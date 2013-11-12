@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="http://simpleframework.net/xsd/default/simple.xsd">
+	<handleClass>
+    net.simpleframework.mvc.component.ui.pager.TablePagerLoaded
+  </handleClass>
+
+	<components>
+		<ajaxRequest name="activity_suspend"
+			handleClass="net.simpleframework.workflow.web.component.activitylist.ActivityListAction"
+			handleMethod="doSuspend">
+		</ajaxRequest>
+
+		<ajaxRequest name="activity_abort_page">
+			<urlForward>activity_abort.jsp</urlForward>
+		</ajaxRequest>
+		<window name="activity_abort_window" contentRef="activity_abort_page" title="#(activity_list.1)"
+			resizable="false" contentStyle="padding: 0px;" height="240">
+		</window>
+
+		<ajaxRequest name="activity_workitem_page">
+			<urlForward>activity_workitem.jsp</urlForward>
+		</ajaxRequest>
+		<tooltip name="activity_workitem_tooltip">
+			<tip selector=".participants2" ajaxRequest="activity_workitem_page" stem="bottomMiddle"
+				hideOthers="true" width="240" offsetY="5">
+				<hook target="topMiddle" tip="bottomMiddle" />
+				<hideOn tipElement="tip" event="mouseleave" />
+			</tip>
+		</tooltip>
+	</components>
+</page>

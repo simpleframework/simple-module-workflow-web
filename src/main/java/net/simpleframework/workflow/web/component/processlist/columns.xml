@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<columns>
+	<column columnName="icon" />
+
+	<column columnName="title" columnText="#(process_list.column.0)"
+		textAlign="left" sort="false" />
+
+	<column columnName="userText" columnText="#(process_list.column.1)"
+		width="120" sort="false" />
+
+	<column columnName="createDate" columnText="#(process_list.column.2)"
+		propertyClass="java.util.Date" width="115" />
+
+	<column columnName="completeDate" columnText="#(process_list.column.3)"
+		propertyClass="java.util.Date" width="115" />
+
+	<column columnName="status" columnText="#(process_list.column.4)"
+		width="80" />
+
+	<!-- <column columnName="processCount" columnText="#(ModelList.column.1)" 
+		textAlign="center" width="100" /> <column columnName="userText" columnText="#(ModelList.column.2)" 
+		textAlign="center" width="120" /> -->
+	<column columnName="action" />
+</columns>

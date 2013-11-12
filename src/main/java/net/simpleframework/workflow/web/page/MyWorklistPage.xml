@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="http://simpleframework.net/xsd/default/simple.xsd">
+	<components>
+		<wf_worklist name="myWorklist" containerId="idMyWorklistPage"
+			handleClass="net.simpleframework.workflow.web.page.MyWorklistPage.MyWorklist" />
+
+		<tree name="myWorklistTree" containerId="idMyWorklistTree" cookies="false">
+			<treenode text="#(MyWorklistPage.0)" opened="true">
+				<jsClickCallback>$Actions["myWorklist"]("status=false");</jsClickCallback>
+				<treenode text="#(EWorkitemStatus.running)">
+					<jsClickCallback>$Actions["myWorklist"]("status=running");</jsClickCallback>
+				</treenode>
+				<treenode text="#(EWorkitemStatus.complete)">
+					<jsClickCallback>$Actions["myWorklist"]("status=complete");</jsClickCallback>
+				</treenode>
+				<treenode text="#(EWorkitemStatus.abort)">
+					<jsClickCallback>$Actions["myWorklist"]("status=abort");</jsClickCallback>
+				</treenode>
+			</treenode>
+		</tree>
+	</components>
+</page>

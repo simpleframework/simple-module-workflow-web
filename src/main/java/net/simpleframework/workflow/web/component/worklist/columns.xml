@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<columns>
+	<column columnName="icon" />
+
+	<column columnName="title" columnText="#(worklist.column.0)"
+		sort="false" textAlign="left" nowrap="false" />
+
+	<column columnName="activity" columnText="#(worklist.column.1)"
+		width="120" sort="false" nowrap="false" />
+
+	<column columnName="userFrom" columnText="#(worklist.column.2)"
+		width="120" sort="false" nowrap="false" />
+
+	<column columnName="userTo" columnText="#(worklist.column.3)"
+		width="120" sort="false" nowrap="false" />
+
+	<column columnName="createDate" columnText="#(worklist.column.4)"
+		propertyClass="java.util.Date" width="115" />
+
+	<column columnName="completeDate" columnText="#(worklist.column.5)"
+		propertyClass="java.util.Date" width="115" />
+
+	<column columnName="action" />
+</columns>

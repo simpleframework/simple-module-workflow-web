@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="http://simpleframework.net/xsd/default/simple.xsd">
+	<handleClass>
+    net.simpleframework.mvc.component.ui.pager.TablePagerLoaded
+  </handleClass>
+
+	<components>
+		<ajaxRequest name="activitylist_page">
+			<urlForward>activitylist_page.jsp</urlForward>
+		</ajaxRequest>
+
+		<tabs name="activitylist_tabs">
+			<tab cache="true" title="#(process_list.1)" contentRef="activitylist_page" />
+			<tab cache="true" title="#(process_list.2)" />
+		</tabs>
+		<window name="activitylist_window" contentRef="activitylist_tabs" width="1060"
+			height="600" title="#(process_list.0)">
+		</window>
+
+		<ajaxRequest name="process_list_suspend"
+			handleClass="net.simpleframework.workflow.web.component.processlist.ProcessListAction"
+			handleMethod="doSuspend">
+		</ajaxRequest>
+
+		<ajaxRequest name="process_list_abort_page">
+			<urlForward>process_abort.jsp</urlForward>
+		</ajaxRequest>
+		<window name="process_list_abort_window" contentRef="process_list_abort_page"
+			title="#(activity_list.1)" resizable="false" contentStyle="padding: 0px;" height="240">
+		</window>
+
+		<ajaxRequest name="process_list_delete"
+			handleClass="net.simpleframework.workflow.web.component.processlist.ProcessListAction"
+			handleMethod="doDelete" confirmMessage="#(process_list.3)">
+		</ajaxRequest>
+	</components>
+</page>

@@ -1,0 +1,54 @@
+.initiator_select .rtitle {
+	padding: 4px 4px;
+	border-bottom: 1px solid #ccc;
+	background-color: #f5f5f5;
+}
+
+.initiator_select .ritem {
+	padding: 8px 4px;
+	border-bottom: 1px solid #ccc;
+}
+
+.initiator_select .ritem:hover {
+	background-color: #f9f9f9;
+}
+
+.initiator_select .rbottom {
+	text-align: right;
+	padding: 6px 6px 0 0;
+}
+
+.process_transition_manual  .node {
+	float: left;
+	margin: 4px;
+	text-align: center;
+	border: 1px solid #bbb;
+	padding: 8px 4px 2px 4px;
+	cursor: pointer;
+	background-color: #fff;
+}
+
+.process_transition_manual .node:hover {
+	background-color: #fafafa;
+	-webkit-box-shadow: 0px 0px 6px #bbb;
+	-moz-box-shadow: 0px 0px 6px #bbb;
+	box-shadow: 0px 0px 6px #bbb;
+}
+
+.process_transition_manual .node .icon {
+	height: 32px;
+	width: 32px;
+	display: inline-block;
+	background: url(images/node_user.gif) no-repeat;
+}
+
+.process_transition_manual .node .txt {
+	font-size: 9.5pt;
+	min-width: 90px;
+}
+
+.process_transition_manual .msg {
+	color: red;
+	margin: 4px;
+	clear: both;
+}

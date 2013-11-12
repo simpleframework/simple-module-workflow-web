@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<columns>
+	<column columnName="tasknode" columnText="#(activity_list.column.0)"
+		sort="false" />
+
+	<column columnName="previous" columnText="#(activity_list.column.1)"
+		separator="true" sort="false" />
+
+	<column columnName="participants" columnText="#(activity_list.column.2)"
+		separator="true" width="100" sort="false" nowrap="false" />
+
+	<column columnName="participants2" columnText="#(activity_list.column.3)"
+		separator="true" width="100" sort="false" nowrap="false" />
+
+	<column columnName="createDate" columnText="#(activity_list.column.4)"
+		textAlign="center" width="115" separator="true" propertyClass="java.util.Date" />
+
+	<column columnName="completeDate" columnText="#(activity_list.column.5)"
+		textAlign="center" width="115" separator="true" propertyClass="java.util.Date" />
+
+	<column columnName="status" columnText="#(activity_list.column.6)"
+		textAlign="center" width="55" separator="true" />
+
+	<column columnName="action" />
+</columns>

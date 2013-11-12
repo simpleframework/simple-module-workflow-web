@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="http://simpleframework.net/xsd/default/simple.xsd">
+	<handleClass>
+    net.simpleframework.mvc.component.ui.pager.TablePagerLoaded
+  </handleClass>
+
+	<components>
+		<ajaxRequest name="workflowFormPage">
+			<urlForward>workitem_form.jsp</urlForward>
+		</ajaxRequest>
+		<window name="workflowFormWindow" contentRef="workflowFormPage" width="800"
+			height="500" />
+
+		<ajaxRequest name="ajaxWorkitemRetake"
+			handleClass="net.simpleframework.workflow.web.component.worklist.WorklistAction"
+			handleMethod="doRetake" confirmMessage="#(worklist.0)">
+		</ajaxRequest>
+
+		<ajaxRequest name="ajaxWorkitemReadMark"
+			handleClass="net.simpleframework.workflow.web.component.worklist.WorklistAction"
+			handleMethod="doReadMark">
+		</ajaxRequest>
+
+		<ajaxRequest name="ajaxWorkitemFallback"
+			handleClass="net.simpleframework.workflow.web.component.worklist.WorklistAction"
+			handleMethod="doFallback" confirmMessage="#(worklist.2)">
+		</ajaxRequest>
+
+		<ajaxRequest name="workitemDelegatePage">
+			<urlForward>workitem_delegate.jsp</urlForward>
+		</ajaxRequest>
+		<window name="workitemDelegateWindow" contentRef="workitemDelegatePage" title="#(worklist.1)"
+			contentStyle="margin: 0px;" height="340" width="360">
+		</window>
+	</components>
+</page>

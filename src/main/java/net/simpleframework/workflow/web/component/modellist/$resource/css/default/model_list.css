@@ -1,0 +1,11 @@
+.model_list {
+}
+
+#model_upload_form input[type=text] {
+	height: 24px;
+	line-height: 24px;
+}
+
+#model_upload_form .text_button .sbtn {
+	margin-top: 5px !important;
+}

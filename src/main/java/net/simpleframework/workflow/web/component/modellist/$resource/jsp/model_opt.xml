@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="http://simpleframework.net/xsd/default/simple.xsd">
+	<handleClass>
+		net.simpleframework.workflow.web.component.modellist.ModelWinLoaded
+	</handleClass>
+	<handleMethod>optLoad</handleMethod>
+
+	<components>
+		<ajaxRequest name="model_opt_save"
+			handleClass="net.simpleframework.workflow.web.component.modellist.ModelListAction"
+			handleMethod="optSave" selector=".mo_edit">
+		</ajaxRequest>
+	</components>
+</page>

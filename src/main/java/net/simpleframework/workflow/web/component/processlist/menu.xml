@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<menu>
+	<item title="#(activity_list.menu.0)">
+		<jsSelectCallback>
+			$pager_action(item).suspend();
+		</jsSelectCallback>
+	</item>
+	<item title="-"></item>
+	<item title="#(activity_list.menu.1)">
+		<jsSelectCallback>
+			$pager_action(item).abort();
+		</jsSelectCallback>
+	</item>
+	<item title="-"></item>
+	<item title="#(Delete)" iconClass="menu_icon_delete">
+		<jsSelectCallback>
+			$pager_action(item).del();
+		</jsSelectCallback>
+	</item>
+</menu>
