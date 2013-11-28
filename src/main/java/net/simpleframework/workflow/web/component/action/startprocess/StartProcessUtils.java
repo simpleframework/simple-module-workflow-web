@@ -10,11 +10,11 @@ import javax.servlet.http.HttpServletResponse;
 
 import net.simpleframework.common.StringUtils;
 import net.simpleframework.common.coll.KVMap;
+import net.simpleframework.mvc.MVCUtils;
 import net.simpleframework.mvc.PageRequestResponse;
 import net.simpleframework.mvc.UrlForward;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.ComponentUtils;
-import net.simpleframework.mvc.component.base.ajaxrequest.AjaxRequestUtils;
 import net.simpleframework.mvc.ctx.permission.IPagePermissionHandler;
 import net.simpleframework.workflow.engine.IProcessModelService;
 import net.simpleframework.workflow.engine.IWorkflowContextAware;
@@ -94,7 +94,7 @@ public abstract class StartProcessUtils implements IWorkflowContextAware {
 					}
 				}
 			} catch (final Throwable th) {
-				kv.add("exception", AjaxRequestUtils.createException(cp, th));
+				kv.add("exception", MVCUtils.createException(cp, th));
 			}
 		}
 		final Writer out = cp.getResponseWriter();

@@ -10,11 +10,11 @@ import javax.servlet.http.HttpServletResponse;
 
 import net.simpleframework.common.StringUtils;
 import net.simpleframework.common.coll.KVMap;
+import net.simpleframework.mvc.MVCUtils;
 import net.simpleframework.mvc.PageRequestResponse;
 import net.simpleframework.mvc.UrlForward;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.ComponentUtils;
-import net.simpleframework.mvc.component.base.ajaxrequest.AjaxRequestUtils;
 import net.simpleframework.workflow.engine.ActivityComplete;
 import net.simpleframework.workflow.engine.IWorkflowForm;
 import net.simpleframework.workflow.engine.TransitionUtils;
@@ -74,7 +74,7 @@ public class WorkitemCompleteUtils {
 				}
 			}
 		} catch (final Throwable ex) {
-			kv.add("exception", AjaxRequestUtils.createException(cp, ex));
+			kv.add("exception", MVCUtils.createException(cp, ex));
 		}
 		final Writer out = cp.getResponseWriter();
 		out.write(kv.toJSON());
