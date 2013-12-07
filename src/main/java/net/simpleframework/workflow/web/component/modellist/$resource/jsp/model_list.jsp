@@ -7,8 +7,7 @@
 <%@ page import="net.simpleframework.workflow.web.component.modellist.DefaultModelListHandler"%>
 <%@ page import="net.simpleframework.workflow.web.component.modellist.ModelListBean"%>
 <%
-	final ComponentParameter nCP = PagerUtils.get(
-	request, response);
+	final ComponentParameter nCP = PagerUtils.get(request, response);
 	ModelListBean componentBean = (ModelListBean) nCP.componentBean;
 	out.write(TablePagerHTML.renderTable(nCP));
 %>

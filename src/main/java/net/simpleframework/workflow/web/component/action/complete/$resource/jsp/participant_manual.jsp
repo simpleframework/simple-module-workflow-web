@@ -9,10 +9,11 @@
 <%@ page import="net.simpleframework.workflow.schema.TransitionNode"%>
 <%@ page import="net.simpleframework.workflow.web.component.action.complete.WorkitemCompleteUtils"%>
 <%
-	final ComponentParameter nCP = WorkitemCompleteUtils
-			.get(request, response);
-	final WorkitemBean workitem = IWorkflowContextAware.context.getWorkitemService()
-			.getBean(request.getParameter(WorkitemBean.workitemId));
+	final ComponentParameter nCP = WorkitemCompleteUtils.get(request,
+			response);
+	final WorkitemBean workitem = IWorkflowContextAware.context
+			.getWorkitemService().getBean(
+					request.getParameter(WorkitemBean.workitemId));
 	final IPagePermissionHandler service = (IPagePermissionHandler) IWorkflowContextAware.context
 			.getParticipantService();
 %>

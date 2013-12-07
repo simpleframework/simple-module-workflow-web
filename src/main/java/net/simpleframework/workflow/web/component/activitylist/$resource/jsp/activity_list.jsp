@@ -5,9 +5,8 @@
 <%@ page import="net.simpleframework.workflow.engine.ActivityBean"%>
 <%@ page import="net.simpleframework.workflow.web.component.activitylist.ActivityListBean"%>
 <%
-	final ComponentParameter nCP = PagerUtils.get(
-			request, response);
-  ActivityListBean componentBean = (ActivityListBean) nCP.componentBean;
+	final ComponentParameter nCP = PagerUtils.get(request, response);
+	ActivityListBean componentBean = (ActivityListBean) nCP.componentBean;
 	out.write(TablePagerHTML.renderTable(nCP));
 %>
 <script type="text/javascript">

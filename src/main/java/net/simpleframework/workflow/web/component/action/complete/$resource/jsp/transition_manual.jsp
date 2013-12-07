@@ -5,10 +5,11 @@
 <%@ page import="net.simpleframework.workflow.web.component.action.complete.WorkitemCompleteUtils"%>
 <%@ page import="net.simpleframework.workflow.schema.TransitionNode"%>
 <%
-	final ComponentParameter nCP = WorkitemCompleteUtils
-			.get(request, response);
-	final WorkitemBean workitem = IWorkflowContextAware.context.getWorkitemService()
-			.getBean(request.getParameter(WorkitemBean.workitemId));
+	final ComponentParameter nCP = WorkitemCompleteUtils.get(request,
+			response);
+	final WorkitemBean workitem = IWorkflowContextAware.context
+			.getWorkitemService().getBean(
+					request.getParameter(WorkitemBean.workitemId));
 %>
 <div class="simple_window_tcb transition_manual">
   <div class="t">#(transition_manual.0)</div>

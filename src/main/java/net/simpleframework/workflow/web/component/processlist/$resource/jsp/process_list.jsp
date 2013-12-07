@@ -5,8 +5,7 @@
 <%@ page import="net.simpleframework.workflow.engine.ProcessBean"%>
 <%@ page import="net.simpleframework.workflow.web.component.processlist.ProcessListBean"%>
 <%
-	final ComponentParameter nCP = PagerUtils.get(
-			request, response);
+	final ComponentParameter nCP = PagerUtils.get(request, response);
 	ProcessListBean componentBean = (ProcessListBean) nCP.componentBean;
 	out.write(TablePagerHTML.renderTable(nCP));
 %>
