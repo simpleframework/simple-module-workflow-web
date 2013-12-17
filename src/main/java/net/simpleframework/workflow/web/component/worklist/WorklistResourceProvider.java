@@ -1,6 +1,5 @@
 package net.simpleframework.workflow.web.component.worklist;
 
-import net.simpleframework.mvc.component.IComponentRegistry;
 import net.simpleframework.mvc.component.ui.pager.TablePagerResourceProvider;
 
 /**
@@ -10,8 +9,4 @@ import net.simpleframework.mvc.component.ui.pager.TablePagerResourceProvider;
  *         http://www.simpleframework.net
  */
 public class WorklistResourceProvider extends TablePagerResourceProvider {
-
-	public WorklistResourceProvider(final IComponentRegistry componentRegistry) {
-		super(componentRegistry);
-	}
 }

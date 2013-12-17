@@ -5,7 +5,6 @@ import net.simpleframework.mvc.component.AbstractComponentRender.ComponentJavasc
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.ComponentRenderUtils;
 import net.simpleframework.mvc.component.ComponentUtils;
-import net.simpleframework.mvc.component.IComponentRegistry;
 import net.simpleframework.workflow.engine.WorkitemBean;
 
 /**
@@ -15,10 +14,6 @@ import net.simpleframework.workflow.engine.WorkitemBean;
  *         http://www.simpleframework.net
  */
 public class WorkitemCompleteRender extends ComponentJavascriptRender {
-
-	public WorkitemCompleteRender(final IComponentRegistry componentRegistry) {
-		super(componentRegistry);
-	}
 
 	@Override
 	public String getJavascriptCode(final ComponentParameter cp) {

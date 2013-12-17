@@ -2,7 +2,6 @@ package net.simpleframework.workflow.web.component.modellist;
 
 import net.simpleframework.common.coll.ArrayUtils;
 import net.simpleframework.mvc.PageParameter;
-import net.simpleframework.mvc.component.IComponentRegistry;
 import net.simpleframework.mvc.component.ui.pager.TablePagerResourceProvider;
 
 /**
@@ -12,10 +11,6 @@ import net.simpleframework.mvc.component.ui.pager.TablePagerResourceProvider;
  *         http://www.simpleframework.net
  */
 public class ModelListResourceProvider extends TablePagerResourceProvider {
-
-	public ModelListResourceProvider(final IComponentRegistry componentRegistry) {
-		super(componentRegistry);
-	}
 
 	@Override
 	public String[] getCssPath(final PageParameter pp) {
