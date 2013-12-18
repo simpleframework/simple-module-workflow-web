@@ -1,8 +1,6 @@
 package net.simpleframework.workflow.web.component.processlist;
 
 import net.simpleframework.common.StringUtils;
-import net.simpleframework.ctx.common.xml.XmlElement;
-import net.simpleframework.mvc.PageDocument;
 import net.simpleframework.mvc.component.ComponentUtils;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
 
@@ -13,14 +11,6 @@ import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
  *         http://www.simpleframework.net
  */
 public class ProcessListBean extends TablePagerBean {
-	public ProcessListBean(final PageDocument pageDocument, final XmlElement element) {
-		super(pageDocument, element);
-		setShowLineNo(true);
-	}
-
-	public ProcessListBean(final PageDocument pageDocument) {
-		this(pageDocument, null);
-	}
 
 	@Override
 	public String getDataPath() {
@@ -30,5 +20,9 @@ public class ProcessListBean extends TablePagerBean {
 	@Override
 	public String getHandleClass() {
 		return StringUtils.text(super.getHandleClass(), DefaultProcessListHandler.class.getName());
+	}
+
+	{
+		setShowLineNo(true);
 	}
 }

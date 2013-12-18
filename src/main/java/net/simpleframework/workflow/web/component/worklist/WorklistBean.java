@@ -1,8 +1,6 @@
 package net.simpleframework.workflow.web.component.worklist;
 
 import net.simpleframework.common.StringUtils;
-import net.simpleframework.ctx.common.xml.XmlElement;
-import net.simpleframework.mvc.PageDocument;
 import net.simpleframework.mvc.component.ComponentUtils;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
 
@@ -14,15 +12,6 @@ import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
  */
 public class WorklistBean extends TablePagerBean {
 
-	public WorklistBean(final PageDocument pageDocument, final XmlElement element) {
-		super(pageDocument, element);
-		setShowLineNo(true);
-	}
-
-	public WorklistBean(final PageDocument pageDocument) {
-		this(pageDocument, null);
-	}
-
 	@Override
 	public String getDataPath() {
 		return ComponentUtils.getResourceHomePath(WorklistBean.class) + "/jsp/worklist.jsp";
@@ -31,5 +20,9 @@ public class WorklistBean extends TablePagerBean {
 	@Override
 	public String getHandleClass() {
 		return StringUtils.text(super.getHandleClass(), DefaultWorklistHandler.class.getName());
+	}
+
+	{
+		setShowLineNo(true);
 	}
 }

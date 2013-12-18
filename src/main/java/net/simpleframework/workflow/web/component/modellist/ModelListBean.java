@@ -1,8 +1,6 @@
 package net.simpleframework.workflow.web.component.modellist;
 
 import net.simpleframework.common.StringUtils;
-import net.simpleframework.ctx.common.xml.XmlElement;
-import net.simpleframework.mvc.PageDocument;
 import net.simpleframework.mvc.component.ComponentUtils;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
 
@@ -14,15 +12,6 @@ import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
  */
 public class ModelListBean extends TablePagerBean {
 
-	public ModelListBean(final PageDocument pageDocument, final XmlElement element) {
-		super(pageDocument, element);
-		setShowLineNo(true);
-	}
-
-	public ModelListBean(final PageDocument pageDocument) {
-		this(pageDocument, null);
-	}
-
 	@Override
 	public String getDataPath() {
 		return ComponentUtils.getResourceHomePath(ModelListBean.class) + "/jsp/model_list.jsp";
@@ -31,5 +20,9 @@ public class ModelListBean extends TablePagerBean {
 	@Override
 	public String getHandleClass() {
 		return StringUtils.text(super.getHandleClass(), DefaultModelListHandler.class.getName());
+	}
+
+	{
+		setShowLineNo(true);
 	}
 }

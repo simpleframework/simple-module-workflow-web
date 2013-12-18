@@ -1,8 +1,6 @@
 package net.simpleframework.workflow.web.component.activitylist;
 
 import net.simpleframework.common.StringUtils;
-import net.simpleframework.ctx.common.xml.XmlElement;
-import net.simpleframework.mvc.PageDocument;
 import net.simpleframework.mvc.component.ComponentUtils;
 import net.simpleframework.mvc.component.ui.pager.EPagerBarLayout;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
@@ -15,16 +13,6 @@ import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
  */
 public class ActivityListBean extends TablePagerBean {
 
-	public ActivityListBean(final PageDocument pageDocument, final XmlElement element) {
-		super(pageDocument, element);
-		setPagerBarLayout(EPagerBarLayout.none);
-		setShowLineNo(true);
-	}
-
-	public ActivityListBean(final PageDocument pageDocument) {
-		this(pageDocument, null);
-	}
-
 	@Override
 	public String getDataPath() {
 		return ComponentUtils.getResourceHomePath(ActivityListBean.class) + "/jsp/activity_list.jsp";
@@ -33,5 +21,10 @@ public class ActivityListBean extends TablePagerBean {
 	@Override
 	public String getHandleClass() {
 		return StringUtils.text(super.getHandleClass(), DefaultActivityListHandler.class.getName());
+	}
+
+	{
+		setPagerBarLayout(EPagerBarLayout.none);
+		setShowLineNo(true);
 	}
 }

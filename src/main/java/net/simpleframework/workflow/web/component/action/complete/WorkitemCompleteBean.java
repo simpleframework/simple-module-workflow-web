@@ -1,8 +1,6 @@
 package net.simpleframework.workflow.web.component.action.complete;
 
 import net.simpleframework.common.StringUtils;
-import net.simpleframework.ctx.common.xml.XmlElement;
-import net.simpleframework.mvc.PageDocument;
 import net.simpleframework.mvc.component.AbstractComponentBean;
 
 /**
@@ -12,14 +10,6 @@ import net.simpleframework.mvc.component.AbstractComponentBean;
  *         http://www.simpleframework.net
  */
 public class WorkitemCompleteBean extends AbstractComponentBean {
-
-	public WorkitemCompleteBean(final PageDocument pageDocument, final XmlElement element) {
-		super(pageDocument, element);
-	}
-
-	public WorkitemCompleteBean(final PageDocument pageDocument) {
-		this(pageDocument, null);
-	}
 
 	@Override
 	public boolean isRunImmediately() {

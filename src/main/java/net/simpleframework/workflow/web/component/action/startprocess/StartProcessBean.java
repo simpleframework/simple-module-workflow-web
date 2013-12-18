@@ -1,7 +1,5 @@
 package net.simpleframework.workflow.web.component.action.startprocess;
 
-import net.simpleframework.ctx.common.xml.XmlElement;
-import net.simpleframework.mvc.PageDocument;
 import net.simpleframework.mvc.component.AbstractComponentBean;
 
 /**
@@ -13,10 +11,6 @@ import net.simpleframework.mvc.component.AbstractComponentBean;
 public class StartProcessBean extends AbstractComponentBean {
 
 	private String confirmMessage;
-
-	public StartProcessBean(final PageDocument pageDocument, final XmlElement element) {
-		super(pageDocument, element);
-	}
 
 	@Override
 	public boolean isRunImmediately() {
