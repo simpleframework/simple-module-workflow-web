@@ -2,6 +2,7 @@ package net.simpleframework.workflow.web;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -35,8 +36,9 @@ public class DefaultParticipantModel extends OrganizationPermissionHandler imple
 			oRole = service.getRoleByName(service.getRoleChart(oRole), relative);
 			if (oRole != null) {
 				final ID roleId = oRole.getId();
-				for (final ID userId : users(roleId, variables)) {
-					participants.add(new Participant(userId, roleId));
+				final Enumeration<ID> users = users(roleId, variables);
+				while (users.hasMoreElements()) {
+					participants.add(new Participant(users.nextElement(), roleId));
 				}
 			}
 		}
