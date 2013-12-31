@@ -8,8 +8,8 @@ import java.util.Map;
 
 import net.simpleframework.common.ID;
 import net.simpleframework.common.coll.KVMap;
-import net.simpleframework.organization.IRole;
 import net.simpleframework.organization.IRoleService;
+import net.simpleframework.organization.Role;
 import net.simpleframework.organization.web.OrganizationPermissionHandler;
 import net.simpleframework.workflow.engine.EDelegationSource;
 import net.simpleframework.workflow.engine.ProcessModelBean;
@@ -29,7 +29,7 @@ public class DefaultParticipantModel extends OrganizationPermissionHandler imple
 	public Collection<Participant> getRelativeParticipants(final Object user, final Object role,
 			final String relative, final KVMap variables) {
 		final ArrayList<Participant> participants = new ArrayList<Participant>();
-		IRole oRole = getRoleObject(role);
+		Role oRole = getRoleObject(role);
 		if (oRole != null) {
 			// 获取相对角色，部门
 			final IRoleService service = context.getRoleService();
