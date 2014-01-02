@@ -17,10 +17,13 @@ public class WorkflowWebContext extends WorkflowContext {
 
 	@Override
 	public ModuleFunctions getFunctions() {
-		return ModuleFunctions.of(
-				new WebModuleFunction(MyWorklistPage.class).setName(MODULE_NAME + "-MyWorklistPage")
-						.setText($m("WorkflowWebContext.0"))).append(
-				new WebModuleFunction(ProcessModelPage.class)
-						.setName(MODULE_NAME + "-ProcessModelPage").setText($m("WorkflowWebContext.1")));
+		return ModuleFunctions.of(FUNC_MY_WORKLIST, FUNC_PROCESS_MODEL);
 	}
+
+	public static final WebModuleFunction FUNC_MY_WORKLIST = (WebModuleFunction) new WebModuleFunction(
+			MyWorklistPage.class).setName(MODULE_NAME + "-MyWorklistPage").setText(
+			$m("WorkflowWebContext.0"));
+	public static final WebModuleFunction FUNC_PROCESS_MODEL = (WebModuleFunction) new WebModuleFunction(
+			ProcessModelPage.class).setName(MODULE_NAME + "-ProcessModelPage").setText(
+			$m("WorkflowWebContext.1"));
 }
