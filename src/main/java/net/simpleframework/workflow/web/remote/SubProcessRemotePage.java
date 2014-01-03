@@ -37,13 +37,13 @@ public class SubProcessRemotePage extends AbstractWorkflowRemotePage {
 						.getProperty(IProcessRemote.VAR_MAPPINGS));
 				if (mappings != null) {
 					for (final String mapping : mappings) {
-						variables.add(mapping, parameter(pp, mapping));
+						variables.add(mapping, pp.getLocaleParameter(mapping));
 					}
 				}
 
 				final ProcessBean process = context.getProcessService().startProcess(
-						context.getModelService().getProcessModel(parameter(pp, IProcessRemote.MODEL)),
-						variables, properties, null);
+						context.getModelService().getProcessModel(
+								pp.getLocaleParameter(IProcessRemote.MODEL)), variables, properties, null);
 				json.put(IProcessRemote.SUB_PROCESSID, process.getId());
 			}
 		});
@@ -54,8 +54,8 @@ public class SubProcessRemotePage extends AbstractWorkflowRemotePage {
 			@Override
 			public void doAction(final JsonForward json) {
 				final IProcessService service = context.getProcessService();
-				final ProcessBean sProcess = service
-						.getBean(parameter(pp, IProcessRemote.SUB_PROCESSID));
+				final ProcessBean sProcess = service.getBean(pp
+						.getLocaleParameter(IProcessRemote.SUB_PROCESSID));
 				if (sProcess != null && service.isFinalStatus(sProcess)) {
 					service.backToRemote(sProcess);
 				}
@@ -69,11 +69,11 @@ public class SubProcessRemotePage extends AbstractWorkflowRemotePage {
 			@Override
 			public void doAction(final JsonForward json) {
 				final ActivityBean nActivity = context.getActivityService().getBean(
-						parameter(pp, IProcessRemote.SUB_ACTIVITYID));
+						pp.getLocaleParameter(IProcessRemote.SUB_ACTIVITYID));
 				context.getActivityService().subComplete(nActivity, new IMappingVal() {
 					@Override
 					public Object val(final String mapping) {
-						return parameter(pp, mapping);
+						return pp.getLocaleParameter(mapping);
 					}
 				});
 				json.put("success", Boolean.TRUE);

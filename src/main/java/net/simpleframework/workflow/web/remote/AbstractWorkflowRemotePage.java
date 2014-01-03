@@ -2,12 +2,13 @@ package net.simpleframework.workflow.web.remote;
 
 import java.util.Properties;
 
-import net.simpleframework.common.web.HttpUtils;
 import net.simpleframework.ctx.permission.IPermissionConst;
+import net.simpleframework.ctx.trans.Transaction;
 import net.simpleframework.mvc.IForwardCallback.IJsonForwardCallback;
 import net.simpleframework.mvc.JsonForward;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.template.AbstractTemplatePage;
+import net.simpleframework.workflow.engine.IWorkflowContext;
 import net.simpleframework.workflow.engine.IWorkflowContextAware;
 
 /**
@@ -29,19 +30,16 @@ public abstract class AbstractWorkflowRemotePage extends AbstractTemplatePage im
 		return IPermissionConst.ROLE_ALL_ACCOUNT;
 	}
 
-	protected String parameter(final PageParameter pp, final String key) {
-		return HttpUtils.toLocaleString(pp.getParameter(key), "utf-8");
-	}
-
 	protected void copyTo(final PageParameter pp, final Properties properties, final String... keys) {
 		if (keys == null) {
 			return;
 		}
 		for (final String key : keys) {
-			properties.setProperty(key, parameter(pp, key));
+			properties.setProperty(key, pp.getLocaleParameter(key));
 		}
 	}
 
+	@Transaction(context = IWorkflowContext.class)
 	public JsonForward doJsonForward(final IJsonForwardCallback callback) {
 		final JsonForward json = new JsonForward();
 		try {
