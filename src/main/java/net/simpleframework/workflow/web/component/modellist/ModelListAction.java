@@ -19,14 +19,14 @@ public class ModelListAction extends AbstractListAction {
 
 	public IForward deleteModel(final ComponentParameter cp) {
 		final JavascriptForward js = new JavascriptForward();
-		context.getModelService().delete(cp.getParameter(ProcessModelBean.modelId));
+		context.getProcessModelService().delete(cp.getParameter(ProcessModelBean.modelId));
 		jsRefreshAction(cp, js);
 		return js;
 	}
 
 	public IForward optSave(final ComponentParameter cp) {
 		final JavascriptForward js = new JavascriptForward();
-		final IProcessModelService service = context.getModelService();
+		final IProcessModelService service = context.getProcessModelService();
 		final ProcessModelBean processModel = service.getBean(cp
 				.getParameter(ProcessModelBean.modelId));
 		service.setStatus(processModel,

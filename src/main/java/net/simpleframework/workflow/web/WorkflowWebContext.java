@@ -5,7 +5,7 @@ import net.simpleframework.ctx.ModuleFunctions;
 import net.simpleframework.mvc.ctx.WebModuleFunction;
 import net.simpleframework.workflow.engine.impl.WorkflowContext;
 import net.simpleframework.workflow.web.page.MyWorklistPage;
-import net.simpleframework.workflow.web.page.ProcessModelPage;
+import net.simpleframework.workflow.web.page.t1.ProcessModelMgrPage;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -24,6 +24,6 @@ public class WorkflowWebContext extends WorkflowContext {
 			MyWorklistPage.class).setName(MODULE_NAME + "-MyWorklistPage").setText(
 			$m("WorkflowWebContext.0"));
 	public static final WebModuleFunction FUNC_PROCESS_MODEL = (WebModuleFunction) new WebModuleFunction(
-			ProcessModelPage.class).setName(MODULE_NAME + "-ProcessModelPage").setText(
+			ProcessModelMgrPage.class).setName(MODULE_NAME + "-ProcessModelMgrPage").setText(
 			$m("WorkflowWebContext.1"));
 }

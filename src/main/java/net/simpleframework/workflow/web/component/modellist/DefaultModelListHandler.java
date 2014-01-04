@@ -33,7 +33,7 @@ public class DefaultModelListHandler extends AbstractDbTablePagerHandler impleme
 
 	@Override
 	public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
-		return context.getModelService().getModelList();
+		return context.getProcessModelService().getModelList();
 	}
 
 	@Override

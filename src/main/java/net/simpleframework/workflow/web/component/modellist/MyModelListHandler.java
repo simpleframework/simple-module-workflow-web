@@ -34,7 +34,8 @@ public class MyModelListHandler extends AbstractTablePagerHandler implements IMy
 	public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
 		final ID loginId = ((IPagePermissionHandler) context.getParticipantService()).getLoginId(cp);
 		InitiateItems items;
-		if (loginId == null || (items = context.getModelService().getInitiateItems(loginId)) == null) {
+		if (loginId == null
+				|| (items = context.getProcessModelService().getInitiateItems(loginId)) == null) {
 			return DataQueryUtils.nullQuery();
 		}
 		return new ListDataObjectQuery<InitiateItem>(items);
@@ -65,7 +66,7 @@ public class MyModelListHandler extends AbstractTablePagerHandler implements IMy
 			public Map<String, Object> getRowData(final ComponentParameter cp, final Object dataObject) {
 				final InitiateItem item = (InitiateItem) dataObject;
 				final ProcessModelBean processModel = item.model();
-				final ProcessNode processNode = context.getModelService()
+				final ProcessNode processNode = context.getProcessModelService()
 						.getProcessDocument(processModel).getProcessNode();
 				final KVMap rowData = new KVMap();
 				rowData.add("title",

@@ -17,7 +17,7 @@ public class ModelWinLoaded extends DefaultPageHandler implements IWorkflowConte
 
 	public void optLoad(final PageParameter pp, final Map<String, Object> dataBinding,
 			final PageSelector selector) {
-		final ProcessModelBean processModel = context.getModelService().getBean(
+		final ProcessModelBean processModel = context.getProcessModelService().getBean(
 				pp.getParameter(ProcessModelBean.modelId));
 		if (processModel != null) {
 			dataBinding.put("model_status", processModel.getStatus().ordinal());

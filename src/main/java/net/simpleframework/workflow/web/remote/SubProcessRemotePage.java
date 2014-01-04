@@ -42,7 +42,7 @@ public class SubProcessRemotePage extends AbstractWorkflowRemotePage {
 				}
 
 				final ProcessBean process = context.getProcessService().startProcess(
-						context.getModelService().getProcessModel(
+						context.getProcessModelService().getProcessModel(
 								pp.getLocaleParameter(IProcessRemote.MODEL)), variables, properties, null);
 				json.put(IProcessRemote.SUB_PROCESSID, process.getId());
 			}

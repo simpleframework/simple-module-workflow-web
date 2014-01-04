@@ -28,7 +28,7 @@ public class DefaultProcessListHandler extends AbstractDbTablePagerHandler imple
 	@Override
 	public Object getBeanProperty(final ComponentParameter cp, final String beanProperty) {
 		if ("title".equals(beanProperty)) {
-			final ProcessModelBean processModel = context.getModelService().getBean(
+			final ProcessModelBean processModel = context.getProcessModelService().getBean(
 					cp.getParameter(ProcessModelBean.modelId));
 			if (processModel != null) {
 				final StringBuilder sb = new StringBuilder();
@@ -49,7 +49,7 @@ public class DefaultProcessListHandler extends AbstractDbTablePagerHandler imple
 	@Override
 	public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
 		return context.getProcessService().getProcessList(
-				context.getModelService().getBean(cp.getParameter(ProcessModelBean.modelId)));
+				context.getProcessModelService().getBean(cp.getParameter(ProcessModelBean.modelId)));
 	}
 
 	@Override

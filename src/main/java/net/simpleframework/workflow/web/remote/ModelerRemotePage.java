@@ -60,7 +60,8 @@ public class ModelerRemotePage extends AbstractWorkflowRemotePage {
 			public void doAction(final JsonForward json) {
 				final ArrayList<Map<?, ?>> models = new ArrayList<Map<?, ?>>();
 				ProcessModelBean pm;
-				final IDataQuery<ProcessModelBean> query = context.getModelService().getModelList();
+				final IDataQuery<ProcessModelBean> query = context.getProcessModelService()
+						.getModelList();
 				while ((pm = query.next()) != null) {
 					models.add(new KVMap().add("text", pm.toString()).add("id", pm.getId()).map());
 				}
@@ -79,7 +80,7 @@ public class ModelerRemotePage extends AbstractWorkflowRemotePage {
 		return doJsonForward(new IJsonForwardCallback() {
 			@Override
 			public void doAction(final JsonForward json) {
-				final IProcessModelService pmm = context.getModelService();
+				final IProcessModelService pmm = context.getProcessModelService();
 				final ProcessDocument document = new ProcessDocument();
 				final ProcessNode processNode = document.getProcessNode();
 				processNode.setName(pp.getLocaleParameter("name"));
@@ -95,7 +96,7 @@ public class ModelerRemotePage extends AbstractWorkflowRemotePage {
 		return doJsonForward(new IJsonForwardCallback() {
 			@Override
 			public void doAction(final JsonForward json) {
-				final IProcessModelService service = context.getModelService();
+				final IProcessModelService service = context.getProcessModelService();
 				final ProcessModelBean pm = service.getBean(pp.getParameter("id"));
 				json.put("doc", service.getProcessDocument(pm).toString());
 			}
@@ -106,7 +107,7 @@ public class ModelerRemotePage extends AbstractWorkflowRemotePage {
 		return doJsonForward(new IJsonForwardCallback() {
 			@Override
 			public void doAction(final JsonForward json) {
-				context.getModelService().delete(pp.getParameter("id"));
+				context.getProcessModelService().delete(pp.getParameter("id"));
 			}
 		});
 	}
@@ -115,7 +116,7 @@ public class ModelerRemotePage extends AbstractWorkflowRemotePage {
 		return doJsonForward(new IJsonForwardCallback() {
 			@Override
 			public void doAction(final JsonForward json) {
-				final IProcessModelService pmm = context.getModelService();
+				final IProcessModelService pmm = context.getProcessModelService();
 				final ProcessModelBean bean = pmm.getBean(pp.getParameter("id"));
 				final String doc = pp.getLocaleParameter("doc");
 				pmm.updateModel(bean, pp.getLoginId(), doc.toCharArray());

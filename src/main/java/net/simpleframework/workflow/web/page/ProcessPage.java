@@ -10,6 +10,7 @@ import net.simpleframework.mvc.template.struct.NavigationButtons;
 import net.simpleframework.mvc.template.t1.T1ResizedTemplatePage;
 import net.simpleframework.workflow.engine.IWorkflowContextAware;
 import net.simpleframework.workflow.web.component.processlist.ProcessListBean;
+import net.simpleframework.workflow.web.page.t1.ProcessModelMgrPage;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -42,7 +43,7 @@ public class ProcessPage extends T1ResizedTemplatePage implements IWorkflowConte
 	@Override
 	public NavigationButtons getNavigationBar(final PageParameter pp) {
 		return super.getNavigationBar(pp).append(
-				new LinkElement("#(ProcessModelPage.0)").setHref(AbstractMVCPage
-						.url(ProcessModelPage.class)));
+				new LinkElement("#(ProcessModelMgrPage.0)").setHref(AbstractMVCPage
+						.url(ProcessModelMgrPage.class)));
 	}
 }

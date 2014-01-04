@@ -28,7 +28,7 @@ public class ModelUploadAction extends AbstractSubmitHandler implements IWorkflo
 		try {
 			final ProcessDocument document = new ProcessDocument(new InputStreamReader(
 					multipartFile.getInputStream()));
-			context.getModelService().addModel(loginId, document);
+			context.getProcessModelService().addModel(loginId, document);
 			return AbstractUrlForward
 					.componentUrl(ModelListBean.class, "/jsp/model_upload_result.jsp");
 		} catch (final IOException e) {
