@@ -28,8 +28,8 @@ import net.simpleframework.workflow.web.component.worklist.WorklistUtils;
 public class MyWorklistPage extends T1ResizedLCTemplatePage implements IWorkflowContextAware {
 
 	@Override
-	protected void addImportCSS(final PageParameter pp) {
-		super.addImportCSS(pp);
+	protected void onForward(final PageParameter pp) {
+		super.onForward(pp);
 
 		pp.addImportCSS(MyWorklistPage.class, "/my_worklist.css");
 	}

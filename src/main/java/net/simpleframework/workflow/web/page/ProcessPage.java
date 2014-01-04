@@ -21,17 +21,12 @@ import net.simpleframework.workflow.web.page.t1.ProcessModelMgrPage;
 public class ProcessPage extends T1ResizedTemplatePage implements IWorkflowContextAware {
 
 	@Override
-	protected void addComponents(final PageParameter pp) {
-		super.addComponents(pp);
-
-		addComponentBean(pp, "processMgr", ProcessListBean.class).setContainerId("idProcessList");
-	}
-
-	@Override
-	protected void addImportCSS(final PageParameter pp) {
-		super.addImportCSS(pp);
+	protected void onForward(final PageParameter pp) {
+		super.onForward(pp);
 
 		pp.addImportCSS(ProcessPage.class, "/process_mgr.css");
+
+		addComponentBean(pp, "processMgr", ProcessListBean.class).setContainerId("idProcessList");
 	}
 
 	@Override

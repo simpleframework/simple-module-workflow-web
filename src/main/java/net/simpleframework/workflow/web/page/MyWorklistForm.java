@@ -26,12 +26,8 @@ public abstract class MyWorklistForm extends AbstractWorkflowFormPage {
 	@Override
 	protected void onForward(final PageParameter pp) {
 		super.onForward(pp);
-		addHtmlViewVariable(pp, getClass(), "worklist_form");
-	}
 
-	@Override
-	protected void addComponents(final PageParameter pp) {
-		super.addComponents(pp);
+		addHtmlViewVariable(pp, getClass(), "worklist_form");
 
 		addComponentBean(pp, "wf_completeAction", WorkitemCompleteBean.class).setSelector(
 				"#idWorklistForm");

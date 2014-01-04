@@ -18,18 +18,13 @@ import net.simpleframework.workflow.web.component.modellist.MyModelListHandler;
 public class InitiateItemPage extends T1ResizedTemplatePage implements IWorkflowContextAware {
 
 	@Override
-	protected void addComponents(final PageParameter pp) {
-		super.addComponents(pp);
+	protected void onForward(final PageParameter pp) {
+		super.onForward(pp);
+
+		pp.addImportCSS(InitiateItemPage.class, "/my_worklist.css");
 
 		addComponentBean(pp, "initiateItemMgr", ModelListBean.class).setContainerId(
 				"idInitiateItemPage").setHandleClass(MyModelListHandler.class);
-	}
-
-	@Override
-	protected void addImportCSS(final PageParameter pp) {
-		super.addImportCSS(pp);
-
-		pp.addImportCSS(InitiateItemPage.class, "/my_worklist.css");
 	}
 
 	@Override
