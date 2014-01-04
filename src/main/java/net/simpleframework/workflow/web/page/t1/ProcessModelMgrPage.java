@@ -8,6 +8,8 @@ import java.util.Map;
 
 import net.simpleframework.ado.query.IDataQuery;
 import net.simpleframework.common.coll.KVMap;
+import net.simpleframework.ctx.common.bean.AttachmentFile;
+import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.ETextAlign;
 import net.simpleframework.mvc.common.element.ElementList;
@@ -17,6 +19,7 @@ import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.ext.attachments.AbstractAttachmentHandler;
 import net.simpleframework.mvc.component.ext.attachments.AttachmentBean;
+import net.simpleframework.mvc.component.ext.attachments.IAttachmentSaveCallback;
 import net.simpleframework.mvc.component.ui.menu.MenuBean;
 import net.simpleframework.mvc.component.ui.menu.MenuItem;
 import net.simpleframework.mvc.component.ui.menu.MenuItems;
@@ -25,6 +28,7 @@ import net.simpleframework.mvc.component.ui.pager.EPagerBarLayout;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
 import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
 import net.simpleframework.mvc.component.ui.pager.db.AbstractDbTablePagerHandler;
+import net.simpleframework.mvc.component.ui.swfupload.SwfUploadBean;
 import net.simpleframework.mvc.component.ui.window.WindowBean;
 import net.simpleframework.mvc.template.struct.NavigationButtons;
 import net.simpleframework.mvc.template.t1.T1ResizedTemplatePage;
@@ -68,12 +72,8 @@ public class ProcessModelMgrPage extends T1ResizedTemplatePage implements IWorkf
 				.addColumn(TablePagerColumn.OPE().setWidth(100));
 
 		// 上传模型文件
-		// pp.addComponentBean("ProcessModelMgrPage_upload", WindowBean.class)
-		// .setUrl(url(ProcessModelUploadPage.class)).setTitle($m("ProcessModelUploadPage.2"))
-		// .setHeight(190);
-
-		addComponentBean(pp, "ProcessModelMgrPage_upload_page", AttachmentBean.class).setShowSubmit(
-				true).setHandleClass(ModelAttachmentAction.class);
+		addComponentBean(pp, "ProcessModelMgrPage_upload_page", AttachmentBean.class)
+				.setShowSubmit(true).setShowEdit(false).setHandleClass(ModelUploadAction.class);
 		addComponentBean(pp, "ProcessModelMgrPage_upload", WindowBean.class)
 				.setContentRef("ProcessModelMgrPage_upload_page")
 				.setTitle($m("ProcessModelUploadPage.2")).setHeight(480).setWidth(400);
@@ -135,6 +135,19 @@ public class ProcessModelMgrPage extends T1ResizedTemplatePage implements IWorkf
 		}
 	}
 
-	public static class ModelAttachmentAction extends AbstractAttachmentHandler {
+	public static class ModelUploadAction extends AbstractAttachmentHandler {
+		@Override
+		public void setSwfUploadBean(final ComponentParameter cp, final SwfUploadBean swfUpload) {
+			super.setSwfUploadBean(cp, swfUpload);
+			swfUpload.setFileTypes("*.xml").setFileTypesDesc("流程模型文件");
+		}
+
+		@Override
+		public JavascriptForward doSave(final ComponentParameter cp,
+				final IAttachmentSaveCallback callback) {
+			final Map<String, AttachmentFile> attachments = getUploadCache(cp);
+
+			return null;
+		}
 	}
 }
