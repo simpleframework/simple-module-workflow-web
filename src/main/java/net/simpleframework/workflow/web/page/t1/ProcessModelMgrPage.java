@@ -2,6 +2,7 @@ package net.simpleframework.workflow.web.page.t1;
 
 import static net.simpleframework.common.I18n.$m;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Date;
 import java.util.Map;
@@ -35,6 +36,7 @@ import net.simpleframework.mvc.template.t1.T1ResizedTemplatePage;
 import net.simpleframework.workflow.engine.EProcessModelStatus;
 import net.simpleframework.workflow.engine.IWorkflowContextAware;
 import net.simpleframework.workflow.engine.ProcessModelBean;
+import net.simpleframework.workflow.schema.ProcessDocument;
 import net.simpleframework.workflow.web.page.ProcessPage;
 
 /**
@@ -144,9 +146,13 @@ public class ProcessModelMgrPage extends T1ResizedTemplatePage implements IWorkf
 
 		@Override
 		public JavascriptForward doSave(final ComponentParameter cp,
-				final IAttachmentSaveCallback callback) {
+				final IAttachmentSaveCallback callback) throws IOException {
 			final Map<String, AttachmentFile> attachments = getUploadCache(cp);
-
+			for (final AttachmentFile aFile : attachments.values()) {
+				final ProcessDocument document = new ProcessDocument(new FileInputStream(
+						aFile.getAttachment()));
+				context.getProcessModelService().addModel(cp.getLoginId(), document);
+			}
 			return null;
 		}
 	}
