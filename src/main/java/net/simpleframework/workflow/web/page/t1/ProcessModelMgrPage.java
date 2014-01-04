@@ -8,8 +8,10 @@ import java.util.Date;
 import java.util.Map;
 
 import net.simpleframework.ado.query.IDataQuery;
+import net.simpleframework.common.StringUtils;
 import net.simpleframework.common.coll.KVMap;
 import net.simpleframework.ctx.common.bean.AttachmentFile;
+import net.simpleframework.mvc.IForward;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.ETextAlign;
@@ -37,6 +39,7 @@ import net.simpleframework.workflow.engine.EProcessModelStatus;
 import net.simpleframework.workflow.engine.IWorkflowContextAware;
 import net.simpleframework.workflow.engine.ProcessModelBean;
 import net.simpleframework.workflow.schema.ProcessDocument;
+import net.simpleframework.workflow.web.WorkflowLogRef.StatusDescLogPage;
 import net.simpleframework.workflow.web.page.ProcessPage;
 
 /**
@@ -73,12 +76,29 @@ public class ProcessModelMgrPage extends T1ResizedTemplatePage implements IWorkf
 								.setPropertyClass(EProcessModelStatus.class))
 				.addColumn(TablePagerColumn.OPE().setWidth(100));
 
+		// 删除
+		addAjaxRequest(pp, "ProcessModelMgrPage_del").setHandleMethod("doDelete").setConfirmMessage(
+				$m("Confirm.Delete"));
+
+		// status
+		addAjaxRequest(pp, "ProcessModelMgrPage_statusPage", StatusDescLogPage.class);
+		addWindowBean(pp, "ProcessModelMgrPage_statusWindow")
+				.setContentRef("ProcessModelMgrPage_statusPage").setWidth(420).setHeight(240);
+
 		// 上传模型文件
 		addComponentBean(pp, "ProcessModelMgrPage_upload_page", AttachmentBean.class)
 				.setShowSubmit(true).setShowEdit(false).setHandleClass(ModelUploadAction.class);
 		addComponentBean(pp, "ProcessModelMgrPage_upload", WindowBean.class)
-				.setContentRef("ProcessModelMgrPage_upload_page")
-				.setTitle($m("ProcessModelUploadPage.2")).setHeight(480).setWidth(400);
+				.setContentRef("ProcessModelMgrPage_upload_page").setTitle($m("ProcessModelMgrPage.7"))
+				.setHeight(480).setWidth(400);
+	}
+
+	public IForward doDelete(final ComponentParameter cp) {
+		final Object[] ids = StringUtils.split(cp.getParameter("modelId"));
+		if (ids != null) {
+			context.getProcessModelService().delete(ids);
+		}
+		return new JavascriptForward("$Actions['ProcessModelMgrPage_tbl']();");
 	}
 
 	@Override
@@ -99,7 +119,7 @@ public class ProcessModelMgrPage extends T1ResizedTemplatePage implements IWorkf
 
 	@Override
 	public NavigationButtons getNavigationBar(final PageParameter pp) {
-		return super.getNavigationBar(pp).append(new SpanElement("#(ProcessModelMgrPage.0)"));
+		return super.getNavigationBar(pp).append(new SpanElement("#(WorkflowWebContext.1)"));
 	}
 
 	public static class ProcessModelTbl extends AbstractDbTablePagerHandler {
@@ -111,7 +131,8 @@ public class ProcessModelMgrPage extends T1ResizedTemplatePage implements IWorkf
 		@Override
 		public MenuItems getContextMenu(final ComponentParameter cp, final MenuBean menuBean,
 				final MenuItem menuItem) {
-			return MenuItems.of(MenuItem.sep(), MenuItem.itemDelete());
+			return MenuItems.of(MenuItem.sep(),
+					MenuItem.itemDelete().setOnclick_act("ProcessModelMgrPage_del", "modelId"));
 		}
 
 		@Override
@@ -120,9 +141,9 @@ public class ProcessModelMgrPage extends T1ResizedTemplatePage implements IWorkf
 			final EProcessModelStatus status = processModel.getStatus();
 			final KVMap row = new KVMap()
 					.add("modelText",
-							new LinkElement(processModel).setHref(url(ProcessPage.class,
-									ProcessModelBean.modelId + "=" + processModel.getId())))
-					.add("processCount", 0).add("userText", cp.getUser(processModel.getUserId()))
+							new LinkElement(processModel).setHref(url(ProcessPage.class, "modelId="
+									+ processModel.getId()))).add("processCount", 0)
+					.add("userText", cp.getUser(processModel.getUserId()))
 					.add("createDate", processModel.getCreateDate())
 					.add("status", processModel.getStatus());
 			final StringBuilder sb = new StringBuilder();
@@ -141,7 +162,7 @@ public class ProcessModelMgrPage extends T1ResizedTemplatePage implements IWorkf
 		@Override
 		public void setSwfUploadBean(final ComponentParameter cp, final SwfUploadBean swfUpload) {
 			super.setSwfUploadBean(cp, swfUpload);
-			swfUpload.setFileTypes("*.xml").setFileTypesDesc("流程模型文件");
+			swfUpload.setFileTypes("*.xml").setFileTypesDesc($m("ProcessModelMgrPage.6"));
 		}
 
 		@Override
@@ -149,11 +170,13 @@ public class ProcessModelMgrPage extends T1ResizedTemplatePage implements IWorkf
 				final IAttachmentSaveCallback callback) throws IOException {
 			final Map<String, AttachmentFile> attachments = getUploadCache(cp);
 			for (final AttachmentFile aFile : attachments.values()) {
-				final ProcessDocument document = new ProcessDocument(new FileInputStream(
-						aFile.getAttachment()));
-				context.getProcessModelService().addModel(cp.getLoginId(), document);
+				context.getProcessModelService().addModel(cp.getLoginId(),
+						new ProcessDocument(new FileInputStream(aFile.getAttachment())));
 			}
-			return null;
+			// 清除
+			clearCache(cp);
+			return new JavascriptForward("$Actions['ProcessModelMgrPage_tbl']();")
+					.append("$Actions['ProcessModelMgrPage_upload'].close();");
 		}
 	}
 }
