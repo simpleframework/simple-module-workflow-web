@@ -1,7 +1,7 @@
 package net.simpleframework.workflow.web;
 
+import net.simpleframework.module.common.web.page.AbstractDescPage;
 import net.simpleframework.module.log.LogRef;
-import net.simpleframework.module.log.web.page.AbstractDescLogPage;
 import net.simpleframework.workflow.engine.IWorkflowContextAware;
 
 /**
@@ -12,7 +12,7 @@ import net.simpleframework.workflow.engine.IWorkflowContextAware;
  */
 public class WorkflowLogRef extends LogRef implements IWorkflowContextAware {
 
-	public static class StatusDescLogPage extends AbstractDescLogPage {
+	public static class StatusDescLogPage extends AbstractDescPage {
 
 	}
 }

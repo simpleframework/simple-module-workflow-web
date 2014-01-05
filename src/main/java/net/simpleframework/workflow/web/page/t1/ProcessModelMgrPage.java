@@ -81,9 +81,9 @@ public class ProcessModelMgrPage extends T1ResizedTemplatePage implements IWorkf
 				$m("Confirm.Delete"));
 
 		// status
-		addAjaxRequest(pp, "ProcessModelMgrPage_statusPage", StatusDescLogPage.class);
-		addWindowBean(pp, "ProcessModelMgrPage_statusWindow")
-				.setContentRef("ProcessModelMgrPage_statusPage").setWidth(420).setHeight(240);
+		addAjaxRequest(pp, "ProcessModelMgrPage_status_page", StatusDescLogPage.class);
+		addWindowBean(pp, "ProcessModelMgrPage_status")
+				.setContentRef("ProcessModelMgrPage_status_page").setWidth(420).setHeight(240);
 
 		// 上传模型文件
 		addComponentBean(pp, "ProcessModelMgrPage_upload_page", AttachmentBean.class)
@@ -148,7 +148,9 @@ public class ProcessModelMgrPage extends T1ResizedTemplatePage implements IWorkf
 					.add("status", processModel.getStatus());
 			final StringBuilder sb = new StringBuilder();
 			if (status == EProcessModelStatus.edit) {
-				sb.append(LinkButton.corner(EProcessModelStatus.deploy));
+				sb.append(LinkButton.corner(EProcessModelStatus.deploy).setOnclick(
+						"$Actions['ProcessModelMgrPage_status']('op=" + EProcessModelStatus.deploy.name()
+								+ "');"));
 			} else if (status == EProcessModelStatus.deploy) {
 				sb.append(LinkButton.corner("恢复"));
 			}
