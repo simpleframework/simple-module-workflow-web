@@ -10,16 +10,23 @@ import java.util.Map;
 import net.simpleframework.ado.query.IDataQuery;
 import net.simpleframework.common.StringUtils;
 import net.simpleframework.common.coll.KVMap;
+import net.simpleframework.ctx.IModuleRef;
 import net.simpleframework.ctx.common.bean.AttachmentFile;
+import net.simpleframework.ctx.trans.Transaction;
+import net.simpleframework.module.common.DescriptionLocalUtils;
+import net.simpleframework.module.common.web.page.AbstractDescPage;
+import net.simpleframework.mvc.AbstractMVCPage;
 import net.simpleframework.mvc.IForward;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageParameter;
+import net.simpleframework.mvc.common.element.ButtonElement;
 import net.simpleframework.mvc.common.element.ETextAlign;
 import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.LinkButton;
 import net.simpleframework.mvc.common.element.LinkElement;
 import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.component.ComponentParameter;
+import net.simpleframework.mvc.component.base.ajaxrequest.AjaxRequestBean;
 import net.simpleframework.mvc.component.ext.attachments.AbstractAttachmentHandler;
 import net.simpleframework.mvc.component.ext.attachments.AttachmentBean;
 import net.simpleframework.mvc.component.ext.attachments.IAttachmentSaveCallback;
@@ -36,10 +43,13 @@ import net.simpleframework.mvc.component.ui.window.WindowBean;
 import net.simpleframework.mvc.template.struct.NavigationButtons;
 import net.simpleframework.mvc.template.t1.T1ResizedTemplatePage;
 import net.simpleframework.workflow.engine.EProcessModelStatus;
+import net.simpleframework.workflow.engine.IProcessModelService;
+import net.simpleframework.workflow.engine.IWorkflowContext;
 import net.simpleframework.workflow.engine.IWorkflowContextAware;
 import net.simpleframework.workflow.engine.ProcessModelBean;
 import net.simpleframework.workflow.schema.ProcessDocument;
-import net.simpleframework.workflow.web.WorkflowLogRef.StatusDescLogPage;
+import net.simpleframework.workflow.web.IWorkflowWebContext;
+import net.simpleframework.workflow.web.WorkflowLogRef.ProcessModelUpdateLogPage;
 import net.simpleframework.workflow.web.page.ProcessPage;
 
 /**
@@ -81,7 +91,7 @@ public class ProcessModelMgrPage extends T1ResizedTemplatePage implements IWorkf
 				$m("Confirm.Delete"));
 
 		// status
-		addAjaxRequest(pp, "ProcessModelMgrPage_status_page", StatusDescLogPage.class);
+		addAjaxRequest(pp, "ProcessModelMgrPage_status_page", StatusDescPage.class);
 		addWindowBean(pp, "ProcessModelMgrPage_status")
 				.setContentRef("ProcessModelMgrPage_status_page").setWidth(420).setHeight(240);
 
@@ -91,8 +101,18 @@ public class ProcessModelMgrPage extends T1ResizedTemplatePage implements IWorkf
 		addComponentBean(pp, "ProcessModelMgrPage_upload", WindowBean.class)
 				.setContentRef("ProcessModelMgrPage_upload_page").setTitle($m("ProcessModelMgrPage.7"))
 				.setHeight(480).setWidth(400);
+
+		// 查看日志
+		final IModuleRef ref = ((IWorkflowWebContext) context).getLogRef();
+		if (ref != null) {
+			pp.addComponentBean("ProcessModelMgrPage_update_logPage", AjaxRequestBean.class)
+					.setUrlForward(AbstractMVCPage.url(ProcessModelUpdateLogPage.class));
+			pp.addComponentBean("ProcessModelMgrPage_update_log", WindowBean.class)
+					.setContentRef("ProcessModelMgrPage_update_logPage").setHeight(540).setWidth(864);
+		}
 	}
 
+	@Transaction(context = IWorkflowContext.class)
 	public IForward doDelete(final ComponentParameter cp) {
 		final Object[] ids = StringUtils.split(cp.getParameter("modelId"));
 		if (ids != null) {
@@ -139,20 +159,22 @@ public class ProcessModelMgrPage extends T1ResizedTemplatePage implements IWorkf
 		protected Map<String, Object> getRowData(final ComponentParameter cp, final Object dataObject) {
 			final ProcessModelBean processModel = (ProcessModelBean) dataObject;
 			final EProcessModelStatus status = processModel.getStatus();
+			final Object id = processModel.getId();
 			final KVMap row = new KVMap()
 					.add("modelText",
-							new LinkElement(processModel).setHref(url(ProcessPage.class, "modelId="
-									+ processModel.getId()))).add("processCount", 0)
-					.add("userText", cp.getUser(processModel.getUserId()))
+							new LinkElement(processModel).setHref(url(ProcessPage.class, "modelId=" + id)))
+					.add("processCount", 0).add("userText", cp.getUser(processModel.getUserId()))
 					.add("createDate", processModel.getCreateDate())
 					.add("status", processModel.getStatus());
 			final StringBuilder sb = new StringBuilder();
 			if (status == EProcessModelStatus.edit) {
-				sb.append(LinkButton.corner(EProcessModelStatus.deploy).setOnclick(
-						"$Actions['ProcessModelMgrPage_status']('op=" + EProcessModelStatus.deploy.name()
-								+ "');"));
-			} else if (status == EProcessModelStatus.deploy) {
-				sb.append(LinkButton.corner("恢复"));
+				final EProcessModelStatus deploy = EProcessModelStatus.deploy;
+				sb.append(new ButtonElement(deploy)
+						.setOnclick("$Actions['ProcessModelMgrPage_status']('modelId=" + id + "&op="
+								+ deploy.name() + "');"));
+			} else {
+				sb.append(ButtonElement.logBtn().setOnclick(
+						"$Actions['ProcessModelMgrPage_update_log']('modelId=" + id + "');"));
 			}
 			sb.append(SpanElement.SPACE).append(AbstractTablePagerSchema.IMG_DOWNMENU);
 			row.add(TablePagerColumn.OPE, sb.toString());
@@ -179,6 +201,33 @@ public class ProcessModelMgrPage extends T1ResizedTemplatePage implements IWorkf
 			clearCache(cp);
 			return new JavascriptForward("$Actions['ProcessModelMgrPage_tbl']();")
 					.append("$Actions['ProcessModelMgrPage_upload'].close();");
+		}
+	}
+
+	public static class StatusDescPage extends AbstractDescPage {
+
+		@Transaction(context = IWorkflowContext.class)
+		@Override
+		public JavascriptForward onSave(final ComponentParameter cp) throws Exception {
+			final EProcessModelStatus op = cp.getEnumParameter(EProcessModelStatus.class, "op");
+			final IProcessModelService service = context.getProcessModelService();
+			final String[] arr = StringUtils.split(cp.getParameter("modelId"), ";");
+			final String desc = cp.getParameter("sl_description");
+			if (arr != null) {
+				for (final String id : arr) {
+					final ProcessModelBean processModel = service.getBean(id);
+					DescriptionLocalUtils.set(processModel, desc);
+					processModel.setStatus(op);
+					service.update(new String[] { "status" }, processModel);
+				}
+			}
+			return super.onSave(cp).append("$Actions['ProcessModelMgrPage_tbl']();");
+		}
+
+		@Override
+		public String getTitle(final PageParameter pp) {
+			final EProcessModelStatus op = pp.getEnumParameter(EProcessModelStatus.class, "op");
+			return op.toString();
 		}
 	}
 }

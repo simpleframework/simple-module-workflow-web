@@ -33,10 +33,10 @@ public class ModelListLoaded extends TablePagerLoaded {
 			pp.addComponentBean("ml_opt_window", WindowBean.class).setContentRef("ajax_ml_opt")
 					.setTitle($m("model_list_menu.1")).setHeight(210);
 
-			// delete action
-			pp.addComponentBean("ml_delete_model", AjaxRequestBean.class)
-					.setConfirmMessage($m("ModelLoaded.1")).setHandleMethod("deleteModel")
-					.setHandleClass(ModelListAction.class);
+			// // delete action
+			// pp.addComponentBean("ml_delete_model", AjaxRequestBean.class)
+			// .setConfirmMessage($m("ModelLoaded.1")).setHandleMethod("deleteModel")
+			// .setHandleClass(ModelListAction.class);
 		} else {
 			pp.addComponentBean("ml_start_process", StartProcessBean.class)
 					.setConfirmMessage($m("ModelLoaded.0")).setHandleClass(MyStartProcessHandler.class);
