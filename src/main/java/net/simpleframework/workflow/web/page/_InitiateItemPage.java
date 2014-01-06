@@ -15,13 +15,13 @@ import net.simpleframework.workflow.web.component.modellist.MyModelListHandler;
  * @author 陈侃(cknet@126.com, 13910090885) https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
-public class InitiateItemPage extends T1ResizedTemplatePage implements IWorkflowContextAware {
+public class _InitiateItemPage extends T1ResizedTemplatePage implements IWorkflowContextAware {
 
 	@Override
 	protected void onForward(final PageParameter pp) {
 		super.onForward(pp);
 
-		pp.addImportCSS(InitiateItemPage.class, "/my_worklist.css");
+		pp.addImportCSS(_InitiateItemPage.class, "/my_worklist.css");
 
 		addComponentBean(pp, "initiateItemMgr", ModelListBean.class).setContainerId(
 				"idInitiateItemPage").setHandleClass(MyModelListHandler.class);
@@ -30,11 +30,11 @@ public class InitiateItemPage extends T1ResizedTemplatePage implements IWorkflow
 	@Override
 	public NavigationButtons getNavigationBar(final PageParameter pp) {
 		// uriFor(ModelerRemotePage.class)
-		return super.getNavigationBar(pp).append(new SpanElement("#(MyWorklistPage.1)"));
+		return super.getNavigationBar(pp).append(new SpanElement("#(MyWorklistTPage.1)"));
 	}
 
 	@Override
 	protected TabButtons getTabButtons(final PageParameter pp) {
-		return get(MyWorklistPage.class).getTabButtons(pp);
+		return get(_MyWorklistPage.class).getTabButtons(pp);
 	}
 }

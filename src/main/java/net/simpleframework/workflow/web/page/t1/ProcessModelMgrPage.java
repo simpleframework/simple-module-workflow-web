@@ -151,8 +151,11 @@ public class ProcessModelMgrPage extends T1ResizedTemplatePage implements IWorkf
 		@Override
 		public MenuItems getContextMenu(final ComponentParameter cp, final MenuBean menuBean,
 				final MenuItem menuItem) {
-			return MenuItems.of(MenuItem.sep(),
-					MenuItem.itemDelete().setOnclick_act("ProcessModelMgrPage_del", "modelId"));
+			return MenuItems.of(
+					MenuItem.of($m("ProcessModelMgrPage.8")).setOnclick_act(
+							"ProcessModelMgrPage_status", "modelId",
+							"op=" + EProcessModelStatus.edit.name()), MenuItem.sep(), MenuItem
+							.itemDelete().setOnclick_act("ProcessModelMgrPage_del", "modelId"));
 		}
 
 		@Override
@@ -179,6 +182,22 @@ public class ProcessModelMgrPage extends T1ResizedTemplatePage implements IWorkf
 			sb.append(SpanElement.SPACE).append(AbstractTablePagerSchema.IMG_DOWNMENU);
 			row.add(TablePagerColumn.OPE, sb.toString());
 			return row;
+		}
+
+		@Override
+		protected Map<String, Object> getRowAttributes(ComponentParameter cp, Object dataObject) {
+			final ProcessModelBean processModel = (ProcessModelBean) dataObject;
+			final Map<String, Object> kv = new KVMap();
+			final StringBuilder sb = new StringBuilder();
+			final EProcessModelStatus s = processModel.getStatus();
+			if (s == EProcessModelStatus.edit) {
+				// 菜单索引
+				sb.append(";0");
+			}
+			if (sb.length() > 0) {
+				kv.put(AbstractTablePagerSchema.MENU_DISABLED, sb.substring(1));
+			}
+			return kv;
 		}
 	}
 
@@ -227,7 +246,10 @@ public class ProcessModelMgrPage extends T1ResizedTemplatePage implements IWorkf
 		@Override
 		public String getTitle(final PageParameter pp) {
 			final EProcessModelStatus op = pp.getEnumParameter(EProcessModelStatus.class, "op");
-			return op.toString();
+			if (op == EProcessModelStatus.edit) {
+				return $m("ProcessModelMgrPage.8");
+			}
+			return op != null ? op.toString() : null;
 		}
 	}
 }

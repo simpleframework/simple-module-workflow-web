@@ -20,7 +20,7 @@ public class MyStartProcessHandler extends DefaultStartProcessHandler implements
 		final WorkitemBean workitem = context.getProcessService().getFirstWorkitem(process);
 		if (workitem != null) {
 			final StringBuilder sb = new StringBuilder();
-			// sb.append("$Actions.loc('").append(AbstractMVCPage.uriFor(MyWorklistPage.class))
+			// sb.append("$Actions.loc('").append(AbstractMVCPage.uriFor(MyWorklistTPage.class))
 			// .append("');");
 			cp.getSession().setAttribute(WorkitemBean.workitemId, workitem.getId());
 			return sb.toString();

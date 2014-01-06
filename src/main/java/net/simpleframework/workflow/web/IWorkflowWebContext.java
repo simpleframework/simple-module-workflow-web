@@ -17,4 +17,6 @@ public interface IWorkflowWebContext extends IWorkflowContext {
 	 * @return
 	 */
 	IModuleRef getLogRef();
+
+	WorkflowUrlsFactory getUrlsFactory();
 }

@@ -25,13 +25,13 @@ import net.simpleframework.workflow.web.component.worklist.WorklistUtils;
  * @author 陈侃(cknet@126.com, 13910090885) https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
-public class MyWorklistPage extends T1ResizedLCTemplatePage implements IWorkflowContextAware {
+public class _MyWorklistPage extends T1ResizedLCTemplatePage implements IWorkflowContextAware {
 
 	@Override
 	protected void onForward(final PageParameter pp) {
 		super.onForward(pp);
 
-		pp.addImportCSS(MyWorklistPage.class, "/my_worklist.css");
+		pp.addImportCSS(_MyWorklistPage.class, "/my_worklist.css");
 	}
 
 	@Override
@@ -47,14 +47,14 @@ public class MyWorklistPage extends T1ResizedLCTemplatePage implements IWorkflow
 
 	@Override
 	public NavigationButtons getNavigationBar(final PageParameter pp) {
-		return super.getNavigationBar(pp).append(new SpanElement("#(MyWorklistPage.0)"));
+		return super.getNavigationBar(pp).append(new SpanElement("#(MyWorklistTPage.0)"));
 	}
 
 	@Override
 	protected TabButtons getTabButtons(final PageParameter pp) {
 		return TabButtons.of(
-				new TabButton("#(MyWorklistPage.0)", AbstractMVCPage.url(MyWorklistPage.class)),
-				new TabButton("#(MyWorklistPage.1)", AbstractMVCPage.url(InitiateItemPage.class)));
+				new TabButton("#(MyWorklistTPage.0)", AbstractMVCPage.url(_MyWorklistPage.class)),
+				new TabButton("#(MyWorklistTPage.1)", AbstractMVCPage.url(_InitiateItemPage.class)));
 	}
 
 	public static class MyWorklist extends DefaultWorklistHandler {
@@ -64,10 +64,10 @@ public class MyWorklistPage extends T1ResizedLCTemplatePage implements IWorkflow
 			final StringBuilder sb = new StringBuilder();
 			final EWorkitemStatus status = WorklistUtils.getWorkitemStatus(cp);
 			if (status != null) {
-				sb.append(new LinkElement($m("MyWorklistPage.0"))
+				sb.append(new LinkElement($m("MyWorklistTPage.0"))
 						.setOnclick("$Actions['myWorklist']('status=false');"));
 			} else {
-				sb.append($m("MyWorklistPage.0"));
+				sb.append($m("MyWorklistTPage.0"));
 			}
 			if (status != null) {
 				sb.append(SpanElement.NAV).append(status);
