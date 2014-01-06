@@ -13,7 +13,6 @@ import net.simpleframework.common.coll.KVMap;
 import net.simpleframework.ctx.IModuleRef;
 import net.simpleframework.ctx.common.bean.AttachmentFile;
 import net.simpleframework.ctx.trans.Transaction;
-import net.simpleframework.module.common.DescriptionLocalUtils;
 import net.simpleframework.module.common.web.page.AbstractDescPage;
 import net.simpleframework.mvc.AbstractMVCPage;
 import net.simpleframework.mvc.IForward;
@@ -50,7 +49,6 @@ import net.simpleframework.workflow.engine.ProcessModelBean;
 import net.simpleframework.workflow.schema.ProcessDocument;
 import net.simpleframework.workflow.web.IWorkflowWebContext;
 import net.simpleframework.workflow.web.WorkflowLogRef.ProcessModelUpdateLogPage;
-import net.simpleframework.workflow.web.page.ProcessPage;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -77,7 +75,7 @@ public class ProcessModelMgrPage extends T1ResizedTemplatePage implements IWorkf
 						new TablePagerColumn("processCount", $m("ProcessModelMgrPage.1"), 80)
 								.setSort(false))
 				.addColumn(
-						new TablePagerColumn("userText", $m("ProcessModelMgrPage.2"), 115).setSort(false))
+						new TablePagerColumn("userId", $m("ProcessModelMgrPage.2"), 115).setSort(false))
 				.addColumn(
 						new TablePagerColumn("createDate", $m("ProcessModelMgrPage.3"), 115)
 								.setPropertyClass(Date.class))
@@ -165,8 +163,9 @@ public class ProcessModelMgrPage extends T1ResizedTemplatePage implements IWorkf
 			final Object id = processModel.getId();
 			final KVMap row = new KVMap()
 					.add("modelText",
-							new LinkElement(processModel).setHref(url(ProcessPage.class, "modelId=" + id)))
-					.add("processCount", 0).add("userText", cp.getUser(processModel.getUserId()))
+							new LinkElement(processModel).setHref(url(ProcessMgrPage.class, "modelId="
+									+ id))).add("processCount", 0)
+					.add("userId", cp.getUser(processModel.getUserId()))
 					.add("createDate", processModel.getCreateDate())
 					.add("status", processModel.getStatus());
 			final StringBuilder sb = new StringBuilder();
@@ -231,13 +230,14 @@ public class ProcessModelMgrPage extends T1ResizedTemplatePage implements IWorkf
 			final EProcessModelStatus op = cp.getEnumParameter(EProcessModelStatus.class, "op");
 			final IProcessModelService service = context.getProcessModelService();
 			final String[] arr = StringUtils.split(cp.getParameter("modelId"), ";");
-			final String desc = cp.getParameter("sl_description");
 			if (arr != null) {
 				for (final String id : arr) {
 					final ProcessModelBean processModel = service.getBean(id);
-					DescriptionLocalUtils.set(processModel, desc);
-					processModel.setStatus(op);
-					service.update(new String[] { "status" }, processModel);
+					if (processModel != null && op != processModel.getStatus()) {
+						setLogDescription(cp, processModel);
+						processModel.setStatus(op);
+						service.update(new String[] { "status" }, processModel);
+					}
 				}
 			}
 			return super.onSave(cp).append("$Actions['ProcessModelMgrPage_tbl']();");

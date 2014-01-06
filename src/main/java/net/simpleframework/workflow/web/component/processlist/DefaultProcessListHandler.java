@@ -11,7 +11,6 @@ import net.simpleframework.mvc.common.element.LinkElement;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.ui.pager.AbstractTablePagerSchema;
 import net.simpleframework.mvc.component.ui.pager.db.AbstractDbTablePagerHandler;
-import net.simpleframework.workflow.engine.EProcessStatus;
 import net.simpleframework.workflow.engine.IWorkflowContextAware;
 import net.simpleframework.workflow.engine.ProcessBean;
 import net.simpleframework.workflow.engine.ProcessModelBean;
@@ -23,7 +22,7 @@ import net.simpleframework.workflow.engine.ProcessModelBean;
  *         http://www.simpleframework.net
  */
 public class DefaultProcessListHandler extends AbstractDbTablePagerHandler implements
-		IProcessListHandler, IWorkflowContextAware {
+		IWorkflowContextAware {
 
 	@Override
 	public Object getBeanProperty(final ComponentParameter cp, final String beanProperty) {
@@ -52,7 +51,6 @@ public class DefaultProcessListHandler extends AbstractDbTablePagerHandler imple
 				context.getProcessModelService().getBean(cp.getParameter(ProcessModelBean.modelId)));
 	}
 
-	@Override
 	public String jsActivityListAction(final ProcessBean processBean) {
 		return "$Actions['activitylist_window']('" + ProcessBean.processId + "="
 				+ processBean.getId() + "');";
@@ -72,8 +70,9 @@ public class DefaultProcessListHandler extends AbstractDbTablePagerHandler imple
 		rowData.add("createDate", processBean.getCreateDate());
 		rowData.add("completeDate", processBean.getCompleteDate());
 
-		final EProcessStatus status = processBean.getStatus();
-		rowData.add("status", ProcessListUtils.getStatusIcon(cp, status) + status);
+		// final EProcessStatus status = processBean.getStatus();
+		// rowData.add("status", ProcessListUtils.getStatusIcon(cp, status) +
+		// status);
 
 		rowData.add("action", AbstractTablePagerSchema.IMG_DOWNMENU);
 		return rowData;
