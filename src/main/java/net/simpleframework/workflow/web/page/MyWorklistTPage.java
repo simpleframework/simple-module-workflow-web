@@ -1,5 +1,7 @@
 package net.simpleframework.workflow.web.page;
 
+import net.simpleframework.mvc.PageParameter;
+
 /**
  * Licensed under the Apache License, Version 2.0
  * 
@@ -7,4 +9,9 @@ package net.simpleframework.workflow.web.page;
  *         http://www.simpleframework.net
  */
 public class MyWorklistTPage extends AbstractWorkTPage {
+
+	@Override
+	protected void onForward(PageParameter pp) {
+		super.onForward(pp);
+	}
 }

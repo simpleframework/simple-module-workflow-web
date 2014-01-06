@@ -1,6 +1,8 @@
 package net.simpleframework.workflow.web.page;
 
 import net.simpleframework.mvc.PageParameter;
+import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
+import net.simpleframework.mvc.component.ui.pager.db.AbstractDbTablePagerHandler;
 import net.simpleframework.mvc.template.lets.Category_ListPage;
 import net.simpleframework.mvc.template.struct.CategoryItem;
 import net.simpleframework.mvc.template.struct.CategoryItems;
@@ -14,6 +16,18 @@ import net.simpleframework.workflow.web.IWorkflowWebContext;
  *         http://www.simpleframework.net
  */
 public abstract class AbstractWorkTPage extends Category_ListPage implements IWorkflowContextAware {
+
+	@Override
+	protected void onForward(PageParameter pp) {
+		super.onForward(pp);
+		pp.addImportCSS(AbstractWorkTPage.class, "/my_work.css");
+	}
+
+	protected TablePagerBean addTablePagerBean(final PageParameter pp,
+			final Class<? extends AbstractDbTablePagerHandler> tblClass) {
+		return addTablePagerBean(pp, "AbstractWorkTPage_tbl", tblClass, false).setShowFilterBar(true)
+				.setShowHead(true).setShowCheckbox(true);
+	}
 
 	private CategoryItem createCategoryItem(final PageParameter pp, String text,
 			final Class<? extends AbstractWorkTPage> mClass) {

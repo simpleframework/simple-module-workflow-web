@@ -5,12 +5,9 @@ import static net.simpleframework.common.I18n.$m;
 import java.io.IOException;
 import java.util.Map;
 
-import net.simpleframework.mvc.AbstractMVCPage;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.LinkElement;
 import net.simpleframework.mvc.common.element.SpanElement;
-import net.simpleframework.mvc.common.element.TabButton;
-import net.simpleframework.mvc.common.element.TabButtons;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.template.struct.NavigationButtons;
 import net.simpleframework.mvc.template.t1.T1ResizedLCTemplatePage;
@@ -50,12 +47,14 @@ public class _MyWorklistPage extends T1ResizedLCTemplatePage implements IWorkflo
 		return super.getNavigationBar(pp).append(new SpanElement("#(MyWorklistTPage.0)"));
 	}
 
-	@Override
-	protected TabButtons getTabButtons(final PageParameter pp) {
-		return TabButtons.of(
-				new TabButton("#(MyWorklistTPage.0)", AbstractMVCPage.url(_MyWorklistPage.class)),
-				new TabButton("#(MyWorklistTPage.1)", AbstractMVCPage.url(_InitiateItemPage.class)));
-	}
+	// @Override
+	// protected TabButtons getTabButtons(final PageParameter pp) {
+	// return TabButtons.of(
+	// new TabButton("#(MyWorklistTPage.0)",
+	// AbstractMVCPage.url(_MyWorklistPage.class)),
+	// new TabButton("#(MyWorklistTPage.1)",
+	// AbstractMVCPage.url(_InitiateItemPage.class)));
+	// }
 
 	public static class MyWorklist extends DefaultWorklistHandler {
 
