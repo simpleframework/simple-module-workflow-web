@@ -1,5 +1,7 @@
 package net.simpleframework.workflow.web.page;
 
+import static net.simpleframework.common.I18n.$m;
+
 import java.util.Map;
 
 import net.simpleframework.ado.query.DataQueryUtils;
@@ -16,6 +18,10 @@ import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
 import net.simpleframework.mvc.component.ui.pager.db.AbstractDbTablePagerHandler;
 import net.simpleframework.workflow.engine.InitiateItem;
 import net.simpleframework.workflow.engine.InitiateItems;
+import net.simpleframework.workflow.engine.ProcessBean;
+import net.simpleframework.workflow.engine.WorkitemBean;
+import net.simpleframework.workflow.web.component.action.startprocess.DefaultStartProcessHandler;
+import net.simpleframework.workflow.web.component.action.startprocess.StartProcessBean;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -33,6 +39,11 @@ public class MyInitiateItemsTPage extends AbstractWorkTPage {
 		tablePager
 				.addColumn(new TablePagerColumn("modelText", "可启动流程").setTextAlign(ETextAlign.left))
 				.addColumn(TablePagerColumn.OPE().setWidth(80));
+
+		// 发起流程
+		pp.addComponentBean("MyInitiateItemsTPage_startProcess", StartProcessBean.class)
+				.setConfirmMessage($m("MyInitiateItemsTPage.0"))
+				.setHandleClass(_StartProcessHandler.class);
 	}
 
 	public static class MyInitiateItemsTbl extends AbstractDbTablePagerHandler {
@@ -51,10 +62,29 @@ public class MyInitiateItemsTPage extends AbstractWorkTPage {
 		@Override
 		protected Map<String, Object> getRowData(ComponentParameter cp, Object dataObject) {
 			final InitiateItem initiateItem = (InitiateItem) dataObject;
-			final KVMap row = new KVMap().add("modelText", new LinkElement(initiateItem));
+			final KVMap row = new KVMap().add("modelText", new LinkElement(initiateItem)
+					.setOnclick("$Actions['MyInitiateItemsTPage_startProcess']('modelId="
+							+ initiateItem.getModelId() + "');"));
 			final StringBuilder sb = new StringBuilder();
 			row.put(TablePagerColumn.OPE, sb.toString());
 			return row;
+		}
+	}
+
+	public static class _StartProcessHandler extends DefaultStartProcessHandler {
+
+		@Override
+		public String jsStartProcessCallback(final ComponentParameter cp, final ProcessBean process) {
+			final WorkitemBean workitem = context.getProcessService().getFirstWorkitem(process);
+			if (workitem != null) {
+				final StringBuilder sb = new StringBuilder();
+				// sb.append("$Actions.loc('").append(AbstractMVCPage.uriFor(MyWorklistTPage.class))
+				// .append("');");
+				cp.getSession().setAttribute(WorkitemBean.workitemId, workitem.getId());
+				return sb.toString();
+			} else {
+				return null;
+			}
 		}
 	}
 }

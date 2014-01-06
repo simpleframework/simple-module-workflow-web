@@ -1,5 +1,6 @@
 package net.simpleframework.workflow.web.component.action.startprocess;
 
+import net.simpleframework.ctx.common.bean.BeanDefaults;
 import net.simpleframework.mvc.component.AbstractComponentBean;
 
 /**
@@ -10,11 +11,25 @@ import net.simpleframework.mvc.component.AbstractComponentBean;
  */
 public class StartProcessBean extends AbstractComponentBean {
 
+	/* modelId的参数名 */
+	private String modelIdParameterName = BeanDefaults.getString(getClass(), "modelIdParameterName",
+			"modelId");
+
+	/* 确认消息 */
 	private String confirmMessage;
 
 	@Override
 	public boolean isRunImmediately() {
 		return false;
+	}
+
+	public String getModelIdParameterName() {
+		return modelIdParameterName;
+	}
+
+	public StartProcessBean setModelIdParameterName(String modelIdParameterName) {
+		this.modelIdParameterName = modelIdParameterName;
+		return this;
 	}
 
 	public String getConfirmMessage() {

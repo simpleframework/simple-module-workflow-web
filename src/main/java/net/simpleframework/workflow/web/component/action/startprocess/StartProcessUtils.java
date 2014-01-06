@@ -15,7 +15,6 @@ import net.simpleframework.mvc.PageRequestResponse;
 import net.simpleframework.mvc.UrlForward;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.ComponentUtils;
-import net.simpleframework.mvc.ctx.permission.IPagePermissionHandler;
 import net.simpleframework.workflow.engine.IProcessModelService;
 import net.simpleframework.workflow.engine.IWorkflowContextAware;
 import net.simpleframework.workflow.engine.InitiateItem;
@@ -43,15 +42,16 @@ public abstract class StartProcessUtils implements IWorkflowContextAware {
 	public static InitiateItem getInitiateItem(final PageRequestResponse rRequest) {
 		final IProcessModelService service = context.getProcessModelService();
 		ProcessModelBean processModel = null;
-		final String modelId = rRequest.getParameter(ProcessModelBean.modelId);
+		final ComponentParameter nCP = get(rRequest);
+		String modelIdParameterName = (String) nCP.getBeanProperty("modelIdParameterName");
+		final String modelId = rRequest.getParameter(modelIdParameterName);
 		if (StringUtils.hasText(modelId)) {
 			processModel = service.getBean(modelId);
 		}
 		if (processModel == null) {
 			processModel = service.getProcessModelByName(rRequest.getParameter("modelName"));
 		}
-		return processModel != null ? service.getInitiateItems(
-				((IPagePermissionHandler) context.getParticipantService()).getLoginId(rRequest)).get(
+		return processModel != null ? service.getInitiateItems(rRequest.getLoginId()).get(
 				processModel) : null;
 	}
 
