@@ -12,10 +12,10 @@ import net.simpleframework.common.StringUtils;
 import net.simpleframework.common.coll.KVMap;
 import net.simpleframework.ctx.trans.Transaction;
 import net.simpleframework.module.common.web.page.AbstractDescPage;
+import net.simpleframework.mvc.AbstractMVCPage;
 import net.simpleframework.mvc.IForward;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageParameter;
-import net.simpleframework.mvc.common.element.ButtonElement;
 import net.simpleframework.mvc.common.element.ETextAlign;
 import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.Icon;
@@ -32,13 +32,12 @@ import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
 import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
 import net.simpleframework.mvc.component.ui.pager.db.AbstractDbTablePagerHandler;
 import net.simpleframework.mvc.template.struct.NavigationButtons;
-import net.simpleframework.mvc.template.t1.T1ResizedTemplatePage;
 import net.simpleframework.workflow.engine.EProcessStatus;
 import net.simpleframework.workflow.engine.IProcessService;
 import net.simpleframework.workflow.engine.IWorkflowContext;
-import net.simpleframework.workflow.engine.IWorkflowContextAware;
 import net.simpleframework.workflow.engine.ProcessBean;
 import net.simpleframework.workflow.engine.ProcessModelBean;
+import net.simpleframework.workflow.web.WorkflowLogRef.ProcessUpdateLogPage;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -46,13 +45,11 @@ import net.simpleframework.workflow.engine.ProcessModelBean;
  * @author 陈侃(cknet@126.com, 13910090885) https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
-public class ProcessMgrPage extends T1ResizedTemplatePage implements IWorkflowContextAware {
+public class ProcessMgrPage extends AbstractWorkflowMgrPage {
 
 	@Override
 	protected void onForward(final PageParameter pp) {
 		super.onForward(pp);
-
-		pp.addImportCSS(ProcessModelMgrPage.class, "/pm_mgr.css");
 
 		final TablePagerBean tablePager = (TablePagerBean) addComponentBean(pp, "ProcessMgrPage_tbl",
 				TablePagerBean.class).setPagerBarLayout(EPagerBarLayout.bottom)
@@ -65,8 +62,8 @@ public class ProcessMgrPage extends T1ResizedTemplatePage implements IWorkflowCo
 				.addColumn(
 						new TablePagerColumn("completeDate", "完成日期", 115).setPropertyClass(Date.class))
 				.addColumn(
-						new TablePagerColumn("status", "状态", 80).setPropertyClass(EProcessStatus.class))
-				.addColumn(TablePagerColumn.OPE().setWidth(120));
+						new TablePagerColumn("status", "状态", 70).setPropertyClass(EProcessStatus.class))
+				.addColumn(TablePagerColumn.OPE().setWidth(90));
 
 		// 删除
 		addAjaxRequest(pp, "ProcessMgrPage_del").setHandleMethod("doDelete").setConfirmMessage(
@@ -84,7 +81,7 @@ public class ProcessMgrPage extends T1ResizedTemplatePage implements IWorkflowCo
 		if (ids != null) {
 			context.getProcessService().delete(ids);
 		}
-		return new JavascriptForward("$Actions['PProcessMgrPage_tbl']();");
+		return new JavascriptForward("$Actions['ProcessMgrPage_tbl']();");
 	}
 
 	@Override
@@ -106,6 +103,11 @@ public class ProcessMgrPage extends T1ResizedTemplatePage implements IWorkflowCo
 	@Override
 	public NavigationButtons getNavigationBar(final PageParameter pp) {
 		return super.getNavigationBar(pp).append(new SpanElement("流程实例管理"));
+	}
+
+	@Override
+	protected Class<? extends AbstractMVCPage> getUpdateLogPage() {
+		return ProcessUpdateLogPage.class;
 	}
 
 	public static class ProcessTbl extends AbstractDbTablePagerHandler {
@@ -130,7 +132,7 @@ public class ProcessMgrPage extends T1ResizedTemplatePage implements IWorkflowCo
 					.add("createDate", process.getCreateDate())
 					.add("completeDate", process.getCompleteDate()).add("status", process.getStatus());
 			final StringBuilder sb = new StringBuilder();
-			sb.append(ButtonElement.logBtn());
+			sb.append(createLogButton("processId=" + process.getId()));
 			sb.append(SpanElement.SPACE).append(AbstractTablePagerSchema.IMG_DOWNMENU);
 			row.add(TablePagerColumn.OPE, sb.toString());
 			return row;

@@ -10,7 +10,6 @@ import java.util.Map;
 import net.simpleframework.ado.query.IDataQuery;
 import net.simpleframework.common.StringUtils;
 import net.simpleframework.common.coll.KVMap;
-import net.simpleframework.ctx.IModuleRef;
 import net.simpleframework.ctx.common.bean.AttachmentFile;
 import net.simpleframework.ctx.trans.Transaction;
 import net.simpleframework.module.common.web.page.AbstractDescPage;
@@ -25,7 +24,6 @@ import net.simpleframework.mvc.common.element.LinkButton;
 import net.simpleframework.mvc.common.element.LinkElement;
 import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.component.ComponentParameter;
-import net.simpleframework.mvc.component.base.ajaxrequest.AjaxRequestBean;
 import net.simpleframework.mvc.component.ext.attachments.AbstractAttachmentHandler;
 import net.simpleframework.mvc.component.ext.attachments.AttachmentBean;
 import net.simpleframework.mvc.component.ext.attachments.IAttachmentSaveCallback;
@@ -40,14 +38,11 @@ import net.simpleframework.mvc.component.ui.pager.db.AbstractDbTablePagerHandler
 import net.simpleframework.mvc.component.ui.swfupload.SwfUploadBean;
 import net.simpleframework.mvc.component.ui.window.WindowBean;
 import net.simpleframework.mvc.template.struct.NavigationButtons;
-import net.simpleframework.mvc.template.t1.T1ResizedTemplatePage;
 import net.simpleframework.workflow.engine.EProcessModelStatus;
 import net.simpleframework.workflow.engine.IProcessModelService;
 import net.simpleframework.workflow.engine.IWorkflowContext;
-import net.simpleframework.workflow.engine.IWorkflowContextAware;
 import net.simpleframework.workflow.engine.ProcessModelBean;
 import net.simpleframework.workflow.schema.ProcessDocument;
-import net.simpleframework.workflow.web.IWorkflowWebContext;
 import net.simpleframework.workflow.web.WorkflowLogRef.ProcessModelUpdateLogPage;
 
 /**
@@ -56,12 +51,11 @@ import net.simpleframework.workflow.web.WorkflowLogRef.ProcessModelUpdateLogPage
  * @author 陈侃(cknet@126.com, 13910090885) https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
-public class ProcessModelMgrPage extends T1ResizedTemplatePage implements IWorkflowContextAware {
+public class ProcessModelMgrPage extends AbstractWorkflowMgrPage {
 
 	@Override
 	protected void onForward(final PageParameter pp) {
 		super.onForward(pp);
-		pp.addImportCSS(ProcessModelMgrPage.class, "/pm_mgr.css");
 
 		final TablePagerBean tablePager = (TablePagerBean) addComponentBean(pp,
 				"ProcessModelMgrPage_tbl", TablePagerBean.class)
@@ -82,7 +76,7 @@ public class ProcessModelMgrPage extends T1ResizedTemplatePage implements IWorkf
 				.addColumn(
 						new TablePagerColumn("status", $m("ProcessModelMgrPage.4"), 70)
 								.setPropertyClass(EProcessModelStatus.class))
-				.addColumn(TablePagerColumn.OPE().setWidth(100));
+				.addColumn(TablePagerColumn.OPE().setWidth(90));
 
 		// 删除
 		addAjaxRequest(pp, "ProcessModelMgrPage_del").setHandleMethod("doDelete").setConfirmMessage(
@@ -99,15 +93,6 @@ public class ProcessModelMgrPage extends T1ResizedTemplatePage implements IWorkf
 		addComponentBean(pp, "ProcessModelMgrPage_upload", WindowBean.class)
 				.setContentRef("ProcessModelMgrPage_upload_page").setTitle($m("ProcessModelMgrPage.7"))
 				.setHeight(480).setWidth(400);
-
-		// 查看日志
-		final IModuleRef ref = ((IWorkflowWebContext) context).getLogRef();
-		if (ref != null) {
-			pp.addComponentBean("ProcessModelMgrPage_update_logPage", AjaxRequestBean.class)
-					.setUrlForward(AbstractMVCPage.url(ProcessModelUpdateLogPage.class));
-			pp.addComponentBean("ProcessModelMgrPage_update_log", WindowBean.class)
-					.setContentRef("ProcessModelMgrPage_update_logPage").setHeight(540).setWidth(864);
-		}
 	}
 
 	@Transaction(context = IWorkflowContext.class)
@@ -138,6 +123,11 @@ public class ProcessModelMgrPage extends T1ResizedTemplatePage implements IWorkf
 	@Override
 	public NavigationButtons getNavigationBar(final PageParameter pp) {
 		return super.getNavigationBar(pp).append(new SpanElement("#(WorkflowWebContext.1)"));
+	}
+
+	@Override
+	protected Class<? extends AbstractMVCPage> getUpdateLogPage() {
+		return ProcessModelUpdateLogPage.class;
 	}
 
 	public static class ProcessModelTbl extends AbstractDbTablePagerHandler {
@@ -175,8 +165,7 @@ public class ProcessModelMgrPage extends T1ResizedTemplatePage implements IWorkf
 						.setOnclick("$Actions['ProcessModelMgrPage_status']('modelId=" + id + "&op="
 								+ deploy.name() + "');"));
 			} else {
-				sb.append(ButtonElement.logBtn().setOnclick(
-						"$Actions['ProcessModelMgrPage_update_log']('modelId=" + id + "');"));
+				sb.append(createLogButton("modelId=" + id));
 			}
 			sb.append(SpanElement.SPACE).append(AbstractTablePagerSchema.IMG_DOWNMENU);
 			row.add(TablePagerColumn.OPE, sb.toString());

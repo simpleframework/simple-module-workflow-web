@@ -1,10 +1,10 @@
 package net.simpleframework.workflow.web;
 
+import net.simpleframework.ctx.service.ado.db.IDbBeanService;
 import net.simpleframework.module.log.LogRef;
 import net.simpleframework.module.log.web.page.EntityUpdateLogPage;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.workflow.engine.IWorkflowContextAware;
-import net.simpleframework.workflow.engine.ProcessModelBean;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -17,13 +17,26 @@ public class WorkflowLogRef extends LogRef implements IWorkflowContextAware {
 	public static class ProcessModelUpdateLogPage extends EntityUpdateLogPage {
 
 		@Override
-		protected ProcessModelBean getBean(final PageParameter pp) {
-			return getCacheBean(pp, context.getProcessModelService(), getBeanIdParameter());
+		protected IDbBeanService<?> getBeanService() {
+			return context.getProcessModelService();
 		}
 
 		@Override
-		public String getBeanIdParameter() {
+		public String getBeanIdParameter(PageParameter pp) {
 			return "modelId";
+		}
+	}
+
+	public static class ProcessUpdateLogPage extends EntityUpdateLogPage {
+
+		@Override
+		protected IDbBeanService<?> getBeanService() {
+			return context.getProcessService();
+		}
+
+		@Override
+		public String getBeanIdParameter(PageParameter pp) {
+			return "processId";
 		}
 	}
 }
