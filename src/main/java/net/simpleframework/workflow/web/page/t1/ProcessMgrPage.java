@@ -1,7 +1,5 @@
 package net.simpleframework.workflow.web.page.t1;
 
-import static net.simpleframework.common.I18n.$m;
-
 import java.io.IOException;
 import java.util.Date;
 import java.util.Map;
@@ -66,13 +64,7 @@ public class ProcessMgrPage extends AbstractWorkflowMgrPage {
 				.addColumn(TablePagerColumn.OPE().setWidth(90));
 
 		// 删除
-		addAjaxRequest(pp, "ProcessMgrPage_del").setHandleMethod("doDelete").setConfirmMessage(
-				$m("Confirm.Delete"));
-
-		// status
-		addAjaxRequest(pp, "ProcessMgrPage_status_page", StatusDescPage.class);
-		addWindowBean(pp, "ProcessMgrPage_status").setContentRef("ProcessMgrPage_status_page")
-				.setWidth(420).setHeight(240);
+		addDeleteAjaxRequest(pp);
 	}
 
 	@Transaction(context = IWorkflowContext.class)
@@ -142,13 +134,36 @@ public class ProcessMgrPage extends AbstractWorkflowMgrPage {
 		public MenuItems getContextMenu(final ComponentParameter cp, final MenuBean menuBean,
 				final MenuItem menuItem) {
 			return MenuItems.of(
-					MenuItem.of("挂起").setOnclick_act("ProcessMgrPage_status", "processId",
+					MenuItem.of("挂起").setOnclick_act("AbstractWorkflowMgrPage_status", "processId",
 							"op=suspended"),
 					MenuItem.sep(),
-					MenuItem.of("恢复运行").setOnclick_act("ProcessMgrPage_status", "processId",
+					MenuItem.of("恢复运行").setOnclick_act("AbstractWorkflowMgrPage_status", "processId",
 							"op=running"), MenuItem.sep(),
-					MenuItem.itemDelete().setOnclick_act("ProcessMgrPage_del", "processId"));
+					MenuItem.itemDelete().setOnclick_act("AbstractWorkflowMgrPage_del", "processId"));
 		}
+
+		@Override
+		protected Map<String, Object> getRowAttributes(ComponentParameter cp, Object dataObject) {
+			ProcessBean process = (ProcessBean) dataObject;
+			final Map<String, Object> kv = new KVMap();
+			final StringBuilder sb = new StringBuilder();
+			final EProcessStatus s = process.getStatus();
+			if (s != EProcessStatus.running) {
+				sb.append(";0");
+			}
+			if (s != EProcessStatus.suspended) {
+				sb.append(";1");
+			}
+			if (sb.length() > 0) {
+				kv.put(AbstractTablePagerSchema.MENU_DISABLED, sb.substring(1));
+			}
+			return kv;
+		}
+	}
+
+	@Override
+	protected Class<? extends AbstractMVCPage> getStatusDescPage() {
+		return StatusDescPage.class;
 	}
 
 	public static class StatusDescPage extends AbstractDescPage {

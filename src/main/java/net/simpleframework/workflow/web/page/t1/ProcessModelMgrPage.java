@@ -79,13 +79,7 @@ public class ProcessModelMgrPage extends AbstractWorkflowMgrPage {
 				.addColumn(TablePagerColumn.OPE().setWidth(90));
 
 		// 删除
-		addAjaxRequest(pp, "ProcessModelMgrPage_del").setHandleMethod("doDelete").setConfirmMessage(
-				$m("Confirm.Delete"));
-
-		// status
-		addAjaxRequest(pp, "ProcessModelMgrPage_status_page", StatusDescPage.class);
-		addWindowBean(pp, "ProcessModelMgrPage_status")
-				.setContentRef("ProcessModelMgrPage_status_page").setWidth(420).setHeight(240);
+		addDeleteAjaxRequest(pp);
 
 		// 上传模型文件
 		addComponentBean(pp, "ProcessModelMgrPage_upload_page", AttachmentBean.class)
@@ -141,9 +135,9 @@ public class ProcessModelMgrPage extends AbstractWorkflowMgrPage {
 				final MenuItem menuItem) {
 			return MenuItems.of(
 					MenuItem.of($m("ProcessModelMgrPage.8")).setOnclick_act(
-							"ProcessModelMgrPage_status", "modelId",
+							"AbstractWorkflowMgrPage_status", "modelId",
 							"op=" + EProcessModelStatus.edit.name()), MenuItem.sep(), MenuItem
-							.itemDelete().setOnclick_act("ProcessModelMgrPage_del", "modelId"));
+							.itemDelete().setOnclick_act("AbstractWorkflowMgrPage_del", "modelId"));
 		}
 
 		@Override
@@ -162,7 +156,7 @@ public class ProcessModelMgrPage extends AbstractWorkflowMgrPage {
 			if (status == EProcessModelStatus.edit) {
 				final EProcessModelStatus deploy = EProcessModelStatus.deploy;
 				sb.append(new ButtonElement(deploy)
-						.setOnclick("$Actions['ProcessModelMgrPage_status']('modelId=" + id + "&op="
+						.setOnclick("$Actions['AbstractWorkflowMgrPage_status']('modelId=" + id + "&op="
 								+ deploy.name() + "');"));
 			} else {
 				sb.append(createLogButton("modelId=" + id));
@@ -209,6 +203,11 @@ public class ProcessModelMgrPage extends AbstractWorkflowMgrPage {
 			return new JavascriptForward("$Actions['ProcessModelMgrPage_tbl']();")
 					.append("$Actions['ProcessModelMgrPage_upload'].close();");
 		}
+	}
+
+	@Override
+	protected Class<? extends AbstractMVCPage> getStatusDescPage() {
+		return StatusDescPage.class;
 	}
 
 	public static class StatusDescPage extends AbstractDescPage {

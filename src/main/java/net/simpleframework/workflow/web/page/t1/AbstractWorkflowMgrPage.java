@@ -1,5 +1,6 @@
 package net.simpleframework.workflow.web.page.t1;
 
+import static net.simpleframework.common.I18n.$m;
 import net.simpleframework.ctx.IModuleRef;
 import net.simpleframework.mvc.AbstractMVCPage;
 import net.simpleframework.mvc.PageParameter;
@@ -24,6 +25,9 @@ public abstract class AbstractWorkflowMgrPage extends T1ResizedTemplatePage impl
 		super.onForward(pp);
 		pp.addImportCSS(ProcessModelMgrPage.class, "/pm_mgr.css");
 
+		// status
+		addStatusWindowBean(pp);
+
 		// 查看日志
 		final IModuleRef ref = ((IWorkflowWebContext) context).getLogRef();
 		if (ref != null) {
@@ -34,6 +38,19 @@ public abstract class AbstractWorkflowMgrPage extends T1ResizedTemplatePage impl
 					.setWidth(864);
 		}
 	}
+
+	protected WindowBean addStatusWindowBean(PageParameter pp) {
+		addAjaxRequest(pp, "AbstractWorkflowMgrPage_status_page", getStatusDescPage());
+		return addWindowBean(pp, "AbstractWorkflowMgrPage_status")
+				.setContentRef("AbstractWorkflowMgrPage_status_page").setWidth(420).setHeight(240);
+	}
+
+	protected AjaxRequestBean addDeleteAjaxRequest(PageParameter pp) {
+		return addAjaxRequest(pp, "AbstractWorkflowMgrPage_del").setHandleMethod("doDelete")
+				.setConfirmMessage($m("Confirm.Delete"));
+	}
+
+	protected abstract Class<? extends AbstractMVCPage> getStatusDescPage();
 
 	protected abstract Class<? extends AbstractMVCPage> getUpdateLogPage();
 
