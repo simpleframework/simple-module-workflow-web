@@ -1,11 +1,14 @@
 package net.simpleframework.workflow.web.page.t1;
 
+import static net.simpleframework.common.I18n.$m;
+
 import java.io.IOException;
 import java.util.Date;
 import java.util.Map;
 
 import net.simpleframework.ado.query.DataQueryUtils;
 import net.simpleframework.ado.query.IDataQuery;
+import net.simpleframework.common.Convert;
 import net.simpleframework.common.StringUtils;
 import net.simpleframework.common.coll.KVMap;
 import net.simpleframework.ctx.trans.Transaction;
@@ -14,11 +17,14 @@ import net.simpleframework.mvc.AbstractMVCPage;
 import net.simpleframework.mvc.IForward;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageParameter;
+import net.simpleframework.mvc.common.element.ButtonElement;
 import net.simpleframework.mvc.common.element.ETextAlign;
 import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.Icon;
+import net.simpleframework.mvc.common.element.InputElement;
 import net.simpleframework.mvc.common.element.LinkButton;
 import net.simpleframework.mvc.common.element.LinkElement;
+import net.simpleframework.mvc.common.element.Radio;
 import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.ui.menu.MenuBean;
@@ -29,7 +35,9 @@ import net.simpleframework.mvc.component.ui.pager.EPagerBarLayout;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
 import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
 import net.simpleframework.mvc.component.ui.pager.db.AbstractDbTablePagerHandler;
+import net.simpleframework.mvc.template.AbstractTemplatePage;
 import net.simpleframework.mvc.template.struct.NavigationButtons;
+import net.simpleframework.workflow.engine.EProcessAbortPolicy;
 import net.simpleframework.workflow.engine.EProcessStatus;
 import net.simpleframework.workflow.engine.IProcessService;
 import net.simpleframework.workflow.engine.IWorkflowContext;
@@ -65,6 +73,12 @@ public class ProcessMgrPage extends AbstractWorkflowMgrPage {
 
 		// 删除
 		addDeleteAjaxRequest(pp);
+
+		// 放弃
+		addAjaxRequest(pp, "ProcessMgrPage_abort_page", ProcessAbortPage.class);
+		addWindowBean(pp, "ProcessMgrPage_abort").setResizable(false)
+				.setContentRef("ProcessMgrPage_abort_page").setTitle(EProcessStatus.abort.toString())
+				.setWidth(420).setHeight(240);
 	}
 
 	@Transaction(context = IWorkflowContext.class)
@@ -134,11 +148,13 @@ public class ProcessMgrPage extends AbstractWorkflowMgrPage {
 		public MenuItems getContextMenu(final ComponentParameter cp, final MenuBean menuBean,
 				final MenuItem menuItem) {
 			return MenuItems.of(
+					MenuItem.of("恢复运行").setOnclick_act("AbstractWorkflowMgrPage_status", "processId",
+							"op=running"),
+					MenuItem.sep(),
 					MenuItem.of("挂起").setOnclick_act("AbstractWorkflowMgrPage_status", "processId",
 							"op=suspended"),
-					MenuItem.sep(),
-					MenuItem.of("恢复运行").setOnclick_act("AbstractWorkflowMgrPage_status", "processId",
-							"op=running"), MenuItem.sep(),
+					MenuItem.of(EProcessStatus.abort.toString()).setOnclick_act("ProcessMgrPage_abort",
+							"processId"), MenuItem.sep(),
 					MenuItem.itemDelete().setOnclick_act("AbstractWorkflowMgrPage_del", "processId"));
 		}
 
@@ -148,10 +164,10 @@ public class ProcessMgrPage extends AbstractWorkflowMgrPage {
 			final Map<String, Object> kv = new KVMap();
 			final StringBuilder sb = new StringBuilder();
 			final EProcessStatus s = process.getStatus();
-			if (s != EProcessStatus.running) {
+			if (s != EProcessStatus.suspended) {
 				sb.append(";0");
 			}
-			if (s != EProcessStatus.suspended) {
+			if (s != EProcessStatus.running) {
 				sb.append(";1");
 			}
 			if (sb.length() > 0) {
@@ -195,6 +211,50 @@ public class ProcessMgrPage extends AbstractWorkflowMgrPage {
 				return "恢复运行";
 			}
 			return null;
+		}
+	}
+
+	public static class ProcessAbortPage extends AbstractTemplatePage {
+
+		@Override
+		protected void onForward(PageParameter pp) {
+			super.onForward(pp);
+
+			addAjaxRequest(pp, "ProcessAbortPage_ok").setConfirmMessage($m("Comfirm.Save"))
+					.setHandleMethod("doOk").setSelector(".ProcessAbortPage");
+		}
+
+		public IForward doOk(ComponentParameter cp) {
+			final IProcessService service = context.getProcessService();
+			final ProcessBean process = service.getBean(cp.getParameter("processId"));
+			service.abort(process,
+					Convert.toEnum(EProcessAbortPolicy.class, cp.getParameter("process_abort_policy")));
+			return null;
+		}
+
+		@Override
+		protected String toHtml(PageParameter pp, Map<String, Object> variables,
+				String currentVariable) throws IOException {
+			StringBuilder sb = new StringBuilder();
+			sb.append("<div class='ProcessAbortPage simple_window_tcb'>");
+			sb.append(" <div class='t'>请选择放弃的策略</div>");
+			sb.append(" <div class='c'>");
+			sb.append(InputElement.hidden("processId").setValue(pp.getParameter("processId")));
+			sb.append(new Radio("process_abort_policy0", EProcessAbortPolicy.normal)
+					.setName("process_abort_policy").setValue(EProcessAbortPolicy.normal.name())
+					.setChecked(true));
+			sb.append("<br>");
+			sb.append(new Radio("process_abort_policy1", EProcessAbortPolicy.allActivities).setValue(
+					EProcessAbortPolicy.allActivities.name()).setName("process_abort_policy"));
+			sb.append(" </div>");
+			sb.append(" <div class='b'>");
+			sb.append(
+					ButtonElement.okBtn().setHighlight(true)
+							.setOnclick("$Actions['ProcessAbortPage_ok']();")).append(SpanElement.SPACE)
+					.append(ButtonElement.WINDOW_CLOSE);
+			sb.append(" </div>");
+			sb.append("</div>");
+			return sb.toString();
 		}
 	}
 }
