@@ -27,7 +27,7 @@ public class StartProcessBean extends AbstractComponentBean {
 		return modelIdParameterName;
 	}
 
-	public StartProcessBean setModelIdParameterName(String modelIdParameterName) {
+	public StartProcessBean setModelIdParameterName(final String modelIdParameterName) {
 		this.modelIdParameterName = modelIdParameterName;
 		return this;
 	}

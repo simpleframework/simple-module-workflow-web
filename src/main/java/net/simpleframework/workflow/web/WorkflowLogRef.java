@@ -22,7 +22,7 @@ public class WorkflowLogRef extends LogRef implements IWorkflowContextAware {
 		}
 
 		@Override
-		public String getBeanIdParameter(PageParameter pp) {
+		public String getBeanIdParameter(final PageParameter pp) {
 			return "modelId";
 		}
 	}
@@ -35,7 +35,7 @@ public class WorkflowLogRef extends LogRef implements IWorkflowContextAware {
 		}
 
 		@Override
-		public String getBeanIdParameter(PageParameter pp) {
+		public String getBeanIdParameter(final PageParameter pp) {
 			return "processId";
 		}
 	}

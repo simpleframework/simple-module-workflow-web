@@ -33,7 +33,7 @@ public class StartProcessAction extends DefaultAjaxRequestHandler {
 		initiateItem.resetTransitions(transitions);
 
 		final ComponentParameter nCP = StartProcessUtils.get(cp);
-		String modelIdParameterName = (String) nCP.getBeanProperty("modelIdParameterName");
+		final String modelIdParameterName = (String) nCP.getBeanProperty("modelIdParameterName");
 		final JavascriptForward js = new JavascriptForward();
 		if (initiateItem.getInitiateRoles().size() > 1) {
 			js.append("$Actions['process_transition_manual_window'].close();");

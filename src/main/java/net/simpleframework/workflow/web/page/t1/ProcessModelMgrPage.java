@@ -167,7 +167,8 @@ public class ProcessModelMgrPage extends AbstractWorkflowMgrPage {
 		}
 
 		@Override
-		protected Map<String, Object> getRowAttributes(ComponentParameter cp, Object dataObject) {
+		protected Map<String, Object> getRowAttributes(final ComponentParameter cp,
+				final Object dataObject) {
 			final ProcessModelBean processModel = (ProcessModelBean) dataObject;
 			final Map<String, Object> kv = new KVMap();
 			final StringBuilder sb = new StringBuilder();

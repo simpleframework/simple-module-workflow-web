@@ -43,7 +43,7 @@ public abstract class StartProcessUtils implements IWorkflowContextAware {
 		final IProcessModelService service = context.getProcessModelService();
 		ProcessModelBean processModel = null;
 		final ComponentParameter nCP = get(rRequest);
-		String modelIdParameterName = (String) nCP.getBeanProperty("modelIdParameterName");
+		final String modelIdParameterName = (String) nCP.getBeanProperty("modelIdParameterName");
 		final String modelId = rRequest.getParameter(modelIdParameterName);
 		if (StringUtils.hasText(modelId)) {
 			processModel = service.getBean(modelId);

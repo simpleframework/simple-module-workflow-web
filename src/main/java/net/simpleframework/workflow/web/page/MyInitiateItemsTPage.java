@@ -49,7 +49,7 @@ public class MyInitiateItemsTPage extends AbstractWorkTPage {
 	public static class MyInitiateItemsTbl extends AbstractDbTablePagerHandler {
 
 		@Override
-		public IDataQuery<?> createDataObjectQuery(ComponentParameter cp) {
+		public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
 			final ID loginId = cp.getLoginId();
 			InitiateItems items;
 			if (loginId == null
@@ -60,7 +60,7 @@ public class MyInitiateItemsTPage extends AbstractWorkTPage {
 		}
 
 		@Override
-		protected Map<String, Object> getRowData(ComponentParameter cp, Object dataObject) {
+		protected Map<String, Object> getRowData(final ComponentParameter cp, final Object dataObject) {
 			final InitiateItem initiateItem = (InitiateItem) dataObject;
 			final KVMap row = new KVMap().add("modelText", new LinkElement(initiateItem)
 					.setOnclick("$Actions['MyInitiateItemsTPage_startProcess']('modelId="

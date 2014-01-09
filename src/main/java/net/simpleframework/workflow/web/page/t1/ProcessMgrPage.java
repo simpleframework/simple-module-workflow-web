@@ -119,8 +119,8 @@ public class ProcessMgrPage extends AbstractWorkflowMgrPage {
 	public static class ProcessTbl extends AbstractDbTablePagerHandler {
 
 		@Override
-		public IDataQuery<?> createDataObjectQuery(ComponentParameter cp) {
-			ProcessModelBean processModel = context.getProcessModelService().getBean(
+		public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
+			final ProcessModelBean processModel = context.getProcessModelService().getBean(
 					cp.getParameter("modelId"));
 			if (processModel == null) {
 				return DataQueryUtils.nullQuery();
@@ -130,15 +130,18 @@ public class ProcessMgrPage extends AbstractWorkflowMgrPage {
 		}
 
 		@Override
-		protected Map<String, Object> getRowData(ComponentParameter cp, Object dataObject) {
-			ProcessBean process = (ProcessBean) dataObject;
+		protected Map<String, Object> getRowData(final ComponentParameter cp, final Object dataObject) {
+			final ProcessBean process = (ProcessBean) dataObject;
+			final Object id = process.getId();
 			final KVMap row = new KVMap()
-					.add("title", new LinkElement(StringUtils.text(process.getTitle(), "未设置主题")))
+					.add("title",
+							new LinkElement(StringUtils.text(process.getTitle(), "未设置主题")).setHref(url(
+									ActivityMgrPage.class, "processId=" + id)))
 					.add("userId", cp.getUser(process.getUserId()))
 					.add("createDate", process.getCreateDate())
 					.add("completeDate", process.getCompleteDate()).add("status", process.getStatus());
 			final StringBuilder sb = new StringBuilder();
-			sb.append(createLogButton("processId=" + process.getId()));
+			sb.append(createLogButton("processId=" + id));
 			sb.append(SpanElement.SPACE).append(AbstractTablePagerSchema.IMG_DOWNMENU);
 			row.add(TablePagerColumn.OPE, sb.toString());
 			return row;
@@ -159,8 +162,9 @@ public class ProcessMgrPage extends AbstractWorkflowMgrPage {
 		}
 
 		@Override
-		protected Map<String, Object> getRowAttributes(ComponentParameter cp, Object dataObject) {
-			ProcessBean process = (ProcessBean) dataObject;
+		protected Map<String, Object> getRowAttributes(final ComponentParameter cp,
+				final Object dataObject) {
+			final ProcessBean process = (ProcessBean) dataObject;
 			final Map<String, Object> kv = new KVMap();
 			final StringBuilder sb = new StringBuilder();
 			final EProcessStatus s = process.getStatus();
@@ -168,7 +172,7 @@ public class ProcessMgrPage extends AbstractWorkflowMgrPage {
 				sb.append(";0");
 			}
 			if (s != EProcessStatus.running) {
-				sb.append(";1");
+				sb.append(";1;2");
 			}
 			if (sb.length() > 0) {
 				kv.put(AbstractTablePagerSchema.MENU_DISABLED, sb.substring(1));
@@ -185,7 +189,7 @@ public class ProcessMgrPage extends AbstractWorkflowMgrPage {
 	public static class StatusDescPage extends AbstractDescPage {
 
 		@Override
-		public JavascriptForward onSave(ComponentParameter cp) throws Exception {
+		public JavascriptForward onSave(final ComponentParameter cp) throws Exception {
 			final EProcessStatus op = cp.getEnumParameter(EProcessStatus.class, "op");
 			final IProcessService service = context.getProcessService();
 			final String[] arr = StringUtils.split(cp.getParameter("processId"), ";");
@@ -217,29 +221,30 @@ public class ProcessMgrPage extends AbstractWorkflowMgrPage {
 	public static class ProcessAbortPage extends AbstractTemplatePage {
 
 		@Override
-		protected void onForward(PageParameter pp) {
+		protected void onForward(final PageParameter pp) {
 			super.onForward(pp);
 
 			addAjaxRequest(pp, "ProcessAbortPage_ok").setConfirmMessage($m("Comfirm.Save"))
 					.setHandleMethod("doOk").setSelector(".ProcessAbortPage");
 		}
 
-		public IForward doOk(ComponentParameter cp) {
+		public IForward doOk(final ComponentParameter cp) {
 			final IProcessService service = context.getProcessService();
 			final ProcessBean process = service.getBean(cp.getParameter("processId"));
 			service.abort(process,
 					Convert.toEnum(EProcessAbortPolicy.class, cp.getParameter("process_abort_policy")));
-			return null;
+			return new JavascriptForward(
+					"$Actions['ProcessMgrPage_abort'].close(); $Actions['ProcessMgrPage_tbl']();");
 		}
 
 		@Override
-		protected String toHtml(PageParameter pp, Map<String, Object> variables,
-				String currentVariable) throws IOException {
-			StringBuilder sb = new StringBuilder();
+		protected String toHtml(final PageParameter pp, final Map<String, Object> variables,
+				final String currentVariable) throws IOException {
+			final StringBuilder sb = new StringBuilder();
 			sb.append("<div class='ProcessAbortPage simple_window_tcb'>");
 			sb.append(" <div class='t'>请选择放弃的策略</div>");
 			sb.append(" <div class='c'>");
-			sb.append(InputElement.hidden("processId").setValue(pp.getParameter("processId")));
+			sb.append(InputElement.hidden("processId").setValue(pp));
 			sb.append(new Radio("process_abort_policy0", EProcessAbortPolicy.normal)
 					.setName("process_abort_policy").setValue(EProcessAbortPolicy.normal.name())
 					.setChecked(true));

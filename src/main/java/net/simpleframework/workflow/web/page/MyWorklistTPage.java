@@ -11,7 +11,7 @@ import net.simpleframework.mvc.PageParameter;
 public class MyWorklistTPage extends AbstractWorkTPage {
 
 	@Override
-	protected void onForward(PageParameter pp) {
+	protected void onForward(final PageParameter pp) {
 		super.onForward(pp);
 	}
 }

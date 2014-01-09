@@ -30,22 +30,27 @@ public abstract class AbstractWorkflowMgrPage extends T1ResizedTemplatePage impl
 
 		// 查看日志
 		final IModuleRef ref = ((IWorkflowWebContext) context).getLogRef();
-		if (ref != null) {
+		Class<? extends AbstractMVCPage> lPage;
+		if (ref != null && (lPage = getUpdateLogPage()) != null) {
 			pp.addComponentBean("AbstractWorkflowMgrPage_update_logPage", AjaxRequestBean.class)
-					.setUrlForward(AbstractMVCPage.url(getUpdateLogPage()));
+					.setUrlForward(AbstractMVCPage.url(lPage));
 			pp.addComponentBean("AbstractWorkflowMgrPage_update_log", WindowBean.class)
 					.setContentRef("AbstractWorkflowMgrPage_update_logPage").setHeight(540)
 					.setWidth(864);
 		}
 	}
 
-	protected WindowBean addStatusWindowBean(PageParameter pp) {
-		addAjaxRequest(pp, "AbstractWorkflowMgrPage_status_page", getStatusDescPage());
-		return addWindowBean(pp, "AbstractWorkflowMgrPage_status")
-				.setContentRef("AbstractWorkflowMgrPage_status_page").setWidth(420).setHeight(240);
+	protected WindowBean addStatusWindowBean(final PageParameter pp) {
+		final Class<? extends AbstractMVCPage> sPage = getStatusDescPage();
+		if (sPage != null) {
+			addAjaxRequest(pp, "AbstractWorkflowMgrPage_status_page", sPage);
+			return addWindowBean(pp, "AbstractWorkflowMgrPage_status")
+					.setContentRef("AbstractWorkflowMgrPage_status_page").setWidth(420).setHeight(240);
+		}
+		return null;
 	}
 
-	protected AjaxRequestBean addDeleteAjaxRequest(PageParameter pp) {
+	protected AjaxRequestBean addDeleteAjaxRequest(final PageParameter pp) {
 		return addAjaxRequest(pp, "AbstractWorkflowMgrPage_del").setHandleMethod("doDelete")
 				.setConfirmMessage($m("Confirm.Delete"));
 	}
@@ -54,7 +59,7 @@ public abstract class AbstractWorkflowMgrPage extends T1ResizedTemplatePage impl
 
 	protected abstract Class<? extends AbstractMVCPage> getUpdateLogPage();
 
-	protected static ButtonElement createLogButton(String params) {
+	protected static ButtonElement createLogButton(final String params) {
 		return ButtonElement.logBtn()
 				.setDisabled(((IWorkflowWebContext) context).getLogRef() == null)
 				.setOnclick("$Actions['AbstractWorkflowMgrPage_update_log']('" + params + "');");

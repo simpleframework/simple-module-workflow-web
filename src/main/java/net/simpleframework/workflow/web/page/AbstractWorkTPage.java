@@ -18,7 +18,7 @@ import net.simpleframework.workflow.web.IWorkflowWebContext;
 public abstract class AbstractWorkTPage extends Category_ListPage implements IWorkflowContextAware {
 
 	@Override
-	protected void onForward(PageParameter pp) {
+	protected void onForward(final PageParameter pp) {
 		super.onForward(pp);
 		pp.addImportCSS(AbstractWorkTPage.class, "/my_work.css");
 	}
@@ -29,7 +29,7 @@ public abstract class AbstractWorkTPage extends Category_ListPage implements IWo
 				.setShowHead(true).setShowCheckbox(true);
 	}
 
-	private CategoryItem createCategoryItem(final PageParameter pp, String text,
+	private CategoryItem createCategoryItem(final PageParameter pp, final String text,
 			final Class<? extends AbstractWorkTPage> mClass) {
 		return new CategoryItem(text).setHref(
 				((IWorkflowWebContext) context).getUrlsFactory().getMyWorkUrl(mClass)).setSelected(
@@ -37,7 +37,7 @@ public abstract class AbstractWorkTPage extends Category_ListPage implements IWo
 	}
 
 	@Override
-	protected CategoryItems getCategoryList(PageParameter pp) {
+	protected CategoryItems getCategoryList(final PageParameter pp) {
 		return CategoryItems.of(createCategoryItem(pp, "我的工作", MyWorklistTPage.class),
 				createCategoryItem(pp, "启动新工作", MyInitiateItemsTPage.class));
 	}
