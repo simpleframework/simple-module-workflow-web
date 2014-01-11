@@ -1,12 +1,23 @@
 package net.simpleframework.workflow.web.page.t1;
 
 import static net.simpleframework.common.I18n.$m;
+
+import java.io.IOException;
+import java.util.Map;
+
+import net.simpleframework.common.BeanUtils;
 import net.simpleframework.ctx.IModuleRef;
+import net.simpleframework.ctx.service.ado.db.IDbBeanService;
+import net.simpleframework.module.common.web.page.AbstractDescPage;
 import net.simpleframework.mvc.AbstractMVCPage;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.ButtonElement;
+import net.simpleframework.mvc.common.element.InputElement;
+import net.simpleframework.mvc.common.element.Radio;
+import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.component.base.ajaxrequest.AjaxRequestBean;
 import net.simpleframework.mvc.component.ui.window.WindowBean;
+import net.simpleframework.mvc.template.AbstractTemplatePage;
 import net.simpleframework.mvc.template.t1.T1ResizedTemplatePage;
 import net.simpleframework.workflow.engine.IWorkflowContextAware;
 import net.simpleframework.workflow.web.IWorkflowWebContext;
@@ -55,13 +66,84 @@ public abstract class AbstractWorkflowMgrPage extends T1ResizedTemplatePage impl
 				.setConfirmMessage($m("Confirm.Delete"));
 	}
 
-	protected abstract Class<? extends AbstractMVCPage> getStatusDescPage();
-
 	protected abstract Class<? extends AbstractMVCPage> getUpdateLogPage();
+
+	protected abstract Class<? extends AbstractMVCPage> getStatusDescPage();
 
 	protected static ButtonElement createLogButton(final String params) {
 		return ButtonElement.logBtn()
 				.setDisabled(((IWorkflowWebContext) context).getLogRef() == null)
 				.setOnclick("$Actions['AbstractWorkflowMgrPage_update_log']('" + params + "');");
+	}
+
+	public static abstract class AbstractStatusDescPage extends AbstractDescPage {
+
+		@SuppressWarnings("unchecked")
+		protected <T> void updateStatus(PageParameter pp, IDbBeanService<T> service, String[] idArr,
+				Enum<?> op) {
+			if (idArr == null) {
+				return;
+			}
+			for (String id : idArr) {
+				T bean = service.getBean(id);
+				if (bean != null && op != BeanUtils.getProperty(bean, "status")) {
+					setLogDescription(pp, bean);
+					BeanUtils.setProperty(bean, "status", op);
+					service.update(new String[] { "status" }, bean);
+				}
+			}
+		}
+
+		@Override
+		public String getTitle(final PageParameter pp) {
+			String op = pp.getParameter("op");
+			if ("suspended".equals(op)) {
+				return "挂起";
+			} else if ("running".equals(op)) {
+				return "恢复运行";
+			}
+			return null;
+		}
+	}
+
+	public static abstract class AbstractAbortPage extends AbstractTemplatePage {
+		@Override
+		protected void onForward(final PageParameter pp) {
+			super.onForward(pp);
+
+			addAjaxRequest(pp, "AbstractAbortPage_ok").setConfirmMessage($m("Comfirm.Save"))
+					.setHandleMethod("doOk").setSelector(".AbstractAbortPage");
+		}
+
+		protected abstract Enum<?>[] getEnumConstants();
+
+		protected abstract InputElement getIdInput(PageParameter pp);
+
+		@Override
+		protected String toHtml(final PageParameter pp, final Map<String, Object> variables,
+				final String currentVariable) throws IOException {
+			final StringBuilder sb = new StringBuilder();
+			sb.append("<div class='AbstractAbortPage simple_window_tcb'>");
+			sb.append(" <div class='t'>请选择放弃的策略</div>");
+			sb.append(" <div class='c'>");
+			sb.append(getIdInput(pp));
+			int i = 0;
+			for (Enum<?> e : getEnumConstants()) {
+				if (i > 0) {
+					sb.append("<br>");
+				}
+				sb.append(new Radio("abort_policy" + i, e).setName("abort_policy").setValue(e.name())
+						.setChecked(i++ == 0));
+			}
+			sb.append(" </div>");
+			sb.append(" <div class='b'>");
+			sb.append(
+					ButtonElement.okBtn().setHighlight(true)
+							.setOnclick("$Actions['AbstractAbortPage_ok']();")).append(SpanElement.SPACE)
+					.append(ButtonElement.WINDOW_CLOSE);
+			sb.append(" </div>");
+			sb.append("</div>");
+			return sb.toString();
+		}
 	}
 }

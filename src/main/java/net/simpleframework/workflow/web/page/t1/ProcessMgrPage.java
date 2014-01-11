@@ -1,7 +1,5 @@
 package net.simpleframework.workflow.web.page.t1;
 
-import static net.simpleframework.common.I18n.$m;
-
 import java.io.IOException;
 import java.util.Date;
 import java.util.Map;
@@ -12,19 +10,16 @@ import net.simpleframework.common.Convert;
 import net.simpleframework.common.StringUtils;
 import net.simpleframework.common.coll.KVMap;
 import net.simpleframework.ctx.trans.Transaction;
-import net.simpleframework.module.common.web.page.AbstractDescPage;
 import net.simpleframework.mvc.AbstractMVCPage;
 import net.simpleframework.mvc.IForward;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageParameter;
-import net.simpleframework.mvc.common.element.ButtonElement;
 import net.simpleframework.mvc.common.element.ETextAlign;
 import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.Icon;
 import net.simpleframework.mvc.common.element.InputElement;
 import net.simpleframework.mvc.common.element.LinkButton;
 import net.simpleframework.mvc.common.element.LinkElement;
-import net.simpleframework.mvc.common.element.Radio;
 import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.ui.menu.MenuBean;
@@ -35,7 +30,6 @@ import net.simpleframework.mvc.component.ui.pager.EPagerBarLayout;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
 import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
 import net.simpleframework.mvc.component.ui.pager.db.AbstractDbTablePagerHandler;
-import net.simpleframework.mvc.template.AbstractTemplatePage;
 import net.simpleframework.mvc.template.struct.NavigationButtons;
 import net.simpleframework.workflow.engine.EProcessAbortPolicy;
 import net.simpleframework.workflow.engine.EProcessStatus;
@@ -120,8 +114,7 @@ public class ProcessMgrPage extends AbstractWorkflowMgrPage {
 
 		@Override
 		public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
-			final ProcessModelBean processModel = context.getProcessModelService().getBean(
-					cp.getParameter("modelId"));
+			final ProcessModelBean processModel = getProcessModelBean(cp);
 			if (processModel == null) {
 				return DataQueryUtils.nullQuery();
 			}
@@ -186,80 +179,40 @@ public class ProcessMgrPage extends AbstractWorkflowMgrPage {
 		return StatusDescPage.class;
 	}
 
-	public static class StatusDescPage extends AbstractDescPage {
+	public static class StatusDescPage extends AbstractStatusDescPage {
 
 		@Override
 		public JavascriptForward onSave(final ComponentParameter cp) throws Exception {
-			final EProcessStatus op = cp.getEnumParameter(EProcessStatus.class, "op");
-			final IProcessService service = context.getProcessService();
-			final String[] arr = StringUtils.split(cp.getParameter("processId"), ";");
-			if (arr != null) {
-				for (final String id : arr) {
-					final ProcessBean process = service.getBean(id);
-					if (process != null && op != process.getStatus()) {
-						setLogDescription(cp, process);
-						process.setStatus(op);
-						service.update(new String[] { "status" }, process);
-					}
-				}
-			}
+			updateStatus(cp, context.getProcessService(),
+					StringUtils.split(cp.getParameter("processId"), ";"),
+					cp.getEnumParameter(EProcessStatus.class, "op"));
 			return super.onSave(cp).append("$Actions['ProcessMgrPage_tbl']();");
-		}
-
-		@Override
-		public String getTitle(final PageParameter pp) {
-			final EProcessStatus op = pp.getEnumParameter(EProcessStatus.class, "op");
-			if (op == EProcessStatus.suspended) {
-				return "挂起";
-			} else if (op == EProcessStatus.running) {
-				return "恢复运行";
-			}
-			return null;
 		}
 	}
 
-	public static class ProcessAbortPage extends AbstractTemplatePage {
-
-		@Override
-		protected void onForward(final PageParameter pp) {
-			super.onForward(pp);
-
-			addAjaxRequest(pp, "ProcessAbortPage_ok").setConfirmMessage($m("Comfirm.Save"))
-					.setHandleMethod("doOk").setSelector(".ProcessAbortPage");
-		}
+	public static class ProcessAbortPage extends AbstractAbortPage {
 
 		public IForward doOk(final ComponentParameter cp) {
 			final IProcessService service = context.getProcessService();
 			final ProcessBean process = service.getBean(cp.getParameter("processId"));
 			service.abort(process,
-					Convert.toEnum(EProcessAbortPolicy.class, cp.getParameter("process_abort_policy")));
+					Convert.toEnum(EProcessAbortPolicy.class, cp.getParameter("abort_policy")));
 			return new JavascriptForward(
 					"$Actions['ProcessMgrPage_abort'].close(); $Actions['ProcessMgrPage_tbl']();");
 		}
 
 		@Override
-		protected String toHtml(final PageParameter pp, final Map<String, Object> variables,
-				final String currentVariable) throws IOException {
-			final StringBuilder sb = new StringBuilder();
-			sb.append("<div class='ProcessAbortPage simple_window_tcb'>");
-			sb.append(" <div class='t'>请选择放弃的策略</div>");
-			sb.append(" <div class='c'>");
-			sb.append(InputElement.hidden("processId").setValue(pp));
-			sb.append(new Radio("process_abort_policy0", EProcessAbortPolicy.normal)
-					.setName("process_abort_policy").setValue(EProcessAbortPolicy.normal.name())
-					.setChecked(true));
-			sb.append("<br>");
-			sb.append(new Radio("process_abort_policy1", EProcessAbortPolicy.allActivities).setValue(
-					EProcessAbortPolicy.allActivities.name()).setName("process_abort_policy"));
-			sb.append(" </div>");
-			sb.append(" <div class='b'>");
-			sb.append(
-					ButtonElement.okBtn().setHighlight(true)
-							.setOnclick("$Actions['ProcessAbortPage_ok']();")).append(SpanElement.SPACE)
-					.append(ButtonElement.WINDOW_CLOSE);
-			sb.append(" </div>");
-			sb.append("</div>");
-			return sb.toString();
+		protected Enum<?>[] getEnumConstants() {
+			return EProcessAbortPolicy.values();
 		}
+
+		@Override
+		protected InputElement getIdInput(PageParameter pp) {
+			return InputElement.hidden("processId").setValue(pp);
+		}
+	}
+
+	private static ProcessModelBean getProcessModelBean(final PageParameter pp) {
+		return getCacheBean(pp, context.getProcessModelService(), "modelId");
 	}
 }

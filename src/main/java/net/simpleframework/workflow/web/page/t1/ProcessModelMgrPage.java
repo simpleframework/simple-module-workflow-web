@@ -12,7 +12,6 @@ import net.simpleframework.common.StringUtils;
 import net.simpleframework.common.coll.KVMap;
 import net.simpleframework.ctx.common.bean.AttachmentFile;
 import net.simpleframework.ctx.trans.Transaction;
-import net.simpleframework.module.common.web.page.AbstractDescPage;
 import net.simpleframework.mvc.AbstractMVCPage;
 import net.simpleframework.mvc.IForward;
 import net.simpleframework.mvc.JavascriptForward;
@@ -39,7 +38,6 @@ import net.simpleframework.mvc.component.ui.swfupload.SwfUploadBean;
 import net.simpleframework.mvc.component.ui.window.WindowBean;
 import net.simpleframework.mvc.template.struct.NavigationButtons;
 import net.simpleframework.workflow.engine.EProcessModelStatus;
-import net.simpleframework.workflow.engine.IProcessModelService;
 import net.simpleframework.workflow.engine.IWorkflowContext;
 import net.simpleframework.workflow.engine.ProcessModelBean;
 import net.simpleframework.workflow.schema.ProcessDocument;
@@ -211,24 +209,14 @@ public class ProcessModelMgrPage extends AbstractWorkflowMgrPage {
 		return StatusDescPage.class;
 	}
 
-	public static class StatusDescPage extends AbstractDescPage {
+	public static class StatusDescPage extends AbstractStatusDescPage {
 
 		@Transaction(context = IWorkflowContext.class)
 		@Override
 		public JavascriptForward onSave(final ComponentParameter cp) throws Exception {
-			final EProcessModelStatus op = cp.getEnumParameter(EProcessModelStatus.class, "op");
-			final IProcessModelService service = context.getProcessModelService();
-			final String[] arr = StringUtils.split(cp.getParameter("modelId"), ";");
-			if (arr != null) {
-				for (final String id : arr) {
-					final ProcessModelBean processModel = service.getBean(id);
-					if (processModel != null && op != processModel.getStatus()) {
-						setLogDescription(cp, processModel);
-						processModel.setStatus(op);
-						service.update(new String[] { "status" }, processModel);
-					}
-				}
-			}
+			updateStatus(cp, context.getProcessModelService(),
+					StringUtils.split(cp.getParameter("modelId"), ";"),
+					cp.getEnumParameter(EProcessModelStatus.class, "op"));
 			return super.onSave(cp).append("$Actions['ProcessModelMgrPage_tbl']();");
 		}
 

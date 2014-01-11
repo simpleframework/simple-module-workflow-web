@@ -9,6 +9,10 @@
 	width: 90%;
 }
 
-.ProcessAbortPage .c {
+.AbstractAbortPage .c {
   line-height: 2.4;
+}
+
+.participants2 {
+  cursor: pointer;
 }
