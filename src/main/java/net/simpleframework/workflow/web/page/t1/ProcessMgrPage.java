@@ -207,7 +207,7 @@ public class ProcessMgrPage extends AbstractWorkflowMgrPage {
 		}
 
 		@Override
-		protected InputElement getIdInput(PageParameter pp) {
+		protected InputElement getIdInput(final PageParameter pp) {
 			return InputElement.hidden("processId").setValue(pp);
 		}
 	}

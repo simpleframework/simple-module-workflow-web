@@ -1,5 +1,7 @@
 package net.simpleframework.workflow.web.page;
 
+import java.util.List;
+
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
 import net.simpleframework.mvc.component.ui.pager.db.AbstractDbTablePagerHandler;
@@ -8,6 +10,7 @@ import net.simpleframework.mvc.template.struct.CategoryItem;
 import net.simpleframework.mvc.template.struct.CategoryItems;
 import net.simpleframework.workflow.engine.IWorkflowContextAware;
 import net.simpleframework.workflow.web.IWorkflowWebContext;
+import net.simpleframework.workflow.web.WorkflowUrlsFactory;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -29,16 +32,32 @@ public abstract class AbstractWorkTPage extends Category_ListPage implements IWo
 				.setShowHead(true).setShowCheckbox(true);
 	}
 
+	protected WorkflowUrlsFactory getUrlsFactory() {
+		return ((IWorkflowWebContext) context).getUrlsFactory();
+	}
+
 	private CategoryItem createCategoryItem(final PageParameter pp, final String text,
-			final Class<? extends AbstractWorkTPage> mClass) {
-		return new CategoryItem(text).setHref(
-				((IWorkflowWebContext) context).getUrlsFactory().getMyWorkUrl(mClass)).setSelected(
-				mClass.equals(getClass()));
+			final Class<? extends AbstractWorkTPage> mClass, final String params) {
+		return new CategoryItem(text).setHref(getUrlsFactory().getMyWorkUrl(mClass, params))
+				.setSelected(mClass.equals(getClass()));
 	}
 
 	@Override
 	protected CategoryItems getCategoryList(final PageParameter pp) {
-		return CategoryItems.of(createCategoryItem(pp, "我的工作", MyWorklistTPage.class),
-				createCategoryItem(pp, "启动新工作", MyInitiateItemsTPage.class));
+		final CategoryItem item0 = createCategoryItem(pp, "我的工作", MyWorklistTPage.class, null);
+		final String _status = pp.getParameter("status");
+		final List<CategoryItem> children = item0.getChildren();
+		// children.add(createCategoryItem(pp, "待办工作", MyWorklistTPage.class,
+		// "status=running")
+		// .setSelected("running".equals(_status)));
+		children.add(createCategoryItem(pp, "办毕工作", MyWorklistTPage.class, "status=complete")
+				.setSelected("complete".equals(_status)));
+		return CategoryItems.of(item0,
+				createCategoryItem(pp, "启动新工作", MyInitiateItemsTPage.class, null));
+	}
+
+	@Override
+	protected int getCategoryWidth(final PageParameter pp) {
+		return 180;
 	}
 }

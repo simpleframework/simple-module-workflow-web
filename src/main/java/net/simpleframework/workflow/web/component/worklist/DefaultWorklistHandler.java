@@ -33,30 +33,27 @@ import net.simpleframework.workflow.engine.participant.IParticipantModel;
  *         http://www.simpleframework.net
  */
 public class DefaultWorklistHandler extends AbstractDbTablePagerHandler implements
-		IWorklistHandler, IWorkflowContextAware {
+		IWorkflowContextAware {
 
-	@Override
-	public Object getBeanProperty(final ComponentParameter cp, final String beanProperty) {
-		String title;
-		if ("title".equals(beanProperty) && (title = getTitle(cp)) != null) {
-			final StringBuilder sb = new StringBuilder();
-			sb.append(title);
-			wrapNavImage(cp, sb);
-			return sb.toString();
-		}
-		return super.getBeanProperty(cp, beanProperty);
-	}
+	// @Override
+	// public Object getBeanProperty(final ComponentParameter cp, final String
+	// beanProperty) {
+	// String title;
+	// if ("title".equals(beanProperty) && (title = getTitle(cp)) != null) {
+	// final StringBuilder sb = new StringBuilder();
+	// sb.append(title);
+	// wrapNavImage(cp, sb);
+	// return sb.toString();
+	// }
+	// return super.getBeanProperty(cp, beanProperty);
+	// }
 
-	@Override
-	public String getTitle(final ComponentParameter cp) {
-		return null;
-	}
-
-	@Override
-	public Map<String, Object> getFormParameters(final ComponentParameter cp) {
-		return ((KVMap) super.getFormParameters(cp)).add(WorklistUtils.STATUS,
-				cp.getParameter(WorklistUtils.STATUS));
-	}
+	// @Override
+	// public Map<String, Object> getFormParameters(final ComponentParameter cp)
+	// {
+	// return ((KVMap) super.getFormParameters(cp)).add(WorklistUtils.STATUS,
+	// cp.getParameter(WorklistUtils.STATUS));
+	// }
 
 	@Override
 	public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
@@ -70,7 +67,6 @@ public class DefaultWorklistHandler extends AbstractDbTablePagerHandler implemen
 		}
 	}
 
-	@Override
 	public String jsWorkflowFormAction(final WorkitemBean workitemBean) {
 		final StringBuilder sb = new StringBuilder();
 		sb.append("$Actions['workflowFormWindow']('").append(WorkitemBean.workitemId);

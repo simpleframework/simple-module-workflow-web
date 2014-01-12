@@ -18,6 +18,7 @@ public class WorkflowUrlsFactory extends UrlsCache {
 
 	public WorkflowUrlsFactory() {
 		urls.put(MyWorklistTPage.class.getName(), MyWorklistPage.class);
+		// urls.put(MyWorklistTPage.class.getName(), MyWorklistPage.class);
 		urls.put(MyInitiateItemsTPage.class.getName(), MyInitiateItemsPage.class);
 	}
 

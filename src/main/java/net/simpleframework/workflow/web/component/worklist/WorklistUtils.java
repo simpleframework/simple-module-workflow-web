@@ -85,9 +85,10 @@ public abstract class WorklistUtils implements IWorkflowContextAware {
 			httpSession.removeAttribute(WorkitemBean.workitemId);
 			final WorkitemBean workitem = context.getWorkitemService().getBean(id);
 			if (workitem != null) {
-				final IWorklistHandler lHandle = (IWorklistHandler) cp.getComponentHandler();
+				// final IWorklistHandler lHandle = (IWorklistHandler)
+				// cp.getComponentHandler();
 				sb.append("$ready(function() {");
-				sb.append(lHandle.jsWorkflowFormAction(workitem));
+				// sb.append(lHandle.jsWorkflowFormAction(workitem));
 				sb.append("});");
 			}
 		}

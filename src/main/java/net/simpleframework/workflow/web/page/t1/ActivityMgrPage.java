@@ -84,12 +84,6 @@ public class ActivityMgrPage extends AbstractWorkflowMgrPage {
 
 		// tooltip
 		final TooltipBean tooltip = addComponentBean(pp, "ActivityMgrPage_tip", TooltipBean.class);
-		// tooltip.addTip(new
-		// TipBean(tooltip).setHideOthers(true).setStem(ETipPosition.bottomMiddle)
-		// .setHook(new Hook(ETipPosition.topMiddle, ETipPosition.bottomMiddle))
-		// .setHideOn(new HideOn(ETipElement.tip,
-		// EElementEvent.mouseleave)).setWidth(240)
-		// .setSelector(".participants2"));
 		tooltip.addTip(new TipBean(tooltip).setSelector(".participants2")
 				.setStem(ETipPosition.bottomMiddle)
 				.setHook(new Hook(ETipPosition.topMiddle, ETipPosition.bottomMiddle))
@@ -202,7 +196,7 @@ public class ActivityMgrPage extends AbstractWorkflowMgrPage {
 
 	public static class StatusDescPage extends AbstractStatusDescPage {
 		@Override
-		public JavascriptForward onSave(ComponentParameter cp) throws Exception {
+		public JavascriptForward onSave(final ComponentParameter cp) throws Exception {
 			updateStatus(cp, context.getActivityService(),
 					StringUtils.split(cp.getParameter("activityId"), ";"),
 					cp.getEnumParameter(EActivityStatus.class, "op"));
@@ -227,7 +221,7 @@ public class ActivityMgrPage extends AbstractWorkflowMgrPage {
 		}
 
 		@Override
-		protected InputElement getIdInput(PageParameter pp) {
+		protected InputElement getIdInput(final PageParameter pp) {
 			return InputElement.hidden("activityId").setValue(pp);
 		}
 	}

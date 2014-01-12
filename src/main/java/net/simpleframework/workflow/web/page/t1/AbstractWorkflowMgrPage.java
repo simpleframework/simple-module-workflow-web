@@ -79,13 +79,13 @@ public abstract class AbstractWorkflowMgrPage extends T1ResizedTemplatePage impl
 	public static abstract class AbstractStatusDescPage extends AbstractDescPage {
 
 		@SuppressWarnings("unchecked")
-		protected <T> void updateStatus(PageParameter pp, IDbBeanService<T> service, String[] idArr,
-				Enum<?> op) {
+		protected <T> void updateStatus(final PageParameter pp, final IDbBeanService<T> service,
+				final String[] idArr, final Enum<?> op) {
 			if (idArr == null) {
 				return;
 			}
-			for (String id : idArr) {
-				T bean = service.getBean(id);
+			for (final String id : idArr) {
+				final T bean = service.getBean(id);
 				if (bean != null && op != BeanUtils.getProperty(bean, "status")) {
 					setLogDescription(pp, bean);
 					BeanUtils.setProperty(bean, "status", op);
@@ -96,7 +96,7 @@ public abstract class AbstractWorkflowMgrPage extends T1ResizedTemplatePage impl
 
 		@Override
 		public String getTitle(final PageParameter pp) {
-			String op = pp.getParameter("op");
+			final String op = pp.getParameter("op");
 			if ("suspended".equals(op)) {
 				return "挂起";
 			} else if ("running".equals(op)) {
@@ -128,7 +128,7 @@ public abstract class AbstractWorkflowMgrPage extends T1ResizedTemplatePage impl
 			sb.append(" <div class='c'>");
 			sb.append(getIdInput(pp));
 			int i = 0;
-			for (Enum<?> e : getEnumConstants()) {
+			for (final Enum<?> e : getEnumConstants()) {
 				if (i > 0) {
 					sb.append("<br>");
 				}
