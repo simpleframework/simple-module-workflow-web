@@ -1,19 +1,18 @@
 package net.simpleframework.workflow.web;
 
-import java.awt.Dimension;
 import java.util.Map;
 
-import net.simpleframework.common.coll.KVMap;
-import net.simpleframework.common.object.ObjectUtils;
-import net.simpleframework.mvc.AbstractMVCPage;
-import net.simpleframework.mvc.IPageHandler.PageSelector;
+import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageParameter;
-import net.simpleframework.mvc.PageRequestResponse;
-import net.simpleframework.mvc.template.AbstractTemplatePage;
+import net.simpleframework.mvc.common.element.ElementList;
+import net.simpleframework.mvc.common.element.InputElement;
+import net.simpleframework.mvc.component.ComponentParameter;
+import net.simpleframework.mvc.template.lets.FormTableRowTemplatePage;
 import net.simpleframework.workflow.engine.IWorkflowContextAware;
 import net.simpleframework.workflow.engine.IWorkflowForm;
-import net.simpleframework.workflow.engine.ProcessBean;
 import net.simpleframework.workflow.engine.WorkitemBean;
+import net.simpleframework.workflow.engine.WorkitemComplete;
+import net.simpleframework.workflow.web.component.action.complete.WorkitemCompleteBean;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -21,69 +20,50 @@ import net.simpleframework.workflow.engine.WorkitemBean;
  * @author 陈侃(cknet@126.com, 13910090885) https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
-public abstract class AbstractWorkflowFormPage extends AbstractTemplatePage implements
+public abstract class AbstractWorkflowFormPage extends FormTableRowTemplatePage implements
 		IWorkflowForm, IWorkflowContextAware {
 
-	private String url;
-
 	@Override
-	protected void onForward(final PageParameter pp) {
+	protected void onForward(PageParameter pp) {
 		super.onForward(pp);
 
-		getPageBean().setHandleClass(getClass().getName()).setHandleMethod("doPageLoad");
+		// 完成
+		addComponentBean(pp, "AbstractWorkflowFormPage_completeAction", WorkitemCompleteBean.class)
+				.setSelector(getFormSelector());
 	}
 
-	public void doPageLoad(final PageParameter pp, final Map<String, Object> dataBinding,
-			final PageSelector selector) {
-		final WorkitemBean workitem = getWorkitem(getWorkitemId(pp));
-		if (!workitem.isReadMark()) {
-			context.getWorkitemService().readMark(workitem, false);
-		}
-		onLoad(pp, dataBinding, selector, workitem);
+	@Override
+	public void onComplete(Map<String, String> parameters, WorkitemComplete workitemComplete) {
+		onSave(parameters, workitemComplete.getWorkitem());
 	}
 
-	protected abstract void onLoad(final PageParameter pp, final Map<String, Object> dataBinding,
-			final PageSelector selector, final WorkitemBean workitem);
+	protected void onSave(final Map<String, String> parameters, final WorkitemBean workitem) {
+	}
+
+	@Override
+	public JavascriptForward onSave(ComponentParameter cp) throws Exception {
+		// onSave(HttpUtils.map(cp.request), getWorkitem(getWorkitemId(cp)));
+		// return new
+		// JavascriptForward("$Actions['myWorklist'].refresh(); alert('").append(
+		// $m("MyWorklistForm.0")).append("');");
+		return super.onSave(cp);
+	}
 
 	@Override
 	public String getFormForward() {
-		if (url == null) {
-			url = AbstractMVCPage.url(getClass());
-		}
-		return url;
+		return url(getClass());
 	}
 
 	@Override
-	public void bindVariables(final KVMap variables) {
+	public void bindVariables(Map<String, Object> variables) {
 	}
 
 	@Override
-	public String getTitle() {
-		return null;
+	public ElementList getLeftElements(PageParameter pp) {
+		return ElementList.of(InputElement.hidden().setName("workitemId").setValue(pp));
 	}
 
-	@Override
-	public Dimension getSize() {
-		return null;
-	}
-
-	protected void updateProcessTitle(final WorkitemBean workitem, final String title) {
-		final ProcessBean process = getProcess(workitem);
-		if (!ObjectUtils.objectEquals(title, process.getTitle())) {
-			context.getProcessService().setProcessTitle(process, title);
-		}
-	}
-
-	protected ProcessBean getProcess(final WorkitemBean workitem) {
-		return context.getActivityService().getProcessBean(
-				context.getWorkitemService().getActivity(workitem));
-	}
-
-	protected Object getWorkitemId(final PageRequestResponse rRequest) {
-		return rRequest.getParameter(WorkitemBean.workitemId);
-	}
-
-	protected WorkitemBean getWorkitem(final Object id) {
-		return context.getWorkitemService().getBean(id);
+	public static WorkitemBean getWorkitemBean(final PageParameter pp) {
+		return getCacheBean(pp, context.getWorkitemService(), "workitemId");
 	}
 }

@@ -3,8 +3,8 @@ package net.simpleframework.workflow.web.page;
 import java.util.List;
 
 import net.simpleframework.mvc.PageParameter;
+import net.simpleframework.mvc.component.ui.pager.ITablePagerHandler;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
-import net.simpleframework.mvc.component.ui.pager.db.AbstractDbTablePagerHandler;
 import net.simpleframework.mvc.template.lets.Category_ListPage;
 import net.simpleframework.mvc.template.struct.CategoryItem;
 import net.simpleframework.mvc.template.struct.CategoryItems;
@@ -26,14 +26,11 @@ public abstract class AbstractWorkTPage extends Category_ListPage implements IWo
 		pp.addImportCSS(AbstractWorkTPage.class, "/my_work.css");
 	}
 
-	protected TablePagerBean addTablePagerBean(final PageParameter pp,
-			final Class<? extends AbstractDbTablePagerHandler> tblClass) {
-		return addTablePagerBean(pp, "AbstractWorkTPage_tbl", tblClass, false).setShowFilterBar(true)
+	@Override
+	protected TablePagerBean addTablePagerBean(PageParameter pp, String name,
+			Class<? extends ITablePagerHandler> handleClass) {
+		return addTablePagerBean(pp, name, handleClass, false).setShowFilterBar(true)
 				.setShowHead(true).setShowCheckbox(true);
-	}
-
-	protected WorkflowUrlsFactory getUrlsFactory() {
-		return ((IWorkflowWebContext) context).getUrlsFactory();
 	}
 
 	private CategoryItem createCategoryItem(final PageParameter pp, final String text,
@@ -59,5 +56,9 @@ public abstract class AbstractWorkTPage extends Category_ListPage implements IWo
 	@Override
 	protected int getCategoryWidth(final PageParameter pp) {
 		return 180;
+	}
+
+	protected static WorkflowUrlsFactory getUrlsFactory() {
+		return ((IWorkflowWebContext) context).getUrlsFactory();
 	}
 }

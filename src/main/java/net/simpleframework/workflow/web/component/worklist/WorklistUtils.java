@@ -2,8 +2,6 @@ package net.simpleframework.workflow.web.component.worklist;
 
 import static net.simpleframework.common.I18n.$m;
 
-import java.awt.Dimension;
-
 import javax.servlet.http.HttpSession;
 
 import net.simpleframework.common.StringUtils;
@@ -59,11 +57,11 @@ public abstract class WorklistUtils implements IWorkflowContextAware {
 			if (StringUtils.hasText(title)) {
 				sb.append("win.setHeader(\"").append(JavascriptUtils.escape(title)).append("\");");
 			}
-			final Dimension d = workflowForm.getSize();
-			if (d != null) {
-				sb.append("win.setSize(").append(d.width).append(", ").append(d.height)
-						.append(").center();");
-			}
+			// final Dimension d = workflowForm.getSize();
+			// if (d != null) {
+			// sb.append("win.setSize(").append(d.width).append(", ").append(d.height)
+			// .append(").center();");
+			// }
 			sb.append("})();");
 			sb.append(HtmlConst.TAG_SCRIPT_END);
 			final IForward forward = new UrlForward(workflowForm.getFormForward());

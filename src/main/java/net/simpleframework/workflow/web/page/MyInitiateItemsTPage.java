@@ -35,7 +35,8 @@ public class MyInitiateItemsTPage extends AbstractWorkTPage {
 	protected void onForward(final PageParameter pp) {
 		super.onForward(pp);
 
-		final TablePagerBean tablePager = addTablePagerBean(pp, MyInitiateItemsTbl.class);
+		final TablePagerBean tablePager = addTablePagerBean(pp, "MyInitiateItemsTPage_tbl",
+				MyInitiateItemsTbl.class);
 		tablePager
 				.addColumn(new TablePagerColumn("modelText", "可启动流程").setTextAlign(ETextAlign.left))
 				.addColumn(TablePagerColumn.OPE().setWidth(80));
