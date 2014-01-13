@@ -27,8 +27,8 @@ public abstract class AbstractWorkTPage extends Category_ListPage implements IWo
 	}
 
 	@Override
-	protected TablePagerBean addTablePagerBean(PageParameter pp, String name,
-			Class<? extends ITablePagerHandler> handleClass) {
+	protected TablePagerBean addTablePagerBean(final PageParameter pp, final String name,
+			final Class<? extends ITablePagerHandler> handleClass) {
 		return addTablePagerBean(pp, name, handleClass, false).setShowFilterBar(true)
 				.setShowHead(true).setShowCheckbox(true);
 	}

@@ -4,7 +4,7 @@
 
 	<components>
 		<ajaxRequest name="ajaxTransitionManualSave"
-			handleClass="net.simpleframework.workflow.web.component.action.complete.WorkitemCompleteAction"
+			handleClass="net.simpleframework.workflow.web.component.complete.WorkitemCompleteAction"
 			handleMethod="doTransitionSave">
 		</ajaxRequest>
 	</components>

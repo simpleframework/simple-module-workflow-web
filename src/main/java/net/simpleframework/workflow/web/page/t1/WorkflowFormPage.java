@@ -26,7 +26,7 @@ import net.simpleframework.workflow.web.page.MyWorklistTPage;
 public class WorkflowFormPage extends T1FormTemplatePage implements IWorkflowContextAware {
 
 	@Override
-	protected void onForward(PageParameter pp) {
+	protected void onForward(final PageParameter pp) {
 		super.onForward(pp);
 		pp.addImportCSS(AbstractWorkTPage.class, "/my_work.css");
 	}
@@ -36,7 +36,7 @@ public class WorkflowFormPage extends T1FormTemplatePage implements IWorkflowCon
 			final String currentVariable) throws IOException {
 		final StringBuilder sb = new StringBuilder();
 		sb.append("<div class='WorkflowFormPage'>");
-		IWorkflowForm workflowForm = getWorkflowForm(pp);
+		final IWorkflowForm workflowForm = getWorkflowForm(pp);
 		if (workflowForm != null) {
 			sb.append(pp.includeUrl(workflowForm.getFormForward()));
 		}
@@ -44,7 +44,7 @@ public class WorkflowFormPage extends T1FormTemplatePage implements IWorkflowCon
 		return sb.toString();
 	}
 
-	protected IWorkflowForm getWorkflowForm(PageParameter pp) {
+	protected IWorkflowForm getWorkflowForm(final PageParameter pp) {
 		final WorkitemBean workitem = AbstractWorkflowFormPage.getWorkitemBean(pp);
 		return (IWorkflowForm) context.getActivityService().getWorkflowForm(
 				context.getWorkitemService().getActivity(workitem));

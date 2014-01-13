@@ -3,7 +3,7 @@
 
   <components>
     <ajaxRequest name="ajaxStartProcessByInitiator" handleMethod="doStartProcess"
-      handleClass="net.simpleframework.workflow.web.component.action.startprocess.StartProcessAction">
+      handleClass="net.simpleframework.workflow.web.component.startprocess.StartProcessAction">
     </ajaxRequest>
   </components>
 </page>

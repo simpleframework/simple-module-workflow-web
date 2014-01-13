@@ -25,7 +25,7 @@ public abstract class AbstractWorkflowFormPage extends FormTableRowTemplatePage 
 		IWorkflowForm, IWorkflowContextAware {
 
 	@Override
-	protected void onForward(PageParameter pp) {
+	protected void onForward(final PageParameter pp) {
 		super.onForward(pp);
 
 		// 完成
@@ -34,7 +34,8 @@ public abstract class AbstractWorkflowFormPage extends FormTableRowTemplatePage 
 	}
 
 	@Override
-	public void onComplete(Map<String, String> parameters, WorkitemComplete workitemComplete) {
+	public void onComplete(final Map<String, String> parameters,
+			final WorkitemComplete workitemComplete) {
 		onSave(parameters, workitemComplete.getWorkitem());
 	}
 
@@ -42,7 +43,7 @@ public abstract class AbstractWorkflowFormPage extends FormTableRowTemplatePage 
 	}
 
 	@Override
-	public JavascriptForward onSave(ComponentParameter cp) throws Exception {
+	public JavascriptForward onSave(final ComponentParameter cp) throws Exception {
 		// onSave(HttpUtils.map(cp.request), getWorkitem(getWorkitemId(cp)));
 		// return new
 		// JavascriptForward("$Actions['myWorklist'].refresh(); alert('").append(
@@ -56,16 +57,16 @@ public abstract class AbstractWorkflowFormPage extends FormTableRowTemplatePage 
 	}
 
 	@Override
-	public void bindVariables(Map<String, Object> variables) {
+	public void bindVariables(final Map<String, Object> variables) {
 	}
 
 	@Override
-	public ElementList getLeftElements(PageParameter pp) {
+	public ElementList getLeftElements(final PageParameter pp) {
 		return ElementList.of(InputElement.hidden().setName("workitemId").setValue(pp));
 	}
 
 	@Override
-	public ElementList getRightElements(PageParameter pp) {
+	public ElementList getRightElements(final PageParameter pp) {
 		return ElementList.of(
 				SAVE_BTN().setText("暂存").setHighlight(false),
 				SpanElement.SPACE,

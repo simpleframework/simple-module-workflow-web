@@ -1,5 +1,6 @@
 package net.simpleframework.workflow.web.component.startprocess;
 
+import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.component.AbstractComponentHandler;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.workflow.engine.InitiateItem;
@@ -18,7 +19,7 @@ public class DefaultStartProcessHandler extends AbstractComponentHandler impleme
 	}
 
 	@Override
-	public String jsStartProcessCallback(final ComponentParameter cp, final ProcessBean process) {
+	public JavascriptForward doStartProcess(final ComponentParameter cp, final ProcessBean process) {
 		return null;
 	}
 }

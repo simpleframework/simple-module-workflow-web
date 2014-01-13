@@ -24,7 +24,7 @@ public class StartProcessAction extends DefaultAjaxRequestHandler {
 			final ID selected = ID.of(initiator);
 			initiateItem.setSelectedRoleId(selected);
 		}
-		return new JavascriptForward(StartProcessUtils.jsStartProcessCallback(nCP, initiateItem));
+		return StartProcessUtils.doStartProcess(nCP, initiateItem);
 	}
 
 	public IForward doTransitionSave(final ComponentParameter cp) {
@@ -34,15 +34,15 @@ public class StartProcessAction extends DefaultAjaxRequestHandler {
 
 		final ComponentParameter nCP = StartProcessUtils.get(cp);
 		final String modelIdParameterName = (String) nCP.getBeanProperty("modelIdParameterName");
-		final JavascriptForward js = new JavascriptForward();
 		if (initiateItem.getInitiateRoles().size() > 1) {
+			final JavascriptForward js = new JavascriptForward();
 			js.append("$Actions['process_transition_manual_window'].close();");
 			js.append("$Actions['initiator_select_window']('").append(StartProcessUtils.BEAN_ID)
 					.append("=").append(nCP.hashId()).append("&").append(modelIdParameterName)
 					.append("=").append(nCP.getParameter(modelIdParameterName)).append("');");
+			return js;
 		} else {
-			js.append(StartProcessUtils.jsStartProcessCallback(nCP, initiateItem));
+			return StartProcessUtils.doStartProcess(nCP, initiateItem);
 		}
-		return js;
 	}
 }

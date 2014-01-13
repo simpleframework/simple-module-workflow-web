@@ -12,9 +12,11 @@ import net.simpleframework.mvc.component.AbstractComponentBean;
  */
 public class WorkitemCompleteBean extends AbstractComponentBean {
 
+	/* workitemId的参数名 */
 	private String workitemIdParameterName = BeanDefaults.getString(getClass(),
 			"workitemIdParameterName", "workitemId");
 
+	/* 回调js */
 	private String jsCompleteCallback;
 
 	@Override
@@ -26,7 +28,7 @@ public class WorkitemCompleteBean extends AbstractComponentBean {
 		return workitemIdParameterName;
 	}
 
-	public WorkitemCompleteBean setWorkitemIdParameterName(String workitemIdParameterName) {
+	public WorkitemCompleteBean setWorkitemIdParameterName(final String workitemIdParameterName) {
 		this.workitemIdParameterName = workitemIdParameterName;
 		return this;
 	}
@@ -35,7 +37,7 @@ public class WorkitemCompleteBean extends AbstractComponentBean {
 		return jsCompleteCallback;
 	}
 
-	public WorkitemCompleteBean setJsCompleteCallback(String jsCompleteCallback) {
+	public WorkitemCompleteBean setJsCompleteCallback(final String jsCompleteCallback) {
 		this.jsCompleteCallback = jsCompleteCallback;
 		return this;
 	}

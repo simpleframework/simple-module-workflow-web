@@ -51,7 +51,7 @@ public abstract class _AbstractWorkflowFormPage extends AbstractTemplatePage imp
 	}
 
 	@Override
-	public void bindVariables(Map<String, Object> variables) {
+	public void bindVariables(final Map<String, Object> variables) {
 	}
 
 	@Override

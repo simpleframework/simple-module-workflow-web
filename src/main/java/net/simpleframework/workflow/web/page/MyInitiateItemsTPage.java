@@ -9,6 +9,7 @@ import net.simpleframework.ado.query.IDataQuery;
 import net.simpleframework.ado.query.ListDataObjectQuery;
 import net.simpleframework.common.ID;
 import net.simpleframework.common.coll.KVMap;
+import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.ETextAlign;
 import net.simpleframework.mvc.common.element.LinkElement;
@@ -75,14 +76,14 @@ public class MyInitiateItemsTPage extends AbstractWorkTPage {
 	public static class _StartProcessHandler extends DefaultStartProcessHandler {
 
 		@Override
-		public String jsStartProcessCallback(final ComponentParameter cp, final ProcessBean process) {
+		public JavascriptForward doStartProcess(final ComponentParameter cp, final ProcessBean process) {
 			final WorkitemBean workitem = context.getProcessService().getFirstWorkitem(process);
 			if (workitem != null) {
-				final StringBuilder sb = new StringBuilder();
+				final JavascriptForward js = new JavascriptForward();
 				// sb.append("$Actions.loc('").append(AbstractMVCPage.uriFor(MyWorklistTPage.class))
 				// .append("');");
 				cp.getSession().setAttribute(WorkitemBean.workitemId, workitem.getId());
-				return sb.toString();
+				return js;
 			} else {
 				return null;
 			}

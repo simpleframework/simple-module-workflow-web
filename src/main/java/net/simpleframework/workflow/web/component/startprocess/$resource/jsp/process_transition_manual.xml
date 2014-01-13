@@ -3,7 +3,7 @@
 
   <components>
     <ajaxRequest name="ajaxProcessTransitionManualSave"
-      handleClass="net.simpleframework.workflow.web.component.action.startprocess.StartProcessAction"
+      handleClass="net.simpleframework.workflow.web.component.startprocess.StartProcessAction"
       handleMethod="doTransitionSave">
     </ajaxRequest>
   </components>

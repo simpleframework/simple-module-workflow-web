@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import net.simpleframework.common.StringUtils;
 import net.simpleframework.common.coll.KVMap;
+import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.MVCUtils;
 import net.simpleframework.mvc.PageRequestResponse;
 import net.simpleframework.mvc.UrlForward;
@@ -87,9 +88,9 @@ public abstract class StartProcessUtils implements IWorkflowContextAware {
 												+ "/jsp/start_process_route2.jsp"));
 						kv.add("confirmMessage", confirmMessage);
 					} else {
-						final String jsCallback = jsStartProcessCallback(cp, initiateItem);
-						if (StringUtils.hasText(jsCallback)) {
-							kv.add("jsCallback", jsCallback);
+						final JavascriptForward jsCallback = doStartProcess(cp, initiateItem);
+						if (jsCallback != null) {
+							kv.add("jsCallback", jsCallback.toString());
 						}
 					}
 				}
@@ -102,10 +103,9 @@ public abstract class StartProcessUtils implements IWorkflowContextAware {
 		out.flush();
 	}
 
-	static String jsStartProcessCallback(final ComponentParameter nCP,
+	static JavascriptForward doStartProcess(final ComponentParameter nCP,
 			final InitiateItem initiateItem) {
-		final IStartProcessHandler hdl = (IStartProcessHandler) nCP.getComponentHandler();
-		return hdl
-				.jsStartProcessCallback(nCP, context.getProcessService().startProcess(initiateItem));
+		return ((IStartProcessHandler) nCP.getComponentHandler()).doStartProcess(nCP, context
+				.getProcessService().startProcess(initiateItem));
 	}
 }

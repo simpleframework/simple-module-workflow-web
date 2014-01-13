@@ -1,5 +1,6 @@
 package net.simpleframework.workflow.web.component.startprocess;
 
+import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.IComponentHandler;
 import net.simpleframework.workflow.engine.InitiateItem;
@@ -28,5 +29,5 @@ public interface IStartProcessHandler extends IComponentHandler {
 	 * @param initiateItem
 	 * @return 返回
 	 */
-	String jsStartProcessCallback(ComponentParameter cp, ProcessBean process);
+	JavascriptForward doStartProcess(ComponentParameter cp, ProcessBean process);
 }

@@ -23,7 +23,7 @@ public class WorkflowUrlsFactory extends UrlsCache {
 		urls.put(MyInitiateItemsTPage.class.getName(), MyInitiateItemsPage.class);
 	}
 
-	public String getMyWorkFormUrl(WorkitemBean workitem) {
+	public String getMyWorkFormUrl(final WorkitemBean workitem) {
 		return AbstractMVCPage.url(WorkflowFormPage.class, "workitemId=" + workitem.getId());
 	}
 
