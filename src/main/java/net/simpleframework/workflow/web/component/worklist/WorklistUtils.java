@@ -37,7 +37,7 @@ public abstract class WorklistUtils implements IWorkflowContextAware {
 	}
 
 	public static WorkitemBean getWorkitem(final PageRequestResponse rRequest) {
-		return context.getWorkitemService().getBean(rRequest.getParameter(WorkitemBean.workitemId));
+		return context.getWorkitemService().getBean(rRequest.getParameter("workitemId"));
 	}
 
 	public static String getFormResponseText(final PageRequestResponse rRequest) {
@@ -78,9 +78,9 @@ public abstract class WorklistUtils implements IWorkflowContextAware {
 	public static String jsWorkflowForm(final ComponentParameter cp) {
 		final StringBuilder sb = new StringBuilder();
 		final HttpSession httpSession = cp.getSession();
-		final Object id = httpSession.getAttribute(WorkitemBean.workitemId);
+		final Object id = httpSession.getAttribute("workitemId");
 		if (id != null) {
-			httpSession.removeAttribute(WorkitemBean.workitemId);
+			httpSession.removeAttribute("workitemId");
 			final WorkitemBean workitem = context.getWorkitemService().getBean(id);
 			if (workitem != null) {
 				// final IWorklistHandler lHandle = (IWorklistHandler)

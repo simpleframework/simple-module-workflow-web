@@ -19,6 +19,7 @@ import net.simpleframework.mvc.component.ComponentUtils;
 import net.simpleframework.workflow.engine.IProcessModelService;
 import net.simpleframework.workflow.engine.IWorkflowContextAware;
 import net.simpleframework.workflow.engine.InitiateItem;
+import net.simpleframework.workflow.engine.ProcessBean;
 import net.simpleframework.workflow.engine.ProcessModelBean;
 
 /**
@@ -65,7 +66,7 @@ public abstract class StartProcessUtils implements IWorkflowContextAware {
 			kv.add("exception", $m("StartProcessUtils.0"));
 		} else {
 			try {
-				((IStartProcessHandler) cp.getComponentHandler()).doInit(cp, initiateItem);
+				((IStartProcessHandler) cp.getComponentHandler()).onInit(cp, initiateItem);
 				initiateItem.doTransitions();
 
 				final boolean transitionManual = initiateItem.isTransitionManual();
@@ -105,7 +106,9 @@ public abstract class StartProcessUtils implements IWorkflowContextAware {
 
 	static JavascriptForward doStartProcess(final ComponentParameter nCP,
 			final InitiateItem initiateItem) {
-		return ((IStartProcessHandler) nCP.getComponentHandler()).doStartProcess(nCP, context
-				.getProcessService().startProcess(initiateItem));
+		// 发起流程实例
+		final ProcessBean process = context.getProcessService().startProcess(initiateItem);
+		// 触发onStartProcess回调
+		return ((IStartProcessHandler) nCP.getComponentHandler()).onStartProcess(nCP, process);
 	}
 }

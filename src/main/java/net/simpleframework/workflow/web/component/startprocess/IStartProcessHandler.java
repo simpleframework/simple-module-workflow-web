@@ -20,7 +20,7 @@ public interface IStartProcessHandler extends IComponentHandler {
 	 * @param compParameter
 	 * @param initiateItem
 	 */
-	void doInit(ComponentParameter cp, InitiateItem initiateItem);
+	void onInit(ComponentParameter cp, InitiateItem initiateItem);
 
 	/**
 	 * 创建流程实例
@@ -29,5 +29,5 @@ public interface IStartProcessHandler extends IComponentHandler {
 	 * @param initiateItem
 	 * @return 返回
 	 */
-	JavascriptForward doStartProcess(ComponentParameter cp, ProcessBean process);
+	JavascriptForward onStartProcess(ComponentParameter cp, ProcessBean process);
 }

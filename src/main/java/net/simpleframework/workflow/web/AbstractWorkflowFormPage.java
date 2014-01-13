@@ -11,6 +11,7 @@ import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.template.lets.FormTableRowTemplatePage;
 import net.simpleframework.workflow.engine.IWorkflowContextAware;
 import net.simpleframework.workflow.engine.IWorkflowForm;
+import net.simpleframework.workflow.engine.ProcessBean;
 import net.simpleframework.workflow.engine.WorkitemBean;
 import net.simpleframework.workflow.engine.WorkitemComplete;
 import net.simpleframework.workflow.web.component.complete.WorkitemCompleteBean;
@@ -49,6 +50,15 @@ public abstract class AbstractWorkflowFormPage extends FormTableRowTemplatePage 
 		// JavascriptForward("$Actions['myWorklist'].refresh(); alert('").append(
 		// $m("MyWorklistForm.0")).append("');");
 		return super.onSave(cp);
+	}
+
+	protected ProcessBean getProcess(final PageParameter pp) {
+		return getProcess(getWorkitemBean(pp));
+	}
+
+	protected ProcessBean getProcess(final WorkitemBean workitem) {
+		return context.getActivityService().getProcessBean(
+				context.getWorkitemService().getActivity(workitem));
 	}
 
 	@Override

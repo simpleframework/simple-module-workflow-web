@@ -5,7 +5,6 @@ import net.simpleframework.mvc.component.AbstractComponentRender.ComponentJavasc
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.ComponentRenderUtils;
 import net.simpleframework.mvc.component.ComponentUtils;
-import net.simpleframework.workflow.engine.WorkitemBean;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -17,13 +16,14 @@ public class WorkitemCompleteRender extends ComponentJavascriptRender {
 
 	@Override
 	public String getJavascriptCode(final ComponentParameter cp) {
-		final String workitemId = cp.getParameter(WorkitemBean.workitemId);
+		final String workitemIdParameterName = (String) cp.getBeanProperty("workitemIdParameterName");
+		final String workitemId = cp.getParameter(workitemIdParameterName);
 		final StringBuilder sb = new StringBuilder();
 		sb.append("var dc = function() { $Loading.hide(); };");
 		sb.append("$Loading.show();");
 		final StringBuilder params = new StringBuilder();
 		params.append(WorkitemCompleteUtils.BEAN_ID).append("=").append(cp.hashId()).append("&")
-				.append(WorkitemBean.workitemId).append("=").append(workitemId);
+				.append(workitemIdParameterName).append("=").append(workitemId);
 		sb.append("var params=\"").append(params).append("\";");
 		ComponentRenderUtils.appendParameters(sb, cp, "params");
 		sb.append("params = params.addParameter(arguments[0]);");

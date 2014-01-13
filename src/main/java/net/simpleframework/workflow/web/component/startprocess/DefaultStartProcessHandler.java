@@ -15,11 +15,11 @@ import net.simpleframework.workflow.engine.ProcessBean;
 public class DefaultStartProcessHandler extends AbstractComponentHandler implements
 		IStartProcessHandler {
 	@Override
-	public void doInit(final ComponentParameter cp, final InitiateItem initiateItem) {
+	public void onInit(final ComponentParameter cp, final InitiateItem initiateItem) {
 	}
 
 	@Override
-	public JavascriptForward doStartProcess(final ComponentParameter cp, final ProcessBean process) {
+	public JavascriptForward onStartProcess(final ComponentParameter cp, final ProcessBean process) {
 		return null;
 	}
 }

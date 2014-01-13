@@ -34,17 +34,20 @@ public class WorkitemCompleteAction extends DefaultAjaxRequestHandler implements
 	}
 
 	public IForward doTransitionSave(final ComponentParameter cp) {
+		final ComponentParameter nCP = WorkitemCompleteUtils.get(cp);
+		final String workitemIdParameterName = (String) nCP
+				.getBeanProperty("workitemIdParameterName");
 		final WorkitemBean workitem = context.getWorkitemService().getBean(
-				cp.getParameter(WorkitemBean.workitemId));
+				cp.getParameter(workitemIdParameterName));
 		final String transitions = cp.getParameter("transitions");
 		final String[] transitionIds = StringUtils.split(transitions);
 		final WorkitemComplete workitemComplete = WorkitemComplete.get(workitem);
 		final ActivityComplete activityComplete = workitemComplete.getActivityComplete();
 		final JavascriptForward js = new JavascriptForward();
-		final ComponentParameter nCP = WorkitemCompleteUtils.get(cp);
+
 		if (activityComplete.isParticipantManual(transitionIds)) {
 			js.append("$Actions['participantManualWindow']('").append(WorkitemCompleteUtils.BEAN_ID)
-					.append("=").append(nCP.hashId()).append("&").append(WorkitemBean.workitemId)
+					.append("=").append(nCP.hashId()).append("&").append(workitemIdParameterName)
 					.append("=").append(workitem.getId()).append("&transitions=").append(transitions)
 					.append("');");
 		} else {
@@ -60,8 +63,12 @@ public class WorkitemCompleteAction extends DefaultAjaxRequestHandler implements
 	}
 
 	public IForward doParticipantSave(final ComponentParameter cp) {
+		final ComponentParameter nCP = WorkitemCompleteUtils.get(cp);
+		final String workitemIdParameterName = (String) nCP
+				.getBeanProperty("workitemIdParameterName");
+
 		final WorkitemBean workitem = context.getWorkitemService().getBean(
-				cp.getParameter(WorkitemBean.workitemId));
+				cp.getParameter(workitemIdParameterName));
 		final WorkitemComplete workitemComplete = WorkitemComplete.get(workitem);
 		final ActivityComplete activityComplete = workitemComplete.getActivityComplete();
 		final Map<String, String[]> participantIds = new HashMap<String, String[]>();
@@ -72,7 +79,6 @@ public class WorkitemCompleteAction extends DefaultAjaxRequestHandler implements
 		}
 		activityComplete.resetParticipants(participantIds);
 
-		final ComponentParameter nCP = WorkitemCompleteUtils.get(cp);
 		((IWorkitemCompleteHandler) nCP.getComponentHandler()).complete(nCP, workitemComplete);
 
 		final JavascriptForward js = new JavascriptForward();

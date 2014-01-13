@@ -76,13 +76,12 @@ public class MyInitiateItemsTPage extends AbstractWorkTPage {
 	public static class _StartProcessHandler extends DefaultStartProcessHandler {
 
 		@Override
-		public JavascriptForward doStartProcess(final ComponentParameter cp, final ProcessBean process) {
+		public JavascriptForward onStartProcess(final ComponentParameter cp, final ProcessBean process) {
 			final WorkitemBean workitem = context.getProcessService().getFirstWorkitem(process);
 			if (workitem != null) {
 				final JavascriptForward js = new JavascriptForward();
-				// sb.append("$Actions.loc('").append(AbstractMVCPage.uriFor(MyWorklistTPage.class))
-				// .append("');");
-				cp.getSession().setAttribute(WorkitemBean.workitemId, workitem.getId());
+				js.append("$Actions.loc('").append(getUrlsFactory().getMyWorkFormUrl(workitem))
+						.append("');");
 				return js;
 			} else {
 				return null;

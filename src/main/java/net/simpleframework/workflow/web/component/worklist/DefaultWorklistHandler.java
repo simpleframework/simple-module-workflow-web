@@ -6,7 +6,6 @@ import java.util.Map;
 
 import net.simpleframework.common.StringUtils;
 import net.simpleframework.common.coll.KVMap;
-import net.simpleframework.mvc.common.element.LinkElement;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.ComponentUtils;
 import net.simpleframework.mvc.component.ui.menu.MenuBean;
@@ -62,12 +61,12 @@ public class DefaultWorklistHandler extends AbstractDbTablePagerHandler implemen
 	// }
 	// }
 
-	public String jsWorkflowFormAction(final WorkitemBean workitemBean) {
-		final StringBuilder sb = new StringBuilder();
-		sb.append("$Actions['workflowFormWindow']('").append(WorkitemBean.workitemId);
-		sb.append("=").append(workitemBean.getId()).append("');");
-		return sb.toString();
-	}
+	// public String jsWorkflowFormAction(final WorkitemBean workitemBean) {
+	// final StringBuilder sb = new StringBuilder();
+	// sb.append("$Actions['workflowFormWindow']('").append(WorkitemBean.workitemId);
+	// sb.append("=").append(workitemBean.getId()).append("');");
+	// return sb.toString();
+	// }
 
 	// private final ParameterMap usersMap = new ParameterMap();
 	//
@@ -142,8 +141,9 @@ public class DefaultWorklistHandler extends AbstractDbTablePagerHandler implemen
 					String title = StringUtils.text(context.getActivityService()
 							.getProcessBean(activity).getTitle(), $m("DefaultWorklistHandle.0"));
 					if (!context.getWorkitemService().isFinalStatus(workitemBean)) {
-						title = new LinkElement(title).setOnclick(jsWorkflowFormAction(workitemBean))
-								.toString();
+						// title = new
+						// LinkElement(title).setOnclick(jsWorkflowFormAction(workitemBean))
+						// .toString();
 					}
 					if (EWorkitemStatus.running == workitemBean.getStatus()
 							&& !workitemBean.isReadMark()) {
