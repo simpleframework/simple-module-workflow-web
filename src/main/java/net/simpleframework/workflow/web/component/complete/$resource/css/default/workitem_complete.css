@@ -1,0 +1,60 @@
+.transition_manual .node,
+.participant_manual .participant {
+	float: left;
+	margin: 4px;
+	text-align: center;
+	border: 1px solid #bbb;
+	padding: 8px 4px 2px 4px;
+	cursor: pointer;
+	background-color: #fff;
+}
+
+.transition_manual .node:hover,
+.participant_manual .participant:hover {
+	background-color: #fafafa;
+	-webkit-box-shadow: 0px 0px 6px #bbb;
+	-moz-box-shadow: 0px 0px 6px #bbb;
+	box-shadow: 0px 0px 6px #bbb;
+}
+	
+.transition_manual .node .icon,
+.participant_manual .participant .icon {
+	display: inline-block;
+}
+
+.transition_manual .node .icon {
+	height: 32px;
+	width: 32px;
+	background: url(images/node_user.gif) no-repeat;
+}
+
+.participant_manual .participant .icon {
+	height: 48px;
+	width: 48px;
+}
+
+.transition_manual .node .txt,
+.participant_manual .participant .txt {
+	font-size: 9.5pt;
+	min-width: 90px;
+}
+
+.transition_manual .msg,
+.participant_manual .msg {
+	color: red; 
+	margin: 4px;
+	clear: both;
+}
+
+.participant_manual .node {
+	text-align: center;
+	padding: 6px;
+	background: #f9f9f9;
+	font-size: 9.5pt;
+}
+
+.participant_manual .participants {
+	border-top: 1px solid #bbb;
+	border-bottom: 1px solid #bbb;
+	padding: 6px;
+}

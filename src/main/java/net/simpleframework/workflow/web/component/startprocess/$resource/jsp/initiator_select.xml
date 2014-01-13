@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://simpleframework.net/xsd/default/simple.xsd">
+
+  <components>
+    <ajaxRequest name="ajaxStartProcessByInitiator" handleMethod="doStartProcess"
+      handleClass="net.simpleframework.workflow.web.component.action.startprocess.StartProcessAction">
+    </ajaxRequest>
+  </components>
+</page>

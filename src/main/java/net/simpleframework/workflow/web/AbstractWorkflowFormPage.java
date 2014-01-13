@@ -6,13 +6,14 @@ import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.InputElement;
+import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.template.lets.FormTableRowTemplatePage;
 import net.simpleframework.workflow.engine.IWorkflowContextAware;
 import net.simpleframework.workflow.engine.IWorkflowForm;
 import net.simpleframework.workflow.engine.WorkitemBean;
 import net.simpleframework.workflow.engine.WorkitemComplete;
-import net.simpleframework.workflow.web.component.action.complete.WorkitemCompleteBean;
+import net.simpleframework.workflow.web.component.complete.WorkitemCompleteBean;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -61,6 +62,15 @@ public abstract class AbstractWorkflowFormPage extends FormTableRowTemplatePage 
 	@Override
 	public ElementList getLeftElements(PageParameter pp) {
 		return ElementList.of(InputElement.hidden().setName("workitemId").setValue(pp));
+	}
+
+	@Override
+	public ElementList getRightElements(PageParameter pp) {
+		return ElementList.of(
+				SAVE_BTN().setText("暂存").setHighlight(false),
+				SpanElement.SPACE,
+				VALIDATION_BTN().setText("完成").setHighlight(true)
+						.setOnclick("$Actions['AbstractWorkflowFormPage_completeAction']();"));
 	}
 
 	public static WorkitemBean getWorkitemBean(final PageParameter pp) {

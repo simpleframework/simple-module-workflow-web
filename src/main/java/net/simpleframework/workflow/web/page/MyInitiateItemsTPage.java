@@ -20,8 +20,8 @@ import net.simpleframework.workflow.engine.InitiateItem;
 import net.simpleframework.workflow.engine.InitiateItems;
 import net.simpleframework.workflow.engine.ProcessBean;
 import net.simpleframework.workflow.engine.WorkitemBean;
-import net.simpleframework.workflow.web.component.action.startprocess.DefaultStartProcessHandler;
-import net.simpleframework.workflow.web.component.action.startprocess.StartProcessBean;
+import net.simpleframework.workflow.web.component.startprocess.DefaultStartProcessHandler;
+import net.simpleframework.workflow.web.component.startprocess.StartProcessBean;
 
 /**
  * Licensed under the Apache License, Version 2.0

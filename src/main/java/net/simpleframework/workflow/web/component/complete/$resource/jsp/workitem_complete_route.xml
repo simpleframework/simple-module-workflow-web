@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="http://simpleframework.net/xsd/default/simple.xsd">
+
+	<components>
+		<ajaxRequest name="transitionManualPage">
+			<urlForward>transition_manual.jsp</urlForward>
+		</ajaxRequest>
+		<window name="transitionManualWindow" contentRef="transitionManualPage" title="#(complete_action_route.0)"
+			height="320" width="480" contentStyle="padding: 0;">
+		</window>
+
+		<ajaxRequest name="participantManualPage">
+			<urlForward>participant_manual.jsp</urlForward>
+		</ajaxRequest>
+		<window name="participantManualWindow" contentRef="participantManualPage" title="#(complete_action_route.1)"
+			height="450" width="400" contentStyle="padding: 0;">
+		</window>
+	</components>
+</page>

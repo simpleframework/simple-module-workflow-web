@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://simpleframework.net/xsd/default/simple.xsd">
+
+  <components>
+    <ajaxRequest name="initiator_select_page">
+      <urlForward>initiator_select.jsp</urlForward>
+    </ajaxRequest>
+    <window name="initiator_select_window" contentRef="initiator_select_page" title="#(start_process_action_route.0)"
+      width="300" height="360" contentStyle="padding: 0px;">
+    </window>
+
+    <ajaxRequest name="process_transition_manual_page">
+      <urlForward>process_transition_manual.jsp</urlForward>
+    </ajaxRequest>
+    <window name="process_transition_manual_window" contentRef="process_transition_manual_page"
+      title="#(start_process_action_route.1)" height="320" width="480" contentStyle="padding: 0px;">
+    </window>
+  </components>
+</page>

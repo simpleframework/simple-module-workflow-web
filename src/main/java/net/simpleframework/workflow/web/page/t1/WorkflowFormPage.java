@@ -14,6 +14,7 @@ import net.simpleframework.workflow.engine.IWorkflowForm;
 import net.simpleframework.workflow.engine.WorkitemBean;
 import net.simpleframework.workflow.web.AbstractWorkflowFormPage;
 import net.simpleframework.workflow.web.IWorkflowWebContext;
+import net.simpleframework.workflow.web.page.AbstractWorkTPage;
 import net.simpleframework.workflow.web.page.MyWorklistTPage;
 
 /**
@@ -23,6 +24,12 @@ import net.simpleframework.workflow.web.page.MyWorklistTPage;
  *         http://www.simpleframework.net
  */
 public class WorkflowFormPage extends T1FormTemplatePage implements IWorkflowContextAware {
+
+	@Override
+	protected void onForward(PageParameter pp) {
+		super.onForward(pp);
+		pp.addImportCSS(AbstractWorkTPage.class, "/my_work.css");
+	}
 
 	@Override
 	protected String toHtml(final PageParameter pp, final Map<String, Object> variables,
