@@ -6,7 +6,10 @@ import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.InputElement;
+import net.simpleframework.mvc.common.element.RowField;
 import net.simpleframework.mvc.common.element.SpanElement;
+import net.simpleframework.mvc.common.element.TableRow;
+import net.simpleframework.mvc.common.element.TableRows;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.template.lets.FormTableRowTemplatePage;
 import net.simpleframework.workflow.engine.IWorkflowContextAware;
@@ -41,15 +44,16 @@ public abstract class AbstractWorkflowFormPage extends FormTableRowTemplatePage 
 	}
 
 	protected void onSave(final Map<String, String> parameters, final WorkitemBean workitem) {
+		final ProcessBean process = getProcess(workitem);
+		context.getProcessService().saveProcessTitle(process, parameters.get("wf_topic"));
 	}
 
 	@Override
 	public JavascriptForward onSave(final ComponentParameter cp) throws Exception {
-		// onSave(HttpUtils.map(cp.request), getWorkitem(getWorkitemId(cp)));
-		// return new
-		// JavascriptForward("$Actions['myWorklist'].refresh(); alert('").append(
-		// $m("MyWorklistForm.0")).append("');");
-		return super.onSave(cp);
+		final WorkitemBean workitem = getWorkitemBean(cp);
+		onSave(cp.map(), workitem);
+		return new JavascriptForward("$Actions.loc('").append(
+				getUrlsFactory().getMyWorkFormUrl(workitem)).append("');");
 	}
 
 	protected ProcessBean getProcess(final PageParameter pp) {
@@ -82,6 +86,27 @@ public abstract class AbstractWorkflowFormPage extends FormTableRowTemplatePage 
 				SpanElement.SPACE,
 				VALIDATION_BTN().setText("完成").setHighlight(true)
 						.setOnclick("$Actions['AbstractWorkflowFormPage_completeAction']();"));
+	}
+
+	@Override
+	public boolean isButtonsOnTop(final PageParameter pp) {
+		return true;
+	}
+
+	@Override
+	protected TableRows getTableRows(final PageParameter pp) {
+		final InputElement wf_topic = new InputElement("wf_topic");
+		final InputElement wf_description = InputElement.textarea("wf_description").setRows(5);
+		final ProcessBean process = getProcess(pp);
+		wf_topic.setText(process.getTitle());
+
+		final TableRow r1 = new TableRow(new RowField("标题", wf_topic));
+		final TableRow r2 = new TableRow(new RowField("描述", wf_description));
+		return TableRows.of(r1, r2);
+	}
+
+	protected static WorkflowUrlsFactory getUrlsFactory() {
+		return ((IWorkflowWebContext) context).getUrlsFactory();
 	}
 
 	public static WorkitemBean getWorkitemBean(final PageParameter pp) {

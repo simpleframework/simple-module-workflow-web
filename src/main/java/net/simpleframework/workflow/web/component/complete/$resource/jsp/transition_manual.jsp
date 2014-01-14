@@ -7,9 +7,11 @@
 <%
 	final ComponentParameter nCP = WorkitemCompleteUtils.get(request,
 			response);
+	final String workitemIdParameterName = (String) nCP
+			.getBeanProperty("workitemIdParameterName");
 	final WorkitemBean workitem = IWorkflowContextAware.context
 			.getWorkitemService().getBean(
-					request.getParameter(WorkitemBean.workitemId));
+					request.getParameter(workitemIdParameterName));
 %>
 <div class="simple_window_tcb transition_manual">
   <div class="t">#(transition_manual.0)</div>
@@ -25,7 +27,7 @@
     </div>
     <%
     	}
-    	final String params = WorkitemBean.workitemId + "=" + workitem.getId() + "&"
+    	final String params = workitemIdParameterName + "=" + workitem.getId() + "&"
     			+ WorkitemCompleteUtils.BEAN_ID + "=" + nCP.hashId();
     %>
     <div class="msg"></div>

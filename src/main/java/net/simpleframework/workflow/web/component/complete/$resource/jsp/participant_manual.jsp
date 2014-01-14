@@ -11,9 +11,11 @@
 <%
 	final ComponentParameter nCP = WorkitemCompleteUtils.get(request,
 			response);
+	final String workitemIdParameterName = (String) nCP
+			.getBeanProperty("workitemIdParameterName");
 	final WorkitemBean workitem = IWorkflowContextAware.context
 			.getWorkitemService().getBean(
-					request.getParameter(WorkitemBean.workitemId));
+					request.getParameter(workitemIdParameterName));
 	final IPagePermissionHandler service = (IPagePermissionHandler) IWorkflowContextAware.context
 			.getParticipantService();
 %>
@@ -46,7 +48,7 @@
   </div>
   <%
   	}
-  	final String params = WorkitemBean.workitemId + "=" + workitem.getId() + "&"
+  	final String params = workitemIdParameterName + "=" + workitem.getId() + "&"
   			+ WorkitemCompleteUtils.BEAN_ID + "=" + nCP.hashId();
   %>
   <div class="b">
