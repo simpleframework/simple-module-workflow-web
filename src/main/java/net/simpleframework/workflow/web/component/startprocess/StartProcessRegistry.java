@@ -59,8 +59,8 @@ public class StartProcessRegistry extends AbstractComponentRegistry implements
 
 	public static class StartProcessHandler extends DefaultAjaxRequestHandler {
 		@Override
-		public IForward ajaxProcess(ComponentParameter cp) throws Exception {
-			StartProcessBean startProcess = (StartProcessBean) cp.componentBean
+		public IForward ajaxProcess(final ComponentParameter cp) throws Exception {
+			final StartProcessBean startProcess = (StartProcessBean) cp.componentBean
 					.getAttr("_startProcess");
 			final ComponentParameter nCP = ComponentParameter.get(cp, startProcess);
 			final InitiateItem initiateItem = StartProcessUtils.getInitiateItem(nCP);

@@ -63,8 +63,8 @@ public abstract class StartProcessUtils implements IWorkflowContextAware {
 		final ComponentParameter cp = get(request, response);
 		final String modelIdParameterName = (String) cp.getBeanProperty("modelIdParameterName");
 
-		String componentName = cp.getComponentName();
-		JavascriptForward js = new JavascriptForward();
+		final String componentName = cp.getComponentName();
+		final JavascriptForward js = new JavascriptForward();
 		final KVMap kv = new KVMap();
 		final InitiateItem initiateItem = getInitiateItem(cp);
 		if (initiateItem == null) {
