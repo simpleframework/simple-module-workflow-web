@@ -70,15 +70,16 @@ public abstract class StartProcessUtils implements IWorkflowContextAware {
 				initiateItem.doTransitions();
 
 				final boolean transitionManual = initiateItem.isTransitionManual();
-				final boolean initiateRoles = initiateItem.getInitiateRoles().size() > 1;
-				if (transitionManual || initiateRoles) {
+				// final boolean initiateRoles =
+				// initiateItem.getInitiateRoles().size() > 1;
+				if (transitionManual) { // || initiateRoles
 					kv.add(
 							"responseText",
 							UrlForward.getResponseText(cp,
 									ComponentUtils.getResourceHomePath(StartProcessBean.class)
 											+ "/jsp/start_process_route.jsp"));
 					kv.add("transitionManual", transitionManual);
-					kv.add("initiateRoles", initiateRoles);
+					// kv.add("initiateRoles", initiateRoles);
 				} else {
 					final String confirmMessage = (String) cp.getBeanProperty("confirmMessage");
 					if (StringUtils.hasText(confirmMessage)) {
