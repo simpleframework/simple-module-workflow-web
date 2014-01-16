@@ -1,10 +1,24 @@
 package net.simpleframework.workflow.web.component.startprocess;
 
+import net.simpleframework.mvc.IForward;
+import net.simpleframework.mvc.PageParameter;
+import net.simpleframework.mvc.common.element.LinkButton;
+import net.simpleframework.mvc.component.AbstractComponentBean;
 import net.simpleframework.mvc.component.AbstractComponentRegistry;
 import net.simpleframework.mvc.component.ComponentBean;
 import net.simpleframework.mvc.component.ComponentName;
+import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.ComponentRender;
 import net.simpleframework.mvc.component.ComponentResourceProvider;
+import net.simpleframework.mvc.component.base.ajaxrequest.AjaxRequestBean;
+import net.simpleframework.mvc.component.base.ajaxrequest.DefaultAjaxRequestHandler;
+import net.simpleframework.mvc.component.ui.dictionary.DictionaryBean;
+import net.simpleframework.mvc.component.ui.listbox.AbstractListboxHandler;
+import net.simpleframework.mvc.component.ui.listbox.ListItem;
+import net.simpleframework.mvc.component.ui.listbox.ListItems;
+import net.simpleframework.mvc.component.ui.listbox.ListboxBean;
+import net.simpleframework.workflow.engine.IWorkflowContextAware;
+import net.simpleframework.workflow.engine.InitiateItem;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -16,8 +30,55 @@ import net.simpleframework.mvc.component.ComponentResourceProvider;
 @ComponentBean(StartProcessBean.class)
 @ComponentRender(StartProcessRender.class)
 @ComponentResourceProvider(StartProcessResourceProvider.class)
-public class StartProcessRegistry extends AbstractComponentRegistry {
-
+public class StartProcessRegistry extends AbstractComponentRegistry implements
+		IWorkflowContextAware {
 	public static final String STARTPROCESS = "wf_start_process";
 
+	@Override
+	public AbstractComponentBean createComponentBean(final PageParameter pp, final Object attriData) {
+		final StartProcessBean startProcess = (StartProcessBean) super.createComponentBean(pp,
+				attriData);
+
+		final ComponentParameter nCP = ComponentParameter.get(pp, startProcess);
+		final String componentName = nCP.getComponentName();
+
+		// 启动流程
+		pp.addComponentBean(componentName + "_startProcess", AjaxRequestBean.class)
+				.setHandleClass(StartProcessHandler.class).setAttr("_startProcess", startProcess);
+
+		// 加入角色选择组件
+		final ListboxBean listbox = (ListboxBean) pp.addComponentBean(
+				componentName + "__initiatorSelect_list", ListboxBean.class).setHandleClass(
+				InitiatorDictList.class);
+		pp.addComponentBean(componentName + "_initiatorSelect", DictionaryBean.class)
+				.addListboxRef(nCP, listbox.getName()).setClearAction("false").setTitle("以其它角色启动")
+				.setPopup(false).setModal(true).setWidth(320).setHeight(400);
+
+		return startProcess;
+	}
+
+	public static class StartProcessHandler extends DefaultAjaxRequestHandler {
+		@Override
+		public IForward ajaxProcess(ComponentParameter cp) throws Exception {
+			StartProcessBean startProcess = (StartProcessBean) cp.componentBean
+					.getAttr("_startProcess");
+			final ComponentParameter nCP = ComponentParameter.get(cp, startProcess);
+			final InitiateItem initiateItem = StartProcessUtils.getInitiateItem(nCP);
+			// 设置选择的其他角色
+			// final String initiator = nCP.getParameter("initiator");
+			// if (StringUtils.hasText(initiator)) {
+			// final ID selected = ID.of(initiator);
+			// initiateItem.setSelectedRoleId(selected);
+			// }
+			return StartProcessUtils.doStartProcess(nCP, initiateItem);
+		}
+	}
+
+	public static class InitiatorDictList extends AbstractListboxHandler {
+		@Override
+		public ListItems getListItems(final ComponentParameter cp) {
+			return ListItems.of(new ListItem(null, new LinkButton("a浇洒接口毒素")), new ListItem(null,
+					"bbb"));
+		}
+	}
 }

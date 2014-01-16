@@ -8,8 +8,10 @@ import java.io.Writer;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import net.simpleframework.common.JsonUtils;
 import net.simpleframework.common.StringUtils;
 import net.simpleframework.common.coll.KVMap;
+import net.simpleframework.common.web.JavascriptUtils;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.MVCUtils;
 import net.simpleframework.mvc.PageRequestResponse;
@@ -41,29 +43,32 @@ public abstract class StartProcessUtils implements IWorkflowContextAware {
 		return ComponentParameter.get(request, response, BEAN_ID);
 	}
 
-	public static InitiateItem getInitiateItem(final PageRequestResponse rRequest) {
+	public static InitiateItem getInitiateItem(final ComponentParameter cp) {
 		final IProcessModelService service = context.getProcessModelService();
 		ProcessModelBean processModel = null;
-		final ComponentParameter nCP = get(rRequest);
-		final String modelIdParameterName = (String) nCP.getBeanProperty("modelIdParameterName");
-		final String modelId = rRequest.getParameter(modelIdParameterName);
+		final String modelIdParameterName = (String) cp.getBeanProperty("modelIdParameterName");
+		final String modelId = cp.getParameter(modelIdParameterName);
 		if (StringUtils.hasText(modelId)) {
 			processModel = service.getBean(modelId);
 		}
 		if (processModel == null) {
-			processModel = service.getProcessModelByName(rRequest.getParameter("modelName"));
+			processModel = service.getProcessModelByName(cp.getParameter("modelName"));
 		}
-		return processModel != null ? service.getInitiateItems(rRequest.getLoginId()).get(
-				processModel) : null;
+		return processModel != null ? service.getInitiateItems(cp.getLoginId()).get(processModel)
+				: null;
 	}
 
 	public static void doStartProcess(final HttpServletRequest request,
 			final HttpServletResponse response) throws IOException {
 		final ComponentParameter cp = get(request, response);
+		final String modelIdParameterName = (String) cp.getBeanProperty("modelIdParameterName");
+
+		String componentName = cp.getComponentName();
+		JavascriptForward js = new JavascriptForward();
 		final KVMap kv = new KVMap();
 		final InitiateItem initiateItem = getInitiateItem(cp);
 		if (initiateItem == null) {
-			kv.add("exception", $m("StartProcessUtils.0"));
+			js.append("alert('").append($m("StartProcessUtils.0")).append("');");
 		} else {
 			try {
 				((IStartProcessHandler) cp.getComponentHandler()).onInit(cp, initiateItem);
@@ -83,25 +88,21 @@ public abstract class StartProcessUtils implements IWorkflowContextAware {
 				} else {
 					final String confirmMessage = (String) cp.getBeanProperty("confirmMessage");
 					if (StringUtils.hasText(confirmMessage)) {
-						kv.add(
-								"responseText",
-								UrlForward.getResponseText(cp,
-										ComponentUtils.getResourceHomePath(StartProcessBean.class)
-												+ "/jsp/start_process_route2.jsp"));
-						kv.add("confirmMessage", confirmMessage);
-					} else {
-						final JavascriptForward jsCallback = doStartProcess(cp, initiateItem);
-						if (jsCallback != null) {
-							kv.add("jsCallback", jsCallback.toString());
-						}
+						js.append("if (!confirm('").append(JavascriptUtils.escape(confirmMessage))
+								.append("')) return;");
 					}
+					js.append("$Actions['").append(componentName).append("_startProcess']('")
+							.append(modelIdParameterName).append("=")
+							.append(cp.getParameter(modelIdParameterName)).append("');");
 				}
 			} catch (final Throwable th) {
-				kv.add("exception", MVCUtils.createException(cp, th));
+				js.clear();
+				js.append("$error(").append(JsonUtils.toJSON(MVCUtils.createException(cp, th)))
+						.append(");");
 			}
 		}
 		final Writer out = cp.getResponseWriter();
-		out.write(kv.toJSON());
+		out.write(JavascriptUtils.wrapFunction(js.toString()));
 		out.flush();
 	}
 

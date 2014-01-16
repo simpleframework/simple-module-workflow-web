@@ -12,6 +12,7 @@ import net.simpleframework.common.coll.KVMap;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.ETextAlign;
+import net.simpleframework.mvc.common.element.LinkButton;
 import net.simpleframework.mvc.common.element.LinkElement;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
@@ -68,6 +69,8 @@ public class MyInitiateItemsTPage extends AbstractWorkTPage {
 					.setOnclick("$Actions['MyInitiateItemsTPage_startProcess']('modelId="
 							+ initiateItem.getModelId() + "');"));
 			final StringBuilder sb = new StringBuilder();
+			sb.append(LinkButton.corner("角色").setOnclick(
+					"$Actions['MyInitiateItemsTPage_startProcess'].initiator_select();"));
 			row.put(TablePagerColumn.OPE, sb.toString());
 			return row;
 		}

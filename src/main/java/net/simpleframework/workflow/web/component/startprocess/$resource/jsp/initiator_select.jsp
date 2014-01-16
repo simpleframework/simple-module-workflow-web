@@ -6,16 +6,22 @@
 <%@ page import="net.simpleframework.workflow.web.component.startprocess.StartProcessUtils"%>
 <%@ page import="net.simpleframework.common.StringUtils"%>
 <%@ page import="net.simpleframework.common.ID"%>
+<%@ page import="java.util.Enumeration"%>
 <%
-	final ComponentParameter cParameter = StartProcessUtils.get(request, response);
-	final InitiateItem initiateItem = StartProcessUtils.getInitiateItem(cParameter);
+	final ComponentParameter cParameter = StartProcessUtils.get(
+			request, response);
+	final InitiateItem initiateItem = StartProcessUtils
+			.getInitiateItem(cParameter);
 	final IParticipantModel service = IWorkflowContextAware.context
 			.getParticipantService();
 %>
 <div class="initiator_select">
   <div class="rtitle">#(initiator_select.0)</div>
   <%
-  	for (final ID id : initiateItem.getInitiateRoles()) {
+  	Enumeration<ID> roles = initiateItem.roles();
+  	ID id;
+  	while (roles.hasMoreElements()) {
+  		id = roles.nextElement();
   %>
   <div class="ritem">
     <a onclick="doStartProcessByInitiator('initiator=<%=id%>');"><%=service.getRole(id)%></a>

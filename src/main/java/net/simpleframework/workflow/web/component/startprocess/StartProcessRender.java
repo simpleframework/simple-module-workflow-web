@@ -28,25 +28,16 @@ public class StartProcessRender extends ComponentJavascriptRender {
 				.append("/jsp/start_process.jsp', {");
 		sb.append("postBody: params,");
 		sb.append("onComplete: function(req) {");
-		sb.append("try {");
-		sb.append("var json = req.responseText.evalJSON();");
-		sb.append("var err = json['exception']; if (err) { $error(err); return; }");
-		sb.append("if (json['jsCallback']) { eval(json['jsCallback']); } else {");
-		sb.append("var rt = json['responseText'];");
-		sb.append("if (rt) { new $UI.AjaxRequest(null, rt, '").append(cp.getComponentName())
-				.append("', false); }");
-		sb.append("if (json['confirmMessage']) { ");
-		sb.append("if (!confirm(json['confirmMessage'])) { return; }");
-		sb.append("$Actions['ajaxStartProcessByInitiator']();");
-		sb.append("} else if (json['transitionManual']) { ")
-				.append("(function() { $Actions['process_transition_manual_window']('").append(params)
-				.append("');}).defer(); } else if (json['initiateRoles']) {")
-				.append("(function() { $Actions['initiator_select_window']('").append(params)
-				.append("');}).defer(); }");
-		sb.append("}");
-		sb.append("} finally { dc(); }");
+		sb.append("try { $call(req.responseText); } finally { dc(); }");
 		sb.append("}, onException: dc, onFailure: dc");
 		sb.append("});");
-		return ComponentRenderUtils.genActionWrapper(cp, sb.toString());
+
+		final String actionFunc = ComponentRenderUtils.actionFunc(cp);
+		String componentName = cp.getComponentName();
+		final StringBuilder sb2 = new StringBuilder();
+		sb2.append(actionFunc).append(".initiator_select = function() {");
+		sb2.append(" $Actions['").append(componentName).append("_initiatorSelect']();");
+		sb2.append("};");
+		return ComponentRenderUtils.genActionWrapper(cp, sb.toString(), sb2.toString());
 	}
 }

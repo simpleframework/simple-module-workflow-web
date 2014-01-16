@@ -14,17 +14,6 @@ import net.simpleframework.workflow.engine.InitiateItem;
  */
 public class StartProcessAction extends DefaultAjaxRequestHandler {
 
-	public IForward doStartProcess(final ComponentParameter cp) {
-		final ComponentParameter nCP = StartProcessUtils.get(cp);
-		final InitiateItem initiateItem = StartProcessUtils.getInitiateItem(nCP);
-		final String initiator = nCP.getParameter("initiator");
-		if (StringUtils.hasText(initiator)) {
-			// final ID selected = ID.of(initiator);
-			// initiateItem.setSelectedRoleId(selected);
-		}
-		return StartProcessUtils.doStartProcess(nCP, initiateItem);
-	}
-
 	public IForward doTransitionSave(final ComponentParameter cp) {
 		final InitiateItem initiateItem = StartProcessUtils.getInitiateItem(cp);
 		final String[] transitions = StringUtils.split(cp.getParameter("transitions"));
