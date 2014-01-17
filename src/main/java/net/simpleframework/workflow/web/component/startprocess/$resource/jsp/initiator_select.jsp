@@ -11,8 +11,7 @@
 	final InitiateItem initiateItem = StartProcessUtils
 			.getInitiateItem(nCP);
 %>
-<div class="initiator_select">
-  <div class="rtitle">#(initiator_select.0)</div>
+<div class="simple_window_tcb initiator_select">
   <%
   	for (ID id : initiateItem.roles()) {
   %>
@@ -26,7 +25,7 @@
   <%
   	}
   %>
-  <div class="rbottom">
+  <div class="b">
     <input type="button" value="#(Button.Cancel)" onclick="$win(this).close();" />
   </div>
 </div>

@@ -1,55 +1,16 @@
-.initiator_select .rtitle {
-  padding: 6px;
-  border-bottom: 1px solid #ccc;
-  background-color: #f5f5f5;
-  font-size: 10.5pt;
+.initiator_select .ritem,
+.transition_select .ritem {
+  border-bottom: 1px solid #bbb;
+  padding: 8px 6px;
 }
 
-.initiator_select .ritem {
-  padding: 8px 4px;
-  border-bottom: 1px solid #ccc;
-}
-
-.initiator_select .ritem:hover {
-  background-color: #f9f9f9;
-}
-
-.initiator_select .rbottom {
-  text-align: right;
-  padding: 10px 6px 0 0;
-}
-
-.transition_select  .node {
-  float: left;
-  margin: 4px;
-  text-align: center;
-  border: 1px solid #bbb;
-  padding: 8px 4px 2px 4px;
-  cursor: pointer;
-  background-color: #fff;
-}
-
-.transition_select .node:hover {
-  background-color: #fafafa;
-  -webkit-box-shadow: 0px 0px 6px #bbb;
-  -moz-box-shadow: 0px 0px 6px #bbb;
-  box-shadow: 0px 0px 6px #bbb;
-}
-
-.transition_select .node .icon {
-  height: 32px;
-  width: 32px;
-  display: inline-block;
-  background: url(images/node_user.gif) no-repeat;
-}
-
-.transition_select .node .txt {
-  font-size: 9.5pt;
-  min-width: 90px;
+.initiator_select .ritem:hover,
+.transition_select .ritem:hover {
+  background-color: #f7f7f7;
 }
 
 .transition_select .msg {
   color: red;
-  margin: 4px;
-  clear: both;
+  font-size: 9.5pt;
+  margin: 6px;
 }

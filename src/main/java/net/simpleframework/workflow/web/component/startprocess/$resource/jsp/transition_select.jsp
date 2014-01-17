@@ -3,6 +3,7 @@
 <%@ page import="net.simpleframework.workflow.web.component.startprocess.StartProcessUtils"%>
 <%@ page import="net.simpleframework.mvc.component.ComponentParameter"%>
 <%@ page import="net.simpleframework.workflow.schema.TransitionNode"%>
+<%@ page import="net.simpleframework.mvc.common.element.Checkbox"%>
 <%
 	final ComponentParameter nCP = StartProcessUtils.get(request,
 			response);
@@ -10,21 +11,17 @@
 			.getInitiateItem(nCP);
 %>
 <div class="simple_window_tcb transition_select">
-  <div class="t">#(transition_manual.0)</div>
-  <div class="c">
-    <%
-    	for (TransitionNode transition : initiateItem.getTransitions()) {
-    %>
-    <div class="node" onclick="var c = $(this).down('input'); c.checked = !c.checked;">
-      <img class="icon" />
-      <div class="txt"><%=transition.to()%></div>
-      <input type="checkbox" value="<%=transition.getId()%>" />
-    </div>
-    <%
-    	}
-    %>
-    <div class="msg"></div>
+  <%
+  	for (TransitionNode transition : initiateItem.getTransitions()) {
+  		String id = transition.getId();
+  %>
+  <div class="ritem">
+    <%=new Checkbox(id, transition.to()).setValue(id)%>
   </div>
+  <%
+  	}
+  %>
+  <div class="msg"></div>
   <div class="b">
     <input type="button" class="button2" value="#(Button.Ok)" /> <input type="button"
       value="#(Button.Cancel)" onclick="$win(this).close();" />
@@ -33,13 +30,12 @@
 <script type="text/javascript">
   $ready(function() {
     var ts = $(".transition_select");
-    $UI.hackCheckbox(ts);
-		
+      
     var PARAMS = "<%=StartProcessUtils.toParams(nCP, initiateItem)%>&transitions=";
     
     ts.down(".button2").observe("click", function(evn) {
       var id = "";
-      ts.select(".node input[type=checkbox]").each(function(box) {
+      ts.select("input[type=checkbox]").each(function(box) {
         if (box.checked) {
           id += ";" + box.value;
         }
