@@ -2,8 +2,7 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://simpleframework.net/xsd/default/simple.xsd">
 
   <components>
-    <ajaxRequest name="ajaxStartProcessByInitiator" handleMethod="doStartProcess"
-      handleClass="net.simpleframework.workflow.web.component.startprocess.StartProcessAction">
-    </ajaxRequest>
+    <ajaxRequest name="InitiatorSelect_ok"
+      handleClass="net.simpleframework.workflow.web.component.startprocess.StartProcessRegistry.StartProcessHandler"></ajaxRequest>
   </components>
 </page>

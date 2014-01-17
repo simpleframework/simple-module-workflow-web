@@ -35,8 +35,9 @@ public class StartProcessRender extends ComponentJavascriptRender {
 		final String actionFunc = ComponentRenderUtils.actionFunc(cp);
 		final String componentName = cp.getComponentName();
 		final StringBuilder sb2 = new StringBuilder();
-		sb2.append(actionFunc).append(".initiator_select = function() {");
-		sb2.append(" $Actions['").append(componentName).append("_initiatorSelect']();");
+		sb2.append(actionFunc).append(".initiator_select = function(p) {");
+		sb2.append(" $Actions['").append(componentName).append("_initiatorSelect']('")
+				.append(StartProcessUtils.toParams(cp, null)).append("'.addParameter(p));");
 		sb2.append("};");
 		return ComponentRenderUtils.genActionWrapper(cp, sb.toString(), sb2.toString());
 	}

@@ -1,8 +1,8 @@
 package net.simpleframework.workflow.web.component.startprocess;
 
 import net.simpleframework.mvc.IForward;
+import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageParameter;
-import net.simpleframework.mvc.common.element.LinkButton;
 import net.simpleframework.mvc.component.AbstractComponentBean;
 import net.simpleframework.mvc.component.AbstractComponentRegistry;
 import net.simpleframework.mvc.component.ComponentBean;
@@ -12,9 +12,6 @@ import net.simpleframework.mvc.component.ComponentRender;
 import net.simpleframework.mvc.component.ComponentResourceProvider;
 import net.simpleframework.mvc.component.base.ajaxrequest.AjaxRequestBean;
 import net.simpleframework.mvc.component.base.ajaxrequest.DefaultAjaxRequestHandler;
-import net.simpleframework.mvc.component.ui.listbox.AbstractListboxHandler;
-import net.simpleframework.mvc.component.ui.listbox.ListItem;
-import net.simpleframework.mvc.component.ui.listbox.ListItems;
 import net.simpleframework.mvc.component.ui.window.WindowBean;
 import net.simpleframework.workflow.engine.IWorkflowContextAware;
 import net.simpleframework.workflow.engine.InitiateItem;
@@ -43,12 +40,19 @@ public class StartProcessRegistry extends AbstractComponentRegistry implements
 
 		// 启动流程
 		pp.addComponentBean(componentName + "_startProcess", AjaxRequestBean.class)
-				.setHandleMethod("doStartProcess").setHandleClass(StartProcessHandler.class)
-				.setAttr("_startProcess", startProcess);
+				.setHandleClass(StartProcessHandler.class).setAttr("_startProcess", startProcess);
+
+		// 路由选择
+		AjaxRequestBean ajaxRequest = pp.addComponentBean(componentName + "__transitionSelect_page",
+				AjaxRequestBean.class).setUrlForward(
+				getComponentResourceProvider().getResourceHomePath() + "/jsp/transition_select.jsp");
+		pp.addComponentBean(componentName + "_transitionSelect", WindowBean.class)
+				.setContentRef(ajaxRequest.getName()).setTitle("路由选择").setWidth(480).setHeight(320);
 
 		// 角色选择
-		final AjaxRequestBean ajaxRequest = pp.addComponentBean(componentName
-				+ "__initiatorSelect_list", AjaxRequestBean.class);
+		ajaxRequest = pp.addComponentBean(componentName + "__initiatorSelect_page",
+				AjaxRequestBean.class).setUrlForward(
+				getComponentResourceProvider().getResourceHomePath() + "/jsp/initiator_select.jsp");
 		pp.addComponentBean(componentName + "_initiatorSelect", WindowBean.class)
 				.setContentRef(ajaxRequest.getName()).setTitle("以其它角色启动").setWidth(320).setHeight(400);
 
@@ -57,27 +61,25 @@ public class StartProcessRegistry extends AbstractComponentRegistry implements
 
 	public static class StartProcessHandler extends DefaultAjaxRequestHandler {
 
-		public IForward doStartProcess(final ComponentParameter cp) throws Exception {
+		@Override
+		public IForward ajaxProcess(final ComponentParameter cp) throws Exception {
 			final StartProcessBean startProcess = (StartProcessBean) cp.componentBean
 					.getAttr("_startProcess");
-			final ComponentParameter nCP = ComponentParameter.get(cp, startProcess);
+			final ComponentParameter nCP = startProcess != null ? ComponentParameter.get(cp,
+					startProcess) : StartProcessUtils.get(cp);
 			final InitiateItem initiateItem = StartProcessUtils.getInitiateItem(nCP);
-			// 设置选择的其他角色
-			// final String initiator = nCP.getParameter("initiator");
-			// if (StringUtils.hasText(initiator)) {
-			// final ID selected = ID.of(initiator);
-			// initiateItem.setSelectedRoleId(selected);
-			// }
-			return StartProcessUtils.doStartProcess(nCP, initiateItem);
-		}
-	}
 
-	public static class InitiatorDictList extends AbstractListboxHandler {
-		@Override
-		public ListItems getListItems(final ComponentParameter cp) {
-			return ListItems.of(
-					new ListItem(null, new LinkButton("a浇洒接口毒素").setOnclick("$Actions['']();")),
-					new ListItem(null, "bbb"));
+			((IStartProcessHandler) nCP.getComponentHandler()).onInit(nCP, initiateItem);
+			initiateItem.doTransitions();
+
+			final boolean transitionManual = initiateItem.isTransitionManual();
+			if (transitionManual) {
+				return new JavascriptForward("$Actions['").append(nCP.getComponentName())
+						.append("_transitionSelect']('")
+						.append(StartProcessUtils.toParams(nCP, initiateItem)).append("');");
+			}
+
+			return StartProcessUtils.doStartProcess(nCP, initiateItem);
 		}
 	}
 }

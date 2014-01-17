@@ -70,7 +70,8 @@ public class MyInitiateItemsTPage extends AbstractWorkTPage {
 							+ initiateItem.getModelId() + "');"));
 			final StringBuilder sb = new StringBuilder();
 			sb.append(LinkButton.corner("角色").setOnclick(
-					"$Actions['MyInitiateItemsTPage_startProcess'].initiator_select();"));
+					"$Actions['MyInitiateItemsTPage_startProcess'].initiator_select('modelId="
+							+ initiateItem.getModelId() + "');"));
 			row.put(TablePagerColumn.OPE, sb.toString());
 			return row;
 		}
