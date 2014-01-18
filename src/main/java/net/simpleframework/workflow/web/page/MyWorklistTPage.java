@@ -8,10 +8,16 @@ import net.simpleframework.ado.query.IDataQuery;
 import net.simpleframework.common.ID;
 import net.simpleframework.common.StringUtils;
 import net.simpleframework.common.coll.KVMap;
+import net.simpleframework.mvc.IForward;
+import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.ETextAlign;
 import net.simpleframework.mvc.common.element.LinkElement;
 import net.simpleframework.mvc.component.ComponentParameter;
+import net.simpleframework.mvc.component.ui.menu.MenuBean;
+import net.simpleframework.mvc.component.ui.menu.MenuItem;
+import net.simpleframework.mvc.component.ui.menu.MenuItems;
+import net.simpleframework.mvc.component.ui.pager.AbstractTablePagerSchema;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
 import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
 import net.simpleframework.mvc.component.ui.pager.db.AbstractDbTablePagerHandler;
@@ -20,6 +26,7 @@ import net.simpleframework.workflow.engine.EWorkitemStatus;
 import net.simpleframework.workflow.engine.IWorkitemService;
 import net.simpleframework.workflow.engine.WorkitemBean;
 import net.simpleframework.workflow.engine.participant.IParticipantModel;
+import net.simpleframework.workflow.web.AbstractWorkflowFormPage;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -35,16 +42,43 @@ public class MyWorklistTPage extends AbstractWorkTPage {
 
 		final TablePagerBean tablePager = addTablePagerBean(pp, "MyWorklistTPage_tbl",
 				MyWorklistTbl.class);
-		tablePager
-				.addColumn(new TablePagerColumn("title", "流程主题").setTextAlign(ETextAlign.left))
-				// .addColumn(new TablePagerColumn("activity", "环节", 120))
-				.addColumn(new TablePagerColumn("userFrom", "发送人", 120))
-				.addColumn(new TablePagerColumn("userTo", "接收人", 120))
-				.addColumn(new TablePagerColumn("createDate", "创建日期", 115).setPropertyClass(Date.class))
-				// .addColumn(
-				// new TablePagerColumn("completeDate", "完成日期",
-				// 115).setPropertyClass(Date.class))
-				.addColumn(TablePagerColumn.OPE().setWidth(80));
+
+		final EWorkitemStatus status = getWorkitemStatus(pp);
+		tablePager.addColumn(new TablePagerColumn("title", "流程主题").setTextAlign(ETextAlign.left)
+				.setSort(false).setFilter(false));
+		if (status == EWorkitemStatus.complete) {
+			tablePager.addColumn(new TablePagerColumn("userTo", "接收人", 120).setSort(false).setFilter(
+					false));
+			tablePager.addColumn(new TablePagerColumn("completeDate", "完成日期", 115)
+					.setPropertyClass(Date.class));
+		} else {
+			tablePager.addColumn(new TablePagerColumn("userFrom", "发送人", 120).setSort(false)
+					.setFilter(false));
+			tablePager.addColumn(new TablePagerColumn("createDate", "创建日期", 115)
+					.setPropertyClass(Date.class));
+		}
+		tablePager.addColumn(TablePagerColumn.OPE().setWidth(35));
+
+		// readMark
+		addAjaxRequest(pp, "MyWorklistTPage_action").setHandleMethod("doAction");
+
+		// 委托
+		addAjaxRequest(pp, "MyWorklistTPage_delegate_page", WorkitemDelegatePage.class);
+		addWindowBean(pp, "MyWorklistTPage_delegate").setContentRef("MyWorklistTPage_delegate_page")
+				.setTitle("委托").setHeight(400).setWidth(320);
+	}
+
+	public IForward doAction(final ComponentParameter cp) {
+		final WorkitemBean workitem = AbstractWorkflowFormPage.getWorkitemBean(cp);
+		final String action = cp.getParameter("action");
+		if ("readMark".equals(action)) {
+			context.getWorkitemService().readMark(workitem, workitem.isReadMark() ? true : false);
+		} else if ("retake".equals(action)) {
+			context.getWorkitemService().retake(workitem);
+		} else if ("fallback".equals(action)) {
+			context.getActivityService().fallback(context.getWorkitemService().getActivity(workitem));
+		}
+		return new JavascriptForward("$Actions['MyWorklistTPage_tbl']();");
 	}
 
 	public static class MyWorklistTbl extends AbstractDbTablePagerHandler {
@@ -65,15 +99,15 @@ public class MyWorklistTPage extends AbstractWorkTPage {
 		@Override
 		protected Map<String, Object> getRowData(final ComponentParameter cp, final Object dataObject) {
 			final WorkitemBean workitem = (WorkitemBean) dataObject;
-			// final Object id = workitem.getId();
+			final StringBuilder sb = new StringBuilder();
 			final ActivityBean activity = context.getWorkitemService().getActivity(workitem);
-			final String title = StringUtils.text(context.getActivityService()
-					.getProcessBean(activity).getTitle(), "未设置主题");
+			sb.append("[").append(context.getActivityService().taskNode(activity)).append("] ");
+			sb.append(new LinkElement(StringUtils.text(
+					context.getActivityService().getProcessBean(activity).getTitle(), "未设置主题"))
+					.setStrong(!workitem.isReadMark()).setOnclick(
+							"$Actions.loc('" + getUrlsFactory().getMyWorkFormUrl(workitem) + "');"));
 			final KVMap row = new KVMap();
-			row.add(
-					"title",
-					new LinkElement(title).setOnclick("$Actions.loc('"
-							+ getUrlsFactory().getMyWorkFormUrl(workitem) + "');"));
+			row.add("title", sb.toString());
 			final String userFrom = getUserFrom(activity);
 			if (userFrom != null) {
 				row.add("userFrom", userFrom);
@@ -82,9 +116,32 @@ public class MyWorklistTPage extends AbstractWorkTPage {
 			if (userTo != null) {
 				row.add("userTo", userTo);
 			}
-			final StringBuilder sb = new StringBuilder();
+			row.add("createDate", workitem.getCreateDate());
+			row.add("completeDate", workitem.getCompleteDate());
+			sb.setLength(0);
+			sb.append(AbstractTablePagerSchema.IMG_DOWNMENU);
 			row.put(TablePagerColumn.OPE, sb.toString());
 			return row;
+		}
+
+		@Override
+		public MenuItems getContextMenu(final ComponentParameter cp, final MenuBean menuBean,
+				final MenuItem menuItem) {
+			final MenuItems items = MenuItems.of();
+			final EWorkitemStatus status = getWorkitemStatus(cp);
+			if (status == EWorkitemStatus.complete) {
+				items.append(MenuItem.of("取回").setOnclick_act("MyWorklistTPage_action", "workitemId",
+						"action=retake"));
+			} else {
+				items.append(MenuItem.of("回退").setOnclick_act("MyWorklistTPage_action", "workitemId",
+						"action=fallback"));
+				items.append(MenuItem.sep());
+				items.append(MenuItem.of("委托").setOnclick_act("MyWorklistTPage_delegate", "workitemId"));
+				items.append(MenuItem.sep());
+				items.append(MenuItem.of("标记已读/未读").setOnclick_act("MyWorklistTPage_action",
+						"workitemId", "action=readMark"));
+			}
+			return items;
 		}
 	}
 
