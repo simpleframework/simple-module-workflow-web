@@ -42,9 +42,9 @@ public class WorkitemCompleteRegistry extends AbstractComponentRegistry {
 		// 手动参与者
 		ajaxRequest = pp.addComponentBean(componentName + "_participantSelect_page",
 				AjaxRequestBean.class).setUrlForward(
-				getComponentResourceProvider().getResourceHomePath() + "/jsp/participant_manual.jsp");
+				getComponentResourceProvider().getResourceHomePath() + "/jsp/participant_select.jsp");
 		pp.addComponentBean(componentName + "_participantSelect", WindowBean.class)
-				.setContentRef(ajaxRequest.getName()).setTitle("选择参与人").setHeight(450).setWidth(400);
+				.setContentRef(ajaxRequest.getName()).setTitle("选择参与人").setHeight(450).setWidth(320);
 
 		return workitemComplete;
 	}

@@ -19,9 +19,6 @@ public class WorkitemCompleteBean extends AbstractComponentBean {
 	/* 确认消息 */
 	private String confirmMessage;
 
-	/* 回调js */
-	private String jsCompleteCallback;
-
 	@Override
 	public boolean isRunImmediately() {
 		return false;
@@ -42,15 +39,6 @@ public class WorkitemCompleteBean extends AbstractComponentBean {
 
 	public WorkitemCompleteBean setConfirmMessage(final String confirmMessage) {
 		this.confirmMessage = confirmMessage;
-		return this;
-	}
-
-	public String getJsCompleteCallback() {
-		return jsCompleteCallback;
-	}
-
-	public WorkitemCompleteBean setJsCompleteCallback(final String jsCompleteCallback) {
-		this.jsCompleteCallback = jsCompleteCallback;
 		return this;
 	}
 

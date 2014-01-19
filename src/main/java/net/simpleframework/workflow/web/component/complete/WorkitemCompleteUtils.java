@@ -10,10 +10,12 @@ import javax.servlet.http.HttpServletResponse;
 
 import net.simpleframework.common.JsonUtils;
 import net.simpleframework.common.StringUtils;
+import net.simpleframework.common.object.ObjectUtils;
 import net.simpleframework.common.web.JavascriptUtils;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.MVCUtils;
 import net.simpleframework.mvc.PageRequestResponse;
+import net.simpleframework.mvc.common.element.Checkbox;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.workflow.engine.ActivityComplete;
 import net.simpleframework.workflow.engine.IWorkflowContextAware;
@@ -21,6 +23,7 @@ import net.simpleframework.workflow.engine.IWorkflowForm;
 import net.simpleframework.workflow.engine.TransitionUtils;
 import net.simpleframework.workflow.engine.WorkitemBean;
 import net.simpleframework.workflow.engine.WorkitemComplete;
+import net.simpleframework.workflow.engine.participant.Participant;
 import net.simpleframework.workflow.schema.TransitionNode;
 
 /**
@@ -117,5 +120,30 @@ public class WorkitemCompleteUtils implements IWorkflowContextAware {
 			al.addAll(activityComplete.getTransitions());
 		}
 		return al;
+	}
+
+	public static String toParticipantsHTML(ComponentParameter cp) {
+		StringBuilder sb = new StringBuilder();
+		final WorkitemBean workitem = getWorkitemBean(cp);
+		for (final TransitionNode transition : WorkitemCompleteUtils.getTransitions(cp, workitem)) {
+			sb.append("<div class='transition' transition='").append(transition.getId()).append("'>")
+					.append(transition.to()).append("</div>");
+			sb.append("<div class='participants'>");
+			final Collection<Participant> coll = WorkitemComplete.get(workitem).getActivityComplete()
+					.getParticipants(transition);
+			if (coll == null || coll.size() == 0) {
+				sb.append("#(participant_manual.1)");
+			} else {
+				for (Participant participant : coll) {
+					sb.append("<div class='ritem'>");
+					sb.append(new Checkbox(ObjectUtils.hashStr(participant), cp
+							.getUser(participant.userId)).setValue(participant.getId()));
+					sb.append("</div>");
+				}
+			}
+			sb.append("<div class='msg'></div>");
+			sb.append("</div>");
+		}
+		return sb.toString();
 	}
 }
