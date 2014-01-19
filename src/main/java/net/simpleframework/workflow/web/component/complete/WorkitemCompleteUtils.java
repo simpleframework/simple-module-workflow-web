@@ -8,13 +8,13 @@ import java.util.Collection;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import net.simpleframework.common.JsonUtils;
 import net.simpleframework.common.StringUtils;
-import net.simpleframework.common.coll.KVMap;
+import net.simpleframework.common.web.JavascriptUtils;
+import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.MVCUtils;
 import net.simpleframework.mvc.PageRequestResponse;
-import net.simpleframework.mvc.UrlForward;
 import net.simpleframework.mvc.component.ComponentParameter;
-import net.simpleframework.mvc.component.ComponentUtils;
 import net.simpleframework.workflow.engine.ActivityComplete;
 import net.simpleframework.workflow.engine.IWorkflowContextAware;
 import net.simpleframework.workflow.engine.IWorkflowForm;
@@ -42,44 +42,56 @@ public class WorkitemCompleteUtils implements IWorkflowContextAware {
 		return ComponentParameter.get(request, response, BEAN_ID);
 	}
 
+	public static String toParams(final ComponentParameter cp, final WorkitemBean workitem) {
+		final StringBuilder sb = new StringBuilder();
+		if (workitem != null) {
+			final String workitemIdParameterName = (String) cp
+					.getBeanProperty("workitemIdParameterName");
+			sb.append(workitemIdParameterName).append("=").append(workitem.getId()).append("&");
+		}
+		sb.append(BEAN_ID).append("=").append(cp.hashId());
+		return sb.toString();
+	}
+
 	public static void doWorkitemComplete(final ComponentParameter cp) throws IOException {
 		final WorkitemBean workitem = context.getWorkitemService().getBean(
 				cp.getParameter((String) cp.getBeanProperty("workitemIdParameterName")));
-		final KVMap kv = new KVMap();
+		final JavascriptForward js = new JavascriptForward();
 		try {
-			final WorkitemComplete workitemComplete = WorkitemComplete.get(workitem);
+			final String confirmMessage = (String) cp.getBeanProperty("confirmMessage");
+			if (StringUtils.hasText(confirmMessage)) {
+				js.append("if (!confirm('").append(JavascriptUtils.escape(confirmMessage))
+						.append("')) return;");
+			}
 
+			final WorkitemComplete workitemComplete = WorkitemComplete.get(workitem);
 			// 绑定变量
 			final IWorkflowForm workflowForm = (IWorkflowForm) workitemComplete.getWorkflowForm();
-			if (workflowForm != null) {
-				workflowForm.bindVariables(workitemComplete.getVariables());
-			}
+			workflowForm.bindVariables(workitemComplete.getVariables());
 
 			final IWorkitemCompleteHandler hdl = (IWorkitemCompleteHandler) cp.getComponentHandler();
 			if (!workitemComplete.isAllCompleted()) {
-				hdl.complete(cp, workitemComplete);
+				js.append(hdl.complete(cp, workitemComplete));
 			} else {
+				final String componentName = cp.getComponentName();
 				// 是否有手动情况
 				final ActivityComplete activityComplete = workitemComplete.getActivityComplete();
-				final boolean transitionManual = activityComplete.isTransitionManual();
-				final boolean participantManual = activityComplete.isParticipantManual();
-				if (transitionManual || participantManual) {
-					kv.add(
-							"responseText",
-							UrlForward.getResponseText(cp,
-									ComponentUtils.getResourceHomePath(WorkitemCompleteBean.class)
-											+ "/jsp/workitem_complete_route.jsp"));
-					kv.add("transitionManual", transitionManual);
-					kv.add("participantManual", participantManual);
+				if (activityComplete.isTransitionManual()) {
+					js.append("$Actions['").append(componentName).append("_transitionSelect']('")
+							.append(toParams(cp, workitem)).append("');");
+				} else if (activityComplete.isParticipantManual()) {
+					js.append("$Actions['").append(componentName).append("_participantSelect']('")
+							.append(toParams(cp, workitem)).append("');");
 				} else {
-					hdl.complete(cp, workitemComplete);
+					js.append(hdl.complete(cp, workitemComplete));
 				}
 			}
 		} catch (final Throwable ex) {
-			kv.add("exception", MVCUtils.createException(cp, ex));
+			js.append("$error(").append(JsonUtils.toJSON(MVCUtils.createException(cp, ex)))
+					.append(");");
 		}
 		final Writer out = cp.getResponseWriter();
-		out.write(kv.toJSON());
+		out.write(js.toString());
 		out.flush();
 	}
 

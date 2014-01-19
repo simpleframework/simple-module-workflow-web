@@ -16,6 +16,9 @@ public class WorkitemCompleteBean extends AbstractComponentBean {
 	private String workitemIdParameterName = BeanDefaults.getString(getClass(),
 			"workitemIdParameterName", "workitemId");
 
+	/* 确认消息 */
+	private String confirmMessage;
+
 	/* 回调js */
 	private String jsCompleteCallback;
 
@@ -30,6 +33,15 @@ public class WorkitemCompleteBean extends AbstractComponentBean {
 
 	public WorkitemCompleteBean setWorkitemIdParameterName(final String workitemIdParameterName) {
 		this.workitemIdParameterName = workitemIdParameterName;
+		return this;
+	}
+
+	public String getConfirmMessage() {
+		return confirmMessage;
+	}
+
+	public WorkitemCompleteBean setConfirmMessage(final String confirmMessage) {
+		this.confirmMessage = confirmMessage;
 		return this;
 	}
 

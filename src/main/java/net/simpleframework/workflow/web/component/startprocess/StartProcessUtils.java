@@ -62,7 +62,7 @@ public abstract class StartProcessUtils implements IWorkflowContextAware {
 			final String modelIdParameterName = (String) cp.getBeanProperty("modelIdParameterName");
 			sb.append(modelIdParameterName).append("=").append(initiateItem.getModelId()).append("&");
 		}
-		sb.append(StartProcessUtils.BEAN_ID).append("=").append(cp.hashId());
+		sb.append(BEAN_ID).append("=").append(cp.hashId());
 		return sb.toString();
 	}
 
@@ -80,7 +80,6 @@ public abstract class StartProcessUtils implements IWorkflowContextAware {
 					js.append("if (!confirm('").append(JavascriptUtils.escape(confirmMessage))
 							.append("')) return;");
 				}
-
 				final String componentName = cp.getComponentName();
 				js.append("$Actions['").append(componentName).append("_startProcess']('")
 						.append(toParams(cp, initiateItem)).append("');");

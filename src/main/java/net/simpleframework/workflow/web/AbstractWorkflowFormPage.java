@@ -34,7 +34,7 @@ public abstract class AbstractWorkflowFormPage extends FormTableRowTemplatePage 
 
 		// 完成
 		addComponentBean(pp, "AbstractWorkflowFormPage_completeAction", WorkitemCompleteBean.class)
-				.setSelector(getFormSelector());
+				.setJsCompleteCallback("alert(1)").setSelector(getFormSelector());
 
 		final WorkitemBean workitem = getWorkitemBean(pp);
 		if (workitem != null && !workitem.isReadMark()) {

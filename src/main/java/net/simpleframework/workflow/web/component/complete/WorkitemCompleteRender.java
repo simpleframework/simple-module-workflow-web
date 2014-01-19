@@ -1,6 +1,5 @@
 package net.simpleframework.workflow.web.component.complete;
 
-import net.simpleframework.common.StringUtils;
 import net.simpleframework.mvc.component.AbstractComponentRender.ComponentJavascriptRender;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.ComponentRenderUtils;
@@ -32,22 +31,24 @@ public class WorkitemCompleteRender extends ComponentJavascriptRender {
 				.append("/jsp/workitem_complete.jsp', {");
 		sb.append("postBody: params,");
 		sb.append("onComplete: function(req) {");
-		sb.append("try {");
-		sb.append("var json = req.responseText.evalJSON();");
-		sb.append("var err = json['exception']; if (err) { $error(err); return; }");
-		sb.append("var rt = json['responseText'];");
-		sb.append("if (rt) { new $UI.AjaxRequest(null, rt, '").append(cp.getComponentName())
-				.append("', false); }");
-		sb.append("if (json['transitionManual']) { (function() { $Actions['transitionManualWindow']('");
-		sb.append(params).append("'); }).defer(); }");
-		sb.append("else if (json['participantManual']) { (function() { $Actions['participantManualWindow']('");
-		sb.append(params).append("'); }).defer(); }");
-
-		final String jsCallback = (String) cp.getBeanProperty("jsCompleteCallback");
-		if (StringUtils.hasText(jsCallback)) {
-			sb.append("else {").append(jsCallback).append("}");
-		}
-		sb.append("} finally { dc(); }");
+		sb.append("try { $call(req.responseText); } finally { dc(); }");
+		// sb.append("try {");
+		// sb.append("var json = req.responseText.evalJSON();");
+		// sb.append("var err = json['exception']; if (err) { $error(err); return; }");
+		// sb.append("var rt = json['responseText'];");
+		// sb.append("if (rt) { new $UI.AjaxRequest(null, rt, '").append(cp.getComponentName())
+		// .append("', false); }");
+		// sb.append("if (json['transitionManual']) { (function() { $Actions['transitionManualWindow']('");
+		// sb.append(params).append("'); }).defer(); }");
+		// sb.append("else if (json['participantManual']) { (function() { $Actions['participantManualWindow']('");
+		// sb.append(params).append("'); }).defer(); }");
+		//
+		// final String jsCallback = (String)
+		// cp.getBeanProperty("jsCompleteCallback");
+		// if (StringUtils.hasText(jsCallback)) {
+		// sb.append("else {").append(jsCallback).append("}");
+		// }
+		// sb.append("} finally { dc(); }");
 		sb.append("}, onException: dc, onFailure: dc");
 		sb.append("});");
 		return ComponentRenderUtils.genActionWrapper(cp, sb.toString());

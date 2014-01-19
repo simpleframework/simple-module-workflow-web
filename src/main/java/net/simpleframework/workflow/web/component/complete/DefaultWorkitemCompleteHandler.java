@@ -1,5 +1,6 @@
 package net.simpleframework.workflow.web.component.complete;
 
+import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.component.AbstractComponentHandler;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.workflow.engine.WorkitemComplete;
@@ -14,7 +15,9 @@ public class DefaultWorkitemCompleteHandler extends AbstractComponentHandler imp
 		IWorkitemCompleteHandler {
 
 	@Override
-	public void complete(final ComponentParameter cp, final WorkitemComplete workitemComplete) {
+	public JavascriptForward complete(final ComponentParameter cp,
+			final WorkitemComplete workitemComplete) {
 		workitemComplete.complete(cp.map());
+		return null;
 	}
 }

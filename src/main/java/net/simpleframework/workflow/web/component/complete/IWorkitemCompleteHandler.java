@@ -1,5 +1,6 @@
 package net.simpleframework.workflow.web.component.complete;
 
+import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.IComponentHandler;
 import net.simpleframework.workflow.engine.WorkitemComplete;
@@ -15,8 +16,9 @@ public interface IWorkitemCompleteHandler extends IComponentHandler {
 	/**
 	 * 工作项完成的触发动作
 	 * 
-	 * @param compParameter
+	 * @param cp
 	 * @param workitemComplete
+	 * @return
 	 */
-	void complete(ComponentParameter cp, WorkitemComplete workitemComplete);
+	JavascriptForward complete(ComponentParameter cp, WorkitemComplete workitemComplete);
 }
