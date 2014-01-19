@@ -35,9 +35,9 @@ public class WorkitemCompleteRegistry extends AbstractComponentRegistry {
 		// 手动路由
 		AjaxRequestBean ajaxRequest = pp.addComponentBean(componentName + "_transitionSelect_page",
 				AjaxRequestBean.class).setUrlForward(
-				getComponentResourceProvider().getResourceHomePath() + "/jsp/transition_manual.jsp");
+				getComponentResourceProvider().getResourceHomePath() + "/jsp/transition_select.jsp");
 		pp.addComponentBean(componentName + "_transitionSelect", WindowBean.class)
-				.setContentRef(ajaxRequest.getName()).setTitle("选择路由分支").setHeight(480).setWidth(320);
+				.setContentRef(ajaxRequest.getName()).setTitle("选择路由分支").setHeight(450).setWidth(320);
 
 		// 手动参与者
 		ajaxRequest = pp.addComponentBean(componentName + "_participantSelect_page",

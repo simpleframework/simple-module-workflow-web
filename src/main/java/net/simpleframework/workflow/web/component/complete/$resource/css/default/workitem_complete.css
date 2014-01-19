@@ -1,3 +1,18 @@
+.transition_select .ritem {
+  border-bottom: 1px solid #bbb;
+  padding: 8px 6px;
+}
+
+.transition_select .ritem:hover {
+  background-color: #f7f7f7;
+}
+
+.transition_select .msg {
+  color: red;
+  font-size: 9.5pt;
+  margin: 6px;
+}
+
 .transition_manual .node,
 .participant_manual .participant {
 	float: left;

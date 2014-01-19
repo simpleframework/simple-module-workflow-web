@@ -10,51 +10,43 @@
 <%@ page import="net.simpleframework.workflow.web.component.complete.WorkitemCompleteUtils"%>
 <%
 	final ComponentParameter nCP = WorkitemCompleteUtils.get(request,
-			response);
-	final String workitemIdParameterName = (String) nCP
-			.getBeanProperty("workitemIdParameterName");
-	final WorkitemBean workitem = IWorkflowContextAware.context
-			.getWorkitemService().getBean(
-					request.getParameter(workitemIdParameterName));
-	final IPagePermissionHandler service = (IPagePermissionHandler) IWorkflowContextAware.context
-			.getParticipantService();
+	response);
+	final WorkitemBean workitem = WorkitemCompleteUtils
+	.getWorkitemBean(nCP);
 %>
 <div class="simple_window_tcb participant_manual">
   <%
   	for (final TransitionNode transition : WorkitemCompleteUtils.getTransitions(
-  			nCP, workitem)) {
+    			nCP, workitem)) {
   %>
   <div class="node" transition="<%=transition.getId()%>"><%=transition.to()%></div>
   <div class="participants">
     <%
     	final Collection<Participant> coll = WorkitemComplete.get(workitem)
-    				.getActivityComplete().getParticipants(transition);
-    		if (coll == null || coll.size() == 0) {
-    			out.write("#(participant_manual.1)");
-    		} else {
-    			for (Participant participant : coll) {
+        				.getActivityComplete().getParticipants(transition);
+        		if (coll == null || coll.size() == 0) {
+        			out.write("#(participant_manual.1)");
+        		} else {
+        			for (Participant participant : coll) {
     %>
     <div class="participant" onclick="var c = $(this).down('input'); c.checked = !c.checked;">
-      <img class="icon" src="<%=service.getPhotoUrl(nCP, participant.userId,
-								128, 128)%>">
-      <div class="txt"><%=service.getUser(participant.userId)%></div>
+      <img class="icon" src="<%=nCP.getPhotoUrl(participant.userId, 128,128)%>">
+      <div class="txt"><%=nCP.getUser(participant.userId)%></div>
       <input type="checkbox" value="<%=participant.getId()%>" />
     </div>
     <%
     	}
-    		}
+        		}
     %>
     <div class="msg"></div>
   </div>
   <%
   	}
-  	final String params = workitemIdParameterName + "=" + workitem.getId() + "&"
-  			+ WorkitemCompleteUtils.BEAN_ID + "=" + nCP.hashId();
   %>
   <div class="b">
     <input type="button" class="button2" value="#(Button.Ok)"
-      onclick="WF_WORKITEM_COMPLETE_ACTION.participantSave(this, '<%=params%>');" /> <input
-      type="button" value="#(Button.Cancel)" onclick="$win(this).close();" />
+      onclick="WF_WORKITEM_COMPLETE_ACTION.participantSave(this, '<%=WorkitemCompleteUtils.toParams(nCP, workitem)%>');" />
+    <input type="button" value="#(Button.Cancel)" onclick="$win(this).close();" />
   </div>
 </div>
 <script type="text/javascript">

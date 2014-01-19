@@ -15,9 +15,10 @@ public class DefaultWorkitemCompleteHandler extends AbstractComponentHandler imp
 		IWorkitemCompleteHandler {
 
 	@Override
-	public JavascriptForward complete(final ComponentParameter cp,
+	public JavascriptForward onComplete(final ComponentParameter cp,
 			final WorkitemComplete workitemComplete) {
 		workitemComplete.complete(cp.map());
-		return null;
+		return new JavascriptForward("$Actions['").append(cp.getComponentName()).append(
+				"_transitionSelect'].close();");
 	}
 }

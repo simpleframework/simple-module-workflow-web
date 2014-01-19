@@ -53,9 +53,12 @@ public class WorkitemCompleteUtils implements IWorkflowContextAware {
 		return sb.toString();
 	}
 
-	public static void doWorkitemComplete(final ComponentParameter cp) throws IOException {
-		final WorkitemBean workitem = context.getWorkitemService().getBean(
+	public static WorkitemBean getWorkitemBean(final ComponentParameter cp) {
+		return context.getWorkitemService().getBean(
 				cp.getParameter((String) cp.getBeanProperty("workitemIdParameterName")));
+	}
+
+	public static void doWorkitemComplete(final ComponentParameter cp) throws IOException {
 		final JavascriptForward js = new JavascriptForward();
 		try {
 			final String confirmMessage = (String) cp.getBeanProperty("confirmMessage");
@@ -64,6 +67,7 @@ public class WorkitemCompleteUtils implements IWorkflowContextAware {
 						.append("')) return;");
 			}
 
+			final WorkitemBean workitem = getWorkitemBean(cp);
 			final WorkitemComplete workitemComplete = WorkitemComplete.get(workitem);
 			// 绑定变量
 			final IWorkflowForm workflowForm = (IWorkflowForm) workitemComplete.getWorkflowForm();
@@ -71,7 +75,7 @@ public class WorkitemCompleteUtils implements IWorkflowContextAware {
 
 			final IWorkitemCompleteHandler hdl = (IWorkitemCompleteHandler) cp.getComponentHandler();
 			if (!workitemComplete.isAllCompleted()) {
-				js.append(hdl.complete(cp, workitemComplete));
+				js.append(hdl.onComplete(cp, workitemComplete));
 			} else {
 				final String componentName = cp.getComponentName();
 				// 是否有手动情况
@@ -83,7 +87,7 @@ public class WorkitemCompleteUtils implements IWorkflowContextAware {
 					js.append("$Actions['").append(componentName).append("_participantSelect']('")
 							.append(toParams(cp, workitem)).append("');");
 				} else {
-					js.append(hdl.complete(cp, workitemComplete));
+					js.append(hdl.onComplete(cp, workitemComplete));
 				}
 			}
 		} catch (final Throwable ex) {

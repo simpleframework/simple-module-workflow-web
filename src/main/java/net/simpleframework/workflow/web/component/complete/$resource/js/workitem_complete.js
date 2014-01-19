@@ -3,7 +3,7 @@ var WF_WORKITEM_COMPLETE_ACTION = {
 	transitionSave : function(obj, params) {
 		var c = obj.up(".transition_manual");
 		var id = "";
-		c.select(".node input[type=checkbox]").each(function(box) {
+		c.select("input[type=checkbox]").each(function(box) {
 			if (box.checked) {
 				id += ";" + box.value;
 			}

@@ -33,34 +33,37 @@ public class WorkitemCompleteAction extends DefaultAjaxRequestHandler implements
 		return super.getBeanProperty(cp, beanProperty);
 	}
 
-	public IForward doTransitionSave(final ComponentParameter cp) {
-		final ComponentParameter nCP = WorkitemCompleteUtils.get(cp);
-		final String workitemIdParameterName = (String) nCP
-				.getBeanProperty("workitemIdParameterName");
-		final WorkitemBean workitem = context.getWorkitemService().getBean(
-				cp.getParameter(workitemIdParameterName));
-		final String transitions = cp.getParameter("transitions");
-		final String[] transitionIds = StringUtils.split(transitions);
-		final WorkitemComplete workitemComplete = WorkitemComplete.get(workitem);
-		final ActivityComplete activityComplete = workitemComplete.getActivityComplete();
-		final JavascriptForward js = new JavascriptForward();
-
-		if (activityComplete.isParticipantManual(transitionIds)) {
-			js.append("$Actions['participantManualWindow']('").append(WorkitemCompleteUtils.BEAN_ID)
-					.append("=").append(nCP.hashId()).append("&").append(workitemIdParameterName)
-					.append("=").append(workitem.getId()).append("&transitions=").append(transitions)
-					.append("');");
-		} else {
-			activityComplete.resetTransitions(transitionIds);
-			((IWorkitemCompleteHandler) nCP.getComponentHandler()).complete(nCP, workitemComplete);
-			js.append("$Actions['transitionManualWindow'].close();");
-			final String jsCallback = (String) nCP.getBeanProperty("jsCompleteCallback");
-			if (StringUtils.hasText(jsCallback)) {
-				js.append(jsCallback);
-			}
-		}
-		return js;
-	}
+	// public IForward doTransitionSave(final ComponentParameter cp) {
+	// final ComponentParameter nCP = WorkitemCompleteUtils.get(cp);
+	// final String workitemIdParameterName = (String) nCP
+	// .getBeanProperty("workitemIdParameterName");
+	// final WorkitemBean workitem = context.getWorkitemService().getBean(
+	// cp.getParameter(workitemIdParameterName));
+	// final String transitions = cp.getParameter("transitions");
+	// final String[] transitionIds = StringUtils.split(transitions);
+	// final WorkitemComplete workitemComplete = WorkitemComplete.get(workitem);
+	// final ActivityComplete activityComplete =
+	// workitemComplete.getActivityComplete();
+	// final JavascriptForward js = new JavascriptForward();
+	//
+	// if (activityComplete.isParticipantManual(transitionIds)) {
+	// js.append("$Actions['participantManualWindow']('").append(WorkitemCompleteUtils.BEAN_ID)
+	// .append("=").append(nCP.hashId()).append("&").append(workitemIdParameterName)
+	// .append("=").append(workitem.getId()).append("&transitions=").append(transitions)
+	// .append("');");
+	// } else {
+	// activityComplete.resetTransitions(transitionIds);
+	// ((IWorkitemCompleteHandler) nCP.getComponentHandler()).onComplete(nCP,
+	// workitemComplete);
+	// js.append("$Actions['transitionManualWindow'].close();");
+	// final String jsCallback = (String)
+	// nCP.getBeanProperty("jsCompleteCallback");
+	// if (StringUtils.hasText(jsCallback)) {
+	// js.append(jsCallback);
+	// }
+	// }
+	// return js;
+	// }
 
 	public IForward doParticipantSave(final ComponentParameter cp) {
 		final ComponentParameter nCP = WorkitemCompleteUtils.get(cp);
@@ -79,7 +82,7 @@ public class WorkitemCompleteAction extends DefaultAjaxRequestHandler implements
 		}
 		activityComplete.resetParticipants(participantIds);
 
-		((IWorkitemCompleteHandler) nCP.getComponentHandler()).complete(nCP, workitemComplete);
+		((IWorkitemCompleteHandler) nCP.getComponentHandler()).onComplete(nCP, workitemComplete);
 
 		final JavascriptForward js = new JavascriptForward();
 		js.append("$Actions['participantManualWindow'].close();");

@@ -20,5 +20,5 @@ public interface IWorkitemCompleteHandler extends IComponentHandler {
 	 * @param workitemComplete
 	 * @return
 	 */
-	JavascriptForward complete(ComponentParameter cp, WorkitemComplete workitemComplete);
+	JavascriptForward onComplete(ComponentParameter cp, WorkitemComplete workitemComplete);
 }
