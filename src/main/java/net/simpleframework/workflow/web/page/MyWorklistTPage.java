@@ -29,24 +29,21 @@ public class MyWorklistTPage extends AbstractWorkTPage {
 		super.onForward(pp);
 
 		final TablePagerBean tablePager = addTablePagerBean(pp, "MyWorklistTPage_tbl",
-				MyWorklistTbl.class);
+				MyWorklistTbl.class).setShowFilterBar(false);
 
 		final EWorkitemStatus status = getWorkitemStatus(pp);
-		tablePager.addColumn(new TablePagerColumn("modelname").setVisible(true));
 		tablePager.addColumn(new TablePagerColumn("title", "流程主题").setTextAlign(ETextAlign.left)
-				.setSort(false).setFilter(false));
+				.setSort(false));
 		if (status == EWorkitemStatus.complete) {
-			tablePager.addColumn(new TablePagerColumn("userTo", "接收人", 120).setSort(false).setFilter(
-					false));
+			tablePager.addColumn(new TablePagerColumn("userTo", "接收人", 120).setSort(false));
 			tablePager.addColumn(new TablePagerColumn("completeDate", "完成日期", 115)
 					.setPropertyClass(Date.class));
 		} else {
-			tablePager.addColumn(new TablePagerColumn("userFrom", "发送人", 120).setSort(false)
-					.setFilter(false));
+			tablePager.addColumn(new TablePagerColumn("userFrom", "发送人", 120).setSort(false));
 			tablePager.addColumn(new TablePagerColumn("createDate", "创建日期", 115)
 					.setPropertyClass(Date.class));
 		}
-		tablePager.addColumn(TablePagerColumn.OPE().setWidth(80));
+		tablePager.addColumn(TablePagerColumn.OPE().setWidth(75));
 
 		// readMark
 		addAjaxRequest(pp, "MyWorklistTPage_action").setHandleMethod("doAction");
@@ -58,7 +55,8 @@ public class MyWorklistTPage extends AbstractWorkTPage {
 	}
 
 	@Override
-	public ElementList getRightElements(PageParameter pp) {
+	public ElementList getRightElements(final PageParameter pp) {
+		pp.putParameter(G, "modelname");
 		return ElementList.of(createGroupElement(pp, "MyWorklistTPage_tbl", new Option("modelname",
 				"按模型分组"), new Option("taskname", "按环节分组")));
 	}

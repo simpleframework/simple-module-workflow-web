@@ -9,6 +9,7 @@ import net.simpleframework.common.ID;
 import net.simpleframework.common.StringUtils;
 import net.simpleframework.common.coll.KVMap;
 import net.simpleframework.mvc.common.element.ButtonElement;
+import net.simpleframework.mvc.common.element.LabelElement;
 import net.simpleframework.mvc.common.element.LinkElement;
 import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.component.ComponentParameter;
@@ -16,6 +17,7 @@ import net.simpleframework.mvc.component.ui.menu.MenuBean;
 import net.simpleframework.mvc.component.ui.menu.MenuItem;
 import net.simpleframework.mvc.component.ui.menu.MenuItems;
 import net.simpleframework.mvc.component.ui.pager.AbstractTablePagerSchema;
+import net.simpleframework.mvc.component.ui.pager.GroupWrapper;
 import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
 import net.simpleframework.mvc.component.ui.pager.db.GroupDbTablePagerHandler;
 import net.simpleframework.workflow.engine.ActivityBean;
@@ -24,7 +26,7 @@ import net.simpleframework.workflow.engine.IActivityService;
 import net.simpleframework.workflow.engine.IProcessService;
 import net.simpleframework.workflow.engine.IWorkflowContextAware;
 import net.simpleframework.workflow.engine.IWorkitemService;
-import net.simpleframework.workflow.engine.ProcessBean;
+import net.simpleframework.workflow.engine.ProcessModelBean;
 import net.simpleframework.workflow.engine.WorkitemBean;
 import net.simpleframework.workflow.schema.AbstractTaskNode;
 import net.simpleframework.workflow.web.IWorkflowWebContext;
@@ -53,39 +55,58 @@ public class MyWorklistTbl extends GroupDbTablePagerHandler implements IWorkflow
 	@Override
 	public Object getGroupValue(final ComponentParameter cp, final Object bean,
 			final String groupColumn) {
-		if ("modelname".equals(groupColumn)) {
-
+		final boolean bModelname = "modelname".equals(groupColumn);
+		if (bModelname || "taskname".equals(groupColumn)) {
+			final ActivityBean activity = wService.getActivity((WorkitemBean) bean);
+			final ProcessModelBean processModel = pService.getProcessModel(aService
+					.getProcessBean(activity));
+			if (bModelname) {
+				return processModel;
+			} else {
+				return aService.taskNode(activity).setAttr("_processModel", processModel);
+			}
 		}
 		return groupColumn;
 	}
 
 	@Override
+	public GroupWrapper getGroupWrapper(final ComponentParameter cp, final Object groupVal) {
+		if (groupVal instanceof AbstractTaskNode) {
+			return new GroupWrapper() {
+				@Override
+				public String toString() {
+					final AbstractTaskNode taskNode = (AbstractTaskNode) groupVal;
+					final StringBuilder sb = new StringBuilder();
+					sb.append(new LabelElement(taskNode)).append(
+							SpanElement.shortText("(" + taskNode.getAttr("_processModel") + ")"));
+					sb.append(toCountHTML());
+					return sb.toString();
+				}
+			};
+		}
+		return super.getGroupWrapper(cp, groupVal);
+	}
+
+	@Override
 	protected Map<String, Object> getRowData(final ComponentParameter cp, final Object dataObject) {
 		final WorkitemBean workitem = (WorkitemBean) dataObject;
-		final StringBuilder sb = new StringBuilder();
+		final KVMap row = new KVMap();
 
 		final ActivityBean activity = wService.getActivity(workitem);
-		AbstractTaskNode taskNode = aService.taskNode(activity);
-		ProcessBean processBean = aService.getProcessBean(activity);
-		sb.append("[").append(taskNode).append("] ");
-		sb.append(new LinkElement(StringUtils.text(processBean.getTitle(), "未设置主题")).setStrong(
-				!workitem.isReadMark()).setOnclick(
+		final StringBuilder sb = new StringBuilder();
+
+		if (!"taskname".equals(cp.getParameter(G))) {
+			sb.append("[").append(aService.taskNode(activity)).append("] ");
+		}
+		sb.append(new LinkElement(StringUtils.text(aService.getProcessBean(activity).toString(),
+				"未设置主题")).setStrong(!workitem.isReadMark()).setOnclick(
 				"$Actions.loc('"
 						+ (((IWorkflowWebContext) context).getUrlsFactory()).getMyWorkFormUrl(workitem)
 						+ "');"));
-		final KVMap row = new KVMap();
-		row.add("modelname", pService.getProcessModel(processBean).toString());
-		row.add("title", sb.toString());
-		final String userFrom = getUserFrom(cp, activity);
-		if (userFrom != null) {
-			row.add("userFrom", userFrom);
-		}
-		final String userTo = getUserTo(cp, activity);
-		if (userTo != null) {
-			row.add("userTo", userTo);
-		}
-		row.add("createDate", workitem.getCreateDate());
-		row.add("completeDate", workitem.getCompleteDate());
+		row.add("title", sb.toString()).add("userFrom", getUserFrom(cp, activity))
+				.add("userTo", getUserTo(cp, activity)).add("createDate", workitem.getCreateDate())
+				.add("completeDate", workitem.getCompleteDate());
+
 		sb.setLength(0);
 		sb.append(new ButtonElement("过程"));
 		sb.append(SpanElement.SPACE).append(AbstractTablePagerSchema.IMG_DOWNMENU);

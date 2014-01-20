@@ -42,7 +42,7 @@ public class MyInitiateItemsTPage extends AbstractWorkTPage {
 				MyInitiateItemsTbl.class);
 		tablePager
 				.addColumn(new TablePagerColumn("modelText", "可启动流程").setTextAlign(ETextAlign.left))
-				.addColumn(TablePagerColumn.OPE().setWidth(80));
+				.addColumn(TablePagerColumn.OPE().setWidth(75));
 
 		// 发起流程
 		pp.addComponentBean("MyInitiateItemsTPage_startProcess", StartProcessBean.class)

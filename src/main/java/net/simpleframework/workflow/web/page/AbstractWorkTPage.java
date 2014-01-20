@@ -41,16 +41,19 @@ public abstract class AbstractWorkTPage extends Category_ListPage implements IWo
 
 	@Override
 	protected CategoryItems getCategoryList(final PageParameter pp) {
-		final CategoryItem item0 = createCategoryItem(pp, "我的工作", MyWorklistTPage.class, null);
+		final CategoryItem item0 = createCategoryItem(pp, "我的工作", MyWorklistTPage.class, null)
+				.setIconClass("my_work_icon");
 		final String _status = pp.getParameter("status");
 		final List<CategoryItem> children = item0.getChildren();
 		// children.add(createCategoryItem(pp, "待办工作", MyWorklistTPage.class,
 		// "status=running")
 		// .setSelected("running".equals(_status)));
 		children.add(createCategoryItem(pp, "办毕工作", MyWorklistTPage.class, "status=complete")
-				.setSelected("complete".equals(_status)));
-		return CategoryItems.of(item0,
-				createCategoryItem(pp, "启动新工作", MyInitiateItemsTPage.class, null));
+				.setIconClass("my_work_complete_icon").setSelected("complete".equals(_status)));
+		return CategoryItems.of(
+				item0,
+				createCategoryItem(pp, "启动新工作", MyInitiateItemsTPage.class, null).setIconClass(
+						"my_initiate_icon"));
 	}
 
 	@Override

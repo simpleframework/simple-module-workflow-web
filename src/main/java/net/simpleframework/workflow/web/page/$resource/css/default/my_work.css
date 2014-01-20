@@ -2,3 +2,15 @@
 .WorkflowFormPage {
   width: 80%;
 }
+
+.my_work_icon {
+  background-image: url("images/my_work.png");
+}
+
+.my_work_complete_icon {
+  background-image: url("images/my_work_complete.png");
+}
+
+.my_initiate_icon {
+  background-image: url("images/my_initiate.png");
+}
