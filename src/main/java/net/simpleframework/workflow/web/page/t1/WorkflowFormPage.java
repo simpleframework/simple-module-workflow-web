@@ -10,6 +10,7 @@ import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.LinkButton;
 import net.simpleframework.mvc.template.t1.T1FormTemplatePage;
+import net.simpleframework.workflow.engine.EWorkitemStatus;
 import net.simpleframework.workflow.engine.IWorkflowContextAware;
 import net.simpleframework.workflow.engine.IWorkflowForm;
 import net.simpleframework.workflow.engine.WorkitemBean;
@@ -59,9 +60,15 @@ public class WorkflowFormPage extends T1FormTemplatePage implements IWorkflowCon
 		if (StringUtils.hasText(url)) {
 			backBtn.setHref(url);
 		} else {
+			final StringBuilder sb = new StringBuilder();
+			final WorkitemBean workitem = AbstractWorkflowFormPage.getWorkitemBean(pp);
+			final EWorkitemStatus status = workitem.getStatus();
+			if (status != EWorkitemStatus.running) {
+				sb.append("status=").append(status.name());
+			}
 			backBtn.setOnclick("$Actions.loc('"
 					+ ((IWorkflowWebContext) context).getUrlsFactory().getMyWorkUrl(
-							MyWorklistTPage.class) + "');");
+							MyWorklistTPage.class, sb.toString()) + "');");
 		}
 		final ElementList el = ElementList.of(backBtn);
 		return el;
