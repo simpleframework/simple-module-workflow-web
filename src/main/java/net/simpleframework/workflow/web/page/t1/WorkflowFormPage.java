@@ -5,6 +5,7 @@ import java.util.Map;
 
 import net.simpleframework.common.StringUtils;
 import net.simpleframework.ctx.permission.IPermissionConst;
+import net.simpleframework.mvc.PageMapping;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.LinkButton;
@@ -23,6 +24,7 @@ import net.simpleframework.workflow.web.page.MyWorklistTPage;
  * @author 陈侃(cknet@126.com, 13910090885) https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
+@PageMapping(url = "/workflow/form")
 public class WorkflowFormPage extends T1FormTemplatePage implements IWorkflowContextAware {
 
 	@Override

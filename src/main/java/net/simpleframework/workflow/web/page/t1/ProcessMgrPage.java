@@ -13,6 +13,7 @@ import net.simpleframework.ctx.trans.Transaction;
 import net.simpleframework.mvc.AbstractMVCPage;
 import net.simpleframework.mvc.IForward;
 import net.simpleframework.mvc.JavascriptForward;
+import net.simpleframework.mvc.PageMapping;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.ETextAlign;
 import net.simpleframework.mvc.common.element.ElementList;
@@ -45,6 +46,7 @@ import net.simpleframework.workflow.web.WorkflowLogRef.ProcessUpdateLogPage;
  * @author 陈侃(cknet@126.com, 13910090885) https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
+@PageMapping(url = "/workflow/mgr/process")
 public class ProcessMgrPage extends AbstractWorkflowMgrPage {
 
 	@Override

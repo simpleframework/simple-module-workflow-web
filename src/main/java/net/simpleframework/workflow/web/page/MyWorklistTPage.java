@@ -12,6 +12,7 @@ import net.simpleframework.mvc.common.element.Option;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
 import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
+import net.simpleframework.mvc.component.ui.pager.db.GroupDbTablePagerHandler;
 import net.simpleframework.workflow.engine.EWorkitemStatus;
 import net.simpleframework.workflow.engine.WorkitemBean;
 import net.simpleframework.workflow.web.AbstractWorkflowFormPage;
@@ -56,7 +57,8 @@ public class MyWorklistTPage extends AbstractWorkTPage {
 
 	@Override
 	public ElementList getRightElements(final PageParameter pp) {
-		pp.putParameter(G, "modelname");
+		GroupDbTablePagerHandler.setDefaultGroupVal(pp, "MyWorklistTPage_tbl", "modelname");
+
 		return ElementList.of(createGroupElement(pp, "MyWorklistTPage_tbl", new Option("modelname",
 				"按模型分组"), new Option("taskname", "按环节分组")));
 	}

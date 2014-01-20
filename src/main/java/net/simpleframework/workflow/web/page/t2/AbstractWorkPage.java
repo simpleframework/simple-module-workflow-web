@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Map;
 
 import net.simpleframework.ctx.permission.IPermissionConst;
+import net.simpleframework.mvc.PageMapping;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.template.t2.T2TemplatePage;
 import net.simpleframework.workflow.web.page.AbstractWorkTPage;
@@ -31,6 +32,7 @@ public abstract class AbstractWorkPage extends T2TemplatePage {
 		return pp.includeUrl(getWorkTPageClass());
 	}
 
+	@PageMapping(url = "/workflow/my/work")
 	public static class MyWorklistPage extends AbstractWorkPage {
 
 		@Override
@@ -39,6 +41,7 @@ public abstract class AbstractWorkPage extends T2TemplatePage {
 		}
 	}
 
+	@PageMapping(url = "/workflow/my/initiate")
 	public static class MyInitiateItemsPage extends AbstractWorkPage {
 		@Override
 		protected Class<? extends AbstractWorkTPage> getWorkTPageClass() {

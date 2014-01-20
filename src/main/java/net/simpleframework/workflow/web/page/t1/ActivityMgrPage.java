@@ -11,6 +11,7 @@ import net.simpleframework.common.coll.KVMap;
 import net.simpleframework.mvc.AbstractMVCPage;
 import net.simpleframework.mvc.IForward;
 import net.simpleframework.mvc.JavascriptForward;
+import net.simpleframework.mvc.PageMapping;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.BlockElement;
 import net.simpleframework.mvc.common.element.EElementEvent;
@@ -51,6 +52,7 @@ import net.simpleframework.workflow.engine.participant.IParticipantModel;
  * @author 陈侃(cknet@126.com, 13910090885) https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
+@PageMapping(url = "/workflow/mgr/activity")
 public class ActivityMgrPage extends AbstractWorkflowMgrPage {
 
 	@Override
