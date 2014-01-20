@@ -10,7 +10,6 @@ import net.simpleframework.mvc.template.struct.CategoryItem;
 import net.simpleframework.mvc.template.struct.CategoryItems;
 import net.simpleframework.workflow.engine.IWorkflowContextAware;
 import net.simpleframework.workflow.web.IWorkflowWebContext;
-import net.simpleframework.workflow.web.WorkflowUrlsFactory;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -35,7 +34,8 @@ public abstract class AbstractWorkTPage extends Category_ListPage implements IWo
 
 	private CategoryItem createCategoryItem(final PageParameter pp, final String text,
 			final Class<? extends AbstractWorkTPage> mClass, final String params) {
-		return new CategoryItem(text).setHref(getUrlsFactory().getMyWorkUrl(mClass, params))
+		return new CategoryItem(text).setHref(
+				(((IWorkflowWebContext) context).getUrlsFactory()).getMyWorkUrl(mClass, params))
 				.setSelected(mClass.equals(getClass()));
 	}
 
@@ -56,9 +56,5 @@ public abstract class AbstractWorkTPage extends Category_ListPage implements IWo
 	@Override
 	protected int getCategoryWidth(final PageParameter pp) {
 		return 180;
-	}
-
-	protected static WorkflowUrlsFactory getUrlsFactory() {
-		return ((IWorkflowWebContext) context).getUrlsFactory();
 	}
 }

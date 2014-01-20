@@ -22,6 +22,7 @@ import net.simpleframework.workflow.engine.InitiateItem;
 import net.simpleframework.workflow.engine.InitiateItems;
 import net.simpleframework.workflow.engine.ProcessBean;
 import net.simpleframework.workflow.engine.WorkitemBean;
+import net.simpleframework.workflow.web.IWorkflowWebContext;
 import net.simpleframework.workflow.web.component.startprocess.DefaultStartProcessHandler;
 import net.simpleframework.workflow.web.component.startprocess.StartProcessBean;
 
@@ -84,8 +85,10 @@ public class MyInitiateItemsTPage extends AbstractWorkTPage {
 			final WorkitemBean workitem = context.getProcessService().getFirstWorkitem(process);
 			if (workitem != null) {
 				final JavascriptForward js = new JavascriptForward();
-				js.append("$Actions.loc('").append(getUrlsFactory().getMyWorkFormUrl(workitem))
-						.append("');");
+				js.append("$Actions.loc('")
+						.append(
+								(((IWorkflowWebContext) context).getUrlsFactory())
+										.getMyWorkFormUrl(workitem)).append("');");
 				return js;
 			} else {
 				return null;

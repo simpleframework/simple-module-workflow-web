@@ -24,7 +24,7 @@ import net.simpleframework.workflow.engine.WorkitemComplete;
 public class ParticipantSelectLoaded extends DefaultPageHandler {
 
 	@Override
-	public void onBeforeComponentRender(PageParameter pp) {
+	public void onBeforeComponentRender(final PageParameter pp) {
 		super.onBeforeComponentRender(pp);
 
 		pp.addComponentBean("ParticipantSelectLoaded_ok", AjaxRequestBean.class).setHandleClass(
@@ -43,7 +43,7 @@ public class ParticipantSelectLoaded extends DefaultPageHandler {
 		}
 
 		@Override
-		public IForward ajaxProcess(ComponentParameter cp) throws Exception {
+		public IForward ajaxProcess(final ComponentParameter cp) throws Exception {
 			final ComponentParameter nCP = WorkitemCompleteUtils.get(cp);
 			final WorkitemBean workitem = WorkitemCompleteUtils.getWorkitemBean(nCP);
 

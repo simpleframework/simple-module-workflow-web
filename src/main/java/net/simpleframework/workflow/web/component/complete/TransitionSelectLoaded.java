@@ -21,7 +21,7 @@ import net.simpleframework.workflow.web.component.complete.ParticipantSelectLoad
 public class TransitionSelectLoaded extends DefaultPageHandler {
 
 	@Override
-	public void onBeforeComponentRender(PageParameter pp) {
+	public void onBeforeComponentRender(final PageParameter pp) {
 		super.onBeforeComponentRender(pp);
 
 		pp.addComponentBean("TransitionSelectLoaded_ok", AjaxRequestBean.class).setHandleClass(
@@ -31,15 +31,15 @@ public class TransitionSelectLoaded extends DefaultPageHandler {
 	public static class TransitionSelectAction extends ParticipantSelectAction {
 
 		@Override
-		public IForward ajaxProcess(ComponentParameter cp) throws Exception {
+		public IForward ajaxProcess(final ComponentParameter cp) throws Exception {
 			final ComponentParameter nCP = WorkitemCompleteUtils.get(cp);
 			final WorkitemBean workitem = WorkitemCompleteUtils.getWorkitemBean(nCP);
-			String transitions = nCP.getParameter("transitions");
+			final String transitions = nCP.getParameter("transitions");
 			final String[] transitionIds = StringUtils.split(transitions);
 			final WorkitemComplete workitemComplete = WorkitemComplete.get(workitem);
 			final ActivityComplete activityComplete = workitemComplete.getActivityComplete();
 			if (activityComplete.isParticipantManual(transitionIds)) {
-				JavascriptForward js = new JavascriptForward();
+				final JavascriptForward js = new JavascriptForward();
 				js.append("$Actions['").append(nCP.getComponentName()).append("_participantSelect']('")
 						.append(WorkitemCompleteUtils.toParams(nCP, workitem)).append("&transitions=")
 						.append(transitions).append("');");

@@ -122,8 +122,8 @@ public class WorkitemCompleteUtils implements IWorkflowContextAware {
 		return al;
 	}
 
-	public static String toParticipantsHTML(ComponentParameter cp) {
-		StringBuilder sb = new StringBuilder();
+	public static String toParticipantsHTML(final ComponentParameter cp) {
+		final StringBuilder sb = new StringBuilder();
 		final WorkitemBean workitem = getWorkitemBean(cp);
 		for (final TransitionNode transition : WorkitemCompleteUtils.getTransitions(cp, workitem)) {
 			sb.append("<div class='transition' transition='").append(transition.getId()).append("'>")
@@ -134,7 +134,7 @@ public class WorkitemCompleteUtils implements IWorkflowContextAware {
 			if (coll == null || coll.size() == 0) {
 				sb.append("#(participant_manual.1)");
 			} else {
-				for (Participant participant : coll) {
+				for (final Participant participant : coll) {
 					sb.append("<div class='ritem'>");
 					sb.append(new Checkbox(ObjectUtils.hashStr(participant), cp
 							.getUser(participant.userId)).setValue(participant.getId()));

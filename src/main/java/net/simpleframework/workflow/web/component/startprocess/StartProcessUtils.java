@@ -8,6 +8,7 @@ import java.io.Writer;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import net.simpleframework.common.ID;
 import net.simpleframework.common.JsonUtils;
 import net.simpleframework.common.StringUtils;
 import net.simpleframework.common.web.JavascriptUtils;
@@ -94,7 +95,7 @@ public abstract class StartProcessUtils implements IWorkflowContextAware {
 	static JavascriptForward doStartProcess(final ComponentParameter nCP,
 			final InitiateItem initiateItem) {
 		// 设置选择的其他角色
-		final PermissionRole role = nCP.getPermission().getRole(nCP.getParameter("initiator"));
+		final PermissionRole role = nCP.getPermission().getRole(ID.of(nCP.getParameter("initiator")));
 		if (role != null) {
 			initiateItem.setSelectedRoleId(role.getId());
 		}
