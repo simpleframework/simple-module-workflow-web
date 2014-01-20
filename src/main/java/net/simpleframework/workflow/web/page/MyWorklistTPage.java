@@ -47,13 +47,13 @@ public class MyWorklistTPage extends AbstractWorkTPage {
 		tablePager.addColumn(new TablePagerColumn("title", "流程主题").setTextAlign(ETextAlign.left)
 				.setSort(false).setFilter(false));
 		if (status == EWorkitemStatus.complete) {
-			tablePager.addColumn(new TablePagerColumn("userTo", "接收人", 120).setSort(false).setFilter(
-					false));
+			tablePager.addColumn(new TablePagerColumn("userTo", "接收人", 120).setSort(false)
+					.setFilter(false).setTextAlign(ETextAlign.left));
 			tablePager.addColumn(new TablePagerColumn("completeDate", "完成日期", 115)
 					.setPropertyClass(Date.class));
 		} else {
 			tablePager.addColumn(new TablePagerColumn("userFrom", "发送人", 120).setSort(false)
-					.setFilter(false));
+					.setFilter(false).setTextAlign(ETextAlign.left));
 			tablePager.addColumn(new TablePagerColumn("createDate", "创建日期", 115)
 					.setPropertyClass(Date.class));
 		}
