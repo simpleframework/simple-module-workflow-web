@@ -60,7 +60,8 @@ public abstract class AbstractWorkflowFormPage extends FormTableRowTemplatePage 
 		final WorkitemBean workitem = getWorkitemBean(cp);
 		onSave(cp.map(), workitem);
 		return new JavascriptForward("$Actions.loc('").append(
-				getUrlsFactory().getMyWorkFormUrl(workitem)).append("');");
+				(((IWorkflowWebContext) context).getUrlsFactory()).getMyWorkFormUrl(workitem)).append(
+				"');");
 	}
 
 	protected ProcessBean getProcess(final PageParameter pp) {
@@ -109,10 +110,6 @@ public abstract class AbstractWorkflowFormPage extends FormTableRowTemplatePage 
 		final TableRow r2 = new TableRow(new RowField($m("AbstractWorkflowFormPage.3"),
 				wf_description));
 		return TableRows.of(r1, r2);
-	}
-
-	protected static WorkflowUrlsFactory getUrlsFactory() {
-		return ((IWorkflowWebContext) context).getUrlsFactory();
 	}
 
 	public static WorkitemBean getWorkitemBean(final PageParameter pp) {
