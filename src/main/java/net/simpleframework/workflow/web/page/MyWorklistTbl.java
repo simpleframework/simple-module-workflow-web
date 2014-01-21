@@ -63,7 +63,7 @@ public class MyWorklistTbl extends GroupDbTablePagerHandler implements IWorkflow
 			if (bModelname) {
 				return processModel;
 			} else {
-				return aService.taskNode(activity).setAttr("_processModel", processModel);
+				return aService.getTaskNode(activity).setAttr("_processModel", processModel);
 			}
 		}
 		return groupColumn;
@@ -96,7 +96,7 @@ public class MyWorklistTbl extends GroupDbTablePagerHandler implements IWorkflow
 		final StringBuilder sb = new StringBuilder();
 
 		if (!"taskname".equals(cp.getParameter(G))) {
-			sb.append("[").append(aService.taskNode(activity)).append("] ");
+			sb.append("[").append(aService.getTaskNode(activity)).append("] ");
 		}
 		sb.append(new LinkElement(StringUtils.text(aService.getProcessBean(activity).toString(),
 				"未设置主题")).setStrong(!workitem.isReadMark()).setOnclick(

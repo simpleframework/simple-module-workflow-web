@@ -144,10 +144,10 @@ public class ActivityMgrPage extends AbstractWorkflowMgrPage {
 			final Object id = activity.getId();
 			final KVMap row = new KVMap();
 			final IActivityService service = context.getActivityService();
-			row.add("tasknode", service.taskNode(activity));
+			row.add("tasknode", service.getTaskNode(activity));
 			final ActivityBean pre = service.getPreActivity(activity);
 			if (pre != null) {
-				row.add("previous", service.taskNode(pre));
+				row.add("previous", service.getTaskNode(pre));
 			}
 			row.add("participants", getParticipants(activity, null));
 			row.add("participants2", getParticipants(activity, EWorkitemStatus.complete));
