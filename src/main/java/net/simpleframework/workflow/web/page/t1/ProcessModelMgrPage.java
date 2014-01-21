@@ -93,7 +93,7 @@ public class ProcessModelMgrPage extends AbstractWorkflowMgrPage {
 	public IForward doDelete(final ComponentParameter cp) {
 		final Object[] ids = StringUtils.split(cp.getParameter("modelId"));
 		if (ids != null) {
-			context.getProcessModelService().delete(ids);
+			mService.delete(ids);
 		}
 		return new JavascriptForward("$Actions['ProcessModelMgrPage_tbl']();");
 	}
@@ -127,7 +127,7 @@ public class ProcessModelMgrPage extends AbstractWorkflowMgrPage {
 	public static class ProcessModelTbl extends AbstractDbTablePagerHandler {
 		@Override
 		public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
-			return context.getProcessModelService().getModelList();
+			return mService.getModelList();
 		}
 
 		@Override
@@ -196,7 +196,7 @@ public class ProcessModelMgrPage extends AbstractWorkflowMgrPage {
 				final IAttachmentSaveCallback callback) throws IOException {
 			final Map<String, AttachmentFile> attachments = getUploadCache(cp);
 			for (final AttachmentFile aFile : attachments.values()) {
-				context.getProcessModelService().addModel(cp.getLoginId(),
+				mService.addModel(cp.getLoginId(),
 						new ProcessDocument(new FileInputStream(aFile.getAttachment())));
 			}
 			// 清除
@@ -216,8 +216,7 @@ public class ProcessModelMgrPage extends AbstractWorkflowMgrPage {
 		@Transaction(context = IWorkflowContext.class)
 		@Override
 		public JavascriptForward onSave(final ComponentParameter cp) throws Exception {
-			updateStatus(cp, context.getProcessModelService(),
-					StringUtils.split(cp.getParameter("modelId"), ";"),
+			updateStatus(cp, mService, StringUtils.split(cp.getParameter("modelId"), ";"),
 					cp.getEnumParameter(EProcessModelStatus.class, "op"));
 			return super.onSave(cp).append("$Actions['ProcessModelMgrPage_tbl']();");
 		}

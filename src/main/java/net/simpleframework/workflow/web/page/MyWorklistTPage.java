@@ -67,11 +67,13 @@ public class MyWorklistTPage extends AbstractWorkTPage {
 		final WorkitemBean workitem = AbstractWorkflowFormPage.getWorkitemBean(cp);
 		final String action = cp.getParameter("action");
 		if ("readMark".equals(action)) {
-			context.getWorkitemService().readMark(workitem, workitem.isReadMark() ? true : false);
+			wService.readMark(workitem, workitem.isReadMark() ? true : false);
 		} else if ("retake".equals(action)) {
-			context.getWorkitemService().retake(workitem);
+			wService.retake(workitem);
 		} else if ("fallback".equals(action)) {
-			context.getActivityService().fallback(context.getWorkitemService().getActivity(workitem));
+			aService.fallback(wService.getActivity(workitem));
+		} else if ("delete".equals(action)) {
+			wService.deleteProcess(workitem);
 		}
 		return new JavascriptForward("$Actions['MyWorklistTPage_tbl']();");
 	}

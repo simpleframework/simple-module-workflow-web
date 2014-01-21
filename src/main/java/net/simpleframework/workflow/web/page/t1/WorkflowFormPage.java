@@ -49,8 +49,7 @@ public class WorkflowFormPage extends T1FormTemplatePage implements IWorkflowCon
 
 	protected IWorkflowForm getWorkflowForm(final PageParameter pp) {
 		final WorkitemBean workitem = AbstractWorkflowFormPage.getWorkitemBean(pp);
-		return (IWorkflowForm) context.getActivityService().getWorkflowForm(
-				context.getWorkitemService().getActivity(workitem));
+		return (IWorkflowForm) aService.getWorkflowForm(wService.getActivity(workitem));
 	}
 
 	@Override

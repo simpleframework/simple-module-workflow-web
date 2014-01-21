@@ -56,8 +56,7 @@ public class MyInitiateItemsTPage extends AbstractWorkTPage {
 		public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
 			final ID loginId = cp.getLoginId();
 			InitiateItems items;
-			if (loginId == null
-					|| (items = context.getProcessModelService().getInitiateItems(loginId)) == null) {
+			if (loginId == null || (items = mService.getInitiateItems(loginId)) == null) {
 				return DataQueryUtils.nullQuery();
 			}
 			return new ListDataObjectQuery<InitiateItem>(items);
@@ -82,7 +81,7 @@ public class MyInitiateItemsTPage extends AbstractWorkTPage {
 
 		@Override
 		public JavascriptForward onStartProcess(final ComponentParameter cp, final ProcessBean process) {
-			final WorkitemBean workitem = context.getProcessService().getFirstWorkitem(process);
+			final WorkitemBean workitem = pService.getFirstWorkitem(process);
 			if (workitem != null) {
 				final JavascriptForward js = new JavascriptForward();
 				js.append("$Actions.loc('")

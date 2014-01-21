@@ -18,7 +18,7 @@ public class WorkflowLogRef extends LogRef implements IWorkflowContextAware {
 
 		@Override
 		protected IDbBeanService<?> getBeanService() {
-			return context.getProcessModelService();
+			return mService;
 		}
 
 		@Override
@@ -31,7 +31,7 @@ public class WorkflowLogRef extends LogRef implements IWorkflowContextAware {
 
 		@Override
 		protected IDbBeanService<?> getBeanService() {
-			return context.getProcessService();
+			return pService;
 		}
 
 		@Override

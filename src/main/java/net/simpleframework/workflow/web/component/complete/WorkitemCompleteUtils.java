@@ -57,8 +57,8 @@ public class WorkitemCompleteUtils implements IWorkflowContextAware {
 	}
 
 	public static WorkitemBean getWorkitemBean(final ComponentParameter cp) {
-		return context.getWorkitemService().getBean(
-				cp.getParameter((String) cp.getBeanProperty("workitemIdParameterName")));
+		return wService.getBean(cp.getParameter((String) cp
+				.getBeanProperty("workitemIdParameterName")));
 	}
 
 	public static void doWorkitemComplete(final ComponentParameter cp) throws IOException {

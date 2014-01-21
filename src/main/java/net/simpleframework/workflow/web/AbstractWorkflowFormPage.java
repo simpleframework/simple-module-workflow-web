@@ -38,7 +38,7 @@ public abstract class AbstractWorkflowFormPage extends FormTableRowTemplatePage 
 
 		final WorkitemBean workitem = getWorkitemBean(pp);
 		if (workitem != null && !workitem.isReadMark()) {
-			context.getWorkitemService().readMark(workitem, false);
+			wService.readMark(workitem, false);
 		}
 	}
 
@@ -50,7 +50,7 @@ public abstract class AbstractWorkflowFormPage extends FormTableRowTemplatePage 
 
 	protected void onSave(final Map<String, String> parameters, final WorkitemBean workitem) {
 		final ProcessBean process = getProcess(workitem);
-		context.getProcessService().saveProcessTitle(process, parameters.get("wf_topic"));
+		pService.saveProcessTitle(process, parameters.get("wf_topic"));
 	}
 
 	@Override
@@ -66,8 +66,7 @@ public abstract class AbstractWorkflowFormPage extends FormTableRowTemplatePage 
 	}
 
 	protected ProcessBean getProcess(final WorkitemBean workitem) {
-		return context.getActivityService().getProcessBean(
-				context.getWorkitemService().getActivity(workitem));
+		return aService.getProcessBean(wService.getActivity(workitem));
 	}
 
 	@Override
@@ -115,6 +114,6 @@ public abstract class AbstractWorkflowFormPage extends FormTableRowTemplatePage 
 	}
 
 	public static WorkitemBean getWorkitemBean(final PageParameter pp) {
-		return getCacheBean(pp, context.getWorkitemService(), "workitemId");
+		return getCacheBean(pp, wService, "workitemId");
 	}
 }

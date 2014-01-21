@@ -22,10 +22,7 @@ import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
 import net.simpleframework.mvc.component.ui.pager.db.GroupDbTablePagerHandler;
 import net.simpleframework.workflow.engine.ActivityBean;
 import net.simpleframework.workflow.engine.EWorkitemStatus;
-import net.simpleframework.workflow.engine.IActivityService;
-import net.simpleframework.workflow.engine.IProcessService;
 import net.simpleframework.workflow.engine.IWorkflowContextAware;
-import net.simpleframework.workflow.engine.IWorkitemService;
 import net.simpleframework.workflow.engine.ProcessModelBean;
 import net.simpleframework.workflow.engine.WorkitemBean;
 import net.simpleframework.workflow.schema.AbstractTaskNode;
@@ -43,12 +40,11 @@ public class MyWorklistTbl extends GroupDbTablePagerHandler implements IWorkflow
 	public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
 		final EWorkitemStatus status = MyWorklistTPage.getWorkitemStatus(cp);
 		final ID userId = cp.getLoginId();
-		final IWorkitemService service = context.getWorkitemService();
 		if (status != null) {
 			cp.addFormParameter("status", status.name());
-			return service.getWorkitemList(userId, status);
+			return wService.getWorkitemList(userId, status);
 		} else {
-			return service.getWorkitemList(userId);
+			return wService.getWorkitemList(userId);
 		}
 	}
 
@@ -184,18 +180,17 @@ public class MyWorklistTbl extends GroupDbTablePagerHandler implements IWorkflow
 			items.append(MenuItem.of("取回").setOnclick_act("MyWorklistTPage_action", "workitemId",
 					"action=retake"));
 		} else {
+			items.append(MenuItem.of("已读/未读").setOnclick_act("MyWorklistTPage_action", "workitemId",
+					"action=readMark"));
+			items.append(MenuItem.sep());
 			items.append(MenuItem.of("回退").setOnclick_act("MyWorklistTPage_action", "workitemId",
 					"action=fallback"));
 			items.append(MenuItem.sep());
-			items.append(MenuItem.of("委托").setOnclick_act("MyWorklistTPage_delegate", "workitemId"));
+			items.append(MenuItem.itemDelete().setOnclick_act("MyWorklistTPage_action", "workitemId",
+					"action=delete"));
 			items.append(MenuItem.sep());
-			items.append(MenuItem.of("标记已读/未读").setOnclick_act("MyWorklistTPage_action", "workitemId",
-					"action=readMark"));
+			items.append(MenuItem.of("委托").setOnclick_act("MyWorklistTPage_delegate", "workitemId"));
 		}
 		return items;
 	}
-
-	private final IWorkitemService wService = context.getWorkitemService();
-	private final IActivityService aService = context.getActivityService();
-	private final IProcessService pService = context.getProcessService();
 }

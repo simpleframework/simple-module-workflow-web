@@ -10,7 +10,6 @@ import net.simpleframework.mvc.JsonForward;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.workflow.engine.ActivityBean;
 import net.simpleframework.workflow.engine.IMappingVal;
-import net.simpleframework.workflow.engine.IProcessService;
 import net.simpleframework.workflow.engine.ProcessBean;
 import net.simpleframework.workflow.engine.remote.IProcessRemote;
 
@@ -41,9 +40,9 @@ public class SubProcessRemotePage extends AbstractWorkflowRemotePage {
 					}
 				}
 
-				final ProcessBean process = context.getProcessService().startProcess(
-						context.getProcessModelService().getProcessModel(
-								pp.getLocaleParameter(IProcessRemote.MODEL)), variables, properties, null);
+				final ProcessBean process = pService.startProcess(
+						mService.getProcessModel(pp.getLocaleParameter(IProcessRemote.MODEL)), variables,
+						properties, null);
 				json.put(IProcessRemote.SUB_PROCESSID, process.getId());
 			}
 		});
@@ -53,11 +52,10 @@ public class SubProcessRemotePage extends AbstractWorkflowRemotePage {
 		return doJsonForward(new IJsonForwardCallback() {
 			@Override
 			public void doAction(final JsonForward json) {
-				final IProcessService service = context.getProcessService();
-				final ProcessBean sProcess = service.getBean(pp
+				final ProcessBean sProcess = pService.getBean(pp
 						.getLocaleParameter(IProcessRemote.SUB_PROCESSID));
-				if (sProcess != null && service.isFinalStatus(sProcess)) {
-					service.backToRemote(sProcess);
+				if (sProcess != null && pService.isFinalStatus(sProcess)) {
+					pService.backToRemote(sProcess);
 				}
 				json.put("success", Boolean.TRUE);
 			}
@@ -68,9 +66,9 @@ public class SubProcessRemotePage extends AbstractWorkflowRemotePage {
 		return doJsonForward(new IJsonForwardCallback() {
 			@Override
 			public void doAction(final JsonForward json) {
-				final ActivityBean nActivity = context.getActivityService().getBean(
-						pp.getLocaleParameter(IProcessRemote.SUB_ACTIVITYID));
-				context.getActivityService().subComplete(nActivity, new IMappingVal() {
+				final ActivityBean nActivity = aService.getBean(pp
+						.getLocaleParameter(IProcessRemote.SUB_ACTIVITYID));
+				aService.subComplete(nActivity, new IMappingVal() {
 					@Override
 					public Object val(final String mapping) {
 						return pp.getLocaleParameter(mapping);

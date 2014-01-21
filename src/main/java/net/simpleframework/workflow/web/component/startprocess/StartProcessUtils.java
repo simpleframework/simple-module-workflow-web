@@ -17,7 +17,6 @@ import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.MVCUtils;
 import net.simpleframework.mvc.PageRequestResponse;
 import net.simpleframework.mvc.component.ComponentParameter;
-import net.simpleframework.workflow.engine.IProcessModelService;
 import net.simpleframework.workflow.engine.IWorkflowContextAware;
 import net.simpleframework.workflow.engine.InitiateItem;
 import net.simpleframework.workflow.engine.ProcessBean;
@@ -43,16 +42,15 @@ public abstract class StartProcessUtils implements IWorkflowContextAware {
 	}
 
 	public static InitiateItem getInitiateItem(final ComponentParameter cp) {
-		final IProcessModelService service = context.getProcessModelService();
 		ProcessModelBean processModel = null;
 		final String modelId = cp.getParameter((String) cp.getBeanProperty("modelIdParameterName"));
 		if (StringUtils.hasText(modelId)) {
-			processModel = service.getBean(modelId);
+			processModel = mService.getBean(modelId);
 		}
 		if (processModel == null) {
-			processModel = service.getProcessModelByName(cp.getParameter("modelName"));
+			processModel = mService.getProcessModelByName(cp.getParameter("modelName"));
 		}
-		return service.getInitiateItems(cp.getLoginId()).get(processModel);
+		return mService.getInitiateItems(cp.getLoginId()).get(processModel);
 	}
 
 	public static String toParams(final ComponentParameter cp, final InitiateItem initiateItem) {
@@ -101,7 +99,7 @@ public abstract class StartProcessUtils implements IWorkflowContextAware {
 		}
 
 		// 发起流程实例
-		final ProcessBean process = context.getProcessService().startProcess(initiateItem);
+		final ProcessBean process = pService.startProcess(initiateItem);
 		// 触发onStartProcess回调
 		return ((IStartProcessHandler) nCP.getComponentHandler()).onStartProcess(nCP, process);
 	}

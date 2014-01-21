@@ -42,10 +42,8 @@ import net.simpleframework.workflow.engine.EActivityAbortPolicy;
 import net.simpleframework.workflow.engine.EActivityStatus;
 import net.simpleframework.workflow.engine.EProcessStatus;
 import net.simpleframework.workflow.engine.EWorkitemStatus;
-import net.simpleframework.workflow.engine.IActivityService;
 import net.simpleframework.workflow.engine.ProcessBean;
 import net.simpleframework.workflow.engine.WorkitemBean;
-import net.simpleframework.workflow.engine.participant.IParticipantModel;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -135,7 +133,7 @@ public class ActivityMgrPage extends AbstractWorkflowMgrPage {
 		public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
 			final ProcessBean process = getProcessBean(cp);
 			cp.addFormParameter("processId", process.getId());
-			return context.getActivityService().getActivities(process);
+			return aService.getActivities(process);
 		}
 
 		@Override
@@ -143,14 +141,13 @@ public class ActivityMgrPage extends AbstractWorkflowMgrPage {
 			final ActivityBean activity = (ActivityBean) dataObject;
 			final Object id = activity.getId();
 			final KVMap row = new KVMap();
-			final IActivityService service = context.getActivityService();
-			row.add("tasknode", service.getTaskNode(activity));
-			final ActivityBean pre = service.getPreActivity(activity);
+			row.add("tasknode", aService.getTaskNode(activity));
+			final ActivityBean pre = aService.getPreActivity(activity);
 			if (pre != null) {
-				row.add("previous", service.getTaskNode(pre));
+				row.add("previous", aService.getTaskNode(pre));
 			}
-			row.add("participants", getParticipants(activity, null));
-			row.add("participants2", getParticipants(activity, EWorkitemStatus.complete));
+			row.add("participants", getParticipants(cp, activity, null));
+			row.add("participants2", getParticipants(cp, activity, EWorkitemStatus.complete));
 			row.add("createDate", activity.getCreateDate());
 			row.add("completeDate", activity.getCompleteDate());
 
@@ -163,10 +160,10 @@ public class ActivityMgrPage extends AbstractWorkflowMgrPage {
 			return row;
 		}
 
-		private String getParticipants(final ActivityBean activity, final EWorkitemStatus status) {
+		private String getParticipants(final PageParameter pp, final ActivityBean activity,
+				final EWorkitemStatus status) {
 			final StringBuilder sb = new StringBuilder();
-			final IDataQuery<WorkitemBean> qs = context.getWorkitemService().getWorkitemList(activity);
-			final IParticipantModel service = context.getParticipantService();
+			final IDataQuery<WorkitemBean> qs = wService.getWorkitemList(activity);
 			WorkitemBean item;
 			int i = 0;
 			while ((item = qs.next()) != null) {
@@ -176,8 +173,7 @@ public class ActivityMgrPage extends AbstractWorkflowMgrPage {
 				if (i > 0) {
 					sb.append(", ");
 				}
-				sb.append(new SpanElement(service.getUser(item.getUserId()))
-						.setClassName("participants2"));
+				sb.append(new SpanElement(pp.getUser(item.getUserId())).setClassName("participants2"));
 				sb.append(BlockElement.tip(item.toString()));
 				i++;
 			}
@@ -201,8 +197,7 @@ public class ActivityMgrPage extends AbstractWorkflowMgrPage {
 	public static class StatusDescPage extends AbstractStatusDescPage {
 		@Override
 		public JavascriptForward onSave(final ComponentParameter cp) throws Exception {
-			updateStatus(cp, context.getActivityService(),
-					StringUtils.split(cp.getParameter("activityId"), ";"),
+			updateStatus(cp, aService, StringUtils.split(cp.getParameter("activityId"), ";"),
 					cp.getEnumParameter(EActivityStatus.class, "op"));
 			return super.onSave(cp).append("$Actions['ActivityMgrPage_tbl']();");
 		}
@@ -211,9 +206,8 @@ public class ActivityMgrPage extends AbstractWorkflowMgrPage {
 	public static class ActivityAbortPage extends AbstractAbortPage {
 
 		public IForward doOk(final ComponentParameter cp) {
-			final IActivityService service = context.getActivityService();
-			final ActivityBean activity = service.getBean(cp.getParameter("activityId"));
-			service.abort(activity,
+			final ActivityBean activity = aService.getBean(cp.getParameter("activityId"));
+			aService.abort(activity,
 					Convert.toEnum(EActivityAbortPolicy.class, cp.getParameter("abort_policy")));
 			return new JavascriptForward(
 					"$Actions['ActivityMgrPage_abort'].close(); $Actions['ActivityMgrPage_tbl']();");
@@ -231,6 +225,6 @@ public class ActivityMgrPage extends AbstractWorkflowMgrPage {
 	}
 
 	private static ProcessBean getProcessBean(final PageParameter pp) {
-		return getCacheBean(pp, context.getProcessService(), "processId");
+		return getCacheBean(pp, pService, "processId");
 	}
 }

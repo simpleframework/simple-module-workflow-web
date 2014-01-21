@@ -10,8 +10,6 @@ import net.simpleframework.mvc.IForward;
 import net.simpleframework.mvc.IForwardCallback.IJsonForwardCallback;
 import net.simpleframework.mvc.JsonForward;
 import net.simpleframework.mvc.PageParameter;
-import net.simpleframework.mvc.ctx.permission.IPagePermissionHandler;
-import net.simpleframework.workflow.engine.IProcessModelService;
 import net.simpleframework.workflow.engine.ProcessModelBean;
 import net.simpleframework.workflow.schema.ProcessDocument;
 import net.simpleframework.workflow.schema.ProcessNode;
@@ -35,8 +33,7 @@ public class ModelerRemotePage extends AbstractWorkflowRemotePage {
 		return doJsonForward(new IJsonForwardCallback() {
 			@Override
 			public void doAction(final JsonForward json) {
-				((IPagePermissionHandler) context.getParticipantService()).login(pp, login, password,
-						null);
+				pp.getPermission().login(pp, login, password, null);
 				json.put("jsessionid", pp.getSessionId());
 			}
 		});
@@ -60,8 +57,7 @@ public class ModelerRemotePage extends AbstractWorkflowRemotePage {
 			public void doAction(final JsonForward json) {
 				final ArrayList<Map<?, ?>> models = new ArrayList<Map<?, ?>>();
 				ProcessModelBean pm;
-				final IDataQuery<ProcessModelBean> query = context.getProcessModelService()
-						.getModelList();
+				final IDataQuery<ProcessModelBean> query = mService.getModelList();
 				while ((pm = query.next()) != null) {
 					models.add(new KVMap().add("text", pm.toString()).add("id", pm.getId()).map());
 				}
@@ -80,12 +76,11 @@ public class ModelerRemotePage extends AbstractWorkflowRemotePage {
 		return doJsonForward(new IJsonForwardCallback() {
 			@Override
 			public void doAction(final JsonForward json) {
-				final IProcessModelService pmm = context.getProcessModelService();
 				final ProcessDocument document = new ProcessDocument();
 				final ProcessNode processNode = document.getProcessNode();
 				processNode.setName(pp.getLocaleParameter("name"));
 				processNode.setDescription(pp.getLocaleParameter("description"));
-				final ProcessModelBean model = pmm.addModel(pp.getLoginId(), document);
+				final ProcessModelBean model = mService.addModel(pp.getLoginId(), document);
 				json.put("id", model.getId().getValue());
 				json.put("text", processNode.toString());
 			}
@@ -96,9 +91,8 @@ public class ModelerRemotePage extends AbstractWorkflowRemotePage {
 		return doJsonForward(new IJsonForwardCallback() {
 			@Override
 			public void doAction(final JsonForward json) {
-				final IProcessModelService service = context.getProcessModelService();
-				final ProcessModelBean pm = service.getBean(pp.getParameter("id"));
-				json.put("doc", service.getProcessDocument(pm).toString());
+				final ProcessModelBean pm = mService.getBean(pp.getParameter("id"));
+				json.put("doc", mService.getProcessDocument(pm).toString());
 			}
 		});
 	}
@@ -107,7 +101,7 @@ public class ModelerRemotePage extends AbstractWorkflowRemotePage {
 		return doJsonForward(new IJsonForwardCallback() {
 			@Override
 			public void doAction(final JsonForward json) {
-				context.getProcessModelService().delete(pp.getParameter("id"));
+				mService.delete(pp.getParameter("id"));
 			}
 		});
 	}
@@ -116,10 +110,9 @@ public class ModelerRemotePage extends AbstractWorkflowRemotePage {
 		return doJsonForward(new IJsonForwardCallback() {
 			@Override
 			public void doAction(final JsonForward json) {
-				final IProcessModelService pmm = context.getProcessModelService();
-				final ProcessModelBean bean = pmm.getBean(pp.getParameter("id"));
+				final ProcessModelBean bean = mService.getBean(pp.getParameter("id"));
 				final String doc = pp.getLocaleParameter("doc");
-				pmm.updateModel(bean, pp.getLoginId(), doc.toCharArray());
+				mService.updateModel(bean, pp.getLoginId(), doc.toCharArray());
 				json.put("result", Boolean.TRUE);
 			}
 		});

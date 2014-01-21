@@ -34,7 +34,6 @@ import net.simpleframework.mvc.component.ui.pager.db.AbstractDbTablePagerHandler
 import net.simpleframework.mvc.template.struct.NavigationButtons;
 import net.simpleframework.workflow.engine.EProcessAbortPolicy;
 import net.simpleframework.workflow.engine.EProcessStatus;
-import net.simpleframework.workflow.engine.IProcessService;
 import net.simpleframework.workflow.engine.IWorkflowContext;
 import net.simpleframework.workflow.engine.ProcessBean;
 import net.simpleframework.workflow.engine.ProcessModelBean;
@@ -82,7 +81,7 @@ public class ProcessMgrPage extends AbstractWorkflowMgrPage {
 	public IForward doDelete(final ComponentParameter cp) {
 		final Object[] ids = StringUtils.split(cp.getParameter("processId"));
 		if (ids != null) {
-			context.getProcessService().delete(ids);
+			pService.delete(ids);
 		}
 		return new JavascriptForward("$Actions['ProcessMgrPage_tbl']();");
 	}
@@ -122,7 +121,7 @@ public class ProcessMgrPage extends AbstractWorkflowMgrPage {
 				return DataQueryUtils.nullQuery();
 			}
 			cp.addFormParameter("modelId", processModel.getId());
-			return context.getProcessService().getProcessList(processModel);
+			return pService.getProcessList(processModel);
 		}
 
 		@Override
@@ -188,8 +187,7 @@ public class ProcessMgrPage extends AbstractWorkflowMgrPage {
 
 		@Override
 		public JavascriptForward onSave(final ComponentParameter cp) throws Exception {
-			updateStatus(cp, context.getProcessService(),
-					StringUtils.split(cp.getParameter("processId"), ";"),
+			updateStatus(cp, pService, StringUtils.split(cp.getParameter("processId"), ";"),
 					cp.getEnumParameter(EProcessStatus.class, "op"));
 			return super.onSave(cp).append("$Actions['ProcessMgrPage_tbl']();");
 		}
@@ -198,9 +196,8 @@ public class ProcessMgrPage extends AbstractWorkflowMgrPage {
 	public static class ProcessAbortPage extends AbstractAbortPage {
 
 		public IForward doOk(final ComponentParameter cp) {
-			final IProcessService service = context.getProcessService();
-			final ProcessBean process = service.getBean(cp.getParameter("processId"));
-			service.abort(process,
+			final ProcessBean process = pService.getBean(cp.getParameter("processId"));
+			pService.abort(process,
 					Convert.toEnum(EProcessAbortPolicy.class, cp.getParameter("abort_policy")));
 			return new JavascriptForward(
 					"$Actions['ProcessMgrPage_abort'].close(); $Actions['ProcessMgrPage_tbl']();");
@@ -218,6 +215,6 @@ public class ProcessMgrPage extends AbstractWorkflowMgrPage {
 	}
 
 	private static ProcessModelBean getProcessModelBean(final PageParameter pp) {
-		return getCacheBean(pp, context.getProcessModelService(), "modelId");
+		return getCacheBean(pp, mService, "modelId");
 	}
 }
