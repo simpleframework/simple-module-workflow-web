@@ -47,7 +47,7 @@
           if (data.any(function(o) {
             if (!o.participant) {
               $UI.shakeMsg(o.participant_obj.down(".msg"),
-                  "#(participant_manual.0)");
+                  "#(participant_select.0)");
               return true;
             }
             delete o.participant_obj;

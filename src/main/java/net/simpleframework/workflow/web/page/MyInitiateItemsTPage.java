@@ -40,9 +40,9 @@ public class MyInitiateItemsTPage extends AbstractWorkTPage {
 
 		final TablePagerBean tablePager = addTablePagerBean(pp, "MyInitiateItemsTPage_tbl",
 				MyInitiateItemsTbl.class);
-		tablePager
-				.addColumn(new TablePagerColumn("modelText", "可启动流程").setTextAlign(ETextAlign.left))
-				.addColumn(TablePagerColumn.OPE().setWidth(70));
+		tablePager.addColumn(
+				new TablePagerColumn("modelText", $m("MyInitiateItemsTPage.1"))
+						.setTextAlign(ETextAlign.left)).addColumn(TablePagerColumn.OPE().setWidth(70));
 
 		// 发起流程
 		pp.addComponentBean("MyInitiateItemsTPage_startProcess", StartProcessBean.class)
@@ -69,7 +69,7 @@ public class MyInitiateItemsTPage extends AbstractWorkTPage {
 					.setOnclick("$Actions['MyInitiateItemsTPage_startProcess']('modelId="
 							+ initiateItem.getModelId() + "');"));
 			final StringBuilder sb = new StringBuilder();
-			sb.append(LinkButton.corner("角色").setOnclick(
+			sb.append(LinkButton.corner($m("MyInitiateItemsTPage.2")).setOnclick(
 					"$Actions['MyInitiateItemsTPage_startProcess'].initiator_select('modelId="
 							+ initiateItem.getModelId() + "');"));
 			row.put(TablePagerColumn.OPE, sb.toString());

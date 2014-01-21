@@ -132,7 +132,7 @@ public class WorkitemCompleteUtils implements IWorkflowContextAware {
 			final Collection<Participant> coll = WorkitemComplete.get(workitem).getActivityComplete()
 					.getParticipants(transition);
 			if (coll == null || coll.size() == 0) {
-				sb.append("#(participant_manual.1)");
+				sb.append("#(participant_select.0)");
 			} else {
 				for (final Participant participant : coll) {
 					sb.append("<div class='ritem'>");

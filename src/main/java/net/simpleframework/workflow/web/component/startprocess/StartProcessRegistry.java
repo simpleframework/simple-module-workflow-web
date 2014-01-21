@@ -1,5 +1,6 @@
 package net.simpleframework.workflow.web.component.startprocess;
 
+import static net.simpleframework.common.I18n.$m;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.component.AbstractComponentBean;
 import net.simpleframework.mvc.component.AbstractComponentRegistry;
@@ -24,6 +25,7 @@ import net.simpleframework.workflow.engine.IWorkflowContextAware;
 @ComponentResourceProvider(StartProcessResourceProvider.class)
 public class StartProcessRegistry extends AbstractComponentRegistry implements
 		IWorkflowContextAware {
+
 	public static final String STARTPROCESS = "wf_start_process";
 
 	@Override
@@ -43,15 +45,16 @@ public class StartProcessRegistry extends AbstractComponentRegistry implements
 				AjaxRequestBean.class).setUrlForward(
 				getComponentResourceProvider().getResourceHomePath() + "/jsp/transition_select.jsp");
 		pp.addComponentBean(componentName + "_transitionSelect", WindowBean.class)
-				.setContentRef(ajaxRequest.getName()).setTitle("选择环节的分支路径").setWidth(320)
-				.setHeight(400);
+				.setContentRef(ajaxRequest.getName()).setTitle($m("StartProcessRegistry.0"))
+				.setWidth(320).setHeight(400);
 
 		// 角色选择
 		ajaxRequest = pp.addComponentBean(componentName + "__initiatorSelect_page",
 				AjaxRequestBean.class).setUrlForward(
 				getComponentResourceProvider().getResourceHomePath() + "/jsp/initiator_select.jsp");
 		pp.addComponentBean(componentName + "_initiatorSelect", WindowBean.class)
-				.setContentRef(ajaxRequest.getName()).setTitle("以其它角色启动").setWidth(320).setHeight(400);
+				.setContentRef(ajaxRequest.getName()).setTitle($m("StartProcessRegistry.1"))
+				.setWidth(320).setHeight(400);
 
 		return startProcess;
 	}

@@ -45,7 +45,7 @@
       if (id.length > 0) {
         $Actions["TransitionSelectLoaded_ok"](PARAMS + id.substring(1));
       } else {
-        $UI.shakeMsg(ts.down(".msg"), "#(transition_manual.1)");
+        $UI.shakeMsg(ts.down(".msg"), "#(transition_select.0)");
       }
     });
   });

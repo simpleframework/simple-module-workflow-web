@@ -1,5 +1,6 @@
 package net.simpleframework.workflow.web.component.complete;
 
+import static net.simpleframework.common.I18n.$m;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.component.AbstractComponentBean;
 import net.simpleframework.mvc.component.AbstractComponentRegistry;
@@ -22,6 +23,7 @@ import net.simpleframework.mvc.component.ui.window.WindowBean;
 @ComponentRender(WorkitemCompleteRender.class)
 @ComponentResourceProvider(WorkitemCompleteResourceProvider.class)
 public class WorkitemCompleteRegistry extends AbstractComponentRegistry {
+
 	public static final String WORKITEMCOMPLETE = "wf_workitem_complete";
 
 	@Override
@@ -37,14 +39,16 @@ public class WorkitemCompleteRegistry extends AbstractComponentRegistry {
 				AjaxRequestBean.class).setUrlForward(
 				getComponentResourceProvider().getResourceHomePath() + "/jsp/transition_select.jsp");
 		pp.addComponentBean(componentName + "_transitionSelect", WindowBean.class)
-				.setContentRef(ajaxRequest.getName()).setTitle("选择路由分支").setHeight(450).setWidth(320);
+				.setContentRef(ajaxRequest.getName()).setTitle($m("WorkitemCompleteRegistry.0"))
+				.setHeight(450).setWidth(320);
 
 		// 手动参与者
 		ajaxRequest = pp.addComponentBean(componentName + "_participantSelect_page",
 				AjaxRequestBean.class).setUrlForward(
 				getComponentResourceProvider().getResourceHomePath() + "/jsp/participant_select.jsp");
 		pp.addComponentBean(componentName + "_participantSelect", WindowBean.class)
-				.setContentRef(ajaxRequest.getName()).setTitle("选择参与人").setHeight(450).setWidth(320);
+				.setContentRef(ajaxRequest.getName()).setTitle($m("WorkitemCompleteRegistry.1"))
+				.setHeight(450).setWidth(320);
 
 		return workitemComplete;
 	}

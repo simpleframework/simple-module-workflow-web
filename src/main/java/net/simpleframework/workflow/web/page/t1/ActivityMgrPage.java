@@ -1,5 +1,7 @@
 package net.simpleframework.workflow.web.page.t1;
 
+import static net.simpleframework.common.I18n.$m;
+
 import java.io.IOException;
 import java.util.Date;
 import java.util.Map;
@@ -62,20 +64,27 @@ public class ActivityMgrPage extends AbstractWorkflowMgrPage {
 				"ActivityMgrPage_tbl", TablePagerBean.class).setPagerBarLayout(EPagerBarLayout.none)
 				.setContainerId("idActivityMgrPage_tbl").setHandleClass(ActivityTbl.class);
 		tablePager
-				.addColumn(new TablePagerColumn("tasknode", "环节").setSort(false).setFilter(false))
-				.addColumn(new TablePagerColumn("previous", "前一环节").setSort(false).setFilter(false))
 				.addColumn(
-						new TablePagerColumn("participants", "定义参与者").setNowrap(false).setSort(false)
+						new TablePagerColumn("tasknode", $m("ActivityMgrPage.0")).setSort(false)
 								.setFilter(false))
 				.addColumn(
-						new TablePagerColumn("participants2", "实际参与者").setNowrap(false).setSort(false)
+						new TablePagerColumn("previous", $m("ActivityMgrPage.1")).setSort(false)
 								.setFilter(false))
-				.addColumn(new TablePagerColumn("createDate", "创建日期", 115).setPropertyClass(Date.class))
 				.addColumn(
-						new TablePagerColumn("completeDate", "完成日期", 115).setPropertyClass(Date.class))
+						new TablePagerColumn("participants", $m("ActivityMgrPage.2")).setNowrap(false)
+								.setSort(false).setFilter(false))
 				.addColumn(
-						new TablePagerColumn("status", "状态", 70).setTextAlign(ETextAlign.left)
-								.setPropertyClass(EActivityStatus.class))
+						new TablePagerColumn("participants2", $m("ActivityMgrPage.3")).setNowrap(false)
+								.setSort(false).setFilter(false))
+				.addColumn(
+						new TablePagerColumn("createDate", $m("ActivityMgrPage.4"), 115)
+								.setPropertyClass(Date.class))
+				.addColumn(
+						new TablePagerColumn("completeDate", $m("ActivityMgrPage.5"), 115)
+								.setPropertyClass(Date.class))
+				.addColumn(
+						new TablePagerColumn("status", $m("ActivityMgrPage.6"), 70).setTextAlign(
+								ETextAlign.left).setPropertyClass(EActivityStatus.class))
 				.addColumn(TablePagerColumn.OPE().setWidth(90));
 
 		// 放弃
@@ -95,16 +104,15 @@ public class ActivityMgrPage extends AbstractWorkflowMgrPage {
 	@Override
 	public ElementList getLeftElements(final PageParameter pp) {
 		final ProcessBean process = getProcessBean(pp);
-		return ElementList.of(
-				new LinkButton("返回").setIconClass(Icon.share_alt).setHref(
-						url(ProcessMgrPage.class, "modelId=" + process.getModelId())),
-				SpanElement.SPACE15,
-				SpanElement.strongText(StringUtils.text(process.getTitle(), "未设置主题")));
+		return ElementList.of(new LinkButton($m("ActivityMgrPage.7")).setIconClass(Icon.share_alt)
+				.setHref(url(ProcessMgrPage.class, "modelId=" + process.getModelId())),
+				SpanElement.SPACE15, SpanElement.strongText(StringUtils.text(process.getTitle(),
+						$m("MyWorklistTbl.0"))));
 	}
 
 	@Override
 	public NavigationButtons getNavigationBar(final PageParameter pp) {
-		return super.getNavigationBar(pp).append(new SpanElement("流程环节"));
+		return super.getNavigationBar(pp).append(new SpanElement($m("ActivityMgrPage.8")));
 	}
 
 	@Override
@@ -184,11 +192,11 @@ public class ActivityMgrPage extends AbstractWorkflowMgrPage {
 		public MenuItems getContextMenu(final ComponentParameter cp, final MenuBean menuBean,
 				final MenuItem menuItem) {
 			return MenuItems.of(
-					MenuItem.of("恢复运行").setOnclick_act("AbstractWorkflowMgrPage_status", "activityId",
-							"op=running"),
+					MenuItem.of($m("AbstractWorkflowMgrPage.1")).setOnclick_act(
+							"AbstractWorkflowMgrPage_status", "activityId", "op=running"),
 					MenuItem.sep(),
-					MenuItem.of("挂起").setOnclick_act("AbstractWorkflowMgrPage_status", "activityId",
-							"op=suspended"),
+					MenuItem.of($m("AbstractWorkflowMgrPage.0")).setOnclick_act(
+							"AbstractWorkflowMgrPage_status", "activityId", "op=suspended"),
 					MenuItem.of(EActivityStatus.abort.toString()).setOnclick_act(
 							"ActivityMgrPage_abort", "activityId"));
 		}

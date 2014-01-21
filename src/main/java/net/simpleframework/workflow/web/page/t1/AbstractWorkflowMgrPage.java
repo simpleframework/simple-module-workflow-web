@@ -106,9 +106,9 @@ public abstract class AbstractWorkflowMgrPage extends T1ResizedTemplatePage impl
 		public String getTitle(final PageParameter pp) {
 			final String op = pp.getParameter("op");
 			if ("suspended".equals(op)) {
-				return "挂起";
+				return $m("AbstractWorkflowMgrPage.0");
 			} else if ("running".equals(op)) {
-				return "恢复运行";
+				return $m("AbstractWorkflowMgrPage.1");
 			}
 			return null;
 		}
@@ -132,7 +132,7 @@ public abstract class AbstractWorkflowMgrPage extends T1ResizedTemplatePage impl
 				final String currentVariable) throws IOException {
 			final StringBuilder sb = new StringBuilder();
 			sb.append("<div class='AbstractAbortPage simple_window_tcb'>");
-			sb.append(" <div class='t'>请选择放弃的策略</div>");
+			sb.append(" <div class='t'>").append($m("AbstractWorkflowMgrPage.2")).append("</div>");
 			sb.append(" <div class='c'>");
 			sb.append(getIdInput(pp));
 			int i = 0;

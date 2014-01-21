@@ -1,5 +1,7 @@
 package net.simpleframework.workflow.web;
 
+import static net.simpleframework.common.I18n.$m;
+
 import java.util.Map;
 
 import net.simpleframework.mvc.JavascriptForward;
@@ -85,10 +87,9 @@ public abstract class AbstractWorkflowFormPage extends FormTableRowTemplatePage 
 
 	@Override
 	public ElementList getRightElements(final PageParameter pp) {
-		return ElementList.of(
-				SAVE_BTN().setText("暂存").setHighlight(false),
-				SpanElement.SPACE,
-				VALIDATION_BTN().setText("完成").setHighlight(true)
+		return ElementList.of(SAVE_BTN().setText($m("AbstractWorkflowFormPage.0"))
+				.setHighlight(false), SpanElement.SPACE,
+				VALIDATION_BTN().setText($m("AbstractWorkflowFormPage.1")).setHighlight(true)
 						.setOnclick("$Actions['AbstractWorkflowFormPage_completeAction']();"));
 	}
 
@@ -104,8 +105,9 @@ public abstract class AbstractWorkflowFormPage extends FormTableRowTemplatePage 
 		final ProcessBean process = getProcess(pp);
 		wf_topic.setText(process.getTitle());
 
-		final TableRow r1 = new TableRow(new RowField("标题", wf_topic));
-		final TableRow r2 = new TableRow(new RowField("描述", wf_description));
+		final TableRow r1 = new TableRow(new RowField($m("AbstractWorkflowFormPage.2"), wf_topic));
+		final TableRow r2 = new TableRow(new RowField($m("AbstractWorkflowFormPage.3"),
+				wf_description));
 		return TableRows.of(r1, r2);
 	}
 

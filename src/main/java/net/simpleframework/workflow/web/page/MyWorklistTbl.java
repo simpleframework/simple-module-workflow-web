@@ -1,5 +1,7 @@
 package net.simpleframework.workflow.web.page;
 
+import static net.simpleframework.common.I18n.$m;
+
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -73,8 +75,9 @@ public class MyWorklistTbl extends GroupDbTablePagerHandler implements IWorkflow
 				public String toString() {
 					final AbstractTaskNode taskNode = (AbstractTaskNode) groupVal;
 					final StringBuilder sb = new StringBuilder();
-					sb.append(new LabelElement(taskNode)).append(
-							SpanElement.shortText("(" + taskNode.getAttr("_processModel") + ")"));
+					sb.append(new LabelElement(taskNode));
+					sb.append(new SpanElement("(" + taskNode.getAttr("_processModel") + ")")
+							.setStyle("font-weight: normal; margin-left: 5px; color: #999; font-size: 9pt;"));
 					sb.append(toCountHTML());
 					return sb.toString();
 				}
@@ -95,7 +98,7 @@ public class MyWorklistTbl extends GroupDbTablePagerHandler implements IWorkflow
 			sb.append("[").append(aService.getTaskNode(activity)).append("] ");
 		}
 		sb.append(new LinkElement(StringUtils.text(aService.getProcessBean(activity).toString(),
-				"未设置主题")).setStrong(!workitem.isReadMark()).setOnclick(
+				$m("MyWorklistTbl.0"))).setStrong(!workitem.isReadMark()).setOnclick(
 				"$Actions.loc('"
 						+ (((IWorkflowWebContext) context).getUrlsFactory()).getMyWorkFormUrl(workitem)
 						+ "');"));
@@ -104,7 +107,7 @@ public class MyWorklistTbl extends GroupDbTablePagerHandler implements IWorkflow
 				.add("completeDate", workitem.getCompleteDate());
 
 		sb.setLength(0);
-		sb.append(new ButtonElement("过程"));
+		sb.append(new ButtonElement($m("MyWorklistTbl.1")));
 		sb.append(SpanElement.SPACE).append(AbstractTablePagerSchema.IMG_DOWNMENU);
 		row.put(TablePagerColumn.OPE, sb.toString());
 		return row;
@@ -177,19 +180,19 @@ public class MyWorklistTbl extends GroupDbTablePagerHandler implements IWorkflow
 		final MenuItems items = MenuItems.of();
 		final EWorkitemStatus status = MyWorklistTPage.getWorkitemStatus(cp);
 		if (status == EWorkitemStatus.complete) {
-			items.append(MenuItem.of("取回").setOnclick_act("MyWorklistTPage_action", "workitemId",
-					"action=retake"));
+			items.append(MenuItem.of($m("MyWorklistTbl.2")).setOnclick_act("MyWorklistTPage_retake",
+					"workitemId"));
 		} else {
-			items.append(MenuItem.of("已读/未读").setOnclick_act("MyWorklistTPage_action", "workitemId",
-					"action=readMark"));
+			items.append(MenuItem.of($m("MyWorklistTbl.3")).setOnclick_act("MyWorklistTPage_readMark",
+					"workitemId"));
 			items.append(MenuItem.sep());
-			items.append(MenuItem.of("回退").setOnclick_act("MyWorklistTPage_action", "workitemId",
-					"action=fallback"));
+			items.append(MenuItem.of($m("MyWorklistTbl.4")).setOnclick_act("MyWorklistTPage_fallback",
+					"workitemId"));
 			items.append(MenuItem.sep());
-			items.append(MenuItem.itemDelete().setOnclick_act("MyWorklistTPage_action", "workitemId",
-					"action=delete"));
+			items.append(MenuItem.itemDelete().setOnclick_act("MyWorklistTPage_delete", "workitemId"));
 			items.append(MenuItem.sep());
-			items.append(MenuItem.of("委托").setOnclick_act("MyWorklistTPage_delegate", "workitemId"));
+			items.append(MenuItem.of($m("MyWorklistTbl.5")).setOnclick_act("MyWorklistTPage_delegate",
+					"workitemId"));
 		}
 		return items;
 	}

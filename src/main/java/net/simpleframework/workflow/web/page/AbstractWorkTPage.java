@@ -1,5 +1,7 @@
 package net.simpleframework.workflow.web.page;
 
+import static net.simpleframework.common.I18n.$m;
+
 import java.util.List;
 
 import net.simpleframework.mvc.PageParameter;
@@ -41,19 +43,19 @@ public abstract class AbstractWorkTPage extends Category_ListPage implements IWo
 
 	@Override
 	protected CategoryItems getCategoryList(final PageParameter pp) {
-		final CategoryItem item0 = createCategoryItem(pp, "我的工作", MyWorklistTPage.class, null)
-				.setIconClass("my_work_icon");
+		final CategoryItem item0 = createCategoryItem(pp, $m("AbstractWorkTPage.0"),
+				MyWorklistTPage.class, null).setIconClass("my_work_icon");
 		final String _status = pp.getParameter("status");
 		final List<CategoryItem> children = item0.getChildren();
 		// children.add(createCategoryItem(pp, "待办工作", MyWorklistTPage.class,
 		// "status=running")
 		// .setSelected("running".equals(_status)));
-		children.add(createCategoryItem(pp, "办毕工作", MyWorklistTPage.class, "status=complete")
-				.setIconClass("my_work_complete_icon").setSelected("complete".equals(_status)));
-		return CategoryItems.of(
-				item0,
-				createCategoryItem(pp, "启动新工作", MyInitiateItemsTPage.class, null).setIconClass(
-						"my_initiate_icon"));
+		children.add(createCategoryItem(pp, $m("AbstractWorkTPage.1"), MyWorklistTPage.class,
+				"status=complete").setIconClass("my_work_complete_icon").setSelected(
+				"complete".equals(_status)));
+		return CategoryItems.of(item0,
+				createCategoryItem(pp, $m("AbstractWorkTPage.2"), MyInitiateItemsTPage.class, null)
+						.setIconClass("my_initiate_icon"));
 	}
 
 	@Override
