@@ -129,7 +129,7 @@ public class ProcessMgrPage extends AbstractWorkflowMgrPage {
 		protected Map<String, Object> getRowData(final ComponentParameter cp, final Object dataObject) {
 			final ProcessBean process = (ProcessBean) dataObject;
 			final Object id = process.getId();
-			EProcessStatus status = process.getStatus();
+			final EProcessStatus status = process.getStatus();
 			final KVMap row = new KVMap()
 					.add("title",
 							new LinkElement(StringUtils.text(process.getTitle(), "未设置主题")).setHref(url(
