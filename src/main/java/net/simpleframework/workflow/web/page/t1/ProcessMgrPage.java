@@ -64,7 +64,8 @@ public class ProcessMgrPage extends AbstractWorkflowMgrPage {
 				.addColumn(
 						new TablePagerColumn("completeDate", "完成日期", 115).setPropertyClass(Date.class))
 				.addColumn(
-						new TablePagerColumn("status", "状态", 70).setPropertyClass(EProcessStatus.class))
+						new TablePagerColumn("status", "状态", 70).setTextAlign(ETextAlign.left)
+								.setPropertyClass(EProcessStatus.class))
 				.addColumn(TablePagerColumn.OPE().setWidth(90));
 
 		// 删除
@@ -128,13 +129,15 @@ public class ProcessMgrPage extends AbstractWorkflowMgrPage {
 		protected Map<String, Object> getRowData(final ComponentParameter cp, final Object dataObject) {
 			final ProcessBean process = (ProcessBean) dataObject;
 			final Object id = process.getId();
+			EProcessStatus status = process.getStatus();
 			final KVMap row = new KVMap()
 					.add("title",
 							new LinkElement(StringUtils.text(process.getTitle(), "未设置主题")).setHref(url(
 									ActivityMgrPage.class, "processId=" + id)))
 					.add("userId", cp.getUser(process.getUserId()))
 					.add("createDate", process.getCreateDate())
-					.add("completeDate", process.getCompleteDate()).add("status", process.getStatus());
+					.add("completeDate", process.getCompleteDate())
+					.add("status", createStatusImage(cp, status) + status.toString());
 			final StringBuilder sb = new StringBuilder();
 			sb.append(createLogButton("processId=" + id));
 			sb.append(SpanElement.SPACE).append(AbstractTablePagerSchema.IMG_DOWNMENU);

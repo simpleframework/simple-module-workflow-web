@@ -12,6 +12,8 @@ import net.simpleframework.module.common.web.page.AbstractDescPage;
 import net.simpleframework.mvc.AbstractMVCPage;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.ButtonElement;
+import net.simpleframework.mvc.common.element.EVerticalAlign;
+import net.simpleframework.mvc.common.element.ImageElement;
 import net.simpleframework.mvc.common.element.InputElement;
 import net.simpleframework.mvc.common.element.Radio;
 import net.simpleframework.mvc.common.element.SpanElement;
@@ -74,6 +76,12 @@ public abstract class AbstractWorkflowMgrPage extends T1ResizedTemplatePage impl
 		return ButtonElement.logBtn()
 				.setDisabled(((IWorkflowWebContext) context).getLogRef() == null)
 				.setOnclick("$Actions['AbstractWorkflowMgrPage_update_log']('" + params + "');");
+	}
+
+	protected static ImageElement createStatusImage(final PageParameter pp, final Enum<?> status) {
+		return new ImageElement(pp.getCssResourceHomePath(AbstractWorkflowMgrPage.class)
+				+ "/images/status_" + status.name() + ".png").setVerticalAlign(EVerticalAlign.bottom)
+				.setClassName("icon16");
 	}
 
 	public static abstract class AbstractStatusDescPage extends AbstractDescPage {

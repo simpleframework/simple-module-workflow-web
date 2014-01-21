@@ -15,6 +15,7 @@ import net.simpleframework.mvc.PageMapping;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.BlockElement;
 import net.simpleframework.mvc.common.element.EElementEvent;
+import net.simpleframework.mvc.common.element.ETextAlign;
 import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.Icon;
 import net.simpleframework.mvc.common.element.InputElement;
@@ -75,7 +76,8 @@ public class ActivityMgrPage extends AbstractWorkflowMgrPage {
 				.addColumn(
 						new TablePagerColumn("completeDate", "完成日期", 115).setPropertyClass(Date.class))
 				.addColumn(
-						new TablePagerColumn("status", "状态", 70).setPropertyClass(EActivityStatus.class))
+						new TablePagerColumn("status", "状态", 70).setTextAlign(ETextAlign.left)
+								.setPropertyClass(EActivityStatus.class))
 				.addColumn(TablePagerColumn.OPE().setWidth(90));
 
 		// 放弃
@@ -153,7 +155,7 @@ public class ActivityMgrPage extends AbstractWorkflowMgrPage {
 			row.add("completeDate", activity.getCompleteDate());
 
 			final EActivityStatus status = activity.getStatus();
-			row.add("status", status);
+			row.add("status", createStatusImage(cp, status) + status.toString());
 			final StringBuilder sb = new StringBuilder();
 			sb.append(createLogButton("activityId=" + id));
 			sb.append(SpanElement.SPACE).append(AbstractTablePagerSchema.IMG_DOWNMENU);

@@ -74,8 +74,8 @@ public class ProcessModelMgrPage extends AbstractWorkflowMgrPage {
 						new TablePagerColumn("createDate", $m("ProcessModelMgrPage.3"), 115)
 								.setPropertyClass(Date.class))
 				.addColumn(
-						new TablePagerColumn("status", $m("ProcessModelMgrPage.4"), 70)
-								.setPropertyClass(EProcessModelStatus.class))
+						new TablePagerColumn("status", $m("ProcessModelMgrPage.4"), 70).setTextAlign(
+								ETextAlign.left).setPropertyClass(EProcessModelStatus.class))
 				.addColumn(TablePagerColumn.OPE().setWidth(90));
 
 		// 删除
@@ -151,7 +151,7 @@ public class ProcessModelMgrPage extends AbstractWorkflowMgrPage {
 									+ id))).add("processCount", 0)
 					.add("userId", cp.getUser(processModel.getUserId()))
 					.add("createDate", processModel.getCreateDate())
-					.add("status", processModel.getStatus());
+					.add("status", createStatusImage(cp, status) + status.toString());
 			final StringBuilder sb = new StringBuilder();
 			if (status == EProcessModelStatus.edit) {
 				final EProcessModelStatus deploy = EProcessModelStatus.deploy;
