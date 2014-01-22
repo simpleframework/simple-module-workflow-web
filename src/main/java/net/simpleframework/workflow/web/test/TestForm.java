@@ -25,9 +25,4 @@ public class TestForm extends AbstractWorkflowFormPage {
 	public void bindVariables(final Map<String, Object> variables) {
 		// variables.put("t1", 103);
 	}
-
-	@Override
-	public String getTitle() {
-		return "测试。。。";
-	}
 }

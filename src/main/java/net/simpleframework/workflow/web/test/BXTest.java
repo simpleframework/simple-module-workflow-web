@@ -16,11 +16,6 @@ public class BXTest extends AbstractWorkflowFormPage {
 		// updateProcessTitle(workitem, title); // db
 	}
 
-	@Override
-	public String getTitle() {
-		return null;
-	}
-
 	// @Override
 	// protected void onLoad(final PageParameter pp, final Map<String, Object>
 	// dataBinding,
