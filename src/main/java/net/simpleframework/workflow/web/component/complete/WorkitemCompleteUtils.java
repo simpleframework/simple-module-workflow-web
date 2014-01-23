@@ -10,6 +10,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import net.simpleframework.common.JsonUtils;
 import net.simpleframework.common.StringUtils;
+import net.simpleframework.common.logger.Log;
+import net.simpleframework.common.logger.LogFactory;
 import net.simpleframework.common.object.ObjectUtils;
 import net.simpleframework.common.web.JavascriptUtils;
 import net.simpleframework.mvc.JavascriptForward;
@@ -19,12 +21,12 @@ import net.simpleframework.mvc.common.element.Checkbox;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.workflow.engine.ActivityComplete;
 import net.simpleframework.workflow.engine.IWorkflowContextAware;
-import net.simpleframework.workflow.engine.IWorkflowForm;
 import net.simpleframework.workflow.engine.TransitionUtils;
 import net.simpleframework.workflow.engine.WorkitemBean;
 import net.simpleframework.workflow.engine.WorkitemComplete;
 import net.simpleframework.workflow.engine.participant.Participant;
 import net.simpleframework.workflow.schema.TransitionNode;
+import net.simpleframework.workflow.web.IWorkflowWebForm;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -73,8 +75,9 @@ public class WorkitemCompleteUtils implements IWorkflowContextAware {
 			final WorkitemBean workitem = getWorkitemBean(cp);
 			final WorkitemComplete workitemComplete = WorkitemComplete.get(workitem);
 			// 绑定变量
-			final IWorkflowForm workflowForm = (IWorkflowForm) workitemComplete.getWorkflowForm();
-			workflowForm.bindVariables(workitemComplete.getVariables());
+			final IWorkflowWebForm workflowForm = (IWorkflowWebForm) workitemComplete
+					.getWorkflowForm();
+			workflowForm.bindVariables(cp, workitemComplete.getVariables());
 
 			final IWorkitemCompleteHandler hdl = (IWorkitemCompleteHandler) cp.getComponentHandler();
 			if (!workitemComplete.isAllCompleted()) {
@@ -94,6 +97,7 @@ public class WorkitemCompleteUtils implements IWorkflowContextAware {
 				}
 			}
 		} catch (final Throwable ex) {
+			log.error(ex);
 			js.append("$error(").append(JsonUtils.toJSON(MVCUtils.createException(cp, ex)))
 					.append(");");
 		}
@@ -146,4 +150,6 @@ public class WorkitemCompleteUtils implements IWorkflowContextAware {
 		}
 		return sb.toString();
 	}
+
+	private static Log log = LogFactory.getLogger(WorkitemCompleteUtils.class);
 }

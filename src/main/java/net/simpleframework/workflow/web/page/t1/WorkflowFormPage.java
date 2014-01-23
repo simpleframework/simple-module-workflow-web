@@ -12,10 +12,10 @@ import net.simpleframework.mvc.common.element.LinkButton;
 import net.simpleframework.mvc.template.t1.T1FormTemplatePage;
 import net.simpleframework.workflow.engine.EWorkitemStatus;
 import net.simpleframework.workflow.engine.IWorkflowContextAware;
-import net.simpleframework.workflow.engine.IWorkflowForm;
 import net.simpleframework.workflow.engine.WorkitemBean;
 import net.simpleframework.workflow.web.AbstractWorkflowFormPage;
 import net.simpleframework.workflow.web.IWorkflowWebContext;
+import net.simpleframework.workflow.web.IWorkflowWebForm;
 import net.simpleframework.workflow.web.page.AbstractWorkTPage;
 import net.simpleframework.workflow.web.page.MyWorklistTPage;
 
@@ -39,17 +39,17 @@ public class WorkflowFormPage extends T1FormTemplatePage implements IWorkflowCon
 			final String currentVariable) throws IOException {
 		final StringBuilder sb = new StringBuilder();
 		sb.append("<div class='WorkflowFormPage'>");
-		final IWorkflowForm workflowForm = getWorkflowForm(pp);
+		final IWorkflowWebForm workflowForm = getWorkflowForm(pp);
 		if (workflowForm != null) {
-			sb.append(pp.includeUrl(workflowForm.getFormForward()));
+			sb.append(pp.includeUrl(workflowForm.getFormForward(pp)));
 		}
 		sb.append("</div>");
 		return sb.toString();
 	}
 
-	protected IWorkflowForm getWorkflowForm(final PageParameter pp) {
+	protected IWorkflowWebForm getWorkflowForm(final PageParameter pp) {
 		final WorkitemBean workitem = AbstractWorkflowFormPage.getWorkitemBean(pp);
-		return (IWorkflowForm) aService.getWorkflowForm(wService.getActivity(workitem));
+		return (IWorkflowWebForm) aService.getWorkflowForm(wService.getActivity(workitem));
 	}
 
 	@Override

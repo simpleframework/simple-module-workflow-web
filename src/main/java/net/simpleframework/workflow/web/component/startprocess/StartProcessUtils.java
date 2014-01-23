@@ -11,6 +11,8 @@ import javax.servlet.http.HttpServletResponse;
 import net.simpleframework.common.ID;
 import net.simpleframework.common.JsonUtils;
 import net.simpleframework.common.StringUtils;
+import net.simpleframework.common.logger.Log;
+import net.simpleframework.common.logger.LogFactory;
 import net.simpleframework.common.web.JavascriptUtils;
 import net.simpleframework.ctx.permission.PermissionRole;
 import net.simpleframework.mvc.JavascriptForward;
@@ -81,6 +83,7 @@ public abstract class StartProcessUtils implements IWorkflowContextAware {
 				js.append("$Actions['").append(componentName).append("_startProcess']('")
 						.append(toParams(cp, initiateItem)).append("');");
 			} catch (final Throwable th) {
+				log.error(th);
 				js.append("$error(").append(JsonUtils.toJSON(MVCUtils.createException(cp, th)))
 						.append(");");
 			}
@@ -103,4 +106,6 @@ public abstract class StartProcessUtils implements IWorkflowContextAware {
 		// 触发onStartProcess回调
 		return ((IStartProcessHandler) nCP.getComponentHandler()).onStartProcess(nCP, process);
 	}
+
+	private static Log log = LogFactory.getLogger(StartProcessUtils.class);
 }

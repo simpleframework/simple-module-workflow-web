@@ -4,6 +4,7 @@ import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.component.AbstractComponentHandler;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.workflow.engine.WorkitemComplete;
+import net.simpleframework.workflow.web.IWorkflowWebForm;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -18,6 +19,7 @@ public class DefaultWorkitemCompleteHandler extends AbstractComponentHandler imp
 	public JavascriptForward onComplete(final ComponentParameter cp,
 			final WorkitemComplete workitemComplete) {
 		workitemComplete.complete(cp.map());
-		return new JavascriptForward("$win.closeAll();");
+		return ((IWorkflowWebForm) workitemComplete.getWorkflowForm()).onComplete(cp,
+				workitemComplete);
 	}
 }

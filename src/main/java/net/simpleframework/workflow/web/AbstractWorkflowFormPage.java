@@ -1,9 +1,6 @@
 package net.simpleframework.workflow.web;
 
 import static net.simpleframework.common.I18n.$m;
-
-import java.util.Map;
-
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.ElementList;
@@ -13,9 +10,11 @@ import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.common.element.TableRow;
 import net.simpleframework.mvc.common.element.TableRows;
 import net.simpleframework.mvc.component.ComponentParameter;
+import net.simpleframework.mvc.component.base.validation.EValidatorMethod;
+import net.simpleframework.mvc.component.base.validation.ValidationBean;
+import net.simpleframework.mvc.component.base.validation.Validator;
 import net.simpleframework.mvc.template.lets.FormTableRowTemplatePage;
 import net.simpleframework.workflow.engine.IWorkflowContextAware;
-import net.simpleframework.workflow.engine.IWorkflowForm;
 import net.simpleframework.workflow.engine.ProcessBean;
 import net.simpleframework.workflow.engine.WorkitemBean;
 import net.simpleframework.workflow.engine.WorkitemComplete;
@@ -28,7 +27,7 @@ import net.simpleframework.workflow.web.component.complete.WorkitemCompleteBean;
  *         http://www.simpleframework.net
  */
 public abstract class AbstractWorkflowFormPage extends FormTableRowTemplatePage implements
-		IWorkflowForm, IWorkflowContextAware {
+		IWorkflowWebForm, IWorkflowContextAware {
 
 	@Override
 	protected void onForward(final PageParameter pp) {
@@ -38,6 +37,9 @@ public abstract class AbstractWorkflowFormPage extends FormTableRowTemplatePage 
 		addComponentBean(pp, "AbstractWorkflowFormPage_completeAction", WorkitemCompleteBean.class)
 				.setSelector(getFormSelector());
 
+		// 验证
+		addFormValidationBean(pp);
+
 		final WorkitemBean workitem = getWorkitemBean(pp);
 		if (workitem != null && !workitem.isReadMark()) {
 			wService.readMark(workitem, false);
@@ -45,20 +47,27 @@ public abstract class AbstractWorkflowFormPage extends FormTableRowTemplatePage 
 	}
 
 	@Override
-	public void onComplete(final Map<String, String> parameters,
-			final WorkitemComplete workitemComplete) {
-		onSave(parameters, workitemComplete.getWorkitem());
+	protected ValidationBean addFormValidationBean(final PageParameter pp) {
+		return super.addFormValidationBean(pp).addValidators(
+				new Validator(EValidatorMethod.required, "#wf_topic"));
 	}
 
-	protected void onSave(final Map<String, String> parameters, final WorkitemBean workitem) {
+	protected void onSaveForm(final PageParameter pp, final WorkitemBean workitem) {
 		final ProcessBean process = getProcess(workitem);
-		pService.saveProcessTitle(process, parameters.get("wf_topic"));
+		pService.saveProcessTitle(process, pp.getParameter("wf_topic"));
+	}
+
+	@Override
+	public JavascriptForward onComplete(final PageParameter pp,
+			final WorkitemComplete workitemComplete) {
+		onSaveForm(pp, workitemComplete.getWorkitem());
+		return null;
 	}
 
 	@Override
 	public JavascriptForward onSave(final ComponentParameter cp) throws Exception {
 		final WorkitemBean workitem = getWorkitemBean(cp);
-		onSave(cp.map(), workitem);
+		onSaveForm(cp, workitem);
 		return new JavascriptForward("$Actions.loc('").append(
 				(((IWorkflowWebContext) context).getUrlsFactory()).getMyWorkFormUrl(workitem)).append(
 				"');");
@@ -73,12 +82,8 @@ public abstract class AbstractWorkflowFormPage extends FormTableRowTemplatePage 
 	}
 
 	@Override
-	public String getFormForward() {
+	public String getFormForward(final PageParameter pp) {
 		return url(getClass());
-	}
-
-	@Override
-	public void bindVariables(final Map<String, Object> variables) {
 	}
 
 	@Override
@@ -99,10 +104,12 @@ public abstract class AbstractWorkflowFormPage extends FormTableRowTemplatePage 
 		return true;
 	}
 
+	protected InputElement wf_topic = new InputElement("wf_topic");
+
+	protected InputElement wf_description = InputElement.textarea("wf_description").setRows(5);
+
 	@Override
 	protected TableRows getTableRows(final PageParameter pp) {
-		final InputElement wf_topic = new InputElement("wf_topic");
-		final InputElement wf_description = InputElement.textarea("wf_description").setRows(5);
 		final ProcessBean process = getProcess(pp);
 		wf_topic.setText(process.getTitle());
 
