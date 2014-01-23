@@ -14,6 +14,7 @@ import net.simpleframework.mvc.component.base.validation.EValidatorMethod;
 import net.simpleframework.mvc.component.base.validation.ValidationBean;
 import net.simpleframework.mvc.component.base.validation.Validator;
 import net.simpleframework.mvc.template.lets.FormTableRowTemplatePage;
+import net.simpleframework.workflow.engine.EWorkitemStatus;
 import net.simpleframework.workflow.engine.IWorkflowContextAware;
 import net.simpleframework.workflow.engine.ProcessBean;
 import net.simpleframework.workflow.engine.WorkitemBean;
@@ -26,7 +27,7 @@ import net.simpleframework.workflow.web.component.complete.WorkitemCompleteBean;
  * @author 陈侃(cknet@126.com, 13910090885) https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
-public abstract class AbstractWorkflowFormPage extends FormTableRowTemplatePage implements
+public abstract class AbstractWorkflowFormTPage extends FormTableRowTemplatePage implements
 		IWorkflowWebForm, IWorkflowContextAware {
 
 	@Override
@@ -60,8 +61,10 @@ public abstract class AbstractWorkflowFormPage extends FormTableRowTemplatePage 
 	@Override
 	public JavascriptForward onComplete(final PageParameter pp,
 			final WorkitemComplete workitemComplete) {
-		onSaveForm(pp, workitemComplete.getWorkitem());
-		return null;
+		final WorkitemBean workitem = getWorkitemBean(pp);
+		onSaveForm(pp, workitem);
+		return new JavascriptForward("$Actions.loc('").append(
+				getUrlsFactory().getWorkflowCompleteInfoUrl(workitem)).append("');");
 	}
 
 	@Override
@@ -69,8 +72,11 @@ public abstract class AbstractWorkflowFormPage extends FormTableRowTemplatePage 
 		final WorkitemBean workitem = getWorkitemBean(cp);
 		onSaveForm(cp, workitem);
 		return new JavascriptForward("$Actions.loc('").append(
-				(((IWorkflowWebContext) context).getUrlsFactory()).getMyWorkFormUrl(workitem)).append(
-				"');");
+				getUrlsFactory().getWorkflowFormUrl(workitem)).append("');");
+	}
+
+	protected WorkflowUrlsFactory getUrlsFactory() {
+		return ((IWorkflowWebContext) context).getUrlsFactory();
 	}
 
 	protected ProcessBean getProcess(final PageParameter pp) {
@@ -93,10 +99,15 @@ public abstract class AbstractWorkflowFormPage extends FormTableRowTemplatePage 
 
 	@Override
 	public ElementList getRightElements(final PageParameter pp) {
-		return ElementList.of(SAVE_BTN().setText($m("AbstractWorkflowFormPage.0"))
-				.setHighlight(false), SpanElement.SPACE,
-				VALIDATION_BTN().setText($m("AbstractWorkflowFormPage.1")).setHighlight(true)
-						.setOnclick("$Actions['AbstractWorkflowFormPage_completeAction']();"));
+		final WorkitemBean workitem = getWorkitemBean(pp);
+		final ElementList el = ElementList.of();
+		if (workitem.getStatus() == EWorkitemStatus.running) {
+			el.append(SAVE_BTN().setText($m("AbstractWorkflowFormPage.0")).setHighlight(false));
+			el.append(SpanElement.SPACE);
+			el.append(VALIDATION_BTN().setText($m("AbstractWorkflowFormPage.1")).setHighlight(true)
+					.setOnclick("$Actions['AbstractWorkflowFormPage_completeAction']();"));
+		}
+		return el;
 	}
 
 	@Override

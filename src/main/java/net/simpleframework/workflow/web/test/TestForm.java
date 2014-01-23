@@ -11,9 +11,9 @@ import net.simpleframework.mvc.common.element.TableRow;
 import net.simpleframework.mvc.common.element.TableRows;
 import net.simpleframework.workflow.engine.ProcessBean;
 import net.simpleframework.workflow.engine.WorkitemBean;
-import net.simpleframework.workflow.web.AbstractWorkflowFormPage;
+import net.simpleframework.workflow.web.AbstractWorkflowFormTPage;
 
-public class TestForm extends AbstractWorkflowFormPage {
+public class TestForm extends AbstractWorkflowFormTPage {
 
 	@Override
 	protected void onSaveForm(final PageParameter pp, final WorkitemBean workitem) {

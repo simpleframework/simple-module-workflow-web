@@ -6,6 +6,7 @@ import net.simpleframework.workflow.engine.WorkitemBean;
 import net.simpleframework.workflow.web.page.AbstractWorkTPage;
 import net.simpleframework.workflow.web.page.MyInitiateItemsTPage;
 import net.simpleframework.workflow.web.page.MyWorklistTPage;
+import net.simpleframework.workflow.web.page.t1.WorkflowCompleteInfoPage;
 import net.simpleframework.workflow.web.page.t1.WorkflowFormPage;
 import net.simpleframework.workflow.web.page.t2.AbstractWorkPage.MyInitiateItemsPage;
 import net.simpleframework.workflow.web.page.t2.AbstractWorkPage.MyWorklistPage;
@@ -23,15 +24,19 @@ public class WorkflowUrlsFactory extends UrlsCache {
 		urls.put(MyInitiateItemsTPage.class.getName(), MyInitiateItemsPage.class);
 	}
 
-	public String getMyWorkFormUrl(final WorkitemBean workitem) {
+	public String getWorkflowFormUrl(final WorkitemBean workitem) {
 		return AbstractMVCPage.url(WorkflowFormPage.class, "workitemId=" + workitem.getId());
 	}
 
-	public String getMyWorkUrl(final Class<? extends AbstractWorkTPage> mClass) {
-		return getMyWorkUrl(mClass, null);
+	public String getWorkflowCompleteInfoUrl(final WorkitemBean workitem) {
+		return AbstractMVCPage.url(WorkflowCompleteInfoPage.class, "workitemId=" + workitem.getId());
 	}
 
-	public String getMyWorkUrl(final Class<? extends AbstractWorkTPage> mClass, final String params) {
+	public String getWorklistUrl(final Class<? extends AbstractWorkTPage> mClass, final String params) {
 		return AbstractMVCPage.url(getUrl(mClass.getName()), params);
+	}
+
+	public String getWorklistUrl(final Class<? extends AbstractWorkTPage> mClass) {
+		return getWorklistUrl(mClass, null);
 	}
 }

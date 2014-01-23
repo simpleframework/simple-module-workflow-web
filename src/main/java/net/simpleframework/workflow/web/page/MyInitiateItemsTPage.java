@@ -87,7 +87,7 @@ public class MyInitiateItemsTPage extends AbstractWorkTPage {
 				js.append("$Actions.loc('")
 						.append(
 								(((IWorkflowWebContext) context).getUrlsFactory())
-										.getMyWorkFormUrl(workitem)).append("');");
+										.getWorkflowFormUrl(workitem)).append("');");
 				return js;
 			} else {
 				return null;

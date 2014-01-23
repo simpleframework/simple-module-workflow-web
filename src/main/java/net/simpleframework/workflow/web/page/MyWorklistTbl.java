@@ -100,7 +100,7 @@ public class MyWorklistTbl extends GroupDbTablePagerHandler implements IWorkflow
 		sb.append(new LinkElement(StringUtils.text(aService.getProcessBean(activity).toString(),
 				$m("MyWorklistTbl.0"))).setStrong(!workitem.isReadMark()).setOnclick(
 				"$Actions.loc('"
-						+ (((IWorkflowWebContext) context).getUrlsFactory()).getMyWorkFormUrl(workitem)
+						+ (((IWorkflowWebContext) context).getUrlsFactory()).getWorkflowFormUrl(workitem)
 						+ "');"));
 		row.add("title", sb.toString()).add("userFrom", getUserFrom(cp, activity))
 				.add("userTo", getUserTo(cp, activity)).add("createDate", workitem.getCreateDate())
