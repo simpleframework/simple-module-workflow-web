@@ -13,3 +13,37 @@
 .my_initiate_icon {
   background-image: url("images/my_initiate.png");
 }
+
+.WorkflowCompleteInfoPage {
+  width: 50%;
+  text-align: left;
+  border: 1px solid #aaa;
+  border-bottom: 0;
+  background-color: #fff;
+  margin-top: 15px;
+}
+
+.WorkflowCompleteInfoPage .l1,
+.WorkflowCompleteInfoPage .l2 {
+  border-bottom: 1px solid #aaa;
+}
+
+.WorkflowCompleteInfoPage .l1,
+.WorkflowCompleteInfoPage .l2 .task {
+  padding: 12px 20px;
+}
+
+.WorkflowCompleteInfoPage .l1 {
+  background-color: #f9f9f9;
+  font-size: 16pt;
+  font-weight: bold;
+}
+
+.WorkflowCompleteInfoPage .l2 {
+  color: #a00;
+  font-size: 11.5pt;
+}
+
+.WorkflowCompleteInfoPage .l2 .task {
+  color: #888;
+}
