@@ -1,10 +1,16 @@
 package net.simpleframework.workflow.web.page.t1;
 
+import static net.simpleframework.common.I18n.$m;
+
 import java.io.IOException;
 import java.util.Map;
 
 import net.simpleframework.mvc.PageMapping;
 import net.simpleframework.mvc.PageParameter;
+import net.simpleframework.mvc.common.element.TabButton;
+import net.simpleframework.mvc.common.element.TabButtons;
+import net.simpleframework.workflow.engine.WorkitemBean;
+import net.simpleframework.workflow.web.AbstractWorkflowFormTPage;
 import net.simpleframework.workflow.web.IWorkflowWebForm;
 
 /**
@@ -27,5 +33,15 @@ public class WorkflowFormPage extends AbstractWorkflowFormPage {
 		}
 		sb.append("</div>");
 		return sb.toString();
+	}
+
+	@Override
+	public TabButtons getTabButtons(PageParameter pp) {
+		final WorkitemBean workitem = AbstractWorkflowFormTPage.getWorkitemBean(pp);
+		return TabButtons.of(
+				new TabButton($m("WorkflowFormPage.0")).setHref(getUrlsFactory().getWorkflowFormUrl(
+						workitem)),
+				new TabButton($m("WorkflowFormPage.1")).setHref(getUrlsFactory().getWorkflowMonitorUrl(
+						workitem)));
 	}
 }

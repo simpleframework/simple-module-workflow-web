@@ -12,6 +12,7 @@ import net.simpleframework.workflow.engine.WorkitemBean;
 import net.simpleframework.workflow.web.AbstractWorkflowFormTPage;
 import net.simpleframework.workflow.web.IWorkflowWebContext;
 import net.simpleframework.workflow.web.IWorkflowWebForm;
+import net.simpleframework.workflow.web.WorkflowUrlsFactory;
 import net.simpleframework.workflow.web.page.AbstractWorkTPage;
 import net.simpleframework.workflow.web.page.MyWorklistTPage;
 
@@ -44,8 +45,8 @@ public abstract class AbstractWorkflowFormPage extends T1FormTemplatePage implem
 		} else {
 			final StringBuilder sb = new StringBuilder();
 			final WorkitemBean workitem = AbstractWorkflowFormTPage.getWorkitemBean(pp);
-			final EWorkitemStatus status = workitem.getStatus();
-			if (status != EWorkitemStatus.running) {
+			EWorkitemStatus status;
+			if (workitem != null && (status = workitem.getStatus()) != EWorkitemStatus.running) {
 				sb.append("status=").append(status.name());
 			}
 			backBtn.setOnclick("$Actions.loc('"
@@ -54,6 +55,10 @@ public abstract class AbstractWorkflowFormPage extends T1FormTemplatePage implem
 		}
 		final ElementList el = ElementList.of(backBtn);
 		return el;
+	}
+
+	protected WorkflowUrlsFactory getUrlsFactory() {
+		return ((IWorkflowWebContext) context).getUrlsFactory();
 	}
 
 	@Override
