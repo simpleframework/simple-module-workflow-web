@@ -112,12 +112,12 @@ public abstract class StartProcessUtils implements IWorkflowContextAware {
 
 	public static String toInitiatorHTML(final ComponentParameter cp) {
 		final InitiateItem initiateItem = StartProcessUtils.getInitiateItem(cp);
-		StringBuilder sb = new StringBuilder();
+		final StringBuilder sb = new StringBuilder();
 		final Collection<ID> coll = initiateItem.roles();
 		if (coll == null || coll.size() == 0) {
 			sb.append(new BlockElement().setClassName("msg").setText($m("StartProcessUtils.1")));
 		} else {
-			for (ID id : coll) {
+			for (final ID id : coll) {
 				sb.append("<div class='ritem'>");
 				sb.append(LinkButton.corner(cp.getPermission().getRole(id)).setOnclick(
 						"$Actions['InitiatorSelect_ok']('" + toParams(cp, initiateItem) + "&initiator="
