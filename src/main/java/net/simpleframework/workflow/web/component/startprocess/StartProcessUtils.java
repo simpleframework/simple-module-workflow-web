@@ -4,6 +4,7 @@ import static net.simpleframework.common.I18n.$m;
 
 import java.io.IOException;
 import java.io.Writer;
+import java.util.Collection;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -18,6 +19,8 @@ import net.simpleframework.ctx.permission.PermissionRole;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.MVCUtils;
 import net.simpleframework.mvc.PageRequestResponse;
+import net.simpleframework.mvc.common.element.BlockElement;
+import net.simpleframework.mvc.common.element.LinkButton;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.workflow.engine.IWorkflowContextAware;
 import net.simpleframework.workflow.engine.InitiateItem;
@@ -105,6 +108,24 @@ public abstract class StartProcessUtils implements IWorkflowContextAware {
 		final ProcessBean process = pService.startProcess(initiateItem);
 		// 触发onStartProcess回调
 		return ((IStartProcessHandler) nCP.getComponentHandler()).onStartProcess(nCP, process);
+	}
+
+	public static String toInitiatorHTML(final ComponentParameter cp) {
+		final InitiateItem initiateItem = StartProcessUtils.getInitiateItem(cp);
+		StringBuilder sb = new StringBuilder();
+		final Collection<ID> coll = initiateItem.roles();
+		if (coll == null || coll.size() == 0) {
+			sb.append(new BlockElement().setClassName("msg").setText($m("StartProcessUtils.1")));
+		} else {
+			for (ID id : coll) {
+				sb.append("<div class='ritem'>");
+				sb.append(LinkButton.corner(cp.getPermission().getRole(id)).setOnclick(
+						"$Actions['InitiatorSelect_ok']('" + toParams(cp, initiateItem) + "&initiator="
+								+ id + "');"));
+				sb.append("</div>");
+			}
+		}
+		return sb.toString();
 	}
 
 	private static Log log = LogFactory.getLogger(StartProcessUtils.class);

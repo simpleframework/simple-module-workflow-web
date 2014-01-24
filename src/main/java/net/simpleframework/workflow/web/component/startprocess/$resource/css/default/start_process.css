@@ -9,6 +9,7 @@
   background-color: #f7f7f7;
 }
 
+.initiator_select .msg,
 .transition_select .msg {
   color: red;
   font-size: 9.5pt;
