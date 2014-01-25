@@ -36,7 +36,7 @@ public class WorkflowFormPage extends AbstractWorkflowFormPage {
 	}
 
 	@Override
-	public TabButtons getTabButtons(PageParameter pp) {
+	public TabButtons getTabButtons(final PageParameter pp) {
 		final WorkitemBean workitem = AbstractWorkflowFormTPage.getWorkitemBean(pp);
 		return TabButtons.of(
 				new TabButton($m("WorkflowFormPage.0")).setHref(getUrlsFactory().getWorkflowFormUrl(

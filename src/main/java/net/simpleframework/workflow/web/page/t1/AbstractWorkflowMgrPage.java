@@ -86,7 +86,7 @@ public abstract class AbstractWorkflowMgrPage extends T1ResizedTemplatePage impl
 	protected static ImageElement createStatusImage(final PageParameter pp, final Enum<?> status) {
 		return new ImageElement(pp.getCssResourceHomePath(AbstractWorkflowMgrPage.class)
 				+ "/images/status_" + status.name() + ".png").setVerticalAlign(EVerticalAlign.bottom)
-				.setClassName("icon16");
+				.setClassName("icon16").setStyle("margin: 0 4px;");
 	}
 
 	public static abstract class AbstractStatusDescPage extends AbstractDescPage {

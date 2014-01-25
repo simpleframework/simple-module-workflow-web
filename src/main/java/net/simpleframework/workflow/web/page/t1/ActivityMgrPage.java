@@ -31,7 +31,7 @@ import net.simpleframework.mvc.component.ui.pager.AbstractTablePagerSchema;
 import net.simpleframework.mvc.component.ui.pager.EPagerBarLayout;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
 import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
-import net.simpleframework.mvc.component.ui.pager.db.AbstractDbTablePagerHandler;
+import net.simpleframework.mvc.component.ui.pager.db.GroupDbTablePagerHandler;
 import net.simpleframework.mvc.component.ui.tooltip.ETipElement;
 import net.simpleframework.mvc.component.ui.tooltip.ETipPosition;
 import net.simpleframework.mvc.component.ui.tooltip.TipBean;
@@ -60,32 +60,13 @@ public class ActivityMgrPage extends AbstractWorkflowMgrPage {
 	protected void onForward(final PageParameter pp) {
 		super.onForward(pp);
 
-		final TablePagerBean tablePager = (TablePagerBean) addComponentBean(pp,
-				"ActivityMgrPage_tbl", TablePagerBean.class).setPagerBarLayout(EPagerBarLayout.none)
+		// 表格
+		final TablePagerBean tablePager = (TablePagerBean) addTablePagerBean(pp,
+				"ActivityMgrPage_tbl").setPagerBarLayout(EPagerBarLayout.none)
 				.setContainerId("idActivityMgrPage_tbl").setHandleClass(ActivityTbl.class);
-		tablePager
-				.addColumn(
-						new TablePagerColumn("tasknode", $m("ActivityMgrPage.0")).setSort(false)
-								.setFilter(false))
-				.addColumn(
-						new TablePagerColumn("previous", $m("ActivityMgrPage.1")).setSort(false)
-								.setFilter(false))
-				.addColumn(
-						new TablePagerColumn("participants", $m("ActivityMgrPage.2")).setNowrap(false)
-								.setSort(false).setFilter(false))
-				.addColumn(
-						new TablePagerColumn("participants2", $m("ActivityMgrPage.3")).setNowrap(false)
-								.setSort(false).setFilter(false))
-				.addColumn(
-						new TablePagerColumn("createDate", $m("ActivityMgrPage.4"), 115)
-								.setPropertyClass(Date.class))
-				.addColumn(
-						new TablePagerColumn("completeDate", $m("ActivityMgrPage.5"), 115)
-								.setPropertyClass(Date.class))
-				.addColumn(
-						new TablePagerColumn("status", $m("ActivityMgrPage.6"), 70).setTextAlign(
-								ETextAlign.left).setPropertyClass(EActivityStatus.class))
-				.addColumn(TablePagerColumn.OPE().setWidth(90));
+		tablePager.addColumn(TC_TASKNODE()).addColumn(TC_PREVIOUS()).addColumn(TC_PARTICIPANTS())
+				.addColumn(TC_PARTICIPANTS2()).addColumn(TC_CREATEDATE()).addColumn(TC_COMPLETEDATE())
+				.addColumn(TC_STATUS()).addColumn(TablePagerColumn.OPE().setWidth(90));
 
 		// 放弃
 		addAjaxRequest(pp, "ActivityMgrPage_abort_page", ActivityAbortPage.class);
@@ -135,7 +116,7 @@ public class ActivityMgrPage extends AbstractWorkflowMgrPage {
 		return null;
 	}
 
-	public static class ActivityTbl extends AbstractDbTablePagerHandler {
+	public static class ActivityTbl extends GroupDbTablePagerHandler {
 
 		@Override
 		public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
@@ -147,7 +128,6 @@ public class ActivityMgrPage extends AbstractWorkflowMgrPage {
 		@Override
 		protected Map<String, Object> getRowData(final ComponentParameter cp, final Object dataObject) {
 			final ActivityBean activity = (ActivityBean) dataObject;
-			final Object id = activity.getId();
 			final KVMap row = new KVMap();
 			row.add("tasknode", aService.getTaskNode(activity));
 			final ActivityBean pre = aService.getPreActivity(activity);
@@ -161,11 +141,15 @@ public class ActivityMgrPage extends AbstractWorkflowMgrPage {
 
 			final EActivityStatus status = activity.getStatus();
 			row.add("status", createStatusImage(cp, status) + status.toString());
-			final StringBuilder sb = new StringBuilder();
-			sb.append(createLogButton("activityId=" + id));
-			sb.append(SpanElement.SPACE).append(AbstractTablePagerSchema.IMG_DOWNMENU);
-			row.add(TablePagerColumn.OPE, sb.toString());
+			row.add(TablePagerColumn.OPE, getOpe(activity));
 			return row;
+		}
+
+		protected String getOpe(final ActivityBean activity) {
+			final StringBuilder sb = new StringBuilder();
+			sb.append(createLogButton("activityId=" + activity.getId()));
+			sb.append(SpanElement.SPACE).append(AbstractTablePagerSchema.IMG_DOWNMENU);
+			return sb.toString();
 		}
 
 		private String getParticipants(final PageParameter pp, final ActivityBean activity,
@@ -234,5 +218,40 @@ public class ActivityMgrPage extends AbstractWorkflowMgrPage {
 
 	private static ProcessBean getProcessBean(final PageParameter pp) {
 		return getCacheBean(pp, pService, "processId");
+	}
+
+	static TablePagerColumn TC_TASKNODE() {
+		return new TablePagerColumn("tasknode", $m("ActivityMgrPage.0")).setSort(false).setFilter(
+				false);
+	}
+
+	static TablePagerColumn TC_PREVIOUS() {
+		return new TablePagerColumn("previous", $m("ActivityMgrPage.1")).setSort(false).setFilter(
+				false);
+	}
+
+	static TablePagerColumn TC_PARTICIPANTS() {
+		return new TablePagerColumn("participants", $m("ActivityMgrPage.2")).setNowrap(false)
+				.setSort(false).setFilter(false);
+	}
+
+	static TablePagerColumn TC_PARTICIPANTS2() {
+		return new TablePagerColumn("participants2", $m("ActivityMgrPage.3")).setNowrap(false)
+				.setSort(false).setFilter(false);
+	}
+
+	static TablePagerColumn TC_CREATEDATE() {
+		return new TablePagerColumn("createDate", $m("ActivityMgrPage.4"), 115)
+				.setPropertyClass(Date.class);
+	}
+
+	static TablePagerColumn TC_COMPLETEDATE() {
+		return new TablePagerColumn("completeDate", $m("ActivityMgrPage.5"), 115)
+				.setPropertyClass(Date.class);
+	}
+
+	static TablePagerColumn TC_STATUS() {
+		return new TablePagerColumn("status", $m("ActivityMgrPage.6"), 70).setTextAlign(
+				ETextAlign.left).setPropertyClass(EActivityStatus.class);
 	}
 }

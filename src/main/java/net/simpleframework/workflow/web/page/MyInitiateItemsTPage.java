@@ -39,7 +39,7 @@ public class MyInitiateItemsTPage extends AbstractWorkTPage {
 		super.onForward(pp);
 
 		final TablePagerBean tablePager = addTablePagerBean(pp, "MyInitiateItemsTPage_tbl",
-				MyInitiateItemsTbl.class);
+				MyInitiateItemsTbl.class).setShowLineNo(false);
 		tablePager.addColumn(
 				new TablePagerColumn("modelText", $m("MyInitiateItemsTPage.1"))
 						.setTextAlign(ETextAlign.left)).addColumn(TablePagerColumn.OPE().setWidth(70));

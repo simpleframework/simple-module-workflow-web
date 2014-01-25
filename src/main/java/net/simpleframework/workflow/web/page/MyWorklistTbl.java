@@ -107,7 +107,9 @@ public class MyWorklistTbl extends GroupDbTablePagerHandler implements IWorkflow
 				.add("completeDate", workitem.getCompleteDate());
 
 		sb.setLength(0);
-		sb.append(new ButtonElement($m("MyWorklistTbl.1")));
+		sb.append(new ButtonElement($m("MyWorklistTbl.1")).setOnclick("$Actions.loc('"
+				+ ((IWorkflowWebContext) context).getUrlsFactory().getWorkflowMonitorUrl(workitem)
+				+ "');"));
 		sb.append(SpanElement.SPACE).append(AbstractTablePagerSchema.IMG_DOWNMENU);
 		row.put(TablePagerColumn.OPE, sb.toString());
 		return row;

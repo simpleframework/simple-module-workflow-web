@@ -130,6 +130,14 @@ public abstract class AbstractWorkflowFormTPage extends FormTableRowTemplatePage
 		return TableRows.of(r1, r2);
 	}
 
+	@Override
+	public String toTableRowsString(final PageParameter pp) {
+		final WorkitemBean workitem = getWorkitemBean(pp);
+		final TableRows tableRows = getTableRows(pp).setReadonly(
+				workitem.getStatus() != EWorkitemStatus.running);
+		return tableRows != null ? tableRows.toString() : "";
+	}
+
 	public static WorkitemBean getWorkitemBean(final PageParameter pp) {
 		return getCacheBean(pp, wService, "workitemId");
 	}

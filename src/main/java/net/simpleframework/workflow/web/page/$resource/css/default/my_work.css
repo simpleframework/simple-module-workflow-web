@@ -47,3 +47,34 @@
 .WorkflowCompleteInfoPage .l2 .task {
   color: #888;
 }
+
+.WorkflowMonitorPage {
+  width: 80%;
+  -webkit-box-shadow: 5px 5px 5px #aaa;
+  -moz-box-shadow: 5px 5px 5px #aaa;
+  box-shadow: 5px 5px 5px #aaa;
+  position: relative;
+}
+
+.WorkflowMonitorPage .tb {
+  background-color: #f9f9f9;
+  padding: 10px;
+  border: 1px solid #ccc;
+  margin-bottom: -1px;
+}
+
+.WorkflowMonitorPage .tabs {
+  left: -29px;
+  width: 29px;
+  text-align: right;
+  position: absolute;
+}
+
+.WorkflowMonitorPage .tabs .simple_tabs.vertical {
+  margin-top: 10px;
+}
+
+.WorkflowMonitorPage .tabs .simple_tabs a.active {
+  background-color: #f9f9f9;
+  border-right-color: #f9f9f9;
+}

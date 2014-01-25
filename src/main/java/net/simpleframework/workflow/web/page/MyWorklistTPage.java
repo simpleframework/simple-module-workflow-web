@@ -32,7 +32,8 @@ public class MyWorklistTPage extends AbstractWorkTPage {
 		super.onForward(pp);
 
 		final TablePagerBean tablePager = addTablePagerBean(pp, "MyWorklistTPage_tbl",
-				MyWorklistTbl.class).setShowFilterBar(false);
+				MyWorklistTbl.class).setShowFilterBar(false).setShowLineNo(false);
+		tablePager.addColumn(TablePagerColumn.ICON().setWidth(16));
 
 		final EWorkitemStatus status = getWorkitemStatus(pp);
 		tablePager.addColumn(new TablePagerColumn("title", $m("MyWorklistTPage.0")).setTextAlign(
