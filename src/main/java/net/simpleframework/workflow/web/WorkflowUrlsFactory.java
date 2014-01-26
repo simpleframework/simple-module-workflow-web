@@ -1,13 +1,15 @@
 package net.simpleframework.workflow.web;
 
+import net.simpleframework.common.StringUtils;
 import net.simpleframework.mvc.AbstractMVCPage;
+import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.UrlsCache;
 import net.simpleframework.workflow.engine.WorkitemBean;
-import net.simpleframework.workflow.web.page.AbstractWorkTPage;
 import net.simpleframework.workflow.web.page.MyInitiateItemsTPage;
 import net.simpleframework.workflow.web.page.MyWorklistTPage;
 import net.simpleframework.workflow.web.page.t1.WorkflowCompleteInfoPage;
 import net.simpleframework.workflow.web.page.t1.WorkflowFormPage;
+import net.simpleframework.workflow.web.page.t1.WorkflowGraphMonitorPage;
 import net.simpleframework.workflow.web.page.t1.WorkflowMonitorPage;
 import net.simpleframework.workflow.web.page.t2.AbstractWorkPage.MyInitiateItemsPage;
 import net.simpleframework.workflow.web.page.t2.AbstractWorkPage.MyWorklistPage;
@@ -21,31 +23,24 @@ import net.simpleframework.workflow.web.page.t2.AbstractWorkPage.MyWorklistPage;
 public class WorkflowUrlsFactory extends UrlsCache {
 
 	public WorkflowUrlsFactory() {
-		urls.put(MyWorklistTPage.class.getName(), MyWorklistPage.class);
-		urls.put(MyInitiateItemsTPage.class.getName(), MyInitiateItemsPage.class);
+		put(MyWorklistTPage.class, MyWorklistPage.class);
+		put(MyInitiateItemsTPage.class, MyInitiateItemsPage.class);
+
+		put(WorkflowFormPage.class);
+		put(WorkflowCompleteInfoPage.class);
+		put(WorkflowMonitorPage.class);
+		put(WorkflowGraphMonitorPage.class);
 	}
 
-	public Class<? extends AbstractMVCPage> getWorkflowFormClass() {
-		return WorkflowFormPage.class;
+	public String getWorkitemUrl(final PageParameter pp,
+			final Class<? extends AbstractMVCPage> mClass, final WorkitemBean workitem) {
+		return getWorkitemUrl(pp, mClass, workitem, null);
 	}
 
-	public String getWorkflowFormUrl(final WorkitemBean workitem) {
-		return AbstractMVCPage.url(getWorkflowFormClass(), "workitemId=" + workitem.getId());
-	}
-
-	public String getWorkflowMonitorUrl(final WorkitemBean workitem) {
-		return AbstractMVCPage.url(WorkflowMonitorPage.class, "workitemId=" + workitem.getId());
-	}
-
-	public String getWorkflowCompleteInfoUrl(final WorkitemBean workitem) {
-		return AbstractMVCPage.url(WorkflowCompleteInfoPage.class, "workitemId=" + workitem.getId());
-	}
-
-	public String getWorklistUrl(final Class<? extends AbstractWorkTPage> mClass, final String params) {
-		return AbstractMVCPage.url(getUrl(mClass.getName()), params);
-	}
-
-	public String getWorklistUrl(final Class<? extends AbstractWorkTPage> mClass) {
-		return getWorklistUrl(mClass, null);
+	public String getWorkitemUrl(final PageParameter pp,
+			final Class<? extends AbstractMVCPage> mClass, final WorkitemBean workitem,
+			final String params) {
+		return getUrl(pp, mClass,
+				StringUtils.join(new String[] { "workitemId=" + workitem.getId(), params }, "&"));
 	}
 }

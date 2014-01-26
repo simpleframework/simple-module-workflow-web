@@ -39,9 +39,11 @@ public class WorkflowFormPage extends AbstractWorkflowFormPage {
 	public TabButtons getTabButtons(final PageParameter pp) {
 		final WorkitemBean workitem = AbstractWorkflowFormTPage.getWorkitemBean(pp);
 		return TabButtons.of(
-				new TabButton($m("WorkflowFormPage.0")).setHref(getUrlsFactory().getWorkflowFormUrl(
-						workitem)),
-				new TabButton($m("WorkflowFormPage.1")).setHref(getUrlsFactory().getWorkflowMonitorUrl(
-						workitem)));
+				new TabButton($m("WorkflowFormPage.0")).setHref(getUrlsFactory().getWorkitemUrl(pp,
+						WorkflowFormPage.class, workitem)),
+				new TabButton($m("WorkflowFormPage.1")).setTabIndex(1)
+						.setHref(
+								getUrlsFactory().getWorkitemUrl(pp, WorkflowMonitorPage.class, workitem,
+										"tab=1")));
 	}
 }

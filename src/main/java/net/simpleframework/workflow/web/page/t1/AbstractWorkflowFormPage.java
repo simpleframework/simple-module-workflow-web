@@ -50,8 +50,8 @@ public abstract class AbstractWorkflowFormPage extends T1FormTemplatePage implem
 				sb.append("status=").append(status.name());
 			}
 			backBtn.setOnclick("$Actions.loc('"
-					+ ((IWorkflowWebContext) context).getUrlsFactory().getWorklistUrl(
-							MyWorklistTPage.class, sb.toString()) + "');");
+					+ ((IWorkflowWebContext) context).getUrlsFactory().getUrl(pp, MyWorklistTPage.class,
+							sb.toString()) + "');");
 		}
 		final ElementList el = ElementList.of(backBtn);
 		return el;

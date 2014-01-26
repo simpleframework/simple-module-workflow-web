@@ -37,7 +37,7 @@ public abstract class AbstractWorkTPage extends Category_ListPage implements IWo
 	private CategoryItem createCategoryItem(final PageParameter pp, final String text,
 			final Class<? extends AbstractWorkTPage> mClass, final String params) {
 		return new CategoryItem(text).setHref(
-				(((IWorkflowWebContext) context).getUrlsFactory()).getWorklistUrl(mClass, params))
+				(((IWorkflowWebContext) context).getUrlsFactory()).getUrl(pp, mClass, params))
 				.setSelected(mClass.equals(getClass()));
 	}
 

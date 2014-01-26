@@ -25,6 +25,7 @@ import net.simpleframework.workflow.engine.WorkitemBean;
 import net.simpleframework.workflow.web.IWorkflowWebContext;
 import net.simpleframework.workflow.web.component.startprocess.DefaultStartProcessHandler;
 import net.simpleframework.workflow.web.component.startprocess.StartProcessBean;
+import net.simpleframework.workflow.web.page.t1.WorkflowFormPage;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -86,8 +87,8 @@ public class MyInitiateItemsTPage extends AbstractWorkTPage {
 				final JavascriptForward js = new JavascriptForward();
 				js.append("$Actions.loc('")
 						.append(
-								(((IWorkflowWebContext) context).getUrlsFactory())
-										.getWorkflowFormUrl(workitem)).append("');");
+								(((IWorkflowWebContext) context).getUrlsFactory()).getWorkitemUrl(cp,
+										WorkflowFormPage.class, workitem)).append("');");
 				return js;
 			} else {
 				return null;

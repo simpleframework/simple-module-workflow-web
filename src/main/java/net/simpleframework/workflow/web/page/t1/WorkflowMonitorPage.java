@@ -32,6 +32,13 @@ public class WorkflowMonitorPage extends AbstractWorkflowFormPage {
 	protected void onForward(final PageParameter pp) {
 		super.onForward(pp);
 
+		addPageComponents(pp);
+
+		final WorkitemBean workitem = AbstractWorkflowFormTPage.getWorkitemBean(pp);
+		pp.putParameter("processId", aService.getBean(workitem.getActivityId()).getProcessId());
+	}
+
+	protected void addPageComponents(final PageParameter pp) {
 		final TablePagerBean tablePager = (TablePagerBean) addTablePagerBean(pp,
 				"WorkflowMonitorPage_tbl").setPagerBarLayout(EPagerBarLayout.none)
 				.setContainerId("idWorkflowMonitorPage_tbl").setHandleClass(_ActivityTbl.class);
@@ -41,19 +48,21 @@ public class WorkflowMonitorPage extends AbstractWorkflowFormPage {
 				.addColumn(ActivityMgrPage.TC_CREATEDATE())
 				.addColumn(ActivityMgrPage.TC_COMPLETEDATE()).addColumn(ActivityMgrPage.TC_STATUS())
 				.addColumn(TablePagerColumn.OPE().setWidth(90));
-
-		final WorkitemBean workitem = AbstractWorkflowFormTPage.getWorkitemBean(pp);
-		pp.putParameter("processId", aService.getBean(workitem.getActivityId()).getProcessId());
 	}
 
 	@Override
-	protected String toHtml(PageParameter pp, Map<String, Object> variables, String currentVariable)
-			throws IOException {
+	protected String toHtml(final PageParameter pp, final Map<String, Object> variables,
+			final String currentVariable) throws IOException {
 		final StringBuilder sb = new StringBuilder();
 		sb.append("<div class='WorkflowMonitorPage'>");
 		sb.append(" <div class='tabs'>");
-		sb.append(TabButtons.of(new TabButton("列表"), new TabButton("图形")).setVertical(true)
-				.toString(pp));
+		final WorkitemBean workitem = AbstractWorkflowFormTPage.getWorkitemBean(pp);
+		final TabButtons tabs = TabButtons.of(
+				new TabButton("列表").setHref(getUrlsFactory().getWorkitemUrl(pp,
+						WorkflowMonitorPage.class, workitem, "tab=1")),
+				new TabButton("图形").setHref(getUrlsFactory().getWorkitemUrl(pp,
+						WorkflowGraphMonitorPage.class, workitem, "tab=1"))).setVertical(true);
+		sb.append(tabs.toString(pp));
 		sb.append("</div>");
 		sb.append(" <div class='tb'></div>");
 		sb.append(" <div id='idWorkflowMonitorPage_tbl'></div>");
@@ -63,8 +72,8 @@ public class WorkflowMonitorPage extends AbstractWorkflowFormPage {
 
 	@Override
 	public TabButtons getTabButtons(final PageParameter pp) {
-		return ((AbstractWorkflowFormPage) singleton(getUrlsFactory().getWorkflowFormClass()))
-				.getTabButtons(pp);
+		return ((AbstractWorkflowFormPage) singleton(getUrlsFactory().getPageClass(
+				WorkflowFormPage.class.getName()))).getTabButtons(pp);
 	}
 
 	public static class _ActivityTbl extends ActivityTbl {

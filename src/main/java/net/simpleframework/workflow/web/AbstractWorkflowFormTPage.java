@@ -20,6 +20,8 @@ import net.simpleframework.workflow.engine.ProcessBean;
 import net.simpleframework.workflow.engine.WorkitemBean;
 import net.simpleframework.workflow.engine.WorkitemComplete;
 import net.simpleframework.workflow.web.component.complete.WorkitemCompleteBean;
+import net.simpleframework.workflow.web.page.t1.WorkflowCompleteInfoPage;
+import net.simpleframework.workflow.web.page.t1.WorkflowFormPage;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -64,7 +66,8 @@ public abstract class AbstractWorkflowFormTPage extends FormTableRowTemplatePage
 		final WorkitemBean workitem = getWorkitemBean(pp);
 		onSaveForm(pp, workitem);
 		return new JavascriptForward("$Actions.loc('").append(
-				getUrlsFactory().getWorkflowCompleteInfoUrl(workitem)).append("');");
+				getUrlsFactory().getWorkitemUrl(pp, WorkflowCompleteInfoPage.class, workitem)).append(
+				"');");
 	}
 
 	@Override
@@ -72,7 +75,7 @@ public abstract class AbstractWorkflowFormTPage extends FormTableRowTemplatePage
 		final WorkitemBean workitem = getWorkitemBean(cp);
 		onSaveForm(cp, workitem);
 		return new JavascriptForward("$Actions.loc('").append(
-				getUrlsFactory().getWorkflowFormUrl(workitem)).append("');");
+				getUrlsFactory().getWorkitemUrl(cp, WorkflowFormPage.class, workitem)).append("');");
 	}
 
 	protected WorkflowUrlsFactory getUrlsFactory() {

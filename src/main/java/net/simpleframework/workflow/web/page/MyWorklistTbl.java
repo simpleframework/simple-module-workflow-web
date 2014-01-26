@@ -29,6 +29,8 @@ import net.simpleframework.workflow.engine.ProcessModelBean;
 import net.simpleframework.workflow.engine.WorkitemBean;
 import net.simpleframework.workflow.schema.AbstractTaskNode;
 import net.simpleframework.workflow.web.IWorkflowWebContext;
+import net.simpleframework.workflow.web.page.t1.WorkflowFormPage;
+import net.simpleframework.workflow.web.page.t1.WorkflowMonitorPage;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -100,16 +102,16 @@ public class MyWorklistTbl extends GroupDbTablePagerHandler implements IWorkflow
 		sb.append(new LinkElement(StringUtils.text(aService.getProcessBean(activity).toString(),
 				$m("MyWorklistTbl.0"))).setStrong(!workitem.isReadMark()).setOnclick(
 				"$Actions.loc('"
-						+ (((IWorkflowWebContext) context).getUrlsFactory()).getWorkflowFormUrl(workitem)
-						+ "');"));
+						+ (((IWorkflowWebContext) context).getUrlsFactory()).getWorkitemUrl(cp,
+								WorkflowFormPage.class, workitem) + "');"));
 		row.add("title", sb.toString()).add("userFrom", getUserFrom(cp, activity))
 				.add("userTo", getUserTo(cp, activity)).add("createDate", workitem.getCreateDate())
 				.add("completeDate", workitem.getCompleteDate());
 
 		sb.setLength(0);
 		sb.append(new ButtonElement($m("MyWorklistTbl.1")).setOnclick("$Actions.loc('"
-				+ ((IWorkflowWebContext) context).getUrlsFactory().getWorkflowMonitorUrl(workitem)
-				+ "');"));
+				+ ((IWorkflowWebContext) context).getUrlsFactory().getWorkitemUrl(cp,
+						WorkflowMonitorPage.class, workitem, "tab=1") + "');"));
 		sb.append(SpanElement.SPACE).append(AbstractTablePagerSchema.IMG_DOWNMENU);
 		row.put(TablePagerColumn.OPE, sb.toString());
 		return row;
