@@ -66,8 +66,7 @@ public abstract class AbstractWorkflowFormTPage extends FormTableRowTemplatePage
 		final WorkitemBean workitem = getWorkitemBean(pp);
 		onSaveForm(pp, workitem);
 		return new JavascriptForward("$Actions.loc('").append(
-				getUrlsFactory().getWorkitemUrl(pp, WorkflowCompleteInfoPage.class, workitem)).append(
-				"');");
+				getUrlsFactory().getUrl(pp, WorkflowCompleteInfoPage.class, workitem)).append("');");
 	}
 
 	@Override
@@ -75,7 +74,7 @@ public abstract class AbstractWorkflowFormTPage extends FormTableRowTemplatePage
 		final WorkitemBean workitem = getWorkitemBean(cp);
 		onSaveForm(cp, workitem);
 		return new JavascriptForward("$Actions.loc('").append(
-				getUrlsFactory().getWorkitemUrl(cp, WorkflowFormPage.class, workitem)).append("');");
+				getUrlsFactory().getUrl(cp, WorkflowFormPage.class, workitem)).append("');");
 	}
 
 	protected WorkflowUrlsFactory getUrlsFactory() {

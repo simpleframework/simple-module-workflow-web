@@ -32,14 +32,13 @@ public class WorkflowUrlsFactory extends UrlsCache {
 		put(WorkflowGraphMonitorPage.class);
 	}
 
-	public String getWorkitemUrl(final PageParameter pp,
-			final Class<? extends AbstractMVCPage> mClass, final WorkitemBean workitem) {
-		return getWorkitemUrl(pp, mClass, workitem, null);
+	public String getUrl(final PageParameter pp, final Class<? extends AbstractMVCPage> mClass,
+			final WorkitemBean workitem) {
+		return getUrl(pp, mClass, workitem, null);
 	}
 
-	public String getWorkitemUrl(final PageParameter pp,
-			final Class<? extends AbstractMVCPage> mClass, final WorkitemBean workitem,
-			final String params) {
+	public String getUrl(final PageParameter pp, final Class<? extends AbstractMVCPage> mClass,
+			final WorkitemBean workitem, final String params) {
 		return getUrl(pp, mClass,
 				StringUtils.join(new String[] { "workitemId=" + workitem.getId(), params }, "&"));
 	}

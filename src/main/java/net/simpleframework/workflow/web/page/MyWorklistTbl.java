@@ -102,7 +102,7 @@ public class MyWorklistTbl extends GroupDbTablePagerHandler implements IWorkflow
 		sb.append(new LinkElement(StringUtils.text(aService.getProcessBean(activity).toString(),
 				$m("MyWorklistTbl.0"))).setStrong(!workitem.isReadMark()).setOnclick(
 				"$Actions.loc('"
-						+ (((IWorkflowWebContext) context).getUrlsFactory()).getWorkitemUrl(cp,
+						+ (((IWorkflowWebContext) context).getUrlsFactory()).getUrl(cp,
 								WorkflowFormPage.class, workitem) + "');"));
 		row.add("title", sb.toString()).add("userFrom", getUserFrom(cp, activity))
 				.add("userTo", getUserTo(cp, activity)).add("createDate", workitem.getCreateDate())
@@ -110,8 +110,8 @@ public class MyWorklistTbl extends GroupDbTablePagerHandler implements IWorkflow
 
 		sb.setLength(0);
 		sb.append(new ButtonElement($m("MyWorklistTbl.1")).setOnclick("$Actions.loc('"
-				+ ((IWorkflowWebContext) context).getUrlsFactory().getWorkitemUrl(cp,
-						WorkflowMonitorPage.class, workitem, "tab=1") + "');"));
+				+ ((IWorkflowWebContext) context).getUrlsFactory().getUrl(cp,
+						WorkflowMonitorPage.class, workitem) + "');"));
 		sb.append(SpanElement.SPACE).append(AbstractTablePagerSchema.IMG_DOWNMENU);
 		row.put(TablePagerColumn.OPE, sb.toString());
 		return row;

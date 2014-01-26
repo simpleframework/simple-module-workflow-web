@@ -1,5 +1,7 @@
 package net.simpleframework.workflow.web.page.t1;
 
+import static net.simpleframework.common.I18n.$m;
+
 import java.io.IOException;
 import java.util.Map;
 
@@ -35,7 +37,8 @@ public class WorkflowMonitorPage extends AbstractWorkflowFormPage {
 		addPageComponents(pp);
 
 		final WorkitemBean workitem = AbstractWorkflowFormTPage.getWorkitemBean(pp);
-		pp.putParameter("processId", aService.getBean(workitem.getActivityId()).getProcessId());
+		pp.putParameter("processId", aService.getBean(workitem.getActivityId()).getProcessId())
+				.putParameter("tab", 1);
 	}
 
 	protected void addPageComponents(final PageParameter pp) {
@@ -58,10 +61,10 @@ public class WorkflowMonitorPage extends AbstractWorkflowFormPage {
 		sb.append(" <div class='tabs'>");
 		final WorkitemBean workitem = AbstractWorkflowFormTPage.getWorkitemBean(pp);
 		final TabButtons tabs = TabButtons.of(
-				new TabButton("列表").setHref(getUrlsFactory().getWorkitemUrl(pp,
-						WorkflowMonitorPage.class, workitem, "tab=1")),
-				new TabButton("图形").setHref(getUrlsFactory().getWorkitemUrl(pp,
-						WorkflowGraphMonitorPage.class, workitem, "tab=1"))).setVertical(true);
+				new TabButton($m("WorkflowMonitorPage.0")).setHref(getUrlsFactory().getUrl(pp,
+						WorkflowMonitorPage.class, workitem)),
+				new TabButton($m("WorkflowMonitorPage.1")).setHref(getUrlsFactory().getUrl(pp,
+						WorkflowGraphMonitorPage.class, workitem))).setVertical(true);
 		sb.append(tabs.toString(pp));
 		sb.append("</div>");
 		sb.append(" <div class='tb'></div>");
