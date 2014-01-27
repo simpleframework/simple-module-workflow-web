@@ -8,6 +8,7 @@ import net.simpleframework.mvc.PageMapping;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.template.t2.T2TemplatePage;
 import net.simpleframework.workflow.web.page.AbstractWorkTPage;
+import net.simpleframework.workflow.web.page.DelegateListTPage;
 import net.simpleframework.workflow.web.page.MyInitiateItemsTPage;
 import net.simpleframework.workflow.web.page.MyWorklistTPage;
 
@@ -46,6 +47,14 @@ public abstract class AbstractWorkPage extends T2TemplatePage {
 		@Override
 		protected Class<? extends AbstractWorkTPage> getWorkTPageClass() {
 			return MyInitiateItemsTPage.class;
+		}
+	}
+
+	@PageMapping(url = "/workflow/delegate")
+	public static class DelegateListPage extends AbstractWorkPage {
+		@Override
+		protected Class<? extends AbstractWorkTPage> getWorkTPageClass() {
+			return DelegateListTPage.class;
 		}
 	}
 }

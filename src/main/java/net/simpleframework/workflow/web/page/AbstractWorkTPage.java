@@ -53,6 +53,8 @@ public abstract class AbstractWorkTPage extends Category_ListPage implements IWo
 		children.add(createCategoryItem(pp, $m("AbstractWorkTPage.1"), MyWorklistTPage.class,
 				"status=complete").setIconClass("my_work_complete_icon").setSelected(
 				"complete".equals(_status)));
+		children.add(createCategoryItem(pp, $m("AbstractWorkTPage.3"), DelegateListTPage.class, null)
+				.setIconClass("delegate_list_icon"));
 		return CategoryItems.of(item0,
 				createCategoryItem(pp, $m("AbstractWorkTPage.2"), MyInitiateItemsTPage.class, null)
 						.setIconClass("my_initiate_icon"));

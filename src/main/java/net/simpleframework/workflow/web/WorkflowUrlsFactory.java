@@ -5,12 +5,14 @@ import net.simpleframework.mvc.AbstractMVCPage;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.UrlsCache;
 import net.simpleframework.workflow.engine.WorkitemBean;
+import net.simpleframework.workflow.web.page.DelegateListTPage;
 import net.simpleframework.workflow.web.page.MyInitiateItemsTPage;
 import net.simpleframework.workflow.web.page.MyWorklistTPage;
 import net.simpleframework.workflow.web.page.t1.WorkflowCompleteInfoPage;
 import net.simpleframework.workflow.web.page.t1.WorkflowFormPage;
 import net.simpleframework.workflow.web.page.t1.WorkflowGraphMonitorPage;
 import net.simpleframework.workflow.web.page.t1.WorkflowMonitorPage;
+import net.simpleframework.workflow.web.page.t2.AbstractWorkPage.DelegateListPage;
 import net.simpleframework.workflow.web.page.t2.AbstractWorkPage.MyInitiateItemsPage;
 import net.simpleframework.workflow.web.page.t2.AbstractWorkPage.MyWorklistPage;
 
@@ -25,6 +27,7 @@ public class WorkflowUrlsFactory extends UrlsCache {
 	public WorkflowUrlsFactory() {
 		put(MyWorklistTPage.class, MyWorklistPage.class);
 		put(MyInitiateItemsTPage.class, MyInitiateItemsPage.class);
+		put(DelegateListTPage.class, DelegateListPage.class);
 
 		put(WorkflowFormPage.class);
 		put(WorkflowCompleteInfoPage.class);
