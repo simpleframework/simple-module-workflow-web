@@ -20,43 +20,37 @@
     var PARAMS = "<%=WorkitemCompleteUtils.toParams(nCP,
 					WorkitemCompleteUtils.getWorkitemBean(nCP))%>";
 
-    ts.down(".button2").observe(
-        "click",
-        function(evn) {
-          var data = ts.select(".transition").inject(
-              [],
-              function(r, p) {
-                var o = {
-                  "transition" : p.readAttribute("transition")
-                };
-                r.push(o);
-                o.participant_obj = p.next();
-                var id = "";
-                o.participant_obj.select("input[type=checkbox]").each(
-                    function(box) {
-                      if (box.checked) {
-                        id += ";" + box.value;
-                      }
-                    });
-                if (id.length > 0) {
-                  o.participant = id.substring(1);
-                }
-                return r;
-              });
-
-          if (data.any(function(o) {
-            if (!o.participant) {
-              $UI.shakeMsg(o.participant_obj.down(".msg"),
-                  "#(participant_select.0)");
-              return true;
-            }
-            delete o.participant_obj;
-          })) {
-            return;
+    ts.down(".button2").observe("click", function(evn) {
+      var data = ts.select(".transition").inject([], function(r, p) {
+        var o = {
+          "transition" : p.readAttribute("transition")
+        };
+        r.push(o);
+        o.participant_obj = p.next();
+        var id = "";
+        o.participant_obj.select("input[type=checkbox], input[type=radio]").each(function(box) {
+          if (box.checked) {
+            id += ";" + box.value;
           }
-          
-          $Actions["ParticipantSelectLoaded_ok"](PARAMS + '&json='
-              + encodeURIComponent(Object.toJSON(data)));
         });
+        if (id.length > 0) {
+          o.participant = id.substring(1);
+        }
+        return r;
+      });
+
+      if (data.any(function(o) {
+        if (!o.participant) {
+          $UI.shakeMsg(o.participant_obj.down(".msg"), "#(participant_select.0)");
+          return true;
+        }
+        delete o.participant_obj;
+      })) {
+        return;
+      }
+
+      $Actions["ParticipantSelectLoaded_ok"](PARAMS + '&json='
+          + encodeURIComponent(Object.toJSON(data)));
+    });
   });
 </script>

@@ -12,12 +12,12 @@ import net.simpleframework.common.JsonUtils;
 import net.simpleframework.common.StringUtils;
 import net.simpleframework.common.logger.Log;
 import net.simpleframework.common.logger.LogFactory;
-import net.simpleframework.common.object.ObjectUtils;
 import net.simpleframework.common.web.JavascriptUtils;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.MVCUtils;
 import net.simpleframework.mvc.PageRequestResponse;
 import net.simpleframework.mvc.common.element.Checkbox;
+import net.simpleframework.mvc.common.element.Radio;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.workflow.engine.ActivityComplete;
 import net.simpleframework.workflow.engine.IWorkflowContextAware;
@@ -139,11 +139,13 @@ public class WorkitemCompleteUtils implements IWorkflowContextAware {
 			if (coll == null || coll.size() == 0) {
 				sb.append("#(participant_select.0)");
 			} else {
-				// ParticipantUtils.isMultiSelected(transition.to());
+				final boolean multi = activityComplete.isParticipantMultiSelected(transition.to());
 				for (final Participant participant : coll) {
 					sb.append("<div class='ritem'>");
-					sb.append(new Checkbox(ObjectUtils.hashStr(participant), cp
-							.getUser(participant.userId)).setValue(participant.getId()));
+					final String id = participant.getId();
+					final Object user = cp.getUser(participant.userId);
+					sb.append((multi ? new Checkbox(id, user) : new Radio(id, user).setName(transition
+							.getId())).setValue(id));
 					sb.append("</div>");
 				}
 			}
