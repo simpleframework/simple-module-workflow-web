@@ -97,7 +97,9 @@ public class MyWorklistTbl extends GroupDbTablePagerHandler implements IWorkflow
 		final StringBuilder sb = new StringBuilder();
 
 		if (!"taskname".equals(cp.getParameter(G))) {
-			sb.append("[").append(aService.getTaskNode(activity)).append("] ");
+			sb.append("[")
+					.append(new SpanElement(aService.getTaskNode(activity)).setClassName("tasknode_txt"))
+					.append("] ");
 		}
 		sb.append(new LinkElement(StringUtils.text(aService.getProcessBean(activity).toString(),
 				$m("MyWorklistTbl.0"))).setStrong(!workitem.isReadMark()).setOnclick(

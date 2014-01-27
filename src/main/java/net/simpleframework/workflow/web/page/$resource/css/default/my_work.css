@@ -14,6 +14,10 @@
   background-image: url("images/my_initiate.png");
 }
 
+.tasknode_txt {
+  color: #390;
+}
+
 .WorkflowCompleteInfoPage {
   width: 50%;
   text-align: left;
