@@ -5,6 +5,7 @@ import net.simpleframework.ctx.IModuleRef;
 import net.simpleframework.ctx.ModuleFunctions;
 import net.simpleframework.mvc.ctx.WebModuleFunction;
 import net.simpleframework.workflow.engine.impl.WorkflowContext;
+import net.simpleframework.workflow.engine.participant.IWorkflowPermissionHandler;
 import net.simpleframework.workflow.web.page.t1.ProcessModelMgrPage;
 import net.simpleframework.workflow.web.page.t2.AbstractWorkPage.MyWorklistPage;
 
@@ -19,6 +20,12 @@ public class WorkflowWebContext extends WorkflowContext implements IWorkflowWebC
 	@Override
 	public WorkflowUrlsFactory getUrlsFactory() {
 		return singleton(WorkflowUrlsFactory.class);
+	}
+
+	@Override
+	public IWorkflowPermissionHandler getParticipantService() {
+		final IWorkflowPermissionHandler handler = super.getParticipantService();
+		return handler == null ? singleton(WorkflowPermissionHandler.class) : handler;
 	}
 
 	@Override

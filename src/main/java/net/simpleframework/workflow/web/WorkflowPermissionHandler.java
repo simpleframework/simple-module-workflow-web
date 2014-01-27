@@ -7,13 +7,12 @@ import java.util.Iterator;
 import java.util.Map;
 
 import net.simpleframework.common.ID;
-import net.simpleframework.common.coll.KVMap;
 import net.simpleframework.organization.IRoleService;
 import net.simpleframework.organization.Role;
 import net.simpleframework.organization.web.OrganizationPermissionHandler;
 import net.simpleframework.workflow.engine.EDelegationSource;
 import net.simpleframework.workflow.engine.ProcessModelBean;
-import net.simpleframework.workflow.engine.participant.IParticipantModel;
+import net.simpleframework.workflow.engine.participant.IWorkflowPermissionHandler;
 import net.simpleframework.workflow.engine.participant.Participant;
 
 /**
@@ -22,12 +21,12 @@ import net.simpleframework.workflow.engine.participant.Participant;
  * @author 陈侃(cknet@126.com, 13910090885) https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
-public class DefaultParticipantModel extends OrganizationPermissionHandler implements
-		IParticipantModel {
+public class WorkflowPermissionHandler extends OrganizationPermissionHandler implements
+		IWorkflowPermissionHandler {
 
 	@Override
 	public Collection<Participant> getRelativeParticipants(final Object user, final Object role,
-			final String relative, final KVMap variables) {
+			final String relative, final Map<String, Object> variables) {
 		final ArrayList<Participant> participants = new ArrayList<Participant>();
 		Role oRole = getRoleObject(role);
 		if (oRole != null) {

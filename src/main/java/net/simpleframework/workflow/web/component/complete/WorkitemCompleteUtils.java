@@ -129,21 +129,19 @@ public class WorkitemCompleteUtils implements IWorkflowContextAware {
 	public static String toParticipantsHTML(final ComponentParameter cp) {
 		final StringBuilder sb = new StringBuilder();
 		final WorkitemBean workitem = getWorkitemBean(cp);
-		WorkitemComplete workitemComplete = WorkitemComplete.get(workitem);
-		// workitemComplete.getActivityComplete()
-		aService.getTaskNode(wService.getActivity(workitem));
+		final ActivityComplete activityComplete = WorkitemComplete.get(workitem)
+				.getActivityComplete();
 		for (final TransitionNode transition : WorkitemCompleteUtils.getTransitions(cp, workitem)) {
 			sb.append("<div class='transition' transition='").append(transition.getId()).append("'>")
 					.append(transition.to()).append("</div>");
 			sb.append("<div class='participants'>");
-			final Collection<Participant> coll = workitemComplete.getActivityComplete()
-					.getParticipants(transition);
+			final Collection<Participant> coll = activityComplete.getParticipants(transition);
 			if (coll == null || coll.size() == 0) {
 				sb.append("#(participant_select.0)");
 			} else {
+				// ParticipantUtils.isMultiSelected(transition.to());
 				for (final Participant participant : coll) {
 					sb.append("<div class='ritem'>");
-
 					sb.append(new Checkbox(ObjectUtils.hashStr(participant), cp
 							.getUser(participant.userId)).setValue(participant.getId()));
 					sb.append("</div>");
