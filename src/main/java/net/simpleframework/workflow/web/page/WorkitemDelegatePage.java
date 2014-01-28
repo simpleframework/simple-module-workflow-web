@@ -1,6 +1,7 @@
 package net.simpleframework.workflow.web.page;
 
 import static net.simpleframework.common.I18n.$m;
+import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.CalendarInput;
 import net.simpleframework.mvc.common.element.InputElement;
@@ -8,11 +9,14 @@ import net.simpleframework.mvc.common.element.RowField;
 import net.simpleframework.mvc.common.element.TableRow;
 import net.simpleframework.mvc.common.element.TableRows;
 import net.simpleframework.mvc.common.element.TextButton;
+import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.base.validation.EValidatorMethod;
 import net.simpleframework.mvc.component.base.validation.Validator;
 import net.simpleframework.mvc.component.ext.userselect.UserSelectBean;
 import net.simpleframework.mvc.template.lets.FormTableRowTemplatePage;
 import net.simpleframework.workflow.engine.IWorkflowContextAware;
+import net.simpleframework.workflow.engine.WorkitemBean;
+import net.simpleframework.workflow.web.AbstractWorkflowFormTPage;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -29,11 +33,21 @@ public class WorkitemDelegatePage extends FormTableRowTemplatePage implements IW
 		addFormValidationBean(pp).addValidators(
 				new Validator(EValidatorMethod.required, "#wd_userTxt, #wd_description"));
 
-		addCalendarBean(pp, "WorkitemDelegatePage_cal");
+		addCalendarBean(pp, "WorkitemDelegatePage_cal").setShowTime(true).setDateFormat(
+				"yyyy-MM-dd HH:mm");
 
 		// 用户选取
 		addComponentBean(pp, "WorkitemDelegatePage_userSelect", UserSelectBean.class).setBindingId(
 				"wd_userId").setBindingText("wd_userTxt");
+	}
+
+	@Override
+	public JavascriptForward onSave(final ComponentParameter cp) throws Exception {
+		final WorkitemBean workitem = AbstractWorkflowFormTPage.getWorkitemBean(cp);
+		wService.setWorkitemDelegation(workitem, cp.getUser(cp.getParameter("wd_userId")).getId(),
+				cp.getDateParameter("wd_startDate"), cp.getDateParameter("wd_startDate"),
+				cp.getParameter("wd_description"));
+		return super.onSave(cp).append("$Actions['MyWorklistTPage_tbl']();");
 	}
 
 	@Override
@@ -43,6 +57,9 @@ public class WorkitemDelegatePage extends FormTableRowTemplatePage implements IW
 
 	@Override
 	protected TableRows getTableRows(final PageParameter pp) {
+		final WorkitemBean workitem = AbstractWorkflowFormTPage.getWorkitemBean(pp);
+		final InputElement workitemId = InputElement.hidden("workitemId").setText(workitem.getId());
+
 		final TextButton wd_userTxt = new TextButton("wd_userTxt").setHiddenField("wd_userId")
 				.setOnclick("$Actions['WorkitemDelegatePage_userSelect']();");
 
@@ -53,8 +70,8 @@ public class WorkitemDelegatePage extends FormTableRowTemplatePage implements IW
 
 		final InputElement wd_description = InputElement.textarea("wd_description").setRows(5);
 
-		final TableRow r1 = new TableRow(
-				new RowField($m("WorkitemDelegatePage.0"), wd_userTxt).setStarMark(true));
+		final TableRow r1 = new TableRow(new RowField($m("WorkitemDelegatePage.0"), workitemId,
+				wd_userTxt).setStarMark(true));
 		final TableRow r2 = new TableRow(new RowField($m("WorkitemDelegatePage.1"), wd_startDate),
 				new RowField($m("WorkitemDelegatePage.2"), wd_endDate));
 		final TableRow r3 = new TableRow(

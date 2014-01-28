@@ -19,6 +19,8 @@ import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
 import net.simpleframework.workflow.engine.ActivityBean;
 import net.simpleframework.workflow.engine.WorkitemBean;
 import net.simpleframework.workflow.web.AbstractWorkflowFormTPage;
+import net.simpleframework.workflow.web.IWorkflowWebContext;
+import net.simpleframework.workflow.web.WorkflowUrlsFactory;
 import net.simpleframework.workflow.web.page.t1.ActivityMgrPage.ActivityTbl;
 
 /**
@@ -60,10 +62,12 @@ public class WorkflowMonitorPage extends AbstractWorkflowFormPage {
 		sb.append("<div class='WorkflowMonitorPage'>");
 		sb.append(" <div class='tabs'>");
 		final WorkitemBean workitem = AbstractWorkflowFormTPage.getWorkitemBean(pp);
+
+		final WorkflowUrlsFactory uFactory = ((IWorkflowWebContext) context).getUrlsFactory();
 		final TabButtons tabs = TabButtons.of(
-				new TabButton($m("WorkflowMonitorPage.0")).setHref(getUrlsFactory().getUrl(pp,
+				new TabButton($m("WorkflowMonitorPage.0")).setHref(uFactory.getUrl(pp,
 						WorkflowMonitorPage.class, workitem)),
-				new TabButton($m("WorkflowMonitorPage.1")).setHref(getUrlsFactory().getUrl(pp,
+				new TabButton($m("WorkflowMonitorPage.1")).setHref(uFactory.getUrl(pp,
 						WorkflowGraphMonitorPage.class, workitem))).setVertical(true);
 		sb.append(tabs.toString(pp));
 		sb.append("</div>");
@@ -75,8 +79,8 @@ public class WorkflowMonitorPage extends AbstractWorkflowFormPage {
 
 	@Override
 	public TabButtons getTabButtons(final PageParameter pp) {
-		return ((AbstractWorkflowFormPage) singleton(getUrlsFactory().getPageClass(
-				WorkflowFormPage.class.getName()))).getTabButtons(pp);
+		return ((AbstractWorkflowFormPage) singleton(((IWorkflowWebContext) context).getUrlsFactory()
+				.getPageClass(WorkflowFormPage.class.getName()))).getTabButtons(pp);
 	}
 
 	public static class _ActivityTbl extends ActivityTbl {

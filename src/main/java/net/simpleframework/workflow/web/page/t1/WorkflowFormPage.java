@@ -11,7 +11,9 @@ import net.simpleframework.mvc.common.element.TabButton;
 import net.simpleframework.mvc.common.element.TabButtons;
 import net.simpleframework.workflow.engine.WorkitemBean;
 import net.simpleframework.workflow.web.AbstractWorkflowFormTPage;
+import net.simpleframework.workflow.web.IWorkflowWebContext;
 import net.simpleframework.workflow.web.IWorkflowWebForm;
+import net.simpleframework.workflow.web.WorkflowUrlsFactory;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -38,10 +40,11 @@ public class WorkflowFormPage extends AbstractWorkflowFormPage {
 	@Override
 	public TabButtons getTabButtons(final PageParameter pp) {
 		final WorkitemBean workitem = AbstractWorkflowFormTPage.getWorkitemBean(pp);
+		final WorkflowUrlsFactory uFactory = ((IWorkflowWebContext) context).getUrlsFactory();
 		return TabButtons.of(
-				new TabButton($m("WorkflowFormPage.0")).setHref(getUrlsFactory().getUrl(pp,
+				new TabButton($m("WorkflowFormPage.0")).setHref(uFactory.getUrl(pp,
 						WorkflowFormPage.class, workitem)),
-				new TabButton($m("WorkflowFormPage.1")).setTabIndex(1).setHref(
-						getUrlsFactory().getUrl(pp, WorkflowMonitorPage.class, workitem)));
+				new TabButton($m("WorkflowFormPage.1")).setHref(
+						uFactory.getUrl(pp, WorkflowMonitorPage.class, workitem)).setTabIndex(1));
 	}
 }

@@ -12,7 +12,6 @@ import net.simpleframework.workflow.engine.WorkitemBean;
 import net.simpleframework.workflow.web.AbstractWorkflowFormTPage;
 import net.simpleframework.workflow.web.IWorkflowWebContext;
 import net.simpleframework.workflow.web.IWorkflowWebForm;
-import net.simpleframework.workflow.web.WorkflowUrlsFactory;
 import net.simpleframework.workflow.web.page.AbstractWorkTPage;
 import net.simpleframework.workflow.web.page.MyWorklistTPage;
 
@@ -55,10 +54,6 @@ public abstract class AbstractWorkflowFormPage extends T1FormTemplatePage implem
 		}
 		final ElementList el = ElementList.of(backBtn);
 		return el;
-	}
-
-	protected WorkflowUrlsFactory getUrlsFactory() {
-		return ((IWorkflowWebContext) context).getUrlsFactory();
 	}
 
 	@Override
