@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import net.simpleframework.ado.query.IDataQuery;
+import net.simpleframework.common.Convert;
 import net.simpleframework.common.ID;
 import net.simpleframework.common.StringUtils;
 import net.simpleframework.common.coll.KVMap;
@@ -101,8 +102,9 @@ public class MyWorklistTbl extends GroupDbTablePagerHandler implements IWorkflow
 					.append(new SpanElement(aService.getTaskNode(activity)).setClassName("tasknode_txt"))
 					.append("] ");
 		}
-		sb.append(new LinkElement(StringUtils.text(aService.getProcessBean(activity).toString(),
-				$m("MyWorklistTbl.0"))).setStrong(!workitem.isReadMark()).setOnclick(
+		sb.append(new LinkElement(StringUtils.text(
+				Convert.toString(aService.getProcessBean(activity)), $m("MyWorklistTbl.0"))).setStrong(
+				!workitem.isReadMark()).setOnclick(
 				"$Actions.loc('"
 						+ (((IWorkflowWebContext) context).getUrlsFactory()).getUrl(cp,
 								WorkflowFormPage.class, workitem) + "');"));
@@ -122,6 +124,9 @@ public class MyWorklistTbl extends GroupDbTablePagerHandler implements IWorkflow
 	private final Map<String, String> userCache = new ConcurrentHashMap<String, String>();
 
 	private String getUserTo(final ComponentParameter cp, final ActivityBean activity) {
+		if (activity == null) {
+			return null;
+		}
 		final String key = "to_" + activity.getId();
 		String userTo = userCache.get(key);
 		if (userTo == null) {

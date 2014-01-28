@@ -66,7 +66,7 @@ public class MyWorklistTPage extends AbstractWorkTPage {
 		// 委托
 		addAjaxRequest(pp, "MyWorklistTPage_delegate_page", WorkitemDelegatePage.class);
 		addWindowBean(pp, "MyWorklistTPage_delegate").setContentRef("MyWorklistTPage_delegate_page")
-				.setTitle($m("MyWorklistTbl.5")).setHeight(400).setWidth(320);
+				.setTitle($m("MyWorklistTbl.5")).setHeight(300).setWidth(510);
 	}
 
 	public IForward doReadMark(final ComponentParameter cp) {
