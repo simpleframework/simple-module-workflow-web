@@ -1,6 +1,7 @@
 package net.simpleframework.workflow.web.page;
 
 import static net.simpleframework.common.I18n.$m;
+import net.simpleframework.ctx.trans.Transaction;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.CalendarInput;
@@ -14,6 +15,7 @@ import net.simpleframework.mvc.component.base.validation.EValidatorMethod;
 import net.simpleframework.mvc.component.base.validation.Validator;
 import net.simpleframework.mvc.component.ext.userselect.UserSelectBean;
 import net.simpleframework.mvc.template.lets.FormTableRowTemplatePage;
+import net.simpleframework.workflow.engine.IWorkflowContext;
 import net.simpleframework.workflow.engine.IWorkflowContextAware;
 import net.simpleframework.workflow.engine.WorkitemBean;
 import net.simpleframework.workflow.web.AbstractWorkflowFormTPage;
@@ -41,6 +43,7 @@ public class WorkitemDelegatePage extends FormTableRowTemplatePage implements IW
 				"wd_userId").setBindingText("wd_userTxt");
 	}
 
+	@Transaction(context = IWorkflowContext.class)
 	@Override
 	public JavascriptForward onSave(final ComponentParameter cp) throws Exception {
 		final WorkitemBean workitem = AbstractWorkflowFormTPage.getWorkitemBean(cp);

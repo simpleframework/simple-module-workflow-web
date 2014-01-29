@@ -12,7 +12,7 @@ import net.simpleframework.workflow.engine.WorkitemBean;
 import net.simpleframework.workflow.web.AbstractWorkflowFormTPage;
 import net.simpleframework.workflow.web.IWorkflowWebContext;
 import net.simpleframework.workflow.web.IWorkflowWebForm;
-import net.simpleframework.workflow.web.page.AbstractWorkTPage;
+import net.simpleframework.workflow.web.page.AbstractItemsTPage;
 import net.simpleframework.workflow.web.page.MyWorklistTPage;
 
 /**
@@ -27,7 +27,7 @@ public abstract class AbstractWorkflowFormPage extends T1FormTemplatePage implem
 	@Override
 	protected void onForward(final PageParameter pp) {
 		super.onForward(pp);
-		pp.addImportCSS(AbstractWorkTPage.class, "/my_work.css");
+		pp.addImportCSS(AbstractItemsTPage.class, "/my_work.css");
 	}
 
 	protected IWorkflowWebForm getWorkflowForm(final PageParameter pp) {

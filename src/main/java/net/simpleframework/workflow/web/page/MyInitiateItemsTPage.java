@@ -33,7 +33,7 @@ import net.simpleframework.workflow.web.page.t1.WorkflowFormPage;
  * @author 陈侃(cknet@126.com, 13910090885) https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
-public class MyInitiateItemsTPage extends AbstractWorkTPage {
+public class MyInitiateItemsTPage extends AbstractItemsTPage {
 
 	@Override
 	protected void onForward(final PageParameter pp) {

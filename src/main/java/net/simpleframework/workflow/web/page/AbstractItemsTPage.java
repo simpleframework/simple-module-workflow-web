@@ -4,6 +4,7 @@ import static net.simpleframework.common.I18n.$m;
 
 import java.util.List;
 
+import net.simpleframework.common.object.ObjectFactory;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.component.ui.pager.ITablePagerHandler;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
@@ -19,12 +20,12 @@ import net.simpleframework.workflow.web.IWorkflowWebContext;
  * @author 陈侃(cknet@126.com, 13910090885) https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
-public abstract class AbstractWorkTPage extends Category_ListPage implements IWorkflowContextAware {
+public abstract class AbstractItemsTPage extends Category_ListPage implements IWorkflowContextAware {
 
 	@Override
 	protected void onForward(final PageParameter pp) {
 		super.onForward(pp);
-		pp.addImportCSS(AbstractWorkTPage.class, "/my_work.css");
+		pp.addImportCSS(AbstractItemsTPage.class, "/my_work.css");
 	}
 
 	@Override
@@ -35,28 +36,29 @@ public abstract class AbstractWorkTPage extends Category_ListPage implements IWo
 	}
 
 	private CategoryItem createCategoryItem(final PageParameter pp, final String text,
-			final Class<? extends AbstractWorkTPage> mClass, final String params) {
+			final Class<? extends AbstractItemsTPage> mClass, final String params) {
 		return new CategoryItem(text).setHref(
 				((IWorkflowWebContext) context).getUrlsFactory().getUrl(pp, mClass, params))
-				.setSelected(mClass.equals(getClass()));
+				.setSelected(mClass == ObjectFactory.original(getClass()));
 	}
 
 	@Override
 	protected CategoryItems getCategoryList(final PageParameter pp) {
-		final CategoryItem item0 = createCategoryItem(pp, $m("AbstractWorkTPage.0"),
+		final CategoryItem item0 = createCategoryItem(pp, $m("AbstractItemsTPage.0"),
 				MyWorklistTPage.class, null).setIconClass("my_work_icon");
 		final String _status = pp.getParameter("status");
 		final List<CategoryItem> children = item0.getChildren();
 		// children.add(createCategoryItem(pp, "待办工作", MyWorklistTPage.class,
 		// "status=running")
 		// .setSelected("running".equals(_status)));
-		children.add(createCategoryItem(pp, $m("AbstractWorkTPage.1"), MyWorklistTPage.class,
+		children.add(createCategoryItem(pp, $m("AbstractItemsTPage.1"), MyWorklistTPage.class,
 				"status=complete").setIconClass("my_work_complete_icon").setSelected(
 				"complete".equals(_status)));
-		children.add(createCategoryItem(pp, $m("AbstractWorkTPage.3"), DelegateListTPage.class, null)
-				.setIconClass("delegate_list_icon"));
+		children
+				.add(createCategoryItem(pp, $m("AbstractItemsTPage.3"), DelegateListTPage.class, null)
+						.setIconClass("delegate_list_icon"));
 		return CategoryItems.of(item0,
-				createCategoryItem(pp, $m("AbstractWorkTPage.2"), MyInitiateItemsTPage.class, null)
+				createCategoryItem(pp, $m("AbstractItemsTPage.2"), MyInitiateItemsTPage.class, null)
 						.setIconClass("my_initiate_icon"));
 	}
 

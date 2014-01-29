@@ -7,7 +7,7 @@ import net.simpleframework.ctx.permission.IPermissionConst;
 import net.simpleframework.mvc.PageMapping;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.template.t2.T2TemplatePage;
-import net.simpleframework.workflow.web.page.AbstractWorkTPage;
+import net.simpleframework.workflow.web.page.AbstractItemsTPage;
 import net.simpleframework.workflow.web.page.DelegateListTPage;
 import net.simpleframework.workflow.web.page.MyInitiateItemsTPage;
 import net.simpleframework.workflow.web.page.MyWorklistTPage;
@@ -25,7 +25,7 @@ public abstract class AbstractWorkPage extends T2TemplatePage {
 		return IPermissionConst.ROLE_ALL_ACCOUNT;
 	}
 
-	protected abstract Class<? extends AbstractWorkTPage> getWorkTPageClass();
+	protected abstract Class<? extends AbstractItemsTPage> getWorkTPageClass();
 
 	@Override
 	protected String toHtml(final PageParameter pp, final Map<String, Object> variables,
@@ -37,7 +37,7 @@ public abstract class AbstractWorkPage extends T2TemplatePage {
 	public static class MyWorklistPage extends AbstractWorkPage {
 
 		@Override
-		protected Class<? extends AbstractWorkTPage> getWorkTPageClass() {
+		protected Class<? extends AbstractItemsTPage> getWorkTPageClass() {
 			return MyWorklistTPage.class;
 		}
 	}
@@ -45,7 +45,7 @@ public abstract class AbstractWorkPage extends T2TemplatePage {
 	@PageMapping(url = "/workflow/my/initiate")
 	public static class MyInitiateItemsPage extends AbstractWorkPage {
 		@Override
-		protected Class<? extends AbstractWorkTPage> getWorkTPageClass() {
+		protected Class<? extends AbstractItemsTPage> getWorkTPageClass() {
 			return MyInitiateItemsTPage.class;
 		}
 	}
@@ -53,7 +53,7 @@ public abstract class AbstractWorkPage extends T2TemplatePage {
 	@PageMapping(url = "/workflow/delegate")
 	public static class DelegateListPage extends AbstractWorkPage {
 		@Override
-		protected Class<? extends AbstractWorkTPage> getWorkTPageClass() {
+		protected Class<? extends AbstractItemsTPage> getWorkTPageClass() {
 			return DelegateListTPage.class;
 		}
 	}

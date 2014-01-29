@@ -44,7 +44,7 @@ public class MyWorklistTbl extends GroupDbTablePagerHandler implements IWorkflow
 
 	@Override
 	public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
-		final EWorkitemStatus status = MyWorklistTPage.getWorkitemStatus(cp);
+		final EWorkitemStatus status = AbstractWorkitemsTPage.getWorkitemStatus(cp);
 		final ID userId = cp.getLoginId();
 		if (status != null) {
 			cp.addFormParameter("status", status.name());
@@ -190,7 +190,7 @@ public class MyWorklistTbl extends GroupDbTablePagerHandler implements IWorkflow
 	public MenuItems getContextMenu(final ComponentParameter cp, final MenuBean menuBean,
 			final MenuItem menuItem) {
 		final MenuItems items = MenuItems.of();
-		final EWorkitemStatus status = MyWorklistTPage.getWorkitemStatus(cp);
+		final EWorkitemStatus status = AbstractWorkitemsTPage.getWorkitemStatus(cp);
 		if (status == EWorkitemStatus.complete) {
 			items.append(MenuItem.of($m("MyWorklistTbl.2")).setOnclick_act("MyWorklistTPage_retake",
 					"workitemId"));

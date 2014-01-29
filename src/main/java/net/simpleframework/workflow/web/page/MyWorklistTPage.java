@@ -4,18 +4,15 @@ import static net.simpleframework.common.I18n.$m;
 
 import java.util.Date;
 
-import net.simpleframework.common.StringUtils;
+import net.simpleframework.ctx.trans.Transaction;
 import net.simpleframework.mvc.IForward;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageParameter;
-import net.simpleframework.mvc.common.element.ETextAlign;
-import net.simpleframework.mvc.common.element.ElementList;
-import net.simpleframework.mvc.common.element.Option;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
 import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
-import net.simpleframework.mvc.component.ui.pager.db.GroupDbTablePagerHandler;
 import net.simpleframework.workflow.engine.EWorkitemStatus;
+import net.simpleframework.workflow.engine.IWorkflowContext;
 import net.simpleframework.workflow.engine.WorkitemBean;
 import net.simpleframework.workflow.web.AbstractWorkflowFormTPage;
 
@@ -25,7 +22,7 @@ import net.simpleframework.workflow.web.AbstractWorkflowFormTPage;
  * @author 陈侃(cknet@126.com, 13910090885) https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
-public class MyWorklistTPage extends AbstractWorkTPage {
+public class MyWorklistTPage extends AbstractWorkitemsTPage {
 
 	@Override
 	protected void onForward(final PageParameter pp) {
@@ -36,17 +33,16 @@ public class MyWorklistTPage extends AbstractWorkTPage {
 		tablePager.addColumn(TablePagerColumn.ICON().setWidth(16));
 
 		final EWorkitemStatus status = getWorkitemStatus(pp);
-		tablePager.addColumn(new TablePagerColumn("title", $m("MyWorklistTPage.0")).setTextAlign(
-				ETextAlign.left).setSort(false));
+		tablePager.addColumn(TITLE());
 		if (status == EWorkitemStatus.complete) {
-			tablePager.addColumn(new TablePagerColumn("userTo", $m("MyWorklistTPage.1"), 115)
+			tablePager.addColumn(new TablePagerColumn("userTo", $m("MyWorklistTPage.0"), 115)
 					.setSort(false));
-			tablePager.addColumn(new TablePagerColumn("completeDate", $m("MyWorklistTPage.2"), 115)
+			tablePager.addColumn(new TablePagerColumn("completeDate", $m("MyWorklistTPage.1"), 115)
 					.setPropertyClass(Date.class));
 		} else {
-			tablePager.addColumn(new TablePagerColumn("userFrom", $m("MyWorklistTPage.3"), 115)
+			tablePager.addColumn(new TablePagerColumn("userFrom", $m("MyWorklistTPage.2"), 115)
 					.setSort(false));
-			tablePager.addColumn(new TablePagerColumn("createDate", $m("MyWorklistTPage.4"), 115)
+			tablePager.addColumn(new TablePagerColumn("createDate", $m("MyWorklistTPage.3"), 115)
 					.setPropertyClass(Date.class));
 		}
 		tablePager.addColumn(TablePagerColumn.OPE().setWidth(70));
@@ -55,10 +51,10 @@ public class MyWorklistTPage extends AbstractWorkTPage {
 		addAjaxRequest(pp, "MyWorklistTPage_readMark").setHandleMethod("doReadMark");
 		// retake
 		addAjaxRequest(pp, "MyWorklistTPage_retake").setHandleMethod("doRetake").setConfirmMessage(
-				$m("MyWorklistTPage.5"));
+				$m("MyWorklistTPage.4"));
 		// fallback
 		addAjaxRequest(pp, "MyWorklistTPage_fallback").setHandleMethod("doFallback")
-				.setConfirmMessage($m("MyWorklistTPage.6"));
+				.setConfirmMessage($m("MyWorklistTPage.5"));
 		// delete
 		addAjaxRequest(pp, "MyWorklistTPage_delete").setHandleMethod("doDelete").setConfirmMessage(
 				$m("Confirm.Delete"));
@@ -69,41 +65,28 @@ public class MyWorklistTPage extends AbstractWorkTPage {
 				.setTitle($m("MyWorklistTbl.5")).setHeight(300).setWidth(510);
 	}
 
+	@Transaction(context = IWorkflowContext.class)
 	public IForward doReadMark(final ComponentParameter cp) {
 		final WorkitemBean workitem = AbstractWorkflowFormTPage.getWorkitemBean(cp);
 		wService.readMark(workitem, workitem.isReadMark() ? true : false);
 		return new JavascriptForward("$Actions['MyWorklistTPage_tbl']();");
 	}
 
+	@Transaction(context = IWorkflowContext.class)
 	public IForward doRetake(final ComponentParameter cp) {
 		wService.retake(AbstractWorkflowFormTPage.getWorkitemBean(cp));
 		return new JavascriptForward("$Actions['MyWorklistTPage_tbl']();");
 	}
 
+	@Transaction(context = IWorkflowContext.class)
 	public IForward doFallback(final ComponentParameter cp) {
 		aService.fallback(wService.getActivity(AbstractWorkflowFormTPage.getWorkitemBean(cp)));
 		return new JavascriptForward("$Actions['MyWorklistTPage_tbl']();");
 	}
 
+	@Transaction(context = IWorkflowContext.class)
 	public IForward doDelete(final ComponentParameter cp) {
 		wService.deleteProcess(AbstractWorkflowFormTPage.getWorkitemBean(cp));
 		return new JavascriptForward("$Actions['MyWorklistTPage_tbl']();");
-	}
-
-	@Override
-	public ElementList getRightElements(final PageParameter pp) {
-		GroupDbTablePagerHandler.setDefaultGroupVal(pp, "MyWorklistTPage_tbl", "modelname");
-
-		return ElementList.of(createGroupElement(pp, "MyWorklistTPage_tbl", new Option("modelname",
-				$m("MyWorklistTPage.7")), new Option("taskname", $m("MyWorklistTPage.8"))));
-	}
-
-	static EWorkitemStatus getWorkitemStatus(final PageParameter pp) {
-		final String status = pp.getParameter("status");
-		if (!"false".equals(status)) {
-			return StringUtils.hasText(status) ? EWorkitemStatus.valueOf(status)
-					: EWorkitemStatus.running;
-		}
-		return null;
 	}
 }
