@@ -1,14 +1,12 @@
 package net.simpleframework.workflow.web.page;
 
 import static net.simpleframework.common.I18n.$m;
-import net.simpleframework.common.StringUtils;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.ETextAlign;
 import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.Option;
 import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
 import net.simpleframework.mvc.component.ui.pager.db.GroupDbTablePagerHandler;
-import net.simpleframework.workflow.engine.EWorkitemStatus;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -31,14 +29,5 @@ public class AbstractWorkitemsTPage extends AbstractItemsTPage {
 	protected TablePagerColumn TITLE() {
 		return new TablePagerColumn("title", $m("AbstractWorkitemsTPage.0")).setTextAlign(
 				ETextAlign.left).setSort(false);
-	}
-
-	static EWorkitemStatus getWorkitemStatus(final PageParameter pp) {
-		final String status = pp.getParameter("status");
-		if (!"false".equals(status)) {
-			return StringUtils.hasText(status) ? EWorkitemStatus.valueOf(status)
-					: EWorkitemStatus.running;
-		}
-		return null;
 	}
 }

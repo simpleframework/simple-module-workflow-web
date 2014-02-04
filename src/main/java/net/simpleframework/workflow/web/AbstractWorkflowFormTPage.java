@@ -101,7 +101,7 @@ public abstract class AbstractWorkflowFormTPage extends FormTableRowTemplatePage
 	public ElementList getRightElements(final PageParameter pp) {
 		final WorkitemBean workitem = getWorkitemBean(pp);
 		final ElementList el = ElementList.of();
-		if (workitem.getStatus() == EWorkitemStatus.running) {
+		if (!isReadonly(workitem)) {
 			el.append(SAVE_BTN().setText($m("AbstractWorkflowFormPage.0")).setHighlight(false));
 			el.append(SpanElement.SPACE);
 			el.append(VALIDATION_BTN().setText($m("AbstractWorkflowFormPage.1")).setHighlight(true)
@@ -133,9 +133,14 @@ public abstract class AbstractWorkflowFormTPage extends FormTableRowTemplatePage
 	@Override
 	public String toTableRowsString(final PageParameter pp) {
 		final WorkitemBean workitem = getWorkitemBean(pp);
-		final TableRows tableRows = getTableRows(pp).setReadonly(
-				workitem.getStatus() != EWorkitemStatus.running);
+		final TableRows tableRows = getTableRows(pp).setReadonly(isReadonly(workitem));
 		return tableRows != null ? tableRows.toString() : "";
+	}
+
+	private boolean isReadonly(WorkitemBean workitem) {
+		final EWorkitemStatus status = workitem.getStatus();
+		return status != EWorkitemStatus.running && status != EWorkitemStatus.suspended
+				&& status != EWorkitemStatus.delegate;
 	}
 
 	public static WorkitemBean getWorkitemBean(final PageParameter pp) {

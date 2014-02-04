@@ -8,14 +8,18 @@ import net.simpleframework.ado.query.IDataQuery;
 import net.simpleframework.common.coll.KVMap;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.ButtonElement;
+import net.simpleframework.mvc.common.element.LinkElement;
 import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.ui.pager.AbstractTablePagerSchema;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
 import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
-import net.simpleframework.workflow.engine.ActivityBean;
 import net.simpleframework.workflow.engine.DelegationBean;
 import net.simpleframework.workflow.engine.IWorkflowContextAware;
+import net.simpleframework.workflow.engine.WorkitemBean;
+import net.simpleframework.workflow.web.IWorkflowWebContext;
+import net.simpleframework.workflow.web.WorkflowUrlsFactory;
+import net.simpleframework.workflow.web.page.t1.WorkflowFormPage;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -54,11 +58,14 @@ public class DelegateListTPage extends AbstractWorkitemsTPage implements IWorkfl
 		@Override
 		protected Map<String, Object> getRowData(final ComponentParameter cp, final Object dataObject) {
 			final DelegationBean delegation = (DelegationBean) dataObject;
-			final ActivityBean activity = wService.getActivity(wService.getBean(delegation
-					.getSourceId()));
-			final KVMap row = new KVMap().add("title",
-					MyWorklistTbl.getTopic(aService.getProcessBean(activity))).add("userId",
-					cp.getUser(delegation.getUserId()));
+			final WorkitemBean workitem = wService.getBean(delegation.getSourceId());
+			final WorkflowUrlsFactory uFactory = ((IWorkflowWebContext) context).getUrlsFactory();
+			final KVMap row = new KVMap().add(
+					"title",
+					new LinkElement(MyWorklistTbl.getTopic(aService.getProcessBean(wService
+							.getActivity(workitem)))).setOnclick("$Actions.loc('"
+							+ uFactory.getUrl(cp, WorkflowFormPage.class, workitem) + "');"));
+			row.add("userId", cp.getUser(delegation.getUserId()));
 			row.add("createDate", delegation.getCreateDate()).add("status", delegation.getStatus());
 
 			final StringBuilder sb = new StringBuilder();

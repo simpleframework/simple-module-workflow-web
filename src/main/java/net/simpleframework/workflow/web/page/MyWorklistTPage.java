@@ -32,7 +32,7 @@ public class MyWorklistTPage extends AbstractWorkitemsTPage {
 				MyWorklistTbl.class).setShowFilterBar(false).setShowLineNo(false);
 		tablePager.addColumn(TablePagerColumn.ICON().setWidth(16));
 
-		final EWorkitemStatus status = getWorkitemStatus(pp);
+		final EWorkitemStatus status = pp.getEnumParameter(EWorkitemStatus.class, "status");
 		tablePager.addColumn(TITLE());
 		if (status == EWorkitemStatus.complete) {
 			tablePager.addColumn(new TablePagerColumn("userTo", $m("MyWorklistTPage.0"), 115)
