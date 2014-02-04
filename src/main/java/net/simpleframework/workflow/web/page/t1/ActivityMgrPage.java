@@ -46,6 +46,7 @@ import net.simpleframework.workflow.engine.EProcessStatus;
 import net.simpleframework.workflow.engine.EWorkitemStatus;
 import net.simpleframework.workflow.engine.ProcessBean;
 import net.simpleframework.workflow.engine.WorkitemBean;
+import net.simpleframework.workflow.web.page.MyWorklistTbl;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -87,8 +88,7 @@ public class ActivityMgrPage extends AbstractWorkflowMgrPage {
 		final ProcessBean process = getProcessBean(pp);
 		return ElementList.of(new LinkButton($m("ActivityMgrPage.7")).setIconClass(Icon.share_alt)
 				.setHref(url(ProcessMgrPage.class, "modelId=" + process.getModelId())),
-				SpanElement.SPACE15, SpanElement.strongText(StringUtils.text(process.getTitle(),
-						$m("MyWorklistTbl.0"))));
+				SpanElement.SPACE15, SpanElement.strongText(MyWorklistTbl.getTopic(process)));
 	}
 
 	@Override

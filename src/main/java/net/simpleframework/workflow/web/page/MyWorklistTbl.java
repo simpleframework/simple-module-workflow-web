@@ -26,6 +26,7 @@ import net.simpleframework.mvc.component.ui.pager.db.GroupDbTablePagerHandler;
 import net.simpleframework.workflow.engine.ActivityBean;
 import net.simpleframework.workflow.engine.EWorkitemStatus;
 import net.simpleframework.workflow.engine.IWorkflowContextAware;
+import net.simpleframework.workflow.engine.ProcessBean;
 import net.simpleframework.workflow.engine.ProcessModelBean;
 import net.simpleframework.workflow.engine.WorkitemBean;
 import net.simpleframework.workflow.schema.AbstractTaskNode;
@@ -106,8 +107,7 @@ public class MyWorklistTbl extends GroupDbTablePagerHandler implements IWorkflow
 
 		final WorkflowUrlsFactory uFactory = ((IWorkflowWebContext) context).getUrlsFactory();
 
-		sb.append(new LinkElement(StringUtils.text(
-				Convert.toString(aService.getProcessBean(activity)), $m("MyWorklistTbl.0"))).setStrong(
+		sb.append(new LinkElement(getTopic(aService.getProcessBean(activity))).setStrong(
 				!workitem.isReadMark()).setOnclick(
 				"$Actions.loc('" + uFactory.getUrl(cp, WorkflowFormPage.class, workitem) + "');"));
 		row.add("title", sb.toString()).add("userFrom", getUserFrom(cp, activity))
@@ -207,5 +207,9 @@ public class MyWorklistTbl extends GroupDbTablePagerHandler implements IWorkflow
 					"workitemId"));
 		}
 		return items;
+	}
+
+	public static String getTopic(ProcessBean process) {
+		return StringUtils.text(Convert.toString(process), $m("MyWorklistTbl.0"));
 	}
 }
