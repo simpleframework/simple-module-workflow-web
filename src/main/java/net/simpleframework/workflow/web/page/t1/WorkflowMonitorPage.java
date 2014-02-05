@@ -18,9 +18,9 @@ import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
 import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
 import net.simpleframework.workflow.engine.ActivityBean;
 import net.simpleframework.workflow.engine.WorkitemBean;
-import net.simpleframework.workflow.web.AbstractWorkflowFormTPage;
 import net.simpleframework.workflow.web.IWorkflowWebContext;
 import net.simpleframework.workflow.web.WorkflowUrlsFactory;
+import net.simpleframework.workflow.web.page.WorkflowUtils;
 import net.simpleframework.workflow.web.page.t1.ActivityMgrPage.ActivityTbl;
 
 /**
@@ -38,7 +38,7 @@ public class WorkflowMonitorPage extends AbstractWorkflowFormPage {
 
 		addPageComponents(pp);
 
-		final WorkitemBean workitem = AbstractWorkflowFormTPage.getWorkitemBean(pp);
+		final WorkitemBean workitem = WorkflowUtils.getWorkitemBean(pp);
 		pp.putParameter("processId", aService.getBean(workitem.getActivityId()).getProcessId())
 				.putParameter("tab", 1);
 	}
@@ -61,7 +61,7 @@ public class WorkflowMonitorPage extends AbstractWorkflowFormPage {
 		final StringBuilder sb = new StringBuilder();
 		sb.append("<div class='WorkflowMonitorPage'>");
 		sb.append(" <div class='tabs'>");
-		final WorkitemBean workitem = AbstractWorkflowFormTPage.getWorkitemBean(pp);
+		final WorkitemBean workitem = WorkflowUtils.getWorkitemBean(pp);
 
 		final WorkflowUrlsFactory uFactory = ((IWorkflowWebContext) context).getUrlsFactory();
 		final TabButtons tabs = TabButtons.of(

@@ -18,7 +18,6 @@ import net.simpleframework.mvc.template.lets.FormTableRowTemplatePage;
 import net.simpleframework.workflow.engine.IWorkflowContext;
 import net.simpleframework.workflow.engine.IWorkflowContextAware;
 import net.simpleframework.workflow.engine.WorkitemBean;
-import net.simpleframework.workflow.web.AbstractWorkflowFormTPage;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -46,7 +45,7 @@ public class WorkitemDelegatePage extends FormTableRowTemplatePage implements IW
 	@Transaction(context = IWorkflowContext.class)
 	@Override
 	public JavascriptForward onSave(final ComponentParameter cp) throws Exception {
-		final WorkitemBean workitem = AbstractWorkflowFormTPage.getWorkitemBean(cp);
+		final WorkitemBean workitem = WorkflowUtils.getWorkitemBean(cp);
 		wService.setWorkitemDelegation(workitem, cp.getUser(cp.getParameter("wd_userId")).getId(),
 				cp.getDateParameter("wd_startDate"), cp.getDateParameter("wd_startDate"),
 				cp.getParameter("wd_description"));
@@ -60,7 +59,7 @@ public class WorkitemDelegatePage extends FormTableRowTemplatePage implements IW
 
 	@Override
 	protected TableRows getTableRows(final PageParameter pp) {
-		final WorkitemBean workitem = AbstractWorkflowFormTPage.getWorkitemBean(pp);
+		final WorkitemBean workitem = WorkflowUtils.getWorkitemBean(pp);
 		final InputElement workitemId = InputElement.hidden("workitemId").setText(workitem.getId());
 
 		final TextButton wd_userTxt = new TextButton("wd_userTxt").setHiddenField("wd_userId")

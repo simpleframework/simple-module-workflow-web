@@ -9,7 +9,7 @@ import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.workflow.engine.ActivityBean;
 import net.simpleframework.workflow.engine.EWorkitemStatus;
 import net.simpleframework.workflow.engine.WorkitemBean;
-import net.simpleframework.workflow.web.AbstractWorkflowFormTPage;
+import net.simpleframework.workflow.web.page.WorkflowUtils;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -28,7 +28,7 @@ public class WorkflowCompleteInfoPage extends AbstractWorkflowFormPage {
 		sb.append(" <div class='l1'>#(WorkflowCompleteInfoPage.0)</div>");
 		sb.append(" <div class='l2'><table>");
 		final IDataQuery<ActivityBean> dq = aService.getNextActivities(wService
-				.getActivity(AbstractWorkflowFormTPage.getWorkitemBean(pp)));
+				.getActivity(WorkflowUtils.getWorkitemBean(pp)));
 		ActivityBean next;
 		while ((next = dq.next()) != null) {
 			sb.append("<tr>");

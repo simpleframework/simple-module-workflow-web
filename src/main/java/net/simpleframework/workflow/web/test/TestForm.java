@@ -11,7 +11,7 @@ import net.simpleframework.mvc.common.element.TableRow;
 import net.simpleframework.mvc.common.element.TableRows;
 import net.simpleframework.workflow.engine.ProcessBean;
 import net.simpleframework.workflow.engine.WorkitemBean;
-import net.simpleframework.workflow.web.AbstractWorkflowFormTPage;
+import net.simpleframework.workflow.web.page.AbstractWorkflowFormTPage;
 
 public class TestForm extends AbstractWorkflowFormTPage {
 

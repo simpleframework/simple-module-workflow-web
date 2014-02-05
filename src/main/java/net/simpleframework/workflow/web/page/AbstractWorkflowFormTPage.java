@@ -1,4 +1,4 @@
-package net.simpleframework.workflow.web;
+package net.simpleframework.workflow.web.page;
 
 import static net.simpleframework.common.I18n.$m;
 import net.simpleframework.mvc.JavascriptForward;
@@ -19,6 +19,8 @@ import net.simpleframework.workflow.engine.IWorkflowContextAware;
 import net.simpleframework.workflow.engine.ProcessBean;
 import net.simpleframework.workflow.engine.WorkitemBean;
 import net.simpleframework.workflow.engine.WorkitemComplete;
+import net.simpleframework.workflow.web.IWorkflowWebContext;
+import net.simpleframework.workflow.web.IWorkflowWebForm;
 import net.simpleframework.workflow.web.component.complete.WorkitemCompleteBean;
 import net.simpleframework.workflow.web.page.t1.WorkflowCompleteInfoPage;
 import net.simpleframework.workflow.web.page.t1.WorkflowFormPage;
@@ -137,13 +139,13 @@ public abstract class AbstractWorkflowFormTPage extends FormTableRowTemplatePage
 		return tableRows != null ? tableRows.toString() : "";
 	}
 
-	private boolean isReadonly(WorkitemBean workitem) {
+	private boolean isReadonly(final WorkitemBean workitem) {
 		final EWorkitemStatus status = workitem.getStatus();
 		return status != EWorkitemStatus.running && status != EWorkitemStatus.suspended
 				&& status != EWorkitemStatus.delegate;
 	}
 
-	public static WorkitemBean getWorkitemBean(final PageParameter pp) {
-		return getCacheBean(pp, wService, "workitemId");
+	protected WorkitemBean getWorkitemBean(final PageParameter pp) {
+		return WorkflowUtils.getWorkitemBean(pp);
 	}
 }

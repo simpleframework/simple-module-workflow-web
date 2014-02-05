@@ -41,6 +41,7 @@ import net.simpleframework.workflow.engine.ProcessBean;
 import net.simpleframework.workflow.engine.ProcessModelBean;
 import net.simpleframework.workflow.web.WorkflowLogRef.ProcessUpdateLogPage;
 import net.simpleframework.workflow.web.page.MyWorklistTbl;
+import net.simpleframework.workflow.web.page.WorkflowUtils;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -145,7 +146,7 @@ public class ProcessMgrPage extends AbstractWorkflowMgrPage {
 					.add("userId", cp.getUser(process.getUserId()))
 					.add("createDate", process.getCreateDate())
 					.add("completeDate", process.getCompleteDate())
-					.add("status", createStatusImage(cp, status) + status.toString());
+					.add("status", WorkflowUtils.createStatusImage(cp, status) + status.toString());
 			final StringBuilder sb = new StringBuilder();
 			sb.append(createLogButton("processId=" + id));
 			sb.append(SpanElement.SPACE).append(AbstractTablePagerSchema.IMG_DOWNMENU);

@@ -14,7 +14,6 @@ import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
 import net.simpleframework.workflow.engine.EWorkitemStatus;
 import net.simpleframework.workflow.engine.IWorkflowContext;
 import net.simpleframework.workflow.engine.WorkitemBean;
-import net.simpleframework.workflow.web.AbstractWorkflowFormTPage;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -67,26 +66,26 @@ public class MyWorklistTPage extends AbstractWorkitemsTPage {
 
 	@Transaction(context = IWorkflowContext.class)
 	public IForward doReadMark(final ComponentParameter cp) {
-		final WorkitemBean workitem = AbstractWorkflowFormTPage.getWorkitemBean(cp);
+		final WorkitemBean workitem = WorkflowUtils.getWorkitemBean(cp);
 		wService.readMark(workitem, workitem.isReadMark() ? true : false);
 		return new JavascriptForward("$Actions['MyWorklistTPage_tbl']();");
 	}
 
 	@Transaction(context = IWorkflowContext.class)
 	public IForward doRetake(final ComponentParameter cp) {
-		wService.retake(AbstractWorkflowFormTPage.getWorkitemBean(cp));
+		wService.retake(WorkflowUtils.getWorkitemBean(cp));
 		return new JavascriptForward("$Actions['MyWorklistTPage_tbl']();");
 	}
 
 	@Transaction(context = IWorkflowContext.class)
 	public IForward doFallback(final ComponentParameter cp) {
-		aService.fallback(wService.getActivity(AbstractWorkflowFormTPage.getWorkitemBean(cp)));
+		aService.fallback(wService.getActivity(WorkflowUtils.getWorkitemBean(cp)));
 		return new JavascriptForward("$Actions['MyWorklistTPage_tbl']();");
 	}
 
 	@Transaction(context = IWorkflowContext.class)
 	public IForward doDelete(final ComponentParameter cp) {
-		wService.deleteProcess(AbstractWorkflowFormTPage.getWorkitemBean(cp));
+		wService.deleteProcess(WorkflowUtils.getWorkitemBean(cp));
 		return new JavascriptForward("$Actions['MyWorklistTPage_tbl']();");
 	}
 }

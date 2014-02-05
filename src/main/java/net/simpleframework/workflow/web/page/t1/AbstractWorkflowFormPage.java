@@ -9,11 +9,11 @@ import net.simpleframework.mvc.template.t1.T1FormTemplatePage;
 import net.simpleframework.workflow.engine.EWorkitemStatus;
 import net.simpleframework.workflow.engine.IWorkflowContextAware;
 import net.simpleframework.workflow.engine.WorkitemBean;
-import net.simpleframework.workflow.web.AbstractWorkflowFormTPage;
 import net.simpleframework.workflow.web.IWorkflowWebContext;
 import net.simpleframework.workflow.web.IWorkflowWebForm;
 import net.simpleframework.workflow.web.page.AbstractItemsTPage;
 import net.simpleframework.workflow.web.page.MyWorklistTPage;
+import net.simpleframework.workflow.web.page.WorkflowUtils;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -31,7 +31,7 @@ public abstract class AbstractWorkflowFormPage extends T1FormTemplatePage implem
 	}
 
 	protected IWorkflowWebForm getWorkflowForm(final PageParameter pp) {
-		final WorkitemBean workitem = AbstractWorkflowFormTPage.getWorkitemBean(pp);
+		final WorkitemBean workitem = WorkflowUtils.getWorkitemBean(pp);
 		return (IWorkflowWebForm) aService.getWorkflowForm(wService.getActivity(workitem));
 	}
 
@@ -43,7 +43,7 @@ public abstract class AbstractWorkflowFormPage extends T1FormTemplatePage implem
 			backBtn.setHref(url);
 		} else {
 			final StringBuilder sb = new StringBuilder();
-			final WorkitemBean workitem = AbstractWorkflowFormTPage.getWorkitemBean(pp);
+			final WorkitemBean workitem = WorkflowUtils.getWorkitemBean(pp);
 			EWorkitemStatus status;
 			if (workitem != null && (status = workitem.getStatus()) != EWorkitemStatus.running) {
 				sb.append("status=").append(status.name());

@@ -47,6 +47,7 @@ import net.simpleframework.workflow.engine.EWorkitemStatus;
 import net.simpleframework.workflow.engine.ProcessBean;
 import net.simpleframework.workflow.engine.WorkitemBean;
 import net.simpleframework.workflow.web.page.MyWorklistTbl;
+import net.simpleframework.workflow.web.page.WorkflowUtils;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -140,7 +141,7 @@ public class ActivityMgrPage extends AbstractWorkflowMgrPage {
 			row.add("completeDate", activity.getCompleteDate());
 
 			final EActivityStatus status = activity.getStatus();
-			row.add("status", createStatusImage(cp, status) + status.toString());
+			row.add("status", WorkflowUtils.createStatusImage(cp, status) + status.toString());
 			row.add(TablePagerColumn.OPE, getOpe(activity));
 			return row;
 		}

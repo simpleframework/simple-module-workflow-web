@@ -43,6 +43,7 @@ import net.simpleframework.workflow.engine.IWorkflowContext;
 import net.simpleframework.workflow.engine.ProcessModelBean;
 import net.simpleframework.workflow.schema.ProcessDocument;
 import net.simpleframework.workflow.web.WorkflowLogRef.ProcessModelUpdateLogPage;
+import net.simpleframework.workflow.web.page.WorkflowUtils;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -151,7 +152,7 @@ public class ProcessModelMgrPage extends AbstractWorkflowMgrPage {
 									+ id))).add("processCount", 0)
 					.add("userId", cp.getUser(processModel.getUserId()))
 					.add("createDate", processModel.getCreateDate())
-					.add("status", createStatusImage(cp, status) + status.toString());
+					.add("status", WorkflowUtils.createStatusImage(cp, status) + status.toString());
 			final StringBuilder sb = new StringBuilder();
 			if (status == EProcessModelStatus.edit) {
 				final EProcessModelStatus deploy = EProcessModelStatus.deploy;

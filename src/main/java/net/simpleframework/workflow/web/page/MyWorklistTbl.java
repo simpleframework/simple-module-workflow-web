@@ -125,7 +125,7 @@ public class MyWorklistTbl extends GroupDbTablePagerHandler implements IWorkflow
 
 	private final Map<String, String> userCache = new ConcurrentHashMap<String, String>();
 
-	private String getUserTo(final ComponentParameter cp, final ActivityBean activity) {
+	protected String getUserTo(final ComponentParameter cp, final ActivityBean activity) {
 		if (activity == null) {
 			return null;
 		}
@@ -157,7 +157,7 @@ public class MyWorklistTbl extends GroupDbTablePagerHandler implements IWorkflow
 		return userTo;
 	}
 
-	private String getUserFrom(final ComponentParameter cp, final ActivityBean activity) {
+	protected String getUserFrom(final ComponentParameter cp, final ActivityBean activity) {
 		final ActivityBean preActivity = aService.getPreActivity(activity);
 		if (preActivity == null) {
 			return null;
@@ -210,7 +210,7 @@ public class MyWorklistTbl extends GroupDbTablePagerHandler implements IWorkflow
 		return items;
 	}
 
-	public static String getTopic(ProcessBean process) {
+	public static String getTopic(final ProcessBean process) {
 		return StringUtils.text(Convert.toString(process), $m("MyWorklistTbl.0"));
 	}
 }
