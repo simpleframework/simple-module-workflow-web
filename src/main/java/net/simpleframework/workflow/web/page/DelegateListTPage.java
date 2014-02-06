@@ -82,16 +82,17 @@ public class DelegateListTPage extends AbstractWorkitemsTPage implements IWorkfl
 					"title",
 					new LinkElement(MyWorklistTbl.getTopic(aService.getProcessBean(wService
 							.getActivity(workitem)))).setOnclick("$Actions.loc('"
-							+ uFactory.getUrl(cp, WorkflowFormPage.class, workitem) + "');"));
+							+ uFactory.getUrl(cp, WorkflowFormPage.class, workitem, "source=delegation")
+							+ "');"));
 			row.add("userId", cp.getUser(delegation.getUserId()));
 			row.add("createDate", delegation.getCreateDate());
 			final EDelegationStatus status = delegation.getStatus();
 			row.add("status", WorkflowUtils.createStatusImage(cp, status) + status.toString());
 
 			final StringBuilder sb = new StringBuilder();
-			sb.append(new ButtonElement($m("Button.Cancel"))
-					.setOnclick("$Actions['DelegateListTPage_abort']('delegationId="
-							+ delegation.getId() + "');"));
+			sb.append(new ButtonElement($m("Button.Cancel")).setOnclick(
+					"$Actions['DelegateListTPage_abort']('delegationId=" + delegation.getId() + "');")
+					.setDisabled(dService.isFinalStatus(delegation)));
 			sb.append(SpanElement.SPACE).append(AbstractTablePagerSchema.IMG_DOWNMENU);
 			row.add(TablePagerColumn.OPE, sb.toString());
 			return row;

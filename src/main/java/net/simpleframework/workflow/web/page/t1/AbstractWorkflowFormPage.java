@@ -1,6 +1,5 @@
 package net.simpleframework.workflow.web.page.t1;
 
-import net.simpleframework.common.StringUtils;
 import net.simpleframework.ctx.permission.IPermissionConst;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.ElementList;
@@ -11,7 +10,9 @@ import net.simpleframework.workflow.engine.IWorkflowContextAware;
 import net.simpleframework.workflow.engine.WorkitemBean;
 import net.simpleframework.workflow.web.IWorkflowWebContext;
 import net.simpleframework.workflow.web.IWorkflowWebForm;
+import net.simpleframework.workflow.web.WorkflowUrlsFactory;
 import net.simpleframework.workflow.web.page.AbstractItemsTPage;
+import net.simpleframework.workflow.web.page.DelegateListTPage;
 import net.simpleframework.workflow.web.page.MyWorklistTPage;
 import net.simpleframework.workflow.web.page.WorkflowUtils;
 
@@ -38,9 +39,10 @@ public abstract class AbstractWorkflowFormPage extends T1FormTemplatePage implem
 	@Override
 	public ElementList getLeftElements(final PageParameter pp) {
 		final LinkButton backBtn = backBtn();
-		final String url = pp.getParameter("url");
-		if (StringUtils.hasText(url)) {
-			backBtn.setHref(url);
+		final WorkflowUrlsFactory uFactory = ((IWorkflowWebContext) context).getUrlsFactory();
+		final String source = pp.getParameter("source");
+		if ("delegation".equals(source)) {
+			backBtn.setHref(uFactory.getUrl(pp, DelegateListTPage.class));
 		} else {
 			final StringBuilder sb = new StringBuilder();
 			final WorkitemBean workitem = WorkflowUtils.getWorkitemBean(pp);
@@ -48,9 +50,7 @@ public abstract class AbstractWorkflowFormPage extends T1FormTemplatePage implem
 			if (workitem != null && (status = workitem.getStatus()) != EWorkitemStatus.running) {
 				sb.append("status=").append(status.name());
 			}
-			backBtn.setOnclick("$Actions.loc('"
-					+ ((IWorkflowWebContext) context).getUrlsFactory().getUrl(pp, MyWorklistTPage.class,
-							sb.toString()) + "');");
+			backBtn.setHref(uFactory.getUrl(pp, MyWorklistTPage.class, sb.toString()));
 		}
 		final ElementList el = ElementList.of(backBtn);
 		return el;
