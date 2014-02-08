@@ -1,6 +1,5 @@
 package net.simpleframework.workflow.web.component.complete;
 
-import java.io.IOException;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -63,13 +62,13 @@ public class WorkitemCompleteUtils implements IWorkflowContextAware {
 				.getBeanProperty("workitemIdParameterName")));
 	}
 
-	public static void doWorkitemComplete(final ComponentParameter cp) throws IOException {
+	public static void doWorkitemComplete(final ComponentParameter cp) throws Exception {
 		final JavascriptForward js = new JavascriptForward();
 		try {
 			final String confirmMessage = (String) cp.getBeanProperty("confirmMessage");
 			if (StringUtils.hasText(confirmMessage)) {
-				js.append("if (!confirm('").append(JavascriptUtils.escape(confirmMessage))
-						.append("')) return;");
+				js.append("if (!confirm('");
+				js.append(JavascriptUtils.escape(confirmMessage)).append("')) return;");
 			}
 
 			final WorkitemBean workitem = getWorkitemBean(cp);
@@ -98,8 +97,8 @@ public class WorkitemCompleteUtils implements IWorkflowContextAware {
 			}
 		} catch (final Throwable ex) {
 			log.error(ex);
-			js.append("$error(").append(JsonUtils.toJSON(MVCUtils.createException(cp, ex)))
-					.append(");");
+			js.append("$error(");
+			js.append(JsonUtils.toJSON(MVCUtils.createException(cp, ex))).append(");");
 		}
 		final Writer out = cp.getResponseWriter();
 		out.write(js.toString());

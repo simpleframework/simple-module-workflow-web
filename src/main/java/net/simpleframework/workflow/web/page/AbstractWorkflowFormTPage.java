@@ -1,6 +1,7 @@
 package net.simpleframework.workflow.web.page;
 
 import static net.simpleframework.common.I18n.$m;
+import net.simpleframework.ctx.trans.Transaction;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.ElementList;
@@ -15,6 +16,7 @@ import net.simpleframework.mvc.component.base.validation.ValidationBean;
 import net.simpleframework.mvc.component.base.validation.Validator;
 import net.simpleframework.mvc.template.lets.FormTableRowTemplatePage;
 import net.simpleframework.workflow.engine.EWorkitemStatus;
+import net.simpleframework.workflow.engine.IWorkflowContext;
 import net.simpleframework.workflow.engine.IWorkflowContextAware;
 import net.simpleframework.workflow.engine.ProcessBean;
 import net.simpleframework.workflow.engine.WorkitemBean;
@@ -57,6 +59,7 @@ public abstract class AbstractWorkflowFormTPage extends FormTableRowTemplatePage
 				new Validator(EValidatorMethod.required, "#wf_topic"));
 	}
 
+	@Transaction(context = IWorkflowContext.class)
 	protected void onSaveForm(final PageParameter pp, final WorkitemBean workitem) {
 		final ProcessBean process = getProcess(workitem);
 		pService.saveProcessTitle(process, pp.getParameter("wf_topic"));

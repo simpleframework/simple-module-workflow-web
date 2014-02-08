@@ -1,8 +1,10 @@
 package net.simpleframework.workflow.web.component.complete;
 
+import net.simpleframework.ctx.trans.Transaction;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.component.AbstractComponentHandler;
 import net.simpleframework.mvc.component.ComponentParameter;
+import net.simpleframework.workflow.engine.IWorkflowContext;
 import net.simpleframework.workflow.engine.WorkitemComplete;
 import net.simpleframework.workflow.web.IWorkflowWebForm;
 
@@ -15,9 +17,10 @@ import net.simpleframework.workflow.web.IWorkflowWebForm;
 public class DefaultWorkitemCompleteHandler extends AbstractComponentHandler implements
 		IWorkitemCompleteHandler {
 
+	@Transaction(context = IWorkflowContext.class)
 	@Override
 	public JavascriptForward onComplete(final ComponentParameter cp,
-			final WorkitemComplete workitemComplete) {
+			final WorkitemComplete workitemComplete) throws Exception {
 		workitemComplete.complete(cp.map());
 		return ((IWorkflowWebForm) workitemComplete.getWorkflowForm()).onComplete(cp,
 				workitemComplete);
