@@ -217,8 +217,17 @@ public class ProcessModelMgrPage extends AbstractWorkflowMgrPage {
 		@Transaction(context = IWorkflowContext.class)
 		@Override
 		public JavascriptForward onSave(final ComponentParameter cp) throws Exception {
-			updateStatus(cp, mService, StringUtils.split(cp.getParameter("modelId"), ";"),
-					cp.getEnumParameter(EProcessModelStatus.class, "op"));
+			final String[] idArr = StringUtils.split(cp.getParameter("modelId"), ";");
+			final EProcessModelStatus op = cp.getEnumParameter(EProcessModelStatus.class, "op");
+			for (final String aId : idArr) {
+				final ProcessModelBean processModel = mService.getBean(aId);
+				setLogDescription(cp, processModel);
+				if (op == EProcessModelStatus.deploy) {
+					mService.deploy(processModel);
+				} else if (op == EProcessModelStatus.edit) {
+					mService.resume(processModel);
+				}
+			}
 			return super.onSave(cp).append("$Actions['ProcessModelMgrPage_tbl']();");
 		}
 

@@ -5,9 +5,7 @@ import static net.simpleframework.common.I18n.$m;
 import java.io.IOException;
 import java.util.Map;
 
-import net.simpleframework.common.BeanUtils;
 import net.simpleframework.ctx.IModuleRef;
-import net.simpleframework.ctx.service.ado.db.IDbBeanService;
 import net.simpleframework.module.common.web.page.AbstractDescPage;
 import net.simpleframework.mvc.AbstractMVCPage;
 import net.simpleframework.mvc.PageParameter;
@@ -82,22 +80,6 @@ public abstract class AbstractWorkflowMgrPage extends T1ResizedTemplatePage impl
 	}
 
 	public static abstract class AbstractStatusDescPage extends AbstractDescPage {
-
-		@SuppressWarnings("unchecked")
-		protected <T> void updateStatus(final PageParameter pp, final IDbBeanService<T> service,
-				final String[] idArr, final Enum<?> op) {
-			if (idArr == null) {
-				return;
-			}
-			for (final String id : idArr) {
-				final T bean = service.getBean(id);
-				if (bean != null && op != BeanUtils.getProperty(bean, "status")) {
-					setLogDescription(pp, bean);
-					BeanUtils.setProperty(bean, "status", op);
-					service.update(new String[] { "status" }, bean);
-				}
-			}
-		}
 
 		@Override
 		public String getTitle(final PageParameter pp) {
