@@ -188,10 +188,26 @@ public class ActivityMgrPage extends AbstractWorkflowMgrPage {
 	}
 
 	public static class StatusDescPage extends AbstractStatusDescPage {
+
 		@Override
 		public JavascriptForward onSave(final ComponentParameter cp) throws Exception {
-			updateStatus(cp, aService, StringUtils.split(cp.getParameter("activityId"), ";"),
-					cp.getEnumParameter(EActivityStatus.class, "op"));
+			final String[] idArr = StringUtils.split(cp.getParameter("activityId"), ";");
+			final EActivityStatus op = cp.getEnumParameter(EActivityStatus.class, "op");
+			for (final String aId : idArr) {
+				final ActivityBean activity = aService.getBean(aId);
+				if (activity == null) {
+					continue;
+				}
+				setLogDescription(cp, activity);
+				final EActivityStatus status = activity.getStatus();
+				if (op == EActivityStatus.suspended) {
+					aService.suspend(activity);
+				} else if (op == EActivityStatus.running) {
+					if (status == EActivityStatus.suspended) {
+						aService.resume(activity);
+					}
+				}
+			}
 			return super.onSave(cp).append("$Actions['ActivityMgrPage_tbl']();");
 		}
 	}

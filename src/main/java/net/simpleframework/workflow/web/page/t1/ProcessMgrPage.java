@@ -197,8 +197,23 @@ public class ProcessMgrPage extends AbstractWorkflowMgrPage {
 
 		@Override
 		public JavascriptForward onSave(final ComponentParameter cp) throws Exception {
-			updateStatus(cp, pService, StringUtils.split(cp.getParameter("processId"), ";"),
-					cp.getEnumParameter(EProcessStatus.class, "op"));
+			final String[] idArr = StringUtils.split(cp.getParameter("processId"), ";");
+			final EProcessStatus op = cp.getEnumParameter(EProcessStatus.class, "op");
+			for (final String aId : idArr) {
+				final ProcessBean process = pService.getBean(aId);
+				if (process == null) {
+					continue;
+				}
+				setLogDescription(cp, process);
+				final EProcessStatus status = process.getStatus();
+				if (op == EProcessStatus.suspended) {
+					pService.suspend(process);
+				} else if (op == EProcessStatus.running) {
+					if (status == EProcessStatus.suspended) {
+						pService.resume(process);
+					}
+				}
+			}
 			return super.onSave(cp).append("$Actions['ProcessMgrPage_tbl']();");
 		}
 	}
