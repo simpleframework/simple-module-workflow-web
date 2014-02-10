@@ -192,6 +192,7 @@ public class ProcessModelMgrPage extends AbstractWorkflowMgrPage {
 			swfUpload.setFileTypes("*.xml").setFileTypesDesc($m("ProcessModelMgrPage.6"));
 		}
 
+		@Transaction(context = IWorkflowContext.class)
 		@Override
 		public JavascriptForward doSave(final ComponentParameter cp,
 				final IAttachmentSaveCallback callback) throws IOException {
