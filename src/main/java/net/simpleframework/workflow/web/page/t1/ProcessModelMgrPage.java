@@ -149,7 +149,7 @@ public class ProcessModelMgrPage extends AbstractWorkflowMgrPage {
 			final KVMap row = new KVMap()
 					.add("modelText",
 							new LinkElement(processModel).setHref(url(ProcessMgrPage.class, "modelId="
-									+ id))).add("processCount", 0)
+									+ id))).add("processCount", processModel.getProcessCount())
 					.add("userId", cp.getUser(processModel.getUserId()))
 					.add("createDate", processModel.getCreateDate())
 					.add("status", WorkflowUtils.createStatusImage(cp, status) + status.toString());
