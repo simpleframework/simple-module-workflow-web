@@ -37,6 +37,11 @@ public abstract class AbstractWorkflowFormTPage extends FormTableRowTemplatePage
 		IWorkflowWebForm, IWorkflowContextAware {
 
 	@Override
+	protected boolean isPage404(PageParameter pp) {
+		return getWorkitemBean(pp) == null;
+	}
+
+	@Override
 	protected void onForward(final PageParameter pp) {
 		super.onForward(pp);
 

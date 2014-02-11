@@ -26,6 +26,11 @@ public abstract class AbstractWorkflowFormPage extends T1FormTemplatePage implem
 		IWorkflowContextAware {
 
 	@Override
+	protected boolean isPage404(PageParameter pp) {
+		return WorkflowUtils.getWorkitemBean(pp) == null;
+	}
+
+	@Override
 	protected void onForward(final PageParameter pp) {
 		super.onForward(pp);
 		pp.addImportCSS(AbstractItemsTPage.class, "/my_work.css");
