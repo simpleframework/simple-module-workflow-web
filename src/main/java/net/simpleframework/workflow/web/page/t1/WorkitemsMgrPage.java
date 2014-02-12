@@ -95,7 +95,7 @@ public class WorkitemsMgrPage extends OneTableTemplatePage implements IWorkflowC
 					.add("userId2", cp.getUser(workitem.getUserId2()))
 					.add("createDate", workitem.getCreateDate())
 					.add("completeDate", workitem.getCompleteDate());
-			EWorkitemStatus status = workitem.getStatus();
+			final EWorkitemStatus status = workitem.getStatus();
 			row.add("status", WorkflowUtils.createStatusImage(cp, status) + status.toString());
 
 			final StringBuilder sb = new StringBuilder();
