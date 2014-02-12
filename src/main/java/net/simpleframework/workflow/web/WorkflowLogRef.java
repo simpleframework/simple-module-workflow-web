@@ -49,4 +49,16 @@ public class WorkflowLogRef extends LogRef implements IWorkflowContextAware {
 			return "activityId";
 		}
 	}
+
+	public static class WorkitemUpdateLogPage extends EntityUpdateLogPage {
+		@Override
+		protected IDbBeanService<?> getBeanService() {
+			return wService;
+		}
+
+		@Override
+		public String getBeanIdParameter(final PageParameter pp) {
+			return "workitemId";
+		}
+	}
 }
