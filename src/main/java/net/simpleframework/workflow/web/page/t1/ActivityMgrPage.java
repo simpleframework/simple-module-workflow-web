@@ -15,13 +15,12 @@ import net.simpleframework.mvc.IForward;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageMapping;
 import net.simpleframework.mvc.PageParameter;
-import net.simpleframework.mvc.common.element.BlockElement;
-import net.simpleframework.mvc.common.element.EElementEvent;
 import net.simpleframework.mvc.common.element.ETextAlign;
 import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.Icon;
 import net.simpleframework.mvc.common.element.InputElement;
 import net.simpleframework.mvc.common.element.LinkButton;
+import net.simpleframework.mvc.common.element.LinkElement;
 import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.ui.menu.MenuBean;
@@ -32,12 +31,6 @@ import net.simpleframework.mvc.component.ui.pager.EPagerBarLayout;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
 import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
 import net.simpleframework.mvc.component.ui.pager.db.GroupDbTablePagerHandler;
-import net.simpleframework.mvc.component.ui.tooltip.ETipElement;
-import net.simpleframework.mvc.component.ui.tooltip.ETipPosition;
-import net.simpleframework.mvc.component.ui.tooltip.TipBean;
-import net.simpleframework.mvc.component.ui.tooltip.TipBean.HideOn;
-import net.simpleframework.mvc.component.ui.tooltip.TipBean.Hook;
-import net.simpleframework.mvc.component.ui.tooltip.TooltipBean;
 import net.simpleframework.mvc.template.struct.NavigationButtons;
 import net.simpleframework.workflow.engine.ActivityBean;
 import net.simpleframework.workflow.engine.EActivityAbortPolicy;
@@ -46,6 +39,8 @@ import net.simpleframework.workflow.engine.EProcessStatus;
 import net.simpleframework.workflow.engine.EWorkitemStatus;
 import net.simpleframework.workflow.engine.ProcessBean;
 import net.simpleframework.workflow.engine.WorkitemBean;
+import net.simpleframework.workflow.schema.AbstractTaskNode;
+import net.simpleframework.workflow.schema.UserNode;
 import net.simpleframework.workflow.web.WorkflowLogRef.ActivityUpdateLogPage;
 import net.simpleframework.workflow.web.page.MyWorklistTbl;
 import net.simpleframework.workflow.web.page.WorkflowUtils;
@@ -77,12 +72,10 @@ public class ActivityMgrPage extends AbstractWorkflowMgrPage {
 				.setContentRef("ActivityMgrPage_abort_page").setTitle(EProcessStatus.abort.toString())
 				.setWidth(420).setHeight(240);
 
-		// tooltip
-		final TooltipBean tooltip = addComponentBean(pp, "ActivityMgrPage_tip", TooltipBean.class);
-		tooltip.addTip(new TipBean(tooltip).setSelector(".participants2")
-				.setStem(ETipPosition.bottomMiddle)
-				.setHook(new Hook(ETipPosition.topMiddle, ETipPosition.bottomMiddle))
-				.setHideOn(new HideOn(ETipElement.tip, EElementEvent.mouseleave)).setWidth(300));
+		// workitems
+		addAjaxRequest(pp, "ActivityMgrPage_workitems_page", WorkitemsPage.class);
+		addWindowBean(pp, "ActivityMgrPage_workitems")
+				.setContentRef("ActivityMgrPage_workitems_page").setWidth(800).setHeight(480);
 	}
 
 	@Override
@@ -127,14 +120,24 @@ public class ActivityMgrPage extends AbstractWorkflowMgrPage {
 			return aService.getActivities(process);
 		}
 
+		protected Object toTasknode(final ActivityBean activity) {
+			final AbstractTaskNode tasknode = aService.getTaskNode(activity);
+			if (tasknode instanceof UserNode) {
+				return new LinkElement(tasknode)
+						.setOnclick("$Actions['ActivityMgrPage_workitems']('activityId="
+								+ activity.getId() + "');");
+			}
+			return tasknode;
+		}
+
 		@Override
 		protected Map<String, Object> getRowData(final ComponentParameter cp, final Object dataObject) {
 			final ActivityBean activity = (ActivityBean) dataObject;
 			final KVMap row = new KVMap();
-			row.add("tasknode", aService.getTaskNode(activity));
+			row.add("tasknode", toTasknode(activity));
 			final ActivityBean pre = aService.getPreActivity(activity);
 			if (pre != null) {
-				row.add("previous", aService.getTaskNode(pre));
+				row.add("previous", toTasknode(pre));
 			}
 			row.add("participants", getParticipants(cp, activity, null));
 			row.add("participants2", getParticipants(cp, activity, EWorkitemStatus.complete));
@@ -164,12 +167,10 @@ public class ActivityMgrPage extends AbstractWorkflowMgrPage {
 				if (status != null && status != item.getStatus()) {
 					continue;
 				}
-				if (i > 0) {
+				if (i++ > 0) {
 					sb.append(", ");
 				}
 				sb.append(new SpanElement(pp.getUser(item.getUserId())).setClassName("participants2"));
-				sb.append(BlockElement.tip(item.toString()));
-				i++;
 			}
 			return sb.toString();
 		}
