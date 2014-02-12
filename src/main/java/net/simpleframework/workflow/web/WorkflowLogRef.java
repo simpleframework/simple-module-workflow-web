@@ -15,7 +15,6 @@ import net.simpleframework.workflow.engine.IWorkflowContextAware;
 public class WorkflowLogRef extends LogRef implements IWorkflowContextAware {
 
 	public static class ProcessModelUpdateLogPage extends EntityUpdateLogPage {
-
 		@Override
 		protected IDbBeanService<?> getBeanService() {
 			return mService;
@@ -28,7 +27,6 @@ public class WorkflowLogRef extends LogRef implements IWorkflowContextAware {
 	}
 
 	public static class ProcessUpdateLogPage extends EntityUpdateLogPage {
-
 		@Override
 		protected IDbBeanService<?> getBeanService() {
 			return pService;
@@ -37,6 +35,18 @@ public class WorkflowLogRef extends LogRef implements IWorkflowContextAware {
 		@Override
 		public String getBeanIdParameter(final PageParameter pp) {
 			return "processId";
+		}
+	}
+
+	public static class ActivityUpdateLogPage extends EntityUpdateLogPage {
+		@Override
+		protected IDbBeanService<?> getBeanService() {
+			return aService;
+		}
+
+		@Override
+		public String getBeanIdParameter(final PageParameter pp) {
+			return "activityId";
 		}
 	}
 }

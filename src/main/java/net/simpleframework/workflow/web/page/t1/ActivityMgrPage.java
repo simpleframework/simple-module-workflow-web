@@ -46,6 +46,7 @@ import net.simpleframework.workflow.engine.EProcessStatus;
 import net.simpleframework.workflow.engine.EWorkitemStatus;
 import net.simpleframework.workflow.engine.ProcessBean;
 import net.simpleframework.workflow.engine.WorkitemBean;
+import net.simpleframework.workflow.web.WorkflowLogRef.ActivityUpdateLogPage;
 import net.simpleframework.workflow.web.page.MyWorklistTbl;
 import net.simpleframework.workflow.web.page.WorkflowUtils;
 
@@ -114,7 +115,7 @@ public class ActivityMgrPage extends AbstractWorkflowMgrPage {
 
 	@Override
 	protected Class<? extends AbstractMVCPage> getUpdateLogPage() {
-		return null;
+		return ActivityUpdateLogPage.class;
 	}
 
 	public static class ActivityTbl extends GroupDbTablePagerHandler {
