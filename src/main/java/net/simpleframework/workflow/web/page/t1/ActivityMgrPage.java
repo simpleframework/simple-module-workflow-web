@@ -73,7 +73,7 @@ public class ActivityMgrPage extends AbstractWorkflowMgrPage {
 				.setWidth(420).setHeight(240);
 
 		// workitems
-		addAjaxRequest(pp, "ActivityMgrPage_workitems_page", WorkitemsPage.class);
+		addAjaxRequest(pp, "ActivityMgrPage_workitems_page", WorkitemsMgrPage.class);
 		addWindowBean(pp, "ActivityMgrPage_workitems")
 				.setContentRef("ActivityMgrPage_workitems_page").setWidth(800).setHeight(480);
 	}

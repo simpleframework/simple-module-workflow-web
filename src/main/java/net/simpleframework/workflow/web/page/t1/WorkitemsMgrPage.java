@@ -26,7 +26,7 @@ import net.simpleframework.workflow.engine.WorkitemBean;
  * @author 陈侃(cknet@126.com, 13910090885) https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
-public class WorkitemsPage extends OneTableTemplatePage implements IWorkflowContextAware {
+public class WorkitemsMgrPage extends OneTableTemplatePage implements IWorkflowContextAware {
 
 	@Override
 	protected void onForward(final PageParameter pp) {
@@ -35,19 +35,23 @@ public class WorkitemsPage extends OneTableTemplatePage implements IWorkflowCont
 		final TablePagerBean tablePager = addTablePagerBean(pp, "WorkitemsPage_tbl",
 				WorkitemsTbl.class).setShowLineNo(false);
 		tablePager
-				.addColumn(new TablePagerColumn("userId", "定义执行者"))
-				.addColumn(new TablePagerColumn("userId2", "实际执行者"))
-				.addColumn(new TablePagerColumn("createDate", "创建时间", 115).setPropertyClass(Date.class))
+				.addColumn(new TablePagerColumn("userId", $m("WorkitemsMgrPage.0")))
+				.addColumn(new TablePagerColumn("userId2", $m("WorkitemsMgrPage.1")))
 				.addColumn(
-						new TablePagerColumn("completeDate", "结束时间", 115).setPropertyClass(Date.class))
+						new TablePagerColumn("createDate", $m("WorkitemsMgrPage.2"), 115)
+								.setPropertyClass(Date.class))
 				.addColumn(
-						new TablePagerColumn("status", "状态", 70).setPropertyClass(EWorkitemStatus.class))
+						new TablePagerColumn("completeDate", $m("WorkitemsMgrPage.3"), 115)
+								.setPropertyClass(Date.class))
+				.addColumn(
+						new TablePagerColumn("status", $m("WorkitemsMgrPage.4"), 70)
+								.setPropertyClass(EWorkitemStatus.class))
 				.addColumn(TablePagerColumn.OPE().setWidth(70));
 	}
 
 	@Override
 	public String getTitle(final PageParameter pp) {
-		return $m("ActivityMgrPage.9") + " - " + aService.getTaskNode(getActivityBean(pp));
+		return $m("WorkitemsMgrPage.5") + " - " + aService.getTaskNode(getActivityBean(pp));
 	}
 
 	@Override
@@ -65,8 +69,8 @@ public class WorkitemsPage extends OneTableTemplatePage implements IWorkflowCont
 		}
 
 		@Override
-		protected Map<String, Object> getRowData(ComponentParameter cp, Object dataObject) {
-			WorkitemBean workitem = (WorkitemBean) dataObject;
+		protected Map<String, Object> getRowData(final ComponentParameter cp, final Object dataObject) {
+			final WorkitemBean workitem = (WorkitemBean) dataObject;
 			final KVMap row = new KVMap();
 			row.add("userId", cp.getUser(workitem.getUserId()))
 					.add("userId2", cp.getUser(workitem.getUserId2()))
