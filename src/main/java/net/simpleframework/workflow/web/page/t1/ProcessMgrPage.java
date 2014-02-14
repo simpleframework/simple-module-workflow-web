@@ -8,6 +8,7 @@ import java.util.Map;
 
 import net.simpleframework.ado.query.DataQueryUtils;
 import net.simpleframework.ado.query.IDataQuery;
+import net.simpleframework.ado.query.IteratorDataQuery;
 import net.simpleframework.common.Convert;
 import net.simpleframework.common.StringUtils;
 import net.simpleframework.common.coll.KVMap;
@@ -131,7 +132,7 @@ public class ProcessMgrPage extends AbstractWorkflowMgrPage {
 				return DataQueryUtils.nullQuery();
 			}
 			cp.addFormParameter("modelId", processModel.getId());
-			return pService.getProcessList(processModel);
+			return new IteratorDataQuery<ProcessBean>(pService.getProcessList(processModel));
 		}
 
 		@Override
