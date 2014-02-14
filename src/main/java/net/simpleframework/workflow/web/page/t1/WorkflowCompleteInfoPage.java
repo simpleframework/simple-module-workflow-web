@@ -3,9 +3,9 @@ package net.simpleframework.workflow.web.page.t1;
 import static net.simpleframework.common.I18n.$m;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
-import net.simpleframework.ado.query.IDataQuery;
 import net.simpleframework.mvc.PageMapping;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.BlockElement;
@@ -30,20 +30,17 @@ public class WorkflowCompleteInfoPage extends AbstractWorkflowFormPage {
 		sb.append("<div class='WorkflowCompleteInfoPage'>");
 		sb.append(" <div class='l1'>#(WorkflowCompleteInfoPage.0)</div>");
 		sb.append(" <div class='l2'>");
-		final IDataQuery<ActivityBean> dq = aService.getNextActivities(wService
+		final List<ActivityBean> nextActivities = aService.getNextActivities(wService
 				.getActivity(WorkflowUtils.getWorkitemBean(pp)));
-		if (dq.getCount() > 0) {
+		if (nextActivities.size() > 0) {
 			sb.append("<table>");
-			ActivityBean next;
-			while ((next = dq.next()) != null) {
+			for (final ActivityBean next : nextActivities) {
 				sb.append("<tr>");
 				sb.append("<td class='task'>").append(aService.getTaskNode(next)).append("</td>");
 				sb.append("<td>");
-				final IDataQuery<WorkitemBean> dq2 = wService.getWorkitemList(next,
-						EWorkitemStatus.running);
-				WorkitemBean workitem2;
 				int i = 0;
-				while ((workitem2 = dq2.next()) != null) {
+				for (final WorkitemBean workitem2 : wService.getWorkitemList(next,
+						EWorkitemStatus.running)) {
 					if (i++ > 0) {
 						sb.append(", ");
 					}

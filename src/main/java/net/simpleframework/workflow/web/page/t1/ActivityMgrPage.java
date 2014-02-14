@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.Map;
 
 import net.simpleframework.ado.query.IDataQuery;
+import net.simpleframework.ado.query.ListDataObjectQuery;
 import net.simpleframework.common.Convert;
 import net.simpleframework.common.StringUtils;
 import net.simpleframework.common.coll.KVMap;
@@ -117,7 +118,7 @@ public class ActivityMgrPage extends AbstractWorkflowMgrPage {
 		public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
 			final ProcessBean process = getProcessBean(cp);
 			cp.addFormParameter("processId", process.getId());
-			return aService.getActivities(process);
+			return new ListDataObjectQuery<ActivityBean>(aService.getActivities(process));
 		}
 
 		protected Object toTasknode(final ActivityBean activity) {
@@ -160,10 +161,8 @@ public class ActivityMgrPage extends AbstractWorkflowMgrPage {
 		private String getParticipants(final PageParameter pp, final ActivityBean activity,
 				final EWorkitemStatus status) {
 			final StringBuilder sb = new StringBuilder();
-			final IDataQuery<WorkitemBean> qs = wService.getWorkitemList(activity);
-			WorkitemBean item;
 			int i = 0;
-			while ((item = qs.next()) != null) {
+			for (final WorkitemBean item : wService.getWorkitemList(activity)) {
 				if (status != null && status != item.getStatus()) {
 					continue;
 				}

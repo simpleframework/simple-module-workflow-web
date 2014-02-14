@@ -3,10 +3,12 @@ package net.simpleframework.workflow.web.page;
 import static net.simpleframework.common.I18n.$m;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import net.simpleframework.ado.query.IDataQuery;
+import net.simpleframework.ado.query.ListDataObjectQuery;
 import net.simpleframework.common.Convert;
 import net.simpleframework.common.ID;
 import net.simpleframework.common.StringUtils;
@@ -47,13 +49,15 @@ public class MyWorklistTbl extends GroupDbTablePagerHandler implements IWorkflow
 	public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
 		final EWorkitemStatus status = cp.getEnumParameter(EWorkitemStatus.class, "status");
 		final ID userId = cp.getLoginId();
+		List<WorkitemBean> list;
 		if (status != null) {
 			cp.addFormParameter("status", status.name());
-			return wService.getWorkitemList(userId, status);
+			list = wService.getWorkitemList(userId, status);
 		} else {
-			return wService.getWorkitemList(userId, EWorkitemStatus.running,
+			list = wService.getWorkitemList(userId, EWorkitemStatus.running,
 					EWorkitemStatus.suspended, EWorkitemStatus.delegate);
 		}
+		return new ListDataObjectQuery<WorkitemBean>(list);
 	}
 
 	@Override
@@ -133,13 +137,9 @@ public class MyWorklistTbl extends GroupDbTablePagerHandler implements IWorkflow
 		String userTo = userCache.get(key);
 		if (userTo == null) {
 			final StringBuilder sb = new StringBuilder();
-			final IDataQuery<ActivityBean> qs = aService.getNextActivities(activity);
-			ActivityBean nextActivity;
 			final ArrayList<ID> ids = new ArrayList<ID>();
-			while ((nextActivity = qs.next()) != null) {
-				WorkitemBean workitem;
-				final IDataQuery<WorkitemBean> qs2 = wService.getWorkitemList(nextActivity);
-				while ((workitem = qs2.next()) != null) {
+			for (final ActivityBean nextActivity : aService.getNextActivities(activity)) {
+				for (final WorkitemBean workitem : wService.getWorkitemList(nextActivity)) {
 					final ID userId = workitem.getUserId();
 					if (!ids.contains(userId)) {
 						if (ids.size() > 0) {
@@ -166,11 +166,9 @@ public class MyWorklistTbl extends GroupDbTablePagerHandler implements IWorkflow
 		String userFrom = userCache.get(key);
 		if (userFrom == null) {
 			final StringBuilder sb = new StringBuilder();
-			final IDataQuery<WorkitemBean> qs = wService.getWorkitemList(preActivity,
-					EWorkitemStatus.complete);
-			WorkitemBean workitem;
 			final ArrayList<ID> ids = new ArrayList<ID>();
-			while ((workitem = qs.next()) != null) {
+			for (final WorkitemBean workitem : wService.getWorkitemList(preActivity,
+					EWorkitemStatus.complete)) {
 				final ID userId = workitem.getUserId();
 				if (!ids.contains(userId)) {
 					if (ids.size() > 0) {
