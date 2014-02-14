@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import net.simpleframework.ado.query.IDataQuery;
-import net.simpleframework.ado.query.ListDataObjectQuery;
+import net.simpleframework.ado.query.ListDataQuery;
 import net.simpleframework.common.Convert;
 import net.simpleframework.common.ID;
 import net.simpleframework.common.StringUtils;
@@ -57,7 +57,7 @@ public class MyWorklistTbl extends GroupDbTablePagerHandler implements IWorkflow
 			list = wService.getWorkitemList(userId, EWorkitemStatus.running,
 					EWorkitemStatus.suspended, EWorkitemStatus.delegate);
 		}
-		return new ListDataObjectQuery<WorkitemBean>(list);
+		return new ListDataQuery<WorkitemBean>(list);
 	}
 
 	@Override

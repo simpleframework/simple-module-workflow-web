@@ -7,7 +7,7 @@ import java.util.Date;
 import java.util.Map;
 
 import net.simpleframework.ado.query.IDataQuery;
-import net.simpleframework.ado.query.ListDataObjectQuery;
+import net.simpleframework.ado.query.ListDataQuery;
 import net.simpleframework.common.Convert;
 import net.simpleframework.common.StringUtils;
 import net.simpleframework.common.coll.KVMap;
@@ -118,7 +118,7 @@ public class ActivityMgrPage extends AbstractWorkflowMgrPage {
 		public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
 			final ProcessBean process = getProcessBean(cp);
 			cp.addFormParameter("processId", process.getId());
-			return new ListDataObjectQuery<ActivityBean>(aService.getActivities(process));
+			return new ListDataQuery<ActivityBean>(aService.getActivities(process));
 		}
 
 		protected Object toTasknode(final ActivityBean activity) {

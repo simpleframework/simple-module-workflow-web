@@ -6,7 +6,7 @@ import java.util.Date;
 import java.util.Map;
 
 import net.simpleframework.ado.query.IDataQuery;
-import net.simpleframework.ado.query.ListDataObjectQuery;
+import net.simpleframework.ado.query.ListDataQuery;
 import net.simpleframework.common.coll.KVMap;
 import net.simpleframework.ctx.IModuleRef;
 import net.simpleframework.mvc.AbstractMVCPage;
@@ -85,7 +85,7 @@ public class WorkitemsMgrPage extends OneTableTemplatePage implements IWorkflowC
 		public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
 			final ActivityBean activity = getActivityBean(cp);
 			cp.addFormParameter("activityId", activity.getId());
-			return new ListDataObjectQuery<WorkitemBean>(wService.getWorkitemList(activity));
+			return new ListDataQuery<WorkitemBean>(wService.getWorkitemList(activity));
 		}
 
 		@Override

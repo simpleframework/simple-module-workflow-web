@@ -6,7 +6,7 @@ import java.util.Map;
 
 import net.simpleframework.ado.query.DataQueryUtils;
 import net.simpleframework.ado.query.IDataQuery;
-import net.simpleframework.ado.query.ListDataObjectQuery;
+import net.simpleframework.ado.query.ListDataQuery;
 import net.simpleframework.common.ID;
 import net.simpleframework.common.coll.KVMap;
 import net.simpleframework.mvc.JavascriptForward;
@@ -60,7 +60,7 @@ public class MyInitiateItemsTPage extends AbstractItemsTPage {
 			if (loginId == null || (items = mService.getInitiateItems(loginId)) == null) {
 				return DataQueryUtils.nullQuery();
 			}
-			return new ListDataObjectQuery<InitiateItem>(items);
+			return new ListDataQuery<InitiateItem>(items);
 		}
 
 		@Override
