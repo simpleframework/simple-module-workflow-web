@@ -5,7 +5,6 @@ import static net.simpleframework.common.I18n.$m;
 import java.util.Map;
 
 import net.simpleframework.ado.query.IDataQuery;
-import net.simpleframework.ado.query.IteratorDataQuery;
 import net.simpleframework.common.coll.KVMap;
 import net.simpleframework.ctx.trans.Transaction;
 import net.simpleframework.mvc.IForward;
@@ -65,8 +64,7 @@ public class DelegateListTPage extends AbstractWorkitemsTPage implements IWorkfl
 
 		@Override
 		public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
-			return new IteratorDataQuery<DelegationBean>(context.getDelegationService()
-					.queryWorkitems(cp.getLoginId()));
+			return context.getDelegationService().queryWorkitems(cp.getLoginId());
 		}
 
 		@Override
