@@ -37,9 +37,7 @@ import net.simpleframework.workflow.engine.ActivityBean;
 import net.simpleframework.workflow.engine.EActivityAbortPolicy;
 import net.simpleframework.workflow.engine.EActivityStatus;
 import net.simpleframework.workflow.engine.EProcessStatus;
-import net.simpleframework.workflow.engine.EWorkitemStatus;
 import net.simpleframework.workflow.engine.ProcessBean;
-import net.simpleframework.workflow.engine.WorkitemBean;
 import net.simpleframework.workflow.schema.AbstractTaskNode;
 import net.simpleframework.workflow.schema.UserNode;
 import net.simpleframework.workflow.web.WorkflowLogRef.ActivityUpdateLogPage;
@@ -140,8 +138,8 @@ public class ActivityMgrPage extends AbstractWorkflowMgrPage {
 			if (pre != null) {
 				row.add("previous", toTasknode(pre));
 			}
-			row.add("participants", getParticipants(cp, activity, null));
-			row.add("participants2", getParticipants(cp, activity, EWorkitemStatus.complete));
+			row.add("participants", getParticipants(activity, false));
+			row.add("participants2", getParticipants(activity, true));
 			row.add("createDate", activity.getCreateDate());
 			row.add("completeDate", activity.getCompleteDate());
 
@@ -158,18 +156,15 @@ public class ActivityMgrPage extends AbstractWorkflowMgrPage {
 			return sb.toString();
 		}
 
-		private String getParticipants(final PageParameter pp, final ActivityBean activity,
-				final EWorkitemStatus status) {
+		private String getParticipants(final ActivityBean activity, final boolean b) {
 			final StringBuilder sb = new StringBuilder();
 			int i = 0;
-			for (final WorkitemBean item : wService.getWorkitemList(activity)) {
-				if (status != null && status != item.getStatus()) {
-					continue;
-				}
+			for (final Object user : (b ? aService.getParticipants2(activity) : aService
+					.getParticipants(activity))) {
 				if (i++ > 0) {
 					sb.append(", ");
 				}
-				sb.append(new SpanElement(pp.getUser(item.getUserId())).setClassName("participants2"));
+				sb.append(new SpanElement(user).setClassName("participants2"));
 			}
 			return sb.toString();
 		}
