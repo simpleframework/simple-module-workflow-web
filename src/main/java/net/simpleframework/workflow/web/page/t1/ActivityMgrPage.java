@@ -160,7 +160,7 @@ public class ActivityMgrPage extends AbstractWorkflowMgrPage {
 			final StringBuilder sb = new StringBuilder();
 			int i = 0;
 			for (final Object user : (b ? aService.getParticipants2(activity) : aService
-					.getParticipants(activity))) {
+					.getParticipants(activity, true))) {
 				if (i++ > 0) {
 					sb.append(", ");
 				}

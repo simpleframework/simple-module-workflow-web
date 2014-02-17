@@ -115,8 +115,8 @@ public class MyWorklistTbl extends GroupDbTablePagerHandler implements IWorkflow
 		sb.append(new LinkElement(getTopic(aService.getProcessBean(activity))).setStrong(
 				!workitem.isReadMark()).setOnclick(
 				"$Actions.loc('" + uFactory.getUrl(cp, WorkflowFormPage.class, workitem) + "');"));
-		row.add("title", sb.toString()).add("userFrom", getUserFrom(cp, activity))
-				.add("userTo", getUserTo(cp, activity)).add("createDate", workitem.getCreateDate())
+		row.add("title", sb.toString()).add("userFrom", getUserFrom(activity))
+				.add("userTo", getUserTo(activity)).add("createDate", workitem.getCreateDate())
 				.add("completeDate", workitem.getCompleteDate());
 
 		sb.setLength(0);
@@ -129,7 +129,7 @@ public class MyWorklistTbl extends GroupDbTablePagerHandler implements IWorkflow
 
 	private final Map<String, String> userCache = new ConcurrentHashMap<String, String>();
 
-	protected String getUserTo(final ComponentParameter cp, final ActivityBean activity) {
+	protected String getUserTo(final ActivityBean activity) {
 		if (activity == null) {
 			return null;
 		}
@@ -145,7 +145,7 @@ public class MyWorklistTbl extends GroupDbTablePagerHandler implements IWorkflow
 						if (ids.size() > 0) {
 							sb.append(", ");
 						}
-						sb.append(cp.getUser(userId));
+						sb.append(permission.getUser(userId));
 						ids.add(userId);
 					}
 				}
@@ -157,7 +157,7 @@ public class MyWorklistTbl extends GroupDbTablePagerHandler implements IWorkflow
 		return userTo;
 	}
 
-	protected String getUserFrom(final ComponentParameter cp, final ActivityBean activity) {
+	protected String getUserFrom(final ActivityBean activity) {
 		final ActivityBean preActivity = aService.getPreActivity(activity);
 		if (preActivity == null) {
 			return null;
@@ -174,7 +174,7 @@ public class MyWorklistTbl extends GroupDbTablePagerHandler implements IWorkflow
 					if (ids.size() > 0) {
 						sb.append(", ");
 					}
-					sb.append(cp.getUser(userId));
+					sb.append(permission.getUser(userId));
 					ids.add(userId);
 				}
 			}

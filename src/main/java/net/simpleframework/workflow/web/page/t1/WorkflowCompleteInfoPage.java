@@ -44,7 +44,7 @@ public class WorkflowCompleteInfoPage extends AbstractWorkflowFormPage {
 					if (i++ > 0) {
 						sb.append(", ");
 					}
-					sb.append(pp.getUser(workitem2.getUserId()));
+					sb.append(permission.getUser(workitem2.getUserId()));
 				}
 				sb.append("</td></tr>");
 			}

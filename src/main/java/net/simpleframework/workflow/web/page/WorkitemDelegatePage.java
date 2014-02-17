@@ -46,9 +46,9 @@ public class WorkitemDelegatePage extends FormTableRowTemplatePage implements IW
 	@Override
 	public JavascriptForward onSave(final ComponentParameter cp) throws Exception {
 		final WorkitemBean workitem = WorkflowUtils.getWorkitemBean(cp);
-		wService.setWorkitemDelegation(workitem, cp.getUser(cp.getParameter("wd_userId")).getId(),
-				cp.getDateParameter("wd_startDate"), cp.getDateParameter("wd_startDate"),
-				cp.getParameter("wd_description"));
+		wService.setWorkitemDelegation(workitem, permission.getUser(cp.getParameter("wd_userId"))
+				.getId(), cp.getDateParameter("wd_startDate"), cp.getDateParameter("wd_startDate"), cp
+				.getParameter("wd_description"));
 		return super.onSave(cp).append("$Actions['MyWorklistTPage_tbl']();");
 	}
 

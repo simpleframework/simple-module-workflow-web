@@ -143,7 +143,7 @@ public class ProcessMgrPage extends AbstractWorkflowMgrPage {
 					.add("title",
 							new LinkElement(MyWorklistTbl.getTopic(process)).setHref(url(
 									ActivityMgrPage.class, "processId=" + id)))
-					.add("userId", cp.getUser(process.getUserId()))
+					.add("userId", permission.getUser(process.getUserId()))
 					.add("createDate", process.getCreateDate())
 					.add("completeDate", process.getCompleteDate())
 					.add("status", WorkflowUtils.createStatusImage(cp, status) + status.toString());

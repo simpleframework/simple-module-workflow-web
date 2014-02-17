@@ -92,8 +92,8 @@ public class WorkitemsMgrPage extends OneTableTemplatePage implements IWorkflowC
 		protected Map<String, Object> getRowData(final ComponentParameter cp, final Object dataObject) {
 			final WorkitemBean workitem = (WorkitemBean) dataObject;
 			final KVMap row = new KVMap();
-			row.add("userId", cp.getUser(workitem.getUserId()))
-					.add("userId2", cp.getUser(workitem.getUserId2()))
+			row.add("userId", permission.getUser(workitem.getUserId()))
+					.add("userId2", permission.getUser(workitem.getUserId2()))
 					.add("createDate", workitem.getCreateDate())
 					.add("completeDate", workitem.getCompleteDate());
 			final EWorkitemStatus status = workitem.getStatus();

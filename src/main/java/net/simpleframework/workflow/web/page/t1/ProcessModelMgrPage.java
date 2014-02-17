@@ -150,7 +150,7 @@ public class ProcessModelMgrPage extends AbstractWorkflowMgrPage {
 					.add("modelText",
 							new LinkElement(processModel).setHref(url(ProcessMgrPage.class, "modelId="
 									+ id))).add("processCount", processModel.getProcessCount())
-					.add("userId", cp.getUser(processModel.getUserId()))
+					.add("userId", permission.getUser(processModel.getUserId()))
 					.add("createDate", processModel.getCreateDate())
 					.add("status", WorkflowUtils.createStatusImage(cp, status) + status.toString());
 			final StringBuilder sb = new StringBuilder();

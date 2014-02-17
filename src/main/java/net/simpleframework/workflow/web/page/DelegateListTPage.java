@@ -84,7 +84,7 @@ public class DelegateListTPage extends AbstractWorkitemsTPage implements IWorkfl
 							.getActivity(workitem)))).setOnclick("$Actions.loc('"
 							+ uFactory.getUrl(cp, WorkflowFormPage.class, workitem, "source=delegation")
 							+ "');"));
-			row.add("userId", cp.getUser(delegation.getUserId()));
+			row.add("userId", permission.getUser(delegation.getUserId()));
 			row.add("createDate", delegation.getCreateDate());
 			final EDelegationStatus status = delegation.getStatus();
 			row.add("status", WorkflowUtils.createStatusImage(cp, status) + status.toString());
