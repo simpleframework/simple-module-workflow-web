@@ -36,14 +36,14 @@ public class WorkflowMonitorPage extends AbstractWorkflowFormPage {
 	protected void onForward(final PageParameter pp) {
 		super.onForward(pp);
 
-		addPageComponents(pp);
+		addTablePagerBean(pp);
 
 		final WorkitemBean workitem = WorkflowUtils.getWorkitemBean(pp);
 		pp.putParameter("processId", aService.getBean(workitem.getActivityId()).getProcessId())
 				.putParameter("tab", 1);
 	}
 
-	protected void addPageComponents(final PageParameter pp) {
+	protected TablePagerBean addTablePagerBean(final PageParameter pp) {
 		final TablePagerBean tablePager = (TablePagerBean) addTablePagerBean(pp,
 				"WorkflowMonitorPage_tbl").setPagerBarLayout(EPagerBarLayout.none)
 				.setContainerId("idWorkflowMonitorPage_tbl").setHandleClass(_ActivityTbl.class);
@@ -53,6 +53,7 @@ public class WorkflowMonitorPage extends AbstractWorkflowFormPage {
 				.addColumn(ActivityMgrPage.TC_CREATEDATE())
 				.addColumn(ActivityMgrPage.TC_COMPLETEDATE()).addColumn(ActivityMgrPage.TC_STATUS())
 				.addColumn(TablePagerColumn.OPE().setWidth(90));
+		return tablePager;
 	}
 
 	@Override
@@ -70,11 +71,15 @@ public class WorkflowMonitorPage extends AbstractWorkflowFormPage {
 				new TabButton($m("WorkflowMonitorPage.1")).setHref(uFactory.getUrl(pp,
 						WorkflowGraphMonitorPage.class, workitem))).setVertical(true);
 		sb.append(tabs.toString(pp));
-		sb.append("</div>");
+		sb.append(" </div>");
 		sb.append(" <div class='tb'></div>");
-		sb.append(" <div id='idWorkflowMonitorPage_tbl'></div>");
+		sb.append(toTabHTML(pp));
 		sb.append("</div>");
 		return sb.toString();
+	}
+
+	protected String toTabHTML(final PageParameter pp) {
+		return "<div id='idWorkflowMonitorPage_tbl'></div>";
 	}
 
 	@Override
