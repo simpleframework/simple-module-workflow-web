@@ -1,5 +1,7 @@
 package net.simpleframework.workflow.web.page.t1;
 
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import net.simpleframework.ado.query.IDataQuery;
@@ -40,16 +42,31 @@ public class WorkflowGraphMonitorPage extends WorkflowMonitorPage {
 
 	@Override
 	protected TablePagerBean addTablePagerBean(final PageParameter pp) {
-		return (TablePagerBean) super.addTablePagerBean(pp).setHandleClass(_ActivityTbl2.class);
+		pp.putParameter(G, "tasknode");
+		final TablePagerBean tablePager = (TablePagerBean) super.addTablePagerBean(pp)
+				.setShowFilterBar(false).setHandleClass(_ActivityTbl2.class);
+		tablePager.getColumns().remove("tasknode");
+		return tablePager;
 	}
 
 	@Override
 	protected String toTabHTML(final PageParameter pp) {
 		final StringBuilder sb = new StringBuilder();
 		final WorkitemBean workitem = WorkflowUtils.getWorkitemBean(pp);
-		final mxGraph graph = GraphUtils.createGraph(pService.getProcessDocument(wService
-				.getProcessBean(workitem)));
-
+		final ProcessBean process = wService.getProcessBean(workitem);
+		final mxGraph graph = GraphUtils.createGraph(pService.getProcessDocument(process));
+		final List<ActivityBean> list = aService.getActivities(process);
+		final Map<String, Boolean> state = new HashMap<String, Boolean>();
+		for (final ActivityBean activity : list) {
+			final String tasknodeId = activity.getTasknodeId();
+			if (state.get(tasknodeId) == null) {
+				state.put(tasknodeId, true);
+			}
+			if (!aService.isFinalStatus(activity)) {
+				state.put(tasknodeId, false);
+				break;
+			}
+		}
 		final mxSvgCanvas canvas = (mxSvgCanvas) mxCellRenderer.drawCells(graph, null, 1, null,
 				new CanvasFactory() {
 					@Override
@@ -62,6 +79,27 @@ public class WorkflowGraphMonitorPage extends WorkflowMonitorPage {
 								final String taskId = (String) style.get("taskid");
 								if (StringUtils.hasText(taskId)) {
 									ele.setAttribute("taskid", taskId);
+								}
+								return ele;
+							}
+
+							@Override
+							public Object drawText(final String text, final int x, final int y,
+									final int w, final int h, final Map<String, Object> style) {
+								final Element ele = (Element) super.drawText(text, x, y, w, h, style);
+								if (ele != null) {
+									final String taskId = (String) style.get("taskid");
+									Boolean sfinal;
+									if (StringUtils.hasText(taskId) && (sfinal = state.get(taskId)) != null) {
+										if (sfinal) {
+											ele.setAttribute("fill", "#c00");
+										} else {
+											ele.setAttribute("fill", "green");
+											ele.setAttribute("font-weight", "bold");
+										}
+									} else {
+										ele.setAttribute("fill", "#777");
+									}
 								}
 								return ele;
 							}
@@ -87,7 +125,7 @@ public class WorkflowGraphMonitorPage extends WorkflowMonitorPage {
 
 		@Override
 		public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
-			final ProcessBean process = pService.getBean(cp.getParameter("processId"));
+			final ProcessBean process = getProcessBean(cp);
 			if (process != null) {
 				cp.addFormParameter("processId", process.getId());
 			}

@@ -130,6 +130,15 @@ public class ActivityMgrPage extends AbstractWorkflowMgrPage {
 		}
 
 		@Override
+		public Object getGroupValue(final ComponentParameter cp, final Object bean,
+				final String groupColumn) {
+			if ("tasknode".equals(groupColumn)) {
+				return aService.getTaskNode((ActivityBean) bean);
+			}
+			return super.getGroupValue(cp, bean, groupColumn);
+		}
+
+		@Override
 		protected Map<String, Object> getRowData(final ComponentParameter cp, final Object dataObject) {
 			final ActivityBean activity = (ActivityBean) dataObject;
 			final KVMap row = new KVMap();

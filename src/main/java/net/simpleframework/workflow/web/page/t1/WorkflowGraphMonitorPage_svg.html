@@ -29,8 +29,18 @@
   $ready(function() {
     Prototype.Selector.select(".WorkflowGraphMonitorPage image").each(
         function(img) {
+          Element.observe(img, "mouseenter", function(e) {
+            var href = img.getAttribute("xlink:href");
+            img.setAttribute("xlink:href", href.substring(0, href.lastIndexOf('.')) + "_active.png");
+            img.onmouseleave = function(e) {
+             	img.setAttribute("xlink:href", href);
+              img.onmouseleave = null;
+            };
+          });
+
           Element.observe(img, "click", function(e) {
-            $Actions['WorkflowMonitorPage_tbl']('taskid=' + img.getAttribute("taskid"));
+            $Actions['WorkflowMonitorPage_tbl']('taskid='
+                + img.getAttribute("taskid"));
           });
         });
   });

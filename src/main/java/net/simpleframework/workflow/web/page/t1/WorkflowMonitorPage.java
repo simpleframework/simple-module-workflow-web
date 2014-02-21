@@ -7,6 +7,8 @@ import java.util.Map;
 
 import net.simpleframework.mvc.PageMapping;
 import net.simpleframework.mvc.PageParameter;
+import net.simpleframework.mvc.common.element.ElementList;
+import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.common.element.TabButton;
 import net.simpleframework.mvc.common.element.TabButtons;
 import net.simpleframework.mvc.component.ComponentParameter;
@@ -17,6 +19,7 @@ import net.simpleframework.mvc.component.ui.pager.EPagerBarLayout;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
 import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
 import net.simpleframework.workflow.engine.ActivityBean;
+import net.simpleframework.workflow.engine.ProcessBean;
 import net.simpleframework.workflow.engine.WorkitemBean;
 import net.simpleframework.workflow.web.IWorkflowWebContext;
 import net.simpleframework.workflow.web.WorkflowUrlsFactory;
@@ -57,6 +60,16 @@ public class WorkflowMonitorPage extends AbstractWorkflowFormPage {
 	}
 
 	@Override
+	public ElementList getLeftElements(final PageParameter pp) {
+		final ElementList el = super.getLeftElements(pp);
+		final ProcessBean process = wService.getProcessBean(WorkflowUtils.getWorkitemBean(pp));
+		if (process != null) {
+			el.append(SpanElement.SPACE15, SpanElement.strongText(process));
+		}
+		return el;
+	}
+
+	@Override
 	protected String toHtml(final PageParameter pp, final Map<String, Object> variables,
 			final String currentVariable) throws IOException {
 		final StringBuilder sb = new StringBuilder();
@@ -72,8 +85,9 @@ public class WorkflowMonitorPage extends AbstractWorkflowFormPage {
 						WorkflowGraphMonitorPage.class, workitem))).setVertical(true);
 		sb.append(tabs.toString(pp));
 		sb.append(" </div>");
-		sb.append(" <div class='tb'></div>");
-		sb.append(toTabHTML(pp));
+		sb.append(" <div class='tb'>");
+		// sb.append();
+		sb.append(" </div>").append(toTabHTML(pp));
 		sb.append("</div>");
 		return sb.toString();
 	}
@@ -99,5 +113,9 @@ public class WorkflowMonitorPage extends AbstractWorkflowFormPage {
 				final MenuItem menuItem) {
 			return null;
 		}
+	}
+
+	protected static ProcessBean getProcessBean(final PageParameter pp) {
+		return getCacheBean(pp, pService, "processId");
 	}
 }
