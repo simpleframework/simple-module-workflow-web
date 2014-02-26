@@ -61,9 +61,9 @@ public class ActivityMgrPage extends AbstractWorkflowMgrPage {
 		final TablePagerBean tablePager = (TablePagerBean) addTablePagerBean(pp,
 				"ActivityMgrPage_tbl").setPagerBarLayout(EPagerBarLayout.none)
 				.setContainerId("idActivityMgrPage_tbl").setHandleClass(ActivityTbl.class);
-		tablePager.addColumn(TC_TASKNODE()).addColumn(TC_PREVIOUS()).addColumn(TC_PARTICIPANTS())
+		tablePager.addColumn(TC_TASKNODE()).addColumn(TC_STATUS()).addColumn(TC_PARTICIPANTS())
 				.addColumn(TC_PARTICIPANTS2()).addColumn(TC_CREATEDATE()).addColumn(TC_COMPLETEDATE())
-				.addColumn(TC_STATUS()).addColumn(TablePagerColumn.OPE().setWidth(90));
+				.addColumn(TC_PREVIOUS()).addColumn(TablePagerColumn.OPE().setWidth(90));
 
 		// 放弃
 		addAjaxRequest(pp, "ActivityMgrPage_abort_page", ActivityAbortPage.class);
@@ -145,7 +145,9 @@ public class ActivityMgrPage extends AbstractWorkflowMgrPage {
 			row.add("tasknode", toTasknode(activity));
 			final ActivityBean pre = aService.getPreActivity(activity);
 			if (pre != null) {
-				row.add("previous", toTasknode(pre));
+				final EActivityStatus pstatus = pre.getStatus();
+				row.add("previous", WorkflowUtils.createStatusImage(cp, pstatus)
+						+ toTasknode(pre).toString());
 			}
 			row.add("participants", getParticipants(activity, false));
 			row.add("participants2", getParticipants(activity, true));
@@ -242,8 +244,8 @@ public class ActivityMgrPage extends AbstractWorkflowMgrPage {
 	}
 
 	static TablePagerColumn TC_PREVIOUS() {
-		return new TablePagerColumn("previous", $m("ActivityMgrPage.1")).setSort(false).setFilter(
-				false);
+		return new TablePagerColumn("previous", $m("ActivityMgrPage.1")).setSort(false)
+				.setFilter(false).setTextAlign(ETextAlign.left);
 	}
 
 	static TablePagerColumn TC_PARTICIPANTS() {

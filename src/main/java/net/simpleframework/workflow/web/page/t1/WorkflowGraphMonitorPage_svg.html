@@ -1,46 +1,55 @@
-
-<div class="WorkflowGraphMonitorPage">
-  <div>${svg}</div>
+<div class="tb">
+  <div class="re">
+    #(WorkflowGraphMonitorPage.0)<span style="color: #c00;">#(WorkflowGraphMonitorPage.1)</span>, <span
+      style="color: green; font-weight: bold;">#(WorkflowGraphMonitorPage.2)</span>, <span
+      style="color: #777;">#(WorkflowGraphMonitorPage.3)</span>
+  </div>
+  <div class="clearfix"></div>
+</div>
+<div class="graph">
+  <div>${graph}</div>
 </div>
 <div id="idWorkflowMonitorPage_tbl"></div>
-<style type="text/css">
-.WorkflowGraphMonitorPage {
-  padding: 12px 8px;
-  border: 1px solid #ccc;
-  background-color: #fff;
-  overflow-x: auto;
-  margin-bottom: -1px;
-}
-
-.WorkflowGraphMonitorPage->div {
-  display: table;
-}
-
-.WorkflowGraphMonitorPage image {
-  cursor: pointer;
-}
-
-.WorkflowGraphMonitorPage text:hover {
-  cursor: default;
-  fill: #f00;
-}
-</style>
 <script type="text/javascript">
   $ready(function() {
-    Prototype.Selector.select(".WorkflowGraphMonitorPage image").each(
-        function(img) {
-          Element.observe(img, "mouseenter", function(e) {
-            var href = img.getAttribute("xlink:href");
-            img.setAttribute("xlink:href", href.substring(0, href.lastIndexOf('.')) + "_active.png");
-            img.onmouseleave = function(e) {
-             	img.setAttribute("xlink:href", href);
-              img.onmouseleave = null;
-            };
-          });
+    var click = function(o) {
+      $Actions['WorkflowMonitorPage_tbl']('taskid=' + o.getAttribute("taskid"));
+    };
 
+    Prototype.Selector.select(".WorkflowMonitorPage .graph .tasknode").each(
+        function(img) {
+          var svg = Element.up(img, "svg");
+          Element.observe(img, "mouseenter", function(e) {
+            var href = svg ? img.getAttribute("xlink:href") : img.src;
+            var _href = href.substring(0, href.lastIndexOf('.'))
+                + "_active.png";
+            if (svg) {
+              img.setAttribute("xlink:href", _href);
+              img.setAttribute("_href", href);
+            } else {
+              img.src = _href;
+              img._href = href;
+            }
+          });
+          Element.observe(img, "mouseleave", function(e) {
+            var href = svg ? img.getAttribute("_href") : img._href;
+            if (svg) {
+              img.removeAttribute("_href");
+              img.setAttribute("xlink:href", href);
+            } else {
+              img._href = 'undefined';
+              img.src = href;
+            }
+          });
           Element.observe(img, "click", function(e) {
-            $Actions['WorkflowMonitorPage_tbl']('taskid='
-                + img.getAttribute("taskid"));
+            click(img);
+          });
+        });
+
+    Prototype.Selector.select(".WorkflowMonitorPage .graph .tasktext").each(
+        function(txt) {
+          Element.observe(txt, "click", function(e) {
+            click(txt);
           });
         });
   });

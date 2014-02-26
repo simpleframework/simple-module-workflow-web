@@ -64,6 +64,22 @@
   position: relative;
 }
 
+.WorkflowMonitorPage .ltabs {
+  left: -29px;
+  width: 29px;
+  text-align: right;
+  position: absolute;
+}
+
+.WorkflowMonitorPage .ltabs .simple_tabs.vertical {
+  margin-top: 10px;
+}
+
+.WorkflowMonitorPage .ltabs .simple_tabs a.active {
+  background-color: #fff;
+  border-right-color: #fff;
+}
+
 .WorkflowMonitorPage .tb {
   background-color: #f9f9f9;
   padding: 10px;
@@ -71,18 +87,27 @@
   margin-bottom: -1px;
 }
 
-.WorkflowMonitorPage .tabs {
-  left: -29px;
-  width: 29px;
-  text-align: right;
-  position: absolute;
+.WorkflowMonitorPage .tb .re {
+  float: right;
 }
 
-.WorkflowMonitorPage .tabs .simple_tabs.vertical {
-  margin-top: 10px;
-}
-
-.WorkflowMonitorPage .tabs .simple_tabs a.active {
+.WorkflowMonitorPage .graph {
+  padding: 12px 8px;
+  border: 1px solid #ccc;
   background-color: #fff;
-  border-right-color: #fff;
+  overflow-x: auto;
+  margin-bottom: -1px;
+}
+
+.WorkflowMonitorPage .graph->div {
+  display: table;
+}
+
+.WorkflowMonitorPage .graph .tasknode,
+.WorkflowMonitorPage .graph .tasktext {
+  cursor: pointer;
+}
+
+v\:shape,v\:image,v\:stroke,v\:fill {
+  behavior: url(#default#VML);
 }
