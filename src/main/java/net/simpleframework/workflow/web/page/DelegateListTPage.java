@@ -80,7 +80,7 @@ public class DelegateListTPage extends AbstractWorkitemsTPage implements IWorkfl
 			final WorkflowUrlsFactory uFactory = ((IWorkflowWebContext) context).getUrlsFactory();
 			final KVMap row = new KVMap().add(
 					"title",
-					new LinkElement(MyWorklistTbl.getTopic(aService.getProcessBean(wService
+					new LinkElement(MyWorklistTbl.getTitle(aService.getProcessBean(wService
 							.getActivity(workitem)))).setOnclick("$Actions.loc('"
 							+ uFactory.getUrl(cp, WorkflowFormPage.class, workitem, "source=delegation")
 							+ "');"));

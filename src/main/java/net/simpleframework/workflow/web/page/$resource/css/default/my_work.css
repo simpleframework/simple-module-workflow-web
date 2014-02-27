@@ -85,10 +85,15 @@
   padding: 10px;
   border: 1px solid #ccc;
   margin-bottom: -1px;
+  text-align: left;
 }
 
 .WorkflowMonitorPage .tb .re {
   float: right;
+}
+
+.WorkflowMonitorPage .tb .le {
+  float: left;
 }
 
 .WorkflowMonitorPage .graph {

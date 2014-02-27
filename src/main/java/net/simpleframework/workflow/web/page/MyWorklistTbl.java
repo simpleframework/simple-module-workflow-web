@@ -112,7 +112,7 @@ public class MyWorklistTbl extends GroupDbTablePagerHandler implements IWorkflow
 
 		final WorkflowUrlsFactory uFactory = ((IWorkflowWebContext) context).getUrlsFactory();
 
-		sb.append(new LinkElement(getTopic(aService.getProcessBean(activity))).setStrong(
+		sb.append(new LinkElement(getTitle(aService.getProcessBean(activity))).setStrong(
 				!workitem.isReadMark()).setOnclick(
 				"$Actions.loc('" + uFactory.getUrl(cp, WorkflowFormPage.class, workitem) + "');"));
 		row.add("title", sb.toString()).add("userFrom", getUserFrom(activity))
@@ -208,7 +208,7 @@ public class MyWorklistTbl extends GroupDbTablePagerHandler implements IWorkflow
 		return items;
 	}
 
-	public static String getTopic(final ProcessBean process) {
+	public static String getTitle(final ProcessBean process) {
 		return StringUtils.text(Convert.toString(process), $m("MyWorklistTbl.0"));
 	}
 }

@@ -26,6 +26,7 @@ import net.simpleframework.workflow.schema.AbstractTaskNode;
 import net.simpleframework.workflow.schema.UserNode;
 import net.simpleframework.workflow.web.IWorkflowWebContext;
 import net.simpleframework.workflow.web.WorkflowUrlsFactory;
+import net.simpleframework.workflow.web.page.MyWorklistTbl;
 import net.simpleframework.workflow.web.page.WorkflowUtils;
 import net.simpleframework.workflow.web.page.t1.ActivityMgrPage.ActivityTbl;
 
@@ -70,10 +71,11 @@ public class WorkflowMonitorPage extends AbstractWorkflowFormPage {
 	@Override
 	public ElementList getLeftElements(final PageParameter pp) {
 		final ElementList el = super.getLeftElements(pp);
-		final ProcessBean process = wService.getProcessBean(WorkflowUtils.getWorkitemBean(pp));
-		if (process != null) {
-			el.append(SpanElement.SPACE15, SpanElement.strongText(process));
-		}
+		final ProcessBean process = getProcessBean(pp);
+		el.append(
+				SpanElement.SPACE15,
+				SpanElement.strongText(MyWorklistTbl.getTitle(process) + " [" + process.getStatus()
+						+ "]"));
 		return el;
 	}
 
@@ -99,7 +101,7 @@ public class WorkflowMonitorPage extends AbstractWorkflowFormPage {
 
 	protected String toMonitorHTML(final PageParameter pp) {
 		final StringBuilder sb = new StringBuilder();
-		sb.append("<div class='tb'></div>");
+		sb.append("<div class='tb'>").append("</div>");
 		sb.append("<div id='idWorkflowMonitorPage_tbl'></div>");
 		return sb.toString();
 	}

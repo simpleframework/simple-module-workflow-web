@@ -141,7 +141,7 @@ public class ProcessMgrPage extends AbstractWorkflowMgrPage {
 			final EProcessStatus status = process.getStatus();
 			final KVMap row = new KVMap()
 					.add("title",
-							new LinkElement(MyWorklistTbl.getTopic(process)).setHref(url(
+							new LinkElement(MyWorklistTbl.getTitle(process)).setHref(url(
 									ActivityMgrPage.class, "processId=" + id)))
 					.add("userId", permission.getUser(process.getUserId()))
 					.add("createDate", process.getCreateDate())

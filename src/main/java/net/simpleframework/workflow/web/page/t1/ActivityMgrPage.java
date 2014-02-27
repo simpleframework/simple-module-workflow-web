@@ -82,7 +82,7 @@ public class ActivityMgrPage extends AbstractWorkflowMgrPage {
 		final ProcessBean process = getProcessBean(pp);
 		return ElementList.of(new LinkButton($m("ActivityMgrPage.7")).setIconClass(Icon.share_alt)
 				.setHref(url(ProcessMgrPage.class, "modelId=" + process.getModelId())),
-				SpanElement.SPACE15, SpanElement.strongText(MyWorklistTbl.getTopic(process)));
+				SpanElement.SPACE15, SpanElement.strongText(MyWorklistTbl.getTitle(process)));
 	}
 
 	@Override
