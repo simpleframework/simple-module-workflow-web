@@ -68,7 +68,7 @@ public class SubProcessRemotePage extends AbstractWorkflowRemotePage {
 			public void doAction(final JsonForward json) {
 				final ActivityBean nActivity = aService.getBean(pp
 						.getLocaleParameter(IProcessRemote.SUB_ACTIVITYID));
-				aService.subComplete(nActivity, new IMappingVal() {
+				aService.doSubComplete(nActivity, new IMappingVal() {
 					@Override
 					public Object val(final String mapping) {
 						return pp.getLocaleParameter(mapping);
