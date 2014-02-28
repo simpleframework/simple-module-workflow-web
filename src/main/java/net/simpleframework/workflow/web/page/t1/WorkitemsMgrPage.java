@@ -71,7 +71,7 @@ public class WorkitemsMgrPage extends OneTableTemplatePage implements IWorkflowC
 
 	@Override
 	public String getTitle(final PageParameter pp) {
-		return $m("WorkitemsMgrPage.5") + " - " + aService.getTaskNode(getActivityBean(pp));
+		return $m("WorkitemsMgrPage.5") + " - " + getActivityBean(pp);
 	}
 
 	@Override
@@ -92,8 +92,7 @@ public class WorkitemsMgrPage extends OneTableTemplatePage implements IWorkflowC
 		protected Map<String, Object> getRowData(final ComponentParameter cp, final Object dataObject) {
 			final WorkitemBean workitem = (WorkitemBean) dataObject;
 			final KVMap row = new KVMap();
-			row.add("userId", permission.getUser(workitem.getUserId()))
-					.add("userId2", permission.getUser(workitem.getUserId2()))
+			row.add("userId", workitem.getUserText()).add("userId2", workitem.getUserText2())
 					.add("createDate", workitem.getCreateDate())
 					.add("completeDate", workitem.getCompleteDate());
 			final EWorkitemStatus status = workitem.getStatus();

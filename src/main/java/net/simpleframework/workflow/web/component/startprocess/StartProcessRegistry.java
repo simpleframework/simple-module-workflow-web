@@ -37,7 +37,7 @@ public class StartProcessRegistry extends AbstractComponentRegistry implements
 		final String componentName = nCP.getComponentName();
 
 		// 启动流程
-		pp.addComponentBean(componentName + "_startProcess", AjaxRequestBean.class).setHandleClass(
+		pp.addComponentBean(componentName + "_startProcess", AjaxRequestBean.class).setHandlerClass(
 				StartProcessAction.class);
 
 		// 路由选择

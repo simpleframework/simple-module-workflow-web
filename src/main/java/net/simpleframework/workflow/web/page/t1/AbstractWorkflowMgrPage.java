@@ -65,7 +65,7 @@ public abstract class AbstractWorkflowMgrPage extends T1ResizedTemplatePage impl
 	}
 
 	protected AjaxRequestBean addDeleteAjaxRequest(final PageParameter pp) {
-		return addAjaxRequest(pp, "AbstractWorkflowMgrPage_del").setHandleMethod("doDelete")
+		return addAjaxRequest(pp, "AbstractWorkflowMgrPage_del").setHandlerMethod("doDelete")
 				.setConfirmMessage($m("Confirm.Delete"));
 	}
 
@@ -99,7 +99,7 @@ public abstract class AbstractWorkflowMgrPage extends T1ResizedTemplatePage impl
 			super.onForward(pp);
 
 			addAjaxRequest(pp, "AbstractAbortPage_ok").setConfirmMessage($m("Comfirm.Save"))
-					.setHandleMethod("doOk").setSelector(".AbstractAbortPage");
+					.setHandlerMethod("doOk").setSelector(".AbstractAbortPage");
 		}
 
 		protected abstract Enum<?>[] getEnumConstants();

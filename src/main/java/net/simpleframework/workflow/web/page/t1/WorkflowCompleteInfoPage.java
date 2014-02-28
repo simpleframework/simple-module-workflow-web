@@ -36,7 +36,7 @@ public class WorkflowCompleteInfoPage extends AbstractWorkflowFormPage {
 			sb.append("<table>");
 			for (final ActivityBean next : nextActivities) {
 				sb.append("<tr>");
-				sb.append("<td class='task'>").append(aService.getTaskNode(next)).append("</td>");
+				sb.append("<td class='task'>").append(next).append("</td>");
 				sb.append("<td>");
 				int i = 0;
 				for (final WorkitemBean workitem2 : wService.getWorkitemList(next,
@@ -44,7 +44,7 @@ public class WorkflowCompleteInfoPage extends AbstractWorkflowFormPage {
 					if (i++ > 0) {
 						sb.append(", ");
 					}
-					sb.append(permission.getUser(workitem2.getUserId()));
+					sb.append(workitem2.getUserText());
 				}
 				sb.append("</td></tr>");
 			}

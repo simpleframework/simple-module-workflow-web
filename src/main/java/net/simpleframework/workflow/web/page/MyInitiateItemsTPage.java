@@ -48,7 +48,7 @@ public class MyInitiateItemsTPage extends AbstractItemsTPage {
 		// 发起流程
 		pp.addComponentBean("MyInitiateItemsTPage_startProcess", StartProcessBean.class)
 				.setConfirmMessage($m("MyInitiateItemsTPage.0"))
-				.setHandleClass(_StartProcessHandler.class);
+				.setHandlerClass(_StartProcessHandler.class);
 	}
 
 	public static class MyInitiateItemsTbl extends AbstractDbTablePagerHandler {

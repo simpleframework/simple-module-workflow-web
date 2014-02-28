@@ -23,7 +23,6 @@ import net.simpleframework.workflow.engine.ActivityBean;
 import net.simpleframework.workflow.engine.ProcessBean;
 import net.simpleframework.workflow.engine.WorkitemBean;
 import net.simpleframework.workflow.schema.AbstractTaskNode;
-import net.simpleframework.workflow.schema.UserNode;
 import net.simpleframework.workflow.web.IWorkflowWebContext;
 import net.simpleframework.workflow.web.WorkflowUrlsFactory;
 import net.simpleframework.workflow.web.page.MyWorklistTbl;
@@ -58,7 +57,7 @@ public class WorkflowMonitorPage extends AbstractWorkflowFormPage {
 	protected TablePagerBean addTablePagerBean(final PageParameter pp) {
 		final TablePagerBean tablePager = (TablePagerBean) addTablePagerBean(pp,
 				"WorkflowMonitorPage_tbl").setPagerBarLayout(EPagerBarLayout.none)
-				.setContainerId("idWorkflowMonitorPage_tbl").setHandleClass(_ActivityTbl.class);
+				.setContainerId("idWorkflowMonitorPage_tbl").setHandlerClass(_ActivityTbl.class);
 		tablePager.addColumn(ActivityMgrPage.TC_TASKNODE()).addColumn(ActivityMgrPage.TC_STATUS())
 				.addColumn(ActivityMgrPage.TC_PARTICIPANTS())
 				.addColumn(ActivityMgrPage.TC_PARTICIPANTS2())
@@ -115,13 +114,12 @@ public class WorkflowMonitorPage extends AbstractWorkflowFormPage {
 	public static class _ActivityTbl extends ActivityTbl {
 		@Override
 		protected Object toTasknode(final ActivityBean activity) {
-			final AbstractTaskNode tasknode = aService.getTaskNode(activity);
-			if (tasknode instanceof UserNode) {
-				return new LinkElement(tasknode)
+			if (activity.getTasknodeType() == AbstractTaskNode.TT_USER) {
+				return new LinkElement(activity)
 						.setOnclick("$Actions['WorkflowMonitorPage_workitems']('activityId="
 								+ activity.getId() + "');");
 			}
-			return tasknode;
+			return activity;
 		}
 
 		@Override

@@ -43,8 +43,8 @@ public class WorkitemCompleteBean extends AbstractComponentBean {
 	}
 
 	@Override
-	public String getHandleClass() {
-		return StringUtils.text(super.getHandleClass(),
-				DefaultWorkitemCompleteHandler.class.getName());
+	public String getHandlerClass() {
+		final String sClass = super.getHandlerClass();
+		return StringUtils.hasText(sClass) ? sClass : DefaultWorkitemCompleteHandler.class.getName();
 	}
 }

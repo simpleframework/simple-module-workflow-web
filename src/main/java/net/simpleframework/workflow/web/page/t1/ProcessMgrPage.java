@@ -58,7 +58,7 @@ public class ProcessMgrPage extends AbstractWorkflowMgrPage {
 
 		final TablePagerBean tablePager = (TablePagerBean) addComponentBean(pp, "ProcessMgrPage_tbl",
 				TablePagerBean.class).setPagerBarLayout(EPagerBarLayout.bottom)
-				.setContainerId("idProcessMgrPage_tbl").setHandleClass(ProcessTbl.class);
+				.setContainerId("idProcessMgrPage_tbl").setHandlerClass(ProcessTbl.class);
 		tablePager
 				.addColumn(
 						new TablePagerColumn("title", $m("ProcessMgrPage.0"))

@@ -61,7 +61,7 @@ public class ProcessModelMgrPage extends AbstractWorkflowMgrPage {
 		final TablePagerBean tablePager = (TablePagerBean) addComponentBean(pp,
 				"ProcessModelMgrPage_tbl", TablePagerBean.class)
 				.setPagerBarLayout(EPagerBarLayout.bottom).setContainerId("idProcessModelMgrPage_tbl")
-				.setHandleClass(ProcessModelTbl.class);
+				.setHandlerClass(ProcessModelTbl.class);
 		tablePager
 				.addColumn(
 						new TablePagerColumn("modelText", $m("ProcessModelMgrPage.0")).setTextAlign(
@@ -84,7 +84,7 @@ public class ProcessModelMgrPage extends AbstractWorkflowMgrPage {
 
 		// 上传模型文件
 		addComponentBean(pp, "ProcessModelMgrPage_upload_page", AttachmentBean.class)
-				.setShowSubmit(true).setShowEdit(false).setHandleClass(ModelUploadAction.class);
+				.setShowSubmit(true).setShowEdit(false).setHandlerClass(ModelUploadAction.class);
 		addComponentBean(pp, "ProcessModelMgrPage_upload", WindowBean.class)
 				.setContentRef("ProcessModelMgrPage_upload_page").setTitle($m("ProcessModelMgrPage.7"))
 				.setHeight(480).setWidth(400);

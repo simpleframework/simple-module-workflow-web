@@ -2,9 +2,10 @@ package net.simpleframework.workflow.web.page;
 
 import static net.simpleframework.common.I18n.$m;
 
-import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import net.simpleframework.ado.query.IDataQuery;
@@ -14,6 +15,7 @@ import net.simpleframework.common.ID;
 import net.simpleframework.common.StringUtils;
 import net.simpleframework.common.coll.KVMap;
 import net.simpleframework.mvc.common.element.ButtonElement;
+import net.simpleframework.mvc.common.element.ImageElement;
 import net.simpleframework.mvc.common.element.LabelElement;
 import net.simpleframework.mvc.common.element.LinkElement;
 import net.simpleframework.mvc.common.element.SpanElement;
@@ -31,7 +33,6 @@ import net.simpleframework.workflow.engine.IWorkflowContextAware;
 import net.simpleframework.workflow.engine.ProcessBean;
 import net.simpleframework.workflow.engine.ProcessModelBean;
 import net.simpleframework.workflow.engine.WorkitemBean;
-import net.simpleframework.workflow.schema.AbstractTaskNode;
 import net.simpleframework.workflow.web.IWorkflowWebContext;
 import net.simpleframework.workflow.web.WorkflowUrlsFactory;
 import net.simpleframework.workflow.web.page.t1.WorkflowFormPage;
@@ -71,7 +72,7 @@ public class MyWorklistTbl extends GroupDbTablePagerHandler implements IWorkflow
 			if (bModelname) {
 				return processModel;
 			} else {
-				return aService.getTaskNode(activity).setAttr("_processModel", processModel);
+				return activity.setAttr("_processModel", processModel);
 			}
 		}
 		return groupColumn;
@@ -79,14 +80,14 @@ public class MyWorklistTbl extends GroupDbTablePagerHandler implements IWorkflow
 
 	@Override
 	public GroupWrapper getGroupWrapper(final ComponentParameter cp, final Object groupVal) {
-		if (groupVal instanceof AbstractTaskNode) {
+		if (groupVal instanceof ActivityBean) {
 			return new GroupWrapper() {
 				@Override
 				public String toString() {
-					final AbstractTaskNode taskNode = (AbstractTaskNode) groupVal;
+					final ActivityBean activity = (ActivityBean) groupVal;
 					final StringBuilder sb = new StringBuilder();
-					sb.append(new LabelElement(taskNode));
-					sb.append(new SpanElement("(" + taskNode.getAttr("_processModel") + ")")
+					sb.append(new LabelElement(activity));
+					sb.append(new SpanElement("(" + activity.getAttr("_processModel") + ")")
 							.setStyle("font-weight: normal; margin-left: 5px; color: #999; font-size: 9pt;"));
 					sb.append(toCountHTML());
 					return sb.toString();
@@ -96,6 +97,11 @@ public class MyWorklistTbl extends GroupDbTablePagerHandler implements IWorkflow
 		return super.getGroupWrapper(cp, groupVal);
 	}
 
+	protected ImageElement createImageMark(final ComponentParameter cp, final String img) {
+		return new ImageElement(cp.getCssResourceHomePath(MyWorklistTbl.class) + "/images/" + img)
+				.setStyle("vertical-align: bottom;");
+	}
+
 	@Override
 	protected Map<String, Object> getRowData(final ComponentParameter cp, final Object dataObject) {
 		final WorkitemBean workitem = (WorkitemBean) dataObject;
@@ -103,11 +109,16 @@ public class MyWorklistTbl extends GroupDbTablePagerHandler implements IWorkflow
 
 		final ActivityBean activity = wService.getActivity(workitem);
 		final StringBuilder sb = new StringBuilder();
+		ImageElement img = null;
+		if (workitem.isReadMark()) {
+			img = createImageMark(cp, "unread.png");
+		}
+		if (img != null) {
+			row.add(TablePagerColumn.ICON, img);
+		}
 
 		if (!"taskname".equals(cp.getParameter(G))) {
-			sb.append("[")
-					.append(new SpanElement(aService.getTaskNode(activity)).setClassName("tasknode_txt"))
-					.append("] ");
+			sb.append("[").append(new SpanElement(activity).setClassName("tasknode_txt")).append("] ");
 		}
 
 		final WorkflowUrlsFactory uFactory = ((IWorkflowWebContext) context).getUrlsFactory();
@@ -136,22 +147,14 @@ public class MyWorklistTbl extends GroupDbTablePagerHandler implements IWorkflow
 		final String key = "to_" + activity.getId();
 		String userTo = userCache.get(key);
 		if (userTo == null) {
-			final StringBuilder sb = new StringBuilder();
-			final ArrayList<ID> ids = new ArrayList<ID>();
+			final Set<String> list = new LinkedHashSet<String>();
 			for (final ActivityBean nextActivity : aService.getNextActivities(activity)) {
 				for (final WorkitemBean workitem : wService.getWorkitemList(nextActivity)) {
-					final ID userId = workitem.getUserId();
-					if (!ids.contains(userId)) {
-						if (ids.size() > 0) {
-							sb.append(", ");
-						}
-						sb.append(permission.getUser(userId));
-						ids.add(userId);
-					}
+					list.add(workitem.getUserText());
 				}
 			}
-			if (sb.length() > 0) {
-				userCache.put(key, userTo = sb.toString());
+			if (list.size() > 0) {
+				userCache.put(key, userTo = StringUtils.join(list, ", "));
 			}
 		}
 		return userTo;
@@ -165,21 +168,13 @@ public class MyWorklistTbl extends GroupDbTablePagerHandler implements IWorkflow
 		final String key = "from_" + preActivity.getId();
 		String userFrom = userCache.get(key);
 		if (userFrom == null) {
-			final StringBuilder sb = new StringBuilder();
-			final ArrayList<ID> ids = new ArrayList<ID>();
+			final Set<String> list = new LinkedHashSet<String>();
 			for (final WorkitemBean workitem : wService.getWorkitemList(preActivity,
 					EWorkitemStatus.complete)) {
-				final ID userId = workitem.getUserId();
-				if (!ids.contains(userId)) {
-					if (ids.size() > 0) {
-						sb.append(", ");
-					}
-					sb.append(permission.getUser(userId));
-					ids.add(userId);
-				}
+				list.add(workitem.getUserText());
 			}
-			if (sb.length() > 0) {
-				userCache.put(key, userFrom = sb.toString());
+			if (list.size() > 0) {
+				userCache.put(key, userFrom = StringUtils.join(list, ", "));
 			}
 		}
 		return userFrom;

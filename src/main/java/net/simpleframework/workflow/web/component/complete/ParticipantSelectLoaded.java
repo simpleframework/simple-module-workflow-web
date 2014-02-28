@@ -27,7 +27,7 @@ public class ParticipantSelectLoaded extends DefaultPageHandler {
 	public void onBeforeComponentRender(final PageParameter pp) {
 		super.onBeforeComponentRender(pp);
 
-		pp.addComponentBean("ParticipantSelectLoaded_ok", AjaxRequestBean.class).setHandleClass(
+		pp.addComponentBean("ParticipantSelectLoaded_ok", AjaxRequestBean.class).setHandlerClass(
 				ParticipantSelectAction.class);
 	}
 

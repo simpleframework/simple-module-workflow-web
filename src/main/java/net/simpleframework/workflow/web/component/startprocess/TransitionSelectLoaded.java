@@ -21,7 +21,7 @@ public class TransitionSelectLoaded extends DefaultPageHandler {
 	public void onBeforeComponentRender(final PageParameter pp) {
 		super.onBeforeComponentRender(pp);
 
-		pp.addComponentBean("TransitionSelectLoaded_ok", AjaxRequestBean.class).setHandleClass(
+		pp.addComponentBean("TransitionSelectLoaded_ok", AjaxRequestBean.class).setHandlerClass(
 				TransitionSelectAction.class);
 	}
 

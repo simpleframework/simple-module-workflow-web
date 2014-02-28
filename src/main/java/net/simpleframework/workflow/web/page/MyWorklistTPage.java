@@ -47,15 +47,15 @@ public class MyWorklistTPage extends AbstractWorkitemsTPage {
 		tablePager.addColumn(TablePagerColumn.OPE().setWidth(70));
 
 		// readMark
-		addAjaxRequest(pp, "MyWorklistTPage_readMark").setHandleMethod("doReadMark");
+		addAjaxRequest(pp, "MyWorklistTPage_readMark").setHandlerMethod("doReadMark");
 		// retake
-		addAjaxRequest(pp, "MyWorklistTPage_retake").setHandleMethod("doRetake").setConfirmMessage(
+		addAjaxRequest(pp, "MyWorklistTPage_retake").setHandlerMethod("doRetake").setConfirmMessage(
 				$m("MyWorklistTPage.4"));
 		// fallback
-		addAjaxRequest(pp, "MyWorklistTPage_fallback").setHandleMethod("doFallback")
+		addAjaxRequest(pp, "MyWorklistTPage_fallback").setHandlerMethod("doFallback")
 				.setConfirmMessage($m("MyWorklistTPage.5"));
 		// delete
-		addAjaxRequest(pp, "MyWorklistTPage_delete").setHandleMethod("doDelete").setConfirmMessage(
+		addAjaxRequest(pp, "MyWorklistTPage_delete").setHandlerMethod("doDelete").setConfirmMessage(
 				$m("Confirm.Delete"));
 
 		// 委托

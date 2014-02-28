@@ -39,7 +39,6 @@ import net.simpleframework.workflow.engine.EActivityStatus;
 import net.simpleframework.workflow.engine.EProcessStatus;
 import net.simpleframework.workflow.engine.ProcessBean;
 import net.simpleframework.workflow.schema.AbstractTaskNode;
-import net.simpleframework.workflow.schema.UserNode;
 import net.simpleframework.workflow.web.WorkflowLogRef.ActivityUpdateLogPage;
 import net.simpleframework.workflow.web.page.MyWorklistTbl;
 import net.simpleframework.workflow.web.page.WorkflowUtils;
@@ -60,7 +59,7 @@ public class ActivityMgrPage extends AbstractWorkflowMgrPage {
 		// 表格
 		final TablePagerBean tablePager = (TablePagerBean) addTablePagerBean(pp,
 				"ActivityMgrPage_tbl").setPagerBarLayout(EPagerBarLayout.none)
-				.setContainerId("idActivityMgrPage_tbl").setHandleClass(ActivityTbl.class);
+				.setContainerId("idActivityMgrPage_tbl").setHandlerClass(ActivityTbl.class);
 		tablePager.addColumn(TC_TASKNODE()).addColumn(TC_STATUS()).addColumn(TC_PARTICIPANTS())
 				.addColumn(TC_PARTICIPANTS2()).addColumn(TC_CREATEDATE()).addColumn(TC_COMPLETEDATE())
 				.addColumn(TC_PREVIOUS()).addColumn(TablePagerColumn.OPE().setWidth(90));
@@ -120,22 +119,12 @@ public class ActivityMgrPage extends AbstractWorkflowMgrPage {
 		}
 
 		protected Object toTasknode(final ActivityBean activity) {
-			final AbstractTaskNode tasknode = aService.getTaskNode(activity);
-			if (tasknode instanceof UserNode) {
-				return new LinkElement(tasknode)
+			if (activity.getTasknodeType() == AbstractTaskNode.TT_USER) {
+				return new LinkElement(activity)
 						.setOnclick("$Actions['ActivityMgrPage_workitems']('activityId="
 								+ activity.getId() + "');");
 			}
-			return tasknode;
-		}
-
-		@Override
-		public Object getGroupValue(final ComponentParameter cp, final Object bean,
-				final String groupColumn) {
-			if ("tasknode".equals(groupColumn)) {
-				return aService.getTaskNode((ActivityBean) bean);
-			}
-			return super.getGroupValue(cp, bean, groupColumn);
+			return activity;
 		}
 
 		@Override
@@ -168,16 +157,9 @@ public class ActivityMgrPage extends AbstractWorkflowMgrPage {
 		}
 
 		private String getParticipants(final ActivityBean activity, final boolean b) {
-			final StringBuilder sb = new StringBuilder();
-			int i = 0;
-			for (final Object user : (b ? aService.getParticipants2(activity) : aService
-					.getParticipants(activity, true))) {
-				if (i++ > 0) {
-					sb.append(", ");
-				}
-				sb.append(new SpanElement(user).setClassName("participants2"));
-			}
-			return sb.toString();
+			return StringUtils.join(
+					(b ? aService.getParticipants2(activity) : aService.getParticipants(activity, true))
+							.values(), ", ");
 		}
 
 		@Override

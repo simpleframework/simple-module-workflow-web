@@ -3,6 +3,6 @@
 
   <components>
     <ajaxRequest name="InitiatorSelect_ok"
-      handleClass="net.simpleframework.workflow.web.component.startprocess.StartProcessAction"></ajaxRequest>
+      handlerClass="net.simpleframework.workflow.web.component.startprocess.StartProcessAction"></ajaxRequest>
   </components>
 </page>

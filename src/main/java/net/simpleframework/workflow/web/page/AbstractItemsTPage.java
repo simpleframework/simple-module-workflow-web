@@ -30,8 +30,8 @@ public abstract class AbstractItemsTPage extends Category_ListPage implements IW
 
 	@Override
 	protected TablePagerBean addTablePagerBean(final PageParameter pp, final String name,
-			final Class<? extends ITablePagerHandler> handleClass) {
-		return addTablePagerBean(pp, name, handleClass, false).setShowFilterBar(true)
+			final Class<? extends ITablePagerHandler> handlerClass) {
+		return addTablePagerBean(pp, name, handlerClass, false).setShowFilterBar(true)
 				.setShowHead(true).setShowCheckbox(true);
 	}
 

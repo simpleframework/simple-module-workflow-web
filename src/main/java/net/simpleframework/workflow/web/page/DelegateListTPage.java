@@ -50,7 +50,7 @@ public class DelegateListTPage extends AbstractWorkitemsTPage implements IWorkfl
 		tablePager.addColumn(TablePagerColumn.OPE().setWidth(70));
 
 		// 取消
-		addAjaxRequest(pp, "DelegateListTPage_abort").setHandleMethod("doAbort").setConfirmMessage(
+		addAjaxRequest(pp, "DelegateListTPage_abort").setHandlerMethod("doAbort").setConfirmMessage(
 				"确认要取消吗？");
 	}
 
