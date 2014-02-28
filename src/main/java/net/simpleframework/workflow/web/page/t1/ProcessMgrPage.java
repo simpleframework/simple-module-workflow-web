@@ -64,7 +64,7 @@ public class ProcessMgrPage extends AbstractWorkflowMgrPage {
 						new TablePagerColumn("title", $m("ProcessMgrPage.0"))
 								.setTextAlign(ETextAlign.left))
 				.addColumn(
-						new TablePagerColumn("userId", $m("ProcessMgrPage.1"), 120)
+						new TablePagerColumn("userText", $m("ProcessMgrPage.1"), 120)
 								.setTextAlign(ETextAlign.left))
 				.addColumn(
 						new TablePagerColumn("createDate", $m("ProcessMgrPage.2"), 115)
@@ -143,8 +143,7 @@ public class ProcessMgrPage extends AbstractWorkflowMgrPage {
 					.add("title",
 							new LinkElement(MyWorklistTbl.getTitle(process)).setHref(url(
 									ActivityMgrPage.class, "processId=" + id)))
-					.add("userId", permission.getUser(process.getUserId()))
-					.add("createDate", process.getCreateDate())
+					.add("userText", process.getUserText()).add("createDate", process.getCreateDate())
 					.add("completeDate", process.getCompleteDate())
 					.add("status", WorkflowUtils.createStatusImage(cp, status) + status.toString());
 			final StringBuilder sb = new StringBuilder();

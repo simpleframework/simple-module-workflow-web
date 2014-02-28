@@ -44,7 +44,7 @@ public class DelegateListTPage extends AbstractWorkitemsTPage implements IWorkfl
 		final TablePagerBean tablePager = addTablePagerBean(pp, "MyWorklistTPage_tbl",
 				DelegateTbl.class).setShowFilterBar(false).setShowLineNo(false);
 		tablePager.addColumn(TablePagerColumn.ICON().setWidth(16));
-		tablePager.addColumn(TITLE()).addColumn(new TablePagerColumn("userId", "委托人", 70))
+		tablePager.addColumn(TITLE()).addColumn(new TablePagerColumn("userText", "委托人", 70))
 				.addColumn(new TablePagerColumn("status", "状态", 70))
 				.addColumn(new TablePagerColumn("createDate", "委托日期", 115));
 		tablePager.addColumn(TablePagerColumn.OPE().setWidth(70));
@@ -84,7 +84,7 @@ public class DelegateListTPage extends AbstractWorkitemsTPage implements IWorkfl
 							.getActivity(workitem)))).setOnclick("$Actions.loc('"
 							+ uFactory.getUrl(cp, WorkflowFormPage.class, workitem, "source=delegation")
 							+ "');"));
-			row.add("userId", permission.getUser(delegation.getUserId()));
+			row.add("userText", delegation.getUserText());
 			row.add("createDate", delegation.getCreateDate());
 			final EDelegationStatus status = delegation.getStatus();
 			row.add("status", WorkflowUtils.createStatusImage(cp, status) + status.toString());

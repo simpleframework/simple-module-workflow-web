@@ -46,8 +46,8 @@ public class WorkitemsMgrPage extends OneTableTemplatePage implements IWorkflowC
 		final TablePagerBean tablePager = addTablePagerBean(pp, "WorkitemsPage_tbl",
 				WorkitemsTbl.class).setShowLineNo(false);
 		tablePager
-				.addColumn(new TablePagerColumn("userId", $m("WorkitemsMgrPage.0")))
-				.addColumn(new TablePagerColumn("userId2", $m("WorkitemsMgrPage.1")))
+				.addColumn(new TablePagerColumn("userText", $m("WorkitemsMgrPage.0")))
+				.addColumn(new TablePagerColumn("userText2", $m("WorkitemsMgrPage.1")))
 				.addColumn(
 						new TablePagerColumn("createDate", $m("WorkitemsMgrPage.2"), 115)
 								.setPropertyClass(Date.class))
@@ -92,7 +92,7 @@ public class WorkitemsMgrPage extends OneTableTemplatePage implements IWorkflowC
 		protected Map<String, Object> getRowData(final ComponentParameter cp, final Object dataObject) {
 			final WorkitemBean workitem = (WorkitemBean) dataObject;
 			final KVMap row = new KVMap();
-			row.add("userId", workitem.getUserText()).add("userId2", workitem.getUserText2())
+			row.add("userText", workitem.getUserText()).add("userText2", workitem.getUserText2())
 					.add("createDate", workitem.getCreateDate())
 					.add("completeDate", workitem.getCompleteDate());
 			final EWorkitemStatus status = workitem.getStatus();
