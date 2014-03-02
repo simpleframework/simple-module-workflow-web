@@ -70,7 +70,7 @@ public class ProcessModelMgrPage extends AbstractWorkflowMgrPage {
 						new TablePagerColumn("processCount", $m("ProcessModelMgrPage.1"), 80)
 								.setSort(false))
 				.addColumn(
-						new TablePagerColumn("userId", $m("ProcessModelMgrPage.2"), 115).setSort(false))
+						new TablePagerColumn("userText", $m("ProcessModelMgrPage.2"), 115).setSort(false))
 				.addColumn(
 						new TablePagerColumn("createDate", $m("ProcessModelMgrPage.3"), 115)
 								.setPropertyClass(Date.class))
@@ -150,7 +150,7 @@ public class ProcessModelMgrPage extends AbstractWorkflowMgrPage {
 					.add("modelText",
 							new LinkElement(processModel).setHref(url(ProcessMgrPage.class, "modelId="
 									+ id))).add("processCount", processModel.getProcessCount())
-					.add("userId", permission.getUser(processModel.getUserId()))
+					.add("userText", processModel.getUserText())
 					.add("createDate", processModel.getCreateDate())
 					.add("status", WorkflowUtils.createStatusImage(cp, status) + status.toString());
 			final StringBuilder sb = new StringBuilder();
