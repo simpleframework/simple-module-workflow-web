@@ -6,6 +6,9 @@
 	-webkit-box-shadow: 5px 5px 5px #aaa;
 	-moz-box-shadow: 5px 5px 5px #aaa;
 	box-shadow: 5px 5px 5px #aaa;
+	-moz-border-radius: 0 0 4px 4px;
+  -webkit-border-radius: 0 0 4px 4px;
+	border-radius: 0 0 4px 4px;
 	width: 90%;
 }
 

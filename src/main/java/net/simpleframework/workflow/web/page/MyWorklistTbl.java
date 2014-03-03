@@ -88,7 +88,7 @@ public class MyWorklistTbl extends GroupDbTablePagerHandler implements IWorkflow
 					final StringBuilder sb = new StringBuilder();
 					sb.append(new LabelElement(activity));
 					sb.append(new SpanElement("(" + activity.getAttr("_processModel") + ")")
-							.setStyle("font-weight: normal; margin-left: 5px; color: #999; font-size: 9pt;"));
+							.addStyle("font-weight: normal; margin-left: 5px; color: #999; font-size: 9pt;"));
 					sb.append(toCountHTML());
 					return sb.toString();
 				}
@@ -99,7 +99,7 @@ public class MyWorklistTbl extends GroupDbTablePagerHandler implements IWorkflow
 
 	protected ImageElement createImageMark(final ComponentParameter cp, final String img) {
 		return new ImageElement(cp.getCssResourceHomePath(MyWorklistTbl.class) + "/images/" + img)
-				.setStyle("vertical-align: bottom;");
+				.addStyle("vertical-align: bottom;");
 	}
 
 	@Override
@@ -110,7 +110,7 @@ public class MyWorklistTbl extends GroupDbTablePagerHandler implements IWorkflow
 		final ActivityBean activity = wService.getActivity(workitem);
 		final StringBuilder sb = new StringBuilder();
 		ImageElement img = null;
-		if (workitem.isReadMark()) {
+		if (!workitem.isReadMark()) {
 			img = createImageMark(cp, "unread.png");
 		}
 		if (img != null) {

@@ -22,6 +22,6 @@ public abstract class WorkflowUtils implements IWorkflowContextAware {
 	public static ImageElement createStatusImage(final PageParameter pp, final Enum<?> status) {
 		return new ImageElement(pp.getCssResourceHomePath(WorkflowUtils.class) + "/images/status_"
 				+ status.name() + ".png").setVerticalAlign(EVerticalAlign.bottom)
-				.setClassName("icon16").setStyle("margin: 0 4px;");
+				.setClassName("icon16").addStyle("margin: 0 4px;");
 	}
 }

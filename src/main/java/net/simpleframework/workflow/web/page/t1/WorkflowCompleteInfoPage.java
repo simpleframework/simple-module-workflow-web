@@ -50,7 +50,7 @@ public class WorkflowCompleteInfoPage extends AbstractWorkflowFormPage {
 			}
 			sb.append("</table>");
 		} else {
-			sb.append(new BlockElement().setText($m("WorkflowCompleteInfoPage.1")).setStyle(
+			sb.append(new BlockElement().setText($m("WorkflowCompleteInfoPage.1")).addStyle(
 					"margin: 12px;"));
 		}
 		sb.append(" </div>");
