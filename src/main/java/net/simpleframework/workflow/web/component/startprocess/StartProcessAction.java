@@ -1,9 +1,11 @@
 package net.simpleframework.workflow.web.component.startprocess;
 
+import net.simpleframework.ctx.trans.Transaction;
 import net.simpleframework.mvc.IForward;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.base.ajaxrequest.DefaultAjaxRequestHandler;
+import net.simpleframework.workflow.engine.IWorkflowContext;
 import net.simpleframework.workflow.engine.InitiateItem;
 
 /**
@@ -14,6 +16,7 @@ import net.simpleframework.workflow.engine.InitiateItem;
  */
 public class StartProcessAction extends DefaultAjaxRequestHandler {
 
+	@Transaction(context = IWorkflowContext.class)
 	@Override
 	public IForward ajaxProcess(final ComponentParameter cp) throws Exception {
 		final ComponentParameter nCP = StartProcessUtils.get(cp);

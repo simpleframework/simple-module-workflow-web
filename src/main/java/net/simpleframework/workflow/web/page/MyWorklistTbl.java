@@ -98,8 +98,7 @@ public class MyWorklistTbl extends GroupDbTablePagerHandler implements IWorkflow
 	}
 
 	protected ImageElement createImageMark(final ComponentParameter cp, final String img) {
-		return new ImageElement(cp.getCssResourceHomePath(MyWorklistTbl.class) + "/images/" + img)
-				.addStyle("vertical-align: bottom;");
+		return new ImageElement(cp.getCssResourceHomePath(MyWorklistTbl.class) + "/images/" + img);
 	}
 
 	@Override

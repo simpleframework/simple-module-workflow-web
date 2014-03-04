@@ -3,6 +3,7 @@ package net.simpleframework.workflow.web.page.t1;
 import static net.simpleframework.common.I18n.$m;
 
 import java.io.IOException;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
 
@@ -61,8 +62,9 @@ public class ActivityMgrPage extends AbstractWorkflowMgrPage {
 				"ActivityMgrPage_tbl").setPagerBarLayout(EPagerBarLayout.none)
 				.setContainerId("idActivityMgrPage_tbl").setHandlerClass(ActivityTbl.class);
 		tablePager.addColumn(TC_TASKNODE()).addColumn(TC_STATUS()).addColumn(TC_PARTICIPANTS())
-				.addColumn(TC_PARTICIPANTS2()).addColumn(TC_CREATEDATE()).addColumn(TC_COMPLETEDATE())
-				.addColumn(TC_PREVIOUS()).addColumn(TablePagerColumn.OPE().setWidth(90));
+				.addColumn(TC_PARTICIPANTS2()).addColumn(TC_CREATEDATE()).addColumn(TC_TIMEOUT())
+				.addColumn(TC_COMPLETEDATE()).addColumn(TC_PREVIOUS())
+				.addColumn(TablePagerColumn.OPE().setWidth(70));
 
 		// 放弃
 		addAjaxRequest(pp, "ActivityMgrPage_abort_page", ActivityAbortPage.class);
@@ -142,6 +144,15 @@ public class ActivityMgrPage extends AbstractWorkflowMgrPage {
 			row.add("participants2", getParticipants(activity, true));
 			row.add("createDate", activity.getCreateDate());
 			row.add("completeDate", activity.getCompleteDate());
+			Date timeoutDate;
+			if ((timeoutDate = activity.getTimeoutDate()) != null) {
+				final Calendar tCal = Calendar.getInstance();
+				tCal.setTime(timeoutDate);
+				final Calendar nCal = Calendar.getInstance();
+				nCal.setTimeInMillis(System.currentTimeMillis());
+				final int d = tCal.get(Calendar.HOUR_OF_DAY) - nCal.get(Calendar.HOUR_OF_DAY);
+				row.add("timeoutDate", new SpanElement(d).setColor(d > 0 ? "green" : "red"));
+			}
 
 			final EActivityStatus status = activity.getStatus();
 			row.add("status", WorkflowUtils.createStatusImage(cp, status) + status.toString());
@@ -250,8 +261,12 @@ public class ActivityMgrPage extends AbstractWorkflowMgrPage {
 				.setPropertyClass(Date.class);
 	}
 
+	static TablePagerColumn TC_TIMEOUT() {
+		return new TablePagerColumn("timeoutDate", $m("ActivityMgrPage.9"), 105).setFilter(false);
+	}
+
 	static TablePagerColumn TC_STATUS() {
-		return new TablePagerColumn("status", $m("ActivityMgrPage.6"), 70).setTextAlign(
+		return new TablePagerColumn("status", $m("ActivityMgrPage.6"), 60).setTextAlign(
 				ETextAlign.left).setPropertyClass(EActivityStatus.class);
 	}
 }
