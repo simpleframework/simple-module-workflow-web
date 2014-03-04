@@ -64,7 +64,7 @@ public class DelegateListTPage extends AbstractWorkitemsTPage implements IWorkfl
 
 		@Override
 		public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
-			return context.getDelegationService().queryWorkitems(cp.getLoginId());
+			return dService.queryWorkitems(cp.getLoginId());
 		}
 
 		@Override
