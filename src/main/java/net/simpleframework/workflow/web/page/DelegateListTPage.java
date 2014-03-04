@@ -11,6 +11,7 @@ import net.simpleframework.mvc.IForward;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.ButtonElement;
+import net.simpleframework.mvc.common.element.ETextAlign;
 import net.simpleframework.mvc.common.element.LinkElement;
 import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.component.ComponentParameter;
@@ -45,7 +46,7 @@ public class DelegateListTPage extends AbstractWorkitemsTPage implements IWorkfl
 				DelegateTbl.class).setShowFilterBar(false).setShowLineNo(false);
 		tablePager.addColumn(TablePagerColumn.ICON().setWidth(16));
 		tablePager.addColumn(TITLE()).addColumn(new TablePagerColumn("userText", "委托人", 70))
-				.addColumn(new TablePagerColumn("status", "状态", 70))
+				.addColumn(new TablePagerColumn("status", "状态", 60).setTextAlign(ETextAlign.left))
 				.addColumn(new TablePagerColumn("createDate", "委托日期", 115));
 		tablePager.addColumn(TablePagerColumn.OPE().setWidth(70));
 

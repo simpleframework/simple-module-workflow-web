@@ -109,8 +109,10 @@ public class MyWorklistTbl extends GroupDbTablePagerHandler implements IWorkflow
 		final ActivityBean activity = wService.getActivity(workitem);
 		final StringBuilder sb = new StringBuilder();
 		ImageElement img = null;
-		if (!workitem.isReadMark()) {
-			img = createImageMark(cp, "unread.png");
+		if (workitem.getStatus() == EWorkitemStatus.delegate) {
+			img = createImageMark(cp, "mark_delegate.png").setTitle($m("MyWorklistTbl.7"));
+		} else if (!workitem.isReadMark()) {
+			img = createImageMark(cp, "mark_unread.png").setTitle($m("MyWorklistTbl.6"));
 		}
 		if (img != null) {
 			row.add(TablePagerColumn.ICON, img);

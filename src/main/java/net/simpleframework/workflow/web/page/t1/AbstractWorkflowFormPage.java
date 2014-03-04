@@ -52,7 +52,8 @@ public abstract class AbstractWorkflowFormPage extends T1FormTemplatePage implem
 			final StringBuilder sb = new StringBuilder();
 			final WorkitemBean workitem = WorkflowUtils.getWorkitemBean(pp);
 			EWorkitemStatus status;
-			if (workitem != null && (status = workitem.getStatus()) != EWorkitemStatus.running) {
+			if (workitem != null
+					&& (status = workitem.getStatus()).ordinal() > EWorkitemStatus.delegate.ordinal()) {
 				sb.append("status=").append(status.name());
 			}
 			backBtn.setHref(uFactory.getUrl(pp, MyWorklistTPage.class, sb.toString()));
