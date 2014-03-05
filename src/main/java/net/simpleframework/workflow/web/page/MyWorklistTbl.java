@@ -29,6 +29,8 @@ import net.simpleframework.mvc.component.ui.pager.GroupWrapper;
 import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
 import net.simpleframework.mvc.component.ui.pager.db.GroupDbTablePagerHandler;
 import net.simpleframework.workflow.engine.ActivityBean;
+import net.simpleframework.workflow.engine.DelegationBean;
+import net.simpleframework.workflow.engine.EDelegationStatus;
 import net.simpleframework.workflow.engine.EWorkitemStatus;
 import net.simpleframework.workflow.engine.IWorkflowContextAware;
 import net.simpleframework.workflow.engine.ProcessBean;
@@ -54,10 +56,9 @@ public class MyWorklistTbl extends GroupDbTablePagerHandler implements IWorkflow
 		List<WorkitemBean> list;
 		if (status != null) {
 			cp.addFormParameter("status", status.name());
-			list = wService.getWorkitemList(userId, status);
+			list = wService.getWorklist(userId, status);
 		} else {
-			list = wService.getWorkitemList(userId, EWorkitemStatus.running,
-					EWorkitemStatus.suspended, EWorkitemStatus.delegate);
+			list = wService.getRunningWorklist(userId);
 		}
 		return new ListDataQuery<WorkitemBean>(list);
 	}
@@ -110,7 +111,8 @@ public class MyWorklistTbl extends GroupDbTablePagerHandler implements IWorkflow
 		final ActivityBean activity = wService.getActivity(workitem);
 		final StringBuilder sb = new StringBuilder();
 		ImageElement img = null;
-		if (workitem.getStatus() == EWorkitemStatus.delegate) {
+		final EWorkitemStatus status = workitem.getStatus();
+		if (status == EWorkitemStatus.delegate) {
 			img = PhotoImage.icon12(cp.getPhotoUrl(workitem.getUserId2())).setTitle(
 					$m("MyWorklistTbl.7", permission.getUser(workitem.getUserId())));
 		} else if (!workitem.isReadMark()) {
@@ -134,8 +136,15 @@ public class MyWorklistTbl extends GroupDbTablePagerHandler implements IWorkflow
 				.add("completeDate", workitem.getCompleteDate());
 
 		sb.setLength(0);
-		sb.append(new ButtonElement($m("MyWorklistTbl.1")).setOnclick("$Actions.loc('"
-				+ uFactory.getUrl(cp, WorkflowMonitorPage.class, workitem) + "');"));
+		DelegationBean delegation = null;
+		if (status == EWorkitemStatus.delegate) {
+			delegation = dService.getDelegation(workitem);
+		}
+		if (delegation != null && delegation.getStatus() == EDelegationStatus.receiving) {
+		} else {
+			sb.append(new ButtonElement($m("MyWorklistTbl.1")).setOnclick("$Actions.loc('"
+					+ uFactory.getUrl(cp, WorkflowMonitorPage.class, workitem) + "');"));
+		}
 		sb.append(SpanElement.SPACE).append(AbstractTablePagerSchema.IMG_DOWNMENU);
 		row.put(TablePagerColumn.OPE, sb.toString());
 		return row;
@@ -152,7 +161,7 @@ public class MyWorklistTbl extends GroupDbTablePagerHandler implements IWorkflow
 		if (userTo == null) {
 			final Set<String> list = new LinkedHashSet<String>();
 			for (final ActivityBean nextActivity : aService.getNextActivities(activity)) {
-				for (final WorkitemBean workitem : wService.getWorkitemList(nextActivity)) {
+				for (final WorkitemBean workitem : wService.getWorkitems(nextActivity)) {
 					list.add(workitem.getUserText());
 				}
 			}
@@ -172,7 +181,7 @@ public class MyWorklistTbl extends GroupDbTablePagerHandler implements IWorkflow
 		String userFrom = userCache.get(key);
 		if (userFrom == null) {
 			final Set<String> list = new LinkedHashSet<String>();
-			for (final WorkitemBean workitem : wService.getWorkitemList(preActivity,
+			for (final WorkitemBean workitem : wService.getWorkitems(preActivity,
 					EWorkitemStatus.complete)) {
 				list.add(workitem.getUserText());
 			}

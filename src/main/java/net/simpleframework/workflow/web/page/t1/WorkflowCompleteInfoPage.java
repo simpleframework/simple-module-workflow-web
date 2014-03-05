@@ -39,8 +39,8 @@ public class WorkflowCompleteInfoPage extends AbstractWorkflowFormPage {
 				sb.append("<td class='task'>").append(next).append("</td>");
 				sb.append("<td>");
 				int i = 0;
-				for (final WorkitemBean workitem2 : wService.getWorkitemList(next,
-						EWorkitemStatus.running)) {
+				for (final WorkitemBean workitem2 : wService
+						.getWorkitems(next, EWorkitemStatus.running)) {
 					if (i++ > 0) {
 						sb.append(", ");
 					}

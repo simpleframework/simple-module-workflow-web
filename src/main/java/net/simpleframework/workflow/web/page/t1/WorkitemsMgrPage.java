@@ -85,7 +85,7 @@ public class WorkitemsMgrPage extends OneTableTemplatePage implements IWorkflowC
 		public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
 			final ActivityBean activity = getActivityBean(cp);
 			cp.addFormParameter("activityId", activity.getId());
-			return new ListDataQuery<WorkitemBean>(wService.getWorkitemList(activity));
+			return new ListDataQuery<WorkitemBean>(wService.getWorkitems(activity));
 		}
 
 		@Override
