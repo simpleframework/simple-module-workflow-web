@@ -18,6 +18,7 @@ import net.simpleframework.mvc.common.element.ButtonElement;
 import net.simpleframework.mvc.common.element.ImageElement;
 import net.simpleframework.mvc.common.element.LabelElement;
 import net.simpleframework.mvc.common.element.LinkElement;
+import net.simpleframework.mvc.common.element.PhotoImage;
 import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.ui.menu.MenuBean;
@@ -110,7 +111,8 @@ public class MyWorklistTbl extends GroupDbTablePagerHandler implements IWorkflow
 		final StringBuilder sb = new StringBuilder();
 		ImageElement img = null;
 		if (workitem.getStatus() == EWorkitemStatus.delegate) {
-			img = createImageMark(cp, "mark_delegate.png").setTitle($m("MyWorklistTbl.7"));
+			img = PhotoImage.icon12(cp.getPhotoUrl(workitem.getUserId2())).setTitle(
+					$m("MyWorklistTbl.7", permission.getUser(workitem.getUserId())));
 		} else if (!workitem.isReadMark()) {
 			img = createImageMark(cp, "mark_unread.png").setTitle($m("MyWorklistTbl.6"));
 		}

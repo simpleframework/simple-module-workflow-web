@@ -29,8 +29,8 @@ public class MyWorklistTPage extends AbstractWorkitemsTPage {
 
 		final TablePagerBean tablePager = (TablePagerBean) addTablePagerBean(pp,
 				"MyWorklistTPage_tbl", MyWorklistTbl.class).setShowFilterBar(false)
-				.setShowLineNo(false).setPageItems(50);
-		tablePager.addColumn(TablePagerColumn.ICON().setWidth(16));
+				.setShowLineNo(false).setShowCheckbox(false).setPageItems(50);
+		tablePager.addColumn(TablePagerColumn.ICON().setWidth(18));
 
 		final EWorkitemStatus status = pp.getEnumParameter(EWorkitemStatus.class, "status");
 		tablePager.addColumn(TITLE());
