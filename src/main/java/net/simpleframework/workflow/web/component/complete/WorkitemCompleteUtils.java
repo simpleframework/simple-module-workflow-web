@@ -141,7 +141,7 @@ public class WorkitemCompleteUtils implements IWorkflowContextAware {
 				final boolean multi = activityComplete.isParticipantMultiSelected(transition.to());
 				for (final Participant participant : coll) {
 					sb.append("<div class='ritem'>");
-					final String id = participant.getId();
+					final String id = participant.toString();
 					final Object user = permission.getUser(participant.userId);
 					sb.append((multi ? new Checkbox(id, user) : new Radio(id, user).setName(transition
 							.getId())).setValue(id));
