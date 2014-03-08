@@ -63,6 +63,9 @@ public class MyWorklistTPage extends AbstractWorkitemsTPage {
 		addAjaxRequest(pp, "MyWorklistTPage_delegate_page", WorkitemDelegatePage.class);
 		addWindowBean(pp, "MyWorklistTPage_delegate").setContentRef("MyWorklistTPage_delegate_page")
 				.setTitle($m("MyWorklistTbl.5")).setHeight(300).setWidth(510);
+
+		// 委托确认
+
 	}
 
 	@Transaction(context = IWorkflowContext.class)

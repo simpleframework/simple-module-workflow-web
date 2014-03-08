@@ -1,6 +1,8 @@
 package net.simpleframework.workflow.web.page;
 
 import static net.simpleframework.common.I18n.$m;
+import net.simpleframework.common.StringUtils;
+import net.simpleframework.ctx.permission.PermissionUser;
 import net.simpleframework.ctx.trans.Transaction;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageParameter;
@@ -37,6 +39,8 @@ public class WorkitemDelegatePage extends FormTableRowTemplatePage implements IW
 		addCalendarBean(pp, "WorkitemDelegatePage_cal").setShowTime(true).setDateFormat(
 				"yyyy-MM-dd HH:mm");
 
+		addUserAutocompleteBean(pp, "WorkitemDelegatePage_autocomplete").setInputField("wd_userTxt");
+
 		// 用户选取
 		addComponentBean(pp, "WorkitemDelegatePage_userSelect", UserSelectBean.class).setBindingId(
 				"wd_userId").setBindingText("wd_userTxt");
@@ -46,9 +50,13 @@ public class WorkitemDelegatePage extends FormTableRowTemplatePage implements IW
 	@Override
 	public JavascriptForward onSave(final ComponentParameter cp) throws Exception {
 		final WorkitemBean workitem = WorkflowUtils.getWorkitemBean(cp);
-		wService.setWorkitemDelegation(workitem, permission.getUser(cp.getParameter("wd_userId"))
-				.getId(), cp.getDateParameter("wd_startDate"), cp.getDateParameter("wd_startDate"), cp
-				.getParameter("wd_description"));
+
+		final String wd_userId = cp.getParameter("wd_userId");
+		final PermissionUser user = StringUtils.hasText(wd_userId) ? permission.getUser(wd_userId)
+				: permission.getUser(cp.getParameter("wd_userTxt"));
+
+		wService.setWorkitemDelegation(workitem, user.getId(), cp.getDateParameter("wd_startDate"),
+				cp.getDateParameter("wd_startDate"), cp.getParameter("wd_description"));
 		return super.onSave(cp).append("$Actions['MyWorklistTPage_tbl']();");
 	}
 
@@ -62,7 +70,8 @@ public class WorkitemDelegatePage extends FormTableRowTemplatePage implements IW
 		final WorkitemBean workitem = WorkflowUtils.getWorkitemBean(pp);
 		final InputElement workitemId = InputElement.hidden("workitemId").setText(workitem.getId());
 
-		final TextButton wd_userTxt = new TextButton("wd_userTxt").setHiddenField("wd_userId")
+		final TextButton wd_userTxt = new TextButton("wd_userTxt").setEditable(true)
+				.setHiddenField("wd_userId")
 				.setOnclick("$Actions['WorkitemDelegatePage_userSelect']();");
 
 		final CalendarInput wd_startDate = new CalendarInput("wd_startDate")

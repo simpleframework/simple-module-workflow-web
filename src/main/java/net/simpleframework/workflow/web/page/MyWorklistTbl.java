@@ -141,6 +141,7 @@ public class MyWorklistTbl extends GroupDbTablePagerHandler implements IWorkflow
 			delegation = dService.getDelegation(workitem);
 		}
 		if (delegation != null && delegation.getStatus() == EDelegationStatus.receiving) {
+			sb.append(new ButtonElement(EDelegationStatus.receiving).setHighlight(true));
 		} else {
 			sb.append(new ButtonElement($m("MyWorklistTbl.1")).setOnclick("$Actions.loc('"
 					+ uFactory.getUrl(cp, WorkflowMonitorPage.class, workitem) + "');"));
@@ -218,4 +219,5 @@ public class MyWorklistTbl extends GroupDbTablePagerHandler implements IWorkflow
 	public static String getTitle(final ProcessBean process) {
 		return StringUtils.text(Convert.toString(process), $m("MyWorklistTbl.0"));
 	}
+
 }
