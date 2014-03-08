@@ -9,7 +9,6 @@ import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.base.ajaxrequest.AjaxRequestBean;
 import net.simpleframework.workflow.engine.ActivityComplete;
 import net.simpleframework.workflow.engine.WorkitemBean;
-import net.simpleframework.workflow.engine.WorkitemComplete;
 import net.simpleframework.workflow.web.component.complete.ParticipantSelectLoaded.ParticipantSelectAction;
 
 /**
@@ -36,8 +35,7 @@ public class TransitionSelectLoaded extends DefaultPageHandler {
 			final WorkitemBean workitem = WorkitemCompleteUtils.getWorkitemBean(nCP);
 			final String transitions = nCP.getParameter("transitions");
 			final String[] transitionIds = StringUtils.split(transitions);
-			final WorkitemComplete workitemComplete = WorkitemComplete.get(workitem);
-			final ActivityComplete activityComplete = workitemComplete.getActivityComplete();
+			final ActivityComplete activityComplete = new ActivityComplete(workitem);
 			if (activityComplete.isParticipantManual(transitionIds)) {
 				final JavascriptForward js = new JavascriptForward();
 				js.append("$Actions['").append(nCP.getComponentName()).append("_participantSelect']('")
@@ -46,8 +44,7 @@ public class TransitionSelectLoaded extends DefaultPageHandler {
 				return js;
 			} else {
 				activityComplete.resetTransitions(transitionIds);
-				return ((IWorkitemCompleteHandler) nCP.getComponentHandler()).onComplete(nCP,
-						workitemComplete);
+				return ((IWorkitemCompleteHandler) nCP.getComponentHandler()).onComplete(nCP, workitem);
 			}
 		}
 	}

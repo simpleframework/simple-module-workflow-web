@@ -80,11 +80,11 @@ public class WorkitemCompleteUtils implements IWorkflowContextAware {
 
 			final IWorkitemCompleteHandler hdl = (IWorkitemCompleteHandler) cp.getComponentHandler();
 			if (!workitemComplete.isAllCompleted()) {
-				js.append(hdl.onComplete(cp, workitemComplete));
+				js.append(hdl.onComplete(cp, workitem));
 			} else {
 				final String componentName = cp.getComponentName();
 				// 是否有手动情况
-				final ActivityComplete activityComplete = workitemComplete.getActivityComplete();
+				final ActivityComplete activityComplete = getActivityComplete(cp, workitem);
 				if (activityComplete.isTransitionManual()) {
 					js.append("$Actions['").append(componentName).append("_transitionSelect']('")
 							.append(toParams(cp, workitem)).append("');");
@@ -92,7 +92,7 @@ public class WorkitemCompleteUtils implements IWorkflowContextAware {
 					js.append("$Actions['").append(componentName).append("_participantSelect']('")
 							.append(toParams(cp, workitem)).append("');");
 				} else {
-					js.append(hdl.onComplete(cp, workitemComplete));
+					js.append(hdl.onComplete(cp, workitem));
 				}
 			}
 		} catch (final Throwable ex) {
@@ -105,12 +105,11 @@ public class WorkitemCompleteUtils implements IWorkflowContextAware {
 		out.flush();
 	}
 
-	public static Collection<TransitionNode> getTransitions(final PageRequestResponse rRequest,
+	public static Collection<TransitionNode> getTransitions(final ComponentParameter cp,
 			final WorkitemBean workitem) {
 		final ArrayList<TransitionNode> al = new ArrayList<TransitionNode>();
-		final String[] transitions = StringUtils.split(rRequest.getParameter("transitions"));
-		final ActivityComplete activityComplete = WorkitemComplete.get(workitem)
-				.getActivityComplete();
+		final String[] transitions = StringUtils.split(cp.getParameter("transitions"));
+		final ActivityComplete activityComplete = getActivityComplete(cp, workitem);
 		// 通过手动方式选取的路由
 		if (transitions != null && transitions.length > 0) {
 			for (final String id : transitions) {
@@ -128,8 +127,7 @@ public class WorkitemCompleteUtils implements IWorkflowContextAware {
 	public static String toParticipantsHTML(final ComponentParameter cp) {
 		final StringBuilder sb = new StringBuilder();
 		final WorkitemBean workitem = getWorkitemBean(cp);
-		final ActivityComplete activityComplete = WorkitemComplete.get(workitem)
-				.getActivityComplete();
+		final ActivityComplete activityComplete = getActivityComplete(cp, workitem);
 		for (final TransitionNode transition : WorkitemCompleteUtils.getTransitions(cp, workitem)) {
 			sb.append("<div class='transition' transition='").append(transition.getId()).append("'>")
 					.append(transition.to()).append("</div>");
@@ -152,6 +150,15 @@ public class WorkitemCompleteUtils implements IWorkflowContextAware {
 			sb.append("</div>");
 		}
 		return sb.toString();
+	}
+
+	private static ActivityComplete getActivityComplete(final ComponentParameter cp,
+			final WorkitemBean workitem) {
+		ActivityComplete activityComplete = (ActivityComplete) cp.getRequestAttr("_ActivityComplete");
+		if (activityComplete == null) {
+			cp.setRequestAttr("_ActivityComplete", activityComplete = new ActivityComplete(workitem));
+		}
+		return activityComplete;
 	}
 
 	private static Log log = LogFactory.getLogger(WorkitemCompleteUtils.class);

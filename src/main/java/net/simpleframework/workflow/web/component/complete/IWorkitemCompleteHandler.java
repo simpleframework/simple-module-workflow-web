@@ -3,7 +3,7 @@ package net.simpleframework.workflow.web.component.complete;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.IComponentHandler;
-import net.simpleframework.workflow.engine.WorkitemComplete;
+import net.simpleframework.workflow.engine.WorkitemBean;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -21,6 +21,5 @@ public interface IWorkitemCompleteHandler extends IComponentHandler {
 	 * @return
 	 * @throws Exception
 	 */
-	JavascriptForward onComplete(ComponentParameter cp, WorkitemComplete workitemComplete)
-			throws Exception;
+	JavascriptForward onComplete(ComponentParameter cp, WorkitemBean workitem) throws Exception;
 }
