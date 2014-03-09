@@ -109,9 +109,9 @@ public class MyWorklistTbl extends GroupDbTablePagerHandler implements IWorkflow
 		final KVMap row = new KVMap();
 
 		final ActivityBean activity = wService.getActivity(workitem);
-		final StringBuilder sb = new StringBuilder();
-		ImageElement img = null;
 		final EWorkitemStatus status = workitem.getStatus();
+
+		ImageElement img = null;
 		if (status == EWorkitemStatus.delegate) {
 			img = PhotoImage.icon12(cp.getPhotoUrl(workitem.getUserId2())).setTitle(
 					$m("MyWorklistTbl.7", permission.getUser(workitem.getUserId())));
@@ -122,32 +122,40 @@ public class MyWorklistTbl extends GroupDbTablePagerHandler implements IWorkflow
 			row.add(TablePagerColumn.ICON, img);
 		}
 
-		if (!"taskname".equals(cp.getParameter(G))) {
-			sb.append("[").append(new SpanElement(activity).setClassName("tasknode_txt")).append("] ");
-		}
-
 		final WorkflowUrlsFactory uFactory = ((IWorkflowWebContext) context).getUrlsFactory();
 
-		sb.append(new LinkElement(getTitle(aService.getProcessBean(activity))).setStrong(
-				!workitem.isReadMark()).setOnclick(
-				"$Actions.loc('" + uFactory.getUrl(cp, WorkflowFormPage.class, workitem) + "');"));
-		row.add("title", sb.toString()).add("userFrom", getUserFrom(activity))
-				.add("userTo", getUserTo(activity)).add("createDate", workitem.getCreateDate())
-				.add("completeDate", workitem.getCompleteDate());
-
-		sb.setLength(0);
+		final StringBuilder title = new StringBuilder();
+		if (!"taskname".equals(cp.getParameter(G))) {
+			title.append("[").append(new SpanElement(activity).setClassName("tasknode_txt"))
+					.append("] ");
+		}
 		DelegationBean delegation = null;
 		if (status == EWorkitemStatus.delegate) {
 			delegation = dService.getDelegation(workitem);
 		}
-		if (delegation != null && delegation.getStatus() == EDelegationStatus.receiving) {
-			sb.append(new ButtonElement(EDelegationStatus.receiving).setHighlight(true));
+		final boolean receiving = delegation != null
+				&& delegation.getStatus() == EDelegationStatus.receiving;
+		if (receiving) {
+			title.append(new SpanElement(getTitle(aService.getProcessBean(activity))));
 		} else {
-			sb.append(new ButtonElement($m("MyWorklistTbl.1")).setOnclick("$Actions.loc('"
+			title.append(new LinkElement(getTitle(aService.getProcessBean(activity))).setStrong(
+					!workitem.isReadMark()).setOnclick(
+					"$Actions.loc('" + uFactory.getUrl(cp, WorkflowFormPage.class, workitem) + "');"));
+		}
+		row.add("title", title.toString()).add("userFrom", getUserFrom(activity))
+				.add("userTo", getUserTo(activity)).add("createDate", workitem.getCreateDate())
+				.add("completeDate", workitem.getCompleteDate());
+
+		final StringBuilder ope = new StringBuilder();
+		if (receiving) {
+			ope.append(new ButtonElement(EDelegationStatus.receiving).setHighlight(true).setOnclick(
+					"$Actions['MyWorklistTPage_delegate_receiving']();"));
+		} else {
+			ope.append(new ButtonElement($m("MyWorklistTbl.1")).setOnclick("$Actions.loc('"
 					+ uFactory.getUrl(cp, WorkflowMonitorPage.class, workitem) + "');"));
 		}
-		sb.append(SpanElement.SPACE).append(AbstractTablePagerSchema.IMG_DOWNMENU);
-		row.put(TablePagerColumn.OPE, sb.toString());
+		ope.append(SpanElement.SPACE).append(AbstractTablePagerSchema.IMG_DOWNMENU);
+		row.put(TablePagerColumn.OPE, ope.toString());
 		return row;
 	}
 
@@ -219,5 +227,4 @@ public class MyWorklistTbl extends GroupDbTablePagerHandler implements IWorkflow
 	public static String getTitle(final ProcessBean process) {
 		return StringUtils.text(Convert.toString(process), $m("MyWorklistTbl.0"));
 	}
-
 }
