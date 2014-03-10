@@ -62,13 +62,13 @@ public class MyWorklistTPage extends AbstractWorkitemsTPage {
 		// 委托
 		addAjaxRequest(pp, "MyWorklistTPage_delegate_page", WorkitemDelegatePage.class);
 		addWindowBean(pp, "MyWorklistTPage_delegate").setContentRef("MyWorklistTPage_delegate_page")
-				.setTitle($m("MyWorklistTbl.5")).setHeight(300).setWidth(510);
+				.setTitle($m("MyWorklistTbl.5")).setHeight(300).setWidth(520);
 		// 委托确认
 		addAjaxRequest(pp, "MyWorklistTPage_delegate_receiving_page",
 				WorkitemDelegateReceivingPage.class);
 		addWindowBean(pp, "MyWorklistTPage_delegate_receiving")
 				.setContentRef("MyWorklistTPage_delegate_receiving_page")
-				.setTitle($m("MyWorklistTbl.5")).setHeight(300).setWidth(510);
+				.setTitle($m("MyWorklistTbl.5")).setHeight(340).setWidth(520);
 	}
 
 	@Transaction(context = IWorkflowContext.class)
