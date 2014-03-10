@@ -39,11 +39,11 @@ public class WorkitemDelegatePage extends FormTableRowTemplatePage implements IW
 		addCalendarBean(pp, "WorkitemDelegatePage_cal").setShowTime(true).setDateFormat(
 				"yyyy-MM-dd HH:mm");
 
-		addUserAutocompleteBean(pp, "WorkitemDelegatePage_autocomplete").setInputField("wd_userTxt");
-
 		// 用户选取
 		addComponentBean(pp, "WorkitemDelegatePage_userSelect", UserSelectBean.class).setBindingId(
 				"wd_userId").setBindingText("wd_userTxt");
+		// 自动完成
+		addUserAutocompleteBean(pp, "WorkitemDelegatePage_autocomplete").setInputField("wd_userTxt");
 	}
 
 	@Transaction(context = IWorkflowContext.class)

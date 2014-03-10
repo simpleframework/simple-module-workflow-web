@@ -43,7 +43,7 @@ public class DelegateListTPage extends AbstractWorkitemsTPage implements IWorkfl
 		super.onForward(pp);
 
 		final TablePagerBean tablePager = addTablePagerBean(pp, "MyWorklistTPage_tbl",
-				DelegateTbl.class).setShowFilterBar(false).setShowLineNo(false);
+				DelegateTbl.class).setShowCheckbox(false).setShowFilterBar(false).setShowLineNo(false);
 		tablePager.addColumn(TablePagerColumn.ICON().setWidth(16));
 		tablePager.addColumn(TITLE()).addColumn(new TablePagerColumn("userText", "委托人", 70))
 				.addColumn(new TablePagerColumn("status", "状态", 60).setTextAlign(ETextAlign.left))
@@ -57,7 +57,7 @@ public class DelegateListTPage extends AbstractWorkitemsTPage implements IWorkfl
 
 	@Transaction(context = IWorkflowContext.class)
 	public IForward doAbort(final ComponentParameter cp) {
-		dService.doAbort(dService.getBean(cp.getParameter("delegationId")));
+		dService.abort(dService.getBean(cp.getParameter("delegationId")));
 		return new JavascriptForward("$Actions['MyWorklistTPage_tbl']();");
 	}
 
