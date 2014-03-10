@@ -14,6 +14,8 @@ import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
 import net.simpleframework.workflow.engine.EWorkitemStatus;
 import net.simpleframework.workflow.engine.IWorkflowContext;
 import net.simpleframework.workflow.engine.WorkitemBean;
+import net.simpleframework.workflow.web.page.AbstractDelegateFormPage.WorkitemDelegateReceivingPage;
+import net.simpleframework.workflow.web.page.AbstractDelegateFormPage.WorkitemDelegateSetPage;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -60,7 +62,7 @@ public class MyWorklistTPage extends AbstractWorkitemsTPage {
 				$m("Confirm.Delete"));
 
 		// 委托
-		addAjaxRequest(pp, "MyWorklistTPage_delegate_page", WorkitemDelegatePage.class);
+		addAjaxRequest(pp, "MyWorklistTPage_delegate_page", WorkitemDelegateSetPage.class);
 		addWindowBean(pp, "MyWorklistTPage_delegate").setContentRef("MyWorklistTPage_delegate_page")
 				.setTitle($m("MyWorklistTbl.5")).setHeight(300).setWidth(520);
 		// 委托确认
