@@ -40,6 +40,15 @@ public abstract class AbstractDelegateFormPage extends FormTableRowTemplatePage 
 		return 75;
 	}
 
+	@Override
+	public boolean isButtonsOnTop(final PageParameter pp) {
+		return true;
+	}
+
+	protected InputElement createDescElement() {
+		return InputElement.textarea("wd_description").setRows(5);
+	}
+
 	public static class WorkitemDelegateSetPage extends AbstractDelegateFormPage {
 
 		@Override
@@ -90,58 +99,17 @@ public abstract class AbstractDelegateFormPage extends FormTableRowTemplatePage 
 			final CalendarInput wd_endDate = new CalendarInput("wd_endDate")
 					.setCalendarComponent("WorkitemDelegatePage_cal");
 
-			final InputElement wd_description = InputElement.textarea("wd_description").setRows(5);
-
 			final TableRow r1 = new TableRow(new RowField($m("WorkitemDelegateSetPage.0"), workitemId,
 					wd_userTxt).setStarMark(true));
 			final TableRow r2 = new TableRow(new RowField($m("WorkitemDelegateSetPage.1"),
 					wd_startDate), new RowField($m("WorkitemDelegateSetPage.2"), wd_endDate));
 			final TableRow r3 = new TableRow(new RowField($m("WorkitemDelegateSetPage.3"),
-					wd_description).setStarMark(true));
+					createDescElement()).setStarMark(true));
 			return TableRows.of(r1, r2, r3);
 		}
 	}
 
-	public static class WorkitemDelegateReceivingPage extends AbstractDelegateFormPage {
-
-		@Override
-		protected void onForward(final PageParameter pp) {
-			super.onForward(pp);
-
-			addFormValidationBean(pp).addValidators(
-					new Validator(EValidatorMethod.required, "#wd_description"));
-
-			addAjaxRequest(pp, "WorkitemDelegateReceivingPage_refuse")
-					.setConfirmMessage($m("WorkitemDelegateReceivingPage.4"))
-					.setHandlerMethod("doRefuse").setSelector(getFormSelector());
-		}
-
-		@Override
-		public JavascriptForward onSave(final ComponentParameter cp) throws Exception {
-			final DelegationBean delegation = dService.queryRunningDelegation(WorkflowUtils
-					.getWorkitemBean(cp));
-			dService.accept(delegation);
-			return super.onSave(cp).append("$Actions['MyWorklistTPage_tbl']();");
-		}
-
-		public IForward doRefuse(final ComponentParameter cp) throws Exception {
-			final DelegationBean delegation = dService.queryRunningDelegation(WorkflowUtils
-					.getWorkitemBean(cp));
-			DescriptionLogUtils.set(delegation, "");
-			dService.abort(delegation);
-			return super.onSave(cp).append("$Actions['MyWorklistTPage_tbl']();");
-		}
-
-		@Override
-		public ElementList getRightElements(final PageParameter pp) {
-			return ElementList.of(
-					SAVE_BTN().setText($m("WorkitemDelegateReceivingPage.1")).removeClassName(
-							"validation"),
-					SpanElement.SPACE,
-					VALIDATION_BTN().setText($m("WorkitemDelegateReceivingPage.2")).setOnclick(
-							"$Actions['WorkitemDelegateReceivingPage_refuse']();"));
-		}
-
+	public static class WorkitemDelegateViewPage extends AbstractDelegateFormPage {
 		@Override
 		protected TableRows getTableRows(final PageParameter pp) {
 			final WorkitemBean workitem = WorkflowUtils.getWorkitemBean(pp);
@@ -161,9 +129,55 @@ public abstract class AbstractDelegateFormPage extends FormTableRowTemplatePage 
 			final TableRow r3 = new TableRow(new RowField($m("WorkitemDelegateSetPage.3"),
 					InputElement.textarea().setText(delegation.getDescription()))).setReadonly(true);
 
-			final TableRow r4 = new TableRow(new RowField($m("WorkitemDelegateReceivingPage.3"),
-					InputElement.textarea("wd_description")));
-			return TableRows.of(r1, r2, r3, r4);
+			return TableRows.of(r1, r2, r3);
+		}
+	}
+
+	public static class WorkitemDelegateReceivingPage extends WorkitemDelegateViewPage {
+		@Override
+		protected void onForward(final PageParameter pp) {
+			super.onForward(pp);
+
+			addFormValidationBean(pp).addValidators(
+					new Validator(EValidatorMethod.required, "#wd_description"));
+
+			addAjaxRequest(pp, "WorkitemDelegateReceivingPage_refuse")
+					.setConfirmMessage($m("WorkitemDelegateReceivingPage.4"))
+					.setHandlerMethod("doRefuse").setSelector(getFormSelector());
+		}
+
+		@Override
+		public JavascriptForward onSave(final ComponentParameter cp) throws Exception {
+			final DelegationBean delegation = dService.queryRunningDelegation(WorkflowUtils
+					.getWorkitemBean(cp));
+			DescriptionLogUtils.set(delegation, cp.getParameter("wd_description"));
+			dService.accept(delegation);
+			return super.onSave(cp).append("$Actions['MyWorklistTPage_tbl']();");
+		}
+
+		public IForward doRefuse(final ComponentParameter cp) throws Exception {
+			final DelegationBean delegation = dService.queryRunningDelegation(WorkflowUtils
+					.getWorkitemBean(cp));
+			DescriptionLogUtils.set(delegation, cp.getParameter("wd_description"));
+			dService.abort(delegation);
+			return super.onSave(cp).append("$Actions['MyWorklistTPage_tbl']();");
+		}
+
+		@Override
+		public ElementList getRightElements(final PageParameter pp) {
+			return ElementList.of(
+					SAVE_BTN().setText($m("WorkitemDelegateReceivingPage.1")).removeClassName(
+							"validation"),
+					SpanElement.SPACE,
+					VALIDATION_BTN().setText($m("WorkitemDelegateReceivingPage.2")).setOnclick(
+							"$Actions['WorkitemDelegateReceivingPage_refuse']();"));
+		}
+
+		@Override
+		protected TableRows getTableRows(final PageParameter pp) {
+			return super.getTableRows(pp).append(
+					new TableRow(
+							new RowField($m("WorkitemDelegateReceivingPage.3"), createDescElement())));
 		}
 	}
 }
