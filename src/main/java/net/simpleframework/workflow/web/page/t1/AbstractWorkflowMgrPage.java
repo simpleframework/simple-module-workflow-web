@@ -73,12 +73,6 @@ public abstract class AbstractWorkflowMgrPage extends T1ResizedTemplatePage impl
 
 	protected abstract Class<? extends AbstractMVCPage> getStatusDescPage();
 
-	protected static ButtonElement createLogButton(final String params) {
-		return ButtonElement.logBtn()
-				.setDisabled(((IWorkflowWebContext) context).getLogRef() == null)
-				.setOnclick("$Actions['AbstractWorkflowMgrPage_update_log']('" + params + "');");
-	}
-
 	public static abstract class AbstractStatusDescPage extends AbstractDescPage {
 
 		@Override

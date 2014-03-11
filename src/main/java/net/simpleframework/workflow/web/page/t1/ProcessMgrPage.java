@@ -145,9 +145,10 @@ public class ProcessMgrPage extends AbstractWorkflowMgrPage {
 									ActivityMgrPage.class, "processId=" + id)))
 					.add("userText", process.getUserText()).add("createDate", process.getCreateDate())
 					.add("completeDate", process.getCompleteDate())
-					.add("status", WorkflowUtils.createStatusImage(cp, status) + status.toString());
+					.add("status", WorkflowUtils.toStatusHTML(cp, status));
 			final StringBuilder sb = new StringBuilder();
-			sb.append(createLogButton("processId=" + id));
+			sb.append(WorkflowUtils.createLogButton().setOnclick(
+					"$Actions['AbstractWorkflowMgrPage_update_log']('processId=" + id + "');"));
 			sb.append(SpanElement.SPACE).append(AbstractTablePagerSchema.IMG_DOWNMENU);
 			row.add(TablePagerColumn.OPE, sb.toString());
 			return row;

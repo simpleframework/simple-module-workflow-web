@@ -96,7 +96,7 @@ public class WorkitemsMgrPage extends OneTableTemplatePage implements IWorkflowC
 					.add("createDate", workitem.getCreateDate())
 					.add("completeDate", workitem.getCompleteDate());
 			final EWorkitemStatus status = workitem.getStatus();
-			row.add("status", WorkflowUtils.createStatusImage(cp, status) + status.toString());
+			row.add("status", WorkflowUtils.toStatusHTML(cp, status));
 
 			final StringBuilder sb = new StringBuilder();
 			sb.append(ButtonElement

@@ -152,7 +152,7 @@ public class ProcessModelMgrPage extends AbstractWorkflowMgrPage {
 									+ id))).add("processCount", processModel.getProcessCount())
 					.add("userText", processModel.getUserText())
 					.add("createDate", processModel.getCreateDate())
-					.add("status", WorkflowUtils.createStatusImage(cp, status) + status.toString());
+					.add("status", WorkflowUtils.toStatusHTML(cp, status));
 			final StringBuilder sb = new StringBuilder();
 			if (status == EProcessModelStatus.edit) {
 				final EProcessModelStatus deploy = EProcessModelStatus.deploy;
@@ -160,7 +160,8 @@ public class ProcessModelMgrPage extends AbstractWorkflowMgrPage {
 						.setOnclick("$Actions['AbstractWorkflowMgrPage_status']('modelId=" + id + "&op="
 								+ deploy.name() + "');"));
 			} else {
-				sb.append(createLogButton("modelId=" + id));
+				sb.append(WorkflowUtils.createLogButton().setOnclick(
+						"$Actions['AbstractWorkflowMgrPage_update_log']('modelId=" + id + "');"));
 			}
 			sb.append(SpanElement.SPACE).append(AbstractTablePagerSchema.IMG_DOWNMENU);
 			row.add(TablePagerColumn.OPE, sb.toString());

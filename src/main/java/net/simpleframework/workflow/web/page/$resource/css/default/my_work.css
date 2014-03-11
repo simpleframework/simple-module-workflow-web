@@ -22,6 +22,10 @@
   color: #390;
 }
 
+.icon16 {
+  margin: 0 4px;
+}
+
 .WorkflowCompleteInfoPage {
   width: 50%;
   text-align: left;

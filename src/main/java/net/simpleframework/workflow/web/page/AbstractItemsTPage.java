@@ -5,9 +5,13 @@ import static net.simpleframework.common.I18n.$m;
 import java.util.List;
 
 import net.simpleframework.common.object.ObjectFactory;
+import net.simpleframework.ctx.IModuleRef;
+import net.simpleframework.mvc.AbstractMVCPage;
 import net.simpleframework.mvc.PageParameter;
+import net.simpleframework.mvc.component.base.ajaxrequest.AjaxRequestBean;
 import net.simpleframework.mvc.component.ui.pager.ITablePagerHandler;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
+import net.simpleframework.mvc.component.ui.window.WindowBean;
 import net.simpleframework.mvc.template.lets.Category_ListPage;
 import net.simpleframework.mvc.template.struct.CategoryItem;
 import net.simpleframework.mvc.template.struct.CategoryItems;
@@ -26,6 +30,19 @@ public abstract class AbstractItemsTPage extends Category_ListPage implements IW
 	protected void onForward(final PageParameter pp) {
 		super.onForward(pp);
 		pp.addImportCSS(AbstractItemsTPage.class, "/my_work.css");
+
+		final IModuleRef ref = ((IWorkflowWebContext) context).getLogRef();
+		Class<? extends AbstractMVCPage> lPage;
+		if (ref != null && (lPage = getUpdateLogPage()) != null) {
+			pp.addComponentBean("AbstractItemsTPage_update_logPage", AjaxRequestBean.class)
+					.setUrlForward(AbstractMVCPage.url(lPage));
+			pp.addComponentBean("AbstractItemsTPage_update_log", WindowBean.class)
+					.setContentRef("AbstractItemsTPage_update_logPage").setHeight(540).setWidth(864);
+		}
+	}
+
+	protected Class<? extends AbstractMVCPage> getUpdateLogPage() {
+		return null;
 	}
 
 	@Override

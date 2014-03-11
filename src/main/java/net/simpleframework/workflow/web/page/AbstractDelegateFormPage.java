@@ -8,6 +8,7 @@ import net.simpleframework.module.common.DescriptionLogUtils;
 import net.simpleframework.mvc.IForward;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageParameter;
+import net.simpleframework.mvc.common.element.ButtonElement;
 import net.simpleframework.mvc.common.element.CalendarInput;
 import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.InputElement;
@@ -38,11 +39,6 @@ public abstract class AbstractDelegateFormPage extends FormTableRowTemplatePage 
 	@Override
 	public int getLabelWidth(final PageParameter pp) {
 		return 75;
-	}
-
-	@Override
-	public boolean isButtonsOnTop(final PageParameter pp) {
-		return true;
 	}
 
 	protected InputElement createDescElement() {
@@ -79,7 +75,7 @@ public abstract class AbstractDelegateFormPage extends FormTableRowTemplatePage 
 					: permission.getUser(cp.getParameter("wd_userTxt"));
 
 			wService.setWorkitemDelegation(workitem, user.getId(),
-					cp.getDateParameter("wd_startDate"), cp.getDateParameter("wd_startDate"),
+					cp.getDateParameter("wd_startDate"), cp.getDateParameter("wd_endDate"),
 					cp.getParameter("wd_description"));
 			return super.onSave(cp).append("$Actions['MyWorklistTPage_tbl']();");
 		}
@@ -110,14 +106,27 @@ public abstract class AbstractDelegateFormPage extends FormTableRowTemplatePage 
 	}
 
 	public static class WorkitemDelegateViewPage extends AbstractDelegateFormPage {
+
+		protected DelegationBean _getDelegation(final PageParameter pp) {
+			return dService.getBean(pp.getParameter("delegationId"));
+		}
+
+		protected RowField createUser(final PageParameter pp) {
+			final DelegationBean delegation = _getDelegation(pp);
+			return new RowField($m("WorkitemDelegateSetPage.0"), new InputElement().setText(delegation
+					.getUserText()));
+		}
+
+		@Override
+		public ElementList getRightElements(final PageParameter pp) {
+			return ElementList.of(ButtonElement.WINDOW_CLOSE);
+		}
+
 		@Override
 		protected TableRows getTableRows(final PageParameter pp) {
-			final WorkitemBean workitem = WorkflowUtils.getWorkitemBean(pp);
-			final DelegationBean delegation = dService.queryRunningDelegation(workitem);
+			final DelegationBean delegation = _getDelegation(pp);
 
-			final TableRow r1 = new TableRow(new RowField($m("WorkitemDelegateSetPage.0"),
-					InputElement.hidden("workitemId").setText(workitem.getId()),
-					new InputElement().setText(workitem.getUserText())), new RowField(
+			final TableRow r1 = new TableRow(createUser(pp), new RowField(
 					$m("WorkitemDelegateReceivingPage.0"), new InputElement().setText(delegation
 							.getCreateDate()))).setReadonly(true);
 
@@ -146,18 +155,18 @@ public abstract class AbstractDelegateFormPage extends FormTableRowTemplatePage 
 					.setHandlerMethod("doRefuse").setSelector(getFormSelector());
 		}
 
+		@Transaction(context = IWorkflowContext.class)
 		@Override
 		public JavascriptForward onSave(final ComponentParameter cp) throws Exception {
-			final DelegationBean delegation = dService.queryRunningDelegation(WorkflowUtils
-					.getWorkitemBean(cp));
+			final DelegationBean delegation = _getDelegation(cp);
 			DescriptionLogUtils.set(delegation, cp.getParameter("wd_description"));
 			dService.accept(delegation);
 			return super.onSave(cp).append("$Actions['MyWorklistTPage_tbl']();");
 		}
 
+		@Transaction(context = IWorkflowContext.class)
 		public IForward doRefuse(final ComponentParameter cp) throws Exception {
-			final DelegationBean delegation = dService.queryRunningDelegation(WorkflowUtils
-					.getWorkitemBean(cp));
+			final DelegationBean delegation = _getDelegation(cp);
 			DescriptionLogUtils.set(delegation, cp.getParameter("wd_description"));
 			dService.abort(delegation);
 			return super.onSave(cp).append("$Actions['MyWorklistTPage_tbl']();");
@@ -174,10 +183,27 @@ public abstract class AbstractDelegateFormPage extends FormTableRowTemplatePage 
 		}
 
 		@Override
+		protected DelegationBean _getDelegation(final PageParameter pp) {
+			return dService.queryRunningDelegation(WorkflowUtils.getWorkitemBean(pp));
+		}
+
+		@Override
+		protected RowField createUser(final PageParameter pp) {
+			final WorkitemBean workitem = WorkflowUtils.getWorkitemBean(pp);
+			return new RowField($m("WorkitemDelegateSetPage.0"), InputElement.hidden("workitemId")
+					.setText(workitem.getId()), new InputElement().setText(workitem.getUserText()));
+		}
+
+		@Override
 		protected TableRows getTableRows(final PageParameter pp) {
 			return super.getTableRows(pp).append(
 					new TableRow(
 							new RowField($m("WorkitemDelegateReceivingPage.3"), createDescElement())));
+		}
+
+		@Override
+		public boolean isButtonsOnTop(final PageParameter pp) {
+			return true;
 		}
 	}
 }

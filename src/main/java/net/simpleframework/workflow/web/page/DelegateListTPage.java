@@ -7,6 +7,7 @@ import java.util.Map;
 import net.simpleframework.ado.query.IDataQuery;
 import net.simpleframework.common.coll.KVMap;
 import net.simpleframework.ctx.trans.Transaction;
+import net.simpleframework.mvc.AbstractMVCPage;
 import net.simpleframework.mvc.IForward;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageParameter;
@@ -26,9 +27,8 @@ import net.simpleframework.workflow.engine.EDelegationStatus;
 import net.simpleframework.workflow.engine.IWorkflowContext;
 import net.simpleframework.workflow.engine.IWorkflowContextAware;
 import net.simpleframework.workflow.engine.WorkitemBean;
-import net.simpleframework.workflow.web.IWorkflowWebContext;
-import net.simpleframework.workflow.web.WorkflowUrlsFactory;
-import net.simpleframework.workflow.web.page.t1.WorkflowFormPage;
+import net.simpleframework.workflow.web.WorkflowLogRef.DelegateUpdateLogPage;
+import net.simpleframework.workflow.web.page.AbstractDelegateFormPage.WorkitemDelegateViewPage;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -45,14 +45,28 @@ public class DelegateListTPage extends AbstractWorkitemsTPage implements IWorkfl
 		final TablePagerBean tablePager = addTablePagerBean(pp, "MyWorklistTPage_tbl",
 				DelegateTbl.class).setShowCheckbox(false).setShowFilterBar(false).setShowLineNo(false);
 		tablePager.addColumn(TablePagerColumn.ICON().setWidth(16));
-		tablePager.addColumn(TITLE()).addColumn(new TablePagerColumn("userText", "委托人", 70))
-				.addColumn(new TablePagerColumn("status", "状态", 60).setTextAlign(ETextAlign.left))
-				.addColumn(new TablePagerColumn("createDate", "委托日期", 115));
+		tablePager
+				.addColumn(TITLE())
+				.addColumn(new TablePagerColumn("userText", $m("DelegateListTPage.0"), 70))
+				.addColumn(
+						new TablePagerColumn("status", $m("DelegateListTPage.1"), 60)
+								.setTextAlign(ETextAlign.left))
+				.addColumn(new TablePagerColumn("createDate", $m("DelegateListTPage.2"), 115));
 		tablePager.addColumn(TablePagerColumn.OPE().setWidth(70));
 
 		// 取消
 		addAjaxRequest(pp, "DelegateListTPage_abort").setHandlerMethod("doAbort").setConfirmMessage(
-				"确认要取消吗？");
+				$m("DelegateListTPage.3"));
+
+		// 查看
+		addAjaxRequest(pp, "DelegateListTPage_view_page", WorkitemDelegateViewPage.class);
+		addWindowBean(pp, "DelegateListTPage_view").setContentRef("DelegateListTPage_view_page")
+				.setTitle($m("DelegateListTPage.4")).setHeight(300).setWidth(500);
+	}
+
+	@Override
+	protected Class<? extends AbstractMVCPage> getUpdateLogPage() {
+		return DelegateUpdateLogPage.class;
 	}
 
 	@Transaction(context = IWorkflowContext.class)
@@ -78,22 +92,27 @@ public class DelegateListTPage extends AbstractWorkitemsTPage implements IWorkfl
 		protected Map<String, Object> getRowData(final ComponentParameter cp, final Object dataObject) {
 			final DelegationBean delegation = (DelegationBean) dataObject;
 			final WorkitemBean workitem = wService.getBean(delegation.getSourceId());
-			final WorkflowUrlsFactory uFactory = ((IWorkflowWebContext) context).getUrlsFactory();
+
+			final Object id = delegation.getId();
 			final KVMap row = new KVMap().add(
 					"title",
 					new LinkElement(MyWorklistTbl.getTitle(aService.getProcessBean(wService
-							.getActivity(workitem)))).setOnclick("$Actions.loc('"
-							+ uFactory.getUrl(cp, WorkflowFormPage.class, workitem, "source=delegation")
-							+ "');"));
+							.getActivity(workitem))))
+							.setOnclick("$Actions['DelegateListTPage_view']('delegationId=" + id + "');"));
 			row.add("userText", delegation.getUserText());
 			row.add("createDate", delegation.getCreateDate());
 			final EDelegationStatus status = delegation.getStatus();
-			row.add("status", WorkflowUtils.createStatusImage(cp, status) + status.toString());
+			row.add("status", WorkflowUtils.toStatusHTML(cp, status));
 
 			final StringBuilder sb = new StringBuilder();
-			sb.append(new ButtonElement($m("Button.Cancel")).setOnclick(
-					"$Actions['DelegateListTPage_abort']('delegationId=" + delegation.getId() + "');")
-					.setDisabled(dService.isFinalStatus(delegation)));
+			if (dService.isFinalStatus(delegation)) {
+				sb.append(WorkflowUtils.createLogButton().setOnclick(
+						"$Actions['AbstractItemsTPage_update_log']('delegationId=" + id + "');"));
+			} else {
+				sb.append(new ButtonElement($m("Button.Cancel"))
+						.setOnclick("$Actions['DelegateListTPage_abort']('delegationId=" + id + "');"));
+			}
+
 			sb.append(SpanElement.SPACE).append(AbstractTablePagerSchema.IMG_DOWNMENU);
 			row.add(TablePagerColumn.OPE, sb.toString());
 			return row;

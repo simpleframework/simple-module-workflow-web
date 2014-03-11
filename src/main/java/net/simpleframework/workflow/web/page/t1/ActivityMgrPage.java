@@ -137,8 +137,7 @@ public class ActivityMgrPage extends AbstractWorkflowMgrPage {
 			final ActivityBean pre = aService.getPreActivity(activity);
 			if (pre != null) {
 				final EActivityStatus pstatus = pre.getStatus();
-				row.add("previous", WorkflowUtils.createStatusImage(cp, pstatus)
-						+ toTasknode(pre).toString());
+				row.add("previous", WorkflowUtils.toStatusHTML(cp, pstatus, toTasknode(pre)));
 			}
 			row.add("participants", getParticipants(activity, false));
 			row.add("participants2", getParticipants(activity, true));
@@ -155,14 +154,16 @@ public class ActivityMgrPage extends AbstractWorkflowMgrPage {
 			}
 
 			final EActivityStatus status = activity.getStatus();
-			row.add("status", WorkflowUtils.createStatusImage(cp, status) + status.toString());
+			row.add("status", WorkflowUtils.toStatusHTML(cp, status));
 			row.add(TablePagerColumn.OPE, getOpe(activity));
 			return row;
 		}
 
 		protected String getOpe(final ActivityBean activity) {
 			final StringBuilder sb = new StringBuilder();
-			sb.append(createLogButton("activityId=" + activity.getId()));
+			sb.append(WorkflowUtils.createLogButton().setOnclick(
+					"$Actions['AbstractWorkflowMgrPage_update_log']('activityId=" + activity.getId()
+							+ "');"));
 			sb.append(SpanElement.SPACE).append(AbstractTablePagerSchema.IMG_DOWNMENU);
 			return sb.toString();
 		}
