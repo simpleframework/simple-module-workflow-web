@@ -8,6 +8,8 @@ import net.simpleframework.ctx.trans.Transaction;
 import net.simpleframework.mvc.IForward;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageParameter;
+import net.simpleframework.mvc.common.element.ElementList;
+import net.simpleframework.mvc.common.element.LinkButton;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
 import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
@@ -31,7 +33,7 @@ public class MyWorklistTPage extends AbstractWorkitemsTPage {
 
 		final TablePagerBean tablePager = (TablePagerBean) addTablePagerBean(pp,
 				"MyWorklistTPage_tbl", MyWorklistTbl.class).setShowFilterBar(false)
-				.setShowLineNo(false).setShowCheckbox(false).setPageItems(50);
+				.setShowLineNo(false).setPageItems(50);
 		tablePager.addColumn(TablePagerColumn.ICON().setWidth(18));
 
 		final EWorkitemStatus status = pp.getEnumParameter(EWorkitemStatus.class, "status");
@@ -71,6 +73,11 @@ public class MyWorklistTPage extends AbstractWorkitemsTPage {
 		addWindowBean(pp, "MyWorklistTPage_delegate_receiving")
 				.setContentRef("MyWorklistTPage_delegate_receiving_page")
 				.setTitle($m("MyWorklistTPage.7")).setHeight(400).setWidth(500);
+	}
+
+	@Override
+	public ElementList getLeftElements(PageParameter pp) {
+		return ElementList.of(LinkButton.menu($m("AbstractMyMessageTPage.6")).setId("idxxx"));
 	}
 
 	@Transaction(context = IWorkflowContext.class)
