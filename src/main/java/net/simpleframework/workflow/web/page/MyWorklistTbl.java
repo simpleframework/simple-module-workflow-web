@@ -206,22 +206,25 @@ public class MyWorklistTbl extends GroupDbTablePagerHandler implements IWorkflow
 	public MenuItems getContextMenu(final ComponentParameter cp, final MenuBean menuBean,
 			final MenuItem menuItem) {
 		final MenuItems items = MenuItems.of();
+		items.append(MenuItem.of("办理过程"));
+		items.append(MenuItem.sep());
 		final EWorkitemStatus status = cp.getEnumParameter(EWorkitemStatus.class, "status");
 		if (status == EWorkitemStatus.complete) {
 			items.append(MenuItem.of($m("MyWorklistTbl.2")).setOnclick_act("MyWorklistTPage_retake",
 					"workitemId"));
 		} else {
+			items.append(MenuItem.of($m("MyWorklistTbl.4")).setOnclick_act("MyWorklistTPage_fallback",
+					"workitemId"));
+			items.append(MenuItem.of($m("MyWorklistTbl.5")).setOnclick_act("MyWorklistTPage_delegate",
+					"workitemId"));
+			items.append(MenuItem.sep());
 			items.append(MenuItem.of($m("MyWorklistTbl.3")).setOnclick_act("MyWorklistTPage_readMark",
 					"workitemId"));
 			items.append(MenuItem.sep());
-			items.append(MenuItem.of($m("MyWorklistTbl.4")).setOnclick_act("MyWorklistTPage_fallback",
-					"workitemId"));
-			items.append(MenuItem.sep());
 			items.append(MenuItem.itemDelete().setOnclick_act("MyWorklistTPage_delete", "workitemId"));
-			items.append(MenuItem.sep());
-			items.append(MenuItem.of($m("MyWorklistTbl.5")).setOnclick_act("MyWorklistTPage_delegate",
-					"workitemId"));
 		}
+		items.append(MenuItem.sep());
+		items.append(MenuItem.of("日志"));
 		return items;
 	}
 

@@ -77,7 +77,7 @@ public class MyWorklistTPage extends AbstractWorkitemsTPage {
 
 	@Override
 	public ElementList getLeftElements(PageParameter pp) {
-		return ElementList.of(LinkButton.menu($m("AbstractMyMessageTPage.6")).setId("idxxx"));
+		return ElementList.of(LinkButton.menu($m("MyWorklistTPage.8")).setId("idxxx"));
 	}
 
 	@Transaction(context = IWorkflowContext.class)
