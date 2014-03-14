@@ -29,7 +29,7 @@ public abstract class WorkflowUtils implements IWorkflowContextAware {
 	public static String toStatusHTML(final PageParameter pp, final Enum<?> status, final Object txt) {
 		final StringBuilder sb = new StringBuilder();
 		sb.append(new ImageElement(pp.getCssResourceHomePath(WorkflowUtils.class) + "/images/status_"
-				+ status.name() + ".png").setClassName("icon16"));
+				+ status.name() + ".png").setClassName("icon16").addStyle("margin: 0 4px;"));
 		sb.append(new SpanElement(txt != null ? txt : status.toString()).setClassName("icon_txt"));
 		return sb.toString();
 	}

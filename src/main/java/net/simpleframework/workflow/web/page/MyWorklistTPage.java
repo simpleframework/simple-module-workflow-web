@@ -5,6 +5,7 @@ import static net.simpleframework.common.I18n.$m;
 import java.util.Date;
 
 import net.simpleframework.ctx.trans.Transaction;
+import net.simpleframework.mvc.AbstractMVCPage;
 import net.simpleframework.mvc.IForward;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageParameter;
@@ -16,6 +17,7 @@ import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
 import net.simpleframework.workflow.engine.EWorkitemStatus;
 import net.simpleframework.workflow.engine.IWorkflowContext;
 import net.simpleframework.workflow.engine.WorkitemBean;
+import net.simpleframework.workflow.web.WorkflowLogRef.WorkitemUpdateLogPage;
 import net.simpleframework.workflow.web.page.AbstractDelegateFormPage.WorkitemDelegateReceivingPage;
 import net.simpleframework.workflow.web.page.AbstractDelegateFormPage.WorkitemDelegateSetPage;
 
@@ -73,6 +75,11 @@ public class MyWorklistTPage extends AbstractWorkitemsTPage {
 		addWindowBean(pp, "MyWorklistTPage_delegate_receiving")
 				.setContentRef("MyWorklistTPage_delegate_receiving_page")
 				.setTitle($m("MyWorklistTPage.7")).setHeight(400).setWidth(500);
+	}
+
+	@Override
+	protected Class<? extends AbstractMVCPage> getUpdateLogPage() {
+		return WorkitemUpdateLogPage.class;
 	}
 
 	@Override

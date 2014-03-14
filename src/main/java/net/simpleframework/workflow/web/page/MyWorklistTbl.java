@@ -206,7 +206,11 @@ public class MyWorklistTbl extends GroupDbTablePagerHandler implements IWorkflow
 	public MenuItems getContextMenu(final ComponentParameter cp, final MenuBean menuBean,
 			final MenuItem menuItem) {
 		final MenuItems items = MenuItems.of();
-		items.append(MenuItem.of("办理过程"));
+		items.append(MenuItem.of("办理过程").setOnclick(
+				"$Actions.loc('"
+						+ ((IWorkflowWebContext) context).getUrlsFactory().getUrl(cp,
+								WorkflowMonitorPage.class)
+						+ "?workitemId=' + $pager_action(item).rowId());"));
 		items.append(MenuItem.sep());
 		final EWorkitemStatus status = cp.getEnumParameter(EWorkitemStatus.class, "status");
 		if (status == EWorkitemStatus.complete) {
@@ -224,7 +228,7 @@ public class MyWorklistTbl extends GroupDbTablePagerHandler implements IWorkflow
 			items.append(MenuItem.itemDelete().setOnclick_act("MyWorklistTPage_delete", "workitemId"));
 		}
 		items.append(MenuItem.sep());
-		items.append(MenuItem.of("日志"));
+		items.append(MenuItem.of("日志").setOnclick_act("AbstractItemsTPage_update_log", "workitemId"));
 		return items;
 	}
 
