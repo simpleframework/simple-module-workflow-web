@@ -54,7 +54,7 @@ public abstract class AbstractWorkflowFormTPage extends FormTableRowTemplatePage
 
 		final WorkitemBean workitem = getWorkitemBean(pp);
 		if (workitem != null && !workitem.isReadMark()) {
-			wService.readMark(workitem, false);
+			wService.doReadMark(workitem, false);
 		}
 	}
 

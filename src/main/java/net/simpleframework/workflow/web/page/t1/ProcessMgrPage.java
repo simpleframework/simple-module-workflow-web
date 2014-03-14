@@ -40,7 +40,6 @@ import net.simpleframework.workflow.engine.IWorkflowContext;
 import net.simpleframework.workflow.engine.ProcessBean;
 import net.simpleframework.workflow.engine.ProcessModelBean;
 import net.simpleframework.workflow.web.WorkflowLogRef.ProcessUpdateLogPage;
-import net.simpleframework.workflow.web.page.MyWorklistTbl;
 import net.simpleframework.workflow.web.page.WorkflowUtils;
 
 /**
@@ -141,7 +140,7 @@ public class ProcessMgrPage extends AbstractWorkflowMgrPage {
 			final EProcessStatus status = process.getStatus();
 			final KVMap row = new KVMap()
 					.add("title",
-							new LinkElement(MyWorklistTbl.getTitle(process)).setHref(url(
+							new LinkElement(WorkflowUtils.getTitle(process)).setHref(url(
 									ActivityMgrPage.class, "processId=" + id)))
 					.add("userText", process.getUserText()).add("createDate", process.getCreateDate())
 					.add("completeDate", process.getCompleteDate())

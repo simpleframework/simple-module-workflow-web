@@ -2,6 +2,7 @@ package net.simpleframework.workflow.web.page;
 
 import static net.simpleframework.common.I18n.$m;
 
+import java.util.Date;
 import java.util.Map;
 
 import net.simpleframework.ado.query.IDataQuery;
@@ -29,6 +30,7 @@ import net.simpleframework.workflow.engine.IWorkflowContextAware;
 import net.simpleframework.workflow.engine.WorkitemBean;
 import net.simpleframework.workflow.web.WorkflowLogRef.DelegateUpdateLogPage;
 import net.simpleframework.workflow.web.page.AbstractDelegateFormPage.WorkitemDelegateViewPage;
+import net.simpleframework.workflow.web.page.MyWorklistTPage.MyWorklistTbl;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -51,7 +53,9 @@ public class DelegateListTPage extends AbstractWorkitemsTPage implements IWorkfl
 				.addColumn(
 						new TablePagerColumn("status", $m("DelegateListTPage.1"), 60)
 								.setTextAlign(ETextAlign.left))
-				.addColumn(new TablePagerColumn("createDate", $m("DelegateListTPage.2"), 115));
+				.addColumn(
+						new TablePagerColumn("createDate", $m("DelegateListTPage.2"), 115)
+								.setPropertyClass(Date.class));
 		tablePager.addColumn(TablePagerColumn.OPE().setWidth(70));
 
 		// 取消
@@ -96,7 +100,7 @@ public class DelegateListTPage extends AbstractWorkitemsTPage implements IWorkfl
 			final Object id = delegation.getId();
 			final KVMap row = new KVMap().add(
 					"title",
-					new LinkElement(MyWorklistTbl.getTitle(aService.getProcessBean(wService
+					new LinkElement(WorkflowUtils.getTitle(aService.getProcessBean(wService
 							.getActivity(workitem))))
 							.setOnclick("$Actions['DelegateListTPage_view']('delegationId=" + id + "');"));
 			row.add("userText", delegation.getUserText());

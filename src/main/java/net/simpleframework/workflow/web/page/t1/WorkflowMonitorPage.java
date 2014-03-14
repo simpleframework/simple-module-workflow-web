@@ -25,7 +25,6 @@ import net.simpleframework.workflow.engine.WorkitemBean;
 import net.simpleframework.workflow.schema.AbstractTaskNode;
 import net.simpleframework.workflow.web.IWorkflowWebContext;
 import net.simpleframework.workflow.web.WorkflowUrlsFactory;
-import net.simpleframework.workflow.web.page.MyWorklistTbl;
 import net.simpleframework.workflow.web.page.WorkflowUtils;
 import net.simpleframework.workflow.web.page.t1.ActivityMgrPage.ActivityTbl;
 
@@ -74,7 +73,7 @@ public class WorkflowMonitorPage extends AbstractWorkflowFormPage {
 		final ProcessBean process = getProcessBean(pp);
 		el.append(
 				SpanElement.SPACE15,
-				SpanElement.strongText(MyWorklistTbl.getTitle(process) + " [" + process.getStatus()
+				SpanElement.strongText(WorkflowUtils.getTitle(process) + " [" + process.getStatus()
 						+ "]"));
 		return el;
 	}

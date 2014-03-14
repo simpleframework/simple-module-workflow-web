@@ -41,7 +41,6 @@ import net.simpleframework.workflow.engine.EProcessStatus;
 import net.simpleframework.workflow.engine.ProcessBean;
 import net.simpleframework.workflow.schema.AbstractTaskNode;
 import net.simpleframework.workflow.web.WorkflowLogRef.ActivityUpdateLogPage;
-import net.simpleframework.workflow.web.page.MyWorklistTbl;
 import net.simpleframework.workflow.web.page.WorkflowUtils;
 
 /**
@@ -83,7 +82,7 @@ public class ActivityMgrPage extends AbstractWorkflowMgrPage {
 		final ProcessBean process = getProcessBean(pp);
 		return ElementList.of(new LinkButton($m("ActivityMgrPage.7")).setIconClass(Icon.share_alt)
 				.setHref(url(ProcessMgrPage.class, "modelId=" + process.getModelId())),
-				SpanElement.SPACE15, SpanElement.strongText(MyWorklistTbl.getTitle(process)));
+				SpanElement.SPACE15, SpanElement.strongText(WorkflowUtils.getTitle(process)));
 	}
 
 	@Override
@@ -263,7 +262,8 @@ public class ActivityMgrPage extends AbstractWorkflowMgrPage {
 	}
 
 	static TablePagerColumn TC_TIMEOUT() {
-		return new TablePagerColumn("timeoutDate", $m("ActivityMgrPage.9"), 105).setFilter(false);
+		return new TablePagerColumn("timeoutDate", $m("ActivityMgrPage.9"), 105).setPropertyClass(
+				Date.class).setFilter(false);
 	}
 
 	static TablePagerColumn TC_STATUS() {
