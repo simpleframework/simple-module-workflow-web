@@ -18,6 +18,14 @@
   background-image: url("images/delegate_list.png");
 }
 
+.menu_unread {
+  background-image: url("images/mark_unread.png");
+}
+
+.menu_top {
+  background-image: url("images/mark_top.png");
+}
+
 .tasknode_txt {
   color: #390;
 }

@@ -11,6 +11,8 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import net.simpleframework.ado.query.IDataQuery;
 import net.simpleframework.ado.query.ListDataQuery;
+import net.simpleframework.common.Convert;
+import net.simpleframework.common.DateUtils;
 import net.simpleframework.common.ID;
 import net.simpleframework.common.StringUtils;
 import net.simpleframework.common.coll.KVMap;
@@ -20,6 +22,7 @@ import net.simpleframework.mvc.IForward;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.ButtonElement;
+import net.simpleframework.mvc.common.element.ETextAlign;
 import net.simpleframework.mvc.common.element.EVerticalAlign;
 import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.ImageElement;
@@ -65,24 +68,24 @@ public class MyWorklistTPage extends AbstractWorkitemsTPage {
 	protected void onForward(final PageParameter pp) {
 		super.onForward(pp);
 
-		final TablePagerBean tablePager = (TablePagerBean) addTablePagerBean(pp,
-				"MyWorklistTPage_tbl", MyWorklistTbl.class).setShowFilterBar(false)
-				.setShowLineNo(false).setPageItems(50);
+		final TablePagerBean tablePager = addTablePagerBean(pp, "MyWorklistTPage_tbl",
+				MyWorklistTbl.class);
 		tablePager.addColumn(TablePagerColumn.ICON().setWidth(18));
 
-		final EWorkitemStatus status = pp.getEnumParameter(EWorkitemStatus.class, "status");
 		tablePager.addColumn(TITLE());
-		if (status == EWorkitemStatus.complete) {
-			tablePager.addColumn(new TablePagerColumn("userTo", $m("MyWorklistTPage.0"), 115)
-					.setSort(false));
+		if ("complete".equals(pp.getParameter("s"))) {
+			tablePager.addColumn(new TablePagerColumn("userTo", $m("MyWorklistTPage.0"), 115).setSort(
+					false).setNowrap(false));
 			tablePager.addColumn(new TablePagerColumn("completeDate", $m("MyWorklistTPage.1"), 115)
 					.setPropertyClass(Date.class));
 		} else {
 			tablePager.addColumn(new TablePagerColumn("userFrom", $m("MyWorklistTPage.2"), 115)
-					.setSort(false));
-			tablePager.addColumn(new TablePagerColumn("createDate", $m("MyWorklistTPage.3"), 115)
+					.setSort(false).setNowrap(false));
+			tablePager.addColumn(new TablePagerColumn("createDate", $m("MyWorklistTPage.3"), 90)
 					.setPropertyClass(Date.class));
 		}
+		tablePager.addColumn(new TablePagerColumn("status", $m("MyWorklistTPage.14"), 55)
+				.setPropertyClass(EWorkitemStatus.class).setTextAlign(ETextAlign.left));
 		tablePager.addColumn(TablePagerColumn.OPE().setWidth(70));
 
 		// 取回
@@ -197,12 +200,13 @@ public class MyWorklistTPage extends AbstractWorkitemsTPage {
 	public static class MyWorklistTbl extends GroupDbTablePagerHandler {
 		@Override
 		public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
-			final EWorkitemStatus status = cp.getEnumParameter(EWorkitemStatus.class, "status");
 			final ID userId = cp.getLoginId();
 			List<WorkitemBean> list;
-			if (status != null) {
-				cp.addFormParameter("status", status.name());
-				list = wService.getWorklist(userId, status);
+			final String s = cp.getParameter("s");
+			if ("complete".equals(s)) {
+				cp.addFormParameter("s", s);
+				list = wService.getWorklist(userId, EWorkitemStatus.complete, EWorkitemStatus.abort,
+						EWorkitemStatus.retake);
 			} else {
 				list = wService.getRunningWorklist(userId);
 			}
@@ -255,12 +259,14 @@ public class MyWorklistTPage extends AbstractWorkitemsTPage {
 
 			ImageElement img = null;
 			if (status == EWorkitemStatus.delegate) {
-				img = PhotoImage.icon12(cp.getPhotoUrl(workitem.getUserId2())).setTitle(
+				img = PhotoImage.icon12(cp.getPhotoUrl(workitem.getUserId())).setTitle(
 						$m("MyWorklistTbl.5", permission.getUser(workitem.getUserId())));
 			} else if (workitem.isTopMark()) {
-				img = createImageMark(cp, "mark_top.png");
+				img = createImageMark(cp, "mark_top.png").setTitle($m("MyWorklistTbl.8")).addStyle(
+						"margin-top: -3px;");
 			} else if (!workitem.isReadMark()) {
-				img = createImageMark(cp, "mark_unread.png").setTitle($m("MyWorklistTbl.4"));
+				img = createImageMark(cp, "mark_unread.png").setTitle($m("MyWorklistTbl.4")).addStyle(
+						"margin-top: -1px;");
 			}
 			if (img != null) {
 				row.add(TablePagerColumn.ICON, img);
@@ -288,8 +294,13 @@ public class MyWorklistTPage extends AbstractWorkitemsTPage {
 										+ "');"));
 			}
 			row.add("title", title.toString()).add("userFrom", getUserFrom(activity))
-					.add("userTo", getUserTo(activity)).add("createDate", workitem.getCreateDate())
-					.add("completeDate", workitem.getCompleteDate());
+					.add("userTo", getUserTo(activity));
+			final Date createDate = workitem.getCreateDate();
+			row.add("createDate",
+					new SpanElement(DateUtils.getRelativeDate(createDate, DATE_NUMBERCONVERT))
+							.setTitle(Convert.toDateString(createDate)));
+			row.add("completeDate", workitem.getCompleteDate()).add("status",
+					WorkflowUtils.toStatusHTML(cp, status));
 
 			final StringBuilder ope = new StringBuilder();
 			if (receiving) {
@@ -316,8 +327,7 @@ public class MyWorklistTPage extends AbstractWorkitemsTPage {
 									WorkflowMonitorPage.class)
 							+ "?workitemId=' + $pager_action(item).rowId());"));
 			items.append(MenuItem.sep());
-			final EWorkitemStatus status = cp.getEnumParameter(EWorkitemStatus.class, "status");
-			if (status == EWorkitemStatus.complete) {
+			if ("complete".equals(cp.getParameter("s"))) {
 				items.append(MenuItem.of($m("MyWorklistTbl.1")).setOnclick_act(
 						"MyWorklistTPage_retake", "workitemId"));
 			} else {
@@ -411,6 +421,7 @@ public class MyWorklistTPage extends AbstractWorkitemsTPage {
 	static MenuItem MENU_MARK_UNREAD() {
 		return MenuItem
 				.of($m("MyWorklistTPage.10"))
+				.setIconClass("menu_unread")
 				.setOnclick(
 						"$Actions['MyWorklistTPage_tbl'].doAct('MyWorklistTPage_readMark', 'workitemId', 'op=unread');");
 	}
@@ -423,6 +434,7 @@ public class MyWorklistTPage extends AbstractWorkitemsTPage {
 	static MenuItem MENU_MARK_TOP() {
 		return MenuItem
 				.of($m("MyWorklistTPage.12"))
+				.setIconClass("menu_top")
 				.setOnclick(
 						"$Actions['MyWorklistTPage_tbl'].doAct('MyWorklistTPage_topMark', 'workitemId', 'op=top');");
 	}

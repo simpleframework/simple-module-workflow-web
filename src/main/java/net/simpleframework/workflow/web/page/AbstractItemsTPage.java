@@ -48,8 +48,9 @@ public abstract class AbstractItemsTPage extends Category_ListPage implements IW
 	@Override
 	protected TablePagerBean addTablePagerBean(final PageParameter pp, final String name,
 			final Class<? extends ITablePagerHandler> handlerClass) {
-		return addTablePagerBean(pp, name, handlerClass, false).setShowFilterBar(true)
-				.setShowHead(true).setShowCheckbox(true);
+		return (TablePagerBean) addTablePagerBean(pp, name, handlerClass, false).setResize(false)
+				.setShowCheckbox(false).setShowFilterBar(false).setShowLineNo(false).setShowHead(true)
+				.setPageItems(50);
 	}
 
 	private CategoryItem createCategoryItem(final PageParameter pp, final String text,
@@ -63,14 +64,13 @@ public abstract class AbstractItemsTPage extends Category_ListPage implements IW
 	protected CategoryItems getCategoryList(final PageParameter pp) {
 		final CategoryItem item0 = createCategoryItem(pp, $m("AbstractItemsTPage.0"),
 				MyWorklistTPage.class, null).setIconClass("my_work_icon");
-		final String _status = pp.getParameter("status");
+		final String s = pp.getParameter("s");
 		final List<CategoryItem> children = item0.getChildren();
 		// children.add(createCategoryItem(pp, "待办工作", MyWorklistTPage.class,
 		// "status=running")
 		// .setSelected("running".equals(_status)));
 		children.add(createCategoryItem(pp, $m("AbstractItemsTPage.1"), MyWorklistTPage.class,
-				"status=complete").setIconClass("my_work_complete_icon").setSelected(
-				"complete".equals(_status)));
+				"s=complete").setIconClass("my_work_complete_icon").setSelected("complete".equals(s)));
 		children
 				.add(createCategoryItem(pp, $m("AbstractItemsTPage.3"), DelegateListTPage.class, null)
 						.setIconClass("delegate_list_icon"));

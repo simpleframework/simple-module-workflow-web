@@ -45,17 +45,17 @@ public class DelegateListTPage extends AbstractWorkitemsTPage implements IWorkfl
 		super.onForward(pp);
 
 		final TablePagerBean tablePager = addTablePagerBean(pp, "MyWorklistTPage_tbl",
-				DelegateTbl.class).setShowCheckbox(false).setShowFilterBar(false).setShowLineNo(false);
+				DelegateTbl.class);
 		tablePager.addColumn(TablePagerColumn.ICON().setWidth(16));
 		tablePager
 				.addColumn(TITLE())
 				.addColumn(new TablePagerColumn("userText", $m("DelegateListTPage.0"), 70))
 				.addColumn(
-						new TablePagerColumn("status", $m("DelegateListTPage.1"), 60)
-								.setTextAlign(ETextAlign.left))
-				.addColumn(
 						new TablePagerColumn("createDate", $m("DelegateListTPage.2"), 115)
-								.setPropertyClass(Date.class));
+								.setPropertyClass(Date.class))
+				.addColumn(
+						new TablePagerColumn("status", $m("DelegateListTPage.1"), 55)
+								.setTextAlign(ETextAlign.left));
 		tablePager.addColumn(TablePagerColumn.OPE().setWidth(70));
 
 		// 取消
