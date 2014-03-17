@@ -199,7 +199,7 @@ public class ProcessModelMgrPage extends AbstractWorkflowMgrPage {
 				final IAttachmentSaveCallback callback) throws IOException {
 			final Map<String, AttachmentFile> attachments = getUploadCache(cp);
 			for (final AttachmentFile aFile : attachments.values()) {
-				mService.addModel(cp.getLoginId(),
+				mService.doAddModel(cp.getLoginId(),
 						new ProcessDocument(new FileInputStream(aFile.getAttachment())));
 			}
 			// 清除
@@ -225,9 +225,9 @@ public class ProcessModelMgrPage extends AbstractWorkflowMgrPage {
 				final ProcessModelBean processModel = mService.getBean(aId);
 				setLogDescription(cp, processModel);
 				if (op == EProcessModelStatus.deploy) {
-					mService.deploy(processModel);
+					mService.doDeploy(processModel);
 				} else if (op == EProcessModelStatus.edit) {
-					mService.resume(processModel);
+					mService.doResume(processModel);
 				}
 			}
 			return super.onSave(cp).append("$Actions['ProcessModelMgrPage_tbl']();");

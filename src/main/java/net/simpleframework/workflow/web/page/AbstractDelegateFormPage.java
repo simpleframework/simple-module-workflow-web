@@ -74,9 +74,8 @@ public abstract class AbstractDelegateFormPage extends FormTableRowTemplatePage 
 			final PermissionUser user = StringUtils.hasText(wd_userId) ? permission.getUser(wd_userId)
 					: permission.getUser(cp.getParameter("wd_userTxt"));
 
-			wService.setWorkitemDelegation(workitem, user.getId(),
-					cp.getDateParameter("wd_startDate"), cp.getDateParameter("wd_endDate"),
-					cp.getParameter("wd_description"));
+			wService.doWorkitemDelegation(workitem, user.getId(), cp.getDateParameter("wd_startDate"),
+					cp.getDateParameter("wd_endDate"), cp.getParameter("wd_description"));
 			return super.onSave(cp).append("$Actions['MyWorklistTPage_tbl']();");
 		}
 
@@ -160,7 +159,7 @@ public abstract class AbstractDelegateFormPage extends FormTableRowTemplatePage 
 		public JavascriptForward onSave(final ComponentParameter cp) throws Exception {
 			final DelegationBean delegation = _getDelegation(cp);
 			DescriptionLogUtils.set(delegation, cp.getParameter("wd_description"));
-			dService.accept(delegation);
+			dService.doAccept(delegation);
 			return super.onSave(cp).append("$Actions['MyWorklistTPage_tbl']();");
 		}
 
@@ -168,7 +167,7 @@ public abstract class AbstractDelegateFormPage extends FormTableRowTemplatePage 
 		public IForward doRefuse(final ComponentParameter cp) throws Exception {
 			final DelegationBean delegation = _getDelegation(cp);
 			DescriptionLogUtils.set(delegation, cp.getParameter("wd_description"));
-			dService.abort(delegation);
+			dService.doAbort(delegation);
 			return super.onSave(cp).append("$Actions['MyWorklistTPage_tbl']();");
 		}
 

@@ -54,7 +54,7 @@ public abstract class AbstractWorkflowFormTPage extends FormTableRowTemplatePage
 
 		final WorkitemBean workitem = getWorkitemBean(pp);
 		if (workitem != null && !workitem.isReadMark()) {
-			wService.doReadMark(workitem, false);
+			wService.doReadMark(workitem);
 		}
 	}
 
@@ -67,7 +67,7 @@ public abstract class AbstractWorkflowFormTPage extends FormTableRowTemplatePage
 	@Transaction(context = IWorkflowContext.class)
 	protected void onSaveForm(final PageParameter pp, final WorkitemBean workitem) {
 		final ProcessBean process = getProcess(workitem);
-		pService.updateTitle(process, pp.getParameter("wf_topic"));
+		pService.doUpdateTitle(process, pp.getParameter("wf_topic"));
 	}
 
 	@Override

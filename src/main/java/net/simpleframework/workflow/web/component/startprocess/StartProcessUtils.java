@@ -105,7 +105,7 @@ public abstract class StartProcessUtils implements IWorkflowContextAware {
 		}
 
 		// 发起流程实例
-		final ProcessBean process = pService.startProcess(initiateItem);
+		final ProcessBean process = pService.doStartProcess(initiateItem);
 		// 触发onStartProcess回调
 		return ((IStartProcessHandler) nCP.getComponentHandler()).onStartProcess(nCP, process);
 	}

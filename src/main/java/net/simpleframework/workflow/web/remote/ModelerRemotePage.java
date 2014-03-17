@@ -80,7 +80,7 @@ public class ModelerRemotePage extends AbstractWorkflowRemotePage {
 				final ProcessNode processNode = document.getProcessNode();
 				processNode.setName(pp.getLocaleParameter("name"));
 				processNode.setDescription(pp.getLocaleParameter("description"));
-				final ProcessModelBean model = mService.addModel(pp.getLoginId(), document);
+				final ProcessModelBean model = mService.doAddModel(pp.getLoginId(), document);
 				json.put("id", model.getId().getValue());
 				json.put("text", processNode.toString());
 			}
@@ -112,7 +112,7 @@ public class ModelerRemotePage extends AbstractWorkflowRemotePage {
 			public void doAction(final JsonForward json) {
 				final ProcessModelBean bean = mService.getBean(pp.getParameter("id"));
 				final String doc = pp.getLocaleParameter("doc");
-				mService.updateModel(bean, doc.toCharArray());
+				mService.doUpdateModel(bean, doc.toCharArray());
 				json.put("result", Boolean.TRUE);
 			}
 		});

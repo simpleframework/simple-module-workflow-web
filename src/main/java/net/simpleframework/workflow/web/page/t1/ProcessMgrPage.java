@@ -202,9 +202,9 @@ public class ProcessMgrPage extends AbstractWorkflowMgrPage {
 				final ProcessBean process = pService.getBean(aId);
 				setLogDescription(cp, process);
 				if (op == EProcessStatus.suspended) {
-					pService.suspend(process);
+					pService.doSuspend(process);
 				} else if (op == EProcessStatus.running) {
-					pService.resume(process);
+					pService.doResume(process);
 				}
 			}
 			return super.onSave(cp).append("$Actions['ProcessMgrPage_tbl']();");
@@ -215,7 +215,7 @@ public class ProcessMgrPage extends AbstractWorkflowMgrPage {
 
 		public IForward doOk(final ComponentParameter cp) {
 			final ProcessBean process = pService.getBean(cp.getParameter("processId"));
-			pService.abort(process,
+			pService.doAbort(process,
 					Convert.toEnum(EProcessAbortPolicy.class, cp.getParameter("abort_policy")));
 			return new JavascriptForward(
 					"$Actions['ProcessMgrPage_abort'].close(); $Actions['ProcessMgrPage_tbl']();");

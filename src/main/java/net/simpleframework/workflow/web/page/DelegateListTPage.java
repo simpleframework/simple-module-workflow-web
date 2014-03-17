@@ -75,7 +75,7 @@ public class DelegateListTPage extends AbstractWorkitemsTPage implements IWorkfl
 
 	@Transaction(context = IWorkflowContext.class)
 	public IForward doAbort(final ComponentParameter cp) {
-		dService.abort(dService.getBean(cp.getParameter("delegationId")));
+		dService.doAbort(dService.getBean(cp.getParameter("delegationId")));
 		return new JavascriptForward("$Actions['MyWorklistTPage_tbl']();");
 	}
 

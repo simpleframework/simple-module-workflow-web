@@ -40,7 +40,7 @@ public class SubProcessRemotePage extends AbstractWorkflowRemotePage {
 					}
 				}
 
-				final ProcessBean process = pService.startProcess(
+				final ProcessBean process = pService.doStartProcess(
 						mService.getProcessModel(pp.getLocaleParameter(IProcessRemote.MODEL)), variables,
 						properties, null);
 				json.put(IProcessRemote.SUB_PROCESSID, process.getId());
@@ -55,7 +55,7 @@ public class SubProcessRemotePage extends AbstractWorkflowRemotePage {
 				final ProcessBean sProcess = pService.getBean(pp
 						.getLocaleParameter(IProcessRemote.SUB_PROCESSID));
 				if (sProcess != null && pService.isFinalStatus(sProcess)) {
-					pService.backToRemote(sProcess);
+					pService.doBackToRemote(sProcess);
 				}
 				json.put("success", Boolean.TRUE);
 			}

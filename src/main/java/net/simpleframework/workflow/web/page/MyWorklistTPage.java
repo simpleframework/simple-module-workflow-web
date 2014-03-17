@@ -112,6 +112,8 @@ public class MyWorklistTPage extends AbstractWorkitemsTPage {
 		createMarkMenuComponent(pp);
 		// 标记已读
 		addAjaxRequest(pp, "MyWorklistTPage_readMark").setHandlerMethod("doReadMark");
+		// 标记置顶
+		addAjaxRequest(pp, "MyWorklistTPage_topMark").setHandlerMethod("doTopMark");
 	}
 
 	@Override
@@ -138,12 +140,36 @@ public class MyWorklistTPage extends AbstractWorkitemsTPage {
 	public IForward doReadMark(final ComponentParameter cp) {
 		final String op = cp.getParameter("op");
 		if ("allread".equals(op)) {
+			for (final WorkitemBean workitem : wService.getRunningWorklist(cp.getLoginId())) {
+				if (!workitem.isReadMark()) {
+					wService.doReadMark(workitem);
+				}
+			}
 		} else {
 			final Object[] ids = StringUtils.split(cp.getParameter("workitemId"));
 			if (ids != null) {
 				for (final Object id : ids) {
 					final WorkitemBean workitem = wService.getBean(id);
-					wService.doReadMark(workitem, "unread".equals(op));
+					if ("unread".equals(op)) {
+						wService.doUnReadMark(workitem);
+					} else {
+						wService.doReadMark(workitem);
+					}
+				}
+			}
+		}
+		return new JavascriptForward("$Actions['MyWorklistTPage_tbl']();");
+	}
+
+	public IForward doTopMark(final ComponentParameter cp) {
+		final Object[] ids = StringUtils.split(cp.getParameter("workitemId"));
+		if (ids != null) {
+			for (final Object id : ids) {
+				final WorkitemBean workitem = wService.getBean(id);
+				if ("untop".equals(cp.getParameter("op"))) {
+					wService.doUnTopMark(workitem);
+				} else {
+					wService.doTopMark(workitem);
 				}
 			}
 		}
@@ -152,19 +178,19 @@ public class MyWorklistTPage extends AbstractWorkitemsTPage {
 
 	@Transaction(context = IWorkflowContext.class)
 	public IForward doRetake(final ComponentParameter cp) {
-		wService.retake(WorkflowUtils.getWorkitemBean(cp));
+		wService.doRetake(WorkflowUtils.getWorkitemBean(cp));
 		return new JavascriptForward("$Actions['MyWorklistTPage_tbl']();");
 	}
 
 	@Transaction(context = IWorkflowContext.class)
 	public IForward doFallback(final ComponentParameter cp) {
-		aService.fallback(wService.getActivity(WorkflowUtils.getWorkitemBean(cp)));
+		aService.doFallback(wService.getActivity(WorkflowUtils.getWorkitemBean(cp)));
 		return new JavascriptForward("$Actions['MyWorklistTPage_tbl']();");
 	}
 
 	@Transaction(context = IWorkflowContext.class)
 	public IForward doDelete(final ComponentParameter cp) {
-		wService.deleteProcess(WorkflowUtils.getWorkitemBean(cp));
+		wService.doDeleteProcess(WorkflowUtils.getWorkitemBean(cp));
 		return new JavascriptForward("$Actions['MyWorklistTPage_tbl']();");
 	}
 
@@ -374,14 +400,14 @@ public class MyWorklistTPage extends AbstractWorkitemsTPage {
 		return MenuItem
 				.of($m("MyWorklistTPage.9"))
 				.setOnclick(
-						"$Actions['MyWorklistTPage_tbl'].doAct('MyWorklistTPage_readMark', 'workitemId' , 'op=read');");
+						"$Actions['MyWorklistTPage_tbl'].doAct('MyWorklistTPage_readMark', 'workitemId', 'op=read');");
 	}
 
 	static MenuItem MENU_MARK_UNREAD() {
 		return MenuItem
 				.of($m("MyWorklistTPage.10"))
 				.setOnclick(
-						"$Actions['MyWorklistTPage_tbl'].doAct('MyWorklistTPage_readMark', 'workitemId' , 'op=unread');");
+						"$Actions['MyWorklistTPage_tbl'].doAct('MyWorklistTPage_readMark', 'workitemId', 'op=unread');");
 	}
 
 	static MenuItem MENU_MARK_ALLREAD() {
@@ -390,10 +416,16 @@ public class MyWorklistTPage extends AbstractWorkitemsTPage {
 	}
 
 	static MenuItem MENU_MARK_TOP() {
-		return MenuItem.of($m("MyWorklistTPage.12"));
+		return MenuItem
+				.of($m("MyWorklistTPage.12"))
+				.setOnclick(
+						"$Actions['MyWorklistTPage_tbl'].doAct('MyWorklistTPage_topMark', 'workitemId', 'op=top');");
 	}
 
 	static MenuItem MENU_MARK_UNTOP() {
-		return MenuItem.of($m("MyWorklistTPage.13"));
+		return MenuItem
+				.of($m("MyWorklistTPage.13"))
+				.setOnclick(
+						"$Actions['MyWorklistTPage_tbl'].doAct('MyWorklistTPage_topMark', 'workitemId', 'op=untop');");
 	}
 }

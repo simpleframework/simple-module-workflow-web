@@ -197,9 +197,9 @@ public class ActivityMgrPage extends AbstractWorkflowMgrPage {
 				final ActivityBean activity = aService.getBean(aId);
 				setLogDescription(cp, activity);
 				if (op == EActivityStatus.suspended) {
-					aService.suspend(activity);
+					aService.doSuspend(activity);
 				} else if (op == EActivityStatus.running) {
-					aService.resume(activity);
+					aService.doResume(activity);
 				}
 			}
 			return super.onSave(cp).append("$Actions['ActivityMgrPage_tbl']();");
@@ -210,7 +210,7 @@ public class ActivityMgrPage extends AbstractWorkflowMgrPage {
 
 		public IForward doOk(final ComponentParameter cp) {
 			final ActivityBean activity = aService.getBean(cp.getParameter("activityId"));
-			aService.abort(activity,
+			aService.doAbort(activity,
 					Convert.toEnum(EActivityAbortPolicy.class, cp.getParameter("abort_policy")));
 			return new JavascriptForward(
 					"$Actions['ActivityMgrPage_abort'].close(); $Actions['ActivityMgrPage_tbl']();");
