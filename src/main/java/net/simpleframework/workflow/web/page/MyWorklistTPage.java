@@ -257,6 +257,8 @@ public class MyWorklistTPage extends AbstractWorkitemsTPage {
 			if (status == EWorkitemStatus.delegate) {
 				img = PhotoImage.icon12(cp.getPhotoUrl(workitem.getUserId2())).setTitle(
 						$m("MyWorklistTbl.5", permission.getUser(workitem.getUserId())));
+			} else if (workitem.isTopMark()) {
+				img = createImageMark(cp, "mark_top.png");
 			} else if (!workitem.isReadMark()) {
 				img = createImageMark(cp, "mark_unread.png").setTitle($m("MyWorklistTbl.4"));
 			}
@@ -335,8 +337,11 @@ public class MyWorklistTPage extends AbstractWorkitemsTPage {
 								MyWorklistTPage.MENU_MARK_ALLREAD().setOnclick_act(
 										"MyWorklistTPage_readMark", "workitemId", "op=allread"));
 				mItems.addChild(MenuItem.sep());
-				mItems.addChild(MyWorklistTPage.MENU_MARK_TOP()).addChild(
-						MyWorklistTPage.MENU_MARK_UNTOP());
+				mItems.addChild(
+						MyWorklistTPage.MENU_MARK_TOP().setOnclick_act("MyWorklistTPage_topMark",
+								"workitemId", "op=top")).addChild(
+						MyWorklistTPage.MENU_MARK_UNTOP().setOnclick_act("MyWorklistTPage_topMark",
+								"workitemId", "op=untop"));
 				items.append(mItems);
 				items.append(MenuItem.sep());
 				items.append(MenuItem.itemDelete().setOnclick_act("MyWorklistTPage_delete",
