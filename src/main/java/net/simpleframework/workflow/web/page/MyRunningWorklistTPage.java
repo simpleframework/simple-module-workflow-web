@@ -41,7 +41,8 @@ public class MyRunningWorklistTPage extends AbstractWorkitemsTPage {
 	}
 
 	protected void addComponents(final PageParameter pp) {
-		final TablePagerBean tablePager = addTablePagerBean(pp, MyRunningWorklistTbl.class);
+		final TablePagerBean tablePager = addTablePagerBean(pp, MyRunningWorklistTbl.class)
+				.setShowCheckbox(true);
 		tablePager.addColumn(TablePagerColumn.ICON().setWidth(18));
 		tablePager.addColumn(TC_TITLE());
 		tablePager.addColumn(new TablePagerColumn("userFrom", $m("MyRunningWorklistTPage.0"), 115)

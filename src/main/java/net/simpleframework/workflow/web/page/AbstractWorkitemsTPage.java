@@ -33,7 +33,7 @@ public class AbstractWorkitemsTPage extends AbstractItemsTPage {
 	}
 
 	protected TablePagerColumn TC_STATUS() {
-		return new TablePagerColumn("status", $m("MyRunningWorklistTPage.14"), 55).setPropertyClass(
+		return new TablePagerColumn("status", $m("AbstractWorkitemsTPage.3"), 55).setPropertyClass(
 				EWorkitemStatus.class).setTextAlign(ETextAlign.left);
 	}
 }

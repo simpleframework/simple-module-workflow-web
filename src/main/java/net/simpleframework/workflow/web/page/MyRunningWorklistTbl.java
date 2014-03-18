@@ -175,10 +175,7 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 				MENU_MARK_READ().setOnclick_act("MyWorklistTPage_readMark", "workitemId", "op=read"))
 				.addChild(
 						MENU_MARK_UNREAD().setOnclick_act("MyWorklistTPage_readMark", "workitemId",
-								"op=unread"))
-				.addChild(
-						MENU_MARK_ALLREAD().setOnclick_act("MyWorklistTPage_readMark", "workitemId",
-								"op=allread"));
+								"op=unread"));
 		mItems.addChild(MenuItem.sep());
 		mItems.addChild(
 				MENU_MARK_TOP().setOnclick_act("MyWorklistTPage_topMark", "workitemId", "op=top"))
@@ -188,8 +185,7 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 		items.append(mItems);
 		items.append(MenuItem.sep());
 		items.append(MenuItem.itemDelete().setOnclick_act("MyWorklistTPage_delete", "workitemId"));
-		items.append(MenuItem.sep());
-		items.append(MENU_LOG());
+		items.append(MenuItem.sep()).append(MENU_LOG());
 		return items;
 	}
 
