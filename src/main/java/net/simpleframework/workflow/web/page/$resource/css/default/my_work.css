@@ -30,6 +30,13 @@
   color: #390;
 }
 
+.worklist_group_val {
+  font-weight: normal; 
+  margin-left: 5px; 
+  color: #999; 
+  font-size: 9pt;
+}
+
 .WorkflowCompleteInfoPage {
   width: 50%;
   text-align: left;

@@ -53,29 +53,31 @@ public abstract class AbstractItemsTPage extends Category_ListPage implements IW
 				.setPageItems(50);
 	}
 
-	private CategoryItem createCategoryItem(final PageParameter pp, final String text,
-			final Class<? extends AbstractItemsTPage> mClass, final String params) {
+	protected CategoryItem createCategoryItem(final PageParameter pp, final String text,
+			final Class<? extends AbstractItemsTPage> mClass) {
 		return new CategoryItem(text).setHref(
-				((IWorkflowWebContext) context).getUrlsFactory().getUrl(pp, mClass, params))
-				.setSelected(mClass == ObjectFactory.original(getClass()));
+				((IWorkflowWebContext) context).getUrlsFactory().getUrl(pp, mClass)).setSelected(
+				mClass == ObjectFactory.original(getClass()));
 	}
 
 	@Override
 	protected CategoryItems getCategoryList(final PageParameter pp) {
 		final CategoryItem item0 = createCategoryItem(pp, $m("AbstractItemsTPage.0"),
-				MyWorklistTPage.class, null).setIconClass("my_work_icon");
-		final String s = pp.getParameter("s");
+				MyRunningWorklistTPage.class).setIconClass("my_work_icon");
+		// final String s = pp.getParameter("s");
 		final List<CategoryItem> children = item0.getChildren();
-		// children.add(createCategoryItem(pp, "待办工作", MyWorklistTPage.class,
+		// children.add(createCategoryItem(pp, "待办工作",
+		// MyRunningWorklistTPage.class,
 		// "status=running")
 		// .setSelected("running".equals(_status)));
-		children.add(createCategoryItem(pp, $m("AbstractItemsTPage.1"), MyWorklistTPage.class,
-				"s=complete").setIconClass("my_work_complete_icon").setSelected("complete".equals(s)));
+		// .setSelected("complete".equals(s))
 		children
-				.add(createCategoryItem(pp, $m("AbstractItemsTPage.3"), DelegateListTPage.class, null)
-						.setIconClass("delegate_list_icon"));
+				.add(createCategoryItem(pp, $m("AbstractItemsTPage.1"), MyCompleteWorklistTPage.class)
+						.setIconClass("my_work_complete_icon"));
+		children.add(createCategoryItem(pp, $m("AbstractItemsTPage.3"), DelegateListTPage.class)
+				.setIconClass("delegate_list_icon"));
 		return CategoryItems.of(item0,
-				createCategoryItem(pp, $m("AbstractItemsTPage.2"), MyInitiateItemsTPage.class, null)
+				createCategoryItem(pp, $m("AbstractItemsTPage.2"), MyInitiateItemsTPage.class)
 						.setIconClass("my_initiate_icon"));
 	}
 

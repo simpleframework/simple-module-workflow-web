@@ -13,7 +13,7 @@ import net.simpleframework.workflow.web.IWorkflowWebForm;
 import net.simpleframework.workflow.web.WorkflowUrlsFactory;
 import net.simpleframework.workflow.web.page.AbstractItemsTPage;
 import net.simpleframework.workflow.web.page.DelegateListTPage;
-import net.simpleframework.workflow.web.page.MyWorklistTPage;
+import net.simpleframework.workflow.web.page.MyRunningWorklistTPage;
 import net.simpleframework.workflow.web.page.WorkflowUtils;
 
 /**
@@ -56,7 +56,7 @@ public abstract class AbstractWorkflowFormPage extends T1FormTemplatePage implem
 					&& (status = workitem.getStatus()).ordinal() > EWorkitemStatus.delegate.ordinal()) {
 				sb.append("status=").append(status.name());
 			}
-			backBtn.setHref(uFactory.getUrl(pp, MyWorklistTPage.class, sb.toString()));
+			backBtn.setHref(uFactory.getUrl(pp, MyRunningWorklistTPage.class, sb.toString()));
 		}
 		final ElementList el = ElementList.of(backBtn);
 		return el;

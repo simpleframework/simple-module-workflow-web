@@ -1,0 +1,80 @@
+package net.simpleframework.workflow.web.page;
+
+import static net.simpleframework.common.I18n.$m;
+
+import java.util.Date;
+
+import net.simpleframework.ado.query.IDataQuery;
+import net.simpleframework.ado.query.ListDataQuery;
+import net.simpleframework.ctx.trans.Transaction;
+import net.simpleframework.mvc.IForward;
+import net.simpleframework.mvc.JavascriptForward;
+import net.simpleframework.mvc.PageParameter;
+import net.simpleframework.mvc.common.element.ElementList;
+import net.simpleframework.mvc.component.ComponentParameter;
+import net.simpleframework.mvc.component.ui.menu.MenuBean;
+import net.simpleframework.mvc.component.ui.menu.MenuItem;
+import net.simpleframework.mvc.component.ui.menu.MenuItems;
+import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
+import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
+import net.simpleframework.workflow.engine.EWorkitemStatus;
+import net.simpleframework.workflow.engine.IWorkflowContext;
+import net.simpleframework.workflow.engine.WorkitemBean;
+
+/**
+ * Licensed under the Apache License, Version 2.0
+ * 
+ * @author 陈侃(cknet@126.com, 13910090885) https://github.com/simpleframework
+ *         http://www.simpleframework.net
+ */
+public class MyCompleteWorklistTPage extends MyRunningWorklistTPage {
+
+	@Override
+	protected void addComponents(PageParameter pp) {
+		final TablePagerBean tablePager = addTablePagerBean(pp, MyCompleteWorklistTbl.class);
+		tablePager.addColumn(TablePagerColumn.ICON().setWidth(18));
+		tablePager.addColumn(TC_TITLE());
+		tablePager.addColumn(new TablePagerColumn("userTo", $m("MyRunningWorklistTPage.0"), 115)
+				.setSort(false).setNowrap(false));
+		tablePager
+				.addColumn(new TablePagerColumn("completeDate", $m("MyRunningWorklistTPage.1"), 115)
+						.setPropertyClass(Date.class));
+		tablePager.addColumn(TC_STATUS()).addColumn(TablePagerColumn.OPE().setWidth(70));
+
+		// 取回
+		addAjaxRequest(pp, "MyWorklistTPage_retake").setHandlerMethod("doRetake").setConfirmMessage(
+				$m("MyRunningWorklistTPage.4"));
+	}
+
+	@Transaction(context = IWorkflowContext.class)
+	public IForward doRetake(final ComponentParameter cp) {
+		wService.doRetake(WorkflowUtils.getWorkitemBean(cp));
+		return new JavascriptForward("$Actions['MyWorklistTPage_tbl']();");
+	}
+
+	@Override
+	public ElementList getLeftElements(final PageParameter pp) {
+		return ElementList.of();
+	}
+
+	public static class MyCompleteWorklistTbl extends MyRunningWorklistTbl {
+
+		@Override
+		public IDataQuery<?> createDataObjectQuery(ComponentParameter cp) {
+			return new ListDataQuery<WorkitemBean>(wService.getWorklist(cp.getLoginId(),
+					EWorkitemStatus.complete, EWorkitemStatus.abort, EWorkitemStatus.retake));
+		}
+
+		@Override
+		public MenuItems getContextMenu(final ComponentParameter cp, final MenuBean menuBean,
+				final MenuItem menuItem) {
+			final MenuItems items = MenuItems.of();
+			items.append(MENU_MONITOR(cp));
+			items.append(MenuItem.sep());
+			items.append(MenuItem.of($m("MyWorklistTbl.1")).setOnclick_act("MyWorklistTPage_retake",
+					"workitemId"));
+			items.append(MenuItem.sep()).append(MENU_LOG());
+			return items;
+		}
+	}
+}

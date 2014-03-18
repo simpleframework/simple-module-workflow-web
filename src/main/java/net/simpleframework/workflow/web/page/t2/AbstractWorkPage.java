@@ -9,8 +9,9 @@ import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.template.t2.T2TemplatePage;
 import net.simpleframework.workflow.web.page.AbstractItemsTPage;
 import net.simpleframework.workflow.web.page.DelegateListTPage;
+import net.simpleframework.workflow.web.page.MyCompleteWorklistTPage;
 import net.simpleframework.workflow.web.page.MyInitiateItemsTPage;
-import net.simpleframework.workflow.web.page.MyWorklistTPage;
+import net.simpleframework.workflow.web.page.MyRunningWorklistTPage;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -33,12 +34,21 @@ public abstract class AbstractWorkPage extends T2TemplatePage {
 		return pp.includeUrl(getWorkTPageClass());
 	}
 
-	@PageMapping(url = "/workflow/my/work")
-	public static class MyWorklistPage extends AbstractWorkPage {
+	@PageMapping(url = "/workflow/my/running")
+	public static class MyRunningWorklistPage extends AbstractWorkPage {
 
 		@Override
 		protected Class<? extends AbstractItemsTPage> getWorkTPageClass() {
-			return MyWorklistTPage.class;
+			return MyRunningWorklistTPage.class;
+		}
+	}
+
+	@PageMapping(url = "/workflow/my/complete")
+	public static class MyCompleteWorklistPage extends AbstractWorkPage {
+
+		@Override
+		protected Class<? extends AbstractItemsTPage> getWorkTPageClass() {
+			return MyCompleteWorklistTPage.class;
 		}
 	}
 
@@ -50,7 +60,7 @@ public abstract class AbstractWorkPage extends T2TemplatePage {
 		}
 	}
 
-	@PageMapping(url = "/workflow/delegate")
+	@PageMapping(url = "/workflow/my/delegate")
 	public static class DelegateListPage extends AbstractWorkPage {
 		@Override
 		protected Class<? extends AbstractItemsTPage> getWorkTPageClass() {

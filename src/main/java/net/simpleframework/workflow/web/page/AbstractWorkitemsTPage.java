@@ -7,6 +7,7 @@ import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.Option;
 import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
 import net.simpleframework.mvc.component.ui.pager.db.GroupDbTablePagerHandler;
+import net.simpleframework.workflow.engine.EWorkitemStatus;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -26,8 +27,13 @@ public class AbstractWorkitemsTPage extends AbstractItemsTPage {
 						$m("AbstractWorkitemsTPage.2"))));
 	}
 
-	protected TablePagerColumn TITLE() {
+	protected TablePagerColumn TC_TITLE() {
 		return new TablePagerColumn("title", $m("AbstractWorkitemsTPage.0")).setTextAlign(
 				ETextAlign.left).setSort(false);
+	}
+
+	protected TablePagerColumn TC_STATUS() {
+		return new TablePagerColumn("status", $m("MyRunningWorklistTPage.14"), 55).setPropertyClass(
+				EWorkitemStatus.class).setTextAlign(ETextAlign.left);
 	}
 }

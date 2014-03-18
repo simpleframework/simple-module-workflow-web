@@ -7,7 +7,7 @@ import net.simpleframework.mvc.ctx.WebModuleFunction;
 import net.simpleframework.workflow.engine.impl.WorkflowContext;
 import net.simpleframework.workflow.engine.participant.IWorkflowPermissionHandler;
 import net.simpleframework.workflow.web.page.t1.ProcessModelMgrPage;
-import net.simpleframework.workflow.web.page.t2.AbstractWorkPage.MyWorklistPage;
+import net.simpleframework.workflow.web.page.t2.AbstractWorkPage.MyRunningWorklistPage;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -39,7 +39,7 @@ public class WorkflowWebContext extends WorkflowContext implements IWorkflowWebC
 	}
 
 	public static final WebModuleFunction FUNC_MY_WORKLIST = (WebModuleFunction) new WebModuleFunction(
-			MyWorklistPage.class).setName(MODULE_NAME + "-MyWorklistTPage").setText(
+			MyRunningWorklistPage.class).setName(MODULE_NAME + "-MyRunningWorklistTPage").setText(
 			$m("WorkflowWebContext.0"));
 	public static final WebModuleFunction FUNC_PROCESS_MODEL = (WebModuleFunction) new WebModuleFunction(
 			ProcessModelMgrPage.class).setName(MODULE_NAME + "-ProcessModelMgrPage").setText(

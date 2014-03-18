@@ -30,7 +30,6 @@ import net.simpleframework.workflow.engine.IWorkflowContextAware;
 import net.simpleframework.workflow.engine.WorkitemBean;
 import net.simpleframework.workflow.web.WorkflowLogRef.DelegateUpdateLogPage;
 import net.simpleframework.workflow.web.page.AbstractDelegateFormPage.WorkitemDelegateViewPage;
-import net.simpleframework.workflow.web.page.MyWorklistTPage.MyWorklistTbl;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -48,7 +47,7 @@ public class DelegateListTPage extends AbstractWorkitemsTPage implements IWorkfl
 				DelegateTbl.class);
 		tablePager.addColumn(TablePagerColumn.ICON().setWidth(16));
 		tablePager
-				.addColumn(TITLE())
+				.addColumn(TC_TITLE())
 				.addColumn(new TablePagerColumn("userText", $m("DelegateListTPage.0"), 70))
 				.addColumn(
 						new TablePagerColumn("createDate", $m("DelegateListTPage.2"), 115)
@@ -79,7 +78,7 @@ public class DelegateListTPage extends AbstractWorkitemsTPage implements IWorkfl
 		return new JavascriptForward("$Actions['MyWorklistTPage_tbl']();");
 	}
 
-	public static class DelegateTbl extends MyWorklistTbl {
+	public static class DelegateTbl extends MyRunningWorklistTbl {
 
 		@Override
 		public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
