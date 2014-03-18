@@ -26,6 +26,18 @@
   background-image: url("images/mark_top.png");
 }
 
+.menu_retake {
+  background-image: url("images/status_retake.png");
+}
+
+.menu_delegate {
+  background-image: url("images/status_delegate.png");
+}
+
+.menu_fallback {
+  background-image: url("images/status_fallback.png");
+}
+
 .tasknode_txt {
   color: #390;
 }

@@ -70,8 +70,8 @@ public class MyCompleteWorklistTPage extends MyRunningWorklistTPage {
 			final MenuItems items = MenuItems.of();
 			items.append(MENU_MONITOR(cp));
 			items.append(MenuItem.sep());
-			items.append(MenuItem.of($m("MyCompleteWorklistTPage.3")).setOnclick_act(
-					"MyWorklistTPage_retake", "workitemId"));
+			items.append(MenuItem.of($m("MyCompleteWorklistTPage.3")).setIconClass("menu_retake")
+					.setOnclick_act("MyWorklistTPage_retake", "workitemId"));
 			items.append(MenuItem.sep()).append(MENU_LOG());
 			return items;
 		}

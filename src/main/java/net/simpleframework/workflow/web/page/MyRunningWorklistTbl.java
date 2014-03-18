@@ -165,10 +165,10 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 		final MenuItems items = MenuItems.of();
 		items.append(MENU_MONITOR(cp));
 		items.append(MenuItem.sep());
-		items.append(MenuItem.of($m("MyRunningWorklistTbl.4")).setOnclick_act(
-				"MyWorklistTPage_fallback", "workitemId"));
-		items.append(MenuItem.of($m("MyRunningWorklistTbl.5")).setOnclick_act(
-				"MyWorklistTPage_delegate", "workitemId"));
+		items.append(MenuItem.of($m("MyRunningWorklistTbl.4")).setIconClass("menu_fallback")
+				.setOnclick_act("MyWorklistTPage_fallback", "workitemId"));
+		items.append(MenuItem.of($m("MyRunningWorklistTbl.5")).setIconClass("menu_delegate")
+				.setOnclick_act("MyWorklistTPage_delegate", "workitemId"));
 		items.append(MenuItem.sep());
 		final MenuItem mItems = MenuItem.of($m("MyRunningWorklistTbl.6"));
 		mItems.addChild(
