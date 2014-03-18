@@ -103,13 +103,13 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 		ImageElement img = null;
 		if (status == EWorkitemStatus.delegate) {
 			img = PhotoImage.icon12(cp.getPhotoUrl(workitem.getUserId())).setTitle(
-					$m("MyWorklistTbl.5", permission.getUser(workitem.getUserId())));
+					$m("MyRunningWorklistTbl.0", permission.getUser(workitem.getUserId())));
 		} else if (workitem.isTopMark()) {
-			img = createImageMark(cp, "mark_top.png").setTitle($m("MyWorklistTbl.8")).addStyle(
+			img = createImageMark(cp, "mark_top.png").setTitle($m("MyRunningWorklistTbl.1")).addStyle(
 					"margin-top: -3px;");
 		} else if (!workitem.isReadMark()) {
-			img = createImageMark(cp, "mark_unread.png").setTitle($m("MyWorklistTbl.4")).addStyle(
-					"margin-top: -1px;");
+			img = createImageMark(cp, "mark_unread.png").setTitle($m("MyRunningWorklistTbl.2"))
+					.addStyle("margin-top: -1px;");
 		}
 		if (img != null) {
 			row.add(TablePagerColumn.ICON, img);
@@ -151,7 +151,7 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 					"$Actions['MyWorklistTPage_delegate_receiving']('workitemId=" + workitem.getId()
 							+ "');"));
 		} else {
-			ope.append(new ButtonElement($m("MyWorklistTbl.0")).setOnclick("$Actions.loc('"
+			ope.append(new ButtonElement($m("MyRunningWorklistTbl.3")).setOnclick("$Actions.loc('"
 					+ uFactory.getUrl(cp, WorkflowMonitorPage.class, workitem) + "');"));
 		}
 		ope.append(SpanElement.SPACE).append(AbstractTablePagerSchema.IMG_DOWNMENU);
@@ -165,12 +165,12 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 		final MenuItems items = MenuItems.of();
 		items.append(MENU_MONITOR(cp));
 		items.append(MenuItem.sep());
-		items.append(MenuItem.of($m("MyWorklistTbl.2")).setOnclick_act("MyWorklistTPage_fallback",
-				"workitemId"));
-		items.append(MenuItem.of($m("MyWorklistTbl.3")).setOnclick_act("MyWorklistTPage_delegate",
-				"workitemId"));
+		items.append(MenuItem.of($m("MyRunningWorklistTbl.4")).setOnclick_act(
+				"MyWorklistTPage_fallback", "workitemId"));
+		items.append(MenuItem.of($m("MyRunningWorklistTbl.5")).setOnclick_act(
+				"MyWorklistTPage_delegate", "workitemId"));
 		items.append(MenuItem.sep());
-		final MenuItem mItems = MenuItem.of($m("MyRunningWorklistTPage.8"));
+		final MenuItem mItems = MenuItem.of($m("MyRunningWorklistTbl.6"));
 		mItems.addChild(
 				MENU_MARK_READ().setOnclick_act("MyWorklistTPage_readMark", "workitemId", "op=read"))
 				.addChild(
@@ -240,8 +240,8 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 		return userFrom;
 	}
 
-	static MenuItem MENU_MONITOR(PageParameter pp) {
-		return MenuItem.of($m("MyWorklistTbl.6")).setOnclick(
+	static MenuItem MENU_MONITOR(final PageParameter pp) {
+		return MenuItem.of($m("MyRunningWorklistTbl.7")).setOnclick(
 				"$Actions.loc('"
 						+ ((IWorkflowWebContext) context).getUrlsFactory().getUrl(pp,
 								WorkflowMonitorPage.class)
@@ -249,33 +249,33 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 	}
 
 	static MenuItem MENU_LOG() {
-		return MenuItem.of($m("MyWorklistTbl.7")).setOnclick_act("AbstractItemsTPage_update_log",
+		return MenuItem.of($m("Button.Log")).setOnclick_act("AbstractItemsTPage_update_log",
 				"workitemId");
 	}
 
 	static MenuItem MENU_MARK_READ() {
 		return MenuItem
-				.of($m("MyRunningWorklistTPage.9"))
+				.of($m("MyRunningWorklistTbl.8"))
 				.setOnclick(
 						"$Actions['MyWorklistTPage_tbl'].doAct('MyWorklistTPage_readMark', 'workitemId', 'op=read');");
 	}
 
 	static MenuItem MENU_MARK_UNREAD() {
 		return MenuItem
-				.of($m("MyRunningWorklistTPage.10"))
+				.of($m("MyRunningWorklistTbl.9"))
 				.setIconClass("menu_unread")
 				.setOnclick(
 						"$Actions['MyWorklistTPage_tbl'].doAct('MyWorklistTPage_readMark', 'workitemId', 'op=unread');");
 	}
 
 	static MenuItem MENU_MARK_ALLREAD() {
-		return MenuItem.of($m("MyRunningWorklistTPage.11")).setOnclick(
+		return MenuItem.of($m("MyRunningWorklistTbl.10")).setOnclick(
 				"$Actions['MyWorklistTPage_readMark']('op=allread');");
 	}
 
 	static MenuItem MENU_MARK_TOP() {
 		return MenuItem
-				.of($m("MyRunningWorklistTPage.12"))
+				.of($m("MyRunningWorklistTbl.11"))
 				.setIconClass("menu_top")
 				.setOnclick(
 						"$Actions['MyWorklistTPage_tbl'].doAct('MyWorklistTPage_topMark', 'workitemId', 'op=top');");
@@ -283,7 +283,7 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 
 	static MenuItem MENU_MARK_UNTOP() {
 		return MenuItem
-				.of($m("MyRunningWorklistTPage.13"))
+				.of($m("MyRunningWorklistTbl.12"))
 				.setOnclick(
 						"$Actions['MyWorklistTPage_tbl'].doAct('MyWorklistTPage_topMark', 'workitemId', 'op=untop');");
 	}

@@ -12,7 +12,7 @@ import net.simpleframework.workflow.web.IWorkflowWebContext;
 import net.simpleframework.workflow.web.IWorkflowWebForm;
 import net.simpleframework.workflow.web.WorkflowUrlsFactory;
 import net.simpleframework.workflow.web.page.AbstractItemsTPage;
-import net.simpleframework.workflow.web.page.DelegateListTPage;
+import net.simpleframework.workflow.web.page.MyDelegateListTPage;
 import net.simpleframework.workflow.web.page.MyRunningWorklistTPage;
 import net.simpleframework.workflow.web.page.WorkflowUtils;
 
@@ -47,7 +47,7 @@ public abstract class AbstractWorkflowFormPage extends T1FormTemplatePage implem
 		final WorkflowUrlsFactory uFactory = ((IWorkflowWebContext) context).getUrlsFactory();
 		final String source = pp.getParameter("source");
 		if ("delegation".equals(source)) {
-			backBtn.setHref(uFactory.getUrl(pp, DelegateListTPage.class));
+			backBtn.setHref(uFactory.getUrl(pp, MyDelegateListTPage.class));
 		} else {
 			final StringBuilder sb = new StringBuilder();
 			final WorkitemBean workitem = WorkflowUtils.getWorkitemBean(pp);

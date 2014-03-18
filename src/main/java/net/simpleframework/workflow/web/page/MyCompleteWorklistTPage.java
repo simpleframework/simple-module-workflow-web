@@ -30,20 +30,19 @@ import net.simpleframework.workflow.engine.WorkitemBean;
 public class MyCompleteWorklistTPage extends MyRunningWorklistTPage {
 
 	@Override
-	protected void addComponents(PageParameter pp) {
+	protected void addComponents(final PageParameter pp) {
 		final TablePagerBean tablePager = addTablePagerBean(pp, MyCompleteWorklistTbl.class);
 		tablePager.addColumn(TablePagerColumn.ICON().setWidth(18));
 		tablePager.addColumn(TC_TITLE());
-		tablePager.addColumn(new TablePagerColumn("userTo", $m("MyRunningWorklistTPage.0"), 115)
+		tablePager.addColumn(new TablePagerColumn("userTo", $m("MyCompleteWorklistTPage.0"), 115)
 				.setSort(false).setNowrap(false));
-		tablePager
-				.addColumn(new TablePagerColumn("completeDate", $m("MyRunningWorklistTPage.1"), 115)
-						.setPropertyClass(Date.class));
+		tablePager.addColumn(new TablePagerColumn("completeDate", $m("MyCompleteWorklistTPage.1"),
+				115).setPropertyClass(Date.class));
 		tablePager.addColumn(TC_STATUS()).addColumn(TablePagerColumn.OPE().setWidth(70));
 
 		// 取回
 		addAjaxRequest(pp, "MyWorklistTPage_retake").setHandlerMethod("doRetake").setConfirmMessage(
-				$m("MyRunningWorklistTPage.4"));
+				$m("MyCompleteWorklistTPage.2"));
 	}
 
 	@Transaction(context = IWorkflowContext.class)
@@ -60,7 +59,7 @@ public class MyCompleteWorklistTPage extends MyRunningWorklistTPage {
 	public static class MyCompleteWorklistTbl extends MyRunningWorklistTbl {
 
 		@Override
-		public IDataQuery<?> createDataObjectQuery(ComponentParameter cp) {
+		public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
 			return new ListDataQuery<WorkitemBean>(wService.getWorklist(cp.getLoginId(),
 					EWorkitemStatus.complete, EWorkitemStatus.abort, EWorkitemStatus.retake));
 		}
@@ -71,8 +70,8 @@ public class MyCompleteWorklistTPage extends MyRunningWorklistTPage {
 			final MenuItems items = MenuItems.of();
 			items.append(MENU_MONITOR(cp));
 			items.append(MenuItem.sep());
-			items.append(MenuItem.of($m("MyWorklistTbl.1")).setOnclick_act("MyWorklistTPage_retake",
-					"workitemId"));
+			items.append(MenuItem.of($m("MyCompleteWorklistTPage.3")).setOnclick_act(
+					"MyWorklistTPage_retake", "workitemId"));
 			items.append(MenuItem.sep()).append(MENU_LOG());
 			return items;
 		}

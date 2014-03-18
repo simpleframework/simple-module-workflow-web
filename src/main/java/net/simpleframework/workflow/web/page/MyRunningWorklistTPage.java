@@ -40,19 +40,19 @@ public class MyRunningWorklistTPage extends AbstractWorkitemsTPage {
 		addComponents(pp);
 	}
 
-	protected void addComponents(PageParameter pp) {
+	protected void addComponents(final PageParameter pp) {
 		final TablePagerBean tablePager = addTablePagerBean(pp, MyRunningWorklistTbl.class);
 		tablePager.addColumn(TablePagerColumn.ICON().setWidth(18));
 		tablePager.addColumn(TC_TITLE());
-		tablePager.addColumn(new TablePagerColumn("userFrom", $m("MyRunningWorklistTPage.2"), 115)
+		tablePager.addColumn(new TablePagerColumn("userFrom", $m("MyRunningWorklistTPage.0"), 115)
 				.setSort(false).setNowrap(false));
-		tablePager.addColumn(new TablePagerColumn("createDate", $m("MyRunningWorklistTPage.3"), 90)
+		tablePager.addColumn(new TablePagerColumn("createDate", $m("MyRunningWorklistTPage.1"), 90)
 				.setPropertyClass(Date.class));
 		tablePager.addColumn(TC_STATUS()).addColumn(TablePagerColumn.OPE().setWidth(70));
 
 		// 回退
 		addAjaxRequest(pp, "MyWorklistTPage_fallback").setHandlerMethod("doFallback")
-				.setConfirmMessage($m("MyRunningWorklistTPage.5"));
+				.setConfirmMessage($m("MyRunningWorklistTPage.3"));
 
 		// 删除
 		addAjaxRequest(pp, "MyWorklistTPage_delete").setHandlerMethod("doDelete").setConfirmMessage(
@@ -61,14 +61,14 @@ public class MyRunningWorklistTPage extends AbstractWorkitemsTPage {
 		// 委托设置
 		addAjaxRequest(pp, "MyWorklistTPage_delegate_page", WorkitemDelegateSetPage.class);
 		addWindowBean(pp, "MyWorklistTPage_delegate").setContentRef("MyWorklistTPage_delegate_page")
-				.setTitle($m("MyRunningWorklistTPage.6")).setHeight(300).setWidth(500);
+				.setTitle($m("MyRunningWorklistTPage.4")).setHeight(300).setWidth(500);
 
 		// 委托确认
 		addAjaxRequest(pp, "MyWorklistTPage_delegate_receiving_page",
 				WorkitemDelegateReceivingPage.class);
 		addWindowBean(pp, "MyWorklistTPage_delegate_receiving")
 				.setContentRef("MyWorklistTPage_delegate_receiving_page")
-				.setTitle($m("MyRunningWorklistTPage.7")).setHeight(400).setWidth(500);
+				.setTitle($m("MyRunningWorklistTPage.5")).setHeight(400).setWidth(500);
 
 		// 标记菜单
 		createMarkMenuComponent(pp);
@@ -78,8 +78,8 @@ public class MyRunningWorklistTPage extends AbstractWorkitemsTPage {
 		addAjaxRequest(pp, "MyWorklistTPage_topMark").setHandlerMethod("doTopMark");
 	}
 
-	protected TablePagerBean addTablePagerBean(PageParameter pp,
-			Class<? extends ITablePagerHandler> handlerClass) {
+	protected TablePagerBean addTablePagerBean(final PageParameter pp,
+			final Class<? extends ITablePagerHandler> handlerClass) {
 		return super.addTablePagerBean(pp, "MyWorklistTPage_tbl", handlerClass);
 	}
 
@@ -102,7 +102,7 @@ public class MyRunningWorklistTPage extends AbstractWorkitemsTPage {
 
 	@Override
 	public ElementList getLeftElements(final PageParameter pp) {
-		return ElementList.of(LinkButton.menu($m("MyRunningWorklistTPage.8")).setId(
+		return ElementList.of(LinkButton.menu($m("MyRunningWorklistTbl.6")).setId(
 				"idMyWorklistTPage_markMenu"));
 	}
 
