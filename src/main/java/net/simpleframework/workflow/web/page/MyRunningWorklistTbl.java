@@ -38,6 +38,7 @@ import net.simpleframework.workflow.engine.EWorkitemStatus;
 import net.simpleframework.workflow.engine.IWorkflowContextAware;
 import net.simpleframework.workflow.engine.ProcessModelBean;
 import net.simpleframework.workflow.engine.WorkitemBean;
+import net.simpleframework.workflow.schema.AbstractTaskNode;
 import net.simpleframework.workflow.web.IWorkflowWebContext;
 import net.simpleframework.workflow.web.WorkflowUrlsFactory;
 import net.simpleframework.workflow.web.page.t1.WorkflowFormPage;
@@ -67,7 +68,7 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 			if (bModelname) {
 				return processModel;
 			} else {
-				return activity.setAttr("_processModel", processModel);
+				return aService.getTaskNode(activity).setAttr("_processModel", processModel);
 			}
 		}
 		return groupColumn;
@@ -75,14 +76,14 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 
 	@Override
 	public GroupWrapper getGroupWrapper(final ComponentParameter cp, final Object groupVal) {
-		if (groupVal instanceof ActivityBean) {
+		if (groupVal instanceof AbstractTaskNode) {
 			return new GroupWrapper() {
 				@Override
 				public String toString() {
-					final ActivityBean activity = (ActivityBean) groupVal;
+					final AbstractTaskNode taskNode = (AbstractTaskNode) groupVal;
 					final StringBuilder sb = new StringBuilder();
-					sb.append(new LabelElement(activity));
-					sb.append(new SpanElement("(" + activity.getAttr("_processModel") + ")")
+					sb.append(new LabelElement(taskNode));
+					sb.append(new SpanElement("(" + taskNode.getAttr("_processModel") + ")")
 							.setClassName("worklist_group_val"));
 					sb.append(toCountHTML());
 					return sb.toString();
@@ -92,25 +93,51 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 		return super.getGroupWrapper(cp, groupVal);
 	}
 
+	protected ImageElement _createImageMark(final ComponentParameter cp, final String img) {
+		return new ImageElement(cp.getCssResourceHomePath(MyRunningWorklistTPage.class) + "/images/"
+				+ img).setVerticalAlign(EVerticalAlign.middle);
+	}
+
+	protected ImageElement MARK_RETAKE(ComponentParameter cp) {
+		return _createImageMark(cp, "status_retake.png").setTitle($m("MyRunningWorklistTbl.13"));
+	}
+
+	protected ImageElement MARK_DELEGATE(ComponentParameter cp, final WorkitemBean workitem) {
+		return PhotoImage.icon12(cp.getPhotoUrl(workitem.getUserId())).setTitle(
+				$m("MyRunningWorklistTbl.0", permission.getUser(workitem.getUserId())));
+	}
+
+	protected ImageElement MARK_TOP(ComponentParameter cp) {
+		return _createImageMark(cp, "mark_top.png").setTitle($m("MyRunningWorklistTbl.1"));
+	}
+
+	protected ImageElement MARK_UNREAD(ComponentParameter cp) {
+		return _createImageMark(cp, "mark_unread.png").setTitle($m("MyRunningWorklistTbl.2"));
+	}
+
+	protected ImageElement createImageMark(final ComponentParameter cp, final WorkitemBean workitem) {
+		final EWorkitemStatus status = workitem.getStatus();
+		ImageElement img = null;
+		if (workitem.getRetakeRef() != null) {
+			img = MARK_RETAKE(cp);
+		} else if (status == EWorkitemStatus.delegate) {
+			img = MARK_DELEGATE(cp, workitem);
+		} else if (workitem.isTopMark()) {
+			img = MARK_TOP(cp);
+		} else if (!workitem.isReadMark()) {
+			img = MARK_UNREAD(cp);
+		}
+		return img;
+	}
+
 	@Override
 	protected Map<String, Object> getRowData(final ComponentParameter cp, final Object dataObject) {
 		final WorkitemBean workitem = (WorkitemBean) dataObject;
 		final KVMap row = new KVMap();
 
 		final ActivityBean activity = wService.getActivity(workitem);
-		final EWorkitemStatus status = workitem.getStatus();
 
-		ImageElement img = null;
-		if (status == EWorkitemStatus.delegate) {
-			img = PhotoImage.icon12(cp.getPhotoUrl(workitem.getUserId())).setTitle(
-					$m("MyRunningWorklistTbl.0", permission.getUser(workitem.getUserId())));
-		} else if (workitem.isTopMark()) {
-			img = createImageMark(cp, "mark_top.png").setTitle($m("MyRunningWorklistTbl.1")).addStyle(
-					"margin-top: -3px;");
-		} else if (!workitem.isReadMark()) {
-			img = createImageMark(cp, "mark_unread.png").setTitle($m("MyRunningWorklistTbl.2"))
-					.addStyle("margin-top: -1px;");
-		}
+		final ImageElement img = createImageMark(cp, workitem);
 		if (img != null) {
 			row.add(TablePagerColumn.ICON, img);
 		}
@@ -122,6 +149,8 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 			title.append("[").append(new SpanElement(activity).setClassName("tasknode_txt"))
 					.append("] ");
 		}
+
+		final EWorkitemStatus status = workitem.getStatus();
 		DelegationBean delegation = null;
 		if (status == EWorkitemStatus.delegate) {
 			delegation = dService.queryRunningDelegation(workitem);
@@ -187,11 +216,6 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 		items.append(MenuItem.itemDelete().setOnclick_act("MyWorklistTPage_delete", "workitemId"));
 		items.append(MenuItem.sep()).append(MENU_LOG());
 		return items;
-	}
-
-	protected ImageElement createImageMark(final ComponentParameter cp, final String img) {
-		return new ImageElement(cp.getCssResourceHomePath(MyRunningWorklistTPage.class) + "/images/"
-				+ img).setVerticalAlign(EVerticalAlign.middle);
 	}
 
 	final Map<String, String> userCache = new ConcurrentHashMap<String, String>();

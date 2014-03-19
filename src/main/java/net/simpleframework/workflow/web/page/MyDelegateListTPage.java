@@ -13,6 +13,7 @@ import net.simpleframework.mvc.IForward;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.ButtonElement;
+import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.LinkElement;
 import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.component.ComponentParameter;
@@ -61,6 +62,11 @@ public class MyDelegateListTPage extends AbstractWorkitemsTPage implements IWork
 		addAjaxRequest(pp, "DelegateListTPage_view_page", WorkitemDelegateViewPage.class);
 		addWindowBean(pp, "DelegateListTPage_view").setContentRef("DelegateListTPage_view_page")
 				.setTitle($m("MyDelegateListTPage.3")).setHeight(300).setWidth(500);
+	}
+
+	@Override
+	public ElementList getRightElements(final PageParameter pp) {
+		return ElementList.of();
 	}
 
 	@Override

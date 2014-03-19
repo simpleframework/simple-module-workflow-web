@@ -17,6 +17,7 @@ import net.simpleframework.mvc.template.struct.CategoryItem;
 import net.simpleframework.mvc.template.struct.CategoryItems;
 import net.simpleframework.workflow.engine.IWorkflowContextAware;
 import net.simpleframework.workflow.web.IWorkflowWebContext;
+import net.simpleframework.workflow.web.WorkflowUrlsFactory;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -55,8 +56,7 @@ public abstract class AbstractItemsTPage extends Category_ListPage implements IW
 
 	protected CategoryItem createCategoryItem(final PageParameter pp, final String text,
 			final Class<? extends AbstractItemsTPage> mClass) {
-		return new CategoryItem(text).setHref(
-				((IWorkflowWebContext) context).getUrlsFactory().getUrl(pp, mClass)).setSelected(
+		return new CategoryItem(text).setHref(getUrlsFactory().getUrl(pp, mClass)).setSelected(
 				mClass == ObjectFactory.original(getClass()));
 	}
 
@@ -71,9 +71,8 @@ public abstract class AbstractItemsTPage extends Category_ListPage implements IW
 		// "status=running")
 		// .setSelected("running".equals(_status)));
 		// .setSelected("complete".equals(s))
-		children
-				.add(createCategoryItem(pp, $m("AbstractItemsTPage.1"), MyCompleteWorklistTPage.class)
-						.setIconClass("my_work_complete_icon"));
+		children.add(createCategoryItem(pp, $m("AbstractItemsTPage.1"), MyFinalWorklistTPage.class)
+				.setIconClass("my_work_complete_icon"));
 		children.add(createCategoryItem(pp, $m("AbstractItemsTPage.3"), MyDelegateListTPage.class)
 				.setIconClass("delegate_list_icon"));
 		return CategoryItems.of(item0,
@@ -84,5 +83,9 @@ public abstract class AbstractItemsTPage extends Category_ListPage implements IW
 	@Override
 	protected int getCategoryWidth(final PageParameter pp) {
 		return 180;
+	}
+
+	protected static WorkflowUrlsFactory getUrlsFactory() {
+		return ((IWorkflowWebContext) context).getUrlsFactory();
 	}
 }

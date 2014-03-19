@@ -8,8 +8,8 @@ import net.simpleframework.mvc.PageMapping;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.template.t2.T2TemplatePage;
 import net.simpleframework.workflow.web.page.AbstractItemsTPage;
-import net.simpleframework.workflow.web.page.MyCompleteWorklistTPage;
 import net.simpleframework.workflow.web.page.MyDelegateListTPage;
+import net.simpleframework.workflow.web.page.MyFinalWorklistTPage;
 import net.simpleframework.workflow.web.page.MyInitiateItemsTPage;
 import net.simpleframework.workflow.web.page.MyRunningWorklistTPage;
 
@@ -43,12 +43,12 @@ public abstract class AbstractWorkPage extends T2TemplatePage {
 		}
 	}
 
-	@PageMapping(url = "/workflow/my/complete")
-	public static class MyCompleteWorklistPage extends AbstractWorkPage {
+	@PageMapping(url = "/workflow/my/final")
+	public static class MyFinalWorklistPage extends AbstractWorkPage {
 
 		@Override
 		protected Class<? extends AbstractItemsTPage> getWorkTPageClass() {
-			return MyCompleteWorklistTPage.class;
+			return MyFinalWorklistTPage.class;
 		}
 	}
 

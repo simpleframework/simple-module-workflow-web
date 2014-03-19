@@ -10,7 +10,9 @@ import net.simpleframework.ctx.trans.Transaction;
 import net.simpleframework.mvc.IForward;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageParameter;
+import net.simpleframework.mvc.common.element.Checkbox;
 import net.simpleframework.mvc.common.element.ElementList;
+import net.simpleframework.mvc.common.element.ImageElement;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.ui.menu.MenuBean;
 import net.simpleframework.mvc.component.ui.menu.MenuItem;
@@ -27,22 +29,22 @@ import net.simpleframework.workflow.engine.WorkitemBean;
  * @author 陈侃(cknet@126.com, 13910090885) https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
-public class MyCompleteWorklistTPage extends MyRunningWorklistTPage {
+public class MyFinalWorklistTPage extends MyRunningWorklistTPage {
 
 	@Override
 	protected void addComponents(final PageParameter pp) {
 		final TablePagerBean tablePager = addTablePagerBean(pp, MyCompleteWorklistTbl.class);
 		tablePager.addColumn(TablePagerColumn.ICON().setWidth(18));
 		tablePager.addColumn(TC_TITLE());
-		tablePager.addColumn(new TablePagerColumn("userTo", $m("MyCompleteWorklistTPage.0"), 115)
+		tablePager.addColumn(new TablePagerColumn("userTo", $m("MyFinalWorklistTPage.0"), 115)
 				.setSort(false).setNowrap(false));
-		tablePager.addColumn(new TablePagerColumn("completeDate", $m("MyCompleteWorklistTPage.1"),
-				115).setPropertyClass(Date.class));
+		tablePager.addColumn(new TablePagerColumn("completeDate", $m("MyFinalWorklistTPage.1"), 115)
+				.setPropertyClass(Date.class));
 		tablePager.addColumn(TC_STATUS()).addColumn(TablePagerColumn.OPE().setWidth(70));
 
 		// 取回
 		addAjaxRequest(pp, "MyWorklistTPage_retake").setHandlerMethod("doRetake").setConfirmMessage(
-				$m("MyCompleteWorklistTPage.2"));
+				$m("MyFinalWorklistTPage.2"));
 	}
 
 	@Transaction(context = IWorkflowContext.class)
@@ -53,7 +55,12 @@ public class MyCompleteWorklistTPage extends MyRunningWorklistTPage {
 
 	@Override
 	public ElementList getLeftElements(final PageParameter pp) {
-		return ElementList.of();
+		final Checkbox box = new Checkbox("idMyCompleteWorklistTPage_box",
+				$m("MyFinalWorklistTPage.4")).setOnchange(
+				"$Actions.loc('" + getUrlsFactory().getUrl(pp, MyFinalWorklistTPage.class)
+						+ "' + (this.checked ? '?status=complete' : ''));").setChecked(
+				"complete".equals(pp.getParameter("status")));
+		return ElementList.of(box);
 	}
 
 	public static class MyCompleteWorklistTbl extends MyRunningWorklistTbl {
@@ -65,12 +72,22 @@ public class MyCompleteWorklistTPage extends MyRunningWorklistTPage {
 		}
 
 		@Override
+		protected ImageElement createImageMark(final ComponentParameter cp,
+				final WorkitemBean workitem) {
+			ImageElement img = null;
+			if (workitem.isTopMark()) {
+				img = MARK_TOP(cp);
+			}
+			return img;
+		}
+
+		@Override
 		public MenuItems getContextMenu(final ComponentParameter cp, final MenuBean menuBean,
 				final MenuItem menuItem) {
 			final MenuItems items = MenuItems.of();
 			items.append(MENU_MONITOR(cp));
 			items.append(MenuItem.sep());
-			items.append(MenuItem.of($m("MyCompleteWorklistTPage.3")).setIconClass("menu_retake")
+			items.append(MenuItem.of($m("MyFinalWorklistTPage.3")).setIconClass("menu_retake")
 					.setOnclick_act("MyWorklistTPage_retake", "workitemId"));
 			items.append(MenuItem.sep()).append(MENU_LOG());
 			return items;
