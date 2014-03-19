@@ -19,9 +19,7 @@ import net.simpleframework.mvc.PageMapping;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.ETextAlign;
 import net.simpleframework.mvc.common.element.ElementList;
-import net.simpleframework.mvc.common.element.Icon;
 import net.simpleframework.mvc.common.element.InputElement;
-import net.simpleframework.mvc.common.element.LinkButton;
 import net.simpleframework.mvc.common.element.LinkElement;
 import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.component.ComponentParameter;
@@ -60,9 +58,10 @@ public class ActivityMgrPage extends AbstractWorkflowMgrPage {
 		final TablePagerBean tablePager = (TablePagerBean) addTablePagerBean(pp,
 				"ActivityMgrPage_tbl").setPagerBarLayout(EPagerBarLayout.none)
 				.setContainerId("idActivityMgrPage_tbl").setHandlerClass(ActivityTbl.class);
-		tablePager.addColumn(TC_TASKNODE()).addColumn(TC_STATUS()).addColumn(TC_PARTICIPANTS())
-				.addColumn(TC_PARTICIPANTS2()).addColumn(TC_CREATEDATE()).addColumn(TC_TIMEOUT())
-				.addColumn(TC_COMPLETEDATE()).addColumn(TC_PREVIOUS())
+		tablePager.addColumn(TC_TASKNODE())
+				.addColumn(TC_STATUS().setPropertyClass(EActivityStatus.class))
+				.addColumn(TC_PARTICIPANTS()).addColumn(TC_PARTICIPANTS2()).addColumn(TC_CREATEDATE())
+				.addColumn(TC_TIMEOUT()).addColumn(TC_COMPLETEDATE()).addColumn(TC_PREVIOUS())
 				.addColumn(TablePagerColumn.OPE().setWidth(70));
 
 		// 放弃
@@ -80,14 +79,15 @@ public class ActivityMgrPage extends AbstractWorkflowMgrPage {
 	@Override
 	public ElementList getLeftElements(final PageParameter pp) {
 		final ProcessBean process = getProcessBean(pp);
-		return ElementList.of(new LinkButton($m("ActivityMgrPage.7")).setIconClass(Icon.share_alt)
-				.setHref(url(ProcessMgrPage.class, "modelId=" + process.getModelId())),
+		return ElementList.of(
+				createBackButton()
+						.setHref(url(ProcessMgrPage.class, "modelId=" + process.getModelId())),
 				SpanElement.SPACE15, SpanElement.strongText(WorkflowUtils.getTitle(process)));
 	}
 
 	@Override
 	public NavigationButtons getNavigationBar(final PageParameter pp) {
-		return super.getNavigationBar(pp).append(new SpanElement($m("ActivityMgrPage.8")));
+		return super.getNavigationBar(pp).append(new SpanElement($m("ActivityMgrPage.0")));
 	}
 
 	@Override
@@ -232,42 +232,27 @@ public class ActivityMgrPage extends AbstractWorkflowMgrPage {
 	}
 
 	static TablePagerColumn TC_TASKNODE() {
-		return new TablePagerColumn("tasknode", $m("ActivityMgrPage.0")).setSort(false).setFilter(
+		return new TablePagerColumn("tasknode", $m("ActivityMgrPage.1")).setSort(false).setFilter(
 				false);
 	}
 
 	static TablePagerColumn TC_PREVIOUS() {
-		return new TablePagerColumn("previous", $m("ActivityMgrPage.1")).setSort(false)
+		return new TablePagerColumn("previous", $m("ActivityMgrPage.2")).setSort(false)
 				.setFilter(false).setTextAlign(ETextAlign.left);
 	}
 
 	static TablePagerColumn TC_PARTICIPANTS() {
-		return new TablePagerColumn("participants", $m("ActivityMgrPage.2")).setNowrap(false)
+		return new TablePagerColumn("participants", $m("ActivityMgrPage.3")).setNowrap(false)
 				.setSort(false).setFilter(false);
 	}
 
 	static TablePagerColumn TC_PARTICIPANTS2() {
-		return new TablePagerColumn("participants2", $m("ActivityMgrPage.3")).setNowrap(false)
+		return new TablePagerColumn("participants2", $m("ActivityMgrPage.4")).setNowrap(false)
 				.setSort(false).setFilter(false);
 	}
 
-	static TablePagerColumn TC_CREATEDATE() {
-		return new TablePagerColumn("createDate", $m("ActivityMgrPage.4"), 115)
-				.setPropertyClass(Date.class);
-	}
-
-	static TablePagerColumn TC_COMPLETEDATE() {
-		return new TablePagerColumn("completeDate", $m("ActivityMgrPage.5"), 115)
-				.setPropertyClass(Date.class);
-	}
-
 	static TablePagerColumn TC_TIMEOUT() {
-		return new TablePagerColumn("timeoutDate", $m("ActivityMgrPage.9"), 105).setPropertyClass(
+		return new TablePagerColumn("timeoutDate", $m("ActivityMgrPage.5"), 105).setPropertyClass(
 				Date.class).setFilter(false);
-	}
-
-	static TablePagerColumn TC_STATUS() {
-		return new TablePagerColumn("status", $m("ActivityMgrPage.6"), 60).setTextAlign(
-				ETextAlign.left).setPropertyClass(EActivityStatus.class);
 	}
 }

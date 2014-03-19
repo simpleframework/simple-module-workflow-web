@@ -4,7 +4,6 @@ import static net.simpleframework.common.I18n.$m;
 
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.Date;
 import java.util.Map;
 
 import net.simpleframework.ado.query.IDataQuery;
@@ -71,12 +70,8 @@ public class ProcessModelMgrPage extends AbstractWorkflowMgrPage {
 								.setSort(false))
 				.addColumn(
 						new TablePagerColumn("userText", $m("ProcessModelMgrPage.2"), 115).setSort(false))
-				.addColumn(
-						new TablePagerColumn("createDate", $m("ProcessModelMgrPage.3"), 115)
-								.setPropertyClass(Date.class))
-				.addColumn(
-						new TablePagerColumn("status", $m("ProcessModelMgrPage.4"), 70).setTextAlign(
-								ETextAlign.left).setPropertyClass(EProcessModelStatus.class))
+				.addColumn(TC_CREATEDATE())
+				.addColumn(TC_STATUS().setPropertyClass(EProcessModelStatus.class))
 				.addColumn(TablePagerColumn.OPE().setWidth(90));
 
 		// 删除
@@ -86,7 +81,7 @@ public class ProcessModelMgrPage extends AbstractWorkflowMgrPage {
 		addComponentBean(pp, "ProcessModelMgrPage_upload_page", AttachmentBean.class)
 				.setShowSubmit(true).setShowEdit(false).setHandlerClass(ModelUploadAction.class);
 		addComponentBean(pp, "ProcessModelMgrPage_upload", WindowBean.class)
-				.setContentRef("ProcessModelMgrPage_upload_page").setTitle($m("ProcessModelMgrPage.7"))
+				.setContentRef("ProcessModelMgrPage_upload_page").setTitle($m("ProcessModelMgrPage.3"))
 				.setHeight(480).setWidth(400);
 	}
 
@@ -111,7 +106,7 @@ public class ProcessModelMgrPage extends AbstractWorkflowMgrPage {
 
 	@Override
 	public ElementList getLeftElements(final PageParameter pp) {
-		return ElementList.of(new LinkButton($m("ProcessModelMgrPage.5"))
+		return ElementList.of(new LinkButton($m("ProcessModelMgrPage.4"))
 				.setOnclick("$Actions['ProcessModelMgrPage_upload']();"));
 	}
 
@@ -135,7 +130,7 @@ public class ProcessModelMgrPage extends AbstractWorkflowMgrPage {
 		public MenuItems getContextMenu(final ComponentParameter cp, final MenuBean menuBean,
 				final MenuItem menuItem) {
 			return MenuItems.of(
-					MenuItem.of($m("ProcessModelMgrPage.8")).setOnclick_act(
+					MenuItem.of($m("ProcessModelMgrPage.6")).setOnclick_act(
 							"AbstractWorkflowMgrPage_status", "modelId",
 							"op=" + EProcessModelStatus.edit.name()), MenuItem.sep(), MenuItem
 							.itemDelete().setOnclick_act("AbstractWorkflowMgrPage_del", "modelId"));
@@ -190,7 +185,7 @@ public class ProcessModelMgrPage extends AbstractWorkflowMgrPage {
 		@Override
 		public void setSwfUploadBean(final ComponentParameter cp, final SwfUploadBean swfUpload) {
 			super.setSwfUploadBean(cp, swfUpload);
-			swfUpload.setFileTypes("*.xml").setFileTypesDesc($m("ProcessModelMgrPage.6"));
+			swfUpload.setFileTypes("*.xml").setFileTypesDesc($m("ProcessModelMgrPage.5"));
 		}
 
 		@Transaction(context = IWorkflowContext.class)
@@ -237,7 +232,7 @@ public class ProcessModelMgrPage extends AbstractWorkflowMgrPage {
 		public String getTitle(final PageParameter pp) {
 			final EProcessModelStatus op = pp.getEnumParameter(EProcessModelStatus.class, "op");
 			if (op == EProcessModelStatus.edit) {
-				return $m("ProcessModelMgrPage.8");
+				return $m("ProcessModelMgrPage.6");
 			}
 			return op != null ? op.toString() : null;
 		}

@@ -98,20 +98,20 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 				+ img).setVerticalAlign(EVerticalAlign.middle);
 	}
 
-	protected ImageElement MARK_RETAKE(ComponentParameter cp) {
+	protected ImageElement MARK_RETAKE(final ComponentParameter cp) {
 		return _createImageMark(cp, "status_retake.png").setTitle($m("MyRunningWorklistTbl.13"));
 	}
 
-	protected ImageElement MARK_DELEGATE(ComponentParameter cp, final WorkitemBean workitem) {
+	protected ImageElement MARK_DELEGATE(final ComponentParameter cp, final WorkitemBean workitem) {
 		return PhotoImage.icon12(cp.getPhotoUrl(workitem.getUserId())).setTitle(
 				$m("MyRunningWorklistTbl.0", permission.getUser(workitem.getUserId())));
 	}
 
-	protected ImageElement MARK_TOP(ComponentParameter cp) {
+	protected ImageElement MARK_TOP(final ComponentParameter cp) {
 		return _createImageMark(cp, "mark_top.png").setTitle($m("MyRunningWorklistTbl.1"));
 	}
 
-	protected ImageElement MARK_UNREAD(ComponentParameter cp) {
+	protected ImageElement MARK_UNREAD(final ComponentParameter cp) {
 		return _createImageMark(cp, "mark_unread.png").setTitle($m("MyRunningWorklistTbl.2"));
 	}
 

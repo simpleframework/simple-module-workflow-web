@@ -20,6 +20,7 @@ import net.simpleframework.mvc.component.ui.pager.EPagerBarLayout;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
 import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
 import net.simpleframework.workflow.engine.ActivityBean;
+import net.simpleframework.workflow.engine.EActivityStatus;
 import net.simpleframework.workflow.engine.ProcessBean;
 import net.simpleframework.workflow.engine.WorkitemBean;
 import net.simpleframework.workflow.schema.AbstractTaskNode;
@@ -57,12 +58,13 @@ public class WorkflowMonitorPage extends AbstractWorkflowFormPage {
 		final TablePagerBean tablePager = (TablePagerBean) addTablePagerBean(pp,
 				"WorkflowMonitorPage_tbl").setPagerBarLayout(EPagerBarLayout.none)
 				.setContainerId("idWorkflowMonitorPage_tbl").setHandlerClass(_ActivityTbl.class);
-		tablePager.addColumn(ActivityMgrPage.TC_TASKNODE()).addColumn(ActivityMgrPage.TC_STATUS())
+		tablePager.addColumn(ActivityMgrPage.TC_TASKNODE())
+				.addColumn(AbstractWorkflowMgrPage.TC_STATUS().setPropertyClass(EActivityStatus.class))
 				.addColumn(ActivityMgrPage.TC_PARTICIPANTS())
 				.addColumn(ActivityMgrPage.TC_PARTICIPANTS2())
-				.addColumn(ActivityMgrPage.TC_CREATEDATE())
-				.addColumn(ActivityMgrPage.TC_COMPLETEDATE()).addColumn(ActivityMgrPage.TC_TIMEOUT())
-				.addColumn(ActivityMgrPage.TC_PREVIOUS())
+				.addColumn(AbstractWorkflowMgrPage.TC_CREATEDATE())
+				.addColumn(AbstractWorkflowMgrPage.TC_COMPLETEDATE())
+				.addColumn(ActivityMgrPage.TC_TIMEOUT()).addColumn(ActivityMgrPage.TC_PREVIOUS())
 				.addColumn(TablePagerColumn.OPE().setWidth(70));
 		return tablePager;
 	}

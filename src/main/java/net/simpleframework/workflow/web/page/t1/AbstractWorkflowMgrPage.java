@@ -3,6 +3,7 @@ package net.simpleframework.workflow.web.page.t1;
 import static net.simpleframework.common.I18n.$m;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.Map;
 
 import net.simpleframework.ctx.IModuleRef;
@@ -10,10 +11,14 @@ import net.simpleframework.module.common.web.page.AbstractDescPage;
 import net.simpleframework.mvc.AbstractMVCPage;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.ButtonElement;
+import net.simpleframework.mvc.common.element.ETextAlign;
+import net.simpleframework.mvc.common.element.Icon;
 import net.simpleframework.mvc.common.element.InputElement;
+import net.simpleframework.mvc.common.element.LinkButton;
 import net.simpleframework.mvc.common.element.Radio;
 import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.component.base.ajaxrequest.AjaxRequestBean;
+import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
 import net.simpleframework.mvc.component.ui.window.WindowBean;
 import net.simpleframework.mvc.template.AbstractTemplatePage;
 import net.simpleframework.mvc.template.t1.T1ResizedTemplatePage;
@@ -67,6 +72,10 @@ public abstract class AbstractWorkflowMgrPage extends T1ResizedTemplatePage impl
 	protected AjaxRequestBean addDeleteAjaxRequest(final PageParameter pp) {
 		return addAjaxRequest(pp, "AbstractWorkflowMgrPage_del").setHandlerMethod("doDelete")
 				.setConfirmMessage($m("Confirm.Delete"));
+	}
+
+	protected LinkButton createBackButton() {
+		return new LinkButton($m("AbstractWorkflowMgrPage.7")).setIconClass(Icon.share_alt);
 	}
 
 	protected abstract Class<? extends AbstractMVCPage> getUpdateLogPage();
@@ -126,5 +135,25 @@ public abstract class AbstractWorkflowMgrPage extends T1ResizedTemplatePage impl
 			sb.append("</div>");
 			return sb.toString();
 		}
+	}
+
+	static TablePagerColumn TC_TITLE() {
+		return new TablePagerColumn("title", $m("AbstractWorkflowMgrPage.3"))
+				.setTextAlign(ETextAlign.left);
+	}
+
+	static TablePagerColumn TC_CREATEDATE() {
+		return new TablePagerColumn("createDate", $m("AbstractWorkflowMgrPage.4"), 115)
+				.setPropertyClass(Date.class);
+	}
+
+	static TablePagerColumn TC_COMPLETEDATE() {
+		return new TablePagerColumn("completeDate", $m("AbstractWorkflowMgrPage.5"), 115)
+				.setPropertyClass(Date.class);
+	}
+
+	static TablePagerColumn TC_STATUS() {
+		return new TablePagerColumn("status", $m("AbstractWorkflowMgrPage.6"), 60)
+				.setTextAlign(ETextAlign.left);
 	}
 }

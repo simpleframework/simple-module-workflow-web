@@ -3,7 +3,6 @@ package net.simpleframework.workflow.web.page.t1;
 import static net.simpleframework.common.I18n.$m;
 
 import java.io.IOException;
-import java.util.Date;
 import java.util.Map;
 
 import net.simpleframework.ado.query.DataQueryUtils;
@@ -19,9 +18,7 @@ import net.simpleframework.mvc.PageMapping;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.ETextAlign;
 import net.simpleframework.mvc.common.element.ElementList;
-import net.simpleframework.mvc.common.element.Icon;
 import net.simpleframework.mvc.common.element.InputElement;
-import net.simpleframework.mvc.common.element.LinkButton;
 import net.simpleframework.mvc.common.element.LinkElement;
 import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.component.ComponentParameter;
@@ -59,21 +56,12 @@ public class ProcessMgrPage extends AbstractWorkflowMgrPage {
 				TablePagerBean.class).setPagerBarLayout(EPagerBarLayout.bottom)
 				.setContainerId("idProcessMgrPage_tbl").setHandlerClass(ProcessTbl.class);
 		tablePager
+				.addColumn(TC_TITLE())
 				.addColumn(
-						new TablePagerColumn("title", $m("ProcessMgrPage.0"))
-								.setTextAlign(ETextAlign.left))
-				.addColumn(
-						new TablePagerColumn("userText", $m("ProcessMgrPage.1"), 120)
-								.setTextAlign(ETextAlign.left))
-				.addColumn(
-						new TablePagerColumn("createDate", $m("ProcessMgrPage.2"), 115)
-								.setPropertyClass(Date.class))
-				.addColumn(
-						new TablePagerColumn("completeDate", $m("ProcessMgrPage.3"), 115)
-								.setPropertyClass(Date.class))
-				.addColumn(
-						new TablePagerColumn("status", $m("ProcessMgrPage.4"), 70).setTextAlign(
-								ETextAlign.left).setPropertyClass(EProcessStatus.class))
+						new TablePagerColumn("userText", $m("ProcessMgrPage.0"), 120)
+								.setTextAlign(ETextAlign.left)).addColumn(TC_CREATEDATE())
+				.addColumn(TC_COMPLETEDATE())
+				.addColumn(TC_STATUS().setPropertyClass(EProcessStatus.class))
 				.addColumn(TablePagerColumn.OPE().setWidth(90));
 
 		// 删除
@@ -107,13 +95,12 @@ public class ProcessMgrPage extends AbstractWorkflowMgrPage {
 
 	@Override
 	public ElementList getLeftElements(final PageParameter pp) {
-		return ElementList.of(new LinkButton($m("ProcessMgrPage.5")).setIconClass(Icon.share_alt)
-				.setHref(url(ProcessModelMgrPage.class)));
+		return ElementList.of(createBackButton().setHref(url(ProcessModelMgrPage.class)));
 	}
 
 	@Override
 	public NavigationButtons getNavigationBar(final PageParameter pp) {
-		return super.getNavigationBar(pp).append(new SpanElement($m("ProcessMgrPage.6")));
+		return super.getNavigationBar(pp).append(new SpanElement($m("ProcessMgrPage.1")));
 	}
 
 	@Override
