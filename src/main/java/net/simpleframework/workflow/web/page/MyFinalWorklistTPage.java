@@ -11,8 +11,10 @@ import net.simpleframework.mvc.IForward;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.Checkbox;
+import net.simpleframework.mvc.common.element.ETextAlign;
 import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.ImageElement;
+import net.simpleframework.mvc.common.element.Option;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.ui.menu.MenuBean;
 import net.simpleframework.mvc.component.ui.menu.MenuItem;
@@ -40,7 +42,14 @@ public class MyFinalWorklistTPage extends MyRunningWorklistTPage {
 				.setSort(false).setNowrap(false));
 		tablePager.addColumn(new TablePagerColumn("completeDate", $m("MyFinalWorklistTPage.1"), 115)
 				.setPropertyClass(Date.class));
-		tablePager.addColumn(TC_STATUS()).addColumn(TablePagerColumn.OPE().setWidth(70));
+		tablePager.addColumn(new TablePagerColumn("status", $m("AbstractWorkitemsTPage.3"), 55) {
+			@Override
+			protected Option[] getFilterOptions() {
+				return Option.from(EWorkitemStatus.complete, EWorkitemStatus.retake,
+						EWorkitemStatus.abort);
+			};
+		}.setPropertyClass(EWorkitemStatus.class).setTextAlign(ETextAlign.left)).addColumn(
+				TablePagerColumn.OPE().setWidth(70));
 
 		// 取回
 		addAjaxRequest(pp, "MyWorklistTPage_retake").setHandlerMethod("doRetake").setConfirmMessage(

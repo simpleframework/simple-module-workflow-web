@@ -7,7 +7,6 @@ import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.Option;
 import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
 import net.simpleframework.mvc.component.ui.pager.db.GroupDbTablePagerHandler;
-import net.simpleframework.workflow.engine.EWorkitemStatus;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -33,7 +32,7 @@ public class AbstractWorkitemsTPage extends AbstractItemsTPage {
 	}
 
 	protected TablePagerColumn TC_STATUS() {
-		return new TablePagerColumn("status", $m("AbstractWorkitemsTPage.3"), 55).setPropertyClass(
-				EWorkitemStatus.class).setTextAlign(ETextAlign.left);
+		return new TablePagerColumn("status", $m("AbstractWorkitemsTPage.3"), 55)
+				.setTextAlign(ETextAlign.left);
 	}
 }

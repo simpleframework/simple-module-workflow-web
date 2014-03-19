@@ -51,7 +51,8 @@ public class MyDelegateListTPage extends AbstractWorkitemsTPage implements IWork
 				.addColumn(new TablePagerColumn("userText", $m("MyDelegateListTPage.0"), 70))
 				.addColumn(
 						new TablePagerColumn("createDate", $m("MyDelegateListTPage.1"), 115)
-								.setPropertyClass(Date.class)).addColumn(TC_STATUS());
+								.setPropertyClass(Date.class))
+				.addColumn(TC_STATUS().setPropertyClass(EDelegationStatus.class));
 		tablePager.addColumn(TablePagerColumn.OPE().setWidth(70));
 
 		// 取消

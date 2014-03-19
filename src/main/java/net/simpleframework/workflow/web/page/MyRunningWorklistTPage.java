@@ -10,8 +10,10 @@ import net.simpleframework.mvc.AbstractMVCPage;
 import net.simpleframework.mvc.IForward;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageParameter;
+import net.simpleframework.mvc.common.element.ETextAlign;
 import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.LinkButton;
+import net.simpleframework.mvc.common.element.Option;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.ui.menu.EMenuEvent;
 import net.simpleframework.mvc.component.ui.menu.MenuBean;
@@ -19,6 +21,7 @@ import net.simpleframework.mvc.component.ui.menu.MenuItem;
 import net.simpleframework.mvc.component.ui.pager.ITablePagerHandler;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
 import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
+import net.simpleframework.workflow.engine.EWorkitemStatus;
 import net.simpleframework.workflow.engine.IWorkflowContext;
 import net.simpleframework.workflow.engine.WorkitemBean;
 import net.simpleframework.workflow.web.WorkflowLogRef.WorkitemUpdateLogPage;
@@ -49,7 +52,14 @@ public class MyRunningWorklistTPage extends AbstractWorkitemsTPage {
 				.setSort(false).setNowrap(false));
 		tablePager.addColumn(new TablePagerColumn("createDate", $m("MyRunningWorklistTPage.1"), 90)
 				.setPropertyClass(Date.class));
-		tablePager.addColumn(TC_STATUS()).addColumn(TablePagerColumn.OPE().setWidth(70));
+		tablePager.addColumn(new TablePagerColumn("status", $m("AbstractWorkitemsTPage.3"), 55) {
+			@Override
+			protected Option[] getFilterOptions() {
+				return Option.from(EWorkitemStatus.running, EWorkitemStatus.delegate,
+						EWorkitemStatus.suspended);
+			};
+		}.setPropertyClass(EWorkitemStatus.class).setTextAlign(ETextAlign.left)).addColumn(
+				TablePagerColumn.OPE().setWidth(70));
 
 		// 回退
 		addAjaxRequest(pp, "MyWorklistTPage_fallback").setHandlerMethod("doFallback")
@@ -81,7 +91,8 @@ public class MyRunningWorklistTPage extends AbstractWorkitemsTPage {
 
 	protected TablePagerBean addTablePagerBean(final PageParameter pp,
 			final Class<? extends ITablePagerHandler> handlerClass) {
-		return super.addTablePagerBean(pp, "MyWorklistTPage_tbl", handlerClass);
+		return super.addTablePagerBean(pp, "MyWorklistTPage_tbl", handlerClass)
+				.setShowFilterBar(true);
 	}
 
 	@Override
