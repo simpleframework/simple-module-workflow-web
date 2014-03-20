@@ -49,7 +49,7 @@ public class MyRunningWorklistTPage extends AbstractWorkitemsTPage {
 		tablePager.addColumn(TablePagerColumn.ICON().setWidth(18));
 		tablePager.addColumn(TC_TITLE());
 		tablePager.addColumn(new TablePagerColumn("userFrom", $m("MyRunningWorklistTPage.0"), 115)
-				.setSort(false).setNowrap(false));
+				.setSort(false).setFilter(false).setNowrap(false));
 		tablePager.addColumn(new TablePagerColumn("createDate", $m("MyRunningWorklistTPage.1"), 90)
 				.setPropertyClass(Date.class));
 		tablePager.addColumn(new TablePagerColumn("status", $m("AbstractWorkitemsTPage.3"), 55) {

@@ -58,6 +58,19 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 	}
 
 	@Override
+	public AbstractTablePagerSchema createTablePagerSchema() {
+		return new DefaultTablePagerSchema() {
+			@Override
+			public Object getVal(final Object dataObject, final String key) {
+				if ("title".equals(key)) {
+					return aService.getProcessBean(wService.getActivity((WorkitemBean) dataObject));
+				}
+				return super.getVal(dataObject, key);
+			}
+		};
+	}
+
+	@Override
 	public Object getGroupValue(final ComponentParameter cp, final Object bean,
 			final String groupColumn) {
 		final boolean bModelname = "modelname".equals(groupColumn);
