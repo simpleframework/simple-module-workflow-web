@@ -57,9 +57,9 @@ public class WorkflowGraphMonitorPage extends WorkflowMonitorPage {
 	}
 
 	@Override
-	public void html_normalise(final PageParameter pp,
+	public void onHtmlNormalise(final PageParameter pp,
 			final net.simpleframework.lib.org.jsoup.nodes.Element element) {
-		super.html_normalise(pp, element);
+		super.onHtmlNormalise(pp, element);
 		if (element.tagName().equalsIgnoreCase("html") && isVML(pp)) {
 			element.attr("xmlns:v", "urn:schemas-microsoft-com:vml");
 		}
