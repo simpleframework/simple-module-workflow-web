@@ -9,7 +9,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import net.simpleframework.ado.query.IDataQuery;
-import net.simpleframework.ado.query.ListDataQuery;
+import net.simpleframework.ado.query.IteratorDataQuery;
 import net.simpleframework.common.Convert;
 import net.simpleframework.common.DateUtils;
 import net.simpleframework.common.DateUtils.NumberConvert;
@@ -54,7 +54,7 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 
 	@Override
 	public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
-		return new ListDataQuery<WorkitemBean>(wService.getRunningWorklist(cp.getLoginId()));
+		return new IteratorDataQuery<WorkitemBean>(wService.getRunningWorklist(cp.getLoginId()));
 	}
 
 	@Override

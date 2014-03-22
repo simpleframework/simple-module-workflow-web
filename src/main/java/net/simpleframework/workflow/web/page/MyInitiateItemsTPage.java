@@ -21,6 +21,7 @@ import net.simpleframework.mvc.component.ui.pager.db.AbstractDbTablePagerHandler
 import net.simpleframework.workflow.engine.InitiateItem;
 import net.simpleframework.workflow.engine.InitiateItems;
 import net.simpleframework.workflow.engine.ProcessBean;
+import net.simpleframework.workflow.engine.ProcessModelBean;
 import net.simpleframework.workflow.engine.WorkitemBean;
 import net.simpleframework.workflow.web.component.startprocess.DefaultStartProcessHandler;
 import net.simpleframework.workflow.web.component.startprocess.StartProcessBean;
@@ -40,9 +41,10 @@ public class MyInitiateItemsTPage extends AbstractItemsTPage {
 
 		final TablePagerBean tablePager = addTablePagerBean(pp, "MyInitiateItemsTPage_tbl",
 				MyInitiateItemsTbl.class);
-		tablePager.addColumn(
-				new TablePagerColumn("modelText", $m("MyInitiateItemsTPage.1"))
-						.setTextAlign(ETextAlign.left)).addColumn(TablePagerColumn.OPE().setWidth(70));
+		tablePager.addColumn(new TablePagerColumn("modelText", $m("MyInitiateItemsTPage.1"))
+				.setTextAlign(ETextAlign.left));
+		tablePager.addColumn(new TablePagerColumn("processCount", $m("MyInitiateItemsTPage.3"), 100));
+		tablePager.addColumn(TablePagerColumn.OPE().setWidth(70));
 
 		// 发起流程
 		pp.addComponentBean("MyInitiateItemsTPage_startProcess", StartProcessBean.class)
@@ -65,13 +67,18 @@ public class MyInitiateItemsTPage extends AbstractItemsTPage {
 		@Override
 		protected Map<String, Object> getRowData(final ComponentParameter cp, final Object dataObject) {
 			final InitiateItem initiateItem = (InitiateItem) dataObject;
-			final KVMap row = new KVMap().add("modelText", new LinkElement(initiateItem)
-					.setOnclick("$Actions['MyInitiateItemsTPage_startProcess']('modelId="
-							+ initiateItem.getModelId() + "');"));
+			final Object modelId = initiateItem.getModelId();
+			final ProcessModelBean processModel = mService.getBean(modelId);
+
+			final KVMap row = new KVMap();
+			row.add("modelText", new LinkElement(initiateItem)
+					.setOnclick("$Actions['MyInitiateItemsTPage_startProcess']('modelId=" + modelId
+							+ "');"));
+			row.add("processCount", processModel.getProcessCount());
 			final StringBuilder sb = new StringBuilder();
 			sb.append(LinkButton.corner($m("MyInitiateItemsTPage.2")).setOnclick(
-					"$Actions['MyInitiateItemsTPage_startProcess'].initiator_select('modelId="
-							+ initiateItem.getModelId() + "');"));
+					"$Actions['MyInitiateItemsTPage_startProcess'].initiator_select('modelId=" + modelId
+							+ "');"));
 			row.put(TablePagerColumn.OPE, sb.toString());
 			return row;
 		}

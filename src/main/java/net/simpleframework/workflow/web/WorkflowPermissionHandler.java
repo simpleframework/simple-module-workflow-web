@@ -2,7 +2,6 @@ package net.simpleframework.workflow.web;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -35,9 +34,9 @@ public class WorkflowPermissionHandler extends OrganizationPermissionHandler imp
 			oRole = service.getRoleByName(service.getRoleChart(oRole), relative);
 			if (oRole != null) {
 				final ID roleId = oRole.getId();
-				final Enumeration<ID> users = users(roleId, variables);
-				while (users.hasMoreElements()) {
-					participants.add(new Participant(users.nextElement(), roleId));
+				final Iterator<ID> users = users(roleId, variables);
+				while (users.hasNext()) {
+					participants.add(new Participant(users.next(), roleId));
 				}
 			}
 		}

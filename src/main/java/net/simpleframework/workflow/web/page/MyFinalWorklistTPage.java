@@ -5,7 +5,7 @@ import static net.simpleframework.common.I18n.$m;
 import java.util.Date;
 
 import net.simpleframework.ado.query.IDataQuery;
-import net.simpleframework.ado.query.ListDataQuery;
+import net.simpleframework.ado.query.IteratorDataQuery;
 import net.simpleframework.ctx.trans.Transaction;
 import net.simpleframework.mvc.IForward;
 import net.simpleframework.mvc.JavascriptForward;
@@ -54,6 +54,9 @@ public class MyFinalWorklistTPage extends MyRunningWorklistTPage {
 		// 取回
 		addAjaxRequest(pp, "MyWorklistTPage_retake").setHandlerMethod("doRetake").setConfirmMessage(
 				$m("MyFinalWorklistTPage.2"));
+
+		// 标记置顶
+		addAjaxRequest(pp, "MyWorklistTPage_topMark").setHandlerMethod("doTopMark");
 	}
 
 	@Transaction(context = IWorkflowContext.class)
@@ -76,7 +79,7 @@ public class MyFinalWorklistTPage extends MyRunningWorklistTPage {
 
 		@Override
 		public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
-			return new ListDataQuery<WorkitemBean>(wService.getWorklist(cp.getLoginId(),
+			return new IteratorDataQuery<WorkitemBean>(wService.getWorklist(cp.getLoginId(),
 					EWorkitemStatus.complete, EWorkitemStatus.abort, EWorkitemStatus.retake));
 		}
 
@@ -98,6 +101,14 @@ public class MyFinalWorklistTPage extends MyRunningWorklistTPage {
 			items.append(MenuItem.sep());
 			items.append(MenuItem.of($m("MyFinalWorklistTPage.3")).setIconClass("menu_retake")
 					.setOnclick_act("MyWorklistTPage_retake", "workitemId"));
+			items.append(MenuItem.sep());
+			final MenuItem mItems = MenuItem.of($m("MyRunningWorklistTbl.6"));
+			mItems.addChild(
+					MENU_MARK_TOP().setOnclick_act("MyWorklistTPage_topMark", "workitemId", "op=top"))
+					.addChild(
+							MENU_MARK_UNTOP().setOnclick_act("MyWorklistTPage_topMark", "workitemId",
+									"op=untop"));
+			items.append(mItems);
 			items.append(MenuItem.sep()).append(MENU_LOG());
 			return items;
 		}

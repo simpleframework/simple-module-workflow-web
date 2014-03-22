@@ -3,6 +3,7 @@ package net.simpleframework.workflow.web.page;
 import static net.simpleframework.common.I18n.$m;
 
 import java.util.Date;
+import java.util.Iterator;
 
 import net.simpleframework.common.StringUtils;
 import net.simpleframework.ctx.trans.Transaction;
@@ -91,8 +92,7 @@ public class MyRunningWorklistTPage extends AbstractWorkitemsTPage {
 
 	protected TablePagerBean addTablePagerBean(final PageParameter pp,
 			final Class<? extends ITablePagerHandler> handlerClass) {
-		return super.addTablePagerBean(pp, "MyWorklistTPage_tbl", handlerClass)
-				.setShowFilterBar(true);
+		return super.addTablePagerBean(pp, "MyWorklistTPage_tbl", handlerClass);
 	}
 
 	@Override
@@ -122,7 +122,9 @@ public class MyRunningWorklistTPage extends AbstractWorkitemsTPage {
 	public IForward doReadMark(final ComponentParameter cp) {
 		final String op = cp.getParameter("op");
 		if ("allread".equals(op)) {
-			for (final WorkitemBean workitem : wService.getRunningWorklist(cp.getLoginId())) {
+			final Iterator<WorkitemBean> it = wService.getRunningWorklist(cp.getLoginId());
+			while (it.hasNext()) {
+				final WorkitemBean workitem = it.next();
 				if (!workitem.isReadMark()) {
 					wService.doReadMark(workitem);
 				}
