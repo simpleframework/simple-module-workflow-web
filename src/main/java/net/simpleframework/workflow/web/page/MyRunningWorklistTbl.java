@@ -332,6 +332,10 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 						"$Actions['MyWorklistTPage_tbl'].doAct('MyWorklistTPage_topMark', 'workitemId', 'op=untop');");
 	}
 
+	static MenuItem MENU_VIEW_ALL() {
+		return MenuItem.of($m("MyRunningWorklistTbl.15"));
+	}
+
 	static NumberConvert DATE_NUMBERCONVERT = new NumberConvert() {
 		@Override
 		public Object convert(final Number n) {

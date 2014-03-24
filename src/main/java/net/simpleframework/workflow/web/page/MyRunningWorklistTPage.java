@@ -15,6 +15,7 @@ import net.simpleframework.mvc.common.element.ETextAlign;
 import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.LinkButton;
 import net.simpleframework.mvc.common.element.Option;
+import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.ui.menu.EMenuEvent;
 import net.simpleframework.mvc.component.ui.menu.MenuBean;
@@ -88,6 +89,9 @@ public class MyRunningWorklistTPage extends AbstractWorkitemsTPage {
 		addAjaxRequest(pp, "MyWorklistTPage_readMark").setHandlerMethod("doReadMark");
 		// 标记置顶
 		addAjaxRequest(pp, "MyWorklistTPage_topMark").setHandlerMethod("doTopMark");
+
+		// 查看菜单
+		createViewMenuComponent(pp);
 	}
 
 	protected TablePagerBean addTablePagerBean(final PageParameter pp,
@@ -112,10 +116,23 @@ public class MyRunningWorklistTPage extends AbstractWorkitemsTPage {
 				.addItem(MyRunningWorklistTbl.MENU_MARK_UNTOP());
 	}
 
+	protected void createViewMenuComponent(final PageParameter pp) {
+		final MenuBean mb = (MenuBean) addComponentBean(pp, "MyWorklistTPage_viewMenu",
+				MenuBean.class).setMenuEvent(EMenuEvent.click).setSelector(
+				"#idMyWorklistTPage_viewMenu");
+		mb.addItem(
+				MyRunningWorklistTbl.MENU_VIEW_ALL().setOnclick(
+						"$Actions['MyWorklistTPage_tbl']('v=');")).addItem(
+				MyRunningWorklistTbl.MENU_MARK_UNREAD().setOnclick(
+						"$Actions['MyWorklistTPage_tbl']('v=unread');"));
+	}
+
 	@Override
 	public ElementList getLeftElements(final PageParameter pp) {
-		return ElementList.of(LinkButton.menu($m("MyRunningWorklistTbl.6")).setId(
-				"idMyWorklistTPage_markMenu"));
+		return ElementList.of(
+				LinkButton.menu($m("MyRunningWorklistTbl.6")).setId("idMyWorklistTPage_markMenu"),
+				SpanElement.SPACE,
+				LinkButton.menu($m("MyRunningWorklistTbl.14")).setId("idMyWorklistTPage_viewMenu"));
 	}
 
 	@Transaction(context = IWorkflowContext.class)
