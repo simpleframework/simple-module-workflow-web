@@ -3,8 +3,8 @@ package net.simpleframework.workflow.web.page;
 import static net.simpleframework.common.I18n.$m;
 
 import java.util.Date;
-import java.util.Iterator;
 
+import net.simpleframework.ado.query.IDataQuery;
 import net.simpleframework.common.StringUtils;
 import net.simpleframework.ctx.trans.Transaction;
 import net.simpleframework.mvc.AbstractMVCPage;
@@ -122,12 +122,10 @@ public class MyRunningWorklistTPage extends AbstractWorkitemsTPage {
 	public IForward doReadMark(final ComponentParameter cp) {
 		final String op = cp.getParameter("op");
 		if ("allread".equals(op)) {
-			final Iterator<WorkitemBean> it = wService.getRunningWorklist(cp.getLoginId());
-			while (it.hasNext()) {
-				final WorkitemBean workitem = it.next();
-				if (!workitem.isReadMark()) {
-					wService.doReadMark(workitem);
-				}
+			final IDataQuery<WorkitemBean> dq = wService.getRunningWorklist(cp.getLoginId());
+			WorkitemBean workitem;
+			while ((workitem = dq.next()) != null && !workitem.isReadMark()) {
+				wService.doReadMark(workitem);
 			}
 		} else {
 			final Object[] ids = StringUtils.split(cp.getParameter("workitemId"));

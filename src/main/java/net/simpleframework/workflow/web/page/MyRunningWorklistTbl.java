@@ -3,13 +3,17 @@ package net.simpleframework.workflow.web.page;
 import static net.simpleframework.common.I18n.$m;
 
 import java.util.Date;
+import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
+import net.simpleframework.ado.FilterItem;
+import net.simpleframework.ado.db.DbDataQuery;
+import net.simpleframework.ado.db.common.ExpressionValue;
+import net.simpleframework.ado.db.common.SQLValue;
 import net.simpleframework.ado.query.IDataQuery;
-import net.simpleframework.ado.query.IteratorDataQuery;
 import net.simpleframework.common.Convert;
 import net.simpleframework.common.DateUtils;
 import net.simpleframework.common.DateUtils.NumberConvert;
@@ -36,6 +40,7 @@ import net.simpleframework.workflow.engine.DelegationBean;
 import net.simpleframework.workflow.engine.EDelegationStatus;
 import net.simpleframework.workflow.engine.EWorkitemStatus;
 import net.simpleframework.workflow.engine.IWorkflowContextAware;
+import net.simpleframework.workflow.engine.ProcessBean;
 import net.simpleframework.workflow.engine.ProcessModelBean;
 import net.simpleframework.workflow.engine.WorkitemBean;
 import net.simpleframework.workflow.schema.AbstractTaskNode;
@@ -54,20 +59,26 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 
 	@Override
 	public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
-		return new IteratorDataQuery<WorkitemBean>(wService.getRunningWorklist(cp.getLoginId()));
+		return wService.getRunningWorklist(cp.getLoginId());
 	}
 
 	@Override
-	public AbstractTablePagerSchema createTablePagerSchema() {
-		return new DefaultTablePagerSchema() {
-			@Override
-			public Object getVal(final Object dataObject, final String key) {
-				if ("title".equals(key)) {
-					return aService.getProcessBean(wService.getActivity((WorkitemBean) dataObject));
-				}
-				return super.getVal(dataObject, key);
-			}
-		};
+	protected ExpressionValue createFilterExpressionValue(final DbDataQuery<?> qs,
+			final TablePagerColumn oCol, final Iterator<FilterItem> it) {
+		if ("title".equals(oCol.getColumnName())) {
+			final TablePagerColumn oCol2 = (TablePagerColumn) oCol.clone();
+			oCol2.setColumnAlias("p.title");
+			final ExpressionValue ev = super.createFilterExpressionValue(qs, oCol2, it);
+			final SQLValue sv = qs.getSqlValue();
+			final StringBuilder sb = new StringBuilder();
+			sb.append("select * from (").append(sv.getSql()).append(") t left join ")
+					.append(pService.getTablename(ProcessBean.class))
+					.append(" p on t.processid=p.id where " + ev.getExpression());
+			sv.setSql(sb.toString());
+			sv.addValues(ev.getValues());
+			return null;
+		}
+		return super.createFilterExpressionValue(qs, oCol, it);
 	}
 
 	@Override

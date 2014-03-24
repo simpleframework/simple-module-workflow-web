@@ -89,12 +89,6 @@ public class MyDelegateListTPage extends AbstractWorkitemsTPage implements IWork
 		}
 
 		@Override
-		public Object getGroupValue(final ComponentParameter cp, final Object bean,
-				final String groupColumn) {
-			return null;
-		}
-
-		@Override
 		protected Map<String, Object> getRowData(final ComponentParameter cp, final Object dataObject) {
 			final DelegationBean delegation = (DelegationBean) dataObject;
 			final WorkitemBean workitem = wService.getBean(delegation.getSourceId());

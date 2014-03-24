@@ -5,7 +5,6 @@ import static net.simpleframework.common.I18n.$m;
 import java.util.Date;
 
 import net.simpleframework.ado.query.IDataQuery;
-import net.simpleframework.ado.query.IteratorDataQuery;
 import net.simpleframework.ctx.trans.Transaction;
 import net.simpleframework.mvc.IForward;
 import net.simpleframework.mvc.JavascriptForward;
@@ -79,8 +78,8 @@ public class MyFinalWorklistTPage extends MyRunningWorklistTPage {
 
 		@Override
 		public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
-			return new IteratorDataQuery<WorkitemBean>(wService.getWorklist(cp.getLoginId(),
-					EWorkitemStatus.complete, EWorkitemStatus.abort, EWorkitemStatus.retake));
+			return wService.getWorklist(cp.getLoginId(), EWorkitemStatus.complete,
+					EWorkitemStatus.abort, EWorkitemStatus.retake);
 		}
 
 		@Override
