@@ -8,6 +8,7 @@ import net.simpleframework.common.object.ObjectFactory;
 import net.simpleframework.ctx.IModuleRef;
 import net.simpleframework.mvc.AbstractMVCPage;
 import net.simpleframework.mvc.PageParameter;
+import net.simpleframework.mvc.common.element.SupElement;
 import net.simpleframework.mvc.component.base.ajaxrequest.AjaxRequestBean;
 import net.simpleframework.mvc.component.ui.pager.ITablePagerHandler;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
@@ -64,6 +65,11 @@ public abstract class AbstractItemsTPage extends Category_ListPage implements IW
 	protected CategoryItems getCategoryList(final PageParameter pp) {
 		final CategoryItem item0 = createCategoryItem(pp, $m("AbstractItemsTPage.0"),
 				MyRunningWorklistTPage.class).setIconClass("my_work_icon");
+		final int count = wService.getUnreadWorklist(pp.getLoginId()).getCount();
+		if (count > 0) {
+			item0.setNum(new SupElement(count).setHighlight(true));
+		}
+
 		// final String s = pp.getParameter("s");
 		final List<CategoryItem> children = item0.getChildren();
 		// children.add(createCategoryItem(pp, "待办工作",
@@ -82,7 +88,7 @@ public abstract class AbstractItemsTPage extends Category_ListPage implements IW
 
 	@Override
 	protected int getCategoryWidth(final PageParameter pp) {
-		return 180;
+		return 170;
 	}
 
 	protected static WorkflowUrlsFactory getUrlsFactory() {

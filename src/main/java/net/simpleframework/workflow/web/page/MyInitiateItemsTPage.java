@@ -43,7 +43,8 @@ public class MyInitiateItemsTPage extends AbstractItemsTPage {
 				MyInitiateItemsTbl.class);
 		tablePager.addColumn(new TablePagerColumn("modelText", $m("MyInitiateItemsTPage.1"))
 				.setTextAlign(ETextAlign.left));
-		tablePager.addColumn(new TablePagerColumn("processCount", $m("MyInitiateItemsTPage.3"), 100));
+		tablePager.addColumn(new TablePagerColumn("processCount", $m("MyInitiateItemsTPage.3"), 80));
+		tablePager.addColumn(new TablePagerColumn("version", $m("MyInitiateItemsTPage.4"), 80));
 		tablePager.addColumn(TablePagerColumn.OPE().setWidth(70));
 
 		// 发起流程
@@ -74,6 +75,7 @@ public class MyInitiateItemsTPage extends AbstractItemsTPage {
 			row.add("modelText", new LinkElement(initiateItem)
 					.setOnclick("$Actions['MyInitiateItemsTPage_startProcess']('modelId=" + modelId
 							+ "');"));
+			// row.add("version", processModel.);
 			row.add("processCount", processModel.getProcessCount());
 			final StringBuilder sb = new StringBuilder();
 			sb.append(LinkButton.corner($m("MyInitiateItemsTPage.2")).setOnclick(
