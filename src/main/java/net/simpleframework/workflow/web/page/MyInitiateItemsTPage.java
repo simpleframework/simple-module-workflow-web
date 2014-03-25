@@ -42,9 +42,11 @@ public class MyInitiateItemsTPage extends AbstractItemsTPage {
 
 		final TablePagerBean tablePager = addTablePagerBean(pp, "MyInitiateItemsTPage_tbl",
 				MyInitiateItemsTbl.class);
+		tablePager.addColumn(TablePagerColumn.ICON().setWidth(18));
 		tablePager.addColumn(new TablePagerColumn("modelText", $m("MyInitiateItemsTPage.1"))
 				.setTextAlign(ETextAlign.left));
-		tablePager.addColumn(new TablePagerColumn("processCount", $m("MyInitiateItemsTPage.3"), 80));
+		tablePager.addColumn(new TablePagerColumn("processCount", $m("MyInitiateItemsTPage.3"), 80)
+				.setPropertyClass(Integer.class));
 		tablePager.addColumn(new TablePagerColumn("version", $m("MyInitiateItemsTPage.4"), 80));
 		tablePager.addColumn(TablePagerColumn.OPE().setWidth(70));
 
@@ -64,6 +66,21 @@ public class MyInitiateItemsTPage extends AbstractItemsTPage {
 				return DataQueryUtils.nullQuery();
 			}
 			return new ListDataQuery<InitiateItem>(items);
+		}
+
+		@Override
+		protected Object getVal(Object dataObject, String key) {
+			final InitiateItem initiateItem = (InitiateItem) dataObject;
+			final ProcessModelBean processModel = mService.getBean(initiateItem.getModelId());
+			if ("modelText".equals(key)) {
+				return processModel.toString();
+			} else if ("processCount".equals(key)) {
+				return processModel.getProcessCount();
+			} else if ("version".equals(key)) {
+				final ProcessDocument doc = mService.getProcessDocument(processModel);
+				return doc.getProcessNode().getVersion();
+			}
+			return super.getVal(dataObject, key);
 		}
 
 		@Override
