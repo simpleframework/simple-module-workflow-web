@@ -14,6 +14,7 @@ import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.ButtonElement;
 import net.simpleframework.mvc.common.element.ElementList;
+import net.simpleframework.mvc.common.element.LinkButton;
 import net.simpleframework.mvc.common.element.LinkElement;
 import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.component.ComponentParameter;
@@ -23,6 +24,7 @@ import net.simpleframework.mvc.component.ui.menu.MenuItems;
 import net.simpleframework.mvc.component.ui.pager.AbstractTablePagerSchema;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
 import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
+import net.simpleframework.workflow.engine.ActivityBean;
 import net.simpleframework.workflow.engine.DelegationBean;
 import net.simpleframework.workflow.engine.EDelegationStatus;
 import net.simpleframework.workflow.engine.IWorkflowContext;
@@ -66,8 +68,8 @@ public class MyDelegateListTPage extends AbstractWorkitemsTPage implements IWork
 	}
 
 	@Override
-	public ElementList getRightElements(final PageParameter pp) {
-		return ElementList.of();
+	public ElementList getLeftElements(final PageParameter pp) {
+		return ElementList.of(LinkButton.of("用户委托"));
 	}
 
 	@Override
@@ -89,16 +91,23 @@ public class MyDelegateListTPage extends AbstractWorkitemsTPage implements IWork
 		}
 
 		@Override
+		protected WorkitemBean getWorkitem(final Object dataObject) {
+			return wService.getBean(((DelegationBean) dataObject).getSourceId());
+		}
+
+		@Override
 		protected Map<String, Object> getRowData(final ComponentParameter cp, final Object dataObject) {
 			final DelegationBean delegation = (DelegationBean) dataObject;
 			final WorkitemBean workitem = wService.getBean(delegation.getSourceId());
 
 			final Object id = delegation.getId();
-			final KVMap row = new KVMap().add(
-					"title",
-					new LinkElement(WorkflowUtils.getTitle(aService.getProcessBean(wService
-							.getActivity(workitem))))
-							.setOnclick("$Actions['DelegateListTPage_view']('delegationId=" + id + "');"));
+
+			final ActivityBean activity = wService.getActivity(workitem);
+			final StringBuilder title = new StringBuilder();
+			appendTaskname(title, cp, activity);
+			title.append(new LinkElement(WorkflowUtils.getTitle(aService.getProcessBean(activity)))
+					.setOnclick("$Actions['DelegateListTPage_view']('delegationId=" + id + "');"));
+			final KVMap row = new KVMap().add("title", title.toString());
 			row.add("userText", delegation.getUserText());
 			row.add("createDate", delegation.getCreateDate());
 			final EDelegationStatus status = delegation.getStatus();

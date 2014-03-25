@@ -84,14 +84,24 @@ public class MyRunningWorklistTPage extends AbstractWorkitemsTPage {
 				.setTitle($m("MyRunningWorklistTPage.5")).setHeight(400).setWidth(500);
 
 		// 标记菜单
-		createMarkMenuComponent(pp);
+		MenuBean mb = createMarkMenuComponent(pp);
+		mb.addItem(MyRunningWorklistTbl.MENU_MARK_READ())
+				.addItem(MyRunningWorklistTbl.MENU_MARK_UNREAD())
+				.addItem(MyRunningWorklistTbl.MENU_MARK_ALLREAD());
+		mb.addItem(MenuItem.sep()).addItem(MyRunningWorklistTbl.MENU_MARK_TOP())
+				.addItem(MyRunningWorklistTbl.MENU_MARK_UNTOP());
 		// 标记已读
 		addAjaxRequest(pp, "MyWorklistTPage_readMark").setHandlerMethod("doReadMark");
 		// 标记置顶
 		addAjaxRequest(pp, "MyWorklistTPage_topMark").setHandlerMethod("doTopMark");
 
 		// 查看菜单
-		createViewMenuComponent(pp);
+		mb = createViewMenuComponent(pp);
+		mb.addItem(
+				MyRunningWorklistTbl.MENU_VIEW_ALL().setOnclick(
+						"$Actions['MyWorklistTPage_tbl']('v=');")).addItem(
+				MyRunningWorklistTbl.MENU_MARK_UNREAD().setOnclick(
+						"$Actions['MyWorklistTPage_tbl']('v=unread');"));
 	}
 
 	protected TablePagerBean addTablePagerBean(final PageParameter pp,
@@ -104,27 +114,16 @@ public class MyRunningWorklistTPage extends AbstractWorkitemsTPage {
 		return WorkitemUpdateLogPage.class;
 	}
 
-	protected void createMarkMenuComponent(final PageParameter pp) {
+	protected MenuBean createMarkMenuComponent(final PageParameter pp) {
 		// 标记菜单
-		final MenuBean mb = (MenuBean) addComponentBean(pp, "MyWorklistTPage_markMenu",
-				MenuBean.class).setMenuEvent(EMenuEvent.click).setSelector(
-				"#idMyWorklistTPage_markMenu");
-		mb.addItem(MyRunningWorklistTbl.MENU_MARK_READ())
-				.addItem(MyRunningWorklistTbl.MENU_MARK_UNREAD())
-				.addItem(MyRunningWorklistTbl.MENU_MARK_ALLREAD());
-		mb.addItem(MenuItem.sep()).addItem(MyRunningWorklistTbl.MENU_MARK_TOP())
-				.addItem(MyRunningWorklistTbl.MENU_MARK_UNTOP());
+		return (MenuBean) addComponentBean(pp, "MyWorklistTPage_markMenu", MenuBean.class)
+				.setMenuEvent(EMenuEvent.click).setSelector("#idMyWorklistTPage_markMenu");
+
 	}
 
-	protected void createViewMenuComponent(final PageParameter pp) {
-		final MenuBean mb = (MenuBean) addComponentBean(pp, "MyWorklistTPage_viewMenu",
-				MenuBean.class).setMenuEvent(EMenuEvent.click).setSelector(
-				"#idMyWorklistTPage_viewMenu");
-		mb.addItem(
-				MyRunningWorklistTbl.MENU_VIEW_ALL().setOnclick(
-						"$Actions['MyWorklistTPage_tbl']('v=');")).addItem(
-				MyRunningWorklistTbl.MENU_MARK_UNREAD().setOnclick(
-						"$Actions['MyWorklistTPage_tbl']('v=unread');"));
+	protected MenuBean createViewMenuComponent(final PageParameter pp) {
+		return (MenuBean) addComponentBean(pp, "MyWorklistTPage_viewMenu", MenuBean.class)
+				.setMenuEvent(EMenuEvent.click).setSelector("#idMyWorklistTPage_viewMenu");
 	}
 
 	@Override

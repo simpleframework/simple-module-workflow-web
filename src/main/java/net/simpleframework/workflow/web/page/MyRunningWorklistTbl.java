@@ -94,7 +94,7 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 			final String groupColumn) {
 		final boolean bModelname = "modelname".equals(groupColumn);
 		if (bModelname || "taskname".equals(groupColumn)) {
-			final ActivityBean activity = wService.getActivity((WorkitemBean) bean);
+			final ActivityBean activity = wService.getActivity(getWorkitem(bean));
 			final ProcessModelBean processModel = pService.getProcessModel(aService
 					.getProcessBean(activity));
 			if (bModelname) {
@@ -162,6 +162,17 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 		return img;
 	}
 
+	protected WorkitemBean getWorkitem(final Object dataObject) {
+		return (WorkitemBean) dataObject;
+	}
+
+	protected void appendTaskname(final StringBuilder sb, final ComponentParameter cp,
+			final ActivityBean activity) {
+		if (!"taskname".equals(cp.getParameter(G))) {
+			sb.append("[").append(new SpanElement(activity).setClassName("tasknode_txt")).append("] ");
+		}
+	}
+
 	@Override
 	protected Map<String, Object> getRowData(final ComponentParameter cp, final Object dataObject) {
 		final WorkitemBean workitem = (WorkitemBean) dataObject;
@@ -177,10 +188,7 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 		final WorkflowUrlsFactory uFactory = ((IWorkflowWebContext) context).getUrlsFactory();
 
 		final StringBuilder title = new StringBuilder();
-		if (!"taskname".equals(cp.getParameter(G))) {
-			title.append("[").append(new SpanElement(activity).setClassName("tasknode_txt"))
-					.append("] ");
-		}
+		appendTaskname(title, cp, activity);
 
 		final EWorkitemStatus status = workitem.getStatus();
 		DelegationBean delegation = null;

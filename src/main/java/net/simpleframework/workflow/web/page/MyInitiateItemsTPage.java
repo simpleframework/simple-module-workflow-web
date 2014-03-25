@@ -23,6 +23,7 @@ import net.simpleframework.workflow.engine.InitiateItems;
 import net.simpleframework.workflow.engine.ProcessBean;
 import net.simpleframework.workflow.engine.ProcessModelBean;
 import net.simpleframework.workflow.engine.WorkitemBean;
+import net.simpleframework.workflow.schema.ProcessDocument;
 import net.simpleframework.workflow.web.component.startprocess.DefaultStartProcessHandler;
 import net.simpleframework.workflow.web.component.startprocess.StartProcessBean;
 import net.simpleframework.workflow.web.page.t1.WorkflowFormPage;
@@ -70,12 +71,12 @@ public class MyInitiateItemsTPage extends AbstractItemsTPage {
 			final InitiateItem initiateItem = (InitiateItem) dataObject;
 			final Object modelId = initiateItem.getModelId();
 			final ProcessModelBean processModel = mService.getBean(modelId);
-
+			final ProcessDocument doc = mService.getProcessDocument(processModel);
 			final KVMap row = new KVMap();
 			row.add("modelText", new LinkElement(initiateItem)
 					.setOnclick("$Actions['MyInitiateItemsTPage_startProcess']('modelId=" + modelId
 							+ "');"));
-			// row.add("version", processModel.);
+			row.add("version", doc.getProcessNode().getVersion());
 			row.add("processCount", processModel.getProcessCount());
 			final StringBuilder sb = new StringBuilder();
 			sb.append(LinkButton.corner($m("MyInitiateItemsTPage.2")).setOnclick(

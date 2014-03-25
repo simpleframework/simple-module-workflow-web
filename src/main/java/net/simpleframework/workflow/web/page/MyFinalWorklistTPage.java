@@ -9,10 +9,10 @@ import net.simpleframework.ctx.trans.Transaction;
 import net.simpleframework.mvc.IForward;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageParameter;
-import net.simpleframework.mvc.common.element.Checkbox;
 import net.simpleframework.mvc.common.element.ETextAlign;
 import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.ImageElement;
+import net.simpleframework.mvc.common.element.LinkButton;
 import net.simpleframework.mvc.common.element.Option;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.ui.menu.MenuBean;
@@ -56,6 +56,9 @@ public class MyFinalWorklistTPage extends MyRunningWorklistTPage {
 
 		// 标记置顶
 		addAjaxRequest(pp, "MyWorklistTPage_topMark").setHandlerMethod("doTopMark");
+
+		final MenuBean mb = createViewMenuComponent(pp);
+		mb.addItem(MyRunningWorklistTbl.MENU_VIEW_ALL());
 	}
 
 	@Transaction(context = IWorkflowContext.class)
@@ -66,12 +69,8 @@ public class MyFinalWorklistTPage extends MyRunningWorklistTPage {
 
 	@Override
 	public ElementList getLeftElements(final PageParameter pp) {
-		final Checkbox box = new Checkbox("idMyCompleteWorklistTPage_box",
-				$m("MyFinalWorklistTPage.4")).setOnchange(
-				"$Actions.loc('" + getUrlsFactory().getUrl(pp, MyFinalWorklistTPage.class)
-						+ "' + (this.checked ? '?status=complete' : ''));").setChecked(
-				"complete".equals(pp.getParameter("status")));
-		return ElementList.of(box);
+		return ElementList.of(LinkButton.menu($m("MyRunningWorklistTbl.14")).setId(
+				"idMyWorklistTPage_viewMenu"));
 	}
 
 	public static class MyCompleteWorklistTbl extends MyRunningWorklistTbl {
