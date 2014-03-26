@@ -69,7 +69,7 @@ public class MyInitiateItemsTPage extends AbstractItemsTPage {
 		}
 
 		@Override
-		protected Object getVal(Object dataObject, String key) {
+		protected Object getVal(final Object dataObject, final String key) {
 			final InitiateItem initiateItem = (InitiateItem) dataObject;
 			final ProcessModelBean processModel = mService.getBean(initiateItem.getModelId());
 			if ("modelText".equals(key)) {
