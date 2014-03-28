@@ -102,6 +102,17 @@ public class MyRunningWorklistTPage extends AbstractWorkitemsTPage {
 						"$Actions['MyWorklistTPage_tbl']('v=');")).addItem(
 				MyRunningWorklistTbl.MENU_MARK_UNREAD().setOnclick(
 						"$Actions['MyWorklistTPage_tbl']('v=unread');"));
+
+		// 委托菜单
+		mb = createDelegateMenuComponent(pp);
+		mb.addItem(MenuItem.of($m("MyRunningWorklistTPage.6"))).addItem(MenuItem.sep())
+				.addItem(MenuItem.of($m("MyRunningWorklistTPage.7")))
+				.addItem(MenuItem.of($m("MyRunningWorklistTPage.8")));
+
+		// 更多操作
+		mb = createOpeMenuComponent(pp);
+		mb.addItem(MenuItem.of($m("MyRunningWorklistTbl.4")).setIconClass("menu_fallback"))
+				.addItem(MenuItem.sep()).addItem(MenuItem.of($m("MyRunningWorklistTbl.16")));
 	}
 
 	protected TablePagerBean addTablePagerBean(final PageParameter pp,
@@ -118,7 +129,6 @@ public class MyRunningWorklistTPage extends AbstractWorkitemsTPage {
 		// 标记菜单
 		return (MenuBean) addComponentBean(pp, "MyWorklistTPage_markMenu", MenuBean.class)
 				.setMenuEvent(EMenuEvent.click).setSelector("#idMyWorklistTPage_markMenu");
-
 	}
 
 	protected MenuBean createViewMenuComponent(final PageParameter pp) {
@@ -126,12 +136,24 @@ public class MyRunningWorklistTPage extends AbstractWorkitemsTPage {
 				.setMenuEvent(EMenuEvent.click).setSelector("#idMyWorklistTPage_viewMenu");
 	}
 
+	protected MenuBean createDelegateMenuComponent(final PageParameter pp) {
+		return (MenuBean) addComponentBean(pp, "MyWorklistTPage_delegateMenu", MenuBean.class)
+				.setMenuEvent(EMenuEvent.click).setSelector("#idMyWorklistTPage_delegateMenu");
+	}
+
+	protected MenuBean createOpeMenuComponent(final PageParameter pp) {
+		return (MenuBean) addComponentBean(pp, "MyWorklistTPage_opeMenu", MenuBean.class)
+				.setMenuEvent(EMenuEvent.click).setSelector("#idMyWorklistTPage_opeMenu");
+	}
+
 	@Override
 	public ElementList getLeftElements(final PageParameter pp) {
 		return ElementList.of(
 				LinkButton.menu($m("MyRunningWorklistTbl.6")).setId("idMyWorklistTPage_markMenu"),
+				LinkButton.menu($m("MyRunningWorklistTbl.14")).setId("idMyWorklistTPage_viewMenu"),
 				SpanElement.SPACE,
-				LinkButton.menu($m("MyRunningWorklistTbl.14")).setId("idMyWorklistTPage_viewMenu"));
+				LinkButton.menu($m("MyRunningWorklistTbl.5")).setId("idMyWorklistTPage_delegateMenu"),
+				LinkButton.menu($m("MyRunningWorklistTbl.17")).setId("idMyWorklistTPage_opeMenu"));
 	}
 
 	@Transaction(context = IWorkflowContext.class)

@@ -253,7 +253,8 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 								"op=untop"));
 		items.append(mItems);
 		items.append(MenuItem.sep());
-		items.append(MenuItem.itemDelete().setOnclick_act("MyWorklistTPage_delete", "workitemId"));
+		items.append(MenuItem.of($m("MyRunningWorklistTbl.16")).setOnclick_act(
+				"MyWorklistTPage_delete", "workitemId"));
 		items.append(MenuItem.sep()).append(MENU_LOG());
 		return items;
 	}
