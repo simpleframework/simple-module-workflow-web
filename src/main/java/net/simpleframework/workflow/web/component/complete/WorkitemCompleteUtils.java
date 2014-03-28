@@ -111,7 +111,7 @@ public class WorkitemCompleteUtils implements IWorkflowContextAware {
 		final String[] transitions = StringUtils.split(cp.getParameter("transitions"));
 		final ActivityComplete activityComplete = getActivityComplete(cp, workitem);
 		// 通过手动方式选取的路由
-		if (transitions != null && transitions.length > 0) {
+		if (transitions.length > 0) {
 			for (final String id : transitions) {
 				final TransitionNode transition = activityComplete.getTransitionById(id);
 				if (TransitionUtils.isTransitionManual(transition)) {

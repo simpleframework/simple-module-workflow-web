@@ -191,9 +191,8 @@ public class ActivityMgrPage extends AbstractWorkflowMgrPage {
 
 		@Override
 		public JavascriptForward onSave(final ComponentParameter cp) throws Exception {
-			final String[] idArr = StringUtils.split(cp.getParameter("activityId"), ";");
 			final EActivityStatus op = cp.getEnumParameter(EActivityStatus.class, "op");
-			for (final String aId : idArr) {
+			for (final String aId : StringUtils.split(cp.getParameter("activityId"), ";")) {
 				final ActivityBean activity = aService.getBean(aId);
 				setLogDescription(cp, activity);
 				if (op == EActivityStatus.suspended) {

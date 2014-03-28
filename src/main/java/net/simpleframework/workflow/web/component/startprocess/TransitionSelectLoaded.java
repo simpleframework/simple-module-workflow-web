@@ -32,8 +32,7 @@ public class TransitionSelectLoaded extends DefaultPageHandler {
 			final ComponentParameter nCP = StartProcessUtils.get(cp);
 			final InitiateItem initiateItem = StartProcessUtils.getInitiateItem(nCP);
 
-			final String[] transitions = StringUtils.split(cp.getParameter("transitions"));
-			initiateItem.resetTransitions(transitions);
+			initiateItem.resetTransitions(StringUtils.split(cp.getParameter("transitions")));
 
 			return StartProcessUtils.doStartProcess(nCP, initiateItem);
 		}

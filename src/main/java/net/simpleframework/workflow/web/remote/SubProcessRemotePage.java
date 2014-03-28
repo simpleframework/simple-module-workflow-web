@@ -32,12 +32,9 @@ public class SubProcessRemotePage extends AbstractWorkflowRemotePage {
 
 				// 子流程变量
 				final KVMap variables = new KVMap();
-				final String[] mappings = StringUtils.split(properties
-						.getProperty(IProcessRemote.VAR_MAPPINGS));
-				if (mappings != null) {
-					for (final String mapping : mappings) {
-						variables.add(mapping, pp.getLocaleParameter(mapping));
-					}
+				for (final String mapping : StringUtils.split(properties
+						.getProperty(IProcessRemote.VAR_MAPPINGS))) {
+					variables.add(mapping, pp.getLocaleParameter(mapping));
 				}
 
 				final ProcessBean process = pService.doStartProcess(

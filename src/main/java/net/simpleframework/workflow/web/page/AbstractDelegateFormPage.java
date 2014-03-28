@@ -1,6 +1,9 @@
 package net.simpleframework.workflow.web.page;
 
 import static net.simpleframework.common.I18n.$m;
+
+import java.util.Date;
+
 import net.simpleframework.common.StringUtils;
 import net.simpleframework.ctx.permission.PermissionUser;
 import net.simpleframework.ctx.trans.Transaction;
@@ -68,22 +71,28 @@ public abstract class AbstractDelegateFormPage extends FormTableRowTemplatePage 
 		@Transaction(context = IWorkflowContext.class)
 		@Override
 		public JavascriptForward onSave(final ComponentParameter cp) throws Exception {
-			final WorkitemBean workitem = WorkflowUtils.getWorkitemBean(cp);
-
 			final String wd_userId = cp.getParameter("wd_userId");
 			final PermissionUser user = StringUtils.hasText(wd_userId) ? permission.getUser(wd_userId)
 					: permission.getUser(cp.getParameter("wd_userTxt"));
+			final Date wd_startDate = cp.getDateParameter("wd_startDate");
+			final Date wd_endDate = cp.getDateParameter("wd_endDate");
+			final String wd_description = cp.getParameter("wd_description");
 
-			wService.doWorkitemDelegation(workitem, user.getId(), cp.getDateParameter("wd_startDate"),
-					cp.getDateParameter("wd_endDate"), cp.getParameter("wd_description"));
+			for (final String workitemId : StringUtils.split(cp.getParameter("workitemId"))) {
+				WorkitemBean workitem = wService.getBean(workitemId);
+				if (workitem == null) {
+					continue;
+				}
+				wService.doWorkitemDelegation(workitem, user.getId(), wd_startDate, wd_endDate,
+						wd_description);
+			}
 			return super.onSave(cp).append("$Actions['MyWorklistTPage_tbl']();");
 		}
 
 		@Override
 		protected TableRows getTableRows(final PageParameter pp) {
-			final WorkitemBean workitem = WorkflowUtils.getWorkitemBean(pp);
-			final InputElement workitemId = InputElement.hidden("workitemId")
-					.setText(workitem.getId());
+			final InputElement workitemId = InputElement.hidden("workitemId").setText(
+					pp.getParameter("workitemId"));
 
 			final TextButton wd_userTxt = new TextButton("wd_userTxt").setEditable(true)
 					.setHiddenField("wd_userId")

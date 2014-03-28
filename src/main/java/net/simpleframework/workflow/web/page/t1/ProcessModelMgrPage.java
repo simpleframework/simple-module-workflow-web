@@ -88,9 +88,7 @@ public class ProcessModelMgrPage extends AbstractWorkflowMgrPage {
 	@Transaction(context = IWorkflowContext.class)
 	public IForward doDelete(final ComponentParameter cp) {
 		final Object[] ids = StringUtils.split(cp.getParameter("modelId"));
-		if (ids != null) {
-			mService.delete(ids);
-		}
+		mService.delete(ids);
 		return new JavascriptForward("$Actions['ProcessModelMgrPage_tbl']();");
 	}
 
@@ -214,9 +212,8 @@ public class ProcessModelMgrPage extends AbstractWorkflowMgrPage {
 		@Transaction(context = IWorkflowContext.class)
 		@Override
 		public JavascriptForward onSave(final ComponentParameter cp) throws Exception {
-			final String[] idArr = StringUtils.split(cp.getParameter("modelId"), ";");
 			final EProcessModelStatus op = cp.getEnumParameter(EProcessModelStatus.class, "op");
-			for (final String aId : idArr) {
+			for (final String aId : StringUtils.split(cp.getParameter("modelId"), ";")) {
 				final ProcessModelBean processModel = mService.getBean(aId);
 				setLogDescription(cp, processModel);
 				if (op == EProcessModelStatus.deploy) {

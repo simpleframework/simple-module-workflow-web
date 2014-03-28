@@ -105,8 +105,12 @@ public class MyRunningWorklistTPage extends AbstractWorkitemsTPage {
 
 		// 委托菜单
 		mb = createDelegateMenuComponent(pp);
-		mb.addItem(MenuItem.of($m("MyRunningWorklistTPage.6"))).addItem(MenuItem.sep())
-				.addItem(MenuItem.of($m("MyRunningWorklistTPage.7")))
+		mb.addItem(
+				MenuItem
+						.of($m("MyRunningWorklistTPage.6"))
+						.setOnclick(
+								"$Actions['MyWorklistTPage_tbl'].doAct('MyWorklistTPage_delegate', 'workitemId');"))
+				.addItem(MenuItem.sep()).addItem(MenuItem.of($m("MyRunningWorklistTPage.7")))
 				.addItem(MenuItem.of($m("MyRunningWorklistTPage.8")));
 
 		// 更多操作
@@ -166,15 +170,12 @@ public class MyRunningWorklistTPage extends AbstractWorkitemsTPage {
 				wService.doReadMark(workitem);
 			}
 		} else {
-			final Object[] ids = StringUtils.split(cp.getParameter("workitemId"));
-			if (ids != null) {
-				for (final Object id : ids) {
-					final WorkitemBean workitem = wService.getBean(id);
-					if ("unread".equals(op)) {
-						wService.doUnReadMark(workitem);
-					} else {
-						wService.doReadMark(workitem);
-					}
+			for (final Object id : StringUtils.split(cp.getParameter("workitemId"))) {
+				final WorkitemBean workitem = wService.getBean(id);
+				if ("unread".equals(op)) {
+					wService.doUnReadMark(workitem);
+				} else {
+					wService.doReadMark(workitem);
 				}
 			}
 		}
@@ -182,15 +183,12 @@ public class MyRunningWorklistTPage extends AbstractWorkitemsTPage {
 	}
 
 	public IForward doTopMark(final ComponentParameter cp) {
-		final Object[] ids = StringUtils.split(cp.getParameter("workitemId"));
-		if (ids != null) {
-			for (final Object id : ids) {
-				final WorkitemBean workitem = wService.getBean(id);
-				if ("untop".equals(cp.getParameter("op"))) {
-					wService.doUnTopMark(workitem);
-				} else {
-					wService.doTopMark(workitem);
-				}
+		for (final Object id : StringUtils.split(cp.getParameter("workitemId"))) {
+			final WorkitemBean workitem = wService.getBean(id);
+			if ("untop".equals(cp.getParameter("op"))) {
+				wService.doUnTopMark(workitem);
+			} else {
+				wService.doTopMark(workitem);
 			}
 		}
 		return new JavascriptForward("$Actions['MyWorklistTPage_tbl']();");
