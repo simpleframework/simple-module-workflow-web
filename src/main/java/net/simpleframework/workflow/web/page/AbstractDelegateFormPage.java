@@ -79,12 +79,8 @@ public abstract class AbstractDelegateFormPage extends FormTableRowTemplatePage 
 			final String wd_description = cp.getParameter("wd_description");
 
 			for (final String workitemId : StringUtils.split(cp.getParameter("workitemId"))) {
-				WorkitemBean workitem = wService.getBean(workitemId);
-				if (workitem == null) {
-					continue;
-				}
-				wService.doWorkitemDelegation(workitem, user.getId(), wd_startDate, wd_endDate,
-						wd_description);
+				wService.doWorkitemDelegation(wService.getBean(workitemId), user.getId(), wd_startDate,
+						wd_endDate, wd_description);
 			}
 			return super.onSave(cp).append("$Actions['MyWorklistTPage_tbl']();");
 		}

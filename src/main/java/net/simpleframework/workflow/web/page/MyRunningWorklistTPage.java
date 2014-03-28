@@ -115,8 +115,18 @@ public class MyRunningWorklistTPage extends AbstractWorkitemsTPage {
 
 		// 更多操作
 		mb = createOpeMenuComponent(pp);
-		mb.addItem(MenuItem.of($m("MyRunningWorklistTbl.4")).setIconClass("menu_fallback"))
-				.addItem(MenuItem.sep()).addItem(MenuItem.of($m("MyRunningWorklistTbl.16")));
+		mb.addItem(
+				MenuItem
+						.of($m("MyRunningWorklistTbl.4"))
+						.setIconClass("menu_fallback")
+						.setOnclick(
+								"$Actions['MyWorklistTPage_tbl'].doAct('MyWorklistTPage_fallback', 'workitemId');"))
+				.addItem(MenuItem.sep())
+				.addItem(
+						MenuItem
+								.of($m("MyRunningWorklistTbl.16"))
+								.setOnclick(
+										"$Actions['MyWorklistTPage_tbl'].doAct('MyWorklistTPage_delete', 'workitemId');"));
 	}
 
 	protected TablePagerBean addTablePagerBean(final PageParameter pp,
@@ -196,13 +206,17 @@ public class MyRunningWorklistTPage extends AbstractWorkitemsTPage {
 
 	@Transaction(context = IWorkflowContext.class)
 	public IForward doFallback(final ComponentParameter cp) {
-		aService.doFallback(wService.getActivity(WorkflowUtils.getWorkitemBean(cp)));
+		for (final String workitemId : StringUtils.split(cp.getParameter("workitemId"))) {
+			aService.doFallback(wService.getActivity(wService.getBean(workitemId)));
+		}
 		return new JavascriptForward("$Actions['MyWorklistTPage_tbl']();");
 	}
 
 	@Transaction(context = IWorkflowContext.class)
 	public IForward doDelete(final ComponentParameter cp) {
-		wService.doDeleteProcess(WorkflowUtils.getWorkitemBean(cp));
+		for (final String workitemId : StringUtils.split(cp.getParameter("workitemId"))) {
+			wService.doDeleteProcess(wService.getBean(workitemId));
+		}
 		return new JavascriptForward("$Actions['MyWorklistTPage_tbl']();");
 	}
 }

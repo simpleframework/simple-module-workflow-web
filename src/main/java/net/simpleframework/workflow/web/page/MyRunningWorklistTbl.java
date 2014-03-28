@@ -100,22 +100,33 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 			if (bModelname) {
 				return processModel;
 			} else {
-				return aService.getTaskNode(activity).setAttr("_processModel", processModel);
+				return new TaskWrapper(aService.getTaskNode(activity), processModel);
 			}
 		}
 		return groupColumn;
 	}
 
+	class TaskWrapper {
+		ProcessModelBean processModel;
+
+		String text;
+
+		TaskWrapper(AbstractTaskNode task, ProcessModelBean processModel) {
+			text = task.toString();
+			this.processModel = processModel;
+		}
+	}
+
 	@Override
 	public GroupWrapper getGroupWrapper(final ComponentParameter cp, final Object groupVal) {
-		if (groupVal instanceof AbstractTaskNode) {
+		if (groupVal instanceof TaskWrapper) {
 			return new GroupWrapper() {
 				@Override
 				public String toString() {
-					final AbstractTaskNode taskNode = (AbstractTaskNode) groupVal;
+					final TaskWrapper wrapper = (TaskWrapper) groupVal;
 					final StringBuilder sb = new StringBuilder();
-					sb.append(new LabelElement(taskNode));
-					sb.append(new SpanElement("(" + taskNode.getAttr("_processModel") + ")")
+					sb.append(new LabelElement(wrapper.text));
+					sb.append(new SpanElement("(" + wrapper.processModel + ")")
 							.setClassName("worklist_group_val"));
 					sb.append(toCountHTML());
 					return sb.toString();
