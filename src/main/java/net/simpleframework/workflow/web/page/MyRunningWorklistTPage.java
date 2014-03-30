@@ -11,9 +11,11 @@ import net.simpleframework.mvc.AbstractMVCPage;
 import net.simpleframework.mvc.IForward;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageParameter;
+import net.simpleframework.mvc.common.element.BlockElement;
 import net.simpleframework.mvc.common.element.ETextAlign;
 import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.LinkButton;
+import net.simpleframework.mvc.common.element.LinkElement;
 import net.simpleframework.mvc.common.element.Option;
 import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.component.ComponentParameter;
@@ -23,6 +25,7 @@ import net.simpleframework.mvc.component.ui.menu.MenuItem;
 import net.simpleframework.mvc.component.ui.pager.ITablePagerHandler;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
 import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
+import net.simpleframework.workflow.engine.DelegationBean;
 import net.simpleframework.workflow.engine.EWorkitemStatus;
 import net.simpleframework.workflow.engine.IWorkflowContext;
 import net.simpleframework.workflow.engine.WorkitemBean;
@@ -110,8 +113,10 @@ public class MyRunningWorklistTPage extends AbstractWorkitemsTPage {
 						.of($m("MyRunningWorklistTPage.6"))
 						.setOnclick(
 								"$Actions['MyWorklistTPage_tbl'].doAct('MyWorklistTPage_delegate', 'workitemId');"))
-				.addItem(MenuItem.sep()).addItem(MenuItem.of($m("MyRunningWorklistTPage.7")))
-				.addItem(MenuItem.of($m("MyRunningWorklistTPage.8")));
+				.addItem(MenuItem.sep())
+				.addItem(
+						MenuItem.of($m("MyRunningWorklistTPage.7")).setOnclick(
+								"$Actions['MyWorklistTPage_delegate']('delegationSource=user');"));
 
 		// 更多操作
 		mb = createOpeMenuComponent(pp);
@@ -158,6 +163,20 @@ public class MyRunningWorklistTPage extends AbstractWorkitemsTPage {
 	protected MenuBean createOpeMenuComponent(final PageParameter pp) {
 		return (MenuBean) addComponentBean(pp, "MyWorklistTPage_opeMenu", MenuBean.class)
 				.setMenuEvent(EMenuEvent.click).setSelector("#idMyWorklistTPage_opeMenu");
+	}
+
+	@Override
+	public String toToolbarHTML(final PageParameter pp) {
+		final StringBuilder sb = new StringBuilder();
+		final DelegationBean delegation = dService.queryRunningDelegation(pp.getLoginId());
+		if (delegation != null) {
+			sb.append(new BlockElement().setClassName("worklist_tip").setText(
+					$m("MyRunningWorklistTPage.8",
+							new SpanElement(pp.getUser(delegation.getUserId())).setStrong(true))
+							+ new LinkElement($m("MyRunningWorklistTPage.9"))));
+		}
+		sb.append(super.toToolbarHTML(pp));
+		return sb.toString();
 	}
 
 	@Override

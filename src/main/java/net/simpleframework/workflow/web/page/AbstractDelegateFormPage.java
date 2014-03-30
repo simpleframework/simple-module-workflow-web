@@ -78,15 +78,22 @@ public abstract class AbstractDelegateFormPage extends FormTableRowTemplatePage 
 			final Date wd_endDate = cp.getDateParameter("wd_endDate");
 			final String wd_description = cp.getParameter("wd_description");
 
-			for (final String workitemId : StringUtils.split(cp.getParameter("workitemId"))) {
-				wService.doWorkitemDelegation(wService.getBean(workitemId), user.getId(), wd_startDate,
-						wd_endDate, wd_description);
+			if ("user".equals(cp.getParameter("delegationSource"))) {
+				dService.doUserDelegation(cp.getLoginId(), user.getId(), wd_startDate, wd_endDate,
+						wd_description);
+			} else {
+				for (final String workitemId : StringUtils.split(cp.getParameter("workitemId"))) {
+					wService.doWorkitemDelegation(wService.getBean(workitemId), user.getId(),
+							wd_startDate, wd_endDate, wd_description);
+				}
 			}
 			return super.onSave(cp).append("$Actions['MyWorklistTPage_tbl']();");
 		}
 
 		@Override
 		protected TableRows getTableRows(final PageParameter pp) {
+			final InputElement delegationSource = InputElement.hidden("delegationSource").setText(
+					pp.getParameter("delegationSource"));
 			final InputElement workitemId = InputElement.hidden("workitemId").setText(
 					pp.getParameter("workitemId"));
 
@@ -99,8 +106,8 @@ public abstract class AbstractDelegateFormPage extends FormTableRowTemplatePage 
 			final CalendarInput wd_endDate = new CalendarInput("wd_endDate")
 					.setCalendarComponent("WorkitemDelegatePage_cal");
 
-			final TableRow r1 = new TableRow(new RowField($m("WorkitemDelegateSetPage.0"), workitemId,
-					wd_userTxt).setStarMark(true));
+			final TableRow r1 = new TableRow(new RowField($m("WorkitemDelegateSetPage.0"),
+					delegationSource, workitemId, wd_userTxt).setStarMark(true));
 			final TableRow r2 = new TableRow(new RowField($m("WorkitemDelegateSetPage.1"),
 					wd_startDate), new RowField($m("WorkitemDelegateSetPage.2"), wd_endDate));
 			final TableRow r3 = new TableRow(new RowField($m("WorkitemDelegateSetPage.3"),

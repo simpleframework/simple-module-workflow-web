@@ -17,8 +17,10 @@ import net.simpleframework.ado.query.IDataQuery;
 import net.simpleframework.common.Convert;
 import net.simpleframework.common.DateUtils;
 import net.simpleframework.common.DateUtils.NumberConvert;
+import net.simpleframework.common.ID;
 import net.simpleframework.common.StringUtils;
 import net.simpleframework.common.coll.KVMap;
+import net.simpleframework.common.object.NamedObject;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.ButtonElement;
 import net.simpleframework.mvc.common.element.EVerticalAlign;
@@ -59,15 +61,15 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 
 	@Override
 	public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
-		final Object user = cp.getLoginId();
+		final ID userId = cp.getLoginId();
 		final String v = cp.getParameter("v");
 		if (StringUtils.hasText(v)) {
 			cp.addFormParameter("v", v);
 		}
 		if ("unread".equals(v)) {
-			return wService.getUnreadWorklist(user);
+			return wService.getUnreadWorklist(userId);
 		}
-		return wService.getRunningWorklist(user);
+		return wService.getRunningWorklist(userId);
 	}
 
 	@Override
@@ -106,14 +108,17 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 		return groupColumn;
 	}
 
-	class TaskWrapper {
+	class TaskWrapper extends NamedObject<TaskWrapper> {
 		ProcessModelBean processModel;
 
-		String text;
-
-		TaskWrapper(AbstractTaskNode task, ProcessModelBean processModel) {
-			text = task.toString();
+		TaskWrapper(final AbstractTaskNode task, final ProcessModelBean processModel) {
+			setName(task.toString());
 			this.processModel = processModel;
+		}
+
+		@Override
+		public String toString() {
+			return getName();
 		}
 	}
 
@@ -125,7 +130,7 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 				public String toString() {
 					final TaskWrapper wrapper = (TaskWrapper) groupVal;
 					final StringBuilder sb = new StringBuilder();
-					sb.append(new LabelElement(wrapper.text));
+					sb.append(new LabelElement(wrapper));
 					sb.append(new SpanElement("(" + wrapper.processModel + ")")
 							.setClassName("worklist_group_val"));
 					sb.append(toCountHTML());
