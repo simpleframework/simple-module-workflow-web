@@ -79,11 +79,12 @@ public abstract class AbstractItemsTPage extends Category_ListPage implements IW
 		// .setSelected("complete".equals(s))
 		children.add(createCategoryItem(pp, $m("AbstractItemsTPage.1"), MyFinalWorklistTPage.class)
 				.setIconClass("my_work_complete_icon"));
-		children.add(createCategoryItem(pp, $m("AbstractItemsTPage.3"), MyDelegateListTPage.class)
-				.setIconClass("delegate_list_icon"));
+		// children.add();
 		return CategoryItems.of(item0,
 				createCategoryItem(pp, $m("AbstractItemsTPage.2"), MyInitiateItemsTPage.class)
-						.setIconClass("my_initiate_icon"));
+						.setIconClass("my_initiate_icon"),
+				createCategoryItem(pp, $m("AbstractItemsTPage.3"), MyDelegateListTPage.class)
+						.setIconClass("delegate_list_icon"));
 	}
 
 	@Override
