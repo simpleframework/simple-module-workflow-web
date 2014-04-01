@@ -165,7 +165,8 @@ public class MyRunningWorklistTPage extends AbstractWorkitemsTPage {
 			txt.append($m("MyRunningWorklistTPage.8",
 					new SpanElement(pp.getUser(delegation.getUserId())).setStrong(true)));
 			txt.append(SpanElement.SPACE15);
-			txt.append(LinkButton.corner($m("MyRunningWorklistTPage.10")));
+			txt.append(LinkButton.corner($m("MyRunningWorklistTPage.10")).setOnclick(
+					"$Actions.loc('" + getUrlsFactory().getUrl(pp, UserDelegateListTPage.class) + "');"));
 			txt.append(SpanElement.SPACE);
 			txt.append(LinkButton.corner($m("MyRunningWorklistTPage.9")).setOnclick(
 					"$Actions['MyRunningWorklistTPage_user_undelegate']();"));
@@ -191,7 +192,7 @@ public class MyRunningWorklistTPage extends AbstractWorkitemsTPage {
 		if (delegation != null) {
 			dService.doAbort(delegation);
 		}
-		return new JavascriptForward("$Actions.reloc();");
+		return JavascriptForward.RELOC;
 	}
 
 	@Transaction(context = IWorkflowContext.class)
