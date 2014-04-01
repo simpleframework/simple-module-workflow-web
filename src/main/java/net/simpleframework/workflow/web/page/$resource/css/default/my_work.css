@@ -56,6 +56,23 @@
   margin-bottom: 4px;
 }
 
+.MyWorkDelegateListTPage .tabbtns {
+  position: absolute;
+  bottom: 0; 
+  right: 150px;
+  z-index: 20;
+}
+
+.MyWorkDelegateListTPage .tablepager .thead {
+  box-shadow: none !important;
+}
+
+.MyWorkDelegateListTPage ul.simple_tabs a.active {
+  background-image: none !important;
+  background-color: #efefef !important;
+  border-bottom-color: #efefef !important;
+}
+
 .WorkflowCompleteInfoPage {
   width: 50%;
   text-align: left;

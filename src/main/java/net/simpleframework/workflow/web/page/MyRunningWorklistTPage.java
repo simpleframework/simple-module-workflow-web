@@ -43,7 +43,6 @@ public class MyRunningWorklistTPage extends AbstractWorkitemsTPage {
 	@Override
 	protected void onForward(final PageParameter pp) {
 		super.onForward(pp);
-
 		addComponents(pp);
 	}
 
