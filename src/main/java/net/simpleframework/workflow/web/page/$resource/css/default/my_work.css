@@ -60,7 +60,7 @@
   position: absolute;
   bottom: 0; 
   right: 150px;
-  z-index: 20;
+  z-index: 11;
 }
 
 .MyWorkDelegateListTPage .tablepager .thead {

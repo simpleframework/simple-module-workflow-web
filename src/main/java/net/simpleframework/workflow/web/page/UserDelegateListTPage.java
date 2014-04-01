@@ -29,11 +29,13 @@ public class UserDelegateListTPage extends MyWorkDelegateListTPage {
 
 	@Override
 	protected void addComponents(final PageParameter pp) {
-
 		final TablePagerBean tablePager = addTablePagerBean(pp, UserDelegateTbl.class);
 		tablePager.addColumn(TablePagerColumn.ICON().setWidth(16));
 		tablePager
-				.addColumn(new TablePagerColumn("userText", $m("MyWorkDelegateListTPage.0")))
+				.addColumn(
+						new TablePagerColumn("description", $m("WorkitemDelegateSetPage.3"))
+								.setTextAlign(ETextAlign.left))
+				.addColumn(new TablePagerColumn("userText", $m("MyWorkDelegateListTPage.0"), 70))
 				.addColumn(
 						new TablePagerColumn("createDate", $m("MyWorkDelegateListTPage.1"), 115)
 								.setPropertyClass(Date.class))
@@ -63,6 +65,7 @@ public class UserDelegateListTPage extends MyWorkDelegateListTPage {
 		protected Map<String, Object> getRowData(final ComponentParameter cp, final Object dataObject) {
 			final DelegationBean delegation = (DelegationBean) dataObject;
 			final KVMap row = new KVMap();
+			row.add("description", delegation.getDescription());
 			row.add("userText", delegation.getUserText());
 			row.add("createDate", delegation.getCreateDate());
 			final EDelegationStatus status = delegation.getStatus();
