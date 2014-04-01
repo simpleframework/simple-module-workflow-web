@@ -23,7 +23,6 @@ import net.simpleframework.mvc.component.ui.menu.MenuBean;
 import net.simpleframework.mvc.component.ui.menu.MenuItem;
 import net.simpleframework.mvc.component.ui.menu.MenuItems;
 import net.simpleframework.mvc.component.ui.pager.AbstractTablePagerSchema;
-import net.simpleframework.mvc.component.ui.pager.ITablePagerHandler;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
 import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
 import net.simpleframework.workflow.engine.ActivityBean;
@@ -45,18 +44,22 @@ import net.simpleframework.workflow.web.page.AbstractDelegateFormPage.WorkitemDe
 public class MyWorkDelegateListTPage extends AbstractWorkitemsTPage {
 
 	@Override
-	protected String getPageCSS(final PageParameter pp) {
-		return "MyWorkDelegateListTPage";
-	}
-
-	@Override
 	protected void onForward(final PageParameter pp) {
 		super.onForward(pp);
-		addComponents(pp);
+		// 列表
+		addTablePagerBean(pp);
+		// 取消
+		addAjaxRequest(pp, "DelegateListTPage_abort").setHandlerMethod("doAbort").setConfirmMessage(
+				$m("MyWorkDelegateListTPage.2"));
+		// 查看
+		addAjaxRequest(pp, "DelegateListTPage_view_page", WorkitemDelegateViewPage.class);
+		addWindowBean(pp, "DelegateListTPage_view").setContentRef("DelegateListTPage_view_page")
+				.setTitle($m("MyWorkDelegateListTPage.3")).setHeight(300).setWidth(500);
 	}
 
-	protected void addComponents(final PageParameter pp) {
-		final TablePagerBean tablePager = addTablePagerBean(pp, MyWorkDelegateTbl.class);
+	protected TablePagerBean addTablePagerBean(final PageParameter pp) {
+		final TablePagerBean tablePager = addTablePagerBean(pp, "MyWorklistTPage_tbl",
+				MyWorkDelegateTbl.class);
 		tablePager.addColumn(TablePagerColumn.ICON().setWidth(16));
 		tablePager
 				.addColumn(TC_TITLE())
@@ -66,25 +69,7 @@ public class MyWorkDelegateListTPage extends AbstractWorkitemsTPage {
 								.setPropertyClass(Date.class))
 				.addColumn(TC_STATUS().setPropertyClass(EDelegationStatus.class));
 		tablePager.addColumn(TablePagerColumn.OPE().setWidth(70));
-
-		// 取消
-		addAjaxRequest(pp, "DelegateListTPage_abort").setHandlerMethod("doAbort").setConfirmMessage(
-				$m("MyWorkDelegateListTPage.2"));
-
-		// 查看
-		addAjaxRequest(pp, "DelegateListTPage_view_page", WorkitemDelegateViewPage.class);
-		addWindowBean(pp, "DelegateListTPage_view").setContentRef("DelegateListTPage_view_page")
-				.setTitle($m("MyWorkDelegateListTPage.3")).setHeight(300).setWidth(500);
-	}
-
-	protected TablePagerBean addTablePagerBean(final PageParameter pp,
-			final Class<? extends ITablePagerHandler> handlerClass) {
-		return addTablePagerBean(pp, "MyWorklistTPage_tbl", handlerClass);
-	}
-
-	@Override
-	protected Class<? extends AbstractMVCPage> getUpdateLogPage() {
-		return DelegateUpdateLogPage.class;
+		return tablePager;
 	}
 
 	@Transaction(context = IWorkflowContext.class)
@@ -93,13 +78,24 @@ public class MyWorkDelegateListTPage extends AbstractWorkitemsTPage {
 		return new JavascriptForward("$Actions['MyWorklistTPage_tbl']();");
 	}
 
+	@Override
+	protected String getPageCSS(final PageParameter pp) {
+		return "MyWorkDelegateListTPage";
+	}
+
+	@Override
+	protected Class<? extends AbstractMVCPage> getUpdateLogPage() {
+		return DelegateUpdateLogPage.class;
+	}
+
 	protected SpanElement getTabButtons(final PageParameter pp) {
 		final WorkflowUrlsFactory urlsFactory = getUrlsFactory();
 		return new SpanElement().setClassName("tabbtns").addHtml(
 				TabButtons.of(
-						new TabButton("工作项委托", urlsFactory.getUrl(pp, MyWorkDelegateListTPage.class)),
-						new TabButton("用户委托", urlsFactory.getUrl(pp, UserDelegateListTPage.class)))
-						.toString(pp));
+						new TabButton($m("MyWorkDelegateListTPage.4"), urlsFactory.getUrl(pp,
+								MyWorkDelegateListTPage.class)),
+						new TabButton($m("MyWorkDelegateListTPage.5"), urlsFactory.getUrl(pp,
+								UserDelegateListTPage.class))).toString(pp));
 	}
 
 	@Override
@@ -121,25 +117,15 @@ public class MyWorkDelegateListTPage extends AbstractWorkitemsTPage {
 			return wService.getBean(((DelegationBean) dataObject).getSourceId());
 		}
 
-		@Override
-		protected Map<String, Object> getRowData(final ComponentParameter cp, final Object dataObject) {
-			final DelegationBean delegation = (DelegationBean) dataObject;
-			final WorkitemBean workitem = getWorkitem(delegation);
+		protected Object toTitle(final DelegationBean delegation, final Object title) {
+			return new LinkElement(title)
+					.setOnclick("$Actions['DelegateListTPage_view']('delegationId=" + delegation.getId()
+							+ "');");
+		}
 
-			final Object id = delegation.getId();
-
-			final ActivityBean activity = wService.getActivity(workitem);
-			final StringBuilder title = new StringBuilder();
-			appendTaskname(title, cp, activity);
-			title.append(new LinkElement(WorkflowUtils.getTitle(aService.getProcessBean(activity)))
-					.setOnclick("$Actions['DelegateListTPage_view']('delegationId=" + id + "');"));
-			final KVMap row = new KVMap().add("title", title.toString());
-			row.add("userText", delegation.getUserText());
-			row.add("createDate", delegation.getCreateDate());
-			final EDelegationStatus status = delegation.getStatus();
-			row.add("status", WorkflowUtils.toStatusHTML(cp, status));
-
+		protected Object toOpe(final DelegationBean delegation) {
 			final StringBuilder sb = new StringBuilder();
+			final Object id = delegation.getId();
 			if (dService.isFinalStatus(delegation)) {
 				sb.append(WorkflowUtils.createLogButton().setOnclick(
 						"$Actions['AbstractItemsTPage_update_log']('delegationId=" + id + "');"));
@@ -149,7 +135,23 @@ public class MyWorkDelegateListTPage extends AbstractWorkitemsTPage {
 			}
 
 			sb.append(SpanElement.SPACE).append(AbstractTablePagerSchema.IMG_DOWNMENU);
-			row.add(TablePagerColumn.OPE, sb.toString());
+			return sb;
+		}
+
+		@Override
+		protected Map<String, Object> getRowData(final ComponentParameter cp, final Object dataObject) {
+			final DelegationBean delegation = (DelegationBean) dataObject;
+			final WorkitemBean workitem = getWorkitem(delegation);
+			final ActivityBean activity = wService.getActivity(workitem);
+			final StringBuilder title = new StringBuilder();
+			appendTaskname(title, cp, activity);
+			title.append(toTitle(delegation, WorkflowUtils.getTitle(aService.getProcessBean(activity))));
+			final KVMap row = new KVMap().add("title", title.toString());
+			row.add("userText", delegation.getUserText());
+			row.add("createDate", delegation.getCreateDate());
+			final EDelegationStatus status = delegation.getStatus();
+			row.add("status", WorkflowUtils.toStatusHTML(cp, status));
+			row.add(TablePagerColumn.OPE, toOpe(delegation));
 			return row;
 		}
 

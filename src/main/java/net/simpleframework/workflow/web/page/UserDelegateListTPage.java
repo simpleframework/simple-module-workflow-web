@@ -14,7 +14,6 @@ import net.simpleframework.mvc.common.element.Option;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
 import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
-import net.simpleframework.mvc.component.ui.pager.db.AbstractDbTablePagerHandler;
 import net.simpleframework.workflow.engine.DelegationBean;
 import net.simpleframework.workflow.engine.EDelegationSource;
 import net.simpleframework.workflow.engine.EDelegationStatus;
@@ -28,8 +27,9 @@ import net.simpleframework.workflow.engine.EDelegationStatus;
 public class UserDelegateListTPage extends MyWorkDelegateListTPage {
 
 	@Override
-	protected void addComponents(final PageParameter pp) {
-		final TablePagerBean tablePager = addTablePagerBean(pp, UserDelegateTbl.class);
+	protected TablePagerBean addTablePagerBean(final PageParameter pp) {
+		final TablePagerBean tablePager = addTablePagerBean(pp, "MyWorklistTPage_tbl",
+				UserDelegateTbl.class);
 		tablePager.addColumn(TablePagerColumn.ICON().setWidth(16));
 		tablePager
 				.addColumn(
@@ -47,6 +47,7 @@ public class UserDelegateListTPage extends MyWorkDelegateListTPage {
 					};
 				}.setTextAlign(ETextAlign.left).setPropertyClass(EDelegationStatus.class));
 		tablePager.addColumn(TablePagerColumn.OPE().setWidth(70));
+		return tablePager;
 	}
 
 	@Override
@@ -54,7 +55,7 @@ public class UserDelegateListTPage extends MyWorkDelegateListTPage {
 		return ElementList.of(getTabButtons(pp));
 	}
 
-	public static class UserDelegateTbl extends AbstractDbTablePagerHandler {
+	public static class UserDelegateTbl extends MyWorkDelegateTbl {
 
 		@Override
 		public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
@@ -65,11 +66,12 @@ public class UserDelegateListTPage extends MyWorkDelegateListTPage {
 		protected Map<String, Object> getRowData(final ComponentParameter cp, final Object dataObject) {
 			final DelegationBean delegation = (DelegationBean) dataObject;
 			final KVMap row = new KVMap();
-			row.add("description", delegation.getDescription());
+			row.add("description", toTitle(delegation, delegation.getDescription()));
 			row.add("userText", delegation.getUserText());
 			row.add("createDate", delegation.getCreateDate());
 			final EDelegationStatus status = delegation.getStatus();
 			row.add("status", WorkflowUtils.toStatusHTML(cp, status));
+			row.add(TablePagerColumn.OPE, toOpe(delegation));
 			return row;
 		}
 	}
