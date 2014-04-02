@@ -10,6 +10,7 @@ import net.simpleframework.common.coll.KVMap;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.ETextAlign;
 import net.simpleframework.mvc.common.element.ElementList;
+import net.simpleframework.mvc.common.element.LinkButton;
 import net.simpleframework.mvc.common.element.Option;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
@@ -17,6 +18,7 @@ import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
 import net.simpleframework.workflow.engine.DelegationBean;
 import net.simpleframework.workflow.engine.EDelegationSource;
 import net.simpleframework.workflow.engine.EDelegationStatus;
+import net.simpleframework.workflow.web.page.AbstractDelegateFormPage.WorkitemDelegateSetPage;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -27,6 +29,17 @@ import net.simpleframework.workflow.engine.EDelegationStatus;
 public class UserDelegateListTPage extends MyWorkDelegateListTPage {
 
 	@Override
+	protected void onForward(final PageParameter pp) {
+		super.onForward(pp);
+
+		// 委托设置
+		addAjaxRequest(pp, "UserDelegateListTPage_delegate_page", WorkitemDelegateSetPage.class);
+		addWindowBean(pp, "UserDelegateListTPage_delegate")
+				.setContentRef("UserDelegateListTPage_delegate_page")
+				.setTitle($m("MyRunningWorklistTPage.4")).setHeight(300).setWidth(500);
+	}
+
+	@Override
 	protected TablePagerBean addTablePagerBean(final PageParameter pp) {
 		final TablePagerBean tablePager = addTablePagerBean(pp, "MyWorklistTPage_tbl",
 				UserDelegateTbl.class);
@@ -34,7 +47,7 @@ public class UserDelegateListTPage extends MyWorkDelegateListTPage {
 		tablePager
 				.addColumn(
 						new TablePagerColumn("description", $m("WorkitemDelegateSetPage.3"))
-								.setTextAlign(ETextAlign.left))
+								.setTextAlign(ETextAlign.left).setSort(false))
 				.addColumn(new TablePagerColumn("userText", $m("MyWorkDelegateListTPage.0"), 70))
 				.addColumn(
 						new TablePagerColumn("createDate", $m("MyWorkDelegateListTPage.1"), 115)
@@ -51,12 +64,17 @@ public class UserDelegateListTPage extends MyWorkDelegateListTPage {
 	}
 
 	@Override
+	public ElementList getLeftElements(final PageParameter pp) {
+		return ElementList.of(LinkButton.of($m("Add")).setOnclick(
+				"$Actions['UserDelegateListTPage_delegate']('delegationSource=user');"));
+	}
+
+	@Override
 	public ElementList getRightElements(final PageParameter pp) {
 		return ElementList.of(getTabButtons(pp));
 	}
 
 	public static class UserDelegateTbl extends MyWorkDelegateTbl {
-
 		@Override
 		public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
 			return dService.queryDelegations(cp.getLoginId(), EDelegationSource.user);

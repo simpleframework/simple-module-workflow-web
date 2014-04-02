@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.Map;
 
 import net.simpleframework.ado.query.IDataQuery;
+import net.simpleframework.common.StringUtils;
 import net.simpleframework.common.coll.KVMap;
 import net.simpleframework.ctx.trans.Transaction;
 import net.simpleframework.mvc.AbstractMVCPage;
@@ -51,6 +52,9 @@ public class MyWorkDelegateListTPage extends AbstractWorkitemsTPage {
 		// 取消
 		addAjaxRequest(pp, "DelegateListTPage_abort").setHandlerMethod("doAbort").setConfirmMessage(
 				$m("MyWorkDelegateListTPage.2"));
+		// 删除
+		addAjaxRequest(pp, "DelegateListTPage_delete").setHandlerMethod("doDelete")
+				.setConfirmMessage($m("Confirm.Delete"));
 		// 查看
 		addAjaxRequest(pp, "DelegateListTPage_view_page", WorkitemDelegateViewPage.class);
 		addWindowBean(pp, "DelegateListTPage_view").setContentRef("DelegateListTPage_view_page")
@@ -75,6 +79,13 @@ public class MyWorkDelegateListTPage extends AbstractWorkitemsTPage {
 	@Transaction(context = IWorkflowContext.class)
 	public IForward doAbort(final ComponentParameter cp) {
 		dService.doAbort(dService.getBean(cp.getParameter("delegationId")));
+		return new JavascriptForward("$Actions['MyWorklistTPage_tbl']();");
+	}
+
+	@Transaction(context = IWorkflowContext.class)
+	public IForward doDelete(final ComponentParameter cp) {
+		final Object[] ids = StringUtils.split(cp.getParameter("delegationId"));
+		dService.delete(ids);
 		return new JavascriptForward("$Actions['MyWorklistTPage_tbl']();");
 	}
 
@@ -159,6 +170,9 @@ public class MyWorkDelegateListTPage extends AbstractWorkitemsTPage {
 		public MenuItems getContextMenu(final ComponentParameter cp, final MenuBean menuBean,
 				final MenuItem menuItem) {
 			final MenuItems items = MenuItems.of();
+			items.add(MenuItem.itemDelete().setOnclick_act("DelegateListTPage_delete", "delegationId"));
+			items.append(MenuItem.sep()).append(
+					MENU_LOG().setOnclick_act("AbstractItemsTPage_update_log", "delegationId"));
 			return items;
 		}
 	}
