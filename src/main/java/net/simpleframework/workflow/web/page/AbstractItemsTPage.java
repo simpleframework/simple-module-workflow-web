@@ -89,11 +89,6 @@ public abstract class AbstractItemsTPage extends Category_ListPage implements IW
 						.setIconClass("my_initiate_icon"), delegate);
 	}
 
-	@Override
-	protected int getCategoryWidth(final PageParameter pp) {
-		return 170;
-	}
-
 	protected static WorkflowUrlsFactory getUrlsFactory() {
 		return ((IWorkflowWebContext) context).getUrlsFactory();
 	}
