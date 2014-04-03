@@ -15,6 +15,7 @@ import net.simpleframework.mvc.common.element.BlockElement;
 import net.simpleframework.mvc.common.element.ETextAlign;
 import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.LinkButton;
+import net.simpleframework.mvc.common.element.LinkElement;
 import net.simpleframework.mvc.common.element.Option;
 import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.component.ComponentParameter;
@@ -165,11 +166,11 @@ public class MyRunningWorklistTPage extends AbstractWorkitemsTPage {
 			txt.append($m("MyRunningWorklistTPage.8",
 					new SpanElement(pp.getUser(delegation.getUserId())).setStrong(true)));
 			txt.append(SpanElement.SPACE15);
-			txt.append(LinkButton.corner($m("MyRunningWorklistTPage.10")).setOnclick(
-					"$Actions.loc('" + getUrlsFactory().getUrl(pp, UserDelegateListTPage.class) + "');"));
+			txt.append(new LinkElement($m("MyRunningWorklistTPage.10")).setHref(
+					 getUrlsFactory().getUrl(pp, UserDelegateListTPage.class) ));
 			txt.append(SpanElement.SPACE);
-			txt.append(LinkButton.corner($m("MyRunningWorklistTPage.9")).setOnclick(
-					"$Actions['MyRunningWorklistTPage_user_undelegate']();"));
+			txt.append(new LinkElement($m("MyRunningWorklistTPage.9"))
+					.setOnclick("$Actions['MyRunningWorklistTPage_user_undelegate']();"));
 			sb.append(new BlockElement().setClassName("worklist_tip").setText(txt.toString()));
 		}
 		sb.append(super.toToolbarHTML(pp));
