@@ -166,8 +166,8 @@ public class MyRunningWorklistTPage extends AbstractWorkitemsTPage {
 			txt.append($m("MyRunningWorklistTPage.8",
 					new SpanElement(pp.getUser(delegation.getUserId())).setStrong(true)));
 			txt.append(SpanElement.SPACE15);
-			txt.append(new LinkElement($m("MyRunningWorklistTPage.10")).setHref(
-					 getUrlsFactory().getUrl(pp, UserDelegateListTPage.class) ));
+			txt.append(new LinkElement($m("MyRunningWorklistTPage.10")).setHref(getUrlsFactory()
+					.getUrl(pp, UserDelegateListTPage.class)));
 			txt.append(SpanElement.SPACE);
 			txt.append(new LinkElement($m("MyRunningWorklistTPage.9"))
 					.setOnclick("$Actions['MyRunningWorklistTPage_user_undelegate']();"));
