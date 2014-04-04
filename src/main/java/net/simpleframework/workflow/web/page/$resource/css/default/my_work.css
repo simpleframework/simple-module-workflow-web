@@ -55,10 +55,10 @@
   background-color: #eed;
   border: 1px solid #aaa;
   padding: 2px 12px;
-  margin-bottom: 8px;
-  -moz-border-radius: 8px;
-	-webkit-border-radius: 8px;
-	border-radius: 8px;
+  margin-bottom: 6px;
+  -moz-border-radius: 6px;
+	-webkit-border-radius: 6px;
+	border-radius: 6px;
 }
 
 .MyWorkDelegateListTPage .tabbtns {
