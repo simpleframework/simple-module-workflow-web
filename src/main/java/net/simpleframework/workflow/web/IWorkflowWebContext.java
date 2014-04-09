@@ -1,6 +1,7 @@
 package net.simpleframework.workflow.web;
 
 import net.simpleframework.ctx.IModuleRef;
+import net.simpleframework.mvc.IMVCContextVar;
 import net.simpleframework.workflow.engine.IWorkflowContext;
 
 /**
@@ -9,7 +10,7 @@ import net.simpleframework.workflow.engine.IWorkflowContext;
  * @author 陈侃(cknet@126.com, 13910090885) https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
-public interface IWorkflowWebContext extends IWorkflowContext {
+public interface IWorkflowWebContext extends IWorkflowContext, IMVCContextVar {
 
 	/**
 	 * 获取日志模块的引用

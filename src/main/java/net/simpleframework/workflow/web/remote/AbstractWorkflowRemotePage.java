@@ -45,7 +45,7 @@ public abstract class AbstractWorkflowRemotePage extends AbstractTemplatePage im
 		try {
 			callback.doAction(json);
 		} catch (final Throwable e) {
-			json.put("error", ctx.getThrowableMessage(e));
+			json.put("error", mvcContext.getThrowableMessage(e));
 		}
 		return json;
 	}
