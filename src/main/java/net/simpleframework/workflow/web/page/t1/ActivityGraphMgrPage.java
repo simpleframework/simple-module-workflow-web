@@ -1,5 +1,8 @@
 package net.simpleframework.workflow.web.page.t1;
 
+import java.io.IOException;
+import java.util.Map;
+
 import net.simpleframework.ado.query.IDataQuery;
 import net.simpleframework.ado.query.ListDataQuery;
 import net.simpleframework.common.StringUtils;
@@ -17,8 +20,8 @@ import net.simpleframework.workflow.web.page.WorkflowUtils;
  * @author 陈侃(cknet@126.com, 13910090885) https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
-@PageMapping(url = "/workflow/monitor/graph")
-public class WorkflowGraphMonitorPage extends WorkflowMonitorPage {
+@PageMapping(url = "/workflow/mgr/activity/graph")
+public class ActivityGraphMgrPage extends ActivityMgrPage {
 
 	@Override
 	protected void onForward(final PageParameter pp) {
@@ -29,29 +32,24 @@ public class WorkflowGraphMonitorPage extends WorkflowMonitorPage {
 
 	@Override
 	protected TablePagerBean addTablePagerBean(final PageParameter pp) {
-		// pp.putParameter(G, "tasknode");
 		final TablePagerBean tablePager = (TablePagerBean) super.addTablePagerBean(pp)
 				.setShowFilterBar(false).setContainerId("idWorkflowGraphMonitorPage_tbl")
-				.setName("WorkflowGraphMonitorPage_tbl").setHandlerClass(ActivityGraphTbl2.class);
+				.setName("WorkflowGraphMonitorPage_tbl").setHandlerClass(ActivityGraphTbl.class);
 		return tablePager;
 	}
 
 	@Override
-	public void onHtmlNormalise(final PageParameter pp,
-			final net.simpleframework.lib.org.jsoup.nodes.Element element) {
-		super.onHtmlNormalise(pp, element);
-		if (element.tagName().equalsIgnoreCase("html") && WorkflowGraphUtils.isVML(pp)) {
-			element.attr("xmlns:v", "urn:schemas-microsoft-com:vml");
-		}
+	protected String toHtml(final PageParameter pp, final Map<String, Object> variables,
+			final String variable) throws IOException {
+		final StringBuilder sb = new StringBuilder();
+		final String gHTML = WorkflowGraphUtils.toGraphHTML(pp, getProcessBean(pp));
+		sb.append("<div align='center' class='ActivityMgrPage'>");
+		sb.append(" <div class='tb'>").append(gHTML).append("</div>");
+		sb.append("</div>");
+		return sb.toString();
 	}
 
-	@Override
-	protected String toMonitorHTML(final PageParameter pp) {
-		final ProcessBean process = wService.getProcessBean(WorkflowUtils.getWorkitemBean(pp));
-		return WorkflowGraphUtils.toGraphHTML(pp, process);
-	}
-
-	public static class ActivityGraphTbl2 extends _ActivityTbl {
+	public static class ActivityGraphTbl extends ActivityTbl {
 
 		@Override
 		public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {

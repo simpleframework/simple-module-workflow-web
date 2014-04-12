@@ -22,6 +22,8 @@ import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.InputElement;
 import net.simpleframework.mvc.common.element.LinkElement;
 import net.simpleframework.mvc.common.element.SpanElement;
+import net.simpleframework.mvc.common.element.TabButton;
+import net.simpleframework.mvc.common.element.TabButtons;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.ui.menu.MenuBean;
 import net.simpleframework.mvc.component.ui.menu.MenuItem;
@@ -55,14 +57,7 @@ public class ActivityMgrPage extends AbstractWorkflowMgrPage {
 		super.onForward(pp);
 
 		// 表格
-		final TablePagerBean tablePager = (TablePagerBean) addTablePagerBean(pp,
-				"ActivityMgrPage_tbl").setPagerBarLayout(EPagerBarLayout.none)
-				.setContainerId("idActivityMgrPage_tbl").setHandlerClass(ActivityTbl.class);
-		tablePager.addColumn(TC_TASKNODE())
-				.addColumn(TC_STATUS().setPropertyClass(EActivityStatus.class))
-				.addColumn(TC_PARTICIPANTS()).addColumn(TC_PARTICIPANTS2()).addColumn(TC_CREATEDATE())
-				.addColumn(TC_TIMEOUT()).addColumn(TC_COMPLETEDATE()).addColumn(TC_PREVIOUS())
-				.addColumn(TablePagerColumn.OPE().setWidth(70));
+		addTablePagerBean(pp);
 
 		// 放弃
 		addAjaxRequest(pp, "ActivityMgrPage_abort_page", ActivityAbortPage.class);
@@ -76,6 +71,18 @@ public class ActivityMgrPage extends AbstractWorkflowMgrPage {
 				.setContentRef("ActivityMgrPage_workitems_page").setWidth(800).setHeight(480);
 	}
 
+	protected TablePagerBean addTablePagerBean(final PageParameter pp) {
+		final TablePagerBean tablePager = (TablePagerBean) addTablePagerBean(pp,
+				"ActivityMgrPage_tbl").setPagerBarLayout(EPagerBarLayout.none)
+				.setContainerId("idActivityMgrPage_tbl").setHandlerClass(ActivityTbl.class);
+		tablePager.addColumn(TC_TASKNODE())
+				.addColumn(TC_STATUS().setPropertyClass(EActivityStatus.class))
+				.addColumn(TC_PARTICIPANTS()).addColumn(TC_PARTICIPANTS2()).addColumn(TC_CREATEDATE())
+				.addColumn(TC_TIMEOUT()).addColumn(TC_COMPLETEDATE()).addColumn(TC_PREVIOUS())
+				.addColumn(TablePagerColumn.OPE().setWidth(70));
+		return tablePager;
+	}
+
 	@Override
 	public ElementList getLeftElements(final PageParameter pp) {
 		final ProcessBean process = getProcessBean(pp);
@@ -83,6 +90,15 @@ public class ActivityMgrPage extends AbstractWorkflowMgrPage {
 				createBackButton()
 						.setHref(url(ProcessMgrPage.class, "modelId=" + process.getModelId())),
 				SpanElement.SPACE15, SpanElement.strongText(WorkflowUtils.getTitle(process)));
+	}
+
+	@Override
+	public ElementList getRightElements(final PageParameter pp) {
+		final ProcessBean process = getProcessBean(pp);
+		final Object id = process.getId();
+		return ElementList.of(createTabsElement(pp, TabButtons.of(
+				new TabButton("列表模式", url(ActivityMgrPage.class, "processId=" + id)), new TabButton(
+						"图形模式", url(ActivityGraphMgrPage.class, "processId=" + id)))));
 	}
 
 	@Override
@@ -226,7 +242,7 @@ public class ActivityMgrPage extends AbstractWorkflowMgrPage {
 		}
 	}
 
-	private static ProcessBean getProcessBean(final PageParameter pp) {
+	static ProcessBean getProcessBean(final PageParameter pp) {
 		return getCacheBean(pp, pService, "processId");
 	}
 

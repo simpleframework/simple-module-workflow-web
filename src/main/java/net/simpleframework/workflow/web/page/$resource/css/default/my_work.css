@@ -136,39 +136,3 @@
   border-right-color: #fff;
 }
 
-.WorkflowMonitorPage .tb {
-  background-color: #f9f9f9;
-  padding: 10px;
-  border: 1px solid #ccc;
-  margin-bottom: -1px;
-  text-align: left;
-}
-
-.WorkflowMonitorPage .tb .re {
-  float: right;
-}
-
-.WorkflowMonitorPage .tb .le {
-  float: left;
-}
-
-.WorkflowMonitorPage .graph {
-  padding: 12px 8px;
-  border: 1px solid #ccc;
-  background-color: #fff;
-  overflow-x: auto;
-  margin-bottom: -1px;
-}
-
-.WorkflowMonitorPage .graph->div {
-  display: table;
-}
-
-.WorkflowMonitorPage .graph .tasknode,
-.WorkflowMonitorPage .graph .tasktext {
-  cursor: pointer;
-}
-
-v\:shape,v\:image,v\:stroke,v\:fill {
-  behavior: url(#default#VML);
-}

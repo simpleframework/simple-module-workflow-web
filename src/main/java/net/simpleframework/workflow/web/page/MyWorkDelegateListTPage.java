@@ -101,12 +101,9 @@ public class MyWorkDelegateListTPage extends AbstractWorkitemsTPage {
 
 	protected SpanElement getTabButtons(final PageParameter pp) {
 		final WorkflowUrlsFactory urlsFactory = getUrlsFactory();
-		return new SpanElement().setClassName("tabbtns").addHtml(
-				TabButtons.of(
-						new TabButton($m("MyWorkDelegateListTPage.4"), urlsFactory.getUrl(pp,
-								MyWorkDelegateListTPage.class)),
-						new TabButton($m("MyWorkDelegateListTPage.5"), urlsFactory.getUrl(pp,
-								UserDelegateListTPage.class))).toString(pp));
+		return createTabsElement(pp, TabButtons.of(new TabButton($m("MyWorkDelegateListTPage.4"),
+				urlsFactory.getUrl(pp, MyWorkDelegateListTPage.class)), new TabButton(
+				$m("MyWorkDelegateListTPage.5"), urlsFactory.getUrl(pp, UserDelegateListTPage.class))));
 	}
 
 	@Override
