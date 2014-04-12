@@ -24,7 +24,7 @@ public class WorkflowGraphMonitorPage extends WorkflowMonitorPage {
 	protected void onForward(final PageParameter pp) {
 		super.onForward(pp);
 
-		pp.addImportCSS(WorkflowUtils.class, "/graph.css");
+		pp.addImportCSS(WorkflowGraphMonitorPage.class, "/monitor.css");
 	}
 
 	@Override

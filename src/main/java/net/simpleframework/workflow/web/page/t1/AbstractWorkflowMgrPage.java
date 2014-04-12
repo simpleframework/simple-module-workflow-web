@@ -37,7 +37,7 @@ public abstract class AbstractWorkflowMgrPage extends T1ResizedTemplatePage impl
 	@Override
 	protected void onForward(final PageParameter pp) {
 		super.onForward(pp);
-		pp.addImportCSS(ProcessModelMgrPage.class, "/pm_mgr.css");
+		pp.addImportCSS(ProcessModelMgrPage.class, "/pmgr.css");
 
 		// status
 		addStatusWindowBean(pp);

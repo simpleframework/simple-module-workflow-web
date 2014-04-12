@@ -12,7 +12,6 @@ import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
 import net.simpleframework.workflow.engine.ActivityBean;
 import net.simpleframework.workflow.engine.ProcessBean;
-import net.simpleframework.workflow.web.page.WorkflowUtils;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -27,7 +26,7 @@ public class ActivityGraphMgrPage extends ActivityMgrPage {
 	protected void onForward(final PageParameter pp) {
 		super.onForward(pp);
 
-		pp.addImportCSS(WorkflowUtils.class, "/graph.css");
+		pp.addImportCSS(ActivityGraphMgrPage.class, "/monitor.css");
 	}
 
 	@Override
