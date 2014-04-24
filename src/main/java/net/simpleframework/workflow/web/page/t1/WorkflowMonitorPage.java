@@ -109,8 +109,8 @@ public class WorkflowMonitorPage extends AbstractWorkflowFormPage {
 
 	@Override
 	public TabButtons getTabButtons(final PageParameter pp) {
-		return ((AbstractWorkflowFormPage) singleton(((IWorkflowWebContext) workflowContext).getUrlsFactory()
-				.getPageClass(WorkflowFormPage.class.getName()))).getTabButtons(pp);
+		return ((AbstractWorkflowFormPage) singleton(((IWorkflowWebContext) workflowContext)
+				.getUrlsFactory().getPageClass(WorkflowFormPage.class.getName()))).getTabButtons(pp);
 	}
 
 	public static class _ActivityTbl extends ActivityTbl {
