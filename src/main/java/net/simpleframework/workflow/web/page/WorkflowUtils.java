@@ -31,7 +31,7 @@ public abstract class WorkflowUtils implements IWorkflowContextAware {
 
 	public static ButtonElement createLogButton() {
 		return ButtonElement.logBtn()
-				.setDisabled(((IWorkflowWebContext) context).getLogRef() == null);
+				.setDisabled(((IWorkflowWebContext) workflowContext).getLogRef() == null);
 	}
 
 	public static String toStatusHTML(final PageParameter pp, final Enum<?> status, final Object txt) {

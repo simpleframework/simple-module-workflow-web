@@ -33,7 +33,7 @@ public abstract class AbstractItemsTPage extends Category_ListPage implements IW
 		super.onForward(pp);
 		pp.addImportCSS(AbstractItemsTPage.class, "/my_work.css");
 
-		final IModuleRef ref = ((IWorkflowWebContext) context).getLogRef();
+		final IModuleRef ref = ((IWorkflowWebContext) workflowContext).getLogRef();
 		Class<? extends AbstractMVCPage> lPage;
 		if (ref != null && (lPage = getUpdateLogPage()) != null) {
 			pp.addComponentBean("AbstractItemsTPage_update_logPage", AjaxRequestBean.class)
@@ -90,6 +90,6 @@ public abstract class AbstractItemsTPage extends Category_ListPage implements IW
 	}
 
 	protected static WorkflowUrlsFactory getUrlsFactory() {
-		return ((IWorkflowWebContext) context).getUrlsFactory();
+		return ((IWorkflowWebContext) workflowContext).getUrlsFactory();
 	}
 }

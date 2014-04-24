@@ -44,7 +44,7 @@ public abstract class AbstractWorkflowFormPage extends T1FormTemplatePage implem
 	@Override
 	public ElementList getLeftElements(final PageParameter pp) {
 		final LinkButton backBtn = backBtn();
-		final WorkflowUrlsFactory uFactory = ((IWorkflowWebContext) context).getUrlsFactory();
+		final WorkflowUrlsFactory uFactory = ((IWorkflowWebContext) workflowContext).getUrlsFactory();
 		final String source = pp.getParameter("source");
 		if ("delegation".equals(source)) {
 			backBtn.setHref(uFactory.getUrl(pp, MyWorkDelegateListTPage.class));

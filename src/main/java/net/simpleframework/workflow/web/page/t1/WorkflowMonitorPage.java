@@ -87,7 +87,7 @@ public class WorkflowMonitorPage extends AbstractWorkflowFormPage {
 		sb.append("<div class='WorkflowMonitorPage'>");
 		sb.append(" <div class='ltabs'>");
 		final WorkitemBean workitem = WorkflowUtils.getWorkitemBean(pp);
-		final WorkflowUrlsFactory uFactory = ((IWorkflowWebContext) context).getUrlsFactory();
+		final WorkflowUrlsFactory uFactory = ((IWorkflowWebContext) workflowContext).getUrlsFactory();
 		final TabButtons tabs = TabButtons.of(
 				new TabButton($m("WorkflowMonitorPage.0")).setHref(uFactory.getUrl(pp,
 						WorkflowMonitorPage.class, workitem)),
@@ -109,7 +109,7 @@ public class WorkflowMonitorPage extends AbstractWorkflowFormPage {
 
 	@Override
 	public TabButtons getTabButtons(final PageParameter pp) {
-		return ((AbstractWorkflowFormPage) singleton(((IWorkflowWebContext) context).getUrlsFactory()
+		return ((AbstractWorkflowFormPage) singleton(((IWorkflowWebContext) workflowContext).getUrlsFactory()
 				.getPageClass(WorkflowFormPage.class.getName()))).getTabButtons(pp);
 	}
 

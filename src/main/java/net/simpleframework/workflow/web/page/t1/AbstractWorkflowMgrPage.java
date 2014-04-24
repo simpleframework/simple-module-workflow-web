@@ -43,7 +43,7 @@ public abstract class AbstractWorkflowMgrPage extends T1ResizedTemplatePage impl
 		addStatusWindowBean(pp);
 
 		// 查看日志
-		final IModuleRef ref = ((IWorkflowWebContext) context).getLogRef();
+		final IModuleRef ref = ((IWorkflowWebContext) workflowContext).getLogRef();
 		Class<? extends AbstractMVCPage> lPage;
 		if (ref != null && (lPage = getUpdateLogPage()) != null) {
 			pp.addComponentBean("AbstractWorkflowMgrPage_update_logPage", AjaxRequestBean.class)
@@ -56,7 +56,7 @@ public abstract class AbstractWorkflowMgrPage extends T1ResizedTemplatePage impl
 
 	@Override
 	public String getRole(final PageParameter pp) {
-		return context.getManagerRole();
+		return workflowContext.getManagerRole();
 	}
 
 	protected WindowBean addStatusWindowBean(final PageParameter pp) {

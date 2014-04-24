@@ -201,7 +201,7 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 			row.add(TablePagerColumn.ICON, img);
 		}
 
-		final WorkflowUrlsFactory uFactory = ((IWorkflowWebContext) context).getUrlsFactory();
+		final WorkflowUrlsFactory uFactory = ((IWorkflowWebContext) workflowContext).getUrlsFactory();
 
 		final StringBuilder title = new StringBuilder();
 		appendTaskname(title, cp, activity);
@@ -320,7 +320,7 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 	static MenuItem MENU_MONITOR(final PageParameter pp) {
 		return MenuItem.of($m("MyRunningWorklistTbl.7")).setOnclick(
 				"$Actions.loc('"
-						+ ((IWorkflowWebContext) context).getUrlsFactory().getUrl(pp,
+						+ ((IWorkflowWebContext) workflowContext).getUrlsFactory().getUrl(pp,
 								WorkflowMonitorPage.class)
 						+ "?workitemId=' + $pager_action(item).rowId());");
 	}

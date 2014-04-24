@@ -30,7 +30,7 @@ public class WorkflowPermissionHandler extends OrganizationPermissionHandler imp
 		Role oRole = getRoleObject(role);
 		if (oRole != null) {
 			// 获取相对角色，部门
-			final IRoleService service = context.getRoleService();
+			final IRoleService service = orgContext.getRoleService();
 			oRole = service.getRoleByName(service.getRoleChart(oRole), relative);
 			if (oRole != null) {
 				final ID roleId = oRole.getId();

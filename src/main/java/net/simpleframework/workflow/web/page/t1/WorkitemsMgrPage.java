@@ -60,7 +60,7 @@ public class WorkitemsMgrPage extends OneTableTemplatePage implements IWorkflowC
 				.addColumn(TablePagerColumn.OPE().setWidth(70));
 
 		// log
-		final IModuleRef ref = ((IWorkflowWebContext) context).getLogRef();
+		final IModuleRef ref = ((IWorkflowWebContext) workflowContext).getLogRef();
 		if (ref != null) {
 			pp.addComponentBean("WorkitemsMgrPage_update_logPage", AjaxRequestBean.class)
 					.setUrlForward(AbstractMVCPage.url(WorkitemUpdateLogPage.class));
@@ -101,7 +101,7 @@ public class WorkitemsMgrPage extends OneTableTemplatePage implements IWorkflowC
 			final StringBuilder sb = new StringBuilder();
 			sb.append(ButtonElement
 					.logBtn()
-					.setDisabled(((IWorkflowWebContext) context).getLogRef() == null)
+					.setDisabled(((IWorkflowWebContext) workflowContext).getLogRef() == null)
 					.setOnclick(
 							"$Actions['WorkitemsMgrPage_update_log']('workitemId=" + workitem.getId()
 									+ "');"));
