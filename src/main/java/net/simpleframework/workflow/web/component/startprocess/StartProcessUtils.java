@@ -22,7 +22,7 @@ import net.simpleframework.mvc.PageRequestResponse;
 import net.simpleframework.mvc.common.element.BlockElement;
 import net.simpleframework.mvc.common.element.LinkButton;
 import net.simpleframework.mvc.component.ComponentParameter;
-import net.simpleframework.workflow.engine.IWorkflowContextAware;
+import net.simpleframework.workflow.engine.IWorkflowServiceAware;
 import net.simpleframework.workflow.engine.InitiateItem;
 import net.simpleframework.workflow.engine.ProcessBean;
 import net.simpleframework.workflow.engine.ProcessModelBean;
@@ -33,7 +33,7 @@ import net.simpleframework.workflow.engine.ProcessModelBean;
  * @author 陈侃(cknet@126.com, 13910090885) https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
-public abstract class StartProcessUtils implements IWorkflowContextAware {
+public abstract class StartProcessUtils implements IWorkflowServiceAware {
 
 	public static final String BEAN_ID = "startprocess_@bid";
 

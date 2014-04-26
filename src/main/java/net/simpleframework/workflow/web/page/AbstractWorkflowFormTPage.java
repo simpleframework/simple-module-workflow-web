@@ -17,7 +17,7 @@ import net.simpleframework.mvc.component.base.validation.Validator;
 import net.simpleframework.mvc.template.lets.FormTableRowTemplatePage;
 import net.simpleframework.workflow.engine.EWorkitemStatus;
 import net.simpleframework.workflow.engine.IWorkflowContext;
-import net.simpleframework.workflow.engine.IWorkflowContextAware;
+import net.simpleframework.workflow.engine.IWorkflowServiceAware;
 import net.simpleframework.workflow.engine.ProcessBean;
 import net.simpleframework.workflow.engine.WorkitemBean;
 import net.simpleframework.workflow.engine.WorkitemComplete;
@@ -34,7 +34,7 @@ import net.simpleframework.workflow.web.page.t1.WorkflowFormPage;
  *         http://www.simpleframework.net
  */
 public abstract class AbstractWorkflowFormTPage extends FormTableRowTemplatePage implements
-		IWorkflowWebForm, IWorkflowContextAware {
+		IWorkflowWebForm, IWorkflowServiceAware {
 
 	@Override
 	protected boolean isPage404(final PageParameter pp) {

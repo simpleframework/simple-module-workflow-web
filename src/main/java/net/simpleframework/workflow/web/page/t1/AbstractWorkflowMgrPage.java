@@ -22,7 +22,7 @@ import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
 import net.simpleframework.mvc.component.ui.window.WindowBean;
 import net.simpleframework.mvc.template.AbstractTemplatePage;
 import net.simpleframework.mvc.template.t1.T1ResizedTemplatePage;
-import net.simpleframework.workflow.engine.IWorkflowContextAware;
+import net.simpleframework.workflow.engine.IWorkflowServiceAware;
 import net.simpleframework.workflow.web.IWorkflowWebContext;
 
 /**
@@ -32,7 +32,7 @@ import net.simpleframework.workflow.web.IWorkflowWebContext;
  *         http://www.simpleframework.net
  */
 public abstract class AbstractWorkflowMgrPage extends T1ResizedTemplatePage implements
-		IWorkflowContextAware {
+		IWorkflowServiceAware {
 
 	@Override
 	protected void onForward(final PageParameter pp) {

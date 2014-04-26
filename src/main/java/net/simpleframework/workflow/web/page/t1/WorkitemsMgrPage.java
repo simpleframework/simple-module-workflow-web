@@ -24,7 +24,7 @@ import net.simpleframework.mvc.component.ui.window.WindowBean;
 import net.simpleframework.mvc.template.lets.OneTableTemplatePage;
 import net.simpleframework.workflow.engine.ActivityBean;
 import net.simpleframework.workflow.engine.EWorkitemStatus;
-import net.simpleframework.workflow.engine.IWorkflowContextAware;
+import net.simpleframework.workflow.engine.IWorkflowServiceAware;
 import net.simpleframework.workflow.engine.WorkitemBean;
 import net.simpleframework.workflow.web.IWorkflowWebContext;
 import net.simpleframework.workflow.web.WorkflowLogRef.WorkitemUpdateLogPage;
@@ -36,7 +36,7 @@ import net.simpleframework.workflow.web.page.WorkflowUtils;
  * @author 陈侃(cknet@126.com, 13910090885) https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
-public class WorkitemsMgrPage extends OneTableTemplatePage implements IWorkflowContextAware {
+public class WorkitemsMgrPage extends OneTableTemplatePage implements IWorkflowServiceAware {
 
 	@Override
 	protected void onForward(final PageParameter pp) {

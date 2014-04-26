@@ -27,7 +27,7 @@ import net.simpleframework.mvc.component.ext.userselect.UserSelectBean;
 import net.simpleframework.mvc.template.lets.FormTableRowTemplatePage;
 import net.simpleframework.workflow.engine.DelegationBean;
 import net.simpleframework.workflow.engine.IWorkflowContext;
-import net.simpleframework.workflow.engine.IWorkflowContextAware;
+import net.simpleframework.workflow.engine.IWorkflowServiceAware;
 import net.simpleframework.workflow.engine.WorkitemBean;
 
 /**
@@ -37,7 +37,7 @@ import net.simpleframework.workflow.engine.WorkitemBean;
  *         http://www.simpleframework.net
  */
 public abstract class AbstractDelegateFormPage extends FormTableRowTemplatePage implements
-		IWorkflowContextAware {
+		IWorkflowServiceAware {
 
 	@Override
 	public int getLabelWidth(final PageParameter pp) {

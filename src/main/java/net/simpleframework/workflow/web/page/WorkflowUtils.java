@@ -8,7 +8,7 @@ import net.simpleframework.mvc.common.element.ButtonElement;
 import net.simpleframework.mvc.common.element.ImageElement;
 import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.template.AbstractTemplatePage;
-import net.simpleframework.workflow.engine.IWorkflowContextAware;
+import net.simpleframework.workflow.engine.IWorkflowServiceAware;
 import net.simpleframework.workflow.engine.ProcessBean;
 import net.simpleframework.workflow.engine.WorkitemBean;
 import net.simpleframework.workflow.web.IWorkflowWebContext;
@@ -19,7 +19,7 @@ import net.simpleframework.workflow.web.IWorkflowWebContext;
  * @author 陈侃(cknet@126.com, 13910090885) https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
-public abstract class WorkflowUtils implements IWorkflowContextAware {
+public abstract class WorkflowUtils implements IWorkflowServiceAware {
 
 	public static WorkitemBean getWorkitemBean(final PageParameter pp) {
 		return AbstractTemplatePage.getCacheBean(pp, wService, "workitemId");

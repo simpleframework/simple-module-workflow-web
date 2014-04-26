@@ -6,7 +6,7 @@ import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.LinkButton;
 import net.simpleframework.mvc.template.t1.T1FormTemplatePage;
 import net.simpleframework.workflow.engine.EWorkitemStatus;
-import net.simpleframework.workflow.engine.IWorkflowContextAware;
+import net.simpleframework.workflow.engine.IWorkflowServiceAware;
 import net.simpleframework.workflow.engine.WorkitemBean;
 import net.simpleframework.workflow.web.IWorkflowWebContext;
 import net.simpleframework.workflow.web.IWorkflowWebForm;
@@ -22,7 +22,7 @@ import net.simpleframework.workflow.web.page.WorkflowUtils;
  *         http://www.simpleframework.net
  */
 public abstract class AbstractWorkflowFormPage extends T1FormTemplatePage implements
-		IWorkflowContextAware {
+		IWorkflowServiceAware {
 
 	@Override
 	protected boolean isPage404(final PageParameter pp) {
