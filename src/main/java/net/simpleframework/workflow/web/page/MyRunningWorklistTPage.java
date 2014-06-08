@@ -202,8 +202,10 @@ public class MyRunningWorklistTPage extends AbstractWorkitemsTPage {
 		if ("allread".equals(op)) {
 			final IDataQuery<WorkitemBean> dq = wService.getRunningWorklist(cp.getLoginId());
 			WorkitemBean workitem;
-			while ((workitem = dq.next()) != null && !workitem.isReadMark()) {
-				wService.doReadMark(workitem);
+			while ((workitem = dq.next()) != null) {
+				if (!workitem.isReadMark()) {
+					wService.doReadMark(workitem);
+				}
 			}
 		} else {
 			for (final Object id : StringUtils.split(cp.getParameter("workitemId"))) {
