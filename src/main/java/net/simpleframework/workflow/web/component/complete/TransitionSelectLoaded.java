@@ -35,15 +35,16 @@ public class TransitionSelectLoaded extends DefaultPageHandler {
 			final WorkitemBean workitem = WorkitemCompleteUtils.getWorkitemBean(nCP);
 			final String transitions = nCP.getParameter("transitions");
 			final String[] transitionIds = StringUtils.split(transitions);
-			final ActivityComplete activityComplete = new ActivityComplete(workitem);
-			if (activityComplete.isParticipantManual(transitionIds)) {
+			final ActivityComplete aComplete = WorkitemCompleteUtils
+					.getActivityComplete(nCP, workitem);
+			if (aComplete.isParticipantManual(transitionIds)) {
 				final JavascriptForward js = new JavascriptForward();
 				js.append("$Actions['").append(nCP.getComponentName()).append("_participantSelect']('")
 						.append(WorkitemCompleteUtils.toParams(nCP, workitem)).append("&transitions=")
 						.append(transitions).append("');");
 				return js;
 			} else {
-				activityComplete.resetTransitions(transitionIds);
+				aComplete.resetTransitions(transitionIds);
 				return ((IWorkitemCompleteHandler) nCP.getComponentHandler()).onComplete(nCP, workitem);
 			}
 		}

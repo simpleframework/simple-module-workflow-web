@@ -152,13 +152,9 @@ public class WorkitemCompleteUtils implements IWorkflowServiceAware {
 		return sb.toString();
 	}
 
-	private static ActivityComplete getActivityComplete(final ComponentParameter cp,
+	static ActivityComplete getActivityComplete(final ComponentParameter cp,
 			final WorkitemBean workitem) {
-		ActivityComplete activityComplete = (ActivityComplete) cp.getRequestAttr("_ActivityComplete");
-		if (activityComplete == null) {
-			cp.setRequestAttr("_ActivityComplete", activityComplete = new ActivityComplete(workitem));
-		}
-		return activityComplete;
+		return WorkitemComplete.get(workitem).getActivityComplete();
 	}
 
 	private static Log log = LogFactory.getLogger(WorkitemCompleteUtils.class);

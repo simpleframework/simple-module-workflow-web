@@ -53,7 +53,9 @@ public class ParticipantSelectLoaded extends DefaultPageHandler {
 						StringUtils.split((String) map.get("participant")));
 			}
 
-			new ActivityComplete(workitem).resetParticipants(participantIds);
+			final ActivityComplete aComplete = WorkitemCompleteUtils
+					.getActivityComplete(nCP, workitem);
+			aComplete.resetParticipants(participantIds);
 			return ((IWorkitemCompleteHandler) nCP.getComponentHandler()).onComplete(nCP, workitem);
 		}
 	}
