@@ -12,17 +12,7 @@
 			.getWorkitemBean(nCP);
 %>
 <div class="simple_window_tcb transition_select">
-  <%
-  	for (final TransitionNode transition : WorkitemCompleteUtils
-  			.getTransitions(nCP, workitem)) {
-  		String id = transition.getId();
-  %>
-  <div class="ritem">
-    <%=new Checkbox(id, transition.to()).setValue(id)%>
-  </div>
-  <%
-  	}
-  %>
+  <%=WorkitemCompleteUtils.toTransitionsHTML(nCP, workitem)%>
   <div class="msg"></div>
   <div class="b">
     <input type="button" class="button2" value="#(Button.Ok)" />
@@ -34,7 +24,7 @@
     var ts = $(".transition_select");
     
     var PARAMS = "<%=WorkitemCompleteUtils.toParams(nCP, workitem)%>&transitions=";
-    
+
     ts.down(".button2").observe("click", function(evn) {
       var id = "";
       ts.select("input[type=checkbox]").each(function(box) {
@@ -42,12 +32,12 @@
           id += ";" + box.value;
         }
       });
-      
+
       if (id.length > 0) {
-  			$Actions['TransitionSelectLoaded_ok'](PARAMS + id.substring(1));
-  		} else {
-  		  $UI.shakeMsg(ts.down(".msg"), "#(transition_select.0)");
-  		}
+        $Actions['TransitionSelectLoaded_ok'](PARAMS + id.substring(1));
+      } else {
+        $UI.shakeMsg(ts.down(".msg"), "#(transition_select.0)");
+      }
     });
   });
 </script>

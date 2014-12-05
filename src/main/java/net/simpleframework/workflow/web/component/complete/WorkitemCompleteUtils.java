@@ -25,6 +25,7 @@ import net.simpleframework.workflow.engine.WorkitemBean;
 import net.simpleframework.workflow.engine.WorkitemComplete;
 import net.simpleframework.workflow.engine.participant.Participant;
 import net.simpleframework.workflow.schema.TransitionNode;
+import net.simpleframework.workflow.schema.UserNode;
 import net.simpleframework.workflow.web.IWorkflowWebForm;
 
 /**
@@ -105,7 +106,7 @@ public class WorkitemCompleteUtils implements IWorkflowServiceAware {
 		out.flush();
 	}
 
-	public static Collection<TransitionNode> getTransitions(final ComponentParameter cp,
+	private static Collection<TransitionNode> getTransitions(final ComponentParameter cp,
 			final WorkitemBean workitem) {
 		final ArrayList<TransitionNode> al = new ArrayList<TransitionNode>();
 		final String[] transitions = StringUtils.split(cp.getParameter("transitions"));
@@ -122,6 +123,22 @@ public class WorkitemCompleteUtils implements IWorkflowServiceAware {
 			al.addAll(activityComplete.getTransitions());
 		}
 		return al;
+	}
+
+	public static String toTransitionsHTML(final ComponentParameter cp, final WorkitemBean workitem) {
+		final StringBuilder sb = new StringBuilder();
+		final UserNode node = (UserNode) aService.getTaskNode(wService.getActivity(workitem));
+		for (final TransitionNode transition : WorkitemCompleteUtils.getTransitions(cp, workitem)) {
+			final String id = transition.getId();
+			sb.append("<div class='ritem'>");
+			if (node.isMultiTransitionSelected()) {
+				sb.append(new Checkbox(id, transition.to()).setValue(id));
+			} else {
+				sb.append(new Radio(id, transition.to()).setValue(id));
+			}
+			sb.append("</div>");
+		}
+		return sb.toString();
 	}
 
 	public static String toParticipantsHTML(final ComponentParameter cp) {
