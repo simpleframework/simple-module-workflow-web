@@ -160,8 +160,8 @@ public class WorkitemCompleteUtils implements IWorkflowServiceAware {
 					sb.append("<div class='ritem'>");
 					final String id = participant.toString();
 					final Object user = permission.getUser(participant.userId);
-					sb.append((multi ? new Checkbox(id, user) : new Radio(id, user).setName(transition
-							.getId())).setValue(id));
+					sb.append(multi ? new Checkbox(id, user) : new Radio(id, user).setName(transition
+							.getId()));
 					sb.append("</div>");
 				}
 			}
