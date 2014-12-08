@@ -128,13 +128,15 @@ public class WorkitemCompleteUtils implements IWorkflowServiceAware {
 	public static String toTransitionsHTML(final ComponentParameter cp, final WorkitemBean workitem) {
 		final StringBuilder sb = new StringBuilder();
 		final UserNode node = (UserNode) aService.getTaskNode(wService.getActivity(workitem));
+		int i = 0;
 		for (final TransitionNode transition : WorkitemCompleteUtils.getTransitions(cp, workitem)) {
 			final String id = transition.getId();
 			sb.append("<div class='ritem'>");
 			if (node.isMultiTransitionSelected()) {
 				sb.append(new Checkbox(id, transition.to()).setValue(id));
 			} else {
-				sb.append(new Radio(id, transition.to()).setValue(id));
+				sb.append(new Radio(id, transition.to()).setName("transitions_radio").setValue(id)
+						.setChecked(i++ == 0));
 			}
 			sb.append("</div>");
 		}
