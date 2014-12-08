@@ -29,21 +29,27 @@ public class WorkflowPermissionHandler extends OrganizationPermissionHandler imp
 	@Override
 	public Collection<Participant> getRelativeParticipants(final Object user, final Object role,
 			final UserNode.RelativeRole rRole, final Map<String, Object> variables) {
+		ID deptId = null;
+		if (rRole.isIndept()) {
+			final WorkitemBean workitem = ((ActivityComplete) variables.get("activityComplete"))
+					.getWorkitem();
+			if (workitem != null) {
+				deptId = workitem.getDeptId();
+			}
+		}
+		return getRelativeParticipants(user, rRole, deptId, variables, rRole.getRelative());
+	}
+	
+	public Collection<Participant> getRelativeParticipants(final Object user, final Object role,final ID deptId,
+			final Map<String, Object> variables,String relativeRoleName) {
 		final ArrayList<Participant> participants = new ArrayList<Participant>();
+		
 		Role oRole = getRoleObject(role);
 		if (oRole != null) {
 			// 获取相对角色，部门
 			final IRoleService service = orgContext.getRoleService();
-			oRole = service.getRoleByName(service.getRoleChart(oRole), rRole.getRelative());
+			oRole = service.getRoleByName(service.getRoleChart(oRole), relativeRoleName);
 			if (oRole != null) {
-				ID deptId = null;
-				if (rRole.isIndept()) {
-					final WorkitemBean workitem = ((ActivityComplete) variables.get("activityComplete"))
-							.getWorkitem();
-					if (workitem != null) {
-						deptId = workitem.getDeptId();
-					}
-				}
 				final ID roleId = oRole.getId();
 				final Iterator<ID> users = users(roleId, deptId, variables);
 				while (users.hasNext()) {
