@@ -77,12 +77,13 @@ public class PRelativeRoleHandler extends AbstractParticipantHandler {
 			if(StringUtils.hasText(levelStr))
 				level=Level.valueOf(levelStr);
 			
-			Collection<Participant> _participants =null;
 			WorkflowPermissionHandler wph = (WorkflowPermissionHandler)permission;
+			Collection<Participant> _participants = wph
+					.getRelativeParticipantsOfLevel(workitem.getUserId(),
+							workitem.getRoleId(), workitem.getDeptId(),
+							variables, role, level);
 			if(level.equals(Level.internal)){
-				_participants = wph.getRelativeParticipants(
-						workitem.getUserId(), workitem.getRoleId(),
-						workitem.getDeptId(), variables, role);
+
 			}else if(level.equals(Level.Level)){
 				
 			}else if(level.equals(Level.lower)){
