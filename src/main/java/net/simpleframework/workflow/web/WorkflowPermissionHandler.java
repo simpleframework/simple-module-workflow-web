@@ -78,7 +78,7 @@ public class WorkflowPermissionHandler extends OrganizationPermissionHandler imp
 					if (level.equals(Level.Level)) {// 平级
 						dept = orgContext.getDepartmentService().getBean(dept.getParentId());
 						final IDataQuery<Department> depts = orgContext.getDepartmentService()
-								.queryChildren(dept, null);
+								.queryChildren(dept);
 						if (null != depts) {
 							while ((dept = depts.next()) != null) {
 								final Iterator<ID> users = users(roleId, dept.getId(), variables);
@@ -89,7 +89,7 @@ public class WorkflowPermissionHandler extends OrganizationPermissionHandler imp
 						}
 					} else if (level.equals(Level.lower)) {// 下级
 						final IDataQuery<Department> depts = orgContext.getDepartmentService()
-								.queryChildren(dept, null);
+								.queryChildren(dept);
 						if (null != depts) {
 							while ((dept = depts.next()) != null) {
 								final Iterator<ID> users = users(roleId, dept.getId(), variables);
