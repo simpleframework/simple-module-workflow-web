@@ -17,7 +17,6 @@ import net.simpleframework.organization.web.OrganizationPermissionHandler;
 import net.simpleframework.workflow.engine.AbstractWorkflowBean;
 import net.simpleframework.workflow.engine.EDelegationSource;
 import net.simpleframework.workflow.engine.ProcessModelBean;
-import net.simpleframework.workflow.engine.WorkitemBean;
 import net.simpleframework.workflow.engine.participant.IWorkflowPermissionHandler;
 import net.simpleframework.workflow.engine.participant.Participant;
 import net.simpleframework.workflow.schema.UserNode;
@@ -42,8 +41,8 @@ public class WorkflowPermissionHandler extends OrganizationPermissionHandler imp
 			final IRoleService service = orgContext.getRoleService();
 			final Role rr = service.getRoleByName(service.getRoleChart(r), rRole.getRelative());
 			if (rr != null) {
-				final ID deptId = (workflowBean instanceof WorkitemBean) && rRole.isIndept() ? ((WorkitemBean) workflowBean)
-						.getDeptId() : null;
+				final ID deptId = rRole.isIndept() ? (ID) BeanUtils.getProperty(workflowBean, "deptId")
+						: null;
 				final Iterator<ID> users = users(rr.getId(), deptId, variables);
 				while (users.hasNext()) {
 					participants.add(new Participant(users.next(), rr.getId()));
