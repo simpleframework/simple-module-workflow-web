@@ -57,7 +57,7 @@ public class PRelativeRoleHandler extends AbstractParticipantHandler {
 		final String role = params.get(PARAMS_KEY_ROLE);
 		if (StringUtils.hasText(node)) {
 			// 获取前一指定任务步骤实例
-			preActivity = getPreActivityBean(preActivity, node);
+			preActivity = aService.getPreActivity(preActivity, node);
 			if (null == preActivity) {
 				return null;
 			}
@@ -103,17 +103,17 @@ public class PRelativeRoleHandler extends AbstractParticipantHandler {
 	 * @param preNodeName
 	 * @return
 	 */
-	public ActivityBean getPreActivityBean(final ActivityBean ab,
-			final String preNodeName) {
-		if (null == ab) {
-			return null;
-		}
-		if (ab.getTasknodeText().equals(preNodeName)) {
-			return ab;
-		}
-		return getPreActivityBean(aService.getBean(ab.getPreviousId()),
-				preNodeName);
-	}
+	// public ActivityBean getPreActivityBean(final ActivityBean ab,
+	// final String preNodeName) {
+	// if (null == ab) {
+	// return null;
+	// }
+	// if (ab.getTasknodeText().equals(preNodeName)) {
+	// return ab;
+	// }
+	// return getPreActivityBean(aService.getBean(ab.getPreviousId()),
+	// preNodeName);
+	// }
 
 	private Map<String, String> getParams(final String pas) {
 		final Map<String, String> params = new HashMap<String, String>();
