@@ -85,10 +85,9 @@ public class PRelativeRoleHandler extends AbstractParticipantHandler {
 		}
 
 		final WorkflowPermissionHandler wph = (WorkflowPermissionHandler) permission;
-		final Collection<Participant> _participants = wph
-				.getRelativeParticipantsOfLevel(workitem.getUserId(),
-						workitem.getRoleId(), workitem.getDeptId(), variables,
-						role, level);
+		final Collection<Participant> _participants = wph.getRelativeParticipantsOfLevel(
+				workitem.getUserId(), workitem.getRoleId(), workitem.getDeptId(), variables, role,
+				level);
 		if (_participants != null) {
 			participants.addAll(_participants);
 		}
