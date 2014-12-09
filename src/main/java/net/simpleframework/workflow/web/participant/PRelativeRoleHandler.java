@@ -20,11 +20,11 @@ import net.simpleframework.workflow.web.WorkflowPermissionHandler;
 public class PRelativeRoleHandler extends AbstractParticipantHandler {
 
 	// 指定前一任务节点node: (默认为前一节点)
-	private String PARAMS_KEY_NODE = "node";
+	private final String PARAMS_KEY_NODE = "node";
 	// 相对角色名role: (默认为实际执行者)
-	private String PARAMS_KEY_ROLE = "role";
+	private final String PARAMS_KEY_ROLE = "role";
 	// 相对角色的级别level:下级lower,上级higher (默认是本部门)
-	private String PARAMS_KEY_level = "level";
+	private final String PARAMS_KEY_level = "level";
 
 	public enum Level {
 		internal {// 本部门
@@ -42,8 +42,8 @@ public class PRelativeRoleHandler extends AbstractParticipantHandler {
 	}
 
 	@Override
-	public Collection<Participant> getParticipants(IScriptEval script,
-			Map<String, Object> variables) {
+	public Collection<Participant> getParticipants(final IScriptEval script,
+			final Map<String, Object> variables) {
 		// TODO Auto-generated method stub
 		final ArrayList<Participant> participants = new ArrayList<Participant>();
 		// UserNode node = ((UserNode) ((TransitionNode)
@@ -52,60 +52,59 @@ public class PRelativeRoleHandler extends AbstractParticipantHandler {
 				.get("activityComplete");
 		ActivityBean preActivity = activityComplete.getActivity();// 前一任务步骤实例
 		final UserNode.RuleRole rRole = (UserNode.RuleRole) getParticipantType(variables);
-		Map<String, String> params = getParams(rRole.getParams());
-		String node = params.get(PARAMS_KEY_NODE);
-		String role = params.get(PARAMS_KEY_ROLE);
+		final Map<String, String> params = getParams(rRole.getParams());
+		final String node = params.get(PARAMS_KEY_NODE);
+		final String role = params.get(PARAMS_KEY_ROLE);
 		if (StringUtils.hasText(node)) {
 			// 获取前一指定任务步骤实例
 			preActivity = getPreActivityBean(preActivity, node);
-			if (null == preActivity)
+			if (null == preActivity) {
 				return null;
+			}
 		}
 
 		if (StringUtils.hasText(role)) {
 			// 指定角色
 			WorkitemBean workitem = null;
-			if (preActivity.getId().equals(
-					activityComplete.getActivity().getId())) {
+			if (preActivity.getId().equals(activityComplete.getActivity().getId())) {
 				// 如果前一指定节点就是上一节点
 				workitem = activityComplete.getWorkitem();
 			} else {
-				List<WorkitemBean> items = wService.getWorkitems(preActivity,
+				final List<WorkitemBean> items = wService.getWorkitems(preActivity,
 						EWorkitemStatus.complete);
-				if (null != items && items.size() > 0)
+				if (null != items && items.size() > 0) {
 					workitem = items.get(0);
-				if (workitem == null)
+				}
+				if (workitem == null) {
 					return null;
+				}
 			}
 
 			Level level = Level.internal;
-			String levelStr = params.get(PARAMS_KEY_level);
-			if (StringUtils.hasText(levelStr))
+			final String levelStr = params.get(PARAMS_KEY_level);
+			if (StringUtils.hasText(levelStr)) {
 				level = Level.valueOf(levelStr);
+			}
 
-			WorkflowPermissionHandler wph = (WorkflowPermissionHandler) permission;
-			Collection<Participant> _participants = wph
-					.getRelativeParticipantsOfLevel(workitem.getUserId(),
-							workitem.getRoleId(), workitem.getDeptId(),
-							variables, role, level);
+			final WorkflowPermissionHandler wph = (WorkflowPermissionHandler) permission;
+			final Collection<Participant> _participants = wph.getRelativeParticipantsOfLevel(
+					workitem.getUserId(), workitem.getRoleId(), workitem.getDeptId(), variables, role,
+					level);
 			if (_participants != null) {
 				participants.addAll(_participants);
 			}
 		} else {
 			// 添加实际执行者
 
-			if (preActivity.getId().equals(
-					activityComplete.getActivity().getId())) {
+			if (preActivity.getId().equals(activityComplete.getActivity().getId())) {
 				// 如果前一指定节点就是上一节点则需要将当前完成的用户加进执行者
-				WorkitemBean workitem = activityComplete.getWorkitem();
-				participants.add(new Participant(workitem.getUserId(), workitem
-						.getRoleId()));
+				final WorkitemBean workitem = activityComplete.getWorkitem();
+				participants.add(new Participant(workitem.getUserId(), workitem.getRoleId()));
 			}
 			// 已完成任务项
-			for (final WorkitemBean workitem2 : wService.getWorkitems(
-					preActivity, EWorkitemStatus.complete)) {
-				participants.add(new Participant(workitem2.getUserId(),
-						workitem2.getRoleId()));
+			for (final WorkitemBean workitem2 : wService.getWorkitems(preActivity,
+					EWorkitemStatus.complete)) {
+				participants.add(new Participant(workitem2.getUserId(), workitem2.getRoleId()));
 			}
 		}
 
@@ -119,28 +118,30 @@ public class PRelativeRoleHandler extends AbstractParticipantHandler {
 	 * @param preNodeName
 	 * @return
 	 */
-	public ActivityBean getPreActivityBean(ActivityBean ab, String preNodeName) {
-		if (null == ab)
+	public ActivityBean getPreActivityBean(final ActivityBean ab, final String preNodeName) {
+		if (null == ab) {
 			return null;
-		if (ab.getTasknodeText().equals(preNodeName))
+		}
+		if (ab.getTasknodeText().equals(preNodeName)) {
 			return ab;
-		return getPreActivityBean(aService.getBean(ab.getPreviousId()),
-				preNodeName);
+		}
+		return getPreActivityBean(aService.getBean(ab.getPreviousId()), preNodeName);
 	}
 
-	private Map<String, String> getParams(String pas) {
-		Map<String, String> params = new HashMap<String, String>();
+	private Map<String, String> getParams(final String pas) {
+		final Map<String, String> params = new HashMap<String, String>();
 		if (StringUtils.hasText(pas)) {
-			String[] ps = pas.split(";");
-			if (null != ps)
-				for (String _p : ps) {
+			final String[] ps = pas.split(";");
+			if (null != ps) {
+				for (final String _p : ps) {
 					if (StringUtils.hasText(_p)) {
-						String[] p = _p.split("=");
+						final String[] p = _p.split("=");
 						if (p.length == 2) {
 							params.put(p[0], p[1]);
 						}
 					}
 				}
+			}
 		}
 		return params;
 	}

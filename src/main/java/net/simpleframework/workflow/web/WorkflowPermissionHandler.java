@@ -26,25 +26,23 @@ import net.simpleframework.workflow.web.participant.PRelativeRoleHandler.Level;
  * @author 陈侃(cknet@126.com, 13910090885) https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
-public class WorkflowPermissionHandler extends OrganizationPermissionHandler
-		implements IWorkflowPermissionHandler {
+public class WorkflowPermissionHandler extends OrganizationPermissionHandler implements
+		IWorkflowPermissionHandler {
 
 	@Override
-	public Collection<Participant> getRelativeParticipants(final Object user,
-			final Object role, final UserNode.RelativeRole rRole,
-			final Map<String, Object> variables) {
+	public Collection<Participant> getRelativeParticipants(final Object user, final Object role,
+			final UserNode.RelativeRole rRole, final Map<String, Object> variables) {
 		final ArrayList<Participant> participants = new ArrayList<Participant>();
 		Role oRole = getRoleObject(role);
 		if (oRole != null) {
 			// 获取相对角色，部门
 			final IRoleService service = orgContext.getRoleService();
-			oRole = service.getRoleByName(service.getRoleChart(oRole),
-					rRole.getRelative());
+			oRole = service.getRoleByName(service.getRoleChart(oRole), rRole.getRelative());
 			if (oRole != null) {
 				ID deptId = null;
 				if (rRole.isIndept()) {
-					final WorkitemBean workitem = ((ActivityComplete) variables
-							.get("activityComplete")).getWorkitem();
+					final WorkitemBean workitem = ((ActivityComplete) variables.get("activityComplete"))
+							.getWorkitem();
 					if (workitem != null) {
 						deptId = workitem.getDeptId();
 					}
@@ -59,17 +57,15 @@ public class WorkflowPermissionHandler extends OrganizationPermissionHandler
 		return participants;
 	}
 
-	public Collection<Participant> getRelativeParticipantsOfLevel(
-			final Object user, final Object role, final ID deptId,
-			final Map<String, Object> variables, String relativeRole,
-			Level level) {
+	public Collection<Participant> getRelativeParticipantsOfLevel(final Object user,
+			final Object role, final ID deptId, final Map<String, Object> variables,
+			final String relativeRole, final Level level) {
 		final ArrayList<Participant> participants = new ArrayList<Participant>();
 		Role oRole = getRoleObject(role);
 		if (oRole != null) {
 			// 获取相对角色，部门
 			final IRoleService service = orgContext.getRoleService();
-			oRole = service.getRoleByName(service.getRoleChart(oRole),
-					relativeRole);
+			oRole = service.getRoleByName(service.getRoleChart(oRole), relativeRole);
 			if (oRole != null) {
 				final ID roleId = oRole.getId();
 				if (level.equals(Level.internal)) {// 本部门
@@ -78,42 +74,34 @@ public class WorkflowPermissionHandler extends OrganizationPermissionHandler
 						participants.add(new Participant(users.next(), roleId));
 					}
 				} else {
-					Department dept = orgContext.getDepartmentService()
-							.getBean(deptId);
+					Department dept = orgContext.getDepartmentService().getBean(deptId);
 					if (level.equals(Level.Level)) {// 平级
-						dept = orgContext.getDepartmentService().getBean(
-								dept.getParentId());
-						IDataQuery<Department> depts = orgContext
-								.getDepartmentService().queryChildren(dept,
-										null);
-						if (null != depts)
+						dept = orgContext.getDepartmentService().getBean(dept.getParentId());
+						final IDataQuery<Department> depts = orgContext.getDepartmentService()
+								.queryChildren(dept, null);
+						if (null != depts) {
 							while ((dept = depts.next()) != null) {
-								final Iterator<ID> users = users(roleId,
-										dept.getId(), variables);
+								final Iterator<ID> users = users(roleId, dept.getId(), variables);
 								while (users.hasNext()) {
-									participants.add(new Participant(users
-											.next(), roleId));
+									participants.add(new Participant(users.next(), roleId));
 								}
 							}
+						}
 					} else if (level.equals(Level.lower)) {// 下级
-						IDataQuery<Department> depts = orgContext
-								.getDepartmentService().queryChildren(dept,
-										null);
-						if (null != depts)
+						final IDataQuery<Department> depts = orgContext.getDepartmentService()
+								.queryChildren(dept, null);
+						if (null != depts) {
 							while ((dept = depts.next()) != null) {
-								final Iterator<ID> users = users(roleId,
-										dept.getId(), variables);
+								final Iterator<ID> users = users(roleId, dept.getId(), variables);
 								while (users.hasNext()) {
-									participants.add(new Participant(users
-											.next(), roleId));
+									participants.add(new Participant(users.next(), roleId));
 								}
 							}
+						}
 					} else if (level.equals(Level.higher)) {// 上级
-						final Iterator<ID> users = users(roleId,
-								dept.getParentId(), variables);
+						final Iterator<ID> users = users(roleId, dept.getParentId(), variables);
 						while (users.hasNext()) {
-							participants.add(new Participant(users.next(),
-									roleId));
+							participants.add(new Participant(users.next(), roleId));
 						}
 					}
 				}
@@ -123,8 +111,7 @@ public class WorkflowPermissionHandler extends OrganizationPermissionHandler
 	}
 
 	@Override
-	public Iterator<ID> getUsersOfDelegation(
-			final ProcessModelBean processModel,
+	public Iterator<ID> getUsersOfDelegation(final ProcessModelBean processModel,
 			final EDelegationSource source, final Map<String, String> filterMap) {
 		return null;
 	}

@@ -5,12 +5,12 @@ import java.util.Map;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.workflow.web.page.AbstractWorkflowFormTPage;
 
-public class FawenTestForm extends AbstractWorkflowFormTPage  {
+public class FawenTestForm extends AbstractWorkflowFormTPage {
 
 	@Override
-	public void bindVariables(PageParameter pp, Map<String, Object> variables) {
+	public void bindVariables(final PageParameter pp, final Map<String, Object> variables) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }
