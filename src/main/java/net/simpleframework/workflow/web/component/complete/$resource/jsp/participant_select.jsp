@@ -28,9 +28,9 @@
         r.push(o);
         o.participant_obj = p.next();
         var id = "";
-        o.participant_obj.select("input[type=checkbox], input[type=radio]").each(function(box) {
+        o.participant_obj.select("input[id]").each(function(box) {
           if (box.checked) {
-            id += ";" + box.value;
+            id += ";" + box.id;
           }
         });
         if (id.length > 0) {
