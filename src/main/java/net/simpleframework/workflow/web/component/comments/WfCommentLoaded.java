@@ -1,6 +1,7 @@
 package net.simpleframework.workflow.web.component.comments;
 
 import net.simpleframework.mvc.DefaultPageHandler;
+import net.simpleframework.mvc.PageParameter;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -10,4 +11,7 @@ import net.simpleframework.mvc.DefaultPageHandler;
  */
 public class WfCommentLoaded extends DefaultPageHandler {
 
+	@Override
+	public void onBeforeComponentRender(final PageParameter pp) {
+	}
 }
