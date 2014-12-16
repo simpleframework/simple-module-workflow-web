@@ -16,6 +16,12 @@ public class WorkitemCompleteBean extends AbstractComponentBean {
 	private String workitemIdParameterName = BeanDefaults.getString(getClass(),
 			"workitemIdParameterName", "workitemId");
 
+	/* 是否完成当前环节，当前环节可以不完成，而直接创建后续环节 */
+	private boolean bcomplete = true;
+
+	/* 选择参与者时用所在部门显示 */
+	private boolean dispWithDept;
+
 	/* 确认消息 */
 	private String confirmMessage;
 
@@ -39,6 +45,24 @@ public class WorkitemCompleteBean extends AbstractComponentBean {
 
 	public WorkitemCompleteBean setConfirmMessage(final String confirmMessage) {
 		this.confirmMessage = confirmMessage;
+		return this;
+	}
+
+	public boolean isBcomplete() {
+		return bcomplete;
+	}
+
+	public WorkitemCompleteBean setBcomplete(final boolean bcomplete) {
+		this.bcomplete = bcomplete;
+		return this;
+	}
+
+	public boolean isDispWithDept() {
+		return dispWithDept;
+	}
+
+	public WorkitemCompleteBean setDispWithDept(final boolean dispWithDept) {
+		this.dispWithDept = dispWithDept;
 		return this;
 	}
 

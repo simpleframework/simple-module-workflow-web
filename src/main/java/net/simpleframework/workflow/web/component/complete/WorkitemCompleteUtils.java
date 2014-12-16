@@ -12,6 +12,7 @@ import net.simpleframework.common.StringUtils;
 import net.simpleframework.common.logger.Log;
 import net.simpleframework.common.logger.LogFactory;
 import net.simpleframework.common.web.JavascriptUtils;
+import net.simpleframework.ctx.permission.PermissionUser;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.MVCUtils;
 import net.simpleframework.mvc.PageRequestResponse;
@@ -145,6 +146,7 @@ public class WorkitemCompleteUtils implements IWorkflowServiceAware {
 
 	public static String toParticipantsHTML(final ComponentParameter cp) {
 		final StringBuilder sb = new StringBuilder();
+		final boolean dispWithDept = (Boolean) cp.getBeanProperty("dispWithDept");
 		final WorkitemBean workitem = getWorkitemBean(cp);
 		final ActivityComplete activityComplete = getActivityComplete(cp, workitem);
 		for (final TransitionNode transition : WorkitemCompleteUtils.getTransitions(cp, workitem)) {
@@ -159,7 +161,10 @@ public class WorkitemCompleteUtils implements IWorkflowServiceAware {
 				for (final Participant participant : coll) {
 					sb.append("<div class='ritem'>");
 					final String id = participant.toString();
-					final Object user = permission.getUser(participant.userId);
+					Object user = permission.getUser(participant.userId);
+					if (dispWithDept) {
+						user = ((PermissionUser) user).toDeptText();
+					}
 					sb.append(multi ? new Checkbox(id, user) : new Radio(id, user).setName(transition
 							.getId()));
 					sb.append("</div>");
