@@ -43,13 +43,11 @@ public class PRelativeRoleHandler extends AbstractParticipantHandler {
 
 	@Override
 	public Collection<Participant> getParticipants(final IScriptEval script,
-			final Map<String, Object> variables) {
+			final ActivityComplete activityComplete, final Map<String, Object> variables) {
 		// TODO Auto-generated method stub
 		final ArrayList<Participant> participants = new ArrayList<Participant>();
 		// UserNode node = ((UserNode) ((TransitionNode)
 		// variables.get("transition")).to());
-		final ActivityComplete activityComplete = (ActivityComplete) variables
-				.get("activityComplete");
 		ActivityBean preActivity = activityComplete.getActivity();// 前一任务步骤实例
 		final UserNode.RuleRole rRole = (UserNode.RuleRole) getParticipantType(variables);
 		final Map<String, String> params = getParams(rRole.getParams());
