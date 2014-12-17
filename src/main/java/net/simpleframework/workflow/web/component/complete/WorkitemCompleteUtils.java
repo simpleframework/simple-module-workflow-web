@@ -11,6 +11,7 @@ import net.simpleframework.common.JsonUtils;
 import net.simpleframework.common.StringUtils;
 import net.simpleframework.common.logger.Log;
 import net.simpleframework.common.logger.LogFactory;
+import net.simpleframework.common.object.ObjectFactory.ObjectCreatorListener;
 import net.simpleframework.common.web.JavascriptUtils;
 import net.simpleframework.ctx.permission.PermissionUser;
 import net.simpleframework.mvc.JavascriptForward;
@@ -178,7 +179,12 @@ public class WorkitemCompleteUtils implements IWorkflowServiceAware {
 
 	static ActivityComplete getActivityComplete(final ComponentParameter cp,
 			final WorkitemBean workitem) {
-		return WorkitemComplete.get(workitem).getActivityComplete();
+		return WorkitemComplete.get(workitem).getActivityComplete(new ObjectCreatorListener() {
+			@Override
+			public void onCreated(final Object o) {
+				((ActivityComplete) o).setBcomplete((Boolean) cp.getBeanProperty("bcomplete"));
+			}
+		});
 	}
 
 	private static Log log = LogFactory.getLogger(WorkitemCompleteUtils.class);
