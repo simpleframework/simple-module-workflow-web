@@ -4,6 +4,7 @@ import static net.simpleframework.common.I18n.$m;
 import net.simpleframework.ctx.trans.Transaction;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageParameter;
+import net.simpleframework.mvc.common.element.ButtonElement;
 import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.InputElement;
 import net.simpleframework.mvc.common.element.RowField;
@@ -23,6 +24,7 @@ import net.simpleframework.workflow.engine.WorkitemBean;
 import net.simpleframework.workflow.engine.WorkitemComplete;
 import net.simpleframework.workflow.web.IWorkflowWebContext;
 import net.simpleframework.workflow.web.IWorkflowWebForm;
+import net.simpleframework.workflow.web.component.comments.WfCommentBean;
 import net.simpleframework.workflow.web.component.complete.WorkitemCompleteBean;
 import net.simpleframework.workflow.web.page.t1.WorkflowCompleteInfoPage;
 import net.simpleframework.workflow.web.page.t1.WorkflowFormPage;
@@ -56,6 +58,10 @@ public abstract class AbstractWorkflowFormTPage extends FormTableRowTemplatePage
 		if (workitem != null && !workitem.isReadMark()) {
 			wService.doReadMark(workitem);
 		}
+	}
+
+	protected WfCommentBean addWfCommentBean(final PageParameter pp) {
+		return addComponentBean(pp, "AbstractWorkflowFormPage_wfComment", WfCommentBean.class);
 	}
 
 	@Override
@@ -107,15 +113,21 @@ public abstract class AbstractWorkflowFormTPage extends FormTableRowTemplatePage
 		return ElementList.of(InputElement.hidden().setName("workitemId").setValue(pp));
 	}
 
+	protected ButtonElement createSaveBtn() {
+		return SAVE_BTN().setText($m("AbstractWorkflowFormPage.0")).setHighlight(false);
+	}
+
+	protected ButtonElement createCompleteBtn() {
+		return VALIDATION_BTN().setText($m("AbstractWorkflowFormPage.1")).setHighlight(true)
+				.setOnclick("$Actions['AbstractWorkflowFormPage_completeAction']();");
+	}
+
 	@Override
 	public ElementList getRightElements(final PageParameter pp) {
 		final WorkitemBean workitem = getWorkitemBean(pp);
 		final ElementList el = ElementList.of();
 		if (!isReadonly(workitem)) {
-			el.append(SAVE_BTN().setText($m("AbstractWorkflowFormPage.0")).setHighlight(false));
-			el.append(SpanElement.SPACE);
-			el.append(VALIDATION_BTN().setText($m("AbstractWorkflowFormPage.1")).setHighlight(true)
-					.setOnclick("$Actions['AbstractWorkflowFormPage_completeAction']();"));
+			el.append(createSaveBtn()).append(SpanElement.SPACE).append(createCompleteBtn());
 		}
 		return el;
 	}
