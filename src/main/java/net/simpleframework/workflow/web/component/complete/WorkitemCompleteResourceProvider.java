@@ -15,9 +15,4 @@ public class WorkitemCompleteResourceProvider extends AbstractComponentResourceP
 	public String[] getCssPath(final PageParameter pp) {
 		return new String[] { getCssResourceHomePath(pp) + "/workitem_complete.css" };
 	}
-
-	@Override
-	public String[] getJavascriptPath(final PageParameter pp) {
-		return new String[] { getResourceHomePath() + "/js/workitem_complete.js" };
-	}
 }

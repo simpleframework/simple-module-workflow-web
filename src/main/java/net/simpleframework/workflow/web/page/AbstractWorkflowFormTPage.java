@@ -24,7 +24,9 @@ import net.simpleframework.workflow.engine.WorkitemBean;
 import net.simpleframework.workflow.engine.WorkitemComplete;
 import net.simpleframework.workflow.web.IWorkflowWebContext;
 import net.simpleframework.workflow.web.IWorkflowWebForm;
+import net.simpleframework.workflow.web.component.comments.IWfCommentHandler;
 import net.simpleframework.workflow.web.component.comments.WfCommentBean;
+import net.simpleframework.workflow.web.component.comments.WfCommentUtils;
 import net.simpleframework.workflow.web.component.complete.WorkitemCompleteBean;
 import net.simpleframework.workflow.web.page.t1.WorkflowCompleteInfoPage;
 import net.simpleframework.workflow.web.page.t1.WorkflowFormPage;
@@ -74,6 +76,12 @@ public abstract class AbstractWorkflowFormTPage extends FormTableRowTemplatePage
 	protected void onSaveForm(final PageParameter pp, final WorkitemBean workitem) {
 		final ProcessBean process = getProcess(workitem);
 		pService.doUpdateTitle(process, pp.getParameter("wf_topic"));
+
+		// 添加了评论
+		final ComponentParameter nCP = WfCommentUtils.get(pp);
+		if (nCP.componentBean != null) {
+			((IWfCommentHandler) nCP.getComponentHandler()).onSave(nCP, getWorkitemBean(nCP));
+		}
 	}
 
 	@Override

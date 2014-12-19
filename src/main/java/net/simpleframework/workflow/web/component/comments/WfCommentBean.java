@@ -9,4 +9,19 @@ import net.simpleframework.mvc.component.AbstractContainerBean;
  *         http://www.simpleframework.net
  */
 public class WfCommentBean extends AbstractContainerBean {
+	/* 是否允许编辑 */
+	private boolean editable;
+
+	public WfCommentBean() {
+		setHandlerClass(DefaultWfCommentHandler.class);
+	}
+
+	public boolean isEditable() {
+		return editable;
+	}
+
+	public WfCommentBean setEditable(final boolean editable) {
+		this.editable = editable;
+		return this;
+	}
 }
