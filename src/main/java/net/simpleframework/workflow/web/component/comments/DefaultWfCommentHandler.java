@@ -53,7 +53,12 @@ public class DefaultWfCommentHandler extends ComponentHandlerEx implements IWfCo
 	}
 
 	protected InputElement createCommentTa(final WorkitemBean workitem) {
-		return InputElement.textarea().setRows(3).setName("ta_wfcomment");
+		final InputElement ele = InputElement.textarea().setRows(3).setName("ta_wfcomment");
+		final WfComment bean = workflowContext.getCommentService().getCurComment(workitem);
+		if (bean != null) {
+			ele.setValue(bean.getCcomment());
+		}
+		return ele;
 	}
 
 	@Override
