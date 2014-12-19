@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.Map;
 
 import net.simpleframework.ado.query.IDataQuery;
+import net.simpleframework.common.StringUtils;
 import net.simpleframework.mvc.common.element.InputElement;
 import net.simpleframework.mvc.component.ComponentHandlerEx;
 import net.simpleframework.mvc.component.ComponentParameter;
@@ -29,6 +30,9 @@ public class DefaultWfCommentHandler extends ComponentHandlerEx implements IWfCo
 	@Override
 	public void onSave(final ComponentParameter cp, final WorkitemBean workitem) {
 		final String ccomment = cp.getParameter("ta_wfcomment");
+		if (!StringUtils.hasText(ccomment)) {
+			return;
+		}
 		final IWfCommentService cService = workflowContext.getCommentService();
 		WfComment bean = cService.getCurComment(workitem);
 		if (bean == null) {
