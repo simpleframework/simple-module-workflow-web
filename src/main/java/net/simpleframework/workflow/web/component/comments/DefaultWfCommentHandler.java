@@ -24,7 +24,7 @@ public class DefaultWfCommentHandler extends ComponentHandlerEx implements IWfCo
 
 	@Override
 	public IDataQuery<WfComment> comments(final ComponentParameter cp, final WorkitemBean workitem) {
-		return null;
+		return workflowContext.getCommentService().queryComments(workitem.getProcessId());
 	}
 
 	@Override
@@ -65,6 +65,18 @@ public class DefaultWfCommentHandler extends ComponentHandlerEx implements IWfCo
 	public String toHTML(final ComponentParameter cp, final WorkitemBean workitem) {
 		final StringBuilder sb = new StringBuilder();
 		sb.append(createCommentTa(workitem));
+		sb.append("<div class='btns'>");
+		sb.append("	<a>常用意见</a>");
+		sb.append("</div>");
+		sb.append("<div>");
+		final IDataQuery<WfComment> dq = comments(cp, workitem);
+		WfComment comment;
+		while ((comment = dq.next()) != null) {
+			sb.append("<div>");
+			sb.append(comment.getCcomment());
+			sb.append("</div>");
+		}
+		sb.append("</div>");
 		return sb.toString();
 	}
 

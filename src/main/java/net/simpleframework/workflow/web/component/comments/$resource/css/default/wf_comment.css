@@ -1,7 +1,25 @@
+.FormTableRowTemplatePage .wf_comment {
+  padding: 2px;
+}
 
 .FormTableRowTemplatePage .wf_comment textarea {
   background-color: #fdfdfd;
   border: 1px solid #eee;
-  margin: 2px;
   padding: 2px;
+}
+
+.FormTableRowTemplatePage .wf_comment .btns {
+  padding: 4px;
+}
+
+.FormTableRowTemplatePage .wf_comment .btns a {
+  background-color: #456;
+  color: #fff;
+  display: inline-block;
+  padding: 2px 10px;
+  text-decoration: none;
+}
+
+.FormTableRowTemplatePage .wf_comment .btns a:HOVER {
+  background-color: #678;
 }
