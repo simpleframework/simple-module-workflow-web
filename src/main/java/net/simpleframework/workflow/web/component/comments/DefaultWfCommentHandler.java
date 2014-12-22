@@ -63,15 +63,21 @@ public class DefaultWfCommentHandler extends ComponentHandlerEx implements IWfCo
 
 	@Override
 	public String toHTML(final ComponentParameter cp, final WorkitemBean workitem) {
+		final String commentName = cp.getComponentName();
+
 		final StringBuilder sb = new StringBuilder();
 		sb.append(createCommentTa(workitem));
 		sb.append("<div class='btns'>");
-		sb.append("	<a>常用意见</a>");
+		sb.append("	<a onclick=\"$Actions['").append(commentName).append("_log_popup']();\">+意见</a>");
 		sb.append("</div>");
 		sb.append("<div>");
 		final IDataQuery<WfComment> dq = comments(cp, workitem);
+		final WfComment comment2 = workflowContext.getCommentService().getCurComment(workitem);
 		WfComment comment;
 		while ((comment = dq.next()) != null) {
+			if (comment2 != null && comment2.equals(comment)) {
+				continue;
+			}
 			sb.append("<div>");
 			sb.append(comment.getCcomment());
 			sb.append("</div>");
