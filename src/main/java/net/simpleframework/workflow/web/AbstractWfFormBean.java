@@ -4,7 +4,7 @@ import net.simpleframework.ado.bean.AbstractDateAwareBean;
 import net.simpleframework.ado.bean.IDescriptionBeanAware;
 import net.simpleframework.common.ID;
 
-public class AbstractWfFormBean extends AbstractDateAwareBean
+public abstract class AbstractWfFormBean extends AbstractDateAwareBean
 implements IDescriptionBeanAware  {
 	private String description;
 
