@@ -23,3 +23,28 @@
 .FormTableRowTemplatePage .wf_comment .btns a:HOVER {
   background-color: #68a;
 }
+
+.cl_tabs {
+  border-bottom: 1px solid #ccc;
+  background-color: #f5f5ff;
+  text-align: right;
+  padding: 5px 10px 0;
+}
+
+.cl_tabs a {
+  display: inline-block;
+  border: 1px solid #ccc;
+  margin: 0 -1px -1px 0;
+  background-color: #eee;
+  padding: 1px 10px;
+  text-decoration: none;
+}
+
+.cl_tabs a.active {
+  background-color: #fff;
+  border-bottom-color: #fff;
+  padding-top: 3px;
+  -moz-border-radius: 2px 2px 0 0;
+	-webkit-border-radius: 2px 2px 0 0;
+	border-radius: 2px 2px 0 0;
+}

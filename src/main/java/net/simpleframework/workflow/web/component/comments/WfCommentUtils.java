@@ -23,4 +23,8 @@ public abstract class WfCommentUtils {
 	public static ComponentParameter get(final PageRequestResponse rRequest) {
 		return ComponentParameter.get(rRequest, BEAN_ID);
 	}
+
+	public static String toLogsHTML(final ComponentParameter cp) {
+		return "";
+	}
 }

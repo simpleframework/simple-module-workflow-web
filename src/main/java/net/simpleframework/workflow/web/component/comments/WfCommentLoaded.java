@@ -23,9 +23,10 @@ public class WfCommentLoaded extends DefaultPageHandler {
 		final String commentName = nCP.getComponentName();
 
 		pp.addComponentBean(commentName + "_logPage", AjaxRequestBean.class).setUrlForward(
-				pp.getResourceHomePath(WfCommentLoaded.class) + "/jsp/wf_comment_log.jsp");
+				pp.getResourceHomePath(WfCommentLoaded.class) + "/jsp/wf_comment_log.jsp?"
+						+ WfCommentUtils.BEAN_ID + "=" + nCP.hashId());
 		pp.addComponentBean(commentName + "_log_popup", WindowBean.class)
 				.setContentRef(commentName + "_logPage").setPopup(true)
-				.setTitle($m("WfCommentLoaded.0"));
+				.setTitle($m("WfCommentLoaded.0")).setHeight(420).setWidth(320);
 	}
 }
