@@ -14,3 +14,7 @@
 .AbstractAbortPage .c {
   line-height: 2.4;
 }
+
+.tablepager .simple_progress {
+  width: 95%;
+}

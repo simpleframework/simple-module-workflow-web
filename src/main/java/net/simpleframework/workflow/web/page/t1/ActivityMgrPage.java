@@ -5,11 +5,13 @@ import static net.simpleframework.common.I18n.$m;
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 import net.simpleframework.ado.query.IDataQuery;
 import net.simpleframework.ado.query.ListDataQuery;
 import net.simpleframework.common.Convert;
+import net.simpleframework.common.DateUtils;
 import net.simpleframework.common.StringUtils;
 import net.simpleframework.common.coll.KVMap;
 import net.simpleframework.mvc.AbstractMVCPage;
@@ -21,6 +23,7 @@ import net.simpleframework.mvc.common.element.ETextAlign;
 import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.InputElement;
 import net.simpleframework.mvc.common.element.LinkElement;
+import net.simpleframework.mvc.common.element.ProgressElement;
 import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.common.element.TabButton;
 import net.simpleframework.mvc.common.element.TabButtons;
@@ -39,6 +42,7 @@ import net.simpleframework.workflow.engine.EActivityAbortPolicy;
 import net.simpleframework.workflow.engine.EActivityStatus;
 import net.simpleframework.workflow.engine.EProcessStatus;
 import net.simpleframework.workflow.engine.ProcessBean;
+import net.simpleframework.workflow.engine.participant.Participant;
 import net.simpleframework.workflow.schema.AbstractTaskNode;
 import net.simpleframework.workflow.web.WorkflowLogRef.ActivityUpdateLogPage;
 import net.simpleframework.workflow.web.page.WorkflowUtils;
@@ -132,7 +136,17 @@ public class ActivityMgrPage extends AbstractWorkflowMgrPage {
 		public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
 			final ProcessBean process = getProcessBean(cp);
 			cp.addFormParameter("processId", process.getId());
-			return new ListDataQuery<ActivityBean>(aService.getActivities(process));
+			final List<ActivityBean> list = aService.getActivities(process);
+			long max = 0;
+			for (final ActivityBean activity : list) {
+				Date completeDate = activity.getCompleteDate();
+				if (completeDate == null) {
+					completeDate = new Date();
+				}
+				max = Math.max(max, completeDate.getTime() - activity.getCreateDate().getTime());
+			}
+			cp.setRequestAttr("relative_date", max);
+			return new ListDataQuery<ActivityBean>(list);
 		}
 
 		protected Object toTasknode(final ActivityBean activity) {
@@ -156,8 +170,20 @@ public class ActivityMgrPage extends AbstractWorkflowMgrPage {
 			}
 			row.add("participants", getParticipants(activity, false));
 			row.add("participants2", getParticipants(activity, true));
-			row.add("createDate", activity.getCreateDate());
-			row.add("completeDate", activity.getCompleteDate());
+
+			final Date createDate = activity.getCreateDate();
+			row.add("createDate", createDate);
+			Date completeDate = activity.getCompleteDate();
+			row.add("completeDate", completeDate);
+			final Long l = (Long) cp.getRequestAttr("relative_date");
+			if (l != null) {
+				if (completeDate == null) {
+					completeDate = new Date();
+				}
+				final long l0 = (completeDate.getTime() - createDate.getTime());
+				row.add("relativeDate",
+						new ProgressElement(l0 / l).setText(DateUtils.toDifferenceDate(l0)));
+			}
 			Date timeoutDate;
 			if ((timeoutDate = activity.getTimeoutDate()) != null) {
 				final Calendar tCal = Calendar.getInstance();
@@ -184,9 +210,16 @@ public class ActivityMgrPage extends AbstractWorkflowMgrPage {
 		}
 
 		private String getParticipants(final ActivityBean activity, final boolean b) {
-			return StringUtils.join(
-					(b ? aService.getParticipants2(activity) : aService.getParticipants(activity, true))
-							.values(), ", ");
+			final StringBuilder sb = new StringBuilder();
+			int i = 0;
+			for (final Participant p : (b ? aService.getParticipants2(activity) : aService
+					.getParticipants(activity, true))) {
+				if (i++ > 0) {
+					sb.append(", ");
+				}
+				sb.append(permission.getUser(p.userId).getText());
+			}
+			return sb.toString();
 		}
 
 		@Override
@@ -269,5 +302,9 @@ public class ActivityMgrPage extends AbstractWorkflowMgrPage {
 	static TablePagerColumn TC_TIMEOUT() {
 		return new TablePagerColumn("timeoutDate", $m("ActivityMgrPage.5"), 105).setPropertyClass(
 				Date.class).setFilter(false);
+	}
+
+	static TablePagerColumn TC_RELATIVEDATE() {
+		return new TablePagerColumn("relativeDate", $m("ActivityMgrPage.6"), 70).setFilter(false);
 	}
 }

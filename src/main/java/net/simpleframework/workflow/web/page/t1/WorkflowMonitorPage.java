@@ -18,7 +18,6 @@ import net.simpleframework.mvc.component.ui.menu.MenuItem;
 import net.simpleframework.mvc.component.ui.menu.MenuItems;
 import net.simpleframework.mvc.component.ui.pager.EPagerBarLayout;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
-import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
 import net.simpleframework.workflow.engine.ActivityBean;
 import net.simpleframework.workflow.engine.EActivityStatus;
 import net.simpleframework.workflow.engine.ProcessBean;
@@ -64,8 +63,8 @@ public class WorkflowMonitorPage extends AbstractWorkflowFormPage {
 				.addColumn(ActivityMgrPage.TC_PARTICIPANTS2())
 				.addColumn(AbstractWorkflowMgrPage.TC_CREATEDATE())
 				.addColumn(AbstractWorkflowMgrPage.TC_COMPLETEDATE())
-				.addColumn(ActivityMgrPage.TC_TIMEOUT()).addColumn(ActivityMgrPage.TC_PREVIOUS())
-				.addColumn(TablePagerColumn.OPE().setWidth(70));
+				.addColumn(ActivityMgrPage.TC_RELATIVEDATE()).addColumn(ActivityMgrPage.TC_TIMEOUT())
+				.addColumn(ActivityMgrPage.TC_PREVIOUS());
 		return tablePager;
 	}
 

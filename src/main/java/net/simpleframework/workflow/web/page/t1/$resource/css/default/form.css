@@ -59,3 +59,7 @@
   background-color: #fff;
   border-right-color: #fff;
 }
+
+.tablepager .simple_progress {
+  width: 95%;
+}
