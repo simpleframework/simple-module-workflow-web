@@ -137,6 +137,11 @@ public class ActivityMgrPage extends AbstractWorkflowMgrPage {
 			final ProcessBean process = getProcessBean(cp);
 			cp.addFormParameter("processId", process.getId());
 			final List<ActivityBean> list = aService.getActivities(process);
+			setRelativeDate(cp, list);
+			return new ListDataQuery<ActivityBean>(list);
+		}
+
+		protected void setRelativeDate(final ComponentParameter cp, final List<ActivityBean> list) {
 			long max = 0;
 			for (final ActivityBean activity : list) {
 				Date completeDate = activity.getCompleteDate();
@@ -146,7 +151,6 @@ public class ActivityMgrPage extends AbstractWorkflowMgrPage {
 				max = Math.max(max, completeDate.getTime() - activity.getCreateDate().getTime());
 			}
 			cp.setRequestAttr("relative_date", max);
-			return new ListDataQuery<ActivityBean>(list);
 		}
 
 		protected Object toTasknode(final ActivityBean activity) {
@@ -182,7 +186,7 @@ public class ActivityMgrPage extends AbstractWorkflowMgrPage {
 				}
 				final long l0 = (completeDate.getTime() - createDate.getTime());
 				row.add("relativeDate",
-						new ProgressElement(l0 / l).setText(DateUtils.toDifferenceDate(l0)));
+						new ProgressElement((double) l0 / l).setText(DateUtils.toDifferenceDate(l0)));
 			}
 			Date timeoutDate;
 			if ((timeoutDate = activity.getTimeoutDate()) != null) {

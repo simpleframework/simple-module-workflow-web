@@ -1,5 +1,7 @@
 package net.simpleframework.workflow.web.page.t1;
 
+import java.util.List;
+
 import net.simpleframework.ado.query.IDataQuery;
 import net.simpleframework.ado.query.ListDataQuery;
 import net.simpleframework.common.StringUtils;
@@ -61,8 +63,12 @@ public class WorkflowGraphMonitorPage extends WorkflowMonitorPage {
 			}
 			final String taskid = cp.getParameter("taskid");
 			cp.addFormParameter("taskid", taskid);
-			return StringUtils.hasText(taskid) ? new ListDataQuery<ActivityBean>(
-					aService.getActivities(process, taskid)) : null;
+			if (StringUtils.hasText(taskid)) {
+				final List<ActivityBean> list = aService.getActivities(process, taskid);
+				setRelativeDate(cp, list);
+				return new ListDataQuery<ActivityBean>(list);
+			}
+			return null;
 		}
 	}
 }

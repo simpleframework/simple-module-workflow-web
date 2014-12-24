@@ -1,6 +1,7 @@
 package net.simpleframework.workflow.web.page.t1;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 import net.simpleframework.ado.query.IDataQuery;
@@ -58,8 +59,12 @@ public class ActivityGraphMgrPage extends ActivityMgrPage {
 			}
 			final String taskid = cp.getParameter("taskid");
 			cp.addFormParameter("taskid", taskid);
-			return StringUtils.hasText(taskid) ? new ListDataQuery<ActivityBean>(
-					aService.getActivities(process, taskid)) : null;
+			if (StringUtils.hasText(taskid)) {
+				final List<ActivityBean> list = aService.getActivities(process, taskid);
+				setRelativeDate(cp, list);
+				return new ListDataQuery<ActivityBean>(list);
+			}
+			return null;
 		}
 	}
 }
