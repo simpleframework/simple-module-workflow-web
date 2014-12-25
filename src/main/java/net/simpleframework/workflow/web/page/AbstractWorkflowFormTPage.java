@@ -167,7 +167,7 @@ public abstract class AbstractWorkflowFormTPage extends FormTableRowTemplatePage
 		return tableRows != null ? tableRows.toString() : "";
 	}
 
-	private boolean isReadonly(final WorkitemBean workitem) {
+	protected boolean isReadonly(final WorkitemBean workitem) {
 		final EWorkitemStatus status = workitem.getStatus();
 		return status != EWorkitemStatus.running && status != EWorkitemStatus.suspended
 				&& status != EWorkitemStatus.delegate;
