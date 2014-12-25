@@ -73,7 +73,7 @@ public abstract class AbstractWorkflowFormTPage extends FormTableRowTemplatePage
 	}
 
 	@Transaction(context = IWorkflowContext.class)
-	protected void onSaveForm(final PageParameter pp, final WorkitemBean workitem) {
+	public void onSaveForm(final PageParameter pp, final WorkitemBean workitem) {
 		final ProcessBean process = getProcess(workitem);
 		pService.doUpdateTitle(process, pp.getParameter("wf_topic"));
 

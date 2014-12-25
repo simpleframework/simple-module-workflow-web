@@ -16,7 +16,7 @@ import net.simpleframework.workflow.web.page.AbstractWorkflowFormTPage;
 public class TestForm extends AbstractWorkflowFormTPage {
 
 	@Override
-	protected void onSaveForm(final PageParameter pp, final WorkitemBean workitem) {
+	public void onSaveForm(final PageParameter pp, final WorkitemBean workitem) {
 		super.onSaveForm(pp, workitem);
 	}
 
