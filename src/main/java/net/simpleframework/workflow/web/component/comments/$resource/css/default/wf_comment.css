@@ -24,6 +24,12 @@
   background-color: #79b;
 }
 
+.wf_comment_log {
+  -moz-user-select: none;  
+	-webkit-user-select: none;  
+	-ms-user-select: none;
+}
+
 .cl_tabs {
   border-bottom: 1px solid #ccc;
   background-color: #def;
@@ -45,6 +51,21 @@
   border-bottom-color: #fff;
   padding-top: 3px;
   -moz-border-radius: 2px 2px 0 0;
-	-webkit-border-radius: 2px 2px 0 0;
-	border-radius: 2px 2px 0 0;
+  -webkit-border-radius: 2px 2px 0 0;
+  border-radius: 2px 2px 0 0;
+}
+
+.cl_list .litem {
+  border-top: 1px solid #ccc;
+  margin-top: -1px;
+  padding: 8px;
+}
+
+.cl_list .litem:HOVER {
+  background-color: #f4f4f4;
+}
+
+.cl_list .litem .l2 {
+  color: #777;
+  text-align: right;
 }
