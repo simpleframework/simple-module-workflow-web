@@ -13,7 +13,7 @@
 }
 
 .FormTableRowTemplatePage .wf_comment .btns a {
-  background-color: #579;
+  background-color: #68a;
   color: #fff;
   display: inline-block;
   padding: 2px 10px;
@@ -21,12 +21,12 @@
 }
 
 .FormTableRowTemplatePage .wf_comment .btns a:HOVER {
-  background-color: #68a;
+  background-color: #79b;
 }
 
 .cl_tabs {
   border-bottom: 1px solid #ccc;
-  background-color: #f5f5ff;
+  background-color: #def;
   text-align: right;
   padding: 5px 10px 0;
 }
