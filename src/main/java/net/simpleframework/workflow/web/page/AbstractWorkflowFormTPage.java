@@ -147,11 +147,11 @@ public abstract class AbstractWorkflowFormTPage extends FormTableRowTemplatePage
 		return true;
 	}
 
-	protected InputElement getInput_topic(final PageParameter pp){
+	protected InputElement getInput_topic(final PageParameter pp) {
 		return new InputElement("wf_topic");
 	}
 
-	protected InputElement getInput_description(final PageParameter pp){
+	protected InputElement getInput_description(final PageParameter pp) {
 		return InputElement.textarea("wf_description").setRows(5);
 	}
 
@@ -159,7 +159,8 @@ public abstract class AbstractWorkflowFormTPage extends FormTableRowTemplatePage
 	protected TableRows getTableRows(final PageParameter pp) {
 		final ProcessBean process = getProcess(pp);
 
-		final TableRow r1 = new TableRow(new RowField($m("AbstractWorkflowFormPage.2"), getInput_topic(pp).setText(process.getTitle())));
+		final TableRow r1 = new TableRow(new RowField($m("AbstractWorkflowFormPage.2"),
+				getInput_topic(pp).setText(process.getTitle())));
 		final TableRow r2 = new TableRow(new RowField($m("AbstractWorkflowFormPage.3"),
 				getInput_description(pp)));
 		return TableRows.of(r1, r2);
