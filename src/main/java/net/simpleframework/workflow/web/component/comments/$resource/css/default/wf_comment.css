@@ -25,16 +25,16 @@
 }
 
 .wf_comment_log {
-  -moz-user-select: none;  
-	-webkit-user-select: none;  
-	-ms-user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
 }
 
 .cl_tabs {
   border-bottom: 1px solid #ccc;
   background-color: #def;
   text-align: right;
-  padding: 5px 10px 0;
+  padding: 4px 24px 0;
 }
 
 .cl_tabs a {
@@ -55,14 +55,37 @@
   border-radius: 2px 2px 0 0;
 }
 
+.cl_list {
+  overflow: auto;
+}
+
 .cl_list .litem {
-  border-top: 1px solid #ccc;
-  margin-top: -1px;
+  border-bottom: 1px solid #ddd;
   padding: 6px 8px;
+  position: relative;
 }
 
 .cl_list .litem:HOVER {
   background-color: #f4f4f4;
+}
+
+.cl_list .litem .del {
+  display: inline-block;
+  background: url(images/delete.gif) no-repeat 0 0;
+  height: 12px;
+  width: 12px;
+  right: 6px;
+  top: 6px;
+  position: absolute;
+  cursor: pointer;
+}
+
+.cl_list .litem .del:HOVER {
+  background-image: url(images/delete_hover.gif);
+}
+
+.cl_list .litem .l1 {
+  padding-right: 25px;
 }
 
 .cl_list .litem .l2 {

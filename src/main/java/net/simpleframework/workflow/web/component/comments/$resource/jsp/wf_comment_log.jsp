@@ -2,19 +2,20 @@
 <%@ page import="net.simpleframework.mvc.component.ComponentParameter"%>
 <%@ page import="net.simpleframework.workflow.web.component.comments.WfCommentUtils"%>
 <%
-	ComponentParameter cp = WfCommentUtils.get(request, response);
+  final ComponentParameter cp = WfCommentUtils.get(request, response);
 	final String commentName = cp.getComponentName();
 %>
-<div class="wf_comment_log">
-  <div class="cl_tabs">
-    <a class="active" onclick="wf_comment_logtab(this, 'lt=collection');">#(wf_comment_log.0)</a><a 
-      onclick="wf_comment_logtab(this, 'lt=history');">#(wf_comment_log.1)</a>
-  </div>
-  <div class="cl_list">
-    <%=WfCommentUtils.toLogsHTML(cp)%>
-  </div>
-</div>
 <script type="text/javascript">
+  function wf_comment_init() {
+    var c = $Actions['<%=commentName%>_log_popup'].window.content;
+    
+    c.select(".litem").invoke("observe", "mouseenter", function(evn) {
+      $(this).down(".del").show();
+    }).invoke("observe", "mouseleave", function(evn) {
+      $(this).down(".del").hide();
+    });
+  }
+  
   function wf_comment_logtab(o, params) {
     var act = $Actions['<%=commentName%>_logTab'];
     act.jsCompleteCallback = function(req, responseText) {
@@ -34,4 +35,40 @@
     $Actions.setValue(ta, $(o).down(".l1").innerHTML);
     act.close();
   }
+  
+  function wf_comment_itemdel(o, params) {
+    if (!confirm('#(wf_comment_log.2)')) {
+      return;
+    }
+    var act = $Actions['<%=commentName%>_logDel'];
+    act.jsCompleteCallback = function(req, responseText) {
+      if (responseText == 'true')
+      	$(o).up(".litem").remove();
+    };
+    act(params);
+  }
+</script>
+<div class="wf_comment_log">
+  <div class="cl_tabs">
+    <a class="active" onclick="wf_comment_logtab(this, 'lt=collection');">#(wf_comment_log.0)</a><a 
+      onclick="wf_comment_logtab(this, 'lt=history');">#(wf_comment_log.1)</a>
+  </div>
+  <div class="cl_list">
+    <%=WfCommentUtils.toLogsHTML(cp)%>
+  </div>
+</div>
+<script type="text/javascript">
+  $ready(function() {
+    var w = $Actions['<%=commentName%>_log_popup'].window;
+    var c = w.content;
+    c.setStyle("overflow:hidden;");
+
+    var t = c.down(".cl_list");
+    var s = function() {
+      var h = w.getSize(true).height;
+      t.setStyle('height: ' + (h - 28) + 'px;');
+    };
+    s();
+    w.observe("resize:ended", s);
+  });
 </script>

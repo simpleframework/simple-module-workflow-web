@@ -62,7 +62,8 @@ public class DefaultWfCommentHandler extends ComponentHandlerEx implements IWfCo
 
 		if (cp.getBoolParameter("cb_wfcomment")) {
 			final IWfCommentLogService lService = workflowContext.getCommentLogService();
-			final WfCommentLog log = lService.getLog(comment, ELogType.collection);
+			final WfCommentLog log = lService.getLog(comment.getUserId(), comment.getCcomment(),
+					ELogType.collection);
 			if (log == null) {
 				lService.insertLog(comment, ELogType.collection);
 			}

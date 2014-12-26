@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 import net.simpleframework.ado.query.IDataQuery;
 import net.simpleframework.common.DateUtils;
 import net.simpleframework.mvc.PageRequestResponse;
+import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.workflow.engine.IWorkflowContextAware;
 import net.simpleframework.workflow.engine.ext.IWfCommentLogService;
@@ -53,8 +54,11 @@ public abstract class WfCommentUtils implements IWorkflowContextAware {
 				sb.append(comment.getTaskname()).append($m("WfCommentUtils.0"));
 			}
 			sb.append(DateUtils.getRelativeDate(log.getCreateDate())).append("</div>");
+			sb.append(new SpanElement().setClassName("del").setStyle("display:none;")
+					.setOnclick("wf_comment_itemdel(this, 'logid=" + log.getId() + "');"));
 			sb.append("</div>");
 		}
+		sb.append("<script type='text/javascript'>wf_comment_init();</script>");
 		return sb.toString();
 	}
 }
