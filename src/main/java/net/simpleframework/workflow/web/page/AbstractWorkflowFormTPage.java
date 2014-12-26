@@ -178,34 +178,46 @@ public abstract class AbstractWorkflowFormTPage extends FormTableRowTemplatePage
 	protected WorkitemBean getWorkitemBean(final PageParameter pp) {
 		return WorkflowUtils.getWorkitemBean(pp);
 	}
-	
+
 	protected ProcessNode getProcessNode(final PageParameter pp) {
 		final WorkitemBean workitem = getWorkitemBean(pp);
-		if(null==workitem) return null;
+		if (null == workitem) {
+			return null;
+		}
 		ProcessNode pn = (ProcessNode) pp.getRequestAttr("$ProcessNode");
-		if(null!=pn) return pn;
+		if (null != pn) {
+			return pn;
+		}
 		pn = pService.getProcessDocument(getProcess(pp)).getProcessNode();
-		pp.setRequestAttr("$ProcessNode",pn);
+		pp.setRequestAttr("$ProcessNode", pn);
 		return pn;
 	}
-	
+
 	protected AbstractTaskNode getTaskNode(final PageParameter pp) {
 		final WorkitemBean workitem = getWorkitemBean(pp);
-		if(null==workitem) return null;
+		if (null == workitem) {
+			return null;
+		}
 		AbstractTaskNode tn = (AbstractTaskNode) pp.getRequestAttr("$TaskNode");
-		if(null!=tn) return tn;
+		if (null != tn) {
+			return tn;
+		}
 		tn = aService.getTaskNode(wService.getActivity(workitem));
-		pp.setRequestAttr("$TaskNode",tn);
+		pp.setRequestAttr("$TaskNode", tn);
 		return tn;
 	}
-	
-	protected String getProcessProperty(final PageParameter pp,String key) {
-		if(null==getProcessNode(pp)) return null;
+
+	protected String getProcessProperty(final PageParameter pp, final String key) {
+		if (null == getProcessNode(pp)) {
+			return null;
+		}
 		return getProcessNode(pp).getProperty(key);
 	}
-	
-	protected String getTaskNodeProperty(final PageParameter pp,String key) {
-		if(null==getTaskNode(pp)) return null;
+
+	protected String getTaskNodeProperty(final PageParameter pp, final String key) {
+		if (null == getTaskNode(pp)) {
+			return null;
+		}
 		return getTaskNode(pp).getProperty(key);
 	}
 }

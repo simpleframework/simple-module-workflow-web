@@ -1,17 +1,25 @@
 package net.simpleframework.workflow.web.component.comments;
 
+import static net.simpleframework.common.I18n.$m;
+
 import java.util.Date;
 import java.util.Map;
 
 import net.simpleframework.ado.query.IDataQuery;
 import net.simpleframework.common.StringUtils;
+import net.simpleframework.mvc.common.element.Checkbox;
 import net.simpleframework.mvc.common.element.InputElement;
+import net.simpleframework.mvc.common.element.LinkElement;
+import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.component.ComponentHandlerEx;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.workflow.engine.IWorkflowContextAware;
 import net.simpleframework.workflow.engine.WorkitemBean;
+import net.simpleframework.workflow.engine.ext.IWfCommentLogService;
 import net.simpleframework.workflow.engine.ext.IWfCommentService;
 import net.simpleframework.workflow.engine.ext.WfComment;
+import net.simpleframework.workflow.engine.ext.WfCommentLog;
+import net.simpleframework.workflow.engine.ext.WfCommentLog.ELogType;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -33,22 +41,31 @@ public class DefaultWfCommentHandler extends ComponentHandlerEx implements IWfCo
 		if (!StringUtils.hasText(ccomment)) {
 			return;
 		}
+
 		final IWfCommentService cService = workflowContext.getCommentService();
-		WfComment bean = cService.getCurComment(workitem);
-		if (bean == null) {
-			bean = cService.createBean();
-			bean.setCreateDate(new Date());
-			bean.setUserId(workitem.getUserId2());
-			bean.setContentId(workitem.getProcessId());
-			bean.setWorkitemId(workitem.getId());
-			bean.setDeptId(workitem.getDeptId());
-			bean.setTaskname(workflowContext.getWorkitemService().getActivity(workitem)
+		WfComment comment = cService.getCurComment(workitem);
+		if (comment == null) {
+			comment = cService.createBean();
+			comment.setCreateDate(new Date());
+			comment.setUserId(workitem.getUserId2());
+			comment.setContentId(workitem.getProcessId());
+			comment.setWorkitemId(workitem.getId());
+			comment.setDeptId(workitem.getDeptId());
+			comment.setTaskname(workflowContext.getWorkitemService().getActivity(workitem)
 					.getTasknodeText());
-			bean.setCcomment(ccomment);
-			cService.insert(bean);
+			comment.setCcomment(ccomment);
+			cService.insert(comment);
 		} else {
-			bean.setCcomment(ccomment);
-			cService.update(new String[] { "ccomment" }, bean);
+			comment.setCcomment(ccomment);
+			cService.update(new String[] { "ccomment" }, comment);
+		}
+
+		if (cp.getBoolParameter("cb_wfcomment")) {
+			final IWfCommentLogService lService = workflowContext.getCommentLogService();
+			final WfCommentLog log = lService.getLog(comment, ELogType.collection);
+			if (log == null) {
+				lService.insertLog(comment, ELogType.collection);
+			}
 		}
 	}
 
@@ -64,11 +81,14 @@ public class DefaultWfCommentHandler extends ComponentHandlerEx implements IWfCo
 	@Override
 	public String toHTML(final ComponentParameter cp, final WorkitemBean workitem) {
 		final String commentName = cp.getComponentName();
-
 		final StringBuilder sb = new StringBuilder();
 		sb.append(createCommentTa(workitem));
 		sb.append("<div class='btns'>");
-		sb.append("	<a onclick=\"$Actions['").append(commentName).append("_log_popup']();\">+意见</a>");
+		sb.append(new LinkElement($m("DefaultWfCommentHandler.0")).setOnclick("$Actions['"
+				+ commentName + "_log_popup']();"));
+		sb.append(SpanElement.SPACE15).append(
+				new Checkbox("id" + commentName + "_addCheck", $m("DefaultWfCommentHandler.1"))
+						.setName("cb_wfcomment").setValue("true"));
 		sb.append("</div>");
 		sb.append("<div>");
 		final IDataQuery<WfComment> dq = comments(cp, workitem);
