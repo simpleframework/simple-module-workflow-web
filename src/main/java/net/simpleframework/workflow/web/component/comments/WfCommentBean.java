@@ -10,7 +10,7 @@ import net.simpleframework.mvc.component.AbstractContainerBean;
  */
 public class WfCommentBean extends AbstractContainerBean {
 	/* 是否允许编辑 */
-	private boolean editable;
+	private boolean editable = true;
 
 	public WfCommentBean() {
 		setHandlerClass(DefaultWfCommentHandler.class);

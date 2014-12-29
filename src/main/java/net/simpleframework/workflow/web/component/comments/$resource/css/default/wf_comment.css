@@ -17,11 +17,31 @@
   color: #fff;
   display: inline-block;
   padding: 2px 10px;
+  line-height: 1.4;
   text-decoration: none;
 }
 
 .FormTableRowTemplatePage .wf_comment .btns a:HOVER {
   background-color: #f72;
+}
+
+.comment-item {
+  border-top: 1px dashed #ccc;
+  padding: 6px 0;
+}
+
+.comment-item.item-first {
+  border-top: 0;
+}
+
+.comment-item .i1 {
+  font-size: 9.5pt;
+}
+
+.comment-item .i2 {
+  color: #777;
+  text-align: right;
+  padding-top: 8px;
 }
 
 .wf_comment_log {

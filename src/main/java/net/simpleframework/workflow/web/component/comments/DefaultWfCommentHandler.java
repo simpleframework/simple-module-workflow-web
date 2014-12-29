@@ -6,11 +6,12 @@ import java.util.Date;
 import java.util.Map;
 
 import net.simpleframework.ado.query.IDataQuery;
+import net.simpleframework.common.DateUtils;
 import net.simpleframework.common.StringUtils;
+import net.simpleframework.common.web.html.HtmlUtils;
+import net.simpleframework.ctx.permission.PermissionUser;
 import net.simpleframework.mvc.common.element.Checkbox;
 import net.simpleframework.mvc.common.element.InputElement;
-import net.simpleframework.mvc.common.element.LinkElement;
-import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.component.ComponentHandlerEx;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.workflow.engine.IWorkflowContextAware;
@@ -83,24 +84,43 @@ public class DefaultWfCommentHandler extends ComponentHandlerEx implements IWfCo
 	public String toHTML(final ComponentParameter cp, final WorkitemBean workitem) {
 		final String commentName = cp.getComponentName();
 		final StringBuilder sb = new StringBuilder();
-		sb.append(createCommentTa(workitem));
-		sb.append("<div class='btns'>");
-		sb.append(new LinkElement($m("DefaultWfCommentHandler.0")).setOnclick("$Actions['"
-				+ commentName + "_log_popup']();"));
-		sb.append(SpanElement.SPACE15).append(
-				new Checkbox("id" + commentName + "_addCheck", $m("DefaultWfCommentHandler.1"))
-						.setName("cb_wfcomment").setValue("true"));
-		sb.append("</div>");
-		sb.append("<div>");
+		if ((Boolean) cp.getBeanProperty("editable")) {
+			sb.append(createCommentTa(workitem));
+			sb.append("<div class='btns'>");
+			sb.append(" <div class='left'>").append("<a onclick=\"$Actions['").append(commentName)
+					.append("_log_popup']();\">#(DefaultWfCommentHandler.0)</a>");
+			sb.append(" </div>");
+			sb.append(" <div class='right'>").append(
+					new Checkbox("id" + commentName + "_addCheck", $m("DefaultWfCommentHandler.1"))
+							.setName("cb_wfcomment").setValue("true"));
+			sb.append(" </div>");
+			sb.append(" <div class='clearfix'></div>");
+			sb.append("</div>");
+		}
+		sb.append("<div class='comment-list'>");
 		final IDataQuery<WfComment> dq = comments(cp, workitem);
 		final WfComment comment2 = workflowContext.getCommentService().getCurComment(workitem);
 		WfComment comment;
+		int i = 0;
 		while ((comment = dq.next()) != null) {
 			if (comment2 != null && comment2.equals(comment)) {
 				continue;
 			}
-			sb.append("<div>");
-			sb.append(comment.getCcomment());
+			sb.append("<div class='comment-item");
+			if (i++ == 0) {
+				sb.append(" item-first");
+			}
+			sb.append("'>");
+			sb.append(" <div class='i1'>").append(HtmlUtils.convertHtmlLines(comment.getCcomment()))
+					.append("</div>");
+			sb.append(" <div class='i2'>");
+			final PermissionUser ouser = cp.getUser(comment.getUserId());
+			sb.append("  <div class='left'>").append(ouser.toDeptText()).append("-").append(ouser)
+					.append(", ").append(DateUtils.getRelativeDate(comment.getCreateDate()))
+					.append("</div>");
+			sb.append("  <div class='right'>").append(comment.getTaskname()).append("</div>");
+			sb.append("  <div class='clearfix'></div>");
+			sb.append(" </div>");
 			sb.append("</div>");
 		}
 		sb.append("</div>");
