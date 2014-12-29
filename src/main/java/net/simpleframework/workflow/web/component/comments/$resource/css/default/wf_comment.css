@@ -85,25 +85,38 @@
   position: relative;
 }
 
+.cl_list .litem:nth-child(2n) {
+  background-color: #f9f9f9;
+}
+
 .cl_list .litem:HOVER {
   background-color: #f4f4f4;
 }
 
-.cl_list .litem .copy,
-.cl_list .litem .del {
+.cl_list .litem .act {
   display: inline-block;
-  background: url(images/del.png) no-repeat 0 0;
-  height: 12px;
-  width: 12px;
+  position: absolute;
   right: 6px;
   top: 6px;
-  position: absolute;
+}
+
+.cl_list .litem .copy, 
+.cl_list .litem .del {
+  display: inline-block;
+  background-repeat: no-repeat;
+  background-position: 0 0;
+  height: 12px;
+  width: 12px;
+  margin-left: 6px;
   cursor: pointer;
+}
+
+.cl_list .litem .del {
+  background-image: url(images/del.png);
 }
 
 .cl_list .litem .copy {
   background-image: url("images/copy.png");
-  right: 24px;
 }
 
 .cl_list .litem .l1 {

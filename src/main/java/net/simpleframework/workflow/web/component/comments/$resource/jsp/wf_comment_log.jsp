@@ -10,11 +10,9 @@
     var c = $Actions['<%=commentName%>_log_popup'].window.content;
     
     c.select(".litem").invoke("observe", "mouseenter", function(evn) {
-      $(this).down(".copy").show();
-      $(this).down(".del").show();
+      $(this).down(".act").show();
     }).invoke("observe", "mouseleave", function(evn) {
-      $(this).down(".copy").hide();
-      $(this).down(".del").hide();
+      $(this).down(".act").hide();
     });
   }
   
@@ -46,6 +44,17 @@
     act.jsCompleteCallback = function(req, responseText) {
       if (responseText == 'true')
       	$(o).up(".litem").remove();
+    };
+    act(params);
+  }
+  
+  function wf_comment_itemcopy(o, params) {
+    if (!confirm('#(wf_comment_log.3)')) {
+      return;
+    }
+    var act = $Actions['<%=commentName%>_logCopy'];
+    act.jsCompleteCallback = function(req, responseText) {
+    	alert(responseText);
     };
     act(params);
   }
