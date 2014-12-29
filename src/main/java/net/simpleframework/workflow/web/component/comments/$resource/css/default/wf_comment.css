@@ -89,9 +89,10 @@
   background-color: #f4f4f4;
 }
 
+.cl_list .litem .copy,
 .cl_list .litem .del {
   display: inline-block;
-  background: url(images/delete.gif) no-repeat 0 0;
+  background: url(images/del.png) no-repeat 0 0;
   height: 12px;
   width: 12px;
   right: 6px;
@@ -100,8 +101,9 @@
   cursor: pointer;
 }
 
-.cl_list .litem .del:HOVER {
-  background-image: url(images/delete_hover.gif);
+.cl_list .litem .copy {
+  background-image: url("images/copy.png");
+  right: 24px;
 }
 
 .cl_list .litem .l1 {

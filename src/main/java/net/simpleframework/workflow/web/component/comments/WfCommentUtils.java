@@ -56,6 +56,8 @@ public abstract class WfCommentUtils implements IWorkflowContextAware {
 				sb.append(comment.getTaskname()).append($m("WfCommentUtils.0"));
 			}
 			sb.append(DateUtils.getRelativeDate(log.getCreateDate())).append("</div>");
+			sb.append(new SpanElement().setClassName("copy").setStyle("display:none;")
+					.setOnclick("wf_comment_itemadd(this);"));
 			sb.append(new SpanElement().setClassName("del").setStyle("display:none;")
 					.setOnclick("wf_comment_itemdel(this, 'logid=" + log.getId() + "');"));
 			sb.append("</div>");

@@ -10,8 +10,10 @@
     var c = $Actions['<%=commentName%>_log_popup'].window.content;
     
     c.select(".litem").invoke("observe", "mouseenter", function(evn) {
+      $(this).down(".copy").show();
       $(this).down(".del").show();
     }).invoke("observe", "mouseleave", function(evn) {
+      $(this).down(".copy").hide();
       $(this).down(".del").hide();
     });
   }
