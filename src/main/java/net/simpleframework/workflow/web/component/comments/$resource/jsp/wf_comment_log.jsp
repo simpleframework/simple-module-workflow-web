@@ -32,7 +32,7 @@
   function wf_comment_itemclick(o) {
     var act = $Actions['<%=commentName%>_log_popup'];
     var ta = $(act.trigger).up(".wf_comment").down("textarea");
-    $Actions.setValue(ta, $(o).down(".l1").innerHTML.replace('<br>', '\r'));
+    $Actions.setValue(ta, $(o).down(".l1 textarea").value);
     act.close();
   }
   

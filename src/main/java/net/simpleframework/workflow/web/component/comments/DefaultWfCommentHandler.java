@@ -72,7 +72,7 @@ public class DefaultWfCommentHandler extends ComponentHandlerEx implements IWfCo
 	}
 
 	protected InputElement createCommentTa(final WorkitemBean workitem) {
-		final InputElement ele = InputElement.textarea().setRows(3).setName("ta_wfcomment");
+		final InputElement ele = InputElement.textarea().setRows(4).setName("ta_wfcomment");
 		final WfComment bean = workflowContext.getCommentService().getCurComment(workitem);
 		if (bean != null) {
 			ele.setValue(bean.getCcomment());
@@ -84,8 +84,11 @@ public class DefaultWfCommentHandler extends ComponentHandlerEx implements IWfCo
 	public String toHTML(final ComponentParameter cp, final WorkitemBean workitem) {
 		final String commentName = cp.getComponentName();
 		final StringBuilder sb = new StringBuilder();
-		if ((Boolean) cp.getBeanProperty("editable")) {
+		final boolean editable = (Boolean) cp.getBeanProperty("editable");
+		if (editable) {
+			sb.append("<div class='ta'>");
 			sb.append(createCommentTa(workitem));
+			sb.append("</div>");
 			sb.append("<div class='btns'>");
 			sb.append(" <div class='left'>").append("<a onclick=\"$Actions['").append(commentName)
 					.append("_log_popup']();\">#(DefaultWfCommentHandler.0)</a>");
@@ -103,7 +106,7 @@ public class DefaultWfCommentHandler extends ComponentHandlerEx implements IWfCo
 		WfComment comment;
 		int i = 0;
 		while ((comment = dq.next()) != null) {
-			if (comment2 != null && comment2.equals(comment)) {
+			if (editable && comment2 != null && comment2.equals(comment)) {
 				continue;
 			}
 			sb.append("<div class='comment-item");
@@ -111,11 +114,12 @@ public class DefaultWfCommentHandler extends ComponentHandlerEx implements IWfCo
 				sb.append(" item-first");
 			}
 			sb.append("'>");
+			sb.append("<img src='").append(cp.getPhotoUrl()).append("' />");
 			sb.append(" <div class='i1'>").append(HtmlUtils.convertHtmlLines(comment.getCcomment()))
 					.append("</div>");
 			sb.append(" <div class='i2'>");
 			final PermissionUser ouser = cp.getUser(comment.getUserId());
-			sb.append("  <div class='left'>").append(ouser.toDeptText()).append("-").append(ouser)
+			sb.append("  <div class='left'>").append(ouser).append("@").append(ouser.toDeptText())
 					.append(", ").append(DateUtils.getRelativeDate(comment.getCreateDate()))
 					.append("</div>");
 			sb.append("  <div class='right'>").append(comment.getTaskname()).append("</div>");

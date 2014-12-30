@@ -65,7 +65,8 @@ public abstract class AbstractWorkflowFormTPage extends FormTableRowTemplatePage
 	}
 
 	protected WfCommentBean addWfCommentBean(final PageParameter pp) {
-		return addComponentBean(pp, "AbstractWorkflowFormPage_wfComment", WfCommentBean.class);
+		return addComponentBean(pp, "AbstractWorkflowFormPage_wfComment", WfCommentBean.class)
+				.setEditable(!isReadonly(getWorkitemBean(pp)));
 	}
 
 	@Override

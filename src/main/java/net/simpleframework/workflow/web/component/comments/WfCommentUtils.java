@@ -9,6 +9,7 @@ import net.simpleframework.ado.query.IDataQuery;
 import net.simpleframework.common.DateUtils;
 import net.simpleframework.common.web.html.HtmlUtils;
 import net.simpleframework.mvc.PageRequestResponse;
+import net.simpleframework.mvc.common.element.InputElement;
 import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.workflow.engine.IWorkflowContextAware;
@@ -48,8 +49,10 @@ public abstract class WfCommentUtils implements IWorkflowContextAware {
 		WfCommentLog log;
 		while ((log = dq.next()) != null) {
 			sb.append("<div class='litem' ondblclick='wf_comment_itemclick(this);'>");
-			sb.append(" <div class='l1'>").append(HtmlUtils.convertHtmlLines(log.getCcomment()))
-					.append("</div>");
+			final String ccomment = log.getCcomment();
+			sb.append(" <div class='l1'>").append(HtmlUtils.convertHtmlLines(ccomment));
+			sb.append(InputElement.textarea().setStyle("display:none;").setValue(ccomment));
+			sb.append(" </div>");
 			sb.append(" <div class='l2'>");
 			final WfComment comment = cService.getBean(log.getCommentId());
 			if (comment != null) {
