@@ -21,7 +21,7 @@ public class TestForm extends AbstractWorkflowFormTPage {
 	protected void onForward(final PageParameter pp) {
 		super.onForward(pp);
 
-		addWfCommentBean(pp).setGroupBy(EGroupBy.taskname).setContainerId("idTestForm_comments");
+		addWfCommentBean(pp).setGroupBy(EGroupBy.dept).setContainerId("idTestForm_comments");
 	}
 
 	@Override
