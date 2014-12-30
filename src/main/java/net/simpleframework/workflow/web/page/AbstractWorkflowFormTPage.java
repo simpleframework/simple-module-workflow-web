@@ -20,6 +20,7 @@ import net.simpleframework.workflow.engine.EWorkitemStatus;
 import net.simpleframework.workflow.engine.IWorkflowContext;
 import net.simpleframework.workflow.engine.IWorkflowServiceAware;
 import net.simpleframework.workflow.engine.ProcessBean;
+import net.simpleframework.workflow.engine.ProcessModelBean;
 import net.simpleframework.workflow.engine.WorkitemBean;
 import net.simpleframework.workflow.engine.WorkitemComplete;
 import net.simpleframework.workflow.schema.AbstractTaskNode;
@@ -112,6 +113,14 @@ public abstract class AbstractWorkflowFormTPage extends FormTableRowTemplatePage
 		pb = getProcess(getWorkitemBean(pp));
 		pp.setRequestAttr("$ProcessBean",pb);
 		return pb;
+	}
+	
+	protected ProcessModelBean getProcessModel(final PageParameter pp) {
+		ProcessModelBean pmb = (ProcessModelBean) pp.getRequestAttr("$ProcessModelBean");
+		if(null!=pmb) return pmb;
+		pmb = mService.getBean(getProcess(pp).getModelId());
+		pp.setRequestAttr("$ProcessModelBean",pmb);
+		return pmb;
 	}
 
 	protected ProcessBean getProcess(final WorkitemBean workitem) {
