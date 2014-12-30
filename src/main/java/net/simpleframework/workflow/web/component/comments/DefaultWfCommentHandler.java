@@ -2,13 +2,19 @@ package net.simpleframework.workflow.web.component.comments;
 
 import static net.simpleframework.common.I18n.$m;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import net.simpleframework.ado.query.IDataQuery;
 import net.simpleframework.common.DateUtils;
 import net.simpleframework.common.StringUtils;
+import net.simpleframework.common.coll.ArrayUtils;
 import net.simpleframework.common.web.html.HtmlUtils;
+import net.simpleframework.ctx.permission.Dept;
+import net.simpleframework.ctx.permission.IPermissionHandler;
 import net.simpleframework.ctx.permission.PermissionUser;
 import net.simpleframework.mvc.common.element.Checkbox;
 import net.simpleframework.mvc.common.element.InputElement;
@@ -21,6 +27,7 @@ import net.simpleframework.workflow.engine.ext.IWfCommentService;
 import net.simpleframework.workflow.engine.ext.WfComment;
 import net.simpleframework.workflow.engine.ext.WfCommentLog;
 import net.simpleframework.workflow.engine.ext.WfCommentLog.ELogType;
+import net.simpleframework.workflow.web.component.comments.WfCommentBean.EGroupBy;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -80,6 +87,52 @@ public class DefaultWfCommentHandler extends ComponentHandlerEx implements IWfCo
 		return ele;
 	}
 
+	protected Map<String, String[]> getTasknames(final ComponentParameter cp,
+			final WorkitemBean workitem) {
+		final Map<String, String[]> data = new LinkedHashMap<String, String[]>();
+		return data;
+	}
+
+	private Map<String, List<WfComment>> comments_map(final ComponentParameter cp,
+			final WorkitemBean workitem, final EGroupBy groupBy) {
+		final Map<String, List<WfComment>> data = new LinkedHashMap<String, List<WfComment>>();
+		Map<String, String[]> tasknames = null;
+		final IDataQuery<WfComment> dq = comments(cp, workitem);
+		final IPermissionHandler phdl = cp.getPermission();
+		WfComment comment;
+		while ((comment = dq.next()) != null) {
+			String key = null;
+			if (groupBy == EGroupBy.dept) {
+				final Dept dept = phdl.getDept(comment.getDeptId());
+				if (dept == null) {
+					continue;
+				}
+				key = dept.toString();
+			} else if (groupBy == EGroupBy.taskname) {
+				if (tasknames == null) {
+					tasknames = getTasknames(cp, workitem);
+				}
+				if (tasknames != null) {
+					for (final Map.Entry<String, String[]> e : tasknames.entrySet()) {
+						if (ArrayUtils.contains(e.getValue(), comment.getTaskname())) {
+							key = e.getKey();
+							break;
+						}
+					}
+				}
+			}
+
+			if (key != null) {
+				List<WfComment> comments = data.get(key);
+				if (comments == null) {
+					data.put(key, comments = new ArrayList<WfComment>());
+				}
+				comments.add(comment);
+			}
+		}
+		return data;
+	}
+
 	@Override
 	public String toHTML(final ComponentParameter cp, final WorkitemBean workitem) {
 		final String commentName = cp.getComponentName();
@@ -100,35 +153,69 @@ public class DefaultWfCommentHandler extends ComponentHandlerEx implements IWfCo
 			sb.append(" <div class='clearfix'></div>");
 			sb.append("</div>");
 		}
-		sb.append("<div class='comment-list'>");
-		final IDataQuery<WfComment> dq = comments(cp, workitem);
+
+		final EGroupBy groupBy = (EGroupBy) cp.getBeanProperty("groupBy");
 		final WfComment comment2 = workflowContext.getCommentService().getCurComment(workitem);
-		WfComment comment;
-		int i = 0;
-		while ((comment = dq.next()) != null) {
-			if (editable && comment2 != null && comment2.equals(comment)) {
-				continue;
+
+		final StringBuilder sb2 = new StringBuilder();
+		if (groupBy == EGroupBy.none) {
+			int i = 0;
+			final IDataQuery<WfComment> dq = comments(cp, workitem);
+			WfComment comment;
+			while ((comment = dq.next()) != null) {
+				if (editable && comment2 != null && comment2.equals(comment)) {
+					continue;
+				}
+				sb2.append(toCommentItemHTML(cp, comment, i++ == 0, groupBy));
 			}
-			sb.append("<div class='comment-item");
-			if (i++ == 0) {
-				sb.append(" item-first");
+		} else {
+			for (final Map.Entry<String, List<WfComment>> e : comments_map(cp, workitem, groupBy)
+					.entrySet()) {
+				sb2.append("<div class='comment-group-item'>").append(e.getKey()).append("</div>");
+				int i = 0;
+				for (final WfComment comment : e.getValue()) {
+					if (editable && comment2 != null && comment2.equals(comment)) {
+						continue;
+					}
+					sb2.append(toCommentItemHTML(cp, comment, i++ == 0, groupBy));
+				}
+			}
+		}
+
+		if (sb2.length() > 0) {
+			sb.append("<div class='comment-list");
+			if (groupBy != EGroupBy.none) {
+				sb.append(" comment-group");
 			}
 			sb.append("'>");
-			sb.append("<img src='").append(cp.getPhotoUrl()).append("' />");
-			sb.append(" <div class='i1'>").append(HtmlUtils.convertHtmlLines(comment.getCcomment()))
-					.append("</div>");
-			sb.append(" <div class='i2'>");
-			final PermissionUser ouser = cp.getUser(comment.getUserId());
-			sb.append("  <div class='left'>").append(ouser).append("@").append(ouser.toDeptText())
-					.append(", ").append(DateUtils.getRelativeDate(comment.getCreateDate()))
-					.append("</div>");
-			sb.append("  <div class='right'>").append(comment.getTaskname()).append("</div>");
-			sb.append("  <div class='clearfix'></div>");
-			sb.append(" </div>");
+			sb.append(sb2);
 			sb.append("</div>");
 		}
-		sb.append("</div>");
 		return sb.toString();
+	}
+
+	protected String toCommentItemHTML(final ComponentParameter cp, final WfComment comment,
+			final boolean first, final EGroupBy groupBy) {
+		final StringBuilder sb2 = new StringBuilder();
+		sb2.append("<div class='comment-item");
+		if (first) {
+			sb2.append(" item-first");
+		}
+		sb2.append("'>");
+		sb2.append("<img src='").append(cp.getPhotoUrl()).append("' />");
+		sb2.append(" <div class='i1'>").append(HtmlUtils.convertHtmlLines(comment.getCcomment()))
+				.append("</div>");
+		sb2.append(" <div class='i2 clearfix'>");
+		final PermissionUser ouser = cp.getUser(comment.getUserId());
+		sb2.append("  <div class='left'>").append(ouser);
+		if (groupBy != EGroupBy.dept) {
+			sb2.append("@").append(ouser.toDeptText());
+		}
+		sb2.append(", ").append(DateUtils.getRelativeDate(comment.getCreateDate())).append("</div>");
+		sb2.append("  <div class='right'>").append(comment.getTaskname()).append("</div>");
+		sb2.append(" </div>");
+		sb2.append("</div>");
+		return sb2.toString();
 	}
 
 	@Override

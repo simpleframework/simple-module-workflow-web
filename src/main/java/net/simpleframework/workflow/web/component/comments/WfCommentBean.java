@@ -12,6 +12,9 @@ public class WfCommentBean extends AbstractContainerBean {
 	/* 是否允许编辑 */
 	private boolean editable = true;
 
+	/* 分组 */
+	private EGroupBy groupBy;
+
 	public WfCommentBean() {
 		setHandlerClass(DefaultWfCommentHandler.class);
 	}
@@ -23,5 +26,23 @@ public class WfCommentBean extends AbstractContainerBean {
 	public WfCommentBean setEditable(final boolean editable) {
 		this.editable = editable;
 		return this;
+	}
+
+	public EGroupBy getGroupBy() {
+		return groupBy == null ? EGroupBy.none : groupBy;
+	}
+
+	public WfCommentBean setGroupBy(final EGroupBy groupBy) {
+		this.groupBy = groupBy;
+		return this;
+	}
+
+	public static enum EGroupBy {
+		/* 不分组 */
+		none,
+		/* 按任务分组 */
+		taskname,
+		/* 按部门分组 */
+		dept
 	}
 }
