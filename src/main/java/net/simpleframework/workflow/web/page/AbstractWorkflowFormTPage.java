@@ -107,7 +107,11 @@ public abstract class AbstractWorkflowFormTPage extends FormTableRowTemplatePage
 	}
 
 	protected ProcessBean getProcess(final PageParameter pp) {
-		return getProcess(getWorkitemBean(pp));
+		ProcessBean pb = (ProcessBean) pp.getRequestAttr("$ProcessBean");
+		if(null!=pb) return pb;
+		pb = getProcess(getWorkitemBean(pp));
+		pp.setRequestAttr("$ProcessBean",pb);
+		return pb;
 	}
 
 	protected ProcessBean getProcess(final WorkitemBean workitem) {
