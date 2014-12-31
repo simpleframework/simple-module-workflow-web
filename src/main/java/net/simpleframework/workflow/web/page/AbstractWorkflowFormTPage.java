@@ -109,17 +109,21 @@ public abstract class AbstractWorkflowFormTPage extends FormTableRowTemplatePage
 
 	protected ProcessBean getProcess(final PageParameter pp) {
 		ProcessBean pb = (ProcessBean) pp.getRequestAttr("$ProcessBean");
-		if(null!=pb) return pb;
+		if (null != pb) {
+			return pb;
+		}
 		pb = getProcess(getWorkitemBean(pp));
-		pp.setRequestAttr("$ProcessBean",pb);
+		pp.setRequestAttr("$ProcessBean", pb);
 		return pb;
 	}
-	
+
 	protected ProcessModelBean getProcessModel(final PageParameter pp) {
 		ProcessModelBean pmb = (ProcessModelBean) pp.getRequestAttr("$ProcessModelBean");
-		if(null!=pmb) return pmb;
+		if (null != pmb) {
+			return pmb;
+		}
 		pmb = mService.getBean(getProcess(pp).getModelId());
-		pp.setRequestAttr("$ProcessModelBean",pmb);
+		pp.setRequestAttr("$ProcessModelBean", pmb);
 		return pmb;
 	}
 
@@ -188,7 +192,9 @@ public abstract class AbstractWorkflowFormTPage extends FormTableRowTemplatePage
 	}
 
 	protected boolean isReadonly(final WorkitemBean workitem) {
-		if(null==workitem) return true;
+		if (null == workitem) {
+			return true;
+		}
 		final EWorkitemStatus status = workitem.getStatus();
 		return status != EWorkitemStatus.running && status != EWorkitemStatus.suspended
 				&& status != EWorkitemStatus.delegate;

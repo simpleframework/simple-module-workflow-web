@@ -13,8 +13,8 @@ import net.simpleframework.common.DateUtils;
 import net.simpleframework.common.StringUtils;
 import net.simpleframework.common.coll.ArrayUtils;
 import net.simpleframework.common.web.html.HtmlUtils;
-import net.simpleframework.ctx.permission.Dept;
 import net.simpleframework.ctx.permission.IPermissionHandler;
+import net.simpleframework.ctx.permission.PermissionDept;
 import net.simpleframework.ctx.permission.PermissionUser;
 import net.simpleframework.mvc.common.element.Checkbox;
 import net.simpleframework.mvc.common.element.InputElement;
@@ -103,11 +103,11 @@ public class DefaultWfCommentHandler extends ComponentHandlerEx implements IWfCo
 		while ((comment = dq.next()) != null) {
 			String key = null;
 			if (groupBy == EGroupBy.dept) {
-				final Dept dept = phdl.getDept(comment.getDeptId());
+				final PermissionDept dept = phdl.getDept(comment.getDeptId());
 				if (dept == null) {
 					continue;
 				}
-				key = dept.toString();
+				key = dept.getText();
 			} else if (groupBy == EGroupBy.taskname) {
 				if (tasknames == null) {
 					tasknames = getTasknames(cp, workitem);
@@ -209,7 +209,7 @@ public class DefaultWfCommentHandler extends ComponentHandlerEx implements IWfCo
 		final PermissionUser ouser = cp.getUser(comment.getUserId());
 		sb2.append("  <div class='left'>").append(ouser);
 		if (groupBy != EGroupBy.dept) {
-			sb2.append("@").append(ouser.toDeptText());
+			sb2.append("@").append(ouser.getDept().getText());
 		}
 		sb2.append(", ").append(DateUtils.getRelativeDate(comment.getCreateDate())).append("</div>");
 		sb2.append("  <div class='right'>").append(comment.getTaskname()).append("</div>");

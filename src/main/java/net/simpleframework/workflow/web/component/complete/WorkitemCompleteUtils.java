@@ -164,7 +164,7 @@ public class WorkitemCompleteUtils implements IWorkflowServiceAware {
 					final String id = participant.toString();
 					Object user = permission.getUser(participant.userId);
 					if (dispWithDept) {
-						user = ((PermissionUser) user).toDeptText();
+						user = ((PermissionUser) user).getDept().getText();
 					}
 					sb.append(multi ? new Checkbox(id, user) : new Radio(id, user).setName(transition
 							.getId()));
