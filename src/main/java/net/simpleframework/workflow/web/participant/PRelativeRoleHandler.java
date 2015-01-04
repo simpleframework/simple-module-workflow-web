@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import net.simpleframework.common.ID;
 import net.simpleframework.common.StringUtils;
 import net.simpleframework.ctx.script.IScriptEval;
 import net.simpleframework.workflow.engine.ActivityBean;
@@ -14,6 +15,7 @@ import net.simpleframework.workflow.engine.EWorkitemStatus;
 import net.simpleframework.workflow.engine.WorkitemBean;
 import net.simpleframework.workflow.engine.participant.IParticipantHandler.AbstractParticipantHandler;
 import net.simpleframework.workflow.engine.participant.Participant;
+import net.simpleframework.workflow.schema.AbstractTaskNode;
 import net.simpleframework.workflow.schema.UserNode;
 import net.simpleframework.workflow.web.WorkflowPermissionHandler;
 
@@ -61,19 +63,40 @@ public class PRelativeRoleHandler extends AbstractParticipantHandler {
 			}
 		}
 
+		ID userId = null;
+		ID roleId=null;
+		ID deptId=null;
 		WorkitemBean workitem = null;
 		if (preActivity.getId().equals(activityComplete.getActivity().getId())) {
 			// 如果前一指定节点就是上一节点
 			workitem = activityComplete.getWorkitem();
+			if(null==workitem){
+				final AbstractTaskNode tasknode = aService.getTaskNode(activityComplete.getActivity());
+				if (tasknode instanceof UserNode && ((UserNode) tasknode).isEmpty()) {
+					//处理空节点的执行者
+					List<Participant> mps = aService.getEmptyParticipants(activityComplete.getActivity());
+					if(null!=mps&&mps.size()>0){
+						Participant mp = mps.get(0);
+						userId=mp.userId;
+						roleId = mp.roleId;
+						deptId = permission.getUser(userId).getDept().getId();
+					}
+				}
+			}
 		} else {
 			final List<WorkitemBean> items = wService.getWorkitems(preActivity,
 					EWorkitemStatus.complete);
 			if (null != items && items.size() > 0) {
 				workitem = items.get(0);
 			}
-			if (workitem == null) {
-				return null;
-			}
+		}
+		if (workitem != null) {
+			userId = workitem.getUserId();
+			roleId = workitem.getRoleId();
+			deptId = workitem.getDeptId();
+		}
+		if(null==userId||null==roleId||null==deptId){
+			return null;
 		}
 
 		Level level = Level.internal;
@@ -84,7 +107,7 @@ public class PRelativeRoleHandler extends AbstractParticipantHandler {
 
 		final WorkflowPermissionHandler wph = (WorkflowPermissionHandler) permission;
 		final Collection<Participant> _participants = wph.getRelativeParticipantsOfLevel(
-				workitem.getUserId(), workitem.getRoleId(), workitem.getDeptId(), variables, role,
+				userId, roleId, deptId, variables, role,
 				level);
 		if (_participants != null) {
 			participants.addAll(_participants);
