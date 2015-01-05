@@ -53,8 +53,7 @@ public abstract class AbstractWorkflowFormTPage extends FormTableRowTemplatePage
 		super.onForward(pp);
 
 		// 完成
-		addComponentBean(pp, "AbstractWorkflowFormPage_completeAction", WorkitemCompleteBean.class)
-				.setSelector(getFormSelector());
+		addWorkitemCompleteComponentBean(pp);
 
 		// 验证
 		addFormValidationBean(pp);
@@ -63,6 +62,12 @@ public abstract class AbstractWorkflowFormTPage extends FormTableRowTemplatePage
 		if (workitem != null && !workitem.isReadMark()) {
 			wService.doReadMark(workitem);
 		}
+	}
+	
+	protected WorkitemCompleteBean addWorkitemCompleteComponentBean(final PageParameter pp){
+		// 完成
+		return (WorkitemCompleteBean) addComponentBean(pp, "AbstractWorkflowFormPage_completeAction", WorkitemCompleteBean.class)
+						.setSelector(getFormSelector());
 	}
 
 	protected WfCommentBean addWfCommentBean(final PageParameter pp) {
