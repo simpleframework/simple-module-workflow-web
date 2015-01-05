@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import net.simpleframework.common.JsonUtils;
 import net.simpleframework.common.StringUtils;
+import net.simpleframework.common.coll.ArrayUtils;
 import net.simpleframework.common.logger.Log;
 import net.simpleframework.common.logger.LogFactory;
 import net.simpleframework.common.object.ObjectFactory.ObjectCreatorListener;
@@ -26,6 +27,7 @@ import net.simpleframework.workflow.engine.TransitionUtils;
 import net.simpleframework.workflow.engine.WorkitemBean;
 import net.simpleframework.workflow.engine.WorkitemComplete;
 import net.simpleframework.workflow.engine.participant.Participant;
+import net.simpleframework.workflow.schema.AbstractTaskNode;
 import net.simpleframework.workflow.schema.TransitionNode;
 import net.simpleframework.workflow.schema.UserNode;
 import net.simpleframework.workflow.web.IWorkflowWebForm;
@@ -147,10 +149,14 @@ public class WorkitemCompleteUtils implements IWorkflowServiceAware {
 
 	public static String toParticipantsHTML(final ComponentParameter cp) {
 		final StringBuilder sb = new StringBuilder();
-		final boolean dispWithDept = (Boolean) cp.getBeanProperty("dispWithDept");
+		final String[] dispWithDept = (String[]) cp.getBeanProperty("dispWithDept");
 		final WorkitemBean workitem = getWorkitemBean(cp);
 		final ActivityComplete activityComplete = getActivityComplete(cp, workitem);
 		for (final TransitionNode transition : WorkitemCompleteUtils.getTransitions(cp, workitem)) {
+			final AbstractTaskNode to = transition.to();
+			if (!activityComplete.isParticipantManual(to)) {
+				continue;
+			}
 			sb.append("<div class='transition' transition='").append(transition.getId()).append("'>")
 					.append(transition.to()).append("</div>");
 			sb.append("<div class='participants'>");
@@ -158,12 +164,12 @@ public class WorkitemCompleteUtils implements IWorkflowServiceAware {
 			if (coll == null || coll.size() == 0) {
 				sb.append("#(participant_select.0)");
 			} else {
-				final boolean multi = activityComplete.isParticipantMultiSelected(transition.to());
+				final boolean multi = activityComplete.isParticipantMultiSelected(to);
 				for (final Participant participant : coll) {
 					sb.append("<div class='ritem'>");
 					final String id = participant.toString();
 					Object user = permission.getUser(participant.userId);
-					if (dispWithDept) {
+					if (ArrayUtils.contains(dispWithDept, to.getName())) {
 						user = ((PermissionUser) user).getDept().getText();
 					}
 					sb.append(multi ? new Checkbox(id, user) : new Radio(id, user).setName(transition

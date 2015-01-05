@@ -19,8 +19,8 @@ public class WorkitemCompleteBean extends AbstractComponentBean {
 	/* 是否完成当前环节，当前环节可以不完成，而直接创建后续环节 */
 	private boolean bcomplete = true;
 
-	/* 选择参与者时用所在部门显示 */
-	private boolean dispWithDept;
+	/* 选择参与者时用所在部门显示的任务名 */
+	private String[] dispWithDept;
 
 	/* 确认消息 */
 	private String confirmMessage;
@@ -57,11 +57,11 @@ public class WorkitemCompleteBean extends AbstractComponentBean {
 		return this;
 	}
 
-	public boolean isDispWithDept() {
+	public String[] getDispWithDept() {
 		return dispWithDept;
 	}
 
-	public WorkitemCompleteBean setDispWithDept(final boolean dispWithDept) {
+	public WorkitemCompleteBean setDispWithDept(final String[] dispWithDept) {
 		this.dispWithDept = dispWithDept;
 		return this;
 	}
