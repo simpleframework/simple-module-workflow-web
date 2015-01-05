@@ -80,7 +80,7 @@ public class PRelativeRoleHandler extends AbstractParticipantHandler {
 						final Participant mp = mps.get(0);
 						userId = mp.userId;
 						roleId = mp.roleId;
-						deptId = permission.getUser(userId).getDept().getId();
+						deptId = mp.deptId;
 					}
 				}
 			}
