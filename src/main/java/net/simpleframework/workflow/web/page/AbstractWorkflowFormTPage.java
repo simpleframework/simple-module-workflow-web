@@ -16,6 +16,7 @@ import net.simpleframework.mvc.component.base.validation.EValidatorMethod;
 import net.simpleframework.mvc.component.base.validation.ValidationBean;
 import net.simpleframework.mvc.component.base.validation.Validator;
 import net.simpleframework.mvc.template.lets.FormTableRowTemplatePage;
+import net.simpleframework.workflow.engine.ActivityBean;
 import net.simpleframework.workflow.engine.EWorkitemStatus;
 import net.simpleframework.workflow.engine.IWorkflowContext;
 import net.simpleframework.workflow.engine.IWorkflowServiceAware;
@@ -83,7 +84,7 @@ public abstract class AbstractWorkflowFormTPage extends FormTableRowTemplatePage
 
 	@Transaction(context = IWorkflowContext.class)
 	public void onSaveForm(final PageParameter pp, final WorkitemBean workitem) {
-		final ProcessBean process = getProcess(workitem);
+		final ProcessBean process = getProcess(pp);
 		pService.doUpdateTitle(process, pp.getParameter("wf_topic"));
 
 		// 添加了评论
@@ -117,24 +118,23 @@ public abstract class AbstractWorkflowFormTPage extends FormTableRowTemplatePage
 		if (null != pb) {
 			return pb;
 		}
-		pb = getProcess(getWorkitemBean(pp));
+		pb = aService.getProcessBean(getActivityBean(pp));
 		pp.setRequestAttr("$ProcessBean", pb);
 		return pb;
 	}
 
 	protected ProcessModelBean getProcessModel(final PageParameter pp) {
 		ProcessModelBean pmb = (ProcessModelBean) pp.getRequestAttr("$ProcessModelBean");
-		if (null != pmb) {
+		if (null != pmb) 
 			return pmb;
-		}
 		pmb = mService.getBean(getProcess(pp).getModelId());
 		pp.setRequestAttr("$ProcessModelBean", pmb);
 		return pmb;
 	}
 
-	protected ProcessBean getProcess(final WorkitemBean workitem) {
-		return aService.getProcessBean(wService.getActivity(workitem));
-	}
+//	protected ProcessBean getProcess(final WorkitemBean workitem) {
+//		return aService.getProcessBean(wService.getActivity(workitem));
+//	}
 
 	@Override
 	public String getFormForward(final PageParameter pp) {
@@ -208,31 +208,39 @@ public abstract class AbstractWorkflowFormTPage extends FormTableRowTemplatePage
 	protected WorkitemBean getWorkitemBean(final PageParameter pp) {
 		return WorkflowUtils.getWorkitemBean(pp);
 	}
+	
+	protected ActivityBean getActivityBean(final PageParameter pp) {
+		final WorkitemBean workitem = getWorkitemBean(pp);
+		if (null == workitem) 
+			return null;
+		ActivityBean activity = (ActivityBean) pp.getRequestAttr("$ActivityBean");
+		if (null != activity) 
+			return activity;
+		activity = wService.getActivity(workitem);
+		pp.setRequestAttr("$ActivityBean", activity);
+		return activity;
+	}
 
 	protected ProcessNode getProcessNode(final PageParameter pp) {
 		final WorkitemBean workitem = getWorkitemBean(pp);
-		if (null == workitem) {
+		if (null == workitem) 
 			return null;
-		}
 		ProcessNode pn = (ProcessNode) pp.getRequestAttr("$ProcessNode");
-		if (null != pn) {
+		if (null != pn) 
 			return pn;
-		}
 		pn = pService.getProcessDocument(getProcess(pp)).getProcessNode();
 		pp.setRequestAttr("$ProcessNode", pn);
 		return pn;
 	}
 
 	protected AbstractTaskNode getTaskNode(final PageParameter pp) {
-		final WorkitemBean workitem = getWorkitemBean(pp);
-		if (null == workitem) {
+		if (null == getActivityBean(pp)) 
 			return null;
-		}
 		AbstractTaskNode tn = (AbstractTaskNode) pp.getRequestAttr("$TaskNode");
 		if (null != tn) {
 			return tn;
 		}
-		tn = aService.getTaskNode(wService.getActivity(workitem));
+		tn = aService.getTaskNode(getActivityBean(pp));
 		pp.setRequestAttr("$TaskNode", tn);
 		return tn;
 	}
