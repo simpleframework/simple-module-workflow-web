@@ -45,7 +45,7 @@ public class WorkflowPermissionHandler extends OrganizationPermissionHandler imp
 						: null;
 				final Iterator<ID> users = users(rr.getId(), deptId, variables);
 				while (users.hasNext()) {
-					participants.add(new Participant(users.next(), rr.getId()));
+					participants.add(new Participant(users.next(), rr.getId(), deptId));
 				}
 			}
 		}
@@ -67,7 +67,7 @@ public class WorkflowPermissionHandler extends OrganizationPermissionHandler imp
 					if (level.equals(Level.internal)) {// 本部门
 						final Iterator<ID> users = users(roleId, deptId, variables);
 						while (users.hasNext()) {
-							participants.add(new Participant(users.next(), roleId));
+							participants.add(new Participant(users.next(), roleId, deptId));
 						}
 					} else {
 						Department dept = orgContext.getDepartmentService().getBean(deptId);
@@ -79,7 +79,7 @@ public class WorkflowPermissionHandler extends OrganizationPermissionHandler imp
 								while ((dept = depts.next()) != null) {
 									final Iterator<ID> users = users(roleId, dept.getId(), variables);
 									while (users.hasNext()) {
-										participants.add(new Participant(users.next(), roleId));
+										participants.add(new Participant(users.next(), roleId, dept.getId()));
 									}
 								}
 							}
@@ -90,14 +90,14 @@ public class WorkflowPermissionHandler extends OrganizationPermissionHandler imp
 								while ((dept = depts.next()) != null) {
 									final Iterator<ID> users = users(roleId, dept.getId(), variables);
 									while (users.hasNext()) {
-										participants.add(new Participant(users.next(), roleId));
+										participants.add(new Participant(users.next(), roleId, dept.getId()));
 									}
 								}
 							}
 						} else if (level.equals(Level.higher)) {// 上级
 							final Iterator<ID> users = users(roleId, dept.getParentId(), variables);
 							while (users.hasNext()) {
-								participants.add(new Participant(users.next(), roleId));
+								participants.add(new Participant(users.next(), roleId, dept.getParentId()));
 							}
 						}
 					}
@@ -144,7 +144,7 @@ public class WorkflowPermissionHandler extends OrganizationPermissionHandler imp
 		User user = null;
 		if (null != users) {
 			while ((user = users.next()) != null) {
-				participants.add(new Participant(user.getId(), null));
+				participants.add(new Participant(user.getId()));
 			}
 		}
 		return participants;

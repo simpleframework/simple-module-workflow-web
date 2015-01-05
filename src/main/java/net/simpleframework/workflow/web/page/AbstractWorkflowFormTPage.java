@@ -64,11 +64,11 @@ public abstract class AbstractWorkflowFormTPage extends FormTableRowTemplatePage
 			wService.doReadMark(workitem);
 		}
 	}
-	
-	protected WorkitemCompleteBean addWorkitemCompleteComponentBean(final PageParameter pp){
+
+	protected WorkitemCompleteBean addWorkitemCompleteComponentBean(final PageParameter pp) {
 		// 完成
-		return (WorkitemCompleteBean) addComponentBean(pp, "AbstractWorkflowFormPage_completeAction", WorkitemCompleteBean.class)
-						.setSelector(getFormSelector());
+		return (WorkitemCompleteBean) addComponentBean(pp, "AbstractWorkflowFormPage_completeAction",
+				WorkitemCompleteBean.class).setSelector(getFormSelector());
 	}
 
 	protected WfCommentBean addWfCommentBean(final PageParameter pp) {
@@ -125,16 +125,17 @@ public abstract class AbstractWorkflowFormTPage extends FormTableRowTemplatePage
 
 	protected ProcessModelBean getProcessModel(final PageParameter pp) {
 		ProcessModelBean pmb = (ProcessModelBean) pp.getRequestAttr("$ProcessModelBean");
-		if (null != pmb) 
+		if (null != pmb) {
 			return pmb;
+		}
 		pmb = mService.getBean(getProcess(pp).getModelId());
 		pp.setRequestAttr("$ProcessModelBean", pmb);
 		return pmb;
 	}
 
-//	protected ProcessBean getProcess(final WorkitemBean workitem) {
-//		return aService.getProcessBean(wService.getActivity(workitem));
-//	}
+	// protected ProcessBean getProcess(final WorkitemBean workitem) {
+	// return aService.getProcessBean(wService.getActivity(workitem));
+	// }
 
 	@Override
 	public String getFormForward(final PageParameter pp) {
@@ -208,14 +209,16 @@ public abstract class AbstractWorkflowFormTPage extends FormTableRowTemplatePage
 	protected WorkitemBean getWorkitemBean(final PageParameter pp) {
 		return WorkflowUtils.getWorkitemBean(pp);
 	}
-	
+
 	protected ActivityBean getActivityBean(final PageParameter pp) {
 		final WorkitemBean workitem = getWorkitemBean(pp);
-		if (null == workitem) 
+		if (null == workitem) {
 			return null;
+		}
 		ActivityBean activity = (ActivityBean) pp.getRequestAttr("$ActivityBean");
-		if (null != activity) 
+		if (null != activity) {
 			return activity;
+		}
 		activity = wService.getActivity(workitem);
 		pp.setRequestAttr("$ActivityBean", activity);
 		return activity;
@@ -223,19 +226,22 @@ public abstract class AbstractWorkflowFormTPage extends FormTableRowTemplatePage
 
 	protected ProcessNode getProcessNode(final PageParameter pp) {
 		final WorkitemBean workitem = getWorkitemBean(pp);
-		if (null == workitem) 
+		if (null == workitem) {
 			return null;
+		}
 		ProcessNode pn = (ProcessNode) pp.getRequestAttr("$ProcessNode");
-		if (null != pn) 
+		if (null != pn) {
 			return pn;
+		}
 		pn = pService.getProcessDocument(getProcess(pp)).getProcessNode();
 		pp.setRequestAttr("$ProcessNode", pn);
 		return pn;
 	}
 
 	protected AbstractTaskNode getTaskNode(final PageParameter pp) {
-		if (null == getActivityBean(pp)) 
+		if (null == getActivityBean(pp)) {
 			return null;
+		}
 		AbstractTaskNode tn = (AbstractTaskNode) pp.getRequestAttr("$TaskNode");
 		if (null != tn) {
 			return tn;

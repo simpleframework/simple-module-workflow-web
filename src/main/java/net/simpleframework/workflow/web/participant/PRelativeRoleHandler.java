@@ -64,20 +64,21 @@ public class PRelativeRoleHandler extends AbstractParticipantHandler {
 		}
 
 		ID userId = null;
-		ID roleId=null;
-		ID deptId=null;
+		ID roleId = null;
+		ID deptId = null;
 		WorkitemBean workitem = null;
 		if (preActivity.getId().equals(activityComplete.getActivity().getId())) {
 			// 如果前一指定节点就是上一节点
 			workitem = activityComplete.getWorkitem();
-			if(null==workitem){
+			if (null == workitem) {
 				final AbstractTaskNode tasknode = aService.getTaskNode(activityComplete.getActivity());
 				if (tasknode instanceof UserNode && ((UserNode) tasknode).isEmpty()) {
-					//处理空节点的执行者
-					List<Participant> mps = aService.getEmptyParticipants(activityComplete.getActivity());
-					if(null!=mps&&mps.size()>0){
-						Participant mp = mps.get(0);
-						userId=mp.userId;
+					// 处理空节点的执行者
+					final List<Participant> mps = aService.getEmptyParticipants(activityComplete
+							.getActivity());
+					if (null != mps && mps.size() > 0) {
+						final Participant mp = mps.get(0);
+						userId = mp.userId;
 						roleId = mp.roleId;
 						deptId = permission.getUser(userId).getDept().getId();
 					}
@@ -95,7 +96,7 @@ public class PRelativeRoleHandler extends AbstractParticipantHandler {
 			roleId = workitem.getRoleId();
 			deptId = workitem.getDeptId();
 		}
-		if(null==userId||null==roleId||null==deptId){
+		if (null == userId || null == roleId || null == deptId) {
 			return null;
 		}
 
@@ -106,9 +107,8 @@ public class PRelativeRoleHandler extends AbstractParticipantHandler {
 		}
 
 		final WorkflowPermissionHandler wph = (WorkflowPermissionHandler) permission;
-		final Collection<Participant> _participants = wph.getRelativeParticipantsOfLevel(
-				userId, roleId, deptId, variables, role,
-				level);
+		final Collection<Participant> _participants = wph.getRelativeParticipantsOfLevel(userId,
+				roleId, deptId, variables, role, level);
 		if (_participants != null) {
 			participants.addAll(_participants);
 		}
