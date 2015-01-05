@@ -1,26 +1,26 @@
-.participant_select .ritem,
+.participant_select .ritem, 
 .transition_select .ritem {
-  border-bottom: 1px solid #bbb;
+  border-bottom: 1px solid #ccc;
   padding: 8px 6px;
 }
 
-.participant_select .ritem:hover,
+.participant_select .ritem:hover, 
 .transition_select .ritem:hover {
   background-color: #f7f7f7;
 }
 
-.participant_select .msg,
-.transition_select .msg {
+.participant_select .msg span, 
+.transition_select .msg span {
   color: red;
   font-size: 9.5pt;
-  margin: 6px;
+  padding: 8px;
 }
 
 .participant_select .transition {
   background-color: #eee;
   padding: 8px 6px;
   color: #a00;
-  border-bottom: 1px solid #aaa;
+  border-bottom: 1px solid #bbb;
   color: #a00;
   font-size: 9.5pt;
 }

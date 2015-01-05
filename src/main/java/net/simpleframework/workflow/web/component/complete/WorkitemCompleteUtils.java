@@ -154,17 +154,16 @@ public class WorkitemCompleteUtils implements IWorkflowServiceAware {
 		final ActivityComplete activityComplete = getActivityComplete(cp, workitem);
 		for (final TransitionNode transition : WorkitemCompleteUtils.getTransitions(cp, workitem)) {
 			final AbstractTaskNode to = transition.to();
-			if (!activityComplete.isParticipantManual(to)) {
-				continue;
-			}
-			sb.append("<div class='transition' transition='").append(transition.getId()).append("'>")
-					.append(transition.to()).append("</div>");
+			final boolean manual = activityComplete.isParticipantManual(to);
+			sb.append("<div class='transition' transition='").append(transition.getId()).append("'>");
+			sb.append(transition.to()).append("</div>");
 			sb.append("<div class='participants'>");
 			final Collection<Participant> coll = activityComplete.getParticipants(transition);
 			if (coll == null || coll.size() == 0) {
 				sb.append("#(participant_select.0)");
 			} else {
 				final boolean multi = activityComplete.isParticipantMultiSelected(to);
+				int i = 0;
 				for (final Participant participant : coll) {
 					sb.append("<div class='ritem'>");
 					final String id = participant.toString();
@@ -172,13 +171,26 @@ public class WorkitemCompleteUtils implements IWorkflowServiceAware {
 					if (ArrayUtils.contains(dispWithDept, to.getName())) {
 						user = ((PermissionUser) user).getDept().getText();
 					}
-					sb.append(multi ? new Checkbox(id, user) : new Radio(id, user).setName(transition
-							.getId()));
+					Checkbox box;
+					if (!manual) {
+						box = new Checkbox(id, user).setChecked(true);
+					} else {
+						if (multi) {
+							box = new Checkbox(id, user);
+						} else {
+							box = new Radio(id, user).setChecked(i++ == 0).setName(transition.getId());
+						}
+					}
+					sb.append(box);
 					sb.append("</div>");
 				}
 			}
 			sb.append("<div class='msg'></div>");
 			sb.append("</div>");
+			if (!manual) {
+				sb.insert(0, "<div style='display:none;'>");
+				sb.append("</div>");
+			}
 		}
 		return sb.toString();
 	}
