@@ -4,11 +4,10 @@ import static net.simpleframework.common.I18n.$m;
 import net.simpleframework.ctx.trans.Transaction;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageParameter;
-import net.simpleframework.mvc.common.element.ButtonElement;
+import net.simpleframework.mvc.common.element.AbstractElement;
 import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.InputElement;
 import net.simpleframework.mvc.common.element.RowField;
-import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.common.element.TableRow;
 import net.simpleframework.mvc.common.element.TableRows;
 import net.simpleframework.mvc.component.ComponentParameter;
@@ -147,13 +146,13 @@ public abstract class AbstractWorkflowFormTPage extends FormTableRowTemplatePage
 		return ElementList.of(InputElement.hidden().setName("workitemId").setValue(pp));
 	}
 
-	protected ButtonElement createSaveBtn() {
-		return SAVE_BTN().setText($m("AbstractWorkflowFormPage.0")).setHighlight(false);
+	protected AbstractElement<?> createSaveBtn() {
+		return VALIDATION_BTN2($m("AbstractWorkflowFormPage.0")).setOnclick(getSaveAction(null));
 	}
 
-	protected ButtonElement createCompleteBtn() {
-		return VALIDATION_BTN().setText($m("AbstractWorkflowFormPage.1")).setHighlight(true)
-				.setOnclick("$Actions['AbstractWorkflowFormPage_completeAction']();");
+	protected AbstractElement<?> createCompleteBtn() {
+		return VALIDATION_BTN2($m("AbstractWorkflowFormPage.1")).setOnclick(
+				"$Actions['AbstractWorkflowFormPage_completeAction']();");
 	}
 
 	@Override
@@ -161,7 +160,7 @@ public abstract class AbstractWorkflowFormTPage extends FormTableRowTemplatePage
 		final WorkitemBean workitem = getWorkitemBean(pp);
 		final ElementList el = ElementList.of();
 		if (!isReadonly(workitem)) {
-			el.append(createSaveBtn()).append(SpanElement.SPACE).append(createCompleteBtn());
+			el.append(createSaveBtn(), createCompleteBtn());
 		}
 		return el;
 	}

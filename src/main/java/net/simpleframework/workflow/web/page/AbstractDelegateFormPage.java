@@ -190,7 +190,7 @@ public abstract class AbstractDelegateFormPage extends FormTableRowTemplatePage 
 					SAVE_BTN().setText($m("WorkitemDelegateReceivingPage.1")).removeClassName(
 							"validation"),
 					SpanElement.SPACE,
-					VALIDATION_BTN().setText($m("WorkitemDelegateReceivingPage.2")).setOnclick(
+					VALIDATION_BTN($m("WorkitemDelegateReceivingPage.2")).setOnclick(
 							"$Actions['WorkitemDelegateReceivingPage_refuse']();"));
 		}
 
