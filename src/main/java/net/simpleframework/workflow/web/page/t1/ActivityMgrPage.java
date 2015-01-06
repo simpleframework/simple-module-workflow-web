@@ -163,7 +163,7 @@ public class ActivityMgrPage extends AbstractWorkflowMgrPage {
 					return createUserNodeLE(activity);
 				}
 			}
-			return activity;
+			return new SpanElement(activity).setStyle("color: #808;");
 		}
 
 		protected LinkElement createUserNodeLE(final ActivityBean activity) {
