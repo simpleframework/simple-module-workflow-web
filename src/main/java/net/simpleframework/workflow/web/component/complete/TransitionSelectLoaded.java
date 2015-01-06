@@ -45,8 +45,16 @@ public class TransitionSelectLoaded extends DefaultPageHandler {
 						.append(transitions).append("');");
 				return js;
 			} else {
-				aComplete.resetTransitions(transitionIds);
-				return ((IWorkitemCompleteHandler) nCP.getComponentHandler()).onComplete(nCP, workitem);
+				try {
+					aComplete.resetTransitions(transitionIds);
+					return ((IWorkitemCompleteHandler) nCP.getComponentHandler()).onComplete(nCP,
+							workitem);
+				} catch (final Throwable th) {
+					final JavascriptForward js = WorkitemCompleteUtils.createErrorForward(cp, th);
+					js.append("$Actions['").append(nCP.getComponentName())
+							.append("_TransitionSelect'].close();");
+					return js;
+				}
 			}
 		}
 	}

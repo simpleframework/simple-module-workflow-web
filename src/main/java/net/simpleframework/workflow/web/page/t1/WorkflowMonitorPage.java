@@ -22,7 +22,6 @@ import net.simpleframework.workflow.engine.ActivityBean;
 import net.simpleframework.workflow.engine.EActivityStatus;
 import net.simpleframework.workflow.engine.ProcessBean;
 import net.simpleframework.workflow.engine.WorkitemBean;
-import net.simpleframework.workflow.schema.AbstractTaskNode;
 import net.simpleframework.workflow.web.IWorkflowWebContext;
 import net.simpleframework.workflow.web.WorkflowUrlsFactory;
 import net.simpleframework.workflow.web.page.WorkflowUtils;
@@ -113,14 +112,12 @@ public class WorkflowMonitorPage extends AbstractWorkflowFormPage {
 	}
 
 	public static class _ActivityTbl extends ActivityTbl {
+
 		@Override
-		protected Object toTasknode(final ActivityBean activity) {
-			if (activity.getTasknodeType() == AbstractTaskNode.TT_USER) {
-				return new LinkElement(activity)
-						.setOnclick("$Actions['WorkflowMonitorPage_workitems']('activityId="
-								+ activity.getId() + "');");
-			}
-			return activity;
+		protected LinkElement createUserNodeLE(final ActivityBean activity) {
+			return new LinkElement(activity)
+					.setOnclick("$Actions['WorkflowMonitorPage_workitems']('activityId="
+							+ activity.getId() + "');");
 		}
 
 		@Override

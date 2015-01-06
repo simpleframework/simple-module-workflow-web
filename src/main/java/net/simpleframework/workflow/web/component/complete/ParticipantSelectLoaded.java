@@ -55,12 +55,17 @@ public class ParticipantSelectLoaded extends DefaultPageHandler {
 						StringUtils.split((String) map.get("participant")));
 			}
 
-			final ActivityComplete aComplete = WorkitemCompleteUtils
-					.getActivityComplete(nCP, workitem);
-			aComplete.resetParticipants(participantIds);
-			final JavascriptForward js = ((IWorkitemCompleteHandler) nCP.getComponentHandler())
-					.onComplete(nCP, workitem);
-			return js;
+			try {
+				final ActivityComplete aComplete = WorkitemCompleteUtils.getActivityComplete(nCP,
+						workitem);
+				aComplete.resetParticipants(participantIds);
+				return ((IWorkitemCompleteHandler) nCP.getComponentHandler()).onComplete(nCP, workitem);
+			} catch (final Throwable th) {
+				final JavascriptForward js = WorkitemCompleteUtils.createErrorForward(cp, th);
+				js.append("$Actions['").append(nCP.getComponentName())
+						.append("_ParticipantSelect'].close();");
+				return js;
+			}
 		}
 	}
 }

@@ -44,6 +44,7 @@ import net.simpleframework.workflow.engine.EProcessStatus;
 import net.simpleframework.workflow.engine.ProcessBean;
 import net.simpleframework.workflow.engine.participant.Participant;
 import net.simpleframework.workflow.schema.AbstractTaskNode;
+import net.simpleframework.workflow.schema.UserNode;
 import net.simpleframework.workflow.web.WorkflowLogRef.ActivityUpdateLogPage;
 import net.simpleframework.workflow.web.page.WorkflowUtils;
 
@@ -154,12 +155,21 @@ public class ActivityMgrPage extends AbstractWorkflowMgrPage {
 		}
 
 		protected Object toTasknode(final ActivityBean activity) {
-			if (activity.getTasknodeType() == AbstractTaskNode.TT_USER) {
-				return new LinkElement(activity)
-						.setOnclick("$Actions['ActivityMgrPage_workitems']('activityId="
-								+ activity.getId() + "');");
+			final AbstractTaskNode tasknode = aService.getTaskNode(activity);
+			if (tasknode instanceof UserNode) {
+				if (((UserNode) tasknode).isEmpty()) {
+					return new SpanElement(activity).setStyle("color: #999;");
+				} else {
+					return createUserNodeLE(activity);
+				}
 			}
 			return activity;
+		}
+
+		protected LinkElement createUserNodeLE(final ActivityBean activity) {
+			return new LinkElement(activity)
+					.setOnclick("$Actions['ActivityMgrPage_workitems']('activityId=" + activity.getId()
+							+ "');");
 		}
 
 		@Override

@@ -13,6 +13,7 @@ import net.simpleframework.common.coll.ArrayUtils;
 import net.simpleframework.common.logger.Log;
 import net.simpleframework.common.logger.LogFactory;
 import net.simpleframework.common.object.ObjectFactory.ObjectCreatorListener;
+import net.simpleframework.common.object.ObjectUtils;
 import net.simpleframework.common.web.JavascriptUtils;
 import net.simpleframework.ctx.permission.PermissionUser;
 import net.simpleframework.mvc.JavascriptForward;
@@ -72,7 +73,7 @@ public class WorkitemCompleteUtils implements IWorkflowServiceAware {
 	}
 
 	public static void doWorkitemComplete(final ComponentParameter cp) throws Exception {
-		final JavascriptForward js = new JavascriptForward();
+		JavascriptForward js = new JavascriptForward();
 		try {
 			final String confirmMessage = (String) cp.getBeanProperty("confirmMessage");
 			if (StringUtils.hasText(confirmMessage)) {
@@ -105,13 +106,20 @@ public class WorkitemCompleteUtils implements IWorkflowServiceAware {
 				}
 			}
 		} catch (final Throwable ex) {
-			log.error(ex);
-			js.append("$error(");
-			js.append(JsonUtils.toJSON(MVCUtils.createException(cp, ex))).append(");");
+			js = createErrorForward(cp, ex);
 		}
 		final Writer out = cp.getResponseWriter();
 		out.write(js.toString());
 		out.flush();
+	}
+
+	static JavascriptForward createErrorForward(final PageRequestResponse rRequest,
+			final Throwable ex) {
+		log.error(ex);
+		final JavascriptForward js = new JavascriptForward();
+		js.append("$error(");
+		js.append(JsonUtils.toJSON(MVCUtils.createException(rRequest, ex))).append(");");
+		return js;
 	}
 
 	private static Collection<TransitionNode> getTransitions(final ComponentParameter cp,
@@ -138,12 +146,12 @@ public class WorkitemCompleteUtils implements IWorkflowServiceAware {
 		final UserNode node = (UserNode) aService.getTaskNode(wService.getActivity(workitem));
 		int i = 0;
 		for (final TransitionNode transition : WorkitemCompleteUtils.getTransitions(cp, workitem)) {
-			final String id = transition.getId();
+			final String val = transition.getId();
 			sb.append("<div class='ritem'>");
 			if (node.isMultiTransitionSelected()) {
-				sb.append(new Checkbox(id, transition.to()).setValue(id));
+				sb.append(new Checkbox(val, transition.to()).setValue(val));
 			} else {
-				sb.append(new Radio(id, transition.to()).setName("transitions_radio").setValue(id)
+				sb.append(new Radio(val, transition.to()).setName("transitions_radio").setValue(val)
 						.setChecked(i++ == 0));
 			}
 			sb.append("</div>");
@@ -170,11 +178,13 @@ public class WorkitemCompleteUtils implements IWorkflowServiceAware {
 				int i = 0;
 				for (final Participant participant : coll) {
 					sb.append("<div class='ritem'>");
-					final String id = participant.toString();
+					final String val = participant.toString();
 					Object user = permission.getUser(participant.userId);
 					if (ArrayUtils.contains(dispWithDept, to.getName())) {
 						user = ((PermissionUser) user).getDept().getText();
 					}
+
+					final String id = ObjectUtils.hashStr(participant);
 					Checkbox box;
 					if (!manual) {
 						box = new Checkbox(id, user).setChecked(true);
@@ -185,7 +195,7 @@ public class WorkitemCompleteUtils implements IWorkflowServiceAware {
 							box = new Radio(id, user).setChecked(i++ == 0).setName(transition.getId());
 						}
 					}
-					sb.append(box);
+					sb.append(box.setValue(val));
 					sb.append("</div>");
 				}
 			}

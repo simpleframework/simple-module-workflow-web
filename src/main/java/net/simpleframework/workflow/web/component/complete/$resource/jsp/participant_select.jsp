@@ -28,9 +28,9 @@
         r.push(o);
         o.participant_obj = p.next();
         var id = "";
-        o.participant_obj.select("input[id]").each(function(box) {
+        o.participant_obj.select("input[value]").each(function(box) {
           if (box.checked) {
-            id += ";" + box.id;
+            id += ";" + box.value;
           }
         });
         if (id.length > 0) {

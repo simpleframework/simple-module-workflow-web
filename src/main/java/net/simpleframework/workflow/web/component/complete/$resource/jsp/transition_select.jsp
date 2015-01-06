@@ -27,7 +27,7 @@
 
     ts.down(".button2").observe("click", function(evn) {
       var id = "";
-      ts.select("input[id]").each(function(box) {
+      ts.select("input[value]").each(function(box) {
         if (box.checked) {
           id += ";" + box.value;
         }
