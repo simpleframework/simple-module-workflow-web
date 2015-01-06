@@ -7,6 +7,7 @@ import net.simpleframework.common.JsonUtils;
 import net.simpleframework.common.StringUtils;
 import net.simpleframework.mvc.DefaultPageHandler;
 import net.simpleframework.mvc.IForward;
+import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.base.ajaxrequest.AjaxRequestBean;
@@ -26,8 +27,9 @@ public class ParticipantSelectLoaded extends DefaultPageHandler {
 	public void onBeforeComponentRender(final PageParameter pp) {
 		super.onBeforeComponentRender(pp);
 
-		pp.addComponentBean("ParticipantSelectLoaded_ok", AjaxRequestBean.class).setHandlerClass(
-				ParticipantSelectAction.class);
+		final ComponentParameter nCP = WorkitemCompleteUtils.get(pp);
+		pp.addComponentBean(nCP.getComponentName() + "_ParticipantSelect_OK", AjaxRequestBean.class)
+				.setHandlerClass(ParticipantSelectAction.class);
 	}
 
 	public static class ParticipantSelectAction extends DefaultAjaxRequestHandler {
@@ -56,7 +58,9 @@ public class ParticipantSelectLoaded extends DefaultPageHandler {
 			final ActivityComplete aComplete = WorkitemCompleteUtils
 					.getActivityComplete(nCP, workitem);
 			aComplete.resetParticipants(participantIds);
-			return ((IWorkitemCompleteHandler) nCP.getComponentHandler()).onComplete(nCP, workitem);
+			final JavascriptForward js = ((IWorkitemCompleteHandler) nCP.getComponentHandler())
+					.onComplete(nCP, workitem);
+			return js;
 		}
 	}
 }

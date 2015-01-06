@@ -29,7 +29,7 @@ public class StartProcessAction extends DefaultAjaxRequestHandler {
 		final boolean transitionManual = initiateItem.isTransitionManual();
 		if (transitionManual) {
 			return new JavascriptForward("$Actions['").append(nCP.getComponentName())
-					.append("_transitionSelect']('")
+					.append("_TransitionSelect']('")
 					.append(StartProcessUtils.toParams(nCP, initiateItem)).append("');");
 		}
 

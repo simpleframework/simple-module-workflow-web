@@ -59,6 +59,10 @@ public class WorkitemCompleteUtils implements IWorkflowServiceAware {
 			sb.append(workitemIdParameterName).append("=").append(workitem.getId()).append("&");
 		}
 		sb.append(BEAN_ID).append("=").append(cp.hashId());
+		final String parameters = (String) cp.getBeanProperty("parameters");
+		if (StringUtils.hasText(parameters)) {
+			sb.append("&").append(parameters);
+		}
 		return sb.toString();
 	}
 
@@ -91,10 +95,10 @@ public class WorkitemCompleteUtils implements IWorkflowServiceAware {
 				// 是否有手动情况
 				final ActivityComplete activityComplete = getActivityComplete(cp, workitem);
 				if (activityComplete.isTransitionManual()) {
-					js.append("$Actions['").append(componentName).append("_transitionSelect']('")
+					js.append("$Actions['").append(componentName).append("_TransitionSelect']('")
 							.append(toParams(cp, workitem)).append("');");
 				} else if (activityComplete.isParticipantManual()) {
-					js.append("$Actions['").append(componentName).append("_participantSelect']('")
+					js.append("$Actions['").append(componentName).append("_ParticipantSelect']('")
 							.append(toParams(cp, workitem)).append("');");
 				} else {
 					js.append(hdl.onComplete(cp, workitem));

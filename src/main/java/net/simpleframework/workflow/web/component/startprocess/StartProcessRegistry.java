@@ -41,10 +41,10 @@ public class StartProcessRegistry extends AbstractComponentRegistry implements
 				StartProcessAction.class);
 
 		// 路由选择
-		AjaxRequestBean ajaxRequest = pp.addComponentBean(componentName + "__transitionSelect_page",
+		AjaxRequestBean ajaxRequest = pp.addComponentBean(componentName + "__TransitionSelect_page",
 				AjaxRequestBean.class).setUrlForward(
 				getComponentResourceProvider().getResourceHomePath() + "/jsp/transition_select.jsp");
-		pp.addComponentBean(componentName + "_transitionSelect", WindowBean.class)
+		pp.addComponentBean(componentName + "_TransitionSelect", WindowBean.class)
 				.setContentRef(ajaxRequest.getName()).setTitle($m("StartProcessRegistry.0"))
 				.setWidth(320).setHeight(400);
 

@@ -23,8 +23,9 @@ public class TransitionSelectLoaded extends DefaultPageHandler {
 	public void onBeforeComponentRender(final PageParameter pp) {
 		super.onBeforeComponentRender(pp);
 
-		pp.addComponentBean("TransitionSelectLoaded_ok", AjaxRequestBean.class).setHandlerClass(
-				TransitionSelectAction.class);
+		final ComponentParameter nCP = WorkitemCompleteUtils.get(pp);
+		pp.addComponentBean(nCP.getComponentName() + "_TransitionSelect_OK", AjaxRequestBean.class)
+				.setHandlerClass(TransitionSelectAction.class);
 	}
 
 	public static class TransitionSelectAction extends ParticipantSelectAction {
@@ -39,7 +40,7 @@ public class TransitionSelectLoaded extends DefaultPageHandler {
 					.getActivityComplete(nCP, workitem);
 			if (aComplete.isParticipantManual(transitionIds)) {
 				final JavascriptForward js = new JavascriptForward();
-				js.append("$Actions['").append(nCP.getComponentName()).append("_participantSelect']('")
+				js.append("$Actions['").append(nCP.getComponentName()).append("_ParticipantSelect']('")
 						.append(WorkitemCompleteUtils.toParams(nCP, workitem)).append("&transitions=")
 						.append(transitions).append("');");
 				return js;

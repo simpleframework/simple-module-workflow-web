@@ -49,7 +49,7 @@
         return;
       }
 
-      $Actions["ParticipantSelectLoaded_ok"](PARAMS + '&json='
+      $Actions["<%=nCP.getComponentName()%>_ParticipantSelect_OK"](PARAMS + '&json='
           + encodeURIComponent(Object.toJSON(data)));
     });
   });

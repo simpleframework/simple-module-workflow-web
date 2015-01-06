@@ -34,7 +34,7 @@
       });
 
       if (id.length > 0) {
-        $Actions['TransitionSelectLoaded_ok'](PARAMS + id.substring(1));
+        $Actions['<%=nCP.getComponentName()%>_TransitionSelect_OK'](PARAMS + id.substring(1));
       } else {
         $UI.shakeMsg(ts.down(".msg"), "<span>#(transition_select.0)</span>");
       }
