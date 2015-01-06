@@ -9,6 +9,8 @@ import java.util.Map;
 import net.simpleframework.common.ID;
 import net.simpleframework.common.StringUtils;
 import net.simpleframework.ctx.script.IScriptEval;
+import net.simpleframework.organization.Department;
+import net.simpleframework.organization.IOrganizationContextAware;
 import net.simpleframework.workflow.engine.ActivityBean;
 import net.simpleframework.workflow.engine.ActivityComplete;
 import net.simpleframework.workflow.engine.EWorkitemStatus;
@@ -19,12 +21,16 @@ import net.simpleframework.workflow.schema.AbstractTaskNode;
 import net.simpleframework.workflow.schema.UserNode;
 import net.simpleframework.workflow.web.WorkflowPermissionHandler;
 
-public class PRelativeRoleHandler extends AbstractParticipantHandler {
+public class PRelativeRoleHandler extends AbstractParticipantHandler implements
+IOrganizationContextAware{
 
 	// 指定前一任务节点node: (默认为前一节点)
 	private final String PARAMS_KEY_NODE = "node";
 	// 相对角色名role: (默认为部门所有人员)
 	private final String PARAMS_KEY_ROLE = "role";
+	//如果当前部门不存在当前角色，是否自动查找上一部门角色，默认false
+	private final String PARAMS_KEY_AUTOPARENT="autoparent";
+	
 	// 相对角色的级别level:下级lower,上级higher (默认是本部门)
 	private final String PARAMS_KEY_level = "level";
 
@@ -55,6 +61,7 @@ public class PRelativeRoleHandler extends AbstractParticipantHandler {
 		final Map<String, String> params = getParams(rRole.getParams());
 		final String node = params.get(PARAMS_KEY_NODE);
 		final String role = params.get(PARAMS_KEY_ROLE);
+		final String autoparent = params.get(PARAMS_KEY_AUTOPARENT);
 		if (StringUtils.hasText(node)) {
 			// 获取前一指定任务步骤实例
 			preActivity = aService.getPreActivity(preActivity, node);
@@ -107,12 +114,18 @@ public class PRelativeRoleHandler extends AbstractParticipantHandler {
 		}
 
 		final WorkflowPermissionHandler wph = (WorkflowPermissionHandler) permission;
-		final Collection<Participant> _participants = wph.getRelativeParticipantsOfLevel(userId,
+		Collection<Participant> _participants = wph.getRelativeParticipantsOfLevel(userId,
 				roleId, deptId, variables, role, level);
-		if (_participants != null) {
+		if((_participants == null||_participants.size()==0)&&level.equals(Level.internal)&&null!=autoparent&&autoparent.equals("true")) {
+			// 本部门,自动查找上一部门角色
+			Department dept = orgContext.getDepartmentService().getBean(deptId);
+			_participants = wph.getRelativeParticipantsOfLevel(userId,
+					roleId, dept.getParentId(), variables, role, level);
+		}
+		
+		if (_participants != null&&_participants.size()>0) {
 			participants.addAll(_participants);
 		}
-
 		return participants;
 	}
 
