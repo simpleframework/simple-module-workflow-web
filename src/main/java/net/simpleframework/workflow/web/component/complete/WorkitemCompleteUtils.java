@@ -147,12 +147,21 @@ public class WorkitemCompleteUtils implements IWorkflowServiceAware {
 		int i = 0;
 		for (final TransitionNode transition : WorkitemCompleteUtils.getTransitions(cp, workitem)) {
 			final String val = transition.getId();
-			sb.append("<div class='ritem'>");
-			if (node.isMultiTransitionSelected()) {
-				sb.append(new Checkbox(val, transition.to()).setValue(val));
+			final boolean manual = TransitionUtils.isTransitionManual(transition);
+			sb.append("<div class='ritem'");
+			if (!manual) {
+				sb.append(" style='display:none;'");
+			}
+			sb.append(">");
+			if (!manual) {
+				sb.append(new Checkbox(val, transition.to()).setChecked(true).setValue(val));
 			} else {
-				sb.append(new Radio(val, transition.to()).setName("transitions_radio").setValue(val)
-						.setChecked(i++ == 0));
+				if (node.isMultiTransitionSelected()) {
+					sb.append(new Checkbox(val, transition.to()).setValue(val));
+				} else {
+					sb.append(new Radio(val, transition.to()).setName("transitions_radio").setValue(val)
+							.setChecked(i++ == 0));
+				}
 			}
 			sb.append("</div>");
 		}
