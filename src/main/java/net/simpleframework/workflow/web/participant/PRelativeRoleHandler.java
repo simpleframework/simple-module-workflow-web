@@ -22,19 +22,19 @@ import net.simpleframework.workflow.schema.UserNode;
 import net.simpleframework.workflow.web.WorkflowPermissionHandler;
 
 public class PRelativeRoleHandler extends AbstractParticipantHandler implements
-IOrganizationContextAware{
+		IOrganizationContextAware {
 
 	// 指定前一任务节点node: (默认为前一节点)
 	private final String PARAMS_KEY_NODE = "node";
 	// 相对角色名role: (默认为部门所有人员)
 	private final String PARAMS_KEY_ROLE = "role";
-	//如果当前部门不存在当前角色，是否自动查找上一部门角色，默认false
-	private final String PARAMS_KEY_AUTOPARENT="autoparent";
-	
+	// 如果当前部门不存在当前角色，是否自动查找上一部门角色，默认false
+	private final String PARAMS_KEY_AUTOPARENT = "autoparent";
+
 	// 相对角色的级别level:下级lower,上级higher (默认是本部门)
 	private final String PARAMS_KEY_level = "level";
-	//指定部门，默认为空
-	private final String PARAMS_KEY_dept="dept";
+	// 指定部门，默认为空
+	private final String PARAMS_KEY_dept = "dept";
 
 	public enum Level {
 		internal {// 本部门
@@ -53,8 +53,8 @@ IOrganizationContextAware{
 
 	@Override
 	public Collection<Participant> getParticipants(final IScriptEval script,
-			final ActivityComplete activityComplete, final Map<String, Object> variables) {
-		// TODO Auto-generated method stub
+			final ActivityComplete activityComplete,
+			final Map<String, Object> variables) {
 		final ArrayList<Participant> participants = new ArrayList<Participant>();
 		// UserNode node = ((UserNode) ((TransitionNode)
 		// variables.get("transition")).to());
@@ -79,20 +79,6 @@ IOrganizationContextAware{
 		if (preActivity.getId().equals(activityComplete.getActivity().getId())) {
 			// 如果前一指定节点就是上一节点
 			workitem = activityComplete.getWorkitem();
-			if (null == workitem) {
-				final AbstractTaskNode tasknode = aService.getTaskNode(activityComplete.getActivity());
-				if (tasknode instanceof UserNode && ((UserNode) tasknode).isEmpty()) {
-					// 处理空节点的执行者
-					final List<Participant> mps = aService.getEmptyParticipants(activityComplete
-							.getActivity());
-					if (null != mps && mps.size() > 0) {
-						final Participant mp = mps.get(0);
-						userId = mp.userId;
-						roleId = mp.roleId;
-						deptId = mp.deptId;
-					}
-				}
-			}
 		} else {
 			final List<WorkitemBean> items = wService.getWorkitems(preActivity,
 					EWorkitemStatus.complete);
@@ -104,11 +90,25 @@ IOrganizationContextAware{
 			userId = workitem.getUserId();
 			roleId = workitem.getRoleId();
 			deptId = workitem.getDeptId();
+		} else {
+			final AbstractTaskNode tasknode = aService.getTaskNode(preActivity);
+			if (tasknode instanceof UserNode && ((UserNode) tasknode).isEmpty()) {
+				// 处理空节点的执行者
+				final List<Participant> mps = aService
+						.getEmptyParticipants(preActivity);
+				if (null != mps && mps.size() > 0) {
+					final Participant mp = mps.get(0);
+					userId = mp.userId;
+					roleId = mp.roleId;
+					deptId = mp.deptId;
+				}
+			}
 		}
 		final String deptName = params.get(PARAMS_KEY_dept);
-		if (StringUtils.hasText(deptName)) {//指定部门
-			Department dept = orgContext.getDepartmentService().getDepartmentByName(deptName);
-			deptId=dept.getId();
+		if (StringUtils.hasText(deptName)) {// 指定部门
+			Department dept = orgContext.getDepartmentService()
+					.getDepartmentByName(deptName);
+			deptId = dept.getId();
 		}
 		if (null == userId || null == roleId || null == deptId) {
 			return null;
@@ -121,16 +121,19 @@ IOrganizationContextAware{
 		}
 
 		final WorkflowPermissionHandler wph = (WorkflowPermissionHandler) permission;
-		Collection<Participant> _participants = wph.getRelativeParticipantsOfLevel(userId,
-				roleId, deptId, variables, role, level);
-		if((_participants == null||_participants.size()==0)&&level.equals(Level.internal)&&null!=autoparent&&autoparent.equals("true")) {
+		Collection<Participant> _participants = wph
+				.getRelativeParticipantsOfLevel(userId, roleId, deptId,
+						variables, role, level);
+		if ((_participants == null || _participants.size() == 0)
+				&& level.equals(Level.internal) && null != autoparent
+				&& autoparent.equals("true")) {
 			// 本部门,自动查找上一部门角色
 			Department dept = orgContext.getDepartmentService().getBean(deptId);
-			_participants = wph.getRelativeParticipantsOfLevel(userId,
-					roleId, dept.getParentId(), variables, role, level);
+			_participants = wph.getRelativeParticipantsOfLevel(userId, roleId,
+					dept.getParentId(), variables, role, level);
 		}
-		
-		if (_participants != null&&_participants.size()>0) {
+
+		if (_participants != null && _participants.size() > 0) {
 			participants.addAll(_participants);
 		}
 		return participants;
