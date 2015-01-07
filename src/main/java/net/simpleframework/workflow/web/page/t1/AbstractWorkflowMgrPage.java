@@ -56,7 +56,7 @@ public abstract class AbstractWorkflowMgrPage extends T1ResizedTemplatePage impl
 
 	@Override
 	public String getRole(final PageParameter pp) {
-		return workflowContext.getManagerRole();
+		return workflowContext.getModule().getManagerRole();
 	}
 
 	protected WindowBean addStatusWindowBean(final PageParameter pp) {
