@@ -38,10 +38,10 @@ public class WorkflowWebContext extends WorkflowContext implements IWorkflowWebC
 		return ModuleFunctions.of(FUNC_MY_WORKLIST, FUNC_PROCESS_MODEL);
 	}
 
-	public static final WebModuleFunction FUNC_MY_WORKLIST = (WebModuleFunction) new WebModuleFunction(
-			MyRunningWorklistPage.class).setName(MODULE_NAME + "-MyRunningWorklistTPage").setText(
-			$m("WorkflowWebContext.0"));
-	public static final WebModuleFunction FUNC_PROCESS_MODEL = (WebModuleFunction) new WebModuleFunction(
-			ProcessModelMgrPage.class).setName(MODULE_NAME + "-ProcessModelMgrPage").setText(
+	public final WebModuleFunction FUNC_MY_WORKLIST = (WebModuleFunction) new WebModuleFunction(
+			this, MyRunningWorklistPage.class).setName(MODULE_NAME + "-MyRunningWorklistTPage")
+			.setText($m("WorkflowWebContext.0"));
+	public final WebModuleFunction FUNC_PROCESS_MODEL = (WebModuleFunction) new WebModuleFunction(
+			this, ProcessModelMgrPage.class).setName(MODULE_NAME + "-ProcessModelMgrPage").setText(
 			$m("WorkflowWebContext.1"));
 }

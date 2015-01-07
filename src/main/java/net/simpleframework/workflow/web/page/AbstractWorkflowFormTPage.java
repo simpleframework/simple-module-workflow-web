@@ -4,6 +4,7 @@ import static net.simpleframework.common.I18n.$m;
 import net.simpleframework.ctx.trans.Transaction;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageParameter;
+import net.simpleframework.mvc.PageParameter.IVal;
 import net.simpleframework.mvc.common.element.AbstractElement;
 import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.Icon;
@@ -114,28 +115,22 @@ public abstract class AbstractWorkflowFormTPage extends FormTableRowTemplatePage
 	}
 
 	protected ProcessBean getProcess(final PageParameter pp) {
-		ProcessBean pb = (ProcessBean) pp.getRequestAttr("$ProcessBean");
-		if (null != pb) {
-			return pb;
-		}
-		pb = aService.getProcessBean(getActivityBean(pp));
-		pp.setRequestAttr("$ProcessBean", pb);
-		return pb;
+		return pp.getCache("$ProcessBean", new IVal<ProcessBean>() {
+			@Override
+			public ProcessBean get() {
+				return aService.getProcessBean(getActivityBean(pp));
+			}
+		});
 	}
 
 	protected ProcessModelBean getProcessModel(final PageParameter pp) {
-		ProcessModelBean pmb = (ProcessModelBean) pp.getRequestAttr("$ProcessModelBean");
-		if (null != pmb) {
-			return pmb;
-		}
-		pmb = mService.getBean(getProcess(pp).getModelId());
-		pp.setRequestAttr("$ProcessModelBean", pmb);
-		return pmb;
+		return pp.getCache("$ProcessModelBean", new IVal<ProcessModelBean>() {
+			@Override
+			public ProcessModelBean get() {
+				return mService.getBean(getProcess(pp).getModelId());
+			}
+		});
 	}
-
-	// protected ProcessBean getProcess(final WorkitemBean workitem) {
-	// return aService.getProcessBean(wService.getActivity(workitem));
-	// }
 
 	@Override
 	public String getFormForward(final PageParameter pp) {
@@ -215,13 +210,12 @@ public abstract class AbstractWorkflowFormTPage extends FormTableRowTemplatePage
 		if (null == workitem) {
 			return null;
 		}
-		ActivityBean activity = (ActivityBean) pp.getRequestAttr("$ActivityBean");
-		if (null != activity) {
-			return activity;
-		}
-		activity = wService.getActivity(workitem);
-		pp.setRequestAttr("$ActivityBean", activity);
-		return activity;
+		return pp.getCache("$ActivityBean", new IVal<ActivityBean>() {
+			@Override
+			public ActivityBean get() {
+				return wService.getActivity(workitem);
+			}
+		});
 	}
 
 	protected ProcessNode getProcessNode(final PageParameter pp) {
@@ -229,26 +223,24 @@ public abstract class AbstractWorkflowFormTPage extends FormTableRowTemplatePage
 		if (null == workitem) {
 			return null;
 		}
-		ProcessNode pn = (ProcessNode) pp.getRequestAttr("$ProcessNode");
-		if (null != pn) {
-			return pn;
-		}
-		pn = pService.getProcessDocument(getProcess(pp)).getProcessNode();
-		pp.setRequestAttr("$ProcessNode", pn);
-		return pn;
+		return pp.getCache("$ProcessNode", new IVal<ProcessNode>() {
+			@Override
+			public ProcessNode get() {
+				return pService.getProcessDocument(getProcess(pp)).getProcessNode();
+			}
+		});
 	}
 
 	protected AbstractTaskNode getTaskNode(final PageParameter pp) {
 		if (null == getActivityBean(pp)) {
 			return null;
 		}
-		AbstractTaskNode tn = (AbstractTaskNode) pp.getRequestAttr("$TaskNode");
-		if (null != tn) {
-			return tn;
-		}
-		tn = aService.getTaskNode(getActivityBean(pp));
-		pp.setRequestAttr("$TaskNode", tn);
-		return tn;
+		return pp.getCache("$TaskNode", new IVal<AbstractTaskNode>() {
+			@Override
+			public AbstractTaskNode get() {
+				return aService.getTaskNode(getActivityBean(pp));
+			}
+		});
 	}
 
 	protected String getProcessProperty(final PageParameter pp, final String key) {
