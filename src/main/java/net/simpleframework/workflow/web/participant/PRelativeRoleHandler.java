@@ -33,6 +33,8 @@ IOrganizationContextAware{
 	
 	// 相对角色的级别level:下级lower,上级higher (默认是本部门)
 	private final String PARAMS_KEY_level = "level";
+	//指定部门，默认为空
+	private final String PARAMS_KEY_dept="dept";
 
 	public enum Level {
 		internal {// 本部门
@@ -102,6 +104,11 @@ IOrganizationContextAware{
 			userId = workitem.getUserId();
 			roleId = workitem.getRoleId();
 			deptId = workitem.getDeptId();
+		}
+		final String deptName = params.get(PARAMS_KEY_dept);
+		if (StringUtils.hasText(deptName)) {//指定部门
+			Department dept = orgContext.getDepartmentService().getDepartmentByName(deptName);
+			deptId=dept.getId();
 		}
 		if (null == userId || null == roleId || null == deptId) {
 			return null;
