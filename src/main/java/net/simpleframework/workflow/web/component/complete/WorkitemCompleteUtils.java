@@ -150,11 +150,12 @@ public class WorkitemCompleteUtils implements IWorkflowServiceAware {
 			final boolean manual = TransitionUtils.isTransitionManual(transition);
 			sb.append("<div class='ritem'");
 			if (!manual) {
-				sb.append(" style='display:none;'");
+				sb.append(" style='background-color: #ddd;'");
 			}
 			sb.append(">");
 			if (!manual) {
-				sb.append(new Checkbox(val, transition.to()).setChecked(true).setValue(val));
+				sb.append(new Checkbox(val, transition.to()).setDisabled(true).setChecked(true)
+						.setValue(val));
 			} else {
 				if (node.isMultiTransitionSelected()) {
 					sb.append(new Checkbox(val, transition.to()).setValue(val));
