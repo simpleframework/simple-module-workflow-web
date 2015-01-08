@@ -131,9 +131,9 @@ public class WorkitemCompleteUtils implements IWorkflowServiceAware {
 		if (transitions.length > 0) {
 			for (final String id : transitions) {
 				final TransitionNode transition = activityComplete.getTransitionById(id);
-				if (TransitionUtils.isTransitionManual(transition)) {
-					al.add(transition);
-				}
+				// if (TransitionUtils.isTransitionManual(transition)) {
+				al.add(transition);
+				// }
 			}
 		} else {
 			al.addAll(activityComplete.getTransitions());
@@ -145,15 +145,10 @@ public class WorkitemCompleteUtils implements IWorkflowServiceAware {
 		final StringBuilder sb = new StringBuilder();
 		final UserNode node = (UserNode) aService.getTaskNode(wService.getActivity(workitem));
 		int i = 0;
-		for (final TransitionNode transition : WorkitemCompleteUtils.getTransitions(cp, workitem)) {
+		for (final TransitionNode transition : getTransitions(cp, workitem)) {
 			final String val = transition.getId();
-			final boolean manual = TransitionUtils.isTransitionManual(transition);
-			sb.append("<div class='ritem'");
-			if (!manual) {
-				sb.append(" style='background-color: #ddd;'");
-			}
-			sb.append(">");
-			if (!manual) {
+			sb.append("<div class='ritem'>");
+			if (!TransitionUtils.isTransitionManual(transition)) {
 				sb.append(new Checkbox(val, transition.to()).setDisabled(true).setChecked(true)
 						.setValue(val));
 			} else {
@@ -174,9 +169,8 @@ public class WorkitemCompleteUtils implements IWorkflowServiceAware {
 		final String[] dispWithDept = (String[]) cp.getBeanProperty("dispWithDept");
 		final WorkitemBean workitem = getWorkitemBean(cp);
 		final ActivityComplete activityComplete = getActivityComplete(cp, workitem);
-		for (final TransitionNode transition : WorkitemCompleteUtils.getTransitions(cp, workitem)) {
+		for (final TransitionNode transition : getTransitions(cp, workitem)) {
 			final AbstractTaskNode to = transition.to();
-			final boolean manual = activityComplete.isParticipantManual(to);
 			sb.append("<div class='transition' transition='").append(transition.getId()).append("'>");
 			sb.append(transition.to()).append("</div>");
 			sb.append("<div class='participants'>");
@@ -184,6 +178,7 @@ public class WorkitemCompleteUtils implements IWorkflowServiceAware {
 			if (coll == null || coll.size() == 0) {
 				sb.append("#(participant_select.0)");
 			} else {
+				final boolean manual = activityComplete.isParticipantManual(to);
 				final boolean multi = activityComplete.isParticipantMultiSelected(to);
 				int i = 0;
 				for (final Participant participant : coll) {
@@ -193,11 +188,10 @@ public class WorkitemCompleteUtils implements IWorkflowServiceAware {
 					if (ArrayUtils.contains(dispWithDept, to.getName())) {
 						user = ((PermissionUser) user).getDept().getText();
 					}
-
 					final String id = ObjectUtils.hashStr(participant);
 					Checkbox box;
 					if (!manual) {
-						box = new Checkbox(id, user).setChecked(true);
+						box = new Checkbox(id, user).setDisabled(true).setChecked(true);
 					} else {
 						if (multi) {
 							box = new Checkbox(id, user);
@@ -211,10 +205,6 @@ public class WorkitemCompleteUtils implements IWorkflowServiceAware {
 			}
 			sb.append("<div class='msg'></div>");
 			sb.append("</div>");
-			if (!manual) {
-				sb.insert(0, "<div style='display:none;'>");
-				sb.append("</div>");
-			}
 		}
 		return sb.toString();
 	}

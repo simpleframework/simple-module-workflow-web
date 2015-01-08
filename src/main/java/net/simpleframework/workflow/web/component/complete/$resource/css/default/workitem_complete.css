@@ -1,7 +1,7 @@
 .participant_select .ritem, 
 .transition_select .ritem {
   border-bottom: 1px solid #ccc;
-  padding: 8px 6px;
+  padding: 10px 8px;
 }
 
 .participant_select .ritem:hover, 
