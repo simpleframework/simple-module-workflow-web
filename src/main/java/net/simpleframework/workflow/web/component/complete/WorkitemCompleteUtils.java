@@ -131,9 +131,9 @@ public class WorkitemCompleteUtils implements IWorkflowServiceAware {
 		if (transitions.length > 0) {
 			for (final String id : transitions) {
 				final TransitionNode transition = activityComplete.getTransitionById(id);
-				// if (TransitionUtils.isTransitionManual(transition)) {
-				al.add(transition);
-				// }
+				if (transition != null) {
+					al.add(transition);
+				}
 			}
 		} else {
 			al.addAll(activityComplete.getTransitions());
@@ -166,14 +166,17 @@ public class WorkitemCompleteUtils implements IWorkflowServiceAware {
 
 	public static String toParticipantsHTML(final ComponentParameter cp) {
 		final StringBuilder sb = new StringBuilder();
-		final String[] dispWithDept = (String[]) cp.getBeanProperty("dispWithDept");
+		final String[] deptdispTasks = (String[]) cp.getBeanProperty("deptdispTasks");
+		final String[] novalidationTasks = (String[]) cp.getBeanProperty("novalidationTasks");
 		final WorkitemBean workitem = getWorkitemBean(cp);
 		final ActivityComplete activityComplete = getActivityComplete(cp, workitem);
 		for (final TransitionNode transition : getTransitions(cp, workitem)) {
 			final AbstractTaskNode to = transition.to();
-			sb.append("<div class='transition' transition='").append(transition.getId()).append("'>");
+			sb.append("<div class='transition' novalidation='")
+					.append(ArrayUtils.contains(novalidationTasks, to.getName()))
+					.append("' transition='").append(transition.getId()).append("'>");
 			sb.append(transition.to()).append("</div>");
-			sb.append("<div class='participants'>");
+			sb.append(" <div class='participants'>");
 			final Collection<Participant> coll = activityComplete.getParticipants(transition);
 			if (coll == null || coll.size() == 0) {
 				sb.append("#(participant_select.0)");
@@ -185,7 +188,7 @@ public class WorkitemCompleteUtils implements IWorkflowServiceAware {
 					sb.append("<div class='ritem'>");
 					final String val = participant.toString();
 					Object user = permission.getUser(participant.userId);
-					if (ArrayUtils.contains(dispWithDept, to.getName())) {
+					if (ArrayUtils.contains(deptdispTasks, to.getName())) {
 						user = ((PermissionUser) user).getDept().getText();
 					}
 					final String id = ObjectUtils.hashStr(participant);
@@ -203,7 +206,7 @@ public class WorkitemCompleteUtils implements IWorkflowServiceAware {
 					sb.append("</div>");
 				}
 			}
-			sb.append("<div class='msg'></div>");
+			sb.append(" <div class='msg'></div>");
 			sb.append("</div>");
 		}
 		return sb.toString();

@@ -20,7 +20,9 @@ public class WorkitemCompleteBean extends AbstractComponentBean {
 	private boolean bcomplete = true;
 
 	/* 选择参与者时用所在部门显示的任务名 */
-	private String[] dispWithDept;
+	private String[] deptdispTasks;
+	/* 选择参与者时，取消对某一任务的空参与者判断 */
+	private String[] novalidationTasks;
 
 	/* 确认消息 */
 	private String confirmMessage;
@@ -57,12 +59,21 @@ public class WorkitemCompleteBean extends AbstractComponentBean {
 		return this;
 	}
 
-	public String[] getDispWithDept() {
-		return dispWithDept;
+	public String[] getDeptdispTasks() {
+		return deptdispTasks;
 	}
 
-	public WorkitemCompleteBean setDispWithDept(final String[] dispWithDept) {
-		this.dispWithDept = dispWithDept;
+	public WorkitemCompleteBean setDeptdispTasks(final String[] deptdispTasks) {
+		this.deptdispTasks = deptdispTasks;
+		return this;
+	}
+
+	public String[] getNovalidationTasks() {
+		return novalidationTasks;
+	}
+
+	public WorkitemCompleteBean setNovalidationTasks(final String[] novalidationTasks) {
+		this.novalidationTasks = novalidationTasks;
 		return this;
 	}
 
