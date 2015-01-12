@@ -22,6 +22,7 @@ import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.ETextAlign;
 import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.InputElement;
+import net.simpleframework.mvc.common.element.LinkButton;
 import net.simpleframework.mvc.common.element.LinkElement;
 import net.simpleframework.mvc.common.element.ProgressElement;
 import net.simpleframework.mvc.common.element.SpanElement;
@@ -94,7 +95,8 @@ public class ActivityMgrPage extends AbstractWorkflowMgrPage {
 		return ElementList.of(
 				createBackButton()
 						.setHref(url(ProcessMgrPage.class, "modelId=" + process.getModelId())),
-				SpanElement.SPACE15, SpanElement.strongText(WorkflowUtils.getTitle(process)));
+				SpanElement.SPACE, LinkButton.of("放弃..."), SpanElement.SPACE15, SpanElement
+						.strongText(WorkflowUtils.getTitle(process)));
 	}
 
 	@Override

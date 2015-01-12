@@ -70,44 +70,51 @@ public class WorkitemCompleteUtils implements IWorkflowServiceAware {
 	public static void doWorkitemComplete(final ComponentParameter cp) throws Exception {
 		JavascriptForward js = new JavascriptForward();
 		try {
-			final String confirmMessage = (String) cp.getBeanProperty("confirmMessage");
-			if (StringUtils.hasText(confirmMessage)) {
-				js.append("if (!confirm('");
-				js.append(JavascriptUtils.escape(confirmMessage)).append("')) return;");
-			}
-
 			final WorkitemBean workitem = getWorkitemBean(cp);
 			final WorkitemComplete workitemComplete = WorkitemComplete.get(workitem);
+
 			// 绑定变量
 			final IWorkflowWebForm workflowForm = (IWorkflowWebForm) workitemComplete
 					.getWorkflowForm();
 			workflowForm.bindVariables(cp, workitemComplete.getVariables());
 
-			final IWorkitemCompleteHandler hdl = (IWorkitemCompleteHandler) cp.getComponentHandler();
 			if (!workitemComplete.isAllCompleted()) {
-				js.append(hdl.onComplete(cp, workitem));
+				_appendWorkitemComplete(cp, js, workitem);
 			} else {
-				final String componentName = cp.getComponentName();
 				// 是否有手动情况
 				final ActivityComplete activityComplete = getActivityComplete(cp, workitem);
-				activityComplete.reset();
-
 				if (activityComplete.isTransitionManual()) {
-					js.append("$Actions['").append(componentName).append("_TransitionSelect']('")
-							.append(toParams(cp, workitem)).append("');");
+					activityComplete.reset();
+					js.append("$Actions['").append(cp.getComponentName())
+							.append("_TransitionSelect']('").append(toParams(cp, workitem)).append("');");
 				} else if (activityComplete.isParticipantManual()) {
-					js.append("$Actions['").append(componentName).append("_ParticipantSelect']('")
-							.append(toParams(cp, workitem)).append("');");
+					activityComplete.reset();
+					js.append("$Actions['").append(cp.getComponentName())
+							.append("_ParticipantSelect']('").append(toParams(cp, workitem)).append("');");
 				} else {
-					js.append(hdl.onComplete(cp, workitem));
+					_appendWorkitemComplete(cp, js, workitem);
 				}
 			}
 		} catch (final Throwable ex) {
 			js = createErrorForward(cp, ex);
 		}
 		final Writer out = cp.getResponseWriter();
-		out.write(js.toString());
+		out.write(JavascriptUtils.wrapFunction(js.toString()));
 		out.flush();
+	}
+
+	private static void _appendWorkitemComplete(final ComponentParameter cp,
+			final JavascriptForward js, final WorkitemBean workitem) throws Exception {
+		final String confirmMessage = (String) cp.getBeanProperty("confirmMessage");
+		if (StringUtils.hasText(confirmMessage)) {
+			js.append("if (!confirm('");
+			js.append(JavascriptUtils.escape(confirmMessage)).append("')) return;");
+			js.append("$Actions['").append(cp.getComponentName()).append("_Comfirm']('")
+					.append(toParams(cp, workitem)).append("');");
+		} else {
+			final IWorkitemCompleteHandler hdl = (IWorkitemCompleteHandler) cp.getComponentHandler();
+			js.append(hdl.onComplete(cp, workitem));
+		}
 	}
 
 	static JavascriptForward createErrorForward(final PageRequestResponse rRequest,
