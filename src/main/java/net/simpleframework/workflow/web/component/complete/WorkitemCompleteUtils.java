@@ -12,7 +12,6 @@ import net.simpleframework.common.StringUtils;
 import net.simpleframework.common.coll.ArrayUtils;
 import net.simpleframework.common.logger.Log;
 import net.simpleframework.common.logger.LogFactory;
-import net.simpleframework.common.object.ObjectFactory.ObjectCreatorListener;
 import net.simpleframework.common.object.ObjectUtils;
 import net.simpleframework.common.web.JavascriptUtils;
 import net.simpleframework.ctx.permission.PermissionUser;
@@ -60,10 +59,6 @@ public class WorkitemCompleteUtils implements IWorkflowServiceAware {
 			sb.append(workitemIdParameterName).append("=").append(workitem.getId()).append("&");
 		}
 		sb.append(BEAN_ID).append("=").append(cp.hashId());
-		final String parameters = (String) cp.getBeanProperty("parameters");
-		if (StringUtils.hasText(parameters)) {
-			sb.append("&").append(parameters);
-		}
 		return sb.toString();
 	}
 
@@ -95,6 +90,8 @@ public class WorkitemCompleteUtils implements IWorkflowServiceAware {
 				final String componentName = cp.getComponentName();
 				// 是否有手动情况
 				final ActivityComplete activityComplete = getActivityComplete(cp, workitem);
+				activityComplete.reset();
+
 				if (activityComplete.isTransitionManual()) {
 					js.append("$Actions['").append(componentName).append("_TransitionSelect']('")
 							.append(toParams(cp, workitem)).append("');");
@@ -214,12 +211,8 @@ public class WorkitemCompleteUtils implements IWorkflowServiceAware {
 
 	static ActivityComplete getActivityComplete(final ComponentParameter cp,
 			final WorkitemBean workitem) {
-		return WorkitemComplete.get(workitem).getActivityComplete(new ObjectCreatorListener() {
-			@Override
-			public void onCreated(final Object o) {
-				((ActivityComplete) o).setBcomplete((Boolean) cp.getBeanProperty("bcomplete"));
-			}
-		});
+		return WorkitemComplete.get(workitem).getActivityComplete()
+				.setBcomplete((Boolean) cp.getBeanProperty("bcomplete"));
 	}
 
 	private static Log log = LogFactory.getLogger(WorkitemCompleteUtils.class);

@@ -69,7 +69,8 @@ public abstract class AbstractWorkflowFormTPage extends FormTableRowTemplatePage
 	protected WorkitemCompleteBean addWorkitemCompleteComponentBean(final PageParameter pp) {
 		// 完成
 		return (WorkitemCompleteBean) addComponentBean(pp, "AbstractWorkflowFormPage_completeAction",
-				WorkitemCompleteBean.class).setSelector(getFormSelector());
+				WorkitemCompleteBean.class).setSelector(getFormSelector()).setParameters(
+				"_isSendAction=false");
 	}
 
 	protected WfCommentBean addWfCommentBean(final PageParameter pp) {
