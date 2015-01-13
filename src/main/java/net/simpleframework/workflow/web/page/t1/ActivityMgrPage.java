@@ -71,6 +71,8 @@ public class ActivityMgrPage extends AbstractWorkflowMgrPage {
 				.setContentRef("ActivityMgrPage_abort_page").setTitle(EProcessStatus.abort.toString())
 				.setWidth(420).setHeight(240);
 
+		// addcom
+
 		// workitems
 		addAjaxRequest(pp, "ActivityMgrPage_workitems_page", WorkitemsMgrPage.class);
 		addWindowBean(pp, "ActivityMgrPage_workitems")

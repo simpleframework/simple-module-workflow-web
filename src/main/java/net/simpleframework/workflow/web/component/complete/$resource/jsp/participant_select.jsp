@@ -19,11 +19,11 @@
 	
     var PARAMS = "<%=WorkitemCompleteUtils.toParams(nCP,
 					WorkitemCompleteUtils.getWorkitemBean(nCP))%>";
-
     ts.down(".button2").observe("click", function(evn) {
       var data = ts.select(".transition").inject([], function(r, p) {
         var o = {
-          "transition" : p.readAttribute("transition")
+          "transition" : p.readAttribute("transition"),
+          "novalidation" : p.readAttribute("novalidation")
         };
         r.push(o);
         o.participant_obj = p.next();
@@ -38,10 +38,11 @@
         }
         return r;
       });
-
+      
+      var _MSG = "<span>#(participant_select.0)</span>";
       if (data.any(function(o) {
-        if (!o.participant) {
-          $UI.shakeMsg(o.participant_obj.down(".msg"), "<span>#(participant_select.0)</span>");
+        if (o.novalidation == 'false' && !o.participant) {
+          $UI.shakeMsg(o.participant_obj.down(".msg"), _MSG);
           return true;
         }
         delete o.participant_obj;
@@ -49,8 +50,15 @@
         return;
       }
 
-      $Actions["<%=nCP.getComponentName()%>_ParticipantSelect_OK"](PARAMS + '&json='
-          + encodeURIComponent(Object.toJSON(data)));
-    });
+      if (!data.any(function(o) {
+        return o.participant;
+      })) {
+        $UI.shakeMsg(ts.down(".msg"), _MSG);
+        return;
+      }
+
+      $Actions["<%=nCP.getComponentName()%>_ParticipantSelect_OK"](PARAMS
+              + '&json=' + encodeURIComponent(Object.toJSON(data)));
+  	});
   });
 </script>

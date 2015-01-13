@@ -58,18 +58,40 @@ public abstract class AbstractItemsTPage extends Category_ListPage implements IW
 	protected CategoryItem createCategoryItem(final PageParameter pp, final String text,
 			final Class<? extends AbstractItemsTPage> mClass) {
 		return new CategoryItem(text).setHref(getUrlsFactory().getUrl(pp, mClass)).setSelected(
-				mClass == ObjectFactory.original(getClass()));
+				mClass.isAssignableFrom(getClass()));
+	}
+
+	protected CategoryItem createCategoryItem_mywork(final PageParameter pp) {
+		final CategoryItem item = createCategoryItem(pp, $m("AbstractItemsTPage.0"),
+				MyRunningWorklistTPage.class).setIconClass("my_work_icon");
+		final int count = wService.getUnreadWorklist(pp.getLoginId()).getCount();
+		if (count > 0) {
+			item.setNum(new SupElement(count).setHighlight(true));
+		}
+		return item;
+	}
+
+	protected CategoryItem createCategoryItem_mywork_complete(final PageParameter pp) {
+		return createCategoryItem(pp, $m("AbstractItemsTPage.1"), MyFinalWorklistTPage.class)
+				.setIconClass("my_work_complete_icon");
+	}
+
+	protected CategoryItem createCategoryItem_delegate(final PageParameter pp) {
+		final CategoryItem delegate = createCategoryItem(pp, $m("AbstractItemsTPage.3"),
+				MyWorkDelegateListTPage.class).setIconClass("delegate_list_icon");
+		delegate.setSelected(delegate.isSelected()
+				|| UserDelegateListTPage.class == ObjectFactory.original(getClass()));
+		return delegate;
+	}
+
+	protected CategoryItem createCategoryItem_myinitiate(final PageParameter pp) {
+		return createCategoryItem(pp, $m("AbstractItemsTPage.2"), MyInitiateItemsTPage.class)
+				.setIconClass("my_initiate_icon");
 	}
 
 	@Override
 	protected CategoryItems getCategoryList(final PageParameter pp) {
-		final CategoryItem item0 = createCategoryItem(pp, $m("AbstractItemsTPage.0"),
-				MyRunningWorklistTPage.class).setIconClass("my_work_icon");
-		final int count = wService.getUnreadWorklist(pp.getLoginId()).getCount();
-		if (count > 0) {
-			item0.setNum(new SupElement(count).setHighlight(true));
-		}
-
+		final CategoryItem item0 = createCategoryItem_mywork(pp);
 		// final String s = pp.getParameter("s");
 		final List<CategoryItem> children = item0.getChildren();
 		// children.add(createCategoryItem(pp, "待办工作",
@@ -77,16 +99,9 @@ public abstract class AbstractItemsTPage extends Category_ListPage implements IW
 		// "status=running")
 		// .setSelected("running".equals(_status)));
 		// .setSelected("complete".equals(s))
-		children.add(createCategoryItem(pp, $m("AbstractItemsTPage.1"), MyFinalWorklistTPage.class)
-				.setIconClass("my_work_complete_icon"));
-		// children.add();
-		final CategoryItem delegate = createCategoryItem(pp, $m("AbstractItemsTPage.3"),
-				MyWorkDelegateListTPage.class).setIconClass("delegate_list_icon");
-		delegate.setSelected(delegate.isSelected()
-				|| UserDelegateListTPage.class == ObjectFactory.original(getClass()));
-		return CategoryItems.of(item0,
-				createCategoryItem(pp, $m("AbstractItemsTPage.2"), MyInitiateItemsTPage.class)
-						.setIconClass("my_initiate_icon"), delegate);
+		children.add(createCategoryItem_mywork_complete(pp));
+		return CategoryItems.of(item0, createCategoryItem_myinitiate(pp),
+				createCategoryItem_delegate(pp));
 	}
 
 	protected static WorkflowUrlsFactory getUrlsFactory() {
