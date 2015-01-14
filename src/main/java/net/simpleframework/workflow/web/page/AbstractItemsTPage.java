@@ -26,20 +26,25 @@ import net.simpleframework.workflow.web.WorkflowUrlsFactory;
  * @author 陈侃(cknet@126.com, 13910090885) https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
-public abstract class AbstractItemsTPage extends Category_ListPage implements IWorkflowServiceAware {
+public abstract class AbstractItemsTPage extends Category_ListPage implements
+		IWorkflowServiceAware {
 
 	@Override
 	protected void onForward(final PageParameter pp) {
 		super.onForward(pp);
 		pp.addImportCSS(AbstractItemsTPage.class, "/my_work.css");
 
-		final IModuleRef ref = ((IWorkflowWebContext) workflowContext).getLogRef();
+		final IModuleRef ref = ((IWorkflowWebContext) workflowContext)
+				.getLogRef();
 		Class<? extends AbstractMVCPage> lPage;
 		if (ref != null && (lPage = getUpdateLogPage()) != null) {
-			pp.addComponentBean("AbstractItemsTPage_update_logPage", AjaxRequestBean.class)
-					.setUrlForward(AbstractMVCPage.url(lPage));
-			pp.addComponentBean("AbstractItemsTPage_update_log", WindowBean.class)
-					.setContentRef("AbstractItemsTPage_update_logPage").setHeight(540).setWidth(864);
+			pp.addComponentBean("AbstractItemsTPage_update_logPage",
+					AjaxRequestBean.class).setUrlForward(
+					AbstractMVCPage.url(lPage));
+			pp.addComponentBean("AbstractItemsTPage_update_log",
+					WindowBean.class)
+					.setContentRef("AbstractItemsTPage_update_logPage")
+					.setHeight(540).setWidth(864);
 		}
 	}
 
@@ -48,45 +53,53 @@ public abstract class AbstractItemsTPage extends Category_ListPage implements IW
 	}
 
 	@Override
-	protected TablePagerBean addTablePagerBean(final PageParameter pp, final String name,
+	protected TablePagerBean addTablePagerBean(final PageParameter pp,
+			final String name,
 			final Class<? extends ITablePagerHandler> handlerClass) {
-		return (TablePagerBean) addTablePagerBean(pp, name, handlerClass, false).setResize(false)
-				.setShowCheckbox(false).setShowFilterBar(true).setShowLineNo(false).setShowHead(true)
-				.setPageItems(50);
+		return (TablePagerBean) addTablePagerBean(pp, name, handlerClass, false)
+				.setResize(false).setShowCheckbox(false).setShowFilterBar(true)
+				.setShowLineNo(false).setShowHead(true).setPageItems(50);
 	}
 
-	protected CategoryItem createCategoryItem(final PageParameter pp, final String text,
-			final Class<? extends AbstractItemsTPage> mClass) {
-		return new CategoryItem(text).setHref(getUrlsFactory().getUrl(pp, mClass)).setSelected(
+	public CategoryItem createCategoryItem(final PageParameter pp,
+			final String text, final Class<? extends AbstractItemsTPage> mClass) {
+		return new CategoryItem(text).setHref(
+				getUrlsFactory().getUrl(pp, mClass)).setSelected(
 				mClass.isAssignableFrom(getClass()));
 	}
 
-	protected CategoryItem createCategoryItem_mywork(final PageParameter pp) {
-		final CategoryItem item = createCategoryItem(pp, $m("AbstractItemsTPage.0"),
-				MyRunningWorklistTPage.class).setIconClass("my_work_icon");
-		final int count = wService.getUnreadWorklist(pp.getLoginId()).getCount();
+	public CategoryItem createCategoryItem_mywork(final PageParameter pp) {
+		final CategoryItem item = createCategoryItem(pp,
+				$m("AbstractItemsTPage.0"), MyRunningWorklistTPage.class)
+				.setIconClass("my_work_icon");
+		final int count = wService.getUnreadWorklist(pp.getLoginId())
+				.getCount();
 		if (count > 0) {
 			item.setNum(new SupElement(count).setHighlight(true));
 		}
 		return item;
 	}
 
-	protected CategoryItem createCategoryItem_mywork_complete(final PageParameter pp) {
-		return createCategoryItem(pp, $m("AbstractItemsTPage.1"), MyFinalWorklistTPage.class)
-				.setIconClass("my_work_complete_icon");
+	public CategoryItem createCategoryItem_mywork_complete(
+			final PageParameter pp) {
+		return createCategoryItem(pp, $m("AbstractItemsTPage.1"),
+				MyFinalWorklistTPage.class).setIconClass(
+				"my_work_complete_icon");
 	}
 
-	protected CategoryItem createCategoryItem_delegate(final PageParameter pp) {
-		final CategoryItem delegate = createCategoryItem(pp, $m("AbstractItemsTPage.3"),
-				MyWorkDelegateListTPage.class).setIconClass("delegate_list_icon");
+	public CategoryItem createCategoryItem_delegate(final PageParameter pp) {
+		final CategoryItem delegate = createCategoryItem(pp,
+				$m("AbstractItemsTPage.3"), MyWorkDelegateListTPage.class)
+				.setIconClass("delegate_list_icon");
 		delegate.setSelected(delegate.isSelected()
-				|| UserDelegateListTPage.class == ObjectFactory.original(getClass()));
+				|| UserDelegateListTPage.class == ObjectFactory
+						.original(getClass()));
 		return delegate;
 	}
 
-	protected CategoryItem createCategoryItem_myinitiate(final PageParameter pp) {
-		return createCategoryItem(pp, $m("AbstractItemsTPage.2"), MyInitiateItemsTPage.class)
-				.setIconClass("my_initiate_icon");
+	public CategoryItem createCategoryItem_myinitiate(final PageParameter pp) {
+		return createCategoryItem(pp, $m("AbstractItemsTPage.2"),
+				MyInitiateItemsTPage.class).setIconClass("my_initiate_icon");
 	}
 
 	@Override
