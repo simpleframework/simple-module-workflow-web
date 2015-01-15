@@ -1,8 +1,13 @@
 package net.simpleframework.workflow.web.component.abort;
 
+import java.io.IOException;
+import java.io.Writer;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import net.simpleframework.common.web.JavascriptUtils;
+import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageRequestResponse;
 import net.simpleframework.mvc.component.ComponentParameter;
 
@@ -23,5 +28,13 @@ public abstract class ActivityAbortUtils {
 	public static ComponentParameter get(final HttpServletRequest request,
 			final HttpServletResponse response) {
 		return ComponentParameter.get(request, response, BEAN_ID);
+	}
+
+	public static void doActivityAbort(final ComponentParameter cp) throws IOException {
+		final JavascriptForward js = new JavascriptForward();
+		js.append("$Actions['").append(cp.getComponentName()).append("_win']();");
+		final Writer out = cp.getResponseWriter();
+		out.write(JavascriptUtils.wrapFunction(js.toString()));
+		out.flush();
 	}
 }
