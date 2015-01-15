@@ -47,6 +47,7 @@ import net.simpleframework.workflow.engine.participant.Participant;
 import net.simpleframework.workflow.schema.AbstractTaskNode;
 import net.simpleframework.workflow.schema.UserNode;
 import net.simpleframework.workflow.web.WorkflowLogRef.ActivityUpdateLogPage;
+import net.simpleframework.workflow.web.component.abort.ActivityAbortBean;
 import net.simpleframework.workflow.web.page.WorkflowUtils;
 
 /**
@@ -71,7 +72,7 @@ public class ActivityMgrPage extends AbstractWorkflowMgrPage {
 				.setContentRef("ActivityMgrPage_abort_page").setTitle(EProcessStatus.abort.toString())
 				.setWidth(420).setHeight(240);
 
-		// addcom
+		addComponentBean(pp, "ActivityMgrPage_abort2", ActivityAbortBean.class);
 
 		// workitems
 		addAjaxRequest(pp, "ActivityMgrPage_workitems_page", WorkitemsMgrPage.class);
@@ -97,8 +98,9 @@ public class ActivityMgrPage extends AbstractWorkflowMgrPage {
 		return ElementList.of(
 				createBackButton()
 						.setHref(url(ProcessMgrPage.class, "modelId=" + process.getModelId())),
-				SpanElement.SPACE, LinkButton.of("放弃..."), SpanElement.SPACE15, SpanElement
-						.strongText(WorkflowUtils.getTitle(process)));
+				SpanElement.SPACE,
+				LinkButton.of("放弃...").setOnclick("$Actions['ActivityMgrPage_abort2']();"),
+				SpanElement.SPACE15, SpanElement.strongText(WorkflowUtils.getTitle(process)));
 	}
 
 	@Override

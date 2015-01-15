@@ -13,19 +13,24 @@ import net.simpleframework.mvc.component.ComponentUtils;
  */
 public class WorkitemCompleteRender extends ComponentJavascriptRender {
 
+	protected String _params(final ComponentParameter cp) {
+		return WorkitemCompleteUtils.BEAN_ID + "=" + cp.hashId();
+	}
+
+	protected String _actpath(final ComponentParameter cp) {
+		return ComponentUtils.getResourceHomePath(WorkitemCompleteBean.class)
+				+ "/jsp/workitem_complete.jsp";
+	}
+
 	@Override
 	public String getJavascriptCode(final ComponentParameter cp) {
 		final StringBuilder sb = new StringBuilder();
 		sb.append("var dc = function() { $Loading.hide(); };");
 		sb.append("$Loading.show();");
-		final StringBuilder params = new StringBuilder();
-		params.append(WorkitemCompleteUtils.BEAN_ID).append("=").append(cp.hashId());
-		sb.append("var params=\"").append(params).append("\";");
+		sb.append("var params=\"").append(_params(cp)).append("\";");
 		ComponentRenderUtils.appendParameters(sb, cp, "params");
 		sb.append("params = params.addParameter(arguments[0]);");
-		sb.append("new Ajax.Request('")
-				.append(ComponentUtils.getResourceHomePath(WorkitemCompleteBean.class))
-				.append("/jsp/workitem_complete.jsp', {");
+		sb.append("new Ajax.Request('").append(_actpath(cp)).append("', {");
 		sb.append("postBody: params,");
 		sb.append("onComplete: function(req) {");
 		sb.append("try { $call(req.responseText); } finally { dc(); }");

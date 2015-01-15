@@ -1,5 +1,7 @@
 package net.simpleframework.workflow.web.component.abort;
 
+import net.simpleframework.mvc.PageParameter;
+import net.simpleframework.mvc.component.AbstractComponentBean;
 import net.simpleframework.mvc.component.AbstractComponentRegistry;
 import net.simpleframework.mvc.component.ComponentBean;
 import net.simpleframework.mvc.component.ComponentName;
@@ -19,4 +21,11 @@ import net.simpleframework.mvc.component.ComponentResourceProvider;
 public class ActivityAbortRegistry extends AbstractComponentRegistry {
 
 	public static final String ACTIVITYABORT = "wf_activity_abort";
+
+	@Override
+	public AbstractComponentBean createComponentBean(final PageParameter pp, final Object attriData) {
+		final ActivityAbortBean activityAbort = (ActivityAbortBean) super.createComponentBean(pp,
+				attriData);
+		return activityAbort;
+	}
 }
