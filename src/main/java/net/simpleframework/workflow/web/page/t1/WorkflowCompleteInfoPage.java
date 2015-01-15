@@ -30,7 +30,7 @@ public class WorkflowCompleteInfoPage extends AbstractWorkflowFormPage {
 		sb.append("<div class='WorkflowCompleteInfoPage'>");
 		sb.append(" <div class='l1'>#(WorkflowCompleteInfoPage.0)</div>");
 		sb.append(" <div class='l2'>");
-		final List<ActivityBean> nextActivities = aService.getNextActivities(wService
+		final List<ActivityBean> nextActivities = aService.getLastNextActivities(wService
 				.getActivity(WorkflowUtils.getWorkitemBean(pp)));
 		if (nextActivities.size() > 0) {
 			sb.append("<table>");
