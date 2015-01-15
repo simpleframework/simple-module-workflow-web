@@ -83,12 +83,11 @@ public class WorkitemCompleteUtils implements IWorkflowServiceAware {
 			} else {
 				// 是否有手动情况
 				final ActivityComplete activityComplete = getActivityComplete(cp, workitem);
+				activityComplete.reset();
 				if (activityComplete.isTransitionManual()) {
-					activityComplete.reset();
 					js.append("$Actions['").append(cp.getComponentName())
 							.append("_TransitionSelect']('").append(toParams(cp, workitem)).append("');");
 				} else if (activityComplete.isParticipantManual()) {
-					activityComplete.reset();
 					js.append("$Actions['").append(cp.getComponentName())
 							.append("_ParticipantSelect']('").append(toParams(cp, workitem)).append("');");
 				} else {
