@@ -53,8 +53,7 @@ public class PRelativeRoleHandler extends AbstractParticipantHandler implements
 
 	@Override
 	public Collection<Participant> getParticipants(final IScriptEval script,
-			final ActivityComplete activityComplete,
-			final Map<String, Object> variables) {
+			final ActivityComplete activityComplete, final Map<String, Object> variables) {
 		final ArrayList<Participant> participants = new ArrayList<Participant>();
 		// UserNode node = ((UserNode) ((TransitionNode)
 		// variables.get("transition")).to());
@@ -94,8 +93,7 @@ public class PRelativeRoleHandler extends AbstractParticipantHandler implements
 			final AbstractTaskNode tasknode = aService.getTaskNode(preActivity);
 			if (tasknode instanceof UserNode && ((UserNode) tasknode).isEmpty()) {
 				// 处理空节点的执行者
-				final List<Participant> mps = aService
-						.getEmptyParticipants(preActivity);
+				final List<Participant> mps = aService.getEmptyParticipants(preActivity);
 				if (null != mps && mps.size() > 0) {
 					final Participant mp = mps.get(0);
 					userId = mp.userId;
@@ -106,8 +104,7 @@ public class PRelativeRoleHandler extends AbstractParticipantHandler implements
 		}
 		final String deptName = params.get(PARAMS_KEY_dept);
 		if (StringUtils.hasText(deptName)) {// 指定部门
-			Department dept = orgContext.getDepartmentService()
-					.getDepartmentByName(deptName);
+			final Department dept = orgContext.getDepartmentService().getDepartmentByName(deptName);
 			deptId = dept.getId();
 		}
 		if (null == userId || null == roleId || null == deptId) {
@@ -121,16 +118,14 @@ public class PRelativeRoleHandler extends AbstractParticipantHandler implements
 		}
 
 		final WorkflowPermissionHandler wph = (WorkflowPermissionHandler) permission;
-		Collection<Participant> _participants = wph
-				.getRelativeParticipantsOfLevel(userId, roleId, deptId,
-						variables, role, level);
-		if ((_participants == null || _participants.size() == 0)
-				&& level.equals(Level.internal) && null != autoparent
-				&& autoparent.equals("true")) {
+		Collection<Participant> _participants = wph.getRelativeParticipantsOfLevel(userId, roleId,
+				deptId, variables, role, level);
+		if ((_participants == null || _participants.size() == 0) && level.equals(Level.internal)
+				&& null != autoparent && autoparent.equals("true")) {
 			// 本部门,自动查找上一部门角色
-			Department dept = orgContext.getDepartmentService().getBean(deptId);
-			_participants = wph.getRelativeParticipantsOfLevel(userId, roleId,
-					dept.getParentId(), variables, role, level);
+			final Department dept = orgContext.getDepartmentService().getBean(deptId);
+			_participants = wph.getRelativeParticipantsOfLevel(userId, roleId, dept.getParentId(),
+					variables, role, level);
 		}
 
 		if (_participants != null && _participants.size() > 0) {
