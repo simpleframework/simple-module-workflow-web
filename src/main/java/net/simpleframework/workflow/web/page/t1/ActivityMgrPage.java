@@ -300,8 +300,8 @@ public class ActivityMgrPage extends AbstractWorkflowMgrPage {
 	}
 
 	static TablePagerColumn TC_TASKNODE() {
-		return new TablePagerColumn("tasknode", $m("ActivityMgrPage.1")).setSort(false).setFilter(
-				false);
+		return new TablePagerColumn("tasknode", $m("ActivityMgrPage.1"))
+				.setTextAlign(ETextAlign.left).setSort(false).setFilter(false);
 	}
 
 	static TablePagerColumn TC_PREVIOUS() {
