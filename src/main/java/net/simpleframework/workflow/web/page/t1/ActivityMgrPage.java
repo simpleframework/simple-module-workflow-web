@@ -177,8 +177,9 @@ public class ActivityMgrPage extends AbstractWorkflowMgrPage {
 				}
 			}
 			final List<ActivityBean> l = new ArrayList<ActivityBean>();
-			if (root != null)
+			if (root != null) {
 				l.add(root);
+			}
 			for (final List<ActivityBean> _l : cache.values()) {
 				l.addAll(_l);
 			}

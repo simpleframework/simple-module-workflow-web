@@ -18,8 +18,11 @@ import net.simpleframework.ctx.permission.PermissionDept;
 import net.simpleframework.ctx.permission.PermissionUser;
 import net.simpleframework.mvc.common.element.Checkbox;
 import net.simpleframework.mvc.common.element.InputElement;
+import net.simpleframework.mvc.common.element.Radio;
+import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.component.ComponentHandlerEx;
 import net.simpleframework.mvc.component.ComponentParameter;
+import net.simpleframework.workflow.engine.IActivityService;
 import net.simpleframework.workflow.engine.IWorkflowContextAware;
 import net.simpleframework.workflow.engine.WorkitemBean;
 import net.simpleframework.workflow.engine.ext.IWfCommentLogService;
@@ -27,6 +30,10 @@ import net.simpleframework.workflow.engine.ext.IWfCommentService;
 import net.simpleframework.workflow.engine.ext.WfComment;
 import net.simpleframework.workflow.engine.ext.WfCommentLog;
 import net.simpleframework.workflow.engine.ext.WfCommentLog.ELogType;
+import net.simpleframework.workflow.schema.AbstractTaskNode;
+import net.simpleframework.workflow.schema.Node;
+import net.simpleframework.workflow.schema.ProcessNode;
+import net.simpleframework.workflow.schema.UserNode;
 import net.simpleframework.workflow.web.component.comments.WfCommentBean.EGroupBy;
 
 /**
@@ -90,6 +97,14 @@ public class DefaultWfCommentHandler extends ComponentHandlerEx implements IWfCo
 	protected Map<String, String[]> getTasknames(final ComponentParameter cp,
 			final WorkitemBean workitem) {
 		final Map<String, String[]> data = new LinkedHashMap<String, String[]>();
+		final IActivityService aService = workflowContext.getActivityService();
+		final AbstractTaskNode tasknode = aService.getTaskNode(aService.getBean(workitem
+				.getActivityId()));
+		for (final Node node : ((ProcessNode) tasknode.getParent()).nodes()) {
+			if (node instanceof UserNode) {
+				data.put(node.getText(), new String[] { node.getName() });
+			}
+		}
 		return data;
 	}
 
@@ -135,6 +150,11 @@ public class DefaultWfCommentHandler extends ComponentHandlerEx implements IWfCo
 
 	@Override
 	public String toHTML(final ComponentParameter cp, final WorkitemBean workitem) {
+		EGroupBy groupBy = cp.getEnumParameter(EGroupBy.class, "groupBy");
+		if (groupBy == null) {
+			groupBy = (EGroupBy) cp.getBeanProperty("groupBy");
+		}
+
 		final String commentName = cp.getComponentName();
 		final StringBuilder sb = new StringBuilder();
 		final boolean editable = (Boolean) cp.getBeanProperty("editable");
@@ -142,19 +162,28 @@ public class DefaultWfCommentHandler extends ComponentHandlerEx implements IWfCo
 			sb.append("<div class='ta'>");
 			sb.append(createCommentTa(workitem));
 			sb.append("</div>");
-			sb.append("<div class='btns'>");
+			sb.append("<div class='btns clearfix'>");
 			sb.append(" <div class='left'>").append("<a onclick=\"$Actions['").append(commentName)
 					.append("_log_popup']();\">#(DefaultWfCommentHandler.0)</a>");
 			sb.append(" </div>");
-			sb.append(" <div class='right'>").append(
+			sb.append(" <div class='right'>");
+			int i = 0;
+			for (final EGroupBy g : EGroupBy.values()) {
+				final String rn = "comments_groupby";
+				sb.append(
+						new Radio(rn + i++, g)
+								.setChecked(groupBy == g)
+								.setOnclick(
+										"location.href = location.href.addParameter('groupBy=" + g.name()
+												+ "');").setName(rn)).append(SpanElement.SPACE);
+			}
+			sb.append(SpanElement.SPACE(20)).append(
 					new Checkbox("id" + commentName + "_addCheck", $m("DefaultWfCommentHandler.1"))
 							.setName("cb_wfcomment").setValue("true"));
 			sb.append(" </div>");
-			sb.append(" <div class='clearfix'></div>");
 			sb.append("</div>");
 		}
 
-		final EGroupBy groupBy = (EGroupBy) cp.getBeanProperty("groupBy");
 		final WfComment comment2 = workflowContext.getCommentService().getCurComment(workitem);
 
 		final StringBuilder sb2 = new StringBuilder();

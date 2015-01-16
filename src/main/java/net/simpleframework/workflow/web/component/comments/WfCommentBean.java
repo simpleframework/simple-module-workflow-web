@@ -1,5 +1,6 @@
 package net.simpleframework.workflow.web.component.comments;
 
+import static net.simpleframework.common.I18n.$m;
 import net.simpleframework.mvc.component.AbstractContainerBean;
 
 /**
@@ -39,10 +40,25 @@ public class WfCommentBean extends AbstractContainerBean {
 
 	public static enum EGroupBy {
 		/* 不分组 */
-		none,
+		none {
+			@Override
+			public String toString() {
+				return $m("EGroupBy.none");
+			}
+		},
 		/* 按任务分组 */
-		taskname,
+		taskname {
+			@Override
+			public String toString() {
+				return $m("EGroupBy.taskname");
+			}
+		},
 		/* 按部门分组 */
-		dept
+		dept {
+			@Override
+			public String toString() {
+				return $m("EGroupBy.dept");
+			}
+		}
 	}
 }
