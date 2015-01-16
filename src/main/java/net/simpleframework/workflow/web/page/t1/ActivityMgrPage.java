@@ -3,8 +3,10 @@ package net.simpleframework.workflow.web.page.t1;
 import static net.simpleframework.common.I18n.$m;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -12,6 +14,7 @@ import net.simpleframework.ado.query.IDataQuery;
 import net.simpleframework.ado.query.ListDataQuery;
 import net.simpleframework.common.Convert;
 import net.simpleframework.common.DateUtils;
+import net.simpleframework.common.ID;
 import net.simpleframework.common.StringUtils;
 import net.simpleframework.common.coll.KVMap;
 import net.simpleframework.mvc.AbstractMVCPage;
@@ -143,9 +146,43 @@ public class ActivityMgrPage extends AbstractWorkflowMgrPage {
 		public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
 			final ProcessBean process = getProcessBean(cp);
 			cp.addFormParameter("processId", process.getId());
-			final List<ActivityBean> list = aService.getActivities(process);
+			final List<ActivityBean> list = toTreeList(aService.getActivities(process));
 			setRelativeDate(cp, list);
 			return new ListDataQuery<ActivityBean>(list);
+		}
+
+		protected List<ActivityBean> toTreeList(final List<ActivityBean> list) {
+			ActivityBean root = null;
+			final Map<ID, List<ActivityBean>> cache = new LinkedHashMap<ID, List<ActivityBean>>();
+			for (final ActivityBean activity : list) {
+				final ID preId = activity.getPreviousId();
+				if (preId == null) {
+					root = activity;
+					root.setAttr("_margin", 0);
+				} else {
+					ActivityBean pre = null;
+					for (final ActivityBean _pre : list) {
+						if (preId.equals(_pre.getId())) {
+							pre = _pre;
+							break;
+						}
+					}
+					List<ActivityBean> _l = cache.get(preId);
+					if (_l == null) {
+						cache.put(preId, _l = new ArrayList<ActivityBean>());
+					}
+					_l.add(activity);
+					activity.setAttr("_margin",
+							(pre != null ? Convert.toInt(pre.getAttr("_margin")) : 0) + 1);
+				}
+			}
+			final List<ActivityBean> l = new ArrayList<ActivityBean>();
+			if (root != null)
+				l.add(root);
+			for (final List<ActivityBean> _l : cache.values()) {
+				l.addAll(_l);
+			}
+			return l;
 		}
 
 		protected void setRelativeDate(final ComponentParameter cp, final List<ActivityBean> list) {
@@ -182,7 +219,11 @@ public class ActivityMgrPage extends AbstractWorkflowMgrPage {
 		protected Map<String, Object> getRowData(final ComponentParameter cp, final Object dataObject) {
 			final ActivityBean activity = (ActivityBean) dataObject;
 			final KVMap row = new KVMap();
-			row.add("tasknode", toTasknode(activity));
+			String space = "";
+			for (int i = 0; i < Convert.toInt(activity.getAttr("_margin")); i++) {
+				space += i == 0 ? "| -- " : " -- ";
+			}
+			row.add("tasknode", space + toTasknode(activity));
 			final ActivityBean pre = aService.getPreActivity(activity);
 			if (pre != null) {
 				final EActivityStatus pstatus = pre.getStatus();
@@ -305,17 +346,17 @@ public class ActivityMgrPage extends AbstractWorkflowMgrPage {
 	}
 
 	static TablePagerColumn TC_PREVIOUS() {
-		return new TablePagerColumn("previous", $m("ActivityMgrPage.2")).setSort(false)
+		return new TablePagerColumn("previous", $m("ActivityMgrPage.2"), 115).setSort(false)
 				.setFilter(false).setTextAlign(ETextAlign.left);
 	}
 
 	static TablePagerColumn TC_PARTICIPANTS() {
-		return new TablePagerColumn("participants", $m("ActivityMgrPage.3")).setNowrap(false)
+		return new TablePagerColumn("participants", $m("ActivityMgrPage.3"), 115).setNowrap(false)
 				.setSort(false).setFilter(false);
 	}
 
 	static TablePagerColumn TC_PARTICIPANTS2() {
-		return new TablePagerColumn("participants2", $m("ActivityMgrPage.4")).setNowrap(false)
+		return new TablePagerColumn("participants2", $m("ActivityMgrPage.4"), 115).setNowrap(false)
 				.setSort(false).setFilter(false);
 	}
 

@@ -62,8 +62,7 @@ public class WorkflowMonitorPage extends AbstractWorkflowFormPage {
 				.addColumn(ActivityMgrPage.TC_PARTICIPANTS2())
 				.addColumn(AbstractWorkflowMgrPage.TC_CREATEDATE())
 				.addColumn(AbstractWorkflowMgrPage.TC_COMPLETEDATE())
-				.addColumn(ActivityMgrPage.TC_RELATIVEDATE()).addColumn(ActivityMgrPage.TC_TIMEOUT())
-				.addColumn(ActivityMgrPage.TC_PREVIOUS());
+				.addColumn(ActivityMgrPage.TC_RELATIVEDATE()).addColumn(ActivityMgrPage.TC_TIMEOUT());
 		return tablePager;
 	}
 

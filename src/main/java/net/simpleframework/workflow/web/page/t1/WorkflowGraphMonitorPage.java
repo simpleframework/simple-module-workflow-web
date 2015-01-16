@@ -64,7 +64,7 @@ public class WorkflowGraphMonitorPage extends WorkflowMonitorPage {
 			final String taskid = cp.getParameter("taskid");
 			cp.addFormParameter("taskid", taskid);
 			if (StringUtils.hasText(taskid)) {
-				final List<ActivityBean> list = aService.getActivities(process, taskid);
+				final List<ActivityBean> list = toTreeList(aService.getActivities(process, taskid));
 				setRelativeDate(cp, list);
 				return new ListDataQuery<ActivityBean>(list);
 			}
