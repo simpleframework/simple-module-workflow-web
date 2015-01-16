@@ -1,5 +1,6 @@
 package net.simpleframework.workflow.web.component.abort;
 
+import static net.simpleframework.common.I18n.$m;
 import net.simpleframework.mvc.IForward;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.component.AbstractComponentBean;
@@ -38,8 +39,9 @@ public class ActivityAbortRegistry extends AbstractComponentRegistry {
 		final AjaxRequestBean ajaxRequest = (AjaxRequestBean) pp.addComponentBean(
 				componentName + "_win_page", AjaxRequestBean.class).setHandlerClass(
 				ActivityAbortPage.class);
-		pp.addComponentBean(componentName + "_win", WindowBean.class).setContentRef(
-				ajaxRequest.getName());
+		pp.addComponentBean(componentName + "_win", WindowBean.class)
+				.setContentRef(ajaxRequest.getName()).setWidth(300).setHeight(400)
+				.setTitle($m("ActivityAbortRegistry.0"));
 
 		return activityAbort;
 	}
