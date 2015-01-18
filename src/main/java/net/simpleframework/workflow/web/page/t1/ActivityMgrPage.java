@@ -102,7 +102,8 @@ public class ActivityMgrPage extends AbstractWorkflowMgrPage {
 				createBackButton()
 						.setHref(url(ProcessMgrPage.class, "modelId=" + process.getModelId())),
 				SpanElement.SPACE,
-				LinkButton.of("放弃...").setOnclick("$Actions['ActivityMgrPage_abort2']();"),
+				LinkButton.of("放弃...").setOnclick(
+						"$Actions['ActivityMgrPage_abort2']('processId=" + process.getId() + "');"),
 				SpanElement.SPACE15, SpanElement.strongText(WorkflowUtils.getTitle(process)));
 	}
 
