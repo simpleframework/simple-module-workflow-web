@@ -2,6 +2,7 @@ package net.simpleframework.workflow.web.component.abort;
 
 import java.io.IOException;
 import java.io.Writer;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -10,6 +11,7 @@ import net.simpleframework.common.web.JavascriptUtils;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageRequestResponse;
 import net.simpleframework.mvc.component.ComponentParameter;
+import net.simpleframework.workflow.engine.ActivityBean;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -40,6 +42,12 @@ public abstract class ActivityAbortUtils {
 
 	public static String toListHTML(final ComponentParameter cp) {
 		final StringBuilder sb = new StringBuilder();
+		final List<ActivityBean> list = ((IActivityAbortHandler) cp.getComponentHandler())
+				.getActivities(cp);
+		if (list != null) {
+			sb.append("<div class='aitem'>");
+			sb.append("</div>");
+		}
 		return sb.toString();
 	}
 }
