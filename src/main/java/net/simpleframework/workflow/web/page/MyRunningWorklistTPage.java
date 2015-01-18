@@ -47,73 +47,59 @@ public class MyRunningWorklistTPage extends AbstractWorkitemsTPage {
 		addComponents(pp);
 	}
 
-	protected Class<? extends ITablePagerHandler> getWorklistTbl(
-			final PageParameter pp) {
+	protected Class<? extends ITablePagerHandler> getWorklistTbl(final PageParameter pp) {
 		return MyRunningWorklistTbl.class;
 	}
 
 	protected void addComponents(final PageParameter pp) {
-		final TablePagerBean tablePager = addTablePagerBean(pp,
-				getWorklistTbl(pp)).setShowCheckbox(true);
+		final TablePagerBean tablePager = addTablePagerBean(pp, getWorklistTbl(pp)).setShowCheckbox(
+				true);
 		tablePager.addColumn(TablePagerColumn.ICON().setWidth(18));
 		tablePager.addColumn(TC_TITLE());
-		tablePager.addColumn(new TablePagerColumn("userFrom",
-				$m("MyRunningWorklistTPage.0"), 115).setSort(false)
-				.setFilter(false).setNowrap(false));
-		tablePager.addColumn(new TablePagerColumn("createDate",
-				$m("MyRunningWorklistTPage.1"), 90)
+		tablePager.addColumn(new TablePagerColumn("userFrom", $m("MyRunningWorklistTPage.0"), 115)
+				.setSort(false).setFilter(false).setNowrap(false));
+		tablePager.addColumn(new TablePagerColumn("createDate", $m("MyRunningWorklistTPage.1"), 90)
 				.setPropertyClass(Date.class));
-		tablePager.addColumn(
-				new TablePagerColumn("status", $m("AbstractWorkitemsTPage.3"),
-						55) {
-					@Override
-					protected Option[] getFilterOptions() {
-						return Option.from(EWorkitemStatus.running,
-								EWorkitemStatus.delegate,
-								EWorkitemStatus.suspended);
-					};
-				}.setPropertyClass(EWorkitemStatus.class).setTextAlign(
-						ETextAlign.left)).addColumn(
+		tablePager.addColumn(new TablePagerColumn("status", $m("AbstractWorkitemsTPage.3"), 55) {
+			@Override
+			protected Option[] getFilterOptions() {
+				return Option.from(EWorkitemStatus.running, EWorkitemStatus.delegate,
+						EWorkitemStatus.suspended);
+			};
+		}.setPropertyClass(EWorkitemStatus.class).setTextAlign(ETextAlign.left)).addColumn(
 				TablePagerColumn.OPE().setWidth(70));
 
 		// 回退
-		addAjaxRequest(pp, "MyWorklistTPage_fallback").setHandlerMethod(
-				"doFallback").setConfirmMessage($m("MyRunningWorklistTPage.3"));
+		addAjaxRequest(pp, "MyWorklistTPage_fallback").setHandlerMethod("doFallback")
+				.setConfirmMessage($m("MyRunningWorklistTPage.3"));
 
 		// 删除
-		addAjaxRequest(pp, "MyWorklistTPage_delete").setHandlerMethod(
-				"doDelete").setConfirmMessage($m("Confirm.Delete"));
+		addAjaxRequest(pp, "MyWorklistTPage_delete").setHandlerMethod("doDelete").setConfirmMessage(
+				$m("Confirm.Delete"));
 
 		// 委托设置
-		addAjaxRequest(pp, "MyWorklistTPage_delegate_page",
-				WorkitemDelegateSetPage.class);
-		addWindowBean(pp, "MyWorklistTPage_delegate")
-				.setContentRef("MyWorklistTPage_delegate_page")
-				.setTitle($m("MyRunningWorklistTPage.4")).setHeight(300)
-				.setWidth(500);
+		addAjaxRequest(pp, "MyWorklistTPage_delegate_page", WorkitemDelegateSetPage.class);
+		addWindowBean(pp, "MyWorklistTPage_delegate").setContentRef("MyWorklistTPage_delegate_page")
+				.setTitle($m("MyRunningWorklistTPage.4")).setHeight(300).setWidth(500);
 
 		// 委托确认
 		addAjaxRequest(pp, "MyWorklistTPage_delegate_receiving_page",
 				WorkitemDelegateReceivingPage.class);
 		addWindowBean(pp, "MyWorklistTPage_delegate_receiving")
 				.setContentRef("MyWorklistTPage_delegate_receiving_page")
-				.setTitle($m("MyRunningWorklistTPage.5")).setHeight(400)
-				.setWidth(500);
+				.setTitle($m("MyRunningWorklistTPage.5")).setHeight(400).setWidth(500);
 
 		// 标记菜单
 		MenuBean mb = createMarkMenuComponent(pp);
 		mb.addItem(MyRunningWorklistTbl.MENU_MARK_READ())
 				.addItem(MyRunningWorklistTbl.MENU_MARK_UNREAD())
 				.addItem(MyRunningWorklistTbl.MENU_MARK_ALLREAD());
-		mb.addItem(MenuItem.sep())
-				.addItem(MyRunningWorklistTbl.MENU_MARK_TOP())
+		mb.addItem(MenuItem.sep()).addItem(MyRunningWorklistTbl.MENU_MARK_TOP())
 				.addItem(MyRunningWorklistTbl.MENU_MARK_UNTOP());
 		// 标记已读
-		addAjaxRequest(pp, "MyWorklistTPage_readMark").setHandlerMethod(
-				"doReadMark");
+		addAjaxRequest(pp, "MyWorklistTPage_readMark").setHandlerMethod("doReadMark");
 		// 标记置顶
-		addAjaxRequest(pp, "MyWorklistTPage_topMark").setHandlerMethod(
-				"doTopMark");
+		addAjaxRequest(pp, "MyWorklistTPage_topMark").setHandlerMethod("doTopMark");
 
 		// 查看菜单
 		mb = createViewMenuComponent(pp);
@@ -126,21 +112,19 @@ public class MyRunningWorklistTPage extends AbstractWorkitemsTPage {
 		// 委托菜单
 		mb = createDelegateMenuComponent(pp);
 		mb.addItem(
-				MenuItem.of($m("MyRunningWorklistTPage.6"))
+				MenuItem
+						.of($m("MyRunningWorklistTPage.6"))
 						.setOnclick(
 								"$Actions['MyWorklistTPage_tbl'].doAct('MyWorklistTPage_delegate', 'workitemId');"))
 				.addItem(MenuItem.sep())
 				.addItem(
-						MenuItem.of($m("MyRunningWorklistTPage.7"))
-								.setOnclick(
-										"$Actions['MyWorklistTPage_delegate']('delegationSource=user');"));
+						MenuItem.of($m("MyRunningWorklistTPage.7")).setOnclick(
+								"$Actions['MyWorklistTPage_delegate']('delegationSource=user');"));
 
 		// 更多操作
 		mb = createOpeMenuComponent(pp);
-		mb.addItem(MenuItem
-				.of($m("MyRunningWorklistTbl.16"))
-				.setOnclick(
-						"$Actions['MyWorklistTPage_tbl'].doAct('MyWorklistTPage_delete', 'workitemId');"));
+		mb.addItem(MenuItem.of($m("MyRunningWorklistTbl.16")).setOnclick(
+				"$Actions['MyWorklistTPage_tbl'].doAct('MyWorklistTPage_delete', 'workitemId');"));
 	}
 
 	protected TablePagerBean addTablePagerBean(final PageParameter pp,
@@ -155,52 +139,43 @@ public class MyRunningWorklistTPage extends AbstractWorkitemsTPage {
 
 	protected MenuBean createMarkMenuComponent(final PageParameter pp) {
 		// 标记菜单
-		return (MenuBean) addComponentBean(pp, "MyWorklistTPage_markMenu",
-				MenuBean.class).setMenuEvent(EMenuEvent.click).setSelector(
-				"#idMyWorklistTPage_markMenu");
+		return (MenuBean) addComponentBean(pp, "MyWorklistTPage_markMenu", MenuBean.class)
+				.setMenuEvent(EMenuEvent.click).setSelector("#idMyWorklistTPage_markMenu");
 	}
 
 	protected MenuBean createViewMenuComponent(final PageParameter pp) {
-		return (MenuBean) addComponentBean(pp, "MyWorklistTPage_viewMenu",
-				MenuBean.class).setMenuEvent(EMenuEvent.click).setSelector(
-				"#idMyWorklistTPage_viewMenu");
+		return (MenuBean) addComponentBean(pp, "MyWorklistTPage_viewMenu", MenuBean.class)
+				.setMenuEvent(EMenuEvent.click).setSelector("#idMyWorklistTPage_viewMenu");
 	}
 
 	protected MenuBean createDelegateMenuComponent(final PageParameter pp) {
-		return (MenuBean) addComponentBean(pp, "MyWorklistTPage_delegateMenu",
-				MenuBean.class).setMenuEvent(EMenuEvent.click).setSelector(
-				"#idMyWorklistTPage_delegateMenu");
+		return (MenuBean) addComponentBean(pp, "MyWorklistTPage_delegateMenu", MenuBean.class)
+				.setMenuEvent(EMenuEvent.click).setSelector("#idMyWorklistTPage_delegateMenu");
 	}
 
 	protected MenuBean createOpeMenuComponent(final PageParameter pp) {
-		return (MenuBean) addComponentBean(pp, "MyWorklistTPage_opeMenu",
-				MenuBean.class).setMenuEvent(EMenuEvent.click).setSelector(
-				"#idMyWorklistTPage_opeMenu");
+		return (MenuBean) addComponentBean(pp, "MyWorklistTPage_opeMenu", MenuBean.class)
+				.setMenuEvent(EMenuEvent.click).setSelector("#idMyWorklistTPage_opeMenu");
 	}
 
 	@Override
 	public String toToolbarHTML(final PageParameter pp) {
 		final StringBuilder sb = new StringBuilder();
-		final DelegationBean delegation = dService.queryRunningDelegation(pp
-				.getLoginId());
+		final DelegationBean delegation = dService.queryRunningDelegation(pp.getLoginId());
 		if (delegation != null) {
-			addAjaxRequest(pp, "MyRunningWorklistTPage_user_undelegate")
-					.setConfirmMessage($m("MyRunningWorklistTPage.11"))
-					.setHandlerMethod("doUserUndelegate");
+			addAjaxRequest(pp, "MyRunningWorklistTPage_user_undelegate").setConfirmMessage(
+					$m("MyRunningWorklistTPage.11")).setHandlerMethod("doUserUndelegate");
 
 			final StringBuilder txt = new StringBuilder();
 			txt.append($m("MyRunningWorklistTPage.8",
-					new SpanElement(pp.getUser(delegation.getUserId()))
-							.setStrong(true)));
+					new SpanElement(pp.getUser(delegation.getUserId())).setStrong(true)));
 			txt.append(SpanElement.SPACE15);
-			txt.append(new LinkElement($m("MyRunningWorklistTPage.10"))
-					.setHref(getUrlsFactory().getUrl(pp,
-							UserDelegateListTPage.class)));
+			txt.append(new LinkElement($m("MyRunningWorklistTPage.10")).setHref(getUrlsFactory()
+					.getUrl(pp, UserDelegateListTPage.class)));
 			txt.append(SpanElement.SPACE);
 			txt.append(new LinkElement($m("MyRunningWorklistTPage.9"))
 					.setOnclick("$Actions['MyRunningWorklistTPage_user_undelegate']();"));
-			sb.append(new BlockElement().setClassName("worklist_tip").setText(
-					txt.toString()));
+			sb.append(new BlockElement().setClassName("worklist_tip").setText(txt.toString()));
 		}
 		sb.append(super.toToolbarHTML(pp));
 		return sb.toString();
@@ -209,21 +184,16 @@ public class MyRunningWorklistTPage extends AbstractWorkitemsTPage {
 	@Override
 	public ElementList getLeftElements(final PageParameter pp) {
 		return ElementList.of(
-				LinkButton.menu($m("MyRunningWorklistTbl.6")).setId(
-						"idMyWorklistTPage_markMenu"),
-				LinkButton.menu($m("MyRunningWorklistTbl.14")).setId(
-						"idMyWorklistTPage_viewMenu"),
+				LinkButton.menu($m("MyRunningWorklistTbl.6")).setId("idMyWorklistTPage_markMenu"),
+				LinkButton.menu($m("MyRunningWorklistTbl.14")).setId("idMyWorklistTPage_viewMenu"),
 				SpanElement.SPACE,
-				LinkButton.menu($m("MyRunningWorklistTbl.5")).setId(
-						"idMyWorklistTPage_delegateMenu"),
-				LinkButton.menu($m("MyRunningWorklistTbl.17")).setId(
-						"idMyWorklistTPage_opeMenu"));
+				LinkButton.menu($m("MyRunningWorklistTbl.5")).setId("idMyWorklistTPage_delegateMenu"),
+				LinkButton.menu($m("MyRunningWorklistTbl.17")).setId("idMyWorklistTPage_opeMenu"));
 	}
 
 	@Transaction(context = IWorkflowContext.class)
 	public IForward doUserUndelegate(final ComponentParameter cp) {
-		final DelegationBean delegation = dService.queryRunningDelegation(cp
-				.getLoginId());
+		final DelegationBean delegation = dService.queryRunningDelegation(cp.getLoginId());
 		if (delegation != null) {
 			dService.doAbort(delegation);
 		}
@@ -234,8 +204,7 @@ public class MyRunningWorklistTPage extends AbstractWorkitemsTPage {
 	public IForward doReadMark(final ComponentParameter cp) {
 		final String op = cp.getParameter("op");
 		if ("allread".equals(op)) {
-			final IDataQuery<WorkitemBean> dq = wService.getRunningWorklist(cp
-					.getLoginId());
+			final IDataQuery<WorkitemBean> dq = wService.getRunningWorklist(cp.getLoginId());
 			WorkitemBean workitem;
 			while ((workitem = dq.next()) != null) {
 				if (!workitem.isReadMark()) {
@@ -243,8 +212,7 @@ public class MyRunningWorklistTPage extends AbstractWorkitemsTPage {
 				}
 			}
 		} else {
-			for (final Object id : StringUtils.split(cp
-					.getParameter("workitemId"))) {
+			for (final Object id : StringUtils.split(cp.getParameter("workitemId"))) {
 				final WorkitemBean workitem = wService.getBean(id);
 				if ("unread".equals(op)) {
 					wService.doUnReadMark(workitem);
@@ -270,15 +238,13 @@ public class MyRunningWorklistTPage extends AbstractWorkitemsTPage {
 
 	@Transaction(context = IWorkflowContext.class)
 	public IForward doFallback(final ComponentParameter cp) {
-		aService.doFallback(wService.getActivity(WorkflowUtils
-				.getWorkitemBean(cp)));
+		aService.doFallback(wService.getActivity(WorkflowUtils.getWorkitemBean(cp)));
 		return new JavascriptForward("$Actions['MyWorklistTPage_tbl']();");
 	}
 
 	@Transaction(context = IWorkflowContext.class)
 	public IForward doDelete(final ComponentParameter cp) {
-		for (final String workitemId : StringUtils.split(cp
-				.getParameter("workitemId"))) {
+		for (final String workitemId : StringUtils.split(cp.getParameter("workitemId"))) {
 			wService.doDeleteProcess(wService.getBean(workitemId));
 		}
 		return new JavascriptForward("$Actions['MyWorklistTPage_tbl']();");

@@ -37,4 +37,9 @@ public abstract class ActivityAbortUtils {
 		out.write(JavascriptUtils.wrapFunction(js.toString()));
 		out.flush();
 	}
+
+	public static String toListHTML(final ComponentParameter cp) {
+		final StringBuilder sb = new StringBuilder();
+		return sb.toString();
+	}
 }

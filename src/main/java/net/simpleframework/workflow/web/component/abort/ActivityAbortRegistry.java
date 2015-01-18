@@ -1,7 +1,6 @@
 package net.simpleframework.workflow.web.component.abort;
 
 import static net.simpleframework.common.I18n.$m;
-import net.simpleframework.mvc.IForward;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.component.AbstractComponentBean;
 import net.simpleframework.mvc.component.AbstractComponentRegistry;
@@ -11,7 +10,6 @@ import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.ComponentRender;
 import net.simpleframework.mvc.component.ComponentResourceProvider;
 import net.simpleframework.mvc.component.base.ajaxrequest.AjaxRequestBean;
-import net.simpleframework.mvc.component.base.ajaxrequest.DefaultAjaxRequestHandler;
 import net.simpleframework.mvc.component.ui.window.WindowBean;
 
 /**
@@ -36,20 +34,13 @@ public class ActivityAbortRegistry extends AbstractComponentRegistry {
 		final ComponentParameter nCP = ComponentParameter.get(pp, activityAbort);
 		final String componentName = nCP.getComponentName();
 
-		final AjaxRequestBean ajaxRequest = (AjaxRequestBean) pp.addComponentBean(
-				componentName + "_win_page", AjaxRequestBean.class).setHandlerClass(
-				ActivityAbortPage.class);
+		final AjaxRequestBean ajaxRequest = pp.addComponentBean(componentName + "_win_page",
+				AjaxRequestBean.class).setUrlForward(
+				getComponentResourceProvider().getResourceHomePath() + "/jsp/activity_select.jsp");
 		pp.addComponentBean(componentName + "_win", WindowBean.class)
 				.setContentRef(ajaxRequest.getName()).setWidth(300).setHeight(400)
 				.setTitle($m("ActivityAbortRegistry.0"));
 
 		return activityAbort;
-	}
-
-	public static class ActivityAbortPage extends DefaultAjaxRequestHandler {
-		@Override
-		public IForward ajaxProcess(final ComponentParameter cp) throws Exception {
-			return super.ajaxProcess(cp);
-		}
 	}
 }

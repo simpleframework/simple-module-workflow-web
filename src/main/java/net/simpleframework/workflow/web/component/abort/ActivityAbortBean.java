@@ -1,5 +1,6 @@
 package net.simpleframework.workflow.web.component.abort;
 
+import net.simpleframework.common.StringUtils;
 import net.simpleframework.mvc.component.AbstractComponentBean;
 
 /**
@@ -12,5 +13,11 @@ public class ActivityAbortBean extends AbstractComponentBean {
 	@Override
 	public boolean isRunImmediately() {
 		return false;
+	}
+
+	@Override
+	public String getHandlerClass() {
+		final String sClass = super.getHandlerClass();
+		return StringUtils.hasText(sClass) ? sClass : DefaultActivityAbortHandler.class.getName();
 	}
 }
