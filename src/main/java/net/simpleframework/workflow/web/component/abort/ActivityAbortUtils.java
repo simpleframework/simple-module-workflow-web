@@ -15,6 +15,7 @@ import net.simpleframework.common.web.JavascriptUtils;
 import net.simpleframework.mvc.IMVCConst;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageRequestResponse;
+import net.simpleframework.mvc.common.element.Checkbox;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.workflow.engine.ActivityBean;
 import net.simpleframework.workflow.engine.IActivityService;
@@ -81,10 +82,11 @@ public abstract class ActivityAbortUtils implements IWorkflowContextAware {
 				}
 			}
 
+			int i = 0;
 			for (final Map.Entry<UserNode, List<ActivityBean>> e : cache.entrySet()) {
 				sb.append("<div class='aitem'>");
 				final UserNode node = e.getKey();
-				sb.append(node.getText());
+				sb.append(new Checkbox("aitem" + i++, node.getText()).setValue(node.getId()));
 				sb.append("</div>");
 			}
 		}

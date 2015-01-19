@@ -1,0 +1,17 @@
+.activity_select {
+  overflow-y: auto;
+}
+
+.activity_select .aitem {
+  border-bottom: 1px solid #ccc;
+  padding: 10px 8px;
+}
+
+.activity_select .aitem:hover {
+  background-color: #f7f7f7;
+}
+
+.simple_window_tcb .b {
+  padding: 6px 8px 6px 0;
+  background-color: #eee;
+}

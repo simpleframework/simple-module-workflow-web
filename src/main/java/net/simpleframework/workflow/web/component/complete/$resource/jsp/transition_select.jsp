@@ -8,6 +8,7 @@
 <%
 	final ComponentParameter nCP = WorkitemCompleteUtils.get(request,
 			response);
+  final String componentName = nCP.getComponentName();
 	final WorkitemBean workitem = WorkitemCompleteUtils
 			.getWorkitemBean(nCP);
 %>
@@ -34,10 +35,20 @@
       });
 
       if (id.length > 0) {
-        $Actions['<%=nCP.getComponentName()%>_TransitionSelect_OK'](PARAMS + id.substring(1));
+        $Actions['<%=componentName%>_TransitionSelect_OK'](PARAMS + id.substring(1));
       } else {
         $UI.shakeMsg(ts.down(".msg"), "<span>#(transition_select.0)</span>");
       }
     });
+    
+ 		// 窗口
+    var w = $Actions['<%=componentName%>_TransitionSelect'].window;
+    w.content.setStyle("overflow:hidden;");
+    var s = function() {
+      var h = w.getSize(true).height;
+      ts.setStyle('height: ' + (h - 37) + 'px;');
+    };
+    s();
+    w.observe("resize:ended", s);
   });
 </script>

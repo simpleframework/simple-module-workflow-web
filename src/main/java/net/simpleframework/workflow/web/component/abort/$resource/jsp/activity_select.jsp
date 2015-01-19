@@ -5,6 +5,7 @@
 <%
 	final ComponentParameter nCP = ActivityAbortUtils.get(request,
 			response);
+	String componentName = nCP.getComponentName();
 %>
 <div class="simple_window_tcb activity_select">
   <%=ActivityAbortUtils.toListHTML(nCP)%>
@@ -14,3 +15,20 @@
     <%=ButtonElement.WINDOW_CLOSE%>
   </div>
 </div>
+<script type="text/javascript">
+  $ready(function() {
+    var ts = $(".activity_select");
+    
+    ts.down(".button2").observe("click", function(evn) {
+    });
+    
+    var w = $Actions['<%=componentName%>_win'].window;
+    w.content.setStyle("overflow:hidden;");
+    var s = function() {
+      var h = w.getSize(true).height;
+      ts.setStyle('height: ' + (h - 37) + 'px;');
+    };
+    s();
+    w.observe("resize:ended", s);
+  });
+</script>

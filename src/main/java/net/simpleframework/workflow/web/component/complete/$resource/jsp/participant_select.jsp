@@ -5,6 +5,7 @@
 <%
 	final ComponentParameter nCP = WorkitemCompleteUtils.get(request,
 			response);
+	final String componentName = nCP.getComponentName();
 %>
 <div class="simple_window_tcb participant_select">
   <%=WorkitemCompleteUtils.toParticipantsHTML(nCP)%>
@@ -57,8 +58,18 @@
         return;
       }
 
-      $Actions["<%=nCP.getComponentName()%>_ParticipantSelect_OK"](PARAMS
+      $Actions["<%=componentName%>_ParticipantSelect_OK"](PARAMS
               + '&json=' + encodeURIComponent(Object.toJSON(data)));
   	});
+    
+    // 窗口
+    var w = $Actions['<%=componentName%>_ParticipantSelect'].window;
+    w.content.setStyle("overflow:hidden;");
+    var s = function() {
+      var h = w.getSize(true).height;
+      ts.setStyle('height: ' + (h - 37) + 'px;');
+    };
+    s();
+    w.observe("resize:ended", s);
   });
 </script>

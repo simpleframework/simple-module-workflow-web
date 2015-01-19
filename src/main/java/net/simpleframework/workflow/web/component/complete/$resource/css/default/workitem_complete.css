@@ -1,3 +1,13 @@
+.participant_select,
+.transition_select {
+  overflow-y: auto;
+}
+
+.simple_window_tcb .b {
+  padding: 6px 8px 6px 0;
+  background-color: #eee;
+}
+
 .participant_select .ritem, 
 .transition_select .ritem {
   border-bottom: 1px solid #ccc;
@@ -22,6 +32,5 @@
   padding: 8px 6px;
   color: #a00;
   border-bottom: 1px solid #bbb;
-  color: #a00;
   font-size: 9.5pt;
 }
