@@ -1,10 +1,18 @@
 package net.simpleframework.workflow.web.component.abort;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import net.simpleframework.common.StringUtils;
 import net.simpleframework.mvc.DefaultPageHandler;
+import net.simpleframework.mvc.IForward;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.base.ajaxrequest.AjaxRequestBean;
 import net.simpleframework.mvc.component.base.ajaxrequest.DefaultAjaxRequestHandler;
+import net.simpleframework.workflow.engine.ActivityBean;
+import net.simpleframework.workflow.engine.IActivityService;
+import net.simpleframework.workflow.engine.IWorkflowContextAware;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -12,7 +20,7 @@ import net.simpleframework.mvc.component.base.ajaxrequest.DefaultAjaxRequestHand
  * @author 陈侃(cknet@126.com, 13910090885) https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
-public class ActivitySelectLoaded extends DefaultPageHandler {
+public class ActivitySelectLoaded extends DefaultPageHandler implements IWorkflowContextAware {
 
 	@Override
 	public void onBeforeComponentRender(final PageParameter pp) {
@@ -24,5 +32,22 @@ public class ActivitySelectLoaded extends DefaultPageHandler {
 	}
 
 	public static class ActivitySelectAction extends DefaultAjaxRequestHandler {
+
+		@Override
+		public IForward ajaxProcess(final ComponentParameter cp) throws Exception {
+			final ComponentParameter nCP = ActivityAbortUtils.get(cp);
+			final IActivityService aService = workflowContext.getActivityService();
+			final List<ActivityBean> list = new ArrayList<ActivityBean>();
+			final String[] activityIds = StringUtils.split(cp.getParameter("activityIds"), ";");
+			if (activityIds != null) {
+				for (final String id : activityIds) {
+					final ActivityBean activity = aService.getBean(id);
+					if (activity != null) {
+						list.add(activity);
+					}
+				}
+			}
+			return ((IActivityAbortHandler) nCP.getComponentHandler()).doAbort(nCP, list);
+		}
 	}
 }

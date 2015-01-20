@@ -86,7 +86,17 @@ public abstract class ActivityAbortUtils implements IWorkflowContextAware {
 			for (final Map.Entry<UserNode, List<ActivityBean>> e : cache.entrySet()) {
 				sb.append("<div class='aitem'>");
 				final UserNode node = e.getKey();
-				sb.append(new Checkbox("aitem" + i++, node.getText()).setValue(node.getId()));
+				final List<ActivityBean> v = e.getValue();
+				final StringBuilder val = new StringBuilder();
+				int j = 0;
+				for (final ActivityBean activity : v) {
+					if (j++ > 0) {
+						val.append(";");
+					}
+					val.append(activity.getId());
+				}
+				sb.append(new Checkbox("aitem" + i++, node.getText() + " (" + v.size() + ")")
+						.setValue(val.toString()));
 				sb.append("</div>");
 			}
 		}

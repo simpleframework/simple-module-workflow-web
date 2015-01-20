@@ -2,9 +2,11 @@ package net.simpleframework.workflow.web.component.abort;
 
 import java.util.List;
 
+import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.component.AbstractComponentHandler;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.workflow.engine.ActivityBean;
+import net.simpleframework.workflow.engine.IActivityService;
 import net.simpleframework.workflow.engine.IWorkflowContextAware;
 import net.simpleframework.workflow.engine.ProcessBean;
 
@@ -25,5 +27,14 @@ public class DefaultActivityAbortHandler extends AbstractComponentHandler implem
 			return workflowContext.getActivityService().getActivities(process);
 		}
 		return null;
+	}
+
+	@Override
+	public JavascriptForward doAbort(final ComponentParameter cp, final List<ActivityBean> list) {
+		final IActivityService aService = workflowContext.getActivityService();
+		for (final ActivityBean activity : list) {
+			aService.doAbort(activity);
+		}
+		return new JavascriptForward("$Actions['" + cp.getComponentName() + "_win'].close();");
 	}
 }

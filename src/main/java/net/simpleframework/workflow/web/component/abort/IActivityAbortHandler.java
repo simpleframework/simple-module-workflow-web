@@ -2,6 +2,7 @@ package net.simpleframework.workflow.web.component.abort;
 
 import java.util.List;
 
+import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.IComponentHandler;
 import net.simpleframework.workflow.engine.ActivityBean;
@@ -21,4 +22,6 @@ public interface IActivityAbortHandler extends IComponentHandler {
 	 * @return
 	 */
 	List<ActivityBean> getActivities(ComponentParameter cp);
+
+	JavascriptForward doAbort(ComponentParameter cp, List<ActivityBean> list);
 }

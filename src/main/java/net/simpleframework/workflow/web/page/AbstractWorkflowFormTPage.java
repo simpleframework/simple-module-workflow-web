@@ -42,9 +42,8 @@ import net.simpleframework.workflow.web.page.t1.WorkflowFormPage;
  * @author 陈侃(cknet@126.com, 13910090885) https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
-public abstract class AbstractWorkflowFormTPage extends
-		FormTableRowTemplatePage implements IWorkflowWebForm,
-		IWorkflowServiceAware {
+public abstract class AbstractWorkflowFormTPage extends FormTableRowTemplatePage implements
+		IWorkflowWebForm, IWorkflowServiceAware {
 
 	@Override
 	protected boolean isPage404(final PageParameter pp) {
@@ -67,27 +66,22 @@ public abstract class AbstractWorkflowFormTPage extends
 		}
 	}
 
-	protected WorkitemCompleteBean addWorkitemCompleteComponentBean(
-			final PageParameter pp) {
+	protected WorkitemCompleteBean addWorkitemCompleteComponentBean(final PageParameter pp) {
 		// 完成
-		return (WorkitemCompleteBean) addComponentBean(pp,
-				"AbstractWorkflowFormPage_completeAction",
-				WorkitemCompleteBean.class).setSelector(getFormSelector())
-				.setParameters("_isSendAction=false");
+		return (WorkitemCompleteBean) addComponentBean(pp, "AbstractWorkflowFormPage_completeAction",
+				WorkitemCompleteBean.class).setSelector(getFormSelector()).setParameters(
+				"_isSendAction=false");
 	}
 
 	protected WfCommentBean addWfCommentBean(final PageParameter pp) {
-		return addComponentBean(pp, "AbstractWorkflowFormPage_wfComment",
-				WfCommentBean.class).setEditable(
-				!isReadonly(getWorkitemBean(pp)));
+		return addComponentBean(pp, "AbstractWorkflowFormPage_wfComment", WfCommentBean.class)
+				.setEditable(!isReadonly(getWorkitemBean(pp)));
 	}
 
 	@Override
 	protected ValidationBean addFormValidationBean(final PageParameter pp) {
-		return super.addFormValidationBean(pp)
-				.addValidators(
-						new Validator(EValidatorMethod.required, "#" + getP()
-								+ "topic"));
+		return super.addFormValidationBean(pp).addValidators(
+				new Validator(EValidatorMethod.required, "#" + getP() + "topic"));
 	}
 
 	@Transaction(context = IWorkflowContext.class)
@@ -98,8 +92,7 @@ public abstract class AbstractWorkflowFormTPage extends
 		// 添加了评论
 		final ComponentParameter nCP = WfCommentUtils.get(pp);
 		if (nCP.componentBean != null) {
-			((IWfCommentHandler) nCP.getComponentHandler()).onSave(nCP,
-					getWorkitemBean(nCP));
+			((IWfCommentHandler) nCP.getComponentHandler()).onSave(nCP, getWorkitemBean(nCP));
 		}
 	}
 
@@ -109,20 +102,17 @@ public abstract class AbstractWorkflowFormTPage extends
 		final WorkitemBean workitem = getWorkitemBean(pp);
 		onSaveForm(pp, workitem);
 		return new JavascriptForward("$Actions.loc('").append(
-				((IWorkflowWebContext) workflowContext).getUrlsFactory()
-						.getUrl(pp, WorkflowCompleteInfoPage.class, workitem))
-				.append("');");
+				((IWorkflowWebContext) workflowContext).getUrlsFactory().getUrl(pp,
+						WorkflowCompleteInfoPage.class, workitem)).append("');");
 	}
 
 	@Override
-	public JavascriptForward onSave(final ComponentParameter cp)
-			throws Exception {
+	public JavascriptForward onSave(final ComponentParameter cp) throws Exception {
 		final WorkitemBean workitem = getWorkitemBean(cp);
 		onSaveForm(cp, workitem);
 		return new JavascriptForward("$Actions.loc('").append(
-				((IWorkflowWebContext) workflowContext).getUrlsFactory()
-						.getUrl(cp, WorkflowFormPage.class, workitem)).append(
-				"');");
+				((IWorkflowWebContext) workflowContext).getUrlsFactory().getUrl(cp,
+						WorkflowFormPage.class, workitem)).append("');");
 	}
 
 	protected ProcessBean getProcess(final PageParameter pp) {
@@ -150,18 +140,15 @@ public abstract class AbstractWorkflowFormTPage extends
 
 	@Override
 	public ElementList getLeftElements(final PageParameter pp) {
-		return ElementList.of(InputElement.hidden().setName("workitemId")
-				.setValue(pp));
+		return ElementList.of(InputElement.hidden().setName("workitemId").setValue(pp));
 	}
 
 	protected AbstractElement<?> createSaveBtn() {
-		return VALIDATION_BTN2($m("AbstractWorkflowFormPage.0")).setOnclick(
-				getSaveAction(null));
+		return VALIDATION_BTN2($m("AbstractWorkflowFormPage.0")).setOnclick(getSaveAction(null));
 	}
 
 	protected AbstractElement<?> createCompleteBtn() {
-		return VALIDATION_BTN2($m("AbstractWorkflowFormPage.1")).setIconClass(
-				Icon.check).setOnclick(
+		return VALIDATION_BTN2($m("AbstractWorkflowFormPage.1")).setIconClass(Icon.check).setOnclick(
 				"$Actions['AbstractWorkflowFormPage_completeAction']();");
 	}
 
@@ -196,19 +183,17 @@ public abstract class AbstractWorkflowFormTPage extends
 	protected TableRows getTableRows(final PageParameter pp) {
 		final ProcessBean process = getProcess(pp);
 
-		final TableRow r1 = new TableRow(new RowField(
-				$m("AbstractWorkflowFormPage.2"), getInput_topic(pp).setText(
-						process.getTitle())));
-		final TableRow r2 = new TableRow(new RowField(
-				$m("AbstractWorkflowFormPage.3"), getInput_description(pp)));
+		final TableRow r1 = new TableRow(new RowField($m("AbstractWorkflowFormPage.2"),
+				getInput_topic(pp).setText(process.getTitle())));
+		final TableRow r2 = new TableRow(new RowField($m("AbstractWorkflowFormPage.3"),
+				getInput_description(pp)));
 		return TableRows.of(r1, r2);
 	}
 
 	@Override
 	public String toTableRowsString(final PageParameter pp) {
 		final WorkitemBean workitem = getWorkitemBean(pp);
-		final TableRows tableRows = getTableRows(pp).setReadonly(
-				isReadonly(workitem));
+		final TableRows tableRows = getTableRows(pp).setReadonly(isReadonly(workitem));
 		return tableRows != null ? tableRows.toString() : "";
 	}
 
@@ -217,8 +202,7 @@ public abstract class AbstractWorkflowFormTPage extends
 			return true;
 		}
 		final EWorkitemStatus status = workitem.getStatus();
-		return status != EWorkitemStatus.running
-				&& status != EWorkitemStatus.suspended
+		return status != EWorkitemStatus.running && status != EWorkitemStatus.suspended
 				&& status != EWorkitemStatus.delegate;
 	}
 
@@ -247,8 +231,7 @@ public abstract class AbstractWorkflowFormTPage extends
 		return pp.getCache("$ProcessNode", new IVal<ProcessNode>() {
 			@Override
 			public ProcessNode get() {
-				return pService.getProcessDocument(getProcess(pp))
-						.getProcessNode();
+				return pService.getProcessDocument(getProcess(pp)).getProcessNode();
 			}
 		});
 	}
@@ -272,8 +255,7 @@ public abstract class AbstractWorkflowFormTPage extends
 		return getProcessNode(pp).getProperty(key);
 	}
 
-	protected String getTaskNodeProperty(final PageParameter pp,
-			final String key) {
+	protected String getTaskNodeProperty(final PageParameter pp, final String key) {
 		if (null == getTaskNode(pp)) {
 			return null;
 		}

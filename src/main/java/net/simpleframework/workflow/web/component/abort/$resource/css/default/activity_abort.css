@@ -11,6 +11,13 @@
   background-color: #f7f7f7;
 }
 
+.activity_select .msg span {
+  color: red;
+  font-size: 9.5pt;
+  padding: 8px;
+  display: inline-block;
+}
+
 .simple_window_tcb .b {
   padding: 6px 8px 6px 0;
   background-color: #eee;

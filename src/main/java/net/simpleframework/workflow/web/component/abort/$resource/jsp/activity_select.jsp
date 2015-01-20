@@ -5,7 +5,9 @@
 <%
 	final ComponentParameter nCP = ActivityAbortUtils.get(request,
 			response);
-	String componentName = nCP.getComponentName();
+	final String componentName = nCP.getComponentName();
+	final String params = ActivityAbortUtils.BEAN_ID + "="
+			+ nCP.hashId();
 %>
 <div class="simple_window_tcb activity_select">
   <%=ActivityAbortUtils.toListHTML(nCP)%>
@@ -20,6 +22,18 @@
     var ts = $(".activity_select");
     
     ts.down(".button2").observe("click", function(evn) {
+      var id = "";
+      ts.select("input[value]").each(function(box) {
+        if (box.checked) {
+          id += ";" + box.value;
+        }
+      });
+      
+      if (id.length > 0) {
+        $Actions['<%=componentName%>_ActivitySelect_OK']('<%=params%>&activityIds=' + id.substring(1));
+      } else {
+        $UI.shakeMsg(ts.down(".msg"), "<span>#(activity_select.0)</span>");
+      }
     });
     
     var w = $Actions['<%=componentName%>_win'].window;
