@@ -46,10 +46,10 @@ import net.simpleframework.workflow.engine.EActivityAbortPolicy;
 import net.simpleframework.workflow.engine.EActivityStatus;
 import net.simpleframework.workflow.engine.EProcessStatus;
 import net.simpleframework.workflow.engine.ProcessBean;
-import net.simpleframework.workflow.engine.participant.Participant;
 import net.simpleframework.workflow.schema.AbstractTaskNode;
 import net.simpleframework.workflow.schema.UserNode;
 import net.simpleframework.workflow.web.WorkflowLogRef.ActivityUpdateLogPage;
+import net.simpleframework.workflow.web.WorkflowWebUtils;
 import net.simpleframework.workflow.web.component.abort.ActivityAbortBean;
 import net.simpleframework.workflow.web.page.WorkflowUtils;
 
@@ -231,8 +231,8 @@ public class ActivityMgrPage extends AbstractWorkflowMgrPage {
 				final EActivityStatus pstatus = pre.getStatus();
 				row.add("previous", WorkflowUtils.toStatusHTML(cp, pstatus, toTasknode(pre)));
 			}
-			row.add("participants", getParticipants(activity, false));
-			row.add("participants2", getParticipants(activity, true));
+			row.add("participants", WorkflowWebUtils.getParticipants(activity, false));
+			row.add("participants2", WorkflowWebUtils.getParticipants(activity, true));
 
 			final Date createDate = activity.getCreateDate();
 			row.add("createDate", createDate);
@@ -269,19 +269,6 @@ public class ActivityMgrPage extends AbstractWorkflowMgrPage {
 					"$Actions['AbstractWorkflowMgrPage_update_log']('activityId=" + activity.getId()
 							+ "');"));
 			sb.append(SpanElement.SPACE).append(AbstractTablePagerSchema.IMG_DOWNMENU);
-			return sb.toString();
-		}
-
-		private String getParticipants(final ActivityBean activity, final boolean b) {
-			final StringBuilder sb = new StringBuilder();
-			int i = 0;
-			for (final Participant p : (b ? aService.getParticipants2(activity) : aService
-					.getParticipants(activity, true))) {
-				if (i++ > 0) {
-					sb.append(", ");
-				}
-				sb.append(permission.getUser(p.userId).getText());
-			}
 			return sb.toString();
 		}
 

@@ -4,11 +4,23 @@
 
 .activity_select .aitem {
   border-bottom: 1px solid #ccc;
-  padding: 10px 8px;
 }
 
 .activity_select .aitem:hover {
   background-color: #f7f7f7;
+}
+
+.activity_select .aitem1 {
+  border-bottom: 1px solid #ddd;
+  background-color: #eee;
+  padding: 6px 8px;
+  margin-bottom: 8px;
+  color: #a00;
+}
+
+.activity_select .aitem2 {
+  padding: 0 0 8px 12px;
+  font-size: 9.5pt;
 }
 
 .activity_select .msg span {

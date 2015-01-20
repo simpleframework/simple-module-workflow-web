@@ -11,7 +11,6 @@ import net.simpleframework.mvc.component.ComponentRender;
 import net.simpleframework.mvc.component.ComponentResourceProvider;
 import net.simpleframework.mvc.component.base.ajaxrequest.AjaxRequestBean;
 import net.simpleframework.mvc.component.ui.window.WindowBean;
-import net.simpleframework.workflow.engine.IWorkflowContextAware;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -23,8 +22,7 @@ import net.simpleframework.workflow.engine.IWorkflowContextAware;
 @ComponentBean(StartProcessBean.class)
 @ComponentRender(StartProcessRender.class)
 @ComponentResourceProvider(StartProcessResourceProvider.class)
-public class StartProcessRegistry extends AbstractComponentRegistry implements
-		IWorkflowContextAware {
+public class StartProcessRegistry extends AbstractComponentRegistry {
 
 	public static final String STARTPROCESS = "wf_start_process";
 

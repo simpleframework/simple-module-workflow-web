@@ -6,8 +6,7 @@ import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.component.AbstractComponentHandler;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.workflow.engine.ActivityBean;
-import net.simpleframework.workflow.engine.IActivityService;
-import net.simpleframework.workflow.engine.IWorkflowContextAware;
+import net.simpleframework.workflow.engine.IWorkflowServiceAware;
 import net.simpleframework.workflow.engine.ProcessBean;
 
 /**
@@ -17,12 +16,11 @@ import net.simpleframework.workflow.engine.ProcessBean;
  *         http://www.simpleframework.net
  */
 public class DefaultActivityAbortHandler extends AbstractComponentHandler implements
-		IActivityAbortHandler, IWorkflowContextAware {
+		IActivityAbortHandler, IWorkflowServiceAware {
 
 	@Override
 	public List<ActivityBean> getActivities(final ComponentParameter cp) {
-		final ProcessBean process = workflowContext.getProcessService().getBean(
-				cp.getParameter("processId"));
+		final ProcessBean process = pService.getBean(cp.getParameter("processId"));
 		if (process != null) {
 			return workflowContext.getActivityService().getActivities(process);
 		}
@@ -31,7 +29,6 @@ public class DefaultActivityAbortHandler extends AbstractComponentHandler implem
 
 	@Override
 	public JavascriptForward doAbort(final ComponentParameter cp, final List<ActivityBean> list) {
-		final IActivityService aService = workflowContext.getActivityService();
 		for (final ActivityBean activity : list) {
 			aService.doAbort(activity);
 		}

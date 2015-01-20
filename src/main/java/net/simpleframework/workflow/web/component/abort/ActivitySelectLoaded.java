@@ -11,8 +11,7 @@ import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.base.ajaxrequest.AjaxRequestBean;
 import net.simpleframework.mvc.component.base.ajaxrequest.DefaultAjaxRequestHandler;
 import net.simpleframework.workflow.engine.ActivityBean;
-import net.simpleframework.workflow.engine.IActivityService;
-import net.simpleframework.workflow.engine.IWorkflowContextAware;
+import net.simpleframework.workflow.engine.IWorkflowServiceAware;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -20,7 +19,7 @@ import net.simpleframework.workflow.engine.IWorkflowContextAware;
  * @author 陈侃(cknet@126.com, 13910090885) https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
-public class ActivitySelectLoaded extends DefaultPageHandler implements IWorkflowContextAware {
+public class ActivitySelectLoaded extends DefaultPageHandler implements IWorkflowServiceAware {
 
 	@Override
 	public void onBeforeComponentRender(final PageParameter pp) {
@@ -36,7 +35,6 @@ public class ActivitySelectLoaded extends DefaultPageHandler implements IWorkflo
 		@Override
 		public IForward ajaxProcess(final ComponentParameter cp) throws Exception {
 			final ComponentParameter nCP = ActivityAbortUtils.get(cp);
-			final IActivityService aService = workflowContext.getActivityService();
 			final List<ActivityBean> list = new ArrayList<ActivityBean>();
 			final String[] activityIds = StringUtils.split(cp.getParameter("activityIds"), ";");
 			if (activityIds != null) {
