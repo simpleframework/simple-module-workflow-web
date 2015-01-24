@@ -73,6 +73,11 @@ public class MyFinalWorklistTPage extends MyRunningWorklistTPage {
 				"idMyWorklistTPage_viewMenu"));
 	}
 
+	@Override
+	protected String getDefaultGroupVal() {
+		return "taskname";
+	}
+
 	public static class MyCompleteWorklistTbl extends MyRunningWorklistTbl {
 
 		@Override
