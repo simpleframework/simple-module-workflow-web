@@ -137,7 +137,7 @@ public abstract class AbstractWorkflowMgrPage extends T1ResizedTemplatePage impl
 		}
 	}
 
-	static TablePagerColumn TC_TITLE() {
+	public static TablePagerColumn TC_TITLE() {
 		return new TablePagerColumn("title", $m("AbstractWorkflowMgrPage.3"))
 				.setTextAlign(ETextAlign.left);
 	}
