@@ -48,9 +48,9 @@ public class UserDelegateListTPage extends MyDelegateListTPage {
 				.addColumn(
 						new TablePagerColumn("description", $m("WorkitemDelegateSetPage.3"))
 								.setTextAlign(ETextAlign.left).setSort(false))
-				.addColumn(new TablePagerColumn("userText", $m("MyWorkDelegateListTPage.0"), 70))
+				.addColumn(new TablePagerColumn("userText", $m("MyDelegateListTPage.0"), 70))
 				.addColumn(
-						new TablePagerColumn("createDate", $m("MyWorkDelegateListTPage.1"), 115)
+						new TablePagerColumn("createDate", $m("MyDelegateListTPage.1"), 115)
 								.setPropertyClass(Date.class))
 				.addColumn(new TablePagerColumn("status", $m("AbstractWorkitemsTPage.3"), 55) {
 					@Override

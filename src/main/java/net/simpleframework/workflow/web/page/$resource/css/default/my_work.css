@@ -57,18 +57,18 @@
 	border-radius: 6px;
 }
 
-.MyWorkDelegateListTPage .tabbtns {
+.MyDelegateListTPage .tabbtns {
   position: absolute;
   bottom: 0; 
   right: 150px;
   z-index: 11;
 }
 
-.MyWorkDelegateListTPage .tablepager .thead {
+.MyDelegateListTPage .tablepager .thead {
   box-shadow: none !important;
 }
 
-.MyWorkDelegateListTPage ul.simple_tabs a.active {
+.MyDelegateListTPage ul.simple_tabs a.active {
   background-image: none !important;
   background-color: #efefef !important;
   border-bottom-color: #efefef !important;

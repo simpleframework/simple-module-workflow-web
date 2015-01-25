@@ -51,14 +51,14 @@ public class MyDelegateListTPage extends AbstractWorkitemsTPage {
 		addTablePagerBean(pp);
 		// 取消
 		addAjaxRequest(pp, "DelegateListTPage_abort").setHandlerMethod("doAbort").setConfirmMessage(
-				$m("MyWorkDelegateListTPage.2"));
+				$m("MyDelegateListTPage.2"));
 		// 删除
 		addAjaxRequest(pp, "DelegateListTPage_delete").setHandlerMethod("doDelete")
 				.setConfirmMessage($m("Confirm.Delete"));
 		// 查看
 		addAjaxRequest(pp, "DelegateListTPage_view_page", WorkitemDelegateViewPage.class);
 		addWindowBean(pp, "DelegateListTPage_view").setContentRef("DelegateListTPage_view_page")
-				.setTitle($m("MyWorkDelegateListTPage.3")).setHeight(300).setWidth(500);
+				.setTitle($m("MyDelegateListTPage.3")).setHeight(300).setWidth(500);
 	}
 
 	protected TablePagerBean addTablePagerBean(final PageParameter pp) {
@@ -67,9 +67,9 @@ public class MyDelegateListTPage extends AbstractWorkitemsTPage {
 		tablePager.addColumn(TablePagerColumn.ICON().setWidth(16));
 		tablePager
 				.addColumn(TC_TITLE())
-				.addColumn(new TablePagerColumn("userText", $m("MyWorkDelegateListTPage.0"), 70))
+				.addColumn(new TablePagerColumn("userText", $m("MyDelegateListTPage.0"), 70))
 				.addColumn(
-						new TablePagerColumn("createDate", $m("MyWorkDelegateListTPage.1"), 115)
+						new TablePagerColumn("createDate", $m("MyDelegateListTPage.1"), 115)
 								.setPropertyClass(Date.class))
 				.addColumn(TC_STATUS().setPropertyClass(EDelegationStatus.class));
 		tablePager.addColumn(TablePagerColumn.OPE().setWidth(70));
@@ -91,7 +91,7 @@ public class MyDelegateListTPage extends AbstractWorkitemsTPage {
 
 	@Override
 	protected String getPageCSS(final PageParameter pp) {
-		return "MyWorkDelegateListTPage";
+		return "MyDelegateListTPage";
 	}
 
 	@Override
@@ -101,9 +101,9 @@ public class MyDelegateListTPage extends AbstractWorkitemsTPage {
 
 	protected SpanElement getTabButtons(final PageParameter pp) {
 		final WorkflowUrlsFactory urlsFactory = getUrlsFactory();
-		return createTabsElement(pp, TabButtons.of(new TabButton($m("MyWorkDelegateListTPage.4"),
+		return createTabsElement(pp, TabButtons.of(new TabButton($m("MyDelegateListTPage.4"),
 				urlsFactory.getUrl(pp, MyDelegateListTPage.class)), new TabButton(
-				$m("MyWorkDelegateListTPage.5"), urlsFactory.getUrl(pp, UserDelegateListTPage.class))));
+				$m("MyDelegateListTPage.5"), urlsFactory.getUrl(pp, UserDelegateListTPage.class))));
 	}
 
 	@Override
