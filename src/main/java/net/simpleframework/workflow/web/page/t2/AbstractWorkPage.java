@@ -8,10 +8,11 @@ import net.simpleframework.mvc.PageMapping;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.template.t2.T2TemplatePage;
 import net.simpleframework.workflow.web.page.AbstractItemsTPage;
+import net.simpleframework.workflow.web.page.MyDelegateListTPage;
 import net.simpleframework.workflow.web.page.MyFinalWorklistTPage;
 import net.simpleframework.workflow.web.page.MyInitiateItemsTPage;
+import net.simpleframework.workflow.web.page.MyQueryWorksTPage;
 import net.simpleframework.workflow.web.page.MyRunningWorklistTPage;
-import net.simpleframework.workflow.web.page.MyWorkDelegateListTPage;
 import net.simpleframework.workflow.web.page.UserDelegateListTPage;
 
 /**
@@ -65,7 +66,7 @@ public abstract class AbstractWorkPage extends T2TemplatePage {
 	public static class MyDelegateListPage extends AbstractWorkPage {
 		@Override
 		protected Class<? extends AbstractItemsTPage> getWorkTPageClass() {
-			return MyWorkDelegateListTPage.class;
+			return MyDelegateListTPage.class;
 		}
 	}
 
@@ -74,6 +75,14 @@ public abstract class AbstractWorkPage extends T2TemplatePage {
 		@Override
 		protected Class<? extends AbstractItemsTPage> getWorkTPageClass() {
 			return UserDelegateListTPage.class;
+		}
+	}
+
+	@PageMapping(url = "/workflow/my/query-works")
+	public static class MyQueryWorksPage extends AbstractWorkPage {
+		@Override
+		protected Class<? extends AbstractItemsTPage> getWorkTPageClass() {
+			return MyQueryWorksTPage.class;
 		}
 	}
 }

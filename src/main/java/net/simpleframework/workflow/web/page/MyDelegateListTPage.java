@@ -42,7 +42,7 @@ import net.simpleframework.workflow.web.page.AbstractDelegateFormPage.WorkitemDe
  * @author 陈侃(cknet@126.com, 13910090885) https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
-public class MyWorkDelegateListTPage extends AbstractWorkitemsTPage {
+public class MyDelegateListTPage extends AbstractWorkitemsTPage {
 
 	@Override
 	protected void onForward(final PageParameter pp) {
@@ -102,7 +102,7 @@ public class MyWorkDelegateListTPage extends AbstractWorkitemsTPage {
 	protected SpanElement getTabButtons(final PageParameter pp) {
 		final WorkflowUrlsFactory urlsFactory = getUrlsFactory();
 		return createTabsElement(pp, TabButtons.of(new TabButton($m("MyWorkDelegateListTPage.4"),
-				urlsFactory.getUrl(pp, MyWorkDelegateListTPage.class)), new TabButton(
+				urlsFactory.getUrl(pp, MyDelegateListTPage.class)), new TabButton(
 				$m("MyWorkDelegateListTPage.5"), urlsFactory.getUrl(pp, UserDelegateListTPage.class))));
 	}
 

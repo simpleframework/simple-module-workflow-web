@@ -26,7 +26,7 @@ import net.simpleframework.workflow.web.page.AbstractDelegateFormPage.WorkitemDe
  * @author 陈侃(cknet@126.com, 13910090885) https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
-public class UserDelegateListTPage extends MyWorkDelegateListTPage {
+public class UserDelegateListTPage extends MyDelegateListTPage {
 
 	@Override
 	protected void onForward(final PageParameter pp) {

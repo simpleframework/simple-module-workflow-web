@@ -78,7 +78,7 @@ public abstract class AbstractItemsTPage extends Category_ListPage implements IW
 
 	public CategoryItem createCategoryItem_delegate(final PageParameter pp) {
 		final CategoryItem delegate = createCategoryItem(pp, $m("AbstractItemsTPage.3"),
-				MyWorkDelegateListTPage.class).setIconClass("delegate_list_icon");
+				MyDelegateListTPage.class).setIconClass("delegate_list_icon");
 		delegate.setSelected(delegate.isSelected()
 				|| UserDelegateListTPage.class == ObjectFactory.original(getClass()));
 		return delegate;
@@ -86,6 +86,11 @@ public abstract class AbstractItemsTPage extends Category_ListPage implements IW
 
 	public CategoryItem createCategoryItem_myinitiate(final PageParameter pp) {
 		return createCategoryItem(pp, $m("AbstractItemsTPage.2"), MyInitiateItemsTPage.class)
+				.setIconClass("my_initiate_icon");
+	}
+
+	public CategoryItem createCategoryItem_queryworks(final PageParameter pp) {
+		return createCategoryItem(pp, $m("AbstractItemsTPage.4"), MyQueryWorksTPage.class)
 				.setIconClass("my_initiate_icon");
 	}
 
@@ -101,7 +106,7 @@ public abstract class AbstractItemsTPage extends Category_ListPage implements IW
 		// .setSelected("complete".equals(s))
 		children.add(createCategoryItem_mywork_complete(pp));
 		return CategoryItems.of(item0, createCategoryItem_myinitiate(pp),
-				createCategoryItem_delegate(pp));
+				createCategoryItem_delegate(pp), createCategoryItem_queryworks(pp));
 	}
 
 	protected static WorkflowUrlsFactory getUrlsFactory() {
