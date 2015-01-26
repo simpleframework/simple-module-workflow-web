@@ -142,17 +142,17 @@ public abstract class AbstractWorkflowMgrPage extends T1ResizedTemplatePage impl
 				.setTextAlign(ETextAlign.left);
 	}
 
-	static TablePagerColumn TC_CREATEDATE() {
+	public static TablePagerColumn TC_CREATEDATE() {
 		return new TablePagerColumn("createDate", $m("AbstractWorkflowMgrPage.4"), 115)
 				.setPropertyClass(Date.class);
 	}
 
-	static TablePagerColumn TC_COMPLETEDATE() {
+	public static TablePagerColumn TC_COMPLETEDATE() {
 		return new TablePagerColumn("completeDate", $m("AbstractWorkflowMgrPage.5"), 115)
 				.setPropertyClass(Date.class);
 	}
 
-	static TablePagerColumn TC_STATUS() {
+	public static TablePagerColumn TC_STATUS() {
 		return new TablePagerColumn("status", $m("AbstractWorkflowMgrPage.6"), 60)
 				.setTextAlign(ETextAlign.left);
 	}

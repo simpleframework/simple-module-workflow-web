@@ -1,5 +1,7 @@
 package net.simpleframework.workflow.web.page;
 
+import static net.simpleframework.common.I18n.$m;
+
 import java.util.Map;
 
 import net.simpleframework.ado.query.IDataQuery;
@@ -26,8 +28,14 @@ public class MyQueryWorksTPage extends AbstractItemsTPage {
 
 		final TablePagerBean tablePager = addTablePagerBean(pp, "MyQueryWorksTPage_tbl",
 				MyQueryWorksTbl.class);
-		tablePager.addColumn(AbstractWorkflowMgrPage.TC_TITLE());
+		tablePager.addColumn(AbstractWorkflowMgrPage.TC_TITLE())
+				.addColumn(new TablePagerColumn("userText", $m("ProcessMgrPage.0"), 100))
+				.addColumn(AbstractWorkflowMgrPage.TC_CREATEDATE())
+				.addColumn(AbstractWorkflowMgrPage.TC_STATUS());
 		tablePager.addColumn(TablePagerColumn.OPE().setWidth(70));
+
+		// 工作列表窗口
+
 	}
 
 	public static class MyQueryWorksTbl extends AbstractDbTablePagerHandler {
@@ -40,7 +48,9 @@ public class MyQueryWorksTPage extends AbstractItemsTPage {
 		protected Map<String, Object> getRowData(final ComponentParameter cp, final Object dataObject) {
 			final ProcessBean process = (ProcessBean) dataObject;
 			final KVMap row = new KVMap();
-			row.put("title", process.getTitle());
+			row.add("title", WorkflowUtils.getTitle(process)).add("userText", process.getUserText())
+					.add("createDate", process.getCreateDate())
+					.add("status", WorkflowUtils.toStatusHTML(cp, process.getStatus()));
 			return row;
 		}
 	}
