@@ -12,7 +12,6 @@ import net.simpleframework.ctx.IModuleRef;
 import net.simpleframework.mvc.AbstractMVCPage;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.ButtonElement;
-import net.simpleframework.mvc.common.element.ETextAlign;
 import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.LinkButton;
 import net.simpleframework.mvc.component.ComponentParameter;
@@ -54,9 +53,7 @@ public class WorkitemsMgrPage extends OneTableTemplatePage implements IWorkflowS
 				.addColumn(
 						new TablePagerColumn("completeDate", $m("WorkitemsMgrPage.3"), 115)
 								.setPropertyClass(Date.class))
-				.addColumn(
-						new TablePagerColumn("status", $m("WorkitemsMgrPage.4"), 70).setPropertyClass(
-								EWorkitemStatus.class).setTextAlign(ETextAlign.left))
+				.addColumn(AbstractWorkflowMgrPage.TC_STATUS().setPropertyClass(EWorkitemStatus.class))
 				.addColumn(TablePagerColumn.OPE().setWidth(70));
 
 		// log
