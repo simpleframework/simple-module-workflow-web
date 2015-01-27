@@ -36,6 +36,7 @@ import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
 import net.simpleframework.mvc.component.ui.pager.db.GroupDbTablePagerHandler;
 import net.simpleframework.workflow.engine.ActivityBean;
 import net.simpleframework.workflow.engine.DelegationBean;
+import net.simpleframework.workflow.engine.EActivityStatus;
 import net.simpleframework.workflow.engine.EDelegationStatus;
 import net.simpleframework.workflow.engine.EWorkitemStatus;
 import net.simpleframework.workflow.engine.IWorkflowServiceAware;
@@ -161,17 +162,35 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 		return _createImageMark(cp, "mark_unread.png").setTitle($m("MyRunningWorklistTbl.2"));
 	}
 
+	protected ImageElement MARK_TIMEOUT_WARN(final ComponentParameter cp) {
+		return _createImageMark(cp, "mark_timeout_warn.png").setTitle($m("MyRunningWorklistTbl.18"));
+	}
+
+	protected ImageElement MARK_TIMEOUT(final ComponentParameter cp) {
+		return _createImageMark(cp, "status_timeout.png").setTitle($m("MyRunningWorklistTbl.19"));
+	}
+
 	protected ImageElement createImageMark(final ComponentParameter cp, final WorkitemBean workitem) {
-		final EWorkitemStatus status = workitem.getStatus();
 		ImageElement img = null;
-		if (workitem.getRetakeRef() != null) {
-			img = MARK_RETAKE(cp);
-		} else if (status == EWorkitemStatus.delegate) {
-			img = MARK_DELEGATE(cp, workitem);
-		} else if (workitem.isTopMark()) {
-			img = MARK_TOP(cp);
-		} else if (!workitem.isReadMark()) {
-			img = MARK_UNREAD(cp);
+		final ActivityBean activity = wService.getActivity(workitem);
+		if (activity.getTimeoutDate() != null) {
+			if (activity.getStatus() == EActivityStatus.timeout) {
+				img = MARK_TIMEOUT(cp);
+			} else {
+				img = MARK_TIMEOUT_WARN(cp);
+			}
+
+		} else {
+			final EWorkitemStatus status = workitem.getStatus();
+			if (workitem.getRetakeRef() != null) {
+				img = MARK_RETAKE(cp);
+			} else if (status == EWorkitemStatus.delegate) {
+				img = MARK_DELEGATE(cp, workitem);
+			} else if (workitem.isTopMark()) {
+				img = MARK_TOP(cp);
+			} else if (!workitem.isReadMark()) {
+				img = MARK_UNREAD(cp);
+			}
 		}
 		return img;
 	}

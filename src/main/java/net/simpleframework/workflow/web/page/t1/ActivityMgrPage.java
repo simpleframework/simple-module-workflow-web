@@ -15,6 +15,7 @@ import net.simpleframework.ado.query.ListDataQuery;
 import net.simpleframework.common.Convert;
 import net.simpleframework.common.DateUtils;
 import net.simpleframework.common.ID;
+import net.simpleframework.common.NumberUtils;
 import net.simpleframework.common.StringUtils;
 import net.simpleframework.common.coll.KVMap;
 import net.simpleframework.mvc.AbstractMVCPage;
@@ -252,8 +253,9 @@ public class ActivityMgrPage extends AbstractWorkflowMgrPage {
 				tCal.setTime(timeoutDate);
 				final Calendar nCal = Calendar.getInstance();
 				nCal.setTimeInMillis(System.currentTimeMillis());
-				final int d = tCal.get(Calendar.HOUR_OF_DAY) - nCal.get(Calendar.HOUR_OF_DAY);
-				row.add("timeoutDate", new SpanElement(d).setColor(d > 0 ? "green" : "red"));
+				final int d = tCal.get(Calendar.MINUTE) - nCal.get(Calendar.MINUTE);
+				row.add("timeoutDate", new SpanElement(NumberUtils.format(d / 60.0, "0.#"))
+						.setColor(d > 0 ? "green" : "red"));
 			}
 
 			final EActivityStatus status = activity.getStatus();
