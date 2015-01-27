@@ -106,7 +106,9 @@ public class MyQueryWorksTPage extends AbstractItemsTPage {
 					.addColumn(
 							new TablePagerColumn("taskname", $m("MyQueryWorksTPage.0"))
 									.setTextAlign(ETextAlign.left))
-					.addColumn(new TablePagerColumn("userFrom", $m("MyRunningWorklistTPage.0")))
+					.addColumn(
+							new TablePagerColumn("userFrom", $m("MyRunningWorklistTPage.0"))
+									.setFilter(false))
 					.addColumn(
 							new TablePagerColumn("createDate", $m("MyRunningWorklistTPage.1"), 115)
 									.setPropertyClass(Date.class))

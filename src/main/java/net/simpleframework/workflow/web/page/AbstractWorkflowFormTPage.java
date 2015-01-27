@@ -139,10 +139,10 @@ public abstract class AbstractWorkflowFormTPage extends FormTableRowTemplatePage
 		return url(getClass());
 	}
 
-	@Override
-	public ElementList getLeftElements(final PageParameter pp) {
-		return ElementList.of(InputElement.hidden().setName("workitemId").setValue(pp));
-	}
+	// @Override
+	// public ElementList getLeftElements(final PageParameter pp) {
+	// return null;
+	// }
 
 	protected AbstractElement<?> createSaveBtn() {
 		return VALIDATION_BTN2($m("AbstractWorkflowFormPage.0")).setOnclick(getSaveAction(null));
@@ -183,7 +183,6 @@ public abstract class AbstractWorkflowFormTPage extends FormTableRowTemplatePage
 	@Override
 	protected TableRows getTableRows(final PageParameter pp) {
 		final ProcessBean process = getProcess(pp);
-
 		final TableRow r1 = new TableRow(new RowField($m("AbstractWorkflowFormPage.2"),
 				getInput_topic(pp).setText(process.getTitle())));
 		final TableRow r2 = new TableRow(new RowField($m("AbstractWorkflowFormPage.3"),
@@ -193,9 +192,14 @@ public abstract class AbstractWorkflowFormTPage extends FormTableRowTemplatePage
 
 	@Override
 	public String toTableRowsString(final PageParameter pp) {
+		final StringBuilder sb = new StringBuilder();
 		final WorkitemBean workitem = getWorkitemBean(pp);
 		final TableRows tableRows = getTableRows(pp).setReadonly(isReadonly(workitem));
-		return tableRows != null ? tableRows.toString() : "";
+		sb.append(InputElement.hidden().setName("workitemId").setValue(pp));
+		if (tableRows != null) {
+			sb.append(tableRows);
+		}
+		return sb.toString();
 	}
 
 	protected boolean isReadonly(final WorkitemBean workitem) {
