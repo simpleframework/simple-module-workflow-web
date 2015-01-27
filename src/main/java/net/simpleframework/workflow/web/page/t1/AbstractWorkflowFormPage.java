@@ -1,18 +1,17 @@
 package net.simpleframework.workflow.web.page.t1;
 
+import net.simpleframework.common.StringUtils;
 import net.simpleframework.ctx.permission.IPermissionConst;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.LinkButton;
 import net.simpleframework.mvc.template.t1.T1FormTemplatePage;
-import net.simpleframework.workflow.engine.EWorkitemStatus;
 import net.simpleframework.workflow.engine.IWorkflowServiceAware;
 import net.simpleframework.workflow.engine.WorkitemBean;
 import net.simpleframework.workflow.web.IWorkflowWebContext;
 import net.simpleframework.workflow.web.IWorkflowWebForm;
 import net.simpleframework.workflow.web.WorkflowUrlsFactory;
 import net.simpleframework.workflow.web.WorkflowUtils;
-import net.simpleframework.workflow.web.page.MyDelegateListTPage;
 import net.simpleframework.workflow.web.page.MyRunningWorklistTPage;
 
 /**
@@ -45,18 +44,17 @@ public abstract class AbstractWorkflowFormPage extends T1FormTemplatePage implem
 	public ElementList getLeftElements(final PageParameter pp) {
 		final LinkButton backBtn = backBtn();
 		final WorkflowUrlsFactory uFactory = ((IWorkflowWebContext) workflowContext).getUrlsFactory();
-		final String source = pp.getParameter("source");
-		if ("delegation".equals(source)) {
-			backBtn.setHref(uFactory.getUrl(pp, MyDelegateListTPage.class));
+		String referer = pp.getRequestHeader("Referer");
+		if (StringUtils.hasText(referer) && referer.contains("/workflow/my/")) {
+			backBtn.setHref(referer);
+			pp.setSessionAttr("_Referer", referer);
 		} else {
-			final StringBuilder sb = new StringBuilder();
-			final WorkitemBean workitem = WorkflowUtils.getWorkitemBean(pp);
-			EWorkitemStatus status;
-			if (workitem != null
-					&& (status = workitem.getStatus()).ordinal() > EWorkitemStatus.delegate.ordinal()) {
-				sb.append("status=").append(status.name());
+			referer = (String) pp.getSessionAttr("_Referer");
+			if (referer != null) {
+				backBtn.setHref(referer);
+			} else {
+				backBtn.setHref(uFactory.getUrl(pp, MyRunningWorklistTPage.class));
 			}
-			backBtn.setHref(uFactory.getUrl(pp, MyRunningWorklistTPage.class, sb.toString()));
 		}
 		final ElementList el = ElementList.of(backBtn);
 		return el;

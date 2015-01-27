@@ -14,6 +14,7 @@ import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.ButtonElement;
 import net.simpleframework.mvc.common.element.ETextAlign;
 import net.simpleframework.mvc.common.element.LinkElement;
+import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.ui.pager.EPagerBarLayout;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
@@ -48,8 +49,8 @@ public class MyQueryWorksTPage extends AbstractItemsTPage {
 		tablePager.addColumn(AbstractWorkflowMgrPage.TC_TITLE())
 				.addColumn(new TablePagerColumn("userText", $m("ProcessMgrPage.0"), 100))
 				.addColumn(AbstractWorkflowMgrPage.TC_CREATEDATE())
-				.addColumn(AbstractWorkflowMgrPage.TC_STATUS().setPropertyClass(EProcessStatus.class));
-		tablePager.addColumn(TablePagerColumn.OPE().setWidth(70));
+				.addColumn(AbstractWorkflowMgrPage.TC_STATUS().setPropertyClass(EProcessStatus.class))
+				.addColumn(TablePagerColumn.OPE().setWidth(90));
 
 		// 工作列表窗口
 		addAjaxRequest(pp, "MyQueryWorksTPage_workitems_page", ProcessWorkitemsPage.class);
@@ -104,9 +105,7 @@ public class MyQueryWorksTPage extends AbstractItemsTPage {
 					.addColumn(
 							new TablePagerColumn("taskname", $m("MyQueryWorksTPage.0"))
 									.setTextAlign(ETextAlign.left))
-					.addColumn(
-							new TablePagerColumn("userFrom", $m("MyRunningWorklistTPage.0"))
-									.setTextAlign(ETextAlign.left))
+					.addColumn(new TablePagerColumn("userFrom", $m("MyRunningWorklistTPage.0")))
 					.addColumn(
 							new TablePagerColumn("createDate", $m("MyRunningWorklistTPage.1"), 115)
 									.setPropertyClass(Date.class))
@@ -114,13 +113,18 @@ public class MyQueryWorksTPage extends AbstractItemsTPage {
 							new TablePagerColumn("completeDate", $m("MyFinalWorklistTPage.1"), 115)
 									.setPropertyClass(Date.class))
 					.addColumn(
-							AbstractWorkflowMgrPage.TC_STATUS().setPropertyClass(EWorkitemStatus.class));
+							AbstractWorkflowMgrPage.TC_STATUS().setPropertyClass(EWorkitemStatus.class))
+					.addColumn(TablePagerColumn.OPE().setWidth(110));
 		}
 
 		@Override
 		public String getTitle(final PageParameter pp) {
+			String t = $m("MyQueryWorksTPage.1");
 			final ProcessBean process = pService.getBean(pp.getParameter("processId"));
-			return process != null ? process.getTitle() : null;
+			if (process != null) {
+				t += " - " + process.getTitle();
+			}
+			return t;
 		}
 	}
 
@@ -128,10 +132,12 @@ public class MyQueryWorksTPage extends AbstractItemsTPage {
 
 		@Override
 		public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
-			final ProcessBean process = pService.getBean(cp.getParameter("processId"));
+			final String pid = cp.getParameter("processId");
+			final ProcessBean process = pService.getBean(pid);
 			if (process == null) {
 				return DataQueryUtils.nullQuery();
 			}
+			cp.addFormParameter("processId", pid);
 			return new ListDataQuery<WorkitemBean>(wService.getWorkitems(process, cp.getLoginId()));
 		}
 
@@ -149,6 +155,11 @@ public class MyQueryWorksTPage extends AbstractItemsTPage {
 					.add("createDate", workitem.getCreateDate())
 					.add("completeDate", workitem.getCompleteDate())
 					.add("status", WorkflowUtils.toStatusHTML(cp, workitem.getStatus()));
+			final StringBuilder ope = new StringBuilder();
+			ope.append(new ButtonElement($m("MyQueryWorksTPage.3")).setOnclick(""));
+			ope.append(SpanElement.SPACE);
+			ope.append(new ButtonElement($m("WorkflowFormPage.1")).setOnclick(""));
+			row.add(TablePagerColumn.OPE, ope.toString());
 			return row;
 		}
 	}
