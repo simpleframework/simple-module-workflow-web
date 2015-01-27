@@ -31,6 +31,7 @@ import net.simpleframework.workflow.web.WorkflowUrlsFactory;
 import net.simpleframework.workflow.web.WorkflowUtils;
 import net.simpleframework.workflow.web.page.t1.AbstractWorkflowMgrPage;
 import net.simpleframework.workflow.web.page.t1.WorkflowFormPage;
+import net.simpleframework.workflow.web.page.t1.WorkflowMonitorPage;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -155,10 +156,13 @@ public class MyQueryWorksTPage extends AbstractItemsTPage {
 					.add("createDate", workitem.getCreateDate())
 					.add("completeDate", workitem.getCompleteDate())
 					.add("status", WorkflowUtils.toStatusHTML(cp, workitem.getStatus()));
+
 			final StringBuilder ope = new StringBuilder();
-			ope.append(new ButtonElement($m("MyQueryWorksTPage.3")).setOnclick(""));
+			ope.append(new ButtonElement($m("MyQueryWorksTPage.3")).setOnclick("$Actions.loc('"
+					+ uFactory.getUrl(cp, WorkflowFormPage.class, workitem) + "');"));
 			ope.append(SpanElement.SPACE);
-			ope.append(new ButtonElement($m("WorkflowFormPage.1")).setOnclick(""));
+			ope.append(new ButtonElement($m("WorkflowFormPage.1")).setOnclick("$Actions.loc('"
+					+ uFactory.getUrl(cp, WorkflowMonitorPage.class, workitem) + "');"));
 			row.add(TablePagerColumn.OPE, ope.toString());
 			return row;
 		}
