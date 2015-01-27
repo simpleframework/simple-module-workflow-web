@@ -12,7 +12,7 @@ import net.simpleframework.mvc.common.element.BlockElement;
 import net.simpleframework.workflow.engine.ActivityBean;
 import net.simpleframework.workflow.engine.EWorkitemStatus;
 import net.simpleframework.workflow.engine.WorkitemBean;
-import net.simpleframework.workflow.web.page.WorkflowUtils;
+import net.simpleframework.workflow.web.WorkflowUtils;
 
 /**
  * Licensed under the Apache License, Version 2.0

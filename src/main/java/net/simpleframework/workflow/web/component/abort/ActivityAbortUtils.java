@@ -22,7 +22,7 @@ import net.simpleframework.workflow.engine.IActivityService;
 import net.simpleframework.workflow.engine.IWorkflowContextAware;
 import net.simpleframework.workflow.schema.AbstractTaskNode;
 import net.simpleframework.workflow.schema.UserNode;
-import net.simpleframework.workflow.web.WorkflowWebUtils;
+import net.simpleframework.workflow.web.WorkflowUtils;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -92,8 +92,8 @@ public abstract class ActivityAbortUtils implements IWorkflowContextAware {
 				final List<ActivityBean> v = e.getValue();
 				for (final ActivityBean activity : v) {
 					sb.append("<div class='aitem2'>");
-					sb.append(new Checkbox("aitem" + i++, WorkflowWebUtils.getParticipants(activity,
-							false)).setValue(activity.getId().toString()));
+					sb.append(new Checkbox("aitem" + i++, WorkflowUtils.getParticipants(activity, false))
+							.setValue(activity.getId().toString()));
 					sb.append("</div>");
 				}
 				sb.append("</div>");

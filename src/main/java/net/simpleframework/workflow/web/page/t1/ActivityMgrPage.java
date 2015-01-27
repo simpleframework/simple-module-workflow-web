@@ -49,9 +49,8 @@ import net.simpleframework.workflow.engine.ProcessBean;
 import net.simpleframework.workflow.schema.AbstractTaskNode;
 import net.simpleframework.workflow.schema.UserNode;
 import net.simpleframework.workflow.web.WorkflowLogRef.ActivityUpdateLogPage;
-import net.simpleframework.workflow.web.WorkflowWebUtils;
+import net.simpleframework.workflow.web.WorkflowUtils;
 import net.simpleframework.workflow.web.component.abort.ActivityAbortBean;
-import net.simpleframework.workflow.web.page.WorkflowUtils;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -231,8 +230,8 @@ public class ActivityMgrPage extends AbstractWorkflowMgrPage {
 				final EActivityStatus pstatus = pre.getStatus();
 				row.add("previous", WorkflowUtils.toStatusHTML(cp, pstatus, toTasknode(pre)));
 			}
-			row.add("participants", WorkflowWebUtils.getParticipants(activity, false));
-			row.add("participants2", WorkflowWebUtils.getParticipants(activity, true));
+			row.add("participants", WorkflowUtils.getParticipants(activity, false));
+			row.add("participants2", WorkflowUtils.getParticipants(activity, true));
 
 			final Date createDate = activity.getCreateDate();
 			row.add("createDate", createDate);

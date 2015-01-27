@@ -4,10 +4,7 @@ import static net.simpleframework.common.I18n.$m;
 
 import java.util.Date;
 import java.util.Iterator;
-import java.util.LinkedHashSet;
 import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
 
 import net.simpleframework.ado.FilterItem;
 import net.simpleframework.ado.db.DbDataQuery;
@@ -48,6 +45,7 @@ import net.simpleframework.workflow.engine.WorkitemBean;
 import net.simpleframework.workflow.schema.AbstractTaskNode;
 import net.simpleframework.workflow.web.IWorkflowWebContext;
 import net.simpleframework.workflow.web.WorkflowUrlsFactory;
+import net.simpleframework.workflow.web.WorkflowUtils;
 import net.simpleframework.workflow.web.page.t1.WorkflowFormPage;
 import net.simpleframework.workflow.web.page.t1.WorkflowMonitorPage;
 
@@ -189,6 +187,9 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 		}
 	}
 
+	private final WorkflowUrlsFactory uFactory = ((IWorkflowWebContext) workflowContext)
+			.getUrlsFactory();
+
 	@Override
 	protected Map<String, Object> getRowData(final ComponentParameter cp, final Object dataObject) {
 		final WorkitemBean workitem = (WorkitemBean) dataObject;
@@ -200,8 +201,6 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 		if (img != null) {
 			row.add(TablePagerColumn.ICON, img);
 		}
-
-		final WorkflowUrlsFactory uFactory = ((IWorkflowWebContext) workflowContext).getUrlsFactory();
 
 		final StringBuilder title = new StringBuilder();
 		appendTaskname(title, cp, activity);
@@ -221,8 +220,8 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 							"$Actions.loc('" + uFactory.getUrl(cp, WorkflowFormPage.class, workitem)
 									+ "');"));
 		}
-		row.add("title", title.toString()).add("userFrom", getUserFrom(activity))
-				.add("userTo", getUserTo(activity));
+		row.add("title", title.toString()).add("userFrom", WorkflowUtils.getUserFrom(activity))
+				.add("userTo", WorkflowUtils.getUserTo(activity));
 		final Date createDate = workitem.getCreateDate();
 		row.add("createDate",
 				new SpanElement(DateUtils.getRelativeDate(createDate, DATE_NUMBERCONVERT))
@@ -273,48 +272,6 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 				"MyWorklistTPage_delete", "workitemId"));
 		items.append(MenuItem.sep()).append(MENU_LOG());
 		return items;
-	}
-
-	final Map<String, String> userCache = new ConcurrentHashMap<String, String>();
-
-	protected String getUserTo(final ActivityBean activity) {
-		if (activity == null) {
-			return null;
-		}
-		final String key = "to_" + activity.getId();
-		String userTo = userCache.get(key);
-		if (userTo == null) {
-			final Set<String> list = new LinkedHashSet<String>();
-			for (final ActivityBean nextActivity : aService.getNextActivities(activity)) {
-				for (final WorkitemBean workitem : wService.getWorkitems(nextActivity)) {
-					list.add(workitem.getUserText());
-				}
-			}
-			if (list.size() > 0) {
-				userCache.put(key, userTo = StringUtils.join(list, ", "));
-			}
-		}
-		return userTo;
-	}
-
-	protected String getUserFrom(final ActivityBean activity) {
-		final ActivityBean preActivity = aService.getPreActivity(activity);
-		if (preActivity == null) {
-			return null;
-		}
-		final String key = "from_" + preActivity.getId();
-		String userFrom = userCache.get(key);
-		if (userFrom == null) {
-			final Set<String> list = new LinkedHashSet<String>();
-			for (final WorkitemBean workitem : wService.getWorkitems(preActivity,
-					EWorkitemStatus.complete)) {
-				list.add(workitem.getUserText());
-			}
-			if (list.size() > 0) {
-				userCache.put(key, userFrom = StringUtils.join(list, ", "));
-			}
-		}
-		return userFrom;
 	}
 
 	static MenuItem MENU_MONITOR(final PageParameter pp) {

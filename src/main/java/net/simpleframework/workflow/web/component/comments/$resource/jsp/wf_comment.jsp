@@ -3,7 +3,7 @@
 <%@ page import="net.simpleframework.mvc.component.ComponentParameter"%>
 <%@ page import="net.simpleframework.workflow.web.component.comments.IWfCommentHandler"%>
 <%@ page import="net.simpleframework.mvc.component.ComponentRenderUtils"%>
-<%@ page import="net.simpleframework.workflow.web.page.WorkflowUtils"%>
+<%@ page import="net.simpleframework.workflow.web.WorkflowUtils"%>
 <%
 	ComponentParameter cp = WfCommentUtils.get(request, response);
 	IWfCommentHandler hdl = (IWfCommentHandler) cp
