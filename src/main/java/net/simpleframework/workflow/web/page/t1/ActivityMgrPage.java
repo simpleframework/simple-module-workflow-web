@@ -4,7 +4,6 @@ import static net.simpleframework.common.I18n.$m;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -249,16 +248,14 @@ public class ActivityMgrPage extends AbstractWorkflowMgrPage {
 			}
 			Date timeoutDate;
 			if ((timeoutDate = activity.getTimeoutDate()) != null) {
-				final Calendar tCal = Calendar.getInstance();
-				tCal.setTime(timeoutDate);
-				final Calendar nCal = Calendar.getInstance();
-				nCal.setTimeInMillis(System.currentTimeMillis());
-				final int d = tCal.get(Calendar.MINUTE) - nCal.get(Calendar.MINUTE);
+				final int d = Double.valueOf(
+						((timeoutDate.getTime() - System.currentTimeMillis()) / (1000 * 60))).intValue();
 				row.add("timeoutDate", new SpanElement(NumberUtils.format(d / 60.0, "0.#"))
 						.setColor(d > 0 ? "green" : "red"));
 			}
 
 			final EActivityStatus status = activity.getStatus();
+			System.out.println(status);
 			row.add("status", WorkflowUtils.toStatusHTML(cp, status));
 			row.add(TablePagerColumn.OPE, getOpe(activity));
 			return row;
