@@ -249,13 +249,13 @@ public class ActivityMgrPage extends AbstractWorkflowMgrPage {
 			Date timeoutDate;
 			if ((timeoutDate = activity.getTimeoutDate()) != null) {
 				final int d = Double.valueOf(
-						((timeoutDate.getTime() - System.currentTimeMillis()) / (1000 * 60))).intValue();
+						(timeoutDate.getTime() - (completeDate != null ? completeDate.getTime() : System
+								.currentTimeMillis())) / (1000 * 60)).intValue();
 				row.add("timeoutDate", new SpanElement(NumberUtils.format(d / 60.0, "0.#"))
 						.setColor(d > 0 ? "green" : "red"));
 			}
 
 			final EActivityStatus status = activity.getStatus();
-			System.out.println(status);
 			row.add("status", WorkflowUtils.toStatusHTML(cp, status));
 			row.add(TablePagerColumn.OPE, getOpe(activity));
 			return row;

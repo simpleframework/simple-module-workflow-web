@@ -19,6 +19,7 @@ import net.simpleframework.common.StringUtils;
 import net.simpleframework.common.coll.KVMap;
 import net.simpleframework.common.object.NamedObject;
 import net.simpleframework.mvc.PageParameter;
+import net.simpleframework.mvc.common.element.AbstractElement;
 import net.simpleframework.mvc.common.element.ButtonElement;
 import net.simpleframework.mvc.common.element.EVerticalAlign;
 import net.simpleframework.mvc.common.element.ImageElement;
@@ -170,17 +171,35 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 		return _createImageMark(cp, "status_timeout.png").setTitle($m("MyRunningWorklistTbl.19"));
 	}
 
-	protected ImageElement createImageMark(final ComponentParameter cp, final WorkitemBean workitem) {
-		ImageElement img = null;
+	protected AbstractElement<?> createImageMark(final ComponentParameter cp,
+			final WorkitemBean workitem) {
+		AbstractElement<?> img = null;
 		final ActivityBean activity = wService.getActivity(workitem);
-		if (activity.getTimeoutDate() != null) {
+		final Date timeoutDate = activity.getTimeoutDate();
+		if (timeoutDate != null) {
 			if (activity.getStatus() == EActivityStatus.timeout) {
-				img = MARK_TIMEOUT(cp);
+				int d = 0;
+				if (activity.getCompleteDate() == null) {
+					d = Double.valueOf(
+							(System.currentTimeMillis() - timeoutDate.getTime()) / (1000 * 60 * 60 * 24))
+							.intValue();
+				}
+				if (d > 0) {
+					img = new SpanElement().addElements(MARK_TIMEOUT(cp),
+							new SpanElement(d).setClassName("worklist_timeout_num"));
+				} else {
+					img = MARK_TIMEOUT(cp);
+				}
 			} else {
+				final int hours = Double.valueOf(
+						(timeoutDate.getTime() - System.currentTimeMillis()) / (1000 * 60 * 60))
+						.intValue();
+				if (hours < wfSettings.getHoursToTimeoutWarning()) {
+				}
 				img = MARK_TIMEOUT_WARN(cp);
 			}
-
-		} else {
+		}
+		if (img == null) {
 			final EWorkitemStatus status = workitem.getStatus();
 			if (workitem.getRetakeRef() != null) {
 				img = MARK_RETAKE(cp);
@@ -216,7 +235,7 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 
 		final ActivityBean activity = wService.getActivity(workitem);
 
-		final ImageElement img = createImageMark(cp, workitem);
+		final AbstractElement<?> img = createImageMark(cp, workitem);
 		if (img != null) {
 			row.add(TablePagerColumn.ICON, img);
 		}

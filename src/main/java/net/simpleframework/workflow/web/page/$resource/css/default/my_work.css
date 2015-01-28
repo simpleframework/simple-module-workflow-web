@@ -57,6 +57,13 @@
 	border-radius: 6px;
 }
 
+.worklist_timeout_num {
+  font-size: 9px;
+  right: -1px;
+  top: 1px;
+  position: absolute;
+}
+
 .MyDelegateListTPage .tabbtns {
   position: absolute;
   bottom: 0; 

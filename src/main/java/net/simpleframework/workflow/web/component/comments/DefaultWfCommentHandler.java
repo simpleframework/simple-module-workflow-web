@@ -102,7 +102,10 @@ public class DefaultWfCommentHandler extends ComponentHandlerEx implements IWfCo
 				.getActivityId()));
 		for (final Node node : ((ProcessNode) tasknode.getParent()).nodes()) {
 			if (node instanceof UserNode) {
-				data.put(node.getText(), new String[] { node.getName() });
+				final String name = node.getName();
+				if (StringUtils.hasText(name)) {
+					data.put(node.getText(), new String[] { name });
+				}
 			}
 		}
 		return data;
@@ -200,13 +203,19 @@ public class DefaultWfCommentHandler extends ComponentHandlerEx implements IWfCo
 		} else {
 			for (final Map.Entry<String, List<WfComment>> e : comments_map(cp, workitem, groupBy)
 					.entrySet()) {
-				sb2.append("<div class='comment-group-item'>").append(e.getKey()).append("</div>");
-				int i = 0;
+				final List<WfComment> list = new ArrayList<WfComment>();
 				for (final WfComment comment : e.getValue()) {
 					if (editable && comment2 != null && comment2.equals(comment)) {
 						continue;
 					}
-					sb2.append(toCommentItemHTML(cp, comment, i++ == 0, groupBy));
+					list.add(comment);
+				}
+				if (list.size() > 0) {
+					sb2.append("<div class='comment-group-item'>").append(e.getKey()).append("</div>");
+					int i = 0;
+					for (final WfComment comment : list) {
+						sb2.append(toCommentItemHTML(cp, comment, i++ == 0, groupBy));
+					}
 				}
 			}
 		}
