@@ -1,6 +1,10 @@
 package net.simpleframework.workflow.web.page;
 
 import static net.simpleframework.common.I18n.$m;
+
+import java.util.Date;
+
+import net.simpleframework.common.Convert;
 import net.simpleframework.ctx.trans.Transaction;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageParameter;
@@ -10,6 +14,7 @@ import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.Icon;
 import net.simpleframework.mvc.common.element.InputElement;
 import net.simpleframework.mvc.common.element.RowField;
+import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.common.element.TableRow;
 import net.simpleframework.mvc.common.element.TableRows;
 import net.simpleframework.mvc.component.ComponentParameter;
@@ -102,6 +107,7 @@ public abstract class AbstractWorkflowFormTPage extends FormTableRowTemplatePage
 			final WorkitemComplete workitemComplete) {
 		final WorkitemBean workitem = getWorkitemBean(pp);
 		onSaveForm(pp, workitem);
+		pp.removeSessionAttr("time_" + workitem.getId());
 		return new JavascriptForward("$Actions.loc('").append(
 				((IWorkflowWebContext) workflowContext).getUrlsFactory().getUrl(pp,
 						WorkflowCompleteInfoPage.class, workitem)).append("');");
@@ -111,6 +117,7 @@ public abstract class AbstractWorkflowFormTPage extends FormTableRowTemplatePage
 	public JavascriptForward onSave(final ComponentParameter cp) throws Exception {
 		final WorkitemBean workitem = getWorkitemBean(cp);
 		onSaveForm(cp, workitem);
+		cp.setSessionAttr("time_" + workitem.getId(), new Date());
 		return new JavascriptForward("$Actions.loc('").append(
 				((IWorkflowWebContext) workflowContext).getUrlsFactory().getUrl(cp,
 						WorkflowFormPage.class, workitem)).append("');");
@@ -139,10 +146,17 @@ public abstract class AbstractWorkflowFormTPage extends FormTableRowTemplatePage
 		return url(getClass());
 	}
 
-	// @Override
-	// public ElementList getLeftElements(final PageParameter pp) {
-	// return null;
-	// }
+	@Override
+	public ElementList getLeftElements(final PageParameter pp) {
+		final ElementList el = ElementList.of();
+		final WorkitemBean workitem = getWorkitemBean(pp);
+		final Date date = (Date) pp.getSessionAttr("time_" + workitem.getId());
+		if (date != null) {
+			el.add(new SpanElement($m("AbstractWorkflowFormTPage.0",
+					Convert.toDateString(date, "HH:mm"))).setColor("green"));
+		}
+		return el;
+	}
 
 	protected AbstractElement<?> createSaveBtn() {
 		return VALIDATION_BTN2($m("AbstractWorkflowFormPage.0")).setOnclick(getSaveAction(null));

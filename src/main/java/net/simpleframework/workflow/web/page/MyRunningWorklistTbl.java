@@ -192,11 +192,10 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 				}
 			} else {
 				final int hours = Double.valueOf(
-						(timeoutDate.getTime() - System.currentTimeMillis()) / (1000 * 60 * 60))
-						.intValue();
-				if (hours < wfSettings.getHoursToTimeoutWarning()) {
+						(timeoutDate.getTime() - System.currentTimeMillis()) / (1000 * 60)).intValue();
+				if (hours < wfSettings.getHoursToTimeoutWarning() * 60) {
+					img = MARK_TIMEOUT_WARN(cp);
 				}
-				img = MARK_TIMEOUT_WARN(cp);
 			}
 		}
 		if (img == null) {
