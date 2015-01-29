@@ -13,8 +13,11 @@ import net.simpleframework.common.coll.KVMap;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.ButtonElement;
 import net.simpleframework.mvc.common.element.ETextAlign;
+import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.LinkElement;
 import net.simpleframework.mvc.common.element.SpanElement;
+import net.simpleframework.mvc.common.element.TabButton;
+import net.simpleframework.mvc.common.element.TabButtons;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.ui.pager.EPagerBarLayout;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
@@ -58,6 +61,23 @@ public class MyQueryWorksTPage extends AbstractItemsTPage {
 		addWindowBean(pp, "MyQueryWorksTPage_workitems")
 				.setContentRef("MyQueryWorksTPage_workitems_page").setWidth(800).setHeight(480)
 				.setTitle($m("MyQueryWorksTPage.1"));
+	}
+
+	@Override
+	protected String getPageCSS(final PageParameter pp) {
+		return "MyQueryWorksTPage";
+	}
+
+	protected SpanElement getTabButtons(final PageParameter pp) {
+		final WorkflowUrlsFactory urlsFactory = getUrlsFactory();
+		return createTabsElement(pp, TabButtons.of(new TabButton($m("MyQueryWorksTPage.4"),
+				urlsFactory.getUrl(pp, MyQueryWorksTPage.class)), new TabButton(
+				$m("MyQueryWorksTPage.5"), urlsFactory.getUrl(pp, MyQueryWorks_DeptTPage.class))));
+	}
+
+	@Override
+	public ElementList getRightElements(final PageParameter pp) {
+		return ElementList.of(getTabButtons(pp));
 	}
 
 	private static final WorkflowUrlsFactory uFactory = ((IWorkflowWebContext) workflowContext)

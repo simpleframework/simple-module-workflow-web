@@ -64,20 +64,22 @@
   position: absolute;
 }
 
-.MyDelegateListTPage .tabbtns {
+.MyDelegateListTPage .tabbtns, 
+.MyQueryWorksTPage .tabbtns {
   position: absolute;
   bottom: 0; 
   right: 150px;
   z-index: 11;
 }
 
-.MyDelegateListTPage .tablepager .thead {
-  box-shadow: none !important;
-}
-
-.MyDelegateListTPage ul.simple_tabs a.active {
+.MyDelegateListTPage ul.simple_tabs a.active,
+.MyQueryWorksTPage ul.simple_tabs a.active {
   background-image: none !important;
   background-color: #efefef !important;
   border-bottom-color: #efefef !important;
 }
 
+.MyDelegateListTPage .tablepager .thead,
+.MyQueryWorksTPage .tablepager .thead {
+  box-shadow: none !important;
+}
