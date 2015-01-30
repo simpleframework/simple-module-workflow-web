@@ -3,6 +3,7 @@ package net.simpleframework.workflow.web.page;
 import static net.simpleframework.common.I18n.$m;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 import net.simpleframework.ado.query.DataQueryUtils;
@@ -48,8 +49,7 @@ public class MyQueryWorksTPage extends AbstractItemsTPage {
 	protected void onForward(final PageParameter pp) {
 		super.onForward(pp);
 
-		final TablePagerBean tablePager = addTablePagerBean(pp, "MyQueryWorksTPage_tbl",
-				MyQueryWorksTbl.class);
+		final TablePagerBean tablePager = addTablePagerBean(pp);
 		tablePager.addColumn(AbstractWorkflowMgrPage.TC_TITLE())
 				.addColumn(new TablePagerColumn("userText", $m("ProcessMgrPage.0"), 100))
 				.addColumn(AbstractWorkflowMgrPage.TC_CREATEDATE())
@@ -68,11 +68,17 @@ public class MyQueryWorksTPage extends AbstractItemsTPage {
 		return "MyQueryWorksTPage";
 	}
 
+	protected TablePagerBean addTablePagerBean(final PageParameter pp) {
+		return addTablePagerBean(pp, "MyQueryWorksTPage_tbl", MyQueryWorksTbl.class);
+	}
+
 	protected SpanElement getTabButtons(final PageParameter pp) {
 		final WorkflowUrlsFactory urlsFactory = getUrlsFactory();
 		return createTabsElement(pp, TabButtons.of(new TabButton($m("MyQueryWorksTPage.4"),
-				urlsFactory.getUrl(pp, MyQueryWorksTPage.class)), new TabButton(
-				$m("MyQueryWorksTPage.5"), urlsFactory.getUrl(pp, MyQueryWorks_DeptTPage.class))));
+				urlsFactory.getUrl(pp, MyQueryWorksTPage.class))));
+		// , new TabButton(
+		// $m("MyQueryWorksTPage.5"), urlsFactory.getUrl(pp,
+		// MyQueryWorks_DeptTPage.class))
 	}
 
 	@Override
@@ -98,9 +104,11 @@ public class MyQueryWorksTPage extends AbstractItemsTPage {
 			if (c > 0) {
 				t.append("[").append(c).append("] ");
 			}
+
+			final List<WorkitemBean> workitems = wService.getWorkitems(process, cp.getLoginId());
 			t.append(new LinkElement(WorkflowUtils.getTitle(process)).setOnclick("$Actions.loc('"
-					+ uFactory.getUrl(cp, WorkflowFormPage.class,
-							wService.getWorkitems(process, cp.getLoginId()).get(0)) + "');"));
+					+ uFactory.getUrl(cp, WorkflowFormPage.class, workitems.get(0)) + "');"));
+
 			row.add("title", t.toString()).add("userText", process.getUserText())
 					.add("createDate", process.getCreateDate())
 					.add("status", WorkflowUtils.toStatusHTML(cp, process.getStatus()));
