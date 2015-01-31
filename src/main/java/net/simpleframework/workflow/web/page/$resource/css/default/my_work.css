@@ -64,22 +64,19 @@
   position: absolute;
 }
 
-.Category_ListPage .tabbtns, 
-.MyQueryWorksTPage .tabbtns {
+.Category_ListPage .tabbtns {
   position: absolute;
   bottom: 0; 
   right: 150px;
   z-index: 11;
 }
 
-.Category_ListPage ul.simple_tabs a.active,
-.MyQueryWorksTPage ul.simple_tabs a.active {
+.Category_ListPage ul.simple_tabs a.active{
   background-image: none !important;
   background-color: #efefef !important;
   border-bottom-color: #efefef !important;
 }
 
-.Category_ListPage .tablepager .thead,
-.MyQueryWorksTPage .tablepager .thead {
+.Category_ListPage .tablepager .thead{
   box-shadow: none !important;
 }
