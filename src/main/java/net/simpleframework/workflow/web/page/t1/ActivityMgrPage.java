@@ -329,22 +329,22 @@ public class ActivityMgrPage extends AbstractWorkflowMgrPage {
 
 	static TablePagerColumn TC_TASKNODE() {
 		return new TablePagerColumn("tasknode", $m("ActivityMgrPage.1"))
-				.setTextAlign(ETextAlign.left).setSort(false).setFilter(false);
+				.setTextAlign(ETextAlign.left).setFilterSort(false);
 	}
 
 	static TablePagerColumn TC_PREVIOUS() {
-		return new TablePagerColumn("previous", $m("ActivityMgrPage.2"), 115).setSort(false)
-				.setFilter(false).setTextAlign(ETextAlign.left);
+		return new TablePagerColumn("previous", $m("ActivityMgrPage.2"), 115).setFilterSort(false)
+				.setTextAlign(ETextAlign.left);
 	}
 
 	static TablePagerColumn TC_PARTICIPANTS() {
 		return new TablePagerColumn("participants", $m("ActivityMgrPage.3"), 115).setNowrap(false)
-				.setSort(false).setFilter(false);
+				.setFilterSort(false);
 	}
 
 	static TablePagerColumn TC_PARTICIPANTS2() {
 		return new TablePagerColumn("participants2", $m("ActivityMgrPage.4"), 115).setNowrap(false)
-				.setSort(false).setFilter(false);
+				.setFilterSort(false);
 	}
 
 	static TablePagerColumn TC_TIMEOUT() {

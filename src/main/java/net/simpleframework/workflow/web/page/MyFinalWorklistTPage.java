@@ -39,7 +39,7 @@ public class MyFinalWorklistTPage extends MyRunningWorklistTPage {
 		tablePager.addColumn(TablePagerColumn.ICON().setWidth(18));
 		tablePager.addColumn(TC_TITLE());
 		tablePager.addColumn(new TablePagerColumn("userTo", $m("MyFinalWorklistTPage.0"), 115)
-				.setSort(false).setFilter(false).setNowrap(false));
+				.setFilterSort(false).setNowrap(false));
 		tablePager.addColumn(new TablePagerColumn("completeDate", $m("MyFinalWorklistTPage.1"), 115)
 				.setPropertyClass(Date.class));
 		tablePager.addColumn(new TablePagerColumn("status", $m("AbstractWorkitemsTPage.3"), 55) {
