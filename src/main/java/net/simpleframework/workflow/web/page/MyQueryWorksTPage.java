@@ -50,16 +50,23 @@ public class MyQueryWorksTPage extends AbstractItemsTPage {
 		super.onForward(pp);
 
 		final TablePagerBean tablePager = addTablePagerBean(pp);
-		tablePager.addColumn(AbstractWorkflowMgrPage.TC_TITLE())
-				.addColumn(new TablePagerColumn("userText", $m("ProcessMgrPage.0"), 100))
+		tablePager
+				.addColumn(AbstractWorkflowMgrPage.TC_TITLE())
+				.addColumn(
+						new TablePagerColumn("userText",
+								$m("ProcessMgrPage.0"), 100))
 				.addColumn(AbstractWorkflowMgrPage.TC_CREATEDATE())
-				.addColumn(AbstractWorkflowMgrPage.TC_STATUS().setPropertyClass(EProcessStatus.class))
+				.addColumn(
+						AbstractWorkflowMgrPage.TC_STATUS().setPropertyClass(
+								EProcessStatus.class))
 				.addColumn(TablePagerColumn.OPE().setWidth(90));
 
 		// 工作列表窗口
-		addAjaxRequest(pp, "MyQueryWorksTPage_workitems_page", ProcessWorkitemsPage.class);
+		addAjaxRequest(pp, "MyQueryWorksTPage_workitems_page",
+				ProcessWorkitemsPage.class);
 		addWindowBean(pp, "MyQueryWorksTPage_workitems")
-				.setContentRef("MyQueryWorksTPage_workitems_page").setWidth(800).setHeight(480)
+				.setContentRef("MyQueryWorksTPage_workitems_page")
+				.setWidth(800).setHeight(480)
 				.setTitle($m("MyQueryWorksTPage.1"));
 	}
 
@@ -69,13 +76,15 @@ public class MyQueryWorksTPage extends AbstractItemsTPage {
 	}
 
 	protected TablePagerBean addTablePagerBean(final PageParameter pp) {
-		return addTablePagerBean(pp, "MyQueryWorksTPage_tbl", MyQueryWorksTbl.class);
+		return addTablePagerBean(pp, "MyQueryWorksTPage_tbl",
+				MyQueryWorksTbl.class);
 	}
 
-	protected SpanElement getTabButtons(final PageParameter pp) {
+	protected SpanElement getRightTabButtons(final PageParameter pp) {
 		final WorkflowUrlsFactory urlsFactory = getUrlsFactory();
-		return createTabsElement(pp, TabButtons.of(new TabButton($m("MyQueryWorksTPage.4"),
-				urlsFactory.getUrl(pp, MyQueryWorksTPage.class))));
+		return createTabsElement(pp, TabButtons.of(new TabButton(
+				$m("MyQueryWorksTPage.4"), urlsFactory.getUrl(pp,
+						MyQueryWorksTPage.class))));
 		// , new TabButton(
 		// $m("MyQueryWorksTPage.5"), urlsFactory.getUrl(pp,
 		// MyQueryWorks_DeptTPage.class))
@@ -83,7 +92,7 @@ public class MyQueryWorksTPage extends AbstractItemsTPage {
 
 	@Override
 	public ElementList getRightElements(final PageParameter pp) {
-		return ElementList.of(getTabButtons(pp));
+		return ElementList.of(getRightTabButtons(pp));
 	}
 
 	private static final WorkflowUrlsFactory uFactory = ((IWorkflowWebContext) workflowContext)
@@ -96,7 +105,8 @@ public class MyQueryWorksTPage extends AbstractItemsTPage {
 		}
 
 		@Override
-		protected Map<String, Object> getRowData(final ComponentParameter cp, final Object dataObject) {
+		protected Map<String, Object> getRowData(final ComponentParameter cp,
+				final Object dataObject) {
 			final ProcessBean process = (ProcessBean) dataObject;
 			final KVMap row = new KVMap();
 			final StringBuilder t = new StringBuilder();
@@ -105,18 +115,23 @@ public class MyQueryWorksTPage extends AbstractItemsTPage {
 				t.append("[").append(c).append("] ");
 			}
 
-			final List<WorkitemBean> workitems = wService.getWorkitems(process, cp.getLoginId());
-			t.append(new LinkElement(WorkflowUtils.getTitle(process)).setOnclick("$Actions.loc('"
-					+ uFactory.getUrl(cp, WorkflowFormPage.class, workitems.get(0)) + "');"));
+			final List<WorkitemBean> workitems = wService.getWorkitems(process,
+					cp.getLoginId());
+			t.append(new LinkElement(WorkflowUtils.getTitle(process))
+					.setOnclick("$Actions.loc('"
+							+ uFactory.getUrl(cp, WorkflowFormPage.class,
+									workitems.get(0)) + "');"));
 
-			row.add("title", t.toString()).add("userText", process.getUserText())
+			row.add("title", t.toString())
+					.add("userText", process.getUserText())
 					.add("createDate", process.getCreateDate())
-					.add("status", WorkflowUtils.toStatusHTML(cp, process.getStatus()));
+					.add("status",
+							WorkflowUtils.toStatusHTML(cp, process.getStatus()));
 
 			final StringBuilder ope = new StringBuilder();
 			ope.append(new ButtonElement($m("MyQueryWorksTPage.2"))
-					.setOnclick("$Actions['MyQueryWorksTPage_workitems']('processId=" + process.getId()
-							+ "');"));
+					.setOnclick("$Actions['MyQueryWorksTPage_workitems']('processId="
+							+ process.getId() + "');"));
 			row.add(TablePagerColumn.OPE, ope.toString());
 			return row;
 		}
@@ -127,31 +142,38 @@ public class MyQueryWorksTPage extends AbstractItemsTPage {
 		protected void onForward(final PageParameter pp) {
 			super.onForward(pp);
 
-			final TablePagerBean tablePager = (TablePagerBean) addTablePagerBean(pp,
-					"ProcessWorkitemsPage_tbl", ProcessWorkitemsTbl.class).setShowCheckbox(false)
-					.setShowLineNo(false).setPagerBarLayout(EPagerBarLayout.none);
+			final TablePagerBean tablePager = (TablePagerBean) addTablePagerBean(
+					pp, "ProcessWorkitemsPage_tbl", ProcessWorkitemsTbl.class)
+					.setShowCheckbox(false).setShowLineNo(false)
+					.setPagerBarLayout(EPagerBarLayout.none);
 			tablePager
 					.addColumn(
-							new TablePagerColumn("taskname", $m("MyQueryWorksTPage.0"))
+							new TablePagerColumn("taskname",
+									$m("MyQueryWorksTPage.0"))
 									.setTextAlign(ETextAlign.left))
 					.addColumn(
-							new TablePagerColumn("userFrom", $m("MyRunningWorklistTPage.0"))
+							new TablePagerColumn("userFrom",
+									$m("MyRunningWorklistTPage.0"))
 									.setFilter(false))
 					.addColumn(
-							new TablePagerColumn("createDate", $m("MyRunningWorklistTPage.1"), 115)
+							new TablePagerColumn("createDate",
+									$m("MyRunningWorklistTPage.1"), 115)
 									.setPropertyClass(Date.class))
 					.addColumn(
-							new TablePagerColumn("completeDate", $m("MyFinalWorklistTPage.1"), 115)
+							new TablePagerColumn("completeDate",
+									$m("MyFinalWorklistTPage.1"), 115)
 									.setPropertyClass(Date.class))
 					.addColumn(
-							AbstractWorkflowMgrPage.TC_STATUS().setPropertyClass(EWorkitemStatus.class))
+							AbstractWorkflowMgrPage.TC_STATUS()
+									.setPropertyClass(EWorkitemStatus.class))
 					.addColumn(TablePagerColumn.OPE().setWidth(110));
 		}
 
 		@Override
 		public String getTitle(final PageParameter pp) {
 			String t = $m("MyQueryWorksTPage.1");
-			final ProcessBean process = pService.getBean(pp.getParameter("processId"));
+			final ProcessBean process = pService.getBean(pp
+					.getParameter("processId"));
 			if (process != null) {
 				t += " - " + process.getTitle();
 			}
@@ -169,30 +191,37 @@ public class MyQueryWorksTPage extends AbstractItemsTPage {
 				return DataQueryUtils.nullQuery();
 			}
 			cp.addFormParameter("processId", pid);
-			return new ListDataQuery<WorkitemBean>(wService.getWorkitems(process, cp.getLoginId()));
+			return new ListDataQuery<WorkitemBean>(wService.getWorkitems(
+					process, cp.getLoginId()));
 		}
 
 		@Override
-		protected Map<String, Object> getRowData(final ComponentParameter cp, final Object dataObject) {
+		protected Map<String, Object> getRowData(final ComponentParameter cp,
+				final Object dataObject) {
 			final WorkitemBean workitem = (WorkitemBean) dataObject;
 			final KVMap row = new KVMap();
 
 			final ActivityBean activity = wService.getActivity(workitem);
-			row.add(
-					"taskname",
+			row.add("taskname",
 					new LinkElement(activity).setOnclick("$Actions.loc('"
-							+ uFactory.getUrl(cp, WorkflowFormPage.class, workitem) + "');"))
+							+ uFactory.getUrl(cp, WorkflowFormPage.class,
+									workitem) + "');"))
 					.add("userFrom", WorkflowUtils.getUserFrom(activity))
 					.add("createDate", workitem.getCreateDate())
 					.add("completeDate", workitem.getCompleteDate())
-					.add("status", WorkflowUtils.toStatusHTML(cp, workitem.getStatus()));
+					.add("status",
+							WorkflowUtils.toStatusHTML(cp, workitem.getStatus()));
 
 			final StringBuilder ope = new StringBuilder();
-			ope.append(new ButtonElement($m("MyQueryWorksTPage.3")).setOnclick("$Actions.loc('"
-					+ uFactory.getUrl(cp, WorkflowFormPage.class, workitem) + "');"));
+			ope.append(new ButtonElement($m("MyQueryWorksTPage.3"))
+					.setOnclick("$Actions.loc('"
+							+ uFactory.getUrl(cp, WorkflowFormPage.class,
+									workitem) + "');"));
 			ope.append(SpanElement.SPACE);
-			ope.append(new ButtonElement($m("WorkflowFormPage.1")).setOnclick("$Actions.loc('"
-					+ uFactory.getUrl(cp, WorkflowMonitorPage.class, workitem) + "');"));
+			ope.append(new ButtonElement($m("WorkflowFormPage.1"))
+					.setOnclick("$Actions.loc('"
+							+ uFactory.getUrl(cp, WorkflowMonitorPage.class,
+									workitem) + "');"));
 			row.add(TablePagerColumn.OPE, ope.toString());
 			return row;
 		}
