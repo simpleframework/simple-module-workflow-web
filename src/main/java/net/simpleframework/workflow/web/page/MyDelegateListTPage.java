@@ -51,35 +51,28 @@ public class MyDelegateListTPage extends AbstractWorkitemsTPage {
 		// 列表
 		addTablePagerBean(pp);
 		// 取消
-		addAjaxRequest(pp, "DelegateListTPage_abort").setHandlerMethod(
-				"doAbort").setConfirmMessage($m("MyDelegateListTPage.2"));
+		addAjaxRequest(pp, "DelegateListTPage_abort").setHandlerMethod("doAbort").setConfirmMessage(
+				$m("MyDelegateListTPage.2"));
 		// 删除
-		addAjaxRequest(pp, "DelegateListTPage_delete").setHandlerMethod(
-				"doDelete").setConfirmMessage($m("Confirm.Delete"));
+		addAjaxRequest(pp, "DelegateListTPage_delete").setHandlerMethod("doDelete")
+				.setConfirmMessage($m("Confirm.Delete"));
 		// 查看
-		addAjaxRequest(pp, "DelegateListTPage_view_page",
-				WorkitemDelegateViewPage.class);
-		addWindowBean(pp, "DelegateListTPage_view")
-				.setContentRef("DelegateListTPage_view_page")
-				.setTitle($m("MyDelegateListTPage.3")).setHeight(300)
-				.setWidth(500);
+		addAjaxRequest(pp, "DelegateListTPage_view_page", WorkitemDelegateViewPage.class);
+		addWindowBean(pp, "DelegateListTPage_view").setContentRef("DelegateListTPage_view_page")
+				.setTitle($m("MyDelegateListTPage.3")).setHeight(300).setWidth(500);
 	}
 
 	protected TablePagerBean addTablePagerBean(final PageParameter pp) {
-		final TablePagerBean tablePager = addTablePagerBean(pp,
-				"MyWorklistTPage_tbl", MyWorkDelegateTbl.class);
+		final TablePagerBean tablePager = addTablePagerBean(pp, "MyWorklistTPage_tbl",
+				MyWorkDelegateTbl.class);
 		tablePager.addColumn(TablePagerColumn.ICON().setWidth(16));
 		tablePager
 				.addColumn(TC_TITLE())
+				.addColumn(new TablePagerColumn("userText", $m("MyDelegateListTPage.0"), 70))
 				.addColumn(
-						new TablePagerColumn("userText",
-								$m("MyDelegateListTPage.0"), 70))
-				.addColumn(
-						new TablePagerColumn("createDate",
-								$m("MyDelegateListTPage.1"), 115)
+						new TablePagerColumn("createDate", $m("MyDelegateListTPage.1"), 115)
 								.setPropertyClass(Date.class))
-				.addColumn(
-						TC_STATUS().setPropertyClass(EDelegationStatus.class));
+				.addColumn(TC_STATUS().setPropertyClass(EDelegationStatus.class));
 		tablePager.addColumn(TablePagerColumn.OPE().setWidth(70));
 		return tablePager;
 	}
@@ -107,19 +100,17 @@ public class MyDelegateListTPage extends AbstractWorkitemsTPage {
 		return DelegateUpdateLogPage.class;
 	}
 
-	protected SpanElement getRightTabButtons(final PageParameter pp) {
+	protected SpanElement getDelegateTabs(final PageParameter pp) {
 		final WorkflowUrlsFactory urlsFactory = getUrlsFactory();
-		return createTabsElement(pp, TabButtons.of(
-				new TabButton($m("MyDelegateListTPage.4"), urlsFactory.getUrl(
-						pp, MyDelegateListTPage.class)),
-				new TabButton($m("MyDelegateListTPage.5"), urlsFactory.getUrl(
-						pp, UserDelegateListTPage.class))));
+		return createTabsElement(pp, TabButtons.of(new TabButton($m("MyDelegateListTPage.4"),
+				urlsFactory.getUrl(pp, MyDelegateListTPage.class)), new TabButton(
+				$m("MyDelegateListTPage.5"), urlsFactory.getUrl(pp, UserDelegateListTPage.class))));
 	}
 
 	@Override
 	public ElementList getRightElements(final PageParameter pp) {
 		final ElementList el = super.getRightElements(pp);
-		el.add(0, getRightTabButtons(pp));
+		el.add(0, getDelegateTabs(pp));
 		return el;
 	}
 
@@ -127,21 +118,18 @@ public class MyDelegateListTPage extends AbstractWorkitemsTPage {
 
 		@Override
 		public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
-			return dService.queryDelegations(cp.getLoginId(),
-					EDelegationSource.workitem);
+			return dService.queryDelegations(cp.getLoginId(), EDelegationSource.workitem);
 		}
 
 		@Override
 		protected WorkitemBean getWorkitem(final Object dataObject) {
-			return wService
-					.getBean(((DelegationBean) dataObject).getSourceId());
+			return wService.getBean(((DelegationBean) dataObject).getSourceId());
 		}
 
-		protected Object toTitle(final DelegationBean delegation,
-				final Object title) {
+		protected Object toTitle(final DelegationBean delegation, final Object title) {
 			return new LinkElement(title)
-					.setOnclick("$Actions['DelegateListTPage_view']('delegationId="
-							+ delegation.getId() + "');");
+					.setOnclick("$Actions['DelegateListTPage_view']('delegationId=" + delegation.getId()
+							+ "');");
 		}
 
 		protected Object toOpe(final DelegationBean delegation) {
@@ -149,29 +137,24 @@ public class MyDelegateListTPage extends AbstractWorkitemsTPage {
 			final Object id = delegation.getId();
 			if (dService.isFinalStatus(delegation)) {
 				sb.append(WorkflowUtils.createLogButton().setOnclick(
-						"$Actions['AbstractItemsTPage_update_log']('delegationId="
-								+ id + "');"));
+						"$Actions['AbstractItemsTPage_update_log']('delegationId=" + id + "');"));
 			} else {
 				sb.append(new ButtonElement($m("Button.Cancel"))
-						.setOnclick("$Actions['DelegateListTPage_abort']('delegationId="
-								+ id + "');"));
+						.setOnclick("$Actions['DelegateListTPage_abort']('delegationId=" + id + "');"));
 			}
 
-			sb.append(SpanElement.SPACE).append(
-					AbstractTablePagerSchema.IMG_DOWNMENU);
+			sb.append(SpanElement.SPACE).append(AbstractTablePagerSchema.IMG_DOWNMENU);
 			return sb;
 		}
 
 		@Override
-		protected Map<String, Object> getRowData(final ComponentParameter cp,
-				final Object dataObject) {
+		protected Map<String, Object> getRowData(final ComponentParameter cp, final Object dataObject) {
 			final DelegationBean delegation = (DelegationBean) dataObject;
 			final WorkitemBean workitem = getWorkitem(delegation);
 			final ActivityBean activity = wService.getActivity(workitem);
 			final StringBuilder title = new StringBuilder();
 			appendTaskname(title, cp, activity);
-			title.append(toTitle(delegation,
-					WorkflowUtils.getTitle(aService.getProcessBean(activity))));
+			title.append(toTitle(delegation, WorkflowUtils.getTitle(aService.getProcessBean(activity))));
 			final KVMap row = new KVMap().add("title", title.toString());
 			row.add("userText", delegation.getUserText());
 			row.add("createDate", delegation.getCreateDate());
@@ -182,14 +165,12 @@ public class MyDelegateListTPage extends AbstractWorkitemsTPage {
 		}
 
 		@Override
-		public MenuItems getContextMenu(final ComponentParameter cp,
-				final MenuBean menuBean, final MenuItem menuItem) {
+		public MenuItems getContextMenu(final ComponentParameter cp, final MenuBean menuBean,
+				final MenuItem menuItem) {
 			final MenuItems items = MenuItems.of();
-			items.add(MenuItem.itemDelete().setOnclick_act(
-					"DelegateListTPage_delete", "delegationId"));
+			items.add(MenuItem.itemDelete().setOnclick_act("DelegateListTPage_delete", "delegationId"));
 			items.append(MenuItem.sep()).append(
-					MENU_LOG().setOnclick_act("AbstractItemsTPage_update_log",
-							"delegationId"));
+					MENU_LOG().setOnclick_act("AbstractItemsTPage_update_log", "delegationId"));
 			return items;
 		}
 	}

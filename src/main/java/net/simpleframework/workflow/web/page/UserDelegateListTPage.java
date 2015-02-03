@@ -34,75 +34,58 @@ public class UserDelegateListTPage extends MyDelegateListTPage {
 		super.onForward(pp);
 
 		// 委托设置
-		addAjaxRequest(pp, "UserDelegateListTPage_delegate_page",
-				WorkitemDelegateSetPage.class);
+		addAjaxRequest(pp, "UserDelegateListTPage_delegate_page", WorkitemDelegateSetPage.class);
 		addWindowBean(pp, "UserDelegateListTPage_delegate")
 				.setContentRef("UserDelegateListTPage_delegate_page")
-				.setTitle($m("MyRunningWorklistTPage.4")).setHeight(300)
-				.setWidth(500);
+				.setTitle($m("MyRunningWorklistTPage.4")).setHeight(300).setWidth(500);
 	}
 
 	@Override
 	protected TablePagerBean addTablePagerBean(final PageParameter pp) {
-		final TablePagerBean tablePager = addTablePagerBean(pp,
-				"MyWorklistTPage_tbl", UserDelegateTbl.class);
+		final TablePagerBean tablePager = addTablePagerBean(pp, "MyWorklistTPage_tbl",
+				UserDelegateTbl.class);
 		tablePager.addColumn(TablePagerColumn.ICON().setWidth(16));
 		tablePager
 				.addColumn(
-						new TablePagerColumn("description",
-								$m("WorkitemDelegateSetPage.3")).setTextAlign(
-								ETextAlign.left).setSort(false))
+						new TablePagerColumn("description", $m("WorkitemDelegateSetPage.3"))
+								.setTextAlign(ETextAlign.left).setSort(false))
+				.addColumn(new TablePagerColumn("userText", $m("MyDelegateListTPage.0"), 70))
 				.addColumn(
-						new TablePagerColumn("userText",
-								$m("MyDelegateListTPage.0"), 70))
-				.addColumn(
-						new TablePagerColumn("createDate",
-								$m("MyDelegateListTPage.1"), 115)
+						new TablePagerColumn("createDate", $m("MyDelegateListTPage.1"), 115)
 								.setPropertyClass(Date.class))
-				.addColumn(
-						new TablePagerColumn("status",
-								$m("AbstractWorkitemsTPage.3"), 55) {
-							@Override
-							protected Option[] getFilterOptions() {
-								return Option.from(EDelegationStatus.ready,
-										EDelegationStatus.running,
-										EDelegationStatus.complete,
-										EDelegationStatus.abort);
-							};
-						}.setTextAlign(ETextAlign.left).setPropertyClass(
-								EDelegationStatus.class));
+				.addColumn(new TablePagerColumn("status", $m("AbstractWorkitemsTPage.3"), 55) {
+					@Override
+					protected Option[] getFilterOptions() {
+						return Option.from(EDelegationStatus.ready, EDelegationStatus.running,
+								EDelegationStatus.complete, EDelegationStatus.abort);
+					};
+				}.setTextAlign(ETextAlign.left).setPropertyClass(EDelegationStatus.class));
 		tablePager.addColumn(TablePagerColumn.OPE().setWidth(70));
 		return tablePager;
 	}
 
 	@Override
 	public ElementList getLeftElements(final PageParameter pp) {
-		return ElementList
-				.of(LinkButton
-						.of($m("Add"))
-						.setOnclick(
-								"$Actions['UserDelegateListTPage_delegate']('delegationSource=user');"));
+		return ElementList.of(LinkButton.of($m("Add")).setOnclick(
+				"$Actions['UserDelegateListTPage_delegate']('delegationSource=user');"));
 	}
 
 	@Override
 	public ElementList getRightElements(final PageParameter pp) {
-		return ElementList.of(getRightTabButtons(pp));
+		return ElementList.of(getDelegateTabs(pp));
 	}
 
 	public static class UserDelegateTbl extends MyWorkDelegateTbl {
 		@Override
 		public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
-			return dService.queryDelegations(cp.getLoginId(),
-					EDelegationSource.user);
+			return dService.queryDelegations(cp.getLoginId(), EDelegationSource.user);
 		}
 
 		@Override
-		protected Map<String, Object> getRowData(final ComponentParameter cp,
-				final Object dataObject) {
+		protected Map<String, Object> getRowData(final ComponentParameter cp, final Object dataObject) {
 			final DelegationBean delegation = (DelegationBean) dataObject;
 			final KVMap row = new KVMap();
-			row.add("description",
-					toTitle(delegation, delegation.getDescription()));
+			row.add("description", toTitle(delegation, delegation.getDescription()));
 			row.add("userText", delegation.getUserText());
 			row.add("createDate", delegation.getCreateDate());
 			final EDelegationStatus status = delegation.getStatus();

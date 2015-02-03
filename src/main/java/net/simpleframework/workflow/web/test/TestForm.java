@@ -21,8 +21,7 @@ public class TestForm extends AbstractWorkflowFormTPage {
 	protected void onForward(final PageParameter pp) {
 		super.onForward(pp);
 
-		addWfCommentBean(pp).setGroupBy(EGroupBy.dept).setContainerId(
-				"idTestForm_comments");
+		addWfCommentBean(pp).setGroupBy(EGroupBy.dept).setContainerId("idTestForm_comments");
 	}
 
 	@Override
@@ -31,8 +30,7 @@ public class TestForm extends AbstractWorkflowFormTPage {
 	}
 
 	@Override
-	public void bindVariables(final PageParameter pp,
-			final Map<String, Object> variables) {
+	public void bindVariables(final PageParameter pp, final Map<String, Object> variables) {
 		// variables.put("m", pp.getIntParameter("wf_days"));
 	}
 
@@ -40,12 +38,11 @@ public class TestForm extends AbstractWorkflowFormTPage {
 	protected TableRows getTableRows(final PageParameter pp) {
 		final ProcessBean process = getProcess(pp);
 		final InputElement wf_days = new InputElement("wf_days");
-		final TableRow r1 = new TableRow(new RowField(
-				$m("AbstractWorkflowFormPage.2"), getInput_topic(pp).setText(
-						process.getTitle())),
+		final TableRow r1 = new TableRow(new RowField($m("AbstractWorkflowFormPage.2"),
+				getInput_topic(pp).setText(process.getTitle())),
 				new RowField("请假天数", wf_days).setElementsStyle("width: 200px;"));
-		final TableRow r2 = new TableRow(new RowField(
-				$m("AbstractWorkflowFormPage.3"), getInput_description(pp)));
+		final TableRow r2 = new TableRow(new RowField($m("AbstractWorkflowFormPage.3"),
+				getInput_description(pp)));
 		final TableRow r3 = new TableRow(new RowField("意见",
 				new BlockElement().setId("idTestForm_comments")));
 		return TableRows.of(r1, r3, r2);
