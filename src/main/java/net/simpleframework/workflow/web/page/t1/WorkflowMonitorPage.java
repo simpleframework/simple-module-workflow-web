@@ -96,6 +96,15 @@ public class WorkflowMonitorPage extends AbstractWorkflowFormPage {
 		final StringBuilder sb = new StringBuilder();
 		sb.append("<div class='WorkflowMonitorPage'>");
 		sb.append(" <div class='ltabs'>");
+		final TabButtons tabs = getLeftTabButtons(pp);
+		sb.append(tabs.toString(pp));
+		sb.append(" </div>");
+		sb.append(toMonitorHTML(pp));
+		sb.append("</div>");
+		return sb.toString();
+	}
+
+	public TabButtons getLeftTabButtons(final PageParameter pp) {
 		final WorkitemBean workitem = WorkflowUtils.getWorkitemBean(pp);
 		final WorkflowUrlsFactory uFactory = ((IWorkflowWebContext) workflowContext)
 				.getUrlsFactory();
@@ -105,11 +114,7 @@ public class WorkflowMonitorPage extends AbstractWorkflowFormPage {
 				new TabButton($m("WorkflowMonitorPage.1")).setHref(uFactory
 						.getUrl(pp, WorkflowGraphMonitorPage.class, workitem)))
 				.setVertical(true);
-		sb.append(tabs.toString(pp));
-		sb.append(" </div>");
-		sb.append(toMonitorHTML(pp));
-		sb.append("</div>");
-		return sb.toString();
+		return tabs;
 	}
 
 	protected String toMonitorHTML(final PageParameter pp) {
