@@ -5,6 +5,7 @@ import static net.simpleframework.common.I18n.$m;
 import java.io.IOException;
 import java.util.Map;
 
+import net.simpleframework.common.ID;
 import net.simpleframework.mvc.PageMapping;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.ElementList;
@@ -43,26 +44,37 @@ public class WorkflowMonitorPage extends AbstractWorkflowFormPage {
 		addTablePagerBean(pp);
 
 		// workitems
-		addAjaxRequest(pp, "WorkflowMonitorPage_workitems_page", WorkitemsMgrPage.class);
+		addAjaxRequest(pp, "WorkflowMonitorPage_workitems_page",
+				WorkitemsMgrPage.class);
 		addWindowBean(pp, "WorkflowMonitorPage_workitems")
-				.setContentRef("WorkflowMonitorPage_workitems_page").setWidth(800).setHeight(480);
+				.setContentRef("WorkflowMonitorPage_workitems_page")
+				.setWidth(800).setHeight(480);
 
+		pp.putParameter("processId", getProcessId(pp)).putParameter("tab", 1);
+	}
+
+	protected ID getProcessId(final PageParameter pp) {
 		final WorkitemBean workitem = WorkflowUtils.getWorkitemBean(pp);
-		pp.putParameter("processId", aService.getBean(workitem.getActivityId()).getProcessId())
-				.putParameter("tab", 1);
+		return aService.getBean(workitem.getActivityId()).getProcessId();
 	}
 
 	protected TablePagerBean addTablePagerBean(final PageParameter pp) {
-		final TablePagerBean tablePager = (TablePagerBean) addTablePagerBean(pp,
-				"WorkflowMonitorPage_tbl").setPagerBarLayout(EPagerBarLayout.none)
-				.setContainerId("idWorkflowMonitorPage_tbl").setHandlerClass(_ActivityTbl.class);
-		tablePager.addColumn(ActivityMgrPage.TC_TASKNODE())
-				.addColumn(AbstractWorkflowMgrPage.TC_STATUS().setPropertyClass(EActivityStatus.class))
+		final TablePagerBean tablePager = (TablePagerBean) addTablePagerBean(
+				pp, "WorkflowMonitorPage_tbl")
+				.setPagerBarLayout(EPagerBarLayout.none)
+				.setContainerId("idWorkflowMonitorPage_tbl")
+				.setHandlerClass(_ActivityTbl.class);
+		tablePager
+				.addColumn(ActivityMgrPage.TC_TASKNODE())
+				.addColumn(
+						AbstractWorkflowMgrPage.TC_STATUS().setPropertyClass(
+								EActivityStatus.class))
 				.addColumn(ActivityMgrPage.TC_PARTICIPANTS())
 				.addColumn(ActivityMgrPage.TC_PARTICIPANTS2())
 				.addColumn(AbstractWorkflowMgrPage.TC_CREATEDATE())
 				.addColumn(AbstractWorkflowMgrPage.TC_COMPLETEDATE())
-				.addColumn(ActivityMgrPage.TC_RELATIVEDATE()).addColumn(ActivityMgrPage.TC_TIMEOUT());
+				.addColumn(ActivityMgrPage.TC_RELATIVEDATE())
+				.addColumn(ActivityMgrPage.TC_TIMEOUT());
 		return tablePager;
 	}
 
@@ -72,24 +84,27 @@ public class WorkflowMonitorPage extends AbstractWorkflowFormPage {
 		final ProcessBean process = getProcessBean(pp);
 		el.append(
 				SpanElement.SPACE15,
-				SpanElement.strongText(WorkflowUtils.getTitle(process) + " [" + process.getStatus()
-						+ "]"));
+				SpanElement.strongText(WorkflowUtils.getTitle(process) + " ["
+						+ process.getStatus() + "]"));
 		return el;
 	}
 
 	@Override
-	protected String toHtml(final PageParameter pp, final Map<String, Object> variables,
-			final String currentVariable) throws IOException {
+	protected String toHtml(final PageParameter pp,
+			final Map<String, Object> variables, final String currentVariable)
+			throws IOException {
 		final StringBuilder sb = new StringBuilder();
 		sb.append("<div class='WorkflowMonitorPage'>");
 		sb.append(" <div class='ltabs'>");
 		final WorkitemBean workitem = WorkflowUtils.getWorkitemBean(pp);
-		final WorkflowUrlsFactory uFactory = ((IWorkflowWebContext) workflowContext).getUrlsFactory();
+		final WorkflowUrlsFactory uFactory = ((IWorkflowWebContext) workflowContext)
+				.getUrlsFactory();
 		final TabButtons tabs = TabButtons.of(
-				new TabButton($m("WorkflowMonitorPage.0")).setHref(uFactory.getUrl(pp,
-						WorkflowMonitorPage.class, workitem)),
-				new TabButton($m("WorkflowMonitorPage.1")).setHref(uFactory.getUrl(pp,
-						WorkflowGraphMonitorPage.class, workitem))).setVertical(true);
+				new TabButton($m("WorkflowMonitorPage.0")).setHref(uFactory
+						.getUrl(pp, WorkflowMonitorPage.class, workitem)),
+				new TabButton($m("WorkflowMonitorPage.1")).setHref(uFactory
+						.getUrl(pp, WorkflowGraphMonitorPage.class, workitem)))
+				.setVertical(true);
 		sb.append(tabs.toString(pp));
 		sb.append(" </div>");
 		sb.append(toMonitorHTML(pp));
@@ -107,7 +122,9 @@ public class WorkflowMonitorPage extends AbstractWorkflowFormPage {
 	@Override
 	public TabButtons getTabButtons(final PageParameter pp) {
 		return ((AbstractWorkflowFormPage) singleton(((IWorkflowWebContext) workflowContext)
-				.getUrlsFactory().getPageClass(WorkflowFormPage.class.getName()))).getTabButtons(pp);
+				.getUrlsFactory()
+				.getPageClass(WorkflowFormPage.class.getName())))
+				.getTabButtons(pp);
 	}
 
 	public static class _ActivityTbl extends ActivityTbl {
@@ -125,8 +142,8 @@ public class WorkflowMonitorPage extends AbstractWorkflowFormPage {
 		}
 
 		@Override
-		public MenuItems getContextMenu(final ComponentParameter cp, final MenuBean menuBean,
-				final MenuItem menuItem) {
+		public MenuItems getContextMenu(final ComponentParameter cp,
+				final MenuBean menuBean, final MenuItem menuItem) {
 			return null;
 		}
 	}
