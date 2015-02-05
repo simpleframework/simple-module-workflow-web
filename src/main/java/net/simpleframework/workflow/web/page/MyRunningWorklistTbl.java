@@ -163,52 +163,18 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 		return _createImageMark(cp, "mark_unread.png").setTitle($m("MyRunningWorklistTbl.2"));
 	}
 
-	protected ImageElement MARK_TIMEOUT_WARN(final ComponentParameter cp) {
-		return _createImageMark(cp, "mark_timeout_warn.png").setTitle($m("MyRunningWorklistTbl.18"));
-	}
-
-	protected ImageElement MARK_TIMEOUT(final ComponentParameter cp) {
-		return _createImageMark(cp, "status_timeout.png").setTitle($m("MyRunningWorklistTbl.19"));
-	}
-
 	protected AbstractElement<?> createImageMark(final ComponentParameter cp,
 			final WorkitemBean workitem) {
 		AbstractElement<?> img = null;
-		final ActivityBean activity = wService.getActivity(workitem);
-		final Date timeoutDate = activity.getTimeoutDate();
-		if (timeoutDate != null) {
-			if (activity.getStatus() == EActivityStatus.timeout) {
-				int d = 0;
-				if (activity.getCompleteDate() == null) {
-					d = Double.valueOf(
-							(System.currentTimeMillis() - timeoutDate.getTime()) / (1000 * 60 * 60 * 24))
-							.intValue();
-				}
-				if (d > 0) {
-					img = new SpanElement().addElements(MARK_TIMEOUT(cp),
-							new SpanElement(d).setClassName("worklist_timeout_num"));
-				} else {
-					img = MARK_TIMEOUT(cp);
-				}
-			} else {
-				final int hours = Double.valueOf(
-						(timeoutDate.getTime() - System.currentTimeMillis()) / (1000 * 60)).intValue();
-				if (hours < wfSettings.getHoursToTimeoutWarning() * 60) {
-					img = MARK_TIMEOUT_WARN(cp);
-				}
-			}
-		}
-		if (img == null) {
-			final EWorkitemStatus status = workitem.getStatus();
-			if (workitem.getRetakeRef() != null) {
-				img = MARK_RETAKE(cp);
-			} else if (status == EWorkitemStatus.delegate) {
-				img = MARK_DELEGATE(cp, workitem);
-			} else if (workitem.isTopMark()) {
-				img = MARK_TOP(cp);
-			} else if (!workitem.isReadMark()) {
-				img = MARK_UNREAD(cp);
-			}
+		final EWorkitemStatus status = workitem.getStatus();
+		if (workitem.getRetakeRef() != null) {
+			img = MARK_RETAKE(cp);
+		} else if (status == EWorkitemStatus.delegate) {
+			img = MARK_DELEGATE(cp, workitem);
+		} else if (workitem.isTopMark()) {
+			img = MARK_TOP(cp);
+		} else if (!workitem.isReadMark()) {
+			img = MARK_UNREAD(cp);
 		}
 		return img;
 	}
@@ -241,6 +207,28 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 
 		final StringBuilder title = new StringBuilder();
 		appendTaskname(title, cp, activity);
+
+		final Date timeoutDate = activity.getTimeoutDate();
+		if (timeoutDate != null && !aService.isFinalStatus(activity)) {
+			if (activity.getStatus() == EActivityStatus.timeout) {
+				int d = 0;
+				if (activity.getCompleteDate() == null) {
+					d = Double.valueOf(
+							(System.currentTimeMillis() - timeoutDate.getTime()) / (1000 * 60 * 60 * 24))
+							.intValue();
+				}
+				title.append(new SpanElement(d > 0 ? $m("MyRunningWorklistTbl.20", d)
+						: $m("MyRunningWorklistTbl.21")).setClassName("worklist_timeout"));
+			} else {
+				final int m = Double.valueOf(
+						(timeoutDate.getTime() - System.currentTimeMillis()) / (1000 * 60)).intValue();
+				if (m < wfSettings.getHoursToTimeoutWarning() * 60) {
+					final int h = m / 60;
+					title.append(new SpanElement(h > 0 ? $m("MyRunningWorklistTbl.19", m)
+							: $m("MyRunningWorklistTbl.18")).setClassName("worklist_timeout2"));
+				}
+			}
+		}
 
 		final EWorkitemStatus status = workitem.getStatus();
 		DelegationBean delegation = null;
