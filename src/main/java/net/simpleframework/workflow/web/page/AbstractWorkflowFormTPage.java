@@ -205,15 +205,17 @@ public abstract class AbstractWorkflowFormTPage extends FormTableRowTemplatePage
 	}
 
 	@Override
+	protected ElementList getFormElements(final PageParameter pp) {
+		return ElementList.of(InputElement.hidden().setName("workitemId").setValue(pp));
+	}
+
+	@Override
 	public String toTableRowsString(final PageParameter pp) {
-		final StringBuilder sb = new StringBuilder();
-		final WorkitemBean workitem = getWorkitemBean(pp);
-		final TableRows tableRows = getTableRows(pp).setReadonly(isReadonly(workitem));
-		sb.append(InputElement.hidden().setName("workitemId").setValue(pp));
+		final TableRows tableRows = getTableRows(pp);
 		if (tableRows != null) {
-			sb.append(tableRows);
+			return tableRows.setReadonly(isReadonly(getWorkitemBean(pp))).toString();
 		}
-		return sb.toString();
+		return null;
 	}
 
 	protected boolean isReadonly(final WorkitemBean workitem) {

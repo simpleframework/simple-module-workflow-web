@@ -231,20 +231,24 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 		}
 
 		final EWorkitemStatus status = workitem.getStatus();
-		DelegationBean delegation = null;
-		if (status == EWorkitemStatus.delegate) {
-			delegation = dService.queryRunningDelegation(workitem);
-		}
+		final DelegationBean delegation = (status == EWorkitemStatus.delegate) ? dService
+				.queryRunningDelegation(workitem) : null;
 		final boolean receiving = delegation != null
 				&& delegation.getStatus() == EDelegationStatus.receiving;
+		AbstractElement<?> tEle;
+		final ProcessBean processBean = aService.getProcessBean(activity);
 		if (receiving) {
-			title.append(new SpanElement(WorkflowUtils.getTitle(aService.getProcessBean(activity))));
+			tEle = new SpanElement(WorkflowUtils.getTitle(processBean));
 		} else {
-			title.append(new LinkElement(WorkflowUtils.getTitle(aService.getProcessBean(activity)))
-					.setStrong(!workitem.isReadMark()).setOnclick(
-							"$Actions.loc('" + uFactory.getUrl(cp, WorkflowFormPage.class, workitem)
-									+ "');"));
+			tEle = new LinkElement(WorkflowUtils.getTitle(processBean)).setStrong(
+					!workitem.isReadMark()).setOnclick(
+					"$Actions.loc('" + uFactory.getUrl(cp, WorkflowFormPage.class, workitem) + "');");
 		}
+		if (!StringUtils.hasText(processBean.getTitle())) {
+			tEle.setColor("#aaa");
+		}
+		title.append(tEle);
+
 		row.add("title", title.toString()).add("userFrom", WorkflowUtils.getUserFrom(activity))
 				.add("userTo", WorkflowUtils.getUserTo(activity));
 		final Date createDate = workitem.getCreateDate();

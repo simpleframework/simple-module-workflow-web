@@ -5,7 +5,6 @@ import static net.simpleframework.common.I18n.$m;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import net.simpleframework.common.Convert;
 import net.simpleframework.common.StringUtils;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.ButtonElement;
@@ -33,7 +32,11 @@ public abstract class WorkflowUtils implements IWorkflowServiceAware {
 	}
 
 	public static String getTitle(final ProcessBean process) {
-		return StringUtils.text(Convert.toString(process), $m("WorkflowUtils.0"));
+		final String title = process.getTitle();
+		if (StringUtils.hasText(title)) {
+			return title;
+		}
+		return $m("WorkflowUtils.0");
 	}
 
 	public static ButtonElement createLogButton() {
