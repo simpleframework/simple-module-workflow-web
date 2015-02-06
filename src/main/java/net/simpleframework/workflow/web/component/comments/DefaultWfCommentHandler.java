@@ -8,6 +8,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import net.simpleframework.ado.query.DataQueryUtils;
 import net.simpleframework.ado.query.IDataQuery;
 import net.simpleframework.common.DateUtils;
 import net.simpleframework.common.StringUtils;
@@ -24,6 +25,7 @@ import net.simpleframework.mvc.component.ComponentHandlerEx;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.workflow.engine.IActivityService;
 import net.simpleframework.workflow.engine.IWorkflowContextAware;
+import net.simpleframework.workflow.engine.ProcessBean;
 import net.simpleframework.workflow.engine.WorkitemBean;
 import net.simpleframework.workflow.engine.ext.IWfCommentLogService;
 import net.simpleframework.workflow.engine.ext.IWfCommentService;
@@ -34,6 +36,7 @@ import net.simpleframework.workflow.schema.AbstractTaskNode;
 import net.simpleframework.workflow.schema.Node;
 import net.simpleframework.workflow.schema.ProcessNode;
 import net.simpleframework.workflow.schema.UserNode;
+import net.simpleframework.workflow.web.WorkflowUtils;
 import net.simpleframework.workflow.web.component.comments.WfCommentBean.EGroupBy;
 
 /**
@@ -46,12 +49,29 @@ public class DefaultWfCommentHandler extends ComponentHandlerEx implements IWfCo
 		IWorkflowContextAware {
 
 	@Override
-	public IDataQuery<WfComment> comments(final ComponentParameter cp, final WorkitemBean workitem) {
-		return workflowContext.getCommentService().queryComments(workitem.getProcessId());
+	public IDataQuery<WfComment> comments(final ComponentParameter cp) {
+		final ProcessBean processBean = getProcessBean(cp);
+		if (processBean == null) {
+			return DataQueryUtils.nullQuery();
+		}
+		return workflowContext.getCommentService().queryComments(processBean.getId());
+	}
+
+	protected ProcessBean getProcessBean(final ComponentParameter cp) {
+		final WorkitemBean workitem = getWorkitemBean(cp);
+		if (workitem != null) {
+			return workflowContext.getProcessService().getBean(workitem.getProcessId());
+		}
+		return null;
+	}
+
+	protected WorkitemBean getWorkitemBean(final ComponentParameter cp) {
+		return WorkflowUtils.getWorkitemBean(cp);
 	}
 
 	@Override
-	public void onSave(final ComponentParameter cp, final WorkitemBean workitem) {
+	public void onSave(final ComponentParameter cp) {
+		final WorkitemBean workitem = getWorkitemBean(cp);
 		final String ccomment = cp.getParameter("ta_wfcomment");
 		if (!StringUtils.hasText(ccomment)) {
 			return;
@@ -115,7 +135,7 @@ public class DefaultWfCommentHandler extends ComponentHandlerEx implements IWfCo
 			final WorkitemBean workitem, final EGroupBy groupBy) {
 		final Map<String, List<WfComment>> data = new LinkedHashMap<String, List<WfComment>>();
 		Map<String, String[]> tasknames = null;
-		final IDataQuery<WfComment> dq = comments(cp, workitem);
+		final IDataQuery<WfComment> dq = comments(cp);
 		final IPermissionHandler phdl = cp.getPermission();
 		WfComment comment;
 		while ((comment = dq.next()) != null) {
@@ -152,7 +172,9 @@ public class DefaultWfCommentHandler extends ComponentHandlerEx implements IWfCo
 	}
 
 	@Override
-	public String toHTML(final ComponentParameter cp, final WorkitemBean workitem) {
+	public String toHTML(final ComponentParameter cp) {
+		final WorkitemBean workitem = getWorkitemBean(cp);
+
 		EGroupBy groupBy = cp.getEnumParameter(EGroupBy.class, "groupBy");
 		if (groupBy == null) {
 			groupBy = (EGroupBy) cp.getBeanProperty("groupBy");
@@ -192,7 +214,7 @@ public class DefaultWfCommentHandler extends ComponentHandlerEx implements IWfCo
 		final StringBuilder sb2 = new StringBuilder();
 		if (groupBy == EGroupBy.none) {
 			int i = 0;
-			final IDataQuery<WfComment> dq = comments(cp, workitem);
+			final IDataQuery<WfComment> dq = comments(cp);
 			WfComment comment;
 			while ((comment = dq.next()) != null) {
 				if (editable && comment2 != null && comment2.equals(comment)) {

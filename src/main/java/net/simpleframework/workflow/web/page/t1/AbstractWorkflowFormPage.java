@@ -20,8 +20,8 @@ import net.simpleframework.workflow.web.page.MyRunningWorklistTPage;
  * @author 陈侃(cknet@126.com, 13910090885) https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
-public abstract class AbstractWorkflowFormPage extends T1FormTemplatePage
-		implements IWorkflowServiceAware {
+public abstract class AbstractWorkflowFormPage extends T1FormTemplatePage implements
+		IWorkflowServiceAware {
 
 	@Override
 	protected boolean isPage404(final PageParameter pp) {
@@ -37,8 +37,7 @@ public abstract class AbstractWorkflowFormPage extends T1FormTemplatePage
 
 	protected IWorkflowWebForm getWorkflowForm(final PageParameter pp) {
 		final WorkitemBean workitem = WorkflowUtils.getWorkitemBean(pp);
-		return (IWorkflowWebForm) aService.getWorkflowForm(wService
-				.getActivity(workitem));
+		return (IWorkflowWebForm) aService.getWorkflowForm(wService.getActivity(workitem));
 	}
 
 	@Override
@@ -49,8 +48,7 @@ public abstract class AbstractWorkflowFormPage extends T1FormTemplatePage
 
 	public LinkButton getBackBtn(final PageParameter pp) {
 		final LinkButton backBtn = backBtn();
-		final WorkflowUrlsFactory uFactory = ((IWorkflowWebContext) workflowContext)
-				.getUrlsFactory();
+		final WorkflowUrlsFactory uFactory = ((IWorkflowWebContext) workflowContext).getUrlsFactory();
 		String referer = pp.getRequestHeader("Referer");
 		if (StringUtils.hasText(referer) && referer.contains("/workflow/my/")) {
 			backBtn.setHref(referer);
@@ -60,8 +58,7 @@ public abstract class AbstractWorkflowFormPage extends T1FormTemplatePage
 			if (referer != null) {
 				backBtn.setHref(referer);
 			} else {
-				backBtn.setHref(uFactory.getUrl(pp,
-						MyRunningWorklistTPage.class));
+				backBtn.setHref(uFactory.getUrl(pp, MyRunningWorklistTPage.class));
 			}
 		}
 		return backBtn;

@@ -31,11 +31,9 @@ public class WorkflowGraphMonitorPage extends WorkflowMonitorPage {
 	@Override
 	protected TablePagerBean addTablePagerBean(final PageParameter pp) {
 		// pp.putParameter(G, "tasknode");
-		final TablePagerBean tablePager = (TablePagerBean) super
-				.addTablePagerBean(pp).setShowFilterBar(false)
-				.setContainerId("idWorkflowGraphMonitorPage_tbl")
-				.setName("WorkflowGraphMonitorPage_tbl")
-				.setHandlerClass(ActivityGraphTbl2.class);
+		final TablePagerBean tablePager = (TablePagerBean) super.addTablePagerBean(pp)
+				.setShowFilterBar(false).setContainerId("idWorkflowGraphMonitorPage_tbl")
+				.setName("WorkflowGraphMonitorPage_tbl").setHandlerClass(ActivityGraphTbl2.class);
 		return tablePager;
 	}
 
@@ -43,8 +41,7 @@ public class WorkflowGraphMonitorPage extends WorkflowMonitorPage {
 	public void onHtmlNormalise(final PageParameter pp,
 			final net.simpleframework.lib.org.jsoup.nodes.Element element) {
 		super.onHtmlNormalise(pp, element);
-		if (element.tagName().equalsIgnoreCase("html")
-				&& WorkflowGraphUtils.isVML(pp)) {
+		if (element.tagName().equalsIgnoreCase("html") && WorkflowGraphUtils.isVML(pp)) {
 			element.attr("xmlns:v", "urn:schemas-microsoft-com:vml");
 		}
 	}
@@ -66,8 +63,7 @@ public class WorkflowGraphMonitorPage extends WorkflowMonitorPage {
 			final String taskid = cp.getParameter("taskid");
 			cp.addFormParameter("taskid", taskid);
 			if (StringUtils.hasText(taskid)) {
-				final List<ActivityBean> list = toTreeList(aService
-						.getActivities(process, taskid));
+				final List<ActivityBean> list = toTreeList(aService.getActivities(process, taskid));
 				setRelativeDate(cp, list);
 				return new ListDataQuery<ActivityBean>(list);
 			}

@@ -11,5 +11,5 @@
 %>
 <div class="wf_comment">
   <%=ComponentRenderUtils.genParameters(cp)%>
-  <%=hdl.toHTML(cp, WorkflowUtils.getWorkitemBean(cp))%>
+  <%=hdl.toHTML(cp)%>
 </div>

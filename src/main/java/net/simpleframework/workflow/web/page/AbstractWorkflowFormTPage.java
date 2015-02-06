@@ -98,7 +98,7 @@ public abstract class AbstractWorkflowFormTPage extends FormTableRowTemplatePage
 		// 添加了评论
 		final ComponentParameter nCP = WfCommentUtils.get(pp);
 		if (nCP.componentBean != null) {
-			((IWfCommentHandler) nCP.getComponentHandler()).onSave(nCP, getWorkitemBean(nCP));
+			((IWfCommentHandler) nCP.getComponentHandler()).onSave(nCP);
 		}
 	}
 
