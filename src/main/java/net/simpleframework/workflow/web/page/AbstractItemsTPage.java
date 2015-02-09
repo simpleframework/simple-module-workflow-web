@@ -52,7 +52,7 @@ public abstract class AbstractItemsTPage extends Category_ListPage implements IW
 			final Class<? extends ITablePagerHandler> handlerClass) {
 		return (TablePagerBean) addTablePagerBean(pp, name, handlerClass, false).setResize(false)
 				.setShowCheckbox(false).setShowFilterBar(true).setShowLineNo(false).setShowHead(true)
-				.setPageItems(50);
+				.setPageItems(30);
 	}
 
 	public CategoryItem createCategoryItem(final PageParameter pp, final String text,
