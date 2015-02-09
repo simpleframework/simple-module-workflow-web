@@ -140,7 +140,7 @@ public class WorkflowPermissionHandler extends OrganizationPermissionHandler imp
 		if (dept == null) {
 			return participants;
 		}
-		final IDataQuery<User> users = orgContext.getUserService().query(dept);
+		final IDataQuery<User> users = orgContext.getUserService().queryUsers(dept, false);
 		User user = null;
 		if (null != users) {
 			while ((user = users.next()) != null) {
