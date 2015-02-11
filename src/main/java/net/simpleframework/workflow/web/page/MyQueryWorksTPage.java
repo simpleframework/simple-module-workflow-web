@@ -50,10 +50,13 @@ public class MyQueryWorksTPage extends AbstractItemsTPage {
 		super.onForward(pp);
 
 		final TablePagerBean tablePager = addTablePagerBean(pp);
-		tablePager.addColumn(AbstractWorkflowMgrPage.TC_TITLE())
+		tablePager
+				.addColumn(AbstractWorkflowMgrPage.TC_TITLE())
 				.addColumn(new TablePagerColumn("userText", $m("ProcessMgrPage.0"), 100))
 				.addColumn(AbstractWorkflowMgrPage.TC_CREATEDATE())
-				.addColumn(AbstractWorkflowMgrPage.TC_STATUS().setPropertyClass(EProcessStatus.class))
+				.addColumn(
+						AbstractWorkflowMgrPage.TC_STATUS().setColumnAlias("p.status")
+								.setPropertyClass(EProcessStatus.class))
 				.addColumn(TablePagerColumn.OPE().setWidth(90));
 
 		// 工作列表窗口
