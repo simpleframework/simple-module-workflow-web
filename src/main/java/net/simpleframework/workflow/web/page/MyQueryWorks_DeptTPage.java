@@ -2,6 +2,8 @@ package net.simpleframework.workflow.web.page;
 
 import net.simpleframework.ado.query.IDataQuery;
 import net.simpleframework.mvc.PageParameter;
+import net.simpleframework.mvc.common.element.ElementList;
+import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
 
@@ -16,6 +18,13 @@ public class MyQueryWorks_DeptTPage extends MyQueryWorksTPage {
 	@Override
 	protected TablePagerBean addTablePagerBean(final PageParameter pp) {
 		return addTablePagerBean(pp, "MyQueryWorksTPage_tbl", MyQueryWorks_DeptTbl.class);
+	}
+
+	@Override
+	public ElementList getLeftElements(final PageParameter pp) {
+		final ElementList el = ElementList.of();
+		el.append(new SpanElement(pp.getLogin().getDept()).setClassName("worklist_dept"));
+		return el;
 	}
 
 	public static class MyQueryWorks_DeptTbl extends MyQueryWorksTbl {

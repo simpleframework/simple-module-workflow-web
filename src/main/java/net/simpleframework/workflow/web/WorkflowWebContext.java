@@ -4,6 +4,7 @@ import static net.simpleframework.common.I18n.$m;
 import net.simpleframework.ctx.IModuleRef;
 import net.simpleframework.ctx.ModuleFunctions;
 import net.simpleframework.ctx.permission.IPermissionConst;
+import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.ctx.WebModuleFunction;
 import net.simpleframework.workflow.engine.impl.WorkflowContext;
 import net.simpleframework.workflow.engine.participant.IWorkflowPermissionHandler;
@@ -17,6 +18,11 @@ import net.simpleframework.workflow.web.page.t2.AbstractWorkPage.MyRunningWorkli
  *         http://www.simpleframework.net
  */
 public class WorkflowWebContext extends WorkflowContext implements IWorkflowWebContext {
+
+	@Override
+	public String getDepartmentMgrRole(final PageParameter pp) {
+		return null;
+	}
 
 	@Override
 	public WorkflowUrlsFactory getUrlsFactory() {

@@ -2,6 +2,7 @@ package net.simpleframework.workflow.web;
 
 import net.simpleframework.ctx.IModuleRef;
 import net.simpleframework.mvc.IMVCContextVar;
+import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.workflow.engine.IWorkflowContext;
 
 /**
@@ -11,6 +12,14 @@ import net.simpleframework.workflow.engine.IWorkflowContext;
  *         http://www.simpleframework.net
  */
 public interface IWorkflowWebContext extends IWorkflowContext, IMVCContextVar {
+
+	/**
+	 * 获取部门管理角色名
+	 * 
+	 * @param pp
+	 * @return
+	 */
+	String getDepartmentMgrRole(PageParameter pp);
 
 	/**
 	 * 获取日志模块的引用

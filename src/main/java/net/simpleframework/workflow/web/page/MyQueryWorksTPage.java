@@ -77,13 +77,17 @@ public class MyQueryWorksTPage extends AbstractItemsTPage {
 
 	@Override
 	public ElementList getRightElements(final PageParameter pp) {
-		final WorkflowUrlsFactory urlsFactory = getUrlsFactory();
-		final SpanElement tabs = createTabsElement(pp, TabButtons.of(new TabButton(
-				$m("MyQueryWorksTPage.4"), urlsFactory.getUrl(pp, MyQueryWorksTPage.class))));
-		// , new TabButton(
-		// $m("MyQueryWorksTPage.5"), urlsFactory.getUrl(pp,
-		// MyQueryWorks_DeptTPage.class))
-		return ElementList.of(tabs);
+		final IWorkflowWebContext ctx = ((IWorkflowWebContext) workflowContext);
+		final WorkflowUrlsFactory urlsFactory = ctx.getUrlsFactory();
+		final TabButtons tabs = TabButtons.of(new TabButton($m("MyQueryWorksTPage.4"), urlsFactory
+				.getUrl(pp, MyQueryWorksTPage.class)));
+		if (pp.getLogin().isMember(ctx.getDepartmentMgrRole(pp))) {
+			tabs.append(new TabButton($m("MyQueryWorksTPage.5"), urlsFactory.getUrl(pp,
+					MyQueryWorks_DeptTPage.class)));
+		}
+		tabs.append(new TabButton($m("MyQueryWorksTPage.6"), urlsFactory.getUrl(pp,
+				MyQueryWorks_DeptTPage.class)));
+		return ElementList.of(createTabsElement(pp, tabs));
 	}
 
 	private static final WorkflowUrlsFactory uFactory = ((IWorkflowWebContext) workflowContext)

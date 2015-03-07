@@ -74,6 +74,13 @@
   background-color: #f60;
 }
 
+.worklist_dept {
+  color: #666;
+  font-size: 9.5pt;
+  font-weight: bold;
+  line-height: 2;
+}
+
 .Category_ListPage .tabbtns {
   position: absolute;
   bottom: 0; 
