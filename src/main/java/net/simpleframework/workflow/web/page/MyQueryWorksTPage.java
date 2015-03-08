@@ -3,15 +3,16 @@ package net.simpleframework.workflow.web.page;
 import static net.simpleframework.common.I18n.$m;
 
 import java.util.Date;
-import java.util.List;
 import java.util.Map;
 
 import net.simpleframework.ado.query.DataQueryUtils;
 import net.simpleframework.ado.query.IDataQuery;
 import net.simpleframework.ado.query.ListDataQuery;
 import net.simpleframework.common.Convert;
+import net.simpleframework.common.StringUtils;
 import net.simpleframework.common.coll.KVMap;
 import net.simpleframework.mvc.PageParameter;
+import net.simpleframework.mvc.common.element.AbstractElement;
 import net.simpleframework.mvc.common.element.ButtonElement;
 import net.simpleframework.mvc.common.element.ETextAlign;
 import net.simpleframework.mvc.common.element.ElementList;
@@ -109,20 +110,33 @@ public class MyQueryWorksTPage extends AbstractItemsTPage {
 				t.append("[").append(c).append("] ");
 			}
 
-			final List<WorkitemBean> workitems = wService.getWorkitems(process, cp.getLoginId());
-			t.append(new LinkElement(WorkflowUtils.getTitle(process)).setOnclick("$Actions.loc('"
-					+ uFactory.getUrl(cp, WorkflowFormPage.class, workitems.get(0)) + "');"));
+			final WorkitemBean workitem = wService.getBean(process.getAttr("workitemid"));
+			final String title = WorkflowUtils.getTitle(process);
+			final AbstractElement<?> le;
+			if (workitem != null) {
+				le = new LinkElement(title).setOnclick("$Actions.loc('"
+						+ uFactory.getUrl(cp, WorkflowFormPage.class, workitem) + "');");
+			} else {
+				le = new SpanElement(title);
+			}
+			if (!StringUtils.hasText(process.getTitle())) {
+				le.setColor("#aaa");
+			}
+			t.append(le);
 
 			row.add("title", t.toString()).add("userText", process.getUserText())
 					.add("createDate", process.getCreateDate())
 					.add("status", WorkflowUtils.toStatusHTML(cp, process.getStatus()));
+			row.add(TablePagerColumn.OPE, toOpeHTML(cp, process));
+			return row;
+		}
 
+		protected String toOpeHTML(final ComponentParameter cp, final ProcessBean process) {
 			final StringBuilder ope = new StringBuilder();
 			ope.append(new ButtonElement($m("MyQueryWorksTPage.2"))
 					.setOnclick("$Actions['MyQueryWorksTPage_workitems']('processId=" + process.getId()
 							+ "');"));
-			row.add(TablePagerColumn.OPE, ope.toString());
-			return row;
+			return ope.toString();
 		}
 	}
 
