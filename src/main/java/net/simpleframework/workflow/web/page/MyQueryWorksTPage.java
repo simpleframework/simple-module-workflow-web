@@ -87,7 +87,7 @@ public class MyQueryWorksTPage extends AbstractItemsTPage {
 					MyQueryWorks_DeptTPage.class)));
 		}
 		tabs.append(new TabButton($m("MyQueryWorksTPage.6"), urlsFactory.getUrl(pp,
-				MyQueryWorks_DeptTPage.class)));
+				MyQueryWorks_RoleTPage.class)));
 		return ElementList.of(createTabsElement(pp, tabs));
 	}
 
