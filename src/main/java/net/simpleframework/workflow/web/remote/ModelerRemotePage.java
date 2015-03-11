@@ -5,7 +5,7 @@ import java.util.Map;
 
 import net.simpleframework.ado.query.IDataQuery;
 import net.simpleframework.common.coll.KVMap;
-import net.simpleframework.ctx.permission.IPermissionConst;
+import net.simpleframework.ctx.permission.PermissionConst;
 import net.simpleframework.mvc.IForward;
 import net.simpleframework.mvc.IForwardCallback.IJsonForwardCallback;
 import net.simpleframework.mvc.JsonForward;
@@ -41,8 +41,8 @@ public class ModelerRemotePage extends AbstractWorkflowRemotePage {
 
 	@Override
 	public String getRole(final PageParameter pp) {
-		return "login".equals(pp.getParameter("method")) ? IPermissionConst.ROLE_ANONYMOUS
-				: IPermissionConst.ROLE_ALL_ACCOUNT;
+		return "login".equals(pp.getParameter("method")) ? PermissionConst.ROLE_ANONYMOUS
+				: PermissionConst.ROLE_ALL_ACCOUNT;
 	}
 
 	/**

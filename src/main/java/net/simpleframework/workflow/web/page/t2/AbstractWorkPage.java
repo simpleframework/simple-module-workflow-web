@@ -3,7 +3,7 @@ package net.simpleframework.workflow.web.page.t2;
 import java.io.IOException;
 import java.util.Map;
 
-import net.simpleframework.ctx.permission.IPermissionConst;
+import net.simpleframework.ctx.permission.PermissionConst;
 import net.simpleframework.mvc.PageMapping;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.template.t2.T2TemplatePage;
@@ -27,7 +27,7 @@ public abstract class AbstractWorkPage extends T2TemplatePage {
 
 	@Override
 	public String getRole(final PageParameter pp) {
-		return IPermissionConst.ROLE_ALL_ACCOUNT;
+		return PermissionConst.ROLE_ALL_ACCOUNT;
 	}
 
 	protected abstract Class<? extends AbstractItemsTPage> getWorkTPageClass();

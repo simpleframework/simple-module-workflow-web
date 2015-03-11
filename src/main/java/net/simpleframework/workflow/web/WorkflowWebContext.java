@@ -3,7 +3,7 @@ package net.simpleframework.workflow.web;
 import static net.simpleframework.common.I18n.$m;
 import net.simpleframework.ctx.IModuleRef;
 import net.simpleframework.ctx.ModuleFunctions;
-import net.simpleframework.ctx.permission.IPermissionConst;
+import net.simpleframework.ctx.permission.PermissionConst;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.ctx.WebModuleFunction;
 import net.simpleframework.workflow.engine.impl.WorkflowContext;
@@ -49,6 +49,6 @@ public class WorkflowWebContext extends WorkflowContext implements IWorkflowWebC
 			this, MyRunningWorklistPage.class).setName(MODULE_NAME + "-MyRunningWorklistTPage")
 			.setText($m("WorkflowWebContext.0"));
 	public final WebModuleFunction FUNC_PROCESS_MODEL = (WebModuleFunction) new WebModuleFunction(
-			this, ProcessModelMgrPage.class).setRole(IPermissionConst.ROLE_MANAGER)
+			this, ProcessModelMgrPage.class).setRole(PermissionConst.ROLE_MANAGER)
 			.setName(MODULE_NAME + "-ProcessModelMgrPage").setText($m("WorkflowWebContext.1"));
 }

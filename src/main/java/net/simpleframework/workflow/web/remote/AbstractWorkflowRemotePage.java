@@ -2,7 +2,7 @@ package net.simpleframework.workflow.web.remote;
 
 import java.util.Properties;
 
-import net.simpleframework.ctx.permission.IPermissionConst;
+import net.simpleframework.ctx.permission.PermissionConst;
 import net.simpleframework.ctx.trans.Transaction;
 import net.simpleframework.mvc.IForwardCallback.IJsonForwardCallback;
 import net.simpleframework.mvc.JsonForward;
@@ -27,7 +27,7 @@ public abstract class AbstractWorkflowRemotePage extends AbstractTemplatePage im
 
 	@Override
 	public String getRole(final PageParameter pp) {
-		return IPermissionConst.ROLE_ALL_ACCOUNT;
+		return PermissionConst.ROLE_ALL_ACCOUNT;
 	}
 
 	protected void copyTo(final PageParameter pp, final Properties properties, final String... keys) {

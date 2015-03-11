@@ -1,7 +1,7 @@
 package net.simpleframework.workflow.web.page.t1;
 
 import net.simpleframework.common.StringUtils;
-import net.simpleframework.ctx.permission.IPermissionConst;
+import net.simpleframework.ctx.permission.PermissionConst;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.LinkButton;
@@ -66,6 +66,6 @@ public abstract class AbstractWorkflowFormPage extends T1FormTemplatePage implem
 
 	@Override
 	public String getRole(final PageParameter pp) {
-		return IPermissionConst.ROLE_ALL_ACCOUNT;
+		return PermissionConst.ROLE_ALL_ACCOUNT;
 	}
 }
