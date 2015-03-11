@@ -35,7 +35,7 @@ public class WorkflowPermissionHandler extends OrganizationPermissionHandler imp
 	public Collection<Participant> getRelativeParticipants(final AbstractWorkflowBean workflowBean,
 			final UserNode.RelativeRole rRole, final Map<String, Object> variables) {
 		final ArrayList<Participant> participants = new ArrayList<Participant>();
-		final Role r = getRoleObject(BeanUtils.getProperty(workflowBean, "roleId"));
+		final Role r = getRoleObject(BeanUtils.getProperty(workflowBean, "roleId"), variables);
 		if (r != null) {
 			// 获取相对角色，部门
 			final IRoleService service = orgContext.getRoleService();
@@ -56,7 +56,7 @@ public class WorkflowPermissionHandler extends OrganizationPermissionHandler imp
 			final Object role, final ID deptId, final Map<String, Object> variables,
 			final String relativeRole, final Level level) {
 		final ArrayList<Participant> participants = new ArrayList<Participant>();
-		Role oRole = getRoleObject(role);
+		Role oRole = getRoleObject(role, variables);
 		if (oRole != null) {
 			if (StringUtils.hasText(relativeRole)) {
 				// 获取相对角色，部门
