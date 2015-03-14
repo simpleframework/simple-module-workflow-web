@@ -4,7 +4,6 @@ import static net.simpleframework.common.I18n.$m;
 
 import java.util.List;
 
-import net.simpleframework.common.object.ObjectFactory;
 import net.simpleframework.ctx.IModuleRef;
 import net.simpleframework.mvc.AbstractMVCPage;
 import net.simpleframework.mvc.PageParameter;
@@ -80,7 +79,7 @@ public abstract class AbstractItemsTPage extends Category_ListPage implements IW
 		final CategoryItem delegate = createCategoryItem(pp, $m("AbstractItemsTPage.3"),
 				MyDelegateListTPage.class).setIconClass("delegate_list_icon");
 		delegate.setSelected(delegate.isSelected()
-				|| UserDelegateListTPage.class == ObjectFactory.original(getClass()));
+				|| UserDelegateListTPage.class == getOriginalClass());
 		return delegate;
 	}
 
