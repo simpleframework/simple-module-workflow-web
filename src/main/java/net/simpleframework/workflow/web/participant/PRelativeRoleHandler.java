@@ -19,7 +19,6 @@ import net.simpleframework.workflow.engine.participant.IParticipantHandler.Abstr
 import net.simpleframework.workflow.engine.participant.Participant;
 import net.simpleframework.workflow.schema.AbstractTaskNode;
 import net.simpleframework.workflow.schema.UserNode;
-import net.simpleframework.workflow.web.WorkflowPermissionHandler;
 
 public class PRelativeRoleHandler extends AbstractParticipantHandler implements
 		IOrganizationContextAware {

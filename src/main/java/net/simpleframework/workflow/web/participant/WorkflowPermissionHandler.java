@@ -1,4 +1,4 @@
-package net.simpleframework.workflow.web;
+package net.simpleframework.workflow.web.participant;
 
 import java.util.ArrayList;
 import java.util.Collection;

@@ -13,7 +13,7 @@ import net.simpleframework.workflow.engine.impl.WorkflowContext;
  * @author 陈侃(cknet@126.com, 13910090885) https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
-public class AbstractMgrTPage extends Tabs_BlankPage implements IWorkflowContextAware {
+public class AbstractWorkflowMgrTPage extends Tabs_BlankPage implements IWorkflowContextAware {
 
 	@Override
 	public String getRole(final PageParameter pp) {
@@ -24,4 +24,21 @@ public class AbstractMgrTPage extends Tabs_BlankPage implements IWorkflowContext
 	public TabButtons getTabButtons(final PageParameter pp) {
 		return TabButtons.of(new TabButton("流程实例"));
 	}
+
+	// static Department getOrg(final PageParameter pp) {
+	// return pp.getCache("@org", new IVal<Department>() {
+	// @Override
+	// public Department get() {
+	// final IDepartmentService dService = orgContext.getDepartmentService();
+	// Department org = null;
+	// if (pp.getLogin().isManager()) {
+	// org = dService.getBean(pp.getParameter("orgId"));
+	// }
+	// if (org == null) {
+	// org = dService.getBean(pp.getLogin().getDept().getDomainId());
+	// }
+	// return org;
+	// }
+	// });
+	// }
 }

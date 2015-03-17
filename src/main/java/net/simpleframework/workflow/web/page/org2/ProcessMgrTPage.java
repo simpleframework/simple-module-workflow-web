@@ -6,5 +6,5 @@ package net.simpleframework.workflow.web.page.org2;
  * @author 陈侃(cknet@126.com, 13910090885) https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
-public class ProcessMgrTPage extends AbstractMgrTPage {
+public class ProcessMgrTPage extends AbstractWorkflowMgrTPage {
 }

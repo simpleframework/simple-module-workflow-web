@@ -28,5 +28,7 @@ public interface IWorkflowWebContext extends IWorkflowContext, IMVCContextVar {
 	 */
 	IModuleRef getLogRef();
 
+	IModuleRef getOrganizationRef();
+
 	WorkflowUrlsFactory getUrlsFactory();
 }
