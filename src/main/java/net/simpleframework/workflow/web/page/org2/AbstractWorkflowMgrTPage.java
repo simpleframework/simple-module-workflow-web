@@ -20,6 +20,13 @@ import net.simpleframework.workflow.engine.impl.WorkflowContext;
 public class AbstractWorkflowMgrTPage extends AbstractMgrTPage implements IWorkflowContextAware {
 
 	@Override
+	protected void onForward(final PageParameter pp) {
+		super.onForward(pp);
+
+		pp.addImportCSS(AbstractWorkflowMgrTPage.class, "/wfmgrt.css");
+	}
+
+	@Override
 	public String getRole(final PageParameter pp) {
 		return WorkflowContext.ROLE_WORKFLOW_MANAGER;
 	}
