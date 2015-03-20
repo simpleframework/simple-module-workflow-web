@@ -1,14 +1,24 @@
 package net.simpleframework.workflow.web.page.org2;
 
+import static net.simpleframework.common.I18n.$m;
+
 import java.io.IOException;
 import java.util.Map;
 
+import net.simpleframework.ado.query.IDataQuery;
+import net.simpleframework.ctx.permission.PermissionDept;
 import net.simpleframework.mvc.PageParameter;
+import net.simpleframework.mvc.common.element.ETextAlign;
 import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.LinkButton;
+import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.ui.pager.EPagerBarLayout;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
+import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
 import net.simpleframework.mvc.component.ui.pager.db.AbstractDbTablePagerHandler;
+import net.simpleframework.workflow.engine.EProcessStatus;
+import net.simpleframework.workflow.engine.ProcessModelBean;
+import net.simpleframework.workflow.web.page.t1.AbstractWorkflowMgrPage;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -29,6 +39,15 @@ public class ProcessMgrTPage extends AbstractWorkflowMgrTPage {
 		final TablePagerBean tablePager = (TablePagerBean) addTablePagerBean(pp,
 				"ProcessMgrTPage_tbl").setPagerBarLayout(EPagerBarLayout.bottom).setPageItems(30)
 				.setContainerId("idProcessMgrTPage_tbl").setHandlerClass(ProcessTbl.class);
+		tablePager
+				.addColumn(AbstractWorkflowMgrPage.TC_TITLE())
+				.addColumn(
+						new TablePagerColumn("userText", $m("ProcessMgrPage.0"), 120)
+								.setTextAlign(ETextAlign.left))
+				.addColumn(AbstractWorkflowMgrPage.TC_CREATEDATE())
+				.addColumn(AbstractWorkflowMgrPage.TC_COMPLETEDATE())
+				.addColumn(AbstractWorkflowMgrPage.TC_STATUS().setPropertyClass(EProcessStatus.class))
+				.addColumn(TablePagerColumn.OPE().setWidth(90));
 		return tablePager;
 	}
 
@@ -45,5 +64,21 @@ public class ProcessMgrTPage extends AbstractWorkflowMgrTPage {
 	}
 
 	public static class ProcessTbl extends AbstractDbTablePagerHandler {
+		@Override
+		public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
+			final PermissionDept org = getOrg(cp);
+			if (org != null) {
+				cp.addFormParameter("orgId", org.getId());
+				return workflowContext.getProcessService().getProcessList(org.getId(),
+						(ProcessModelBean) null);
+			}
+			return null;
+		}
+
+		@Override
+		protected Map<String, Object> getRowData(final ComponentParameter cp, final Object dataObject) {
+			// final KVMap kv = new KVMap();
+			return super.getRowData(cp, dataObject);
+		}
 	}
 }

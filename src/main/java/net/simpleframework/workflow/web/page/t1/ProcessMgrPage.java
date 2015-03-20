@@ -115,7 +115,7 @@ public class ProcessMgrPage extends AbstractWorkflowMgrPage {
 				return DataQueryUtils.nullQuery();
 			}
 			cp.addFormParameter("modelId", processModel.getId());
-			return pService.getProcessList(processModel);
+			return pService.getProcessList(null, processModel);
 		}
 
 		@Override
