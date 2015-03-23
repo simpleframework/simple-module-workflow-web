@@ -2,7 +2,6 @@ package net.simpleframework.workflow.web.page;
 
 import static net.simpleframework.common.I18n.$m;
 import net.simpleframework.mvc.PageParameter;
-import net.simpleframework.mvc.common.element.ETextAlign;
 import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.Option;
 import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
@@ -29,12 +28,10 @@ public class AbstractWorkitemsTPage extends AbstractItemsTPage {
 	}
 
 	protected TablePagerColumn TC_TITLE() {
-		return new TablePagerColumn("title", $m("AbstractWorkitemsTPage.0")).setTextAlign(
-				ETextAlign.left).setSort(false);
+		return new TablePagerColumn("title", $m("AbstractWorkitemsTPage.0")).setSort(false);
 	}
 
 	protected TablePagerColumn TC_STATUS() {
-		return new TablePagerColumn("status", $m("AbstractWorkitemsTPage.3"), 55)
-				.setTextAlign(ETextAlign.left);
+		return new TablePagerColumn("status", $m("AbstractWorkitemsTPage.3"), 55);
 	}
 }

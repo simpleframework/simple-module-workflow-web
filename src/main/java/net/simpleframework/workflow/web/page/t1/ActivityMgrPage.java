@@ -22,7 +22,6 @@ import net.simpleframework.mvc.IForward;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageMapping;
 import net.simpleframework.mvc.PageParameter;
-import net.simpleframework.mvc.common.element.ETextAlign;
 import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.InputElement;
 import net.simpleframework.mvc.common.element.LinkButton;
@@ -103,7 +102,7 @@ public class ActivityMgrPage extends AbstractWorkflowMgrPage {
 				SpanElement.SPACE,
 				LinkButton.of("放弃...").setOnclick(
 						"$Actions['ActivityMgrPage_abort2']('processId=" + process.getId() + "');"),
-				SpanElement.SPACE15, SpanElement.strongText(WorkflowUtils.getTitle(process)));
+				SpanElement.SPACE15, SpanElement.strongText(WorkflowUtils.getProcessTitle(process)));
 	}
 
 	@Override
@@ -328,13 +327,11 @@ public class ActivityMgrPage extends AbstractWorkflowMgrPage {
 	}
 
 	static TablePagerColumn TC_TASKNODE() {
-		return new TablePagerColumn("tasknode", $m("ActivityMgrPage.1"))
-				.setTextAlign(ETextAlign.left).setFilterSort(false);
+		return new TablePagerColumn("tasknode", $m("ActivityMgrPage.1")).setFilterSort(false);
 	}
 
 	static TablePagerColumn TC_PREVIOUS() {
-		return new TablePagerColumn("previous", $m("ActivityMgrPage.2"), 115).setFilterSort(false)
-				.setTextAlign(ETextAlign.left);
+		return new TablePagerColumn("previous", $m("ActivityMgrPage.2"), 115).setFilterSort(false);
 	}
 
 	static TablePagerColumn TC_PARTICIPANTS() {

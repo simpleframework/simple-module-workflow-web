@@ -14,7 +14,6 @@ import net.simpleframework.common.coll.KVMap;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.AbstractElement;
 import net.simpleframework.mvc.common.element.ButtonElement;
-import net.simpleframework.mvc.common.element.ETextAlign;
 import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.LinkElement;
 import net.simpleframework.mvc.common.element.SpanElement;
@@ -111,7 +110,7 @@ public class MyQueryWorksTPage extends AbstractItemsTPage {
 			}
 
 			final WorkitemBean workitem = wService.getBean(process.getAttr("workitemid"));
-			final String title = WorkflowUtils.getTitle(process);
+			final String title = WorkflowUtils.getProcessTitle(process);
 			final AbstractElement<?> le;
 			if (workitem != null) {
 				le = new LinkElement(title).setOnclick("$Actions.loc('"
@@ -149,9 +148,7 @@ public class MyQueryWorksTPage extends AbstractItemsTPage {
 					"ProcessWorkitemsPage_tbl", ProcessWorkitemsTbl.class).setShowCheckbox(false)
 					.setShowLineNo(false).setPagerBarLayout(EPagerBarLayout.none);
 			tablePager
-					.addColumn(
-							new TablePagerColumn("taskname", $m("MyQueryWorksTPage.0"))
-									.setTextAlign(ETextAlign.left))
+					.addColumn(new TablePagerColumn("taskname", $m("MyQueryWorksTPage.0")))
 					.addColumn(
 							new TablePagerColumn("userFrom", $m("MyRunningWorklistTPage.0"))
 									.setFilter(false))

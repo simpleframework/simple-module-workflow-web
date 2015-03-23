@@ -9,7 +9,6 @@ import net.simpleframework.ado.query.IDataQuery;
 import net.simpleframework.common.ID;
 import net.simpleframework.ctx.permission.PermissionDept;
 import net.simpleframework.mvc.PageParameter;
-import net.simpleframework.mvc.common.element.ETextAlign;
 import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.LinkButton;
 import net.simpleframework.mvc.component.ComponentParameter;
@@ -40,11 +39,8 @@ public class ProcessMgrTPage extends AbstractWorkflowMgrTPage {
 		final TablePagerBean tablePager = (TablePagerBean) addTablePagerBean(pp,
 				"ProcessMgrTPage_tbl").setPagerBarLayout(EPagerBarLayout.bottom).setPageItems(30)
 				.setContainerId("idProcessMgrTPage_tbl").setHandlerClass(ProcessTbl.class);
-		tablePager
-				.addColumn(AbstractWorkflowMgrPage.TC_TITLE())
-				.addColumn(
-						new TablePagerColumn("userText", $m("ProcessMgrPage.0"), 120)
-								.setTextAlign(ETextAlign.left))
+		tablePager.addColumn(AbstractWorkflowMgrPage.TC_TITLE())
+				.addColumn(new TablePagerColumn("userText", $m("ProcessMgrPage.0"), 120))
 				.addColumn(AbstractWorkflowMgrPage.TC_CREATEDATE())
 				.addColumn(AbstractWorkflowMgrPage.TC_COMPLETEDATE())
 				.addColumn(AbstractWorkflowMgrPage.TC_STATUS().setPropertyClass(EProcessStatus.class))

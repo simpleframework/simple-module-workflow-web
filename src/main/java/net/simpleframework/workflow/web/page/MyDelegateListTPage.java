@@ -154,7 +154,8 @@ public class MyDelegateListTPage extends AbstractWorkitemsTPage {
 			final ActivityBean activity = wService.getActivity(workitem);
 			final StringBuilder title = new StringBuilder();
 			appendTaskname(title, cp, activity);
-			title.append(toTitle(delegation, WorkflowUtils.getTitle(aService.getProcessBean(activity))));
+			title.append(toTitle(delegation,
+					WorkflowUtils.getProcessTitle(aService.getProcessBean(activity))));
 			final KVMap row = new KVMap().add("title", title.toString());
 			row.add("userText", delegation.getUserText());
 			row.add("createDate", delegation.getCreateDate());

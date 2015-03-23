@@ -16,7 +16,6 @@ import net.simpleframework.mvc.IForward;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageMapping;
 import net.simpleframework.mvc.PageParameter;
-import net.simpleframework.mvc.common.element.ETextAlign;
 import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.InputElement;
 import net.simpleframework.mvc.common.element.LinkElement;
@@ -55,12 +54,9 @@ public class ProcessMgrPage extends AbstractWorkflowMgrPage {
 		final TablePagerBean tablePager = (TablePagerBean) addComponentBean(pp, "ProcessMgrPage_tbl",
 				TablePagerBean.class).setPagerBarLayout(EPagerBarLayout.bottom)
 				.setContainerId("idProcessMgrPage_tbl").setHandlerClass(ProcessTbl.class);
-		tablePager
-				.addColumn(TC_TITLE())
-				.addColumn(
-						new TablePagerColumn("userText", $m("ProcessMgrPage.0"), 120)
-								.setTextAlign(ETextAlign.left)).addColumn(TC_CREATEDATE())
-				.addColumn(TC_COMPLETEDATE())
+		tablePager.addColumn(TC_TITLE())
+				.addColumn(new TablePagerColumn("userText", $m("ProcessMgrPage.0"), 120))
+				.addColumn(TC_CREATEDATE()).addColumn(TC_COMPLETEDATE())
 				.addColumn(TC_STATUS().setPropertyClass(EProcessStatus.class))
 				.addColumn(TablePagerColumn.OPE().setWidth(90));
 
@@ -125,7 +121,7 @@ public class ProcessMgrPage extends AbstractWorkflowMgrPage {
 			final EProcessStatus status = process.getStatus();
 			final KVMap row = new KVMap()
 					.add("title",
-							new LinkElement(WorkflowUtils.getTitle(process)).setHref(url(
+							new LinkElement(WorkflowUtils.getProcessTitle(process)).setHref(url(
 									ActivityMgrPage.class, "processId=" + id)))
 					.add("userText", process.getUserText()).add("createDate", process.getCreateDate())
 					.add("completeDate", process.getCompleteDate())

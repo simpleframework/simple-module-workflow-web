@@ -9,7 +9,6 @@ import net.simpleframework.ctx.trans.Transaction;
 import net.simpleframework.mvc.IForward;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageParameter;
-import net.simpleframework.mvc.common.element.ETextAlign;
 import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.ImageElement;
 import net.simpleframework.mvc.common.element.LinkButton;
@@ -48,8 +47,7 @@ public class MyFinalWorklistTPage extends MyRunningWorklistTPage {
 				return Option.from(EWorkitemStatus.complete, EWorkitemStatus.retake,
 						EWorkitemStatus.abort);
 			};
-		}.setPropertyClass(EWorkitemStatus.class).setTextAlign(ETextAlign.left)).addColumn(
-				TablePagerColumn.OPE().setWidth(70));
+		}.setPropertyClass(EWorkitemStatus.class)).addColumn(TablePagerColumn.OPE().setWidth(70));
 
 		// 取回
 		addAjaxRequest(pp, "MyWorklistTPage_retake").setHandlerMethod("doRetake").setConfirmMessage(

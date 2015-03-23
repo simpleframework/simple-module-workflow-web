@@ -8,7 +8,6 @@ import java.util.Map;
 import net.simpleframework.ado.query.IDataQuery;
 import net.simpleframework.common.coll.KVMap;
 import net.simpleframework.mvc.PageParameter;
-import net.simpleframework.mvc.common.element.ETextAlign;
 import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.LinkButton;
 import net.simpleframework.mvc.common.element.Option;
@@ -48,7 +47,7 @@ public class UserDelegateListTPage extends MyDelegateListTPage {
 		tablePager
 				.addColumn(
 						new TablePagerColumn("description", $m("WorkitemDelegateSetPage.3"))
-								.setTextAlign(ETextAlign.left).setSort(false))
+								.setSort(false))
 				.addColumn(new TablePagerColumn("userText", $m("MyDelegateListTPage.0"), 70))
 				.addColumn(
 						new TablePagerColumn("createDate", $m("MyDelegateListTPage.1"), 115)
@@ -59,7 +58,7 @@ public class UserDelegateListTPage extends MyDelegateListTPage {
 						return Option.from(EDelegationStatus.ready, EDelegationStatus.running,
 								EDelegationStatus.complete, EDelegationStatus.abort);
 					};
-				}.setTextAlign(ETextAlign.left).setPropertyClass(EDelegationStatus.class));
+				}.setPropertyClass(EDelegationStatus.class));
 		tablePager.addColumn(TablePagerColumn.OPE().setWidth(70));
 		return tablePager;
 	}

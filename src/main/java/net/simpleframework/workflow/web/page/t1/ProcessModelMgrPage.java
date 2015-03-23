@@ -17,7 +17,6 @@ import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageMapping;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.ButtonElement;
-import net.simpleframework.mvc.common.element.ETextAlign;
 import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.LinkButton;
 import net.simpleframework.mvc.common.element.LinkElement;
@@ -58,18 +57,13 @@ public class ProcessModelMgrPage extends AbstractWorkflowMgrPage {
 		super.onForward(pp);
 
 		final TablePagerBean tablePager = (TablePagerBean) addComponentBean(pp,
-				"ProcessModelMgrPage_tbl", TablePagerBean.class)
+				"ProcessModelMgrPage_tbl", TablePagerBean.class).setShowFilterBar(false).setSort(false)
 				.setPagerBarLayout(EPagerBarLayout.bottom).setContainerId("idProcessModelMgrPage_tbl")
 				.setHandlerClass(ProcessModelTbl.class);
-		tablePager
-				.addColumn(
-						new TablePagerColumn("modelText", $m("ProcessModelMgrPage.0")).setTextAlign(
-								ETextAlign.left).setSort(false))
-				.addColumn(
-						new TablePagerColumn("processCount", $m("ProcessModelMgrPage.1"), 80)
-								.setSort(false))
-				.addColumn(
-						new TablePagerColumn("userText", $m("ProcessModelMgrPage.2"), 115).setSort(false))
+		tablePager.addColumn(new TablePagerColumn("modelText", $m("ProcessModelMgrPage.0")))
+				.addColumn(new TablePagerColumn("processCount", $m("ProcessModelMgrPage.1"), 60))
+				.addColumn(new TablePagerColumn("userText", $m("ProcessModelMgrPage.2"), 80))
+				.addColumn(new TablePagerColumn("version", $m("MyInitiateItemsTPage.4"), 80))
 				.addColumn(TC_CREATEDATE())
 				.addColumn(TC_STATUS().setPropertyClass(EProcessModelStatus.class))
 				.addColumn(TablePagerColumn.OPE().setWidth(90));

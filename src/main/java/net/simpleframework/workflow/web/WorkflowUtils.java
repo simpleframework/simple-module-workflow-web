@@ -31,7 +31,7 @@ public abstract class WorkflowUtils implements IWorkflowServiceAware {
 		return AbstractTemplatePage.getCacheBean(pp, wService, "workitemId");
 	}
 
-	public static String getTitle(final ProcessBean process) {
+	public static String getProcessTitle(final ProcessBean process) {
 		final String title = process.getTitle();
 		if (StringUtils.hasText(title)) {
 			return title;

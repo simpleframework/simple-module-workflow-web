@@ -11,7 +11,6 @@ import net.simpleframework.common.ID;
 import net.simpleframework.common.coll.KVMap;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageParameter;
-import net.simpleframework.mvc.common.element.ETextAlign;
 import net.simpleframework.mvc.common.element.LinkButton;
 import net.simpleframework.mvc.common.element.LinkElement;
 import net.simpleframework.mvc.component.ComponentParameter;
@@ -43,8 +42,7 @@ public class MyInitiateItemsTPage extends AbstractItemsTPage {
 		final TablePagerBean tablePager = addTablePagerBean(pp, "MyInitiateItemsTPage_tbl",
 				MyInitiateItemsTbl.class);
 		tablePager.addColumn(TablePagerColumn.ICON().setWidth(18));
-		tablePager.addColumn(new TablePagerColumn("modelText", $m("MyInitiateItemsTPage.1"))
-				.setTextAlign(ETextAlign.left));
+		tablePager.addColumn(new TablePagerColumn("modelText", $m("MyInitiateItemsTPage.1")));
 		tablePager.addColumn(new TablePagerColumn("processCount", $m("MyInitiateItemsTPage.3"), 80)
 				.setPropertyClass(Integer.class));
 		tablePager.addColumn(new TablePagerColumn("version", $m("MyInitiateItemsTPage.4"), 80));
@@ -88,12 +86,11 @@ public class MyInitiateItemsTPage extends AbstractItemsTPage {
 			final InitiateItem initiateItem = (InitiateItem) dataObject;
 			final Object modelId = initiateItem.getModelId();
 			final ProcessModelBean processModel = mService.getBean(modelId);
-			final ProcessDocument doc = mService.getProcessDocument(processModel);
 			final KVMap row = new KVMap();
 			row.add("modelText", new LinkElement(initiateItem)
 					.setOnclick("$Actions['MyInitiateItemsTPage_startProcess']('modelId=" + modelId
 							+ "');"));
-			row.add("version", doc.getProcessNode().getVersion());
+			row.add("version", processModel.getModelVer());
 			row.add("processCount", processModel.getProcessCount());
 			final StringBuilder sb = new StringBuilder();
 			sb.append(LinkButton.corner($m("MyInitiateItemsTPage.2")).setOnclick(

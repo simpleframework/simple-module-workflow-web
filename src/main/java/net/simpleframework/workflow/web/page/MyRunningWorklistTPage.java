@@ -12,7 +12,6 @@ import net.simpleframework.mvc.IForward;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.BlockElement;
-import net.simpleframework.mvc.common.element.ETextAlign;
 import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.LinkButton;
 import net.simpleframework.mvc.common.element.LinkElement;
@@ -67,8 +66,7 @@ public class MyRunningWorklistTPage extends AbstractWorkitemsTPage {
 				return Option.from(EWorkitemStatus.running, EWorkitemStatus.delegate,
 						EWorkitemStatus.suspended);
 			};
-		}.setPropertyClass(EWorkitemStatus.class).setTextAlign(ETextAlign.left)).addColumn(
-				TablePagerColumn.OPE().setWidth(70));
+		}.setPropertyClass(EWorkitemStatus.class)).addColumn(TablePagerColumn.OPE().setWidth(70));
 
 		// 回退
 		addAjaxRequest(pp, "MyWorklistTPage_fallback").setHandlerMethod("doFallback")

@@ -76,8 +76,8 @@ public class WorkflowMonitorPage extends AbstractWorkflowFormPage {
 		final ProcessBean process = getProcessBean(pp);
 		el.append(
 				SpanElement.SPACE15,
-				SpanElement.strongText(WorkflowUtils.getTitle(process) + " [" + process.getStatus()
-						+ "]"));
+				SpanElement.strongText(WorkflowUtils.getProcessTitle(process) + " ["
+						+ process.getStatus() + "]"));
 		return el;
 	}
 

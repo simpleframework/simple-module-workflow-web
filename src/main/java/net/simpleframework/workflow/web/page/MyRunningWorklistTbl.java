@@ -238,9 +238,9 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 		AbstractElement<?> tEle;
 		final ProcessBean processBean = aService.getProcessBean(activity);
 		if (receiving) {
-			tEle = new SpanElement(WorkflowUtils.getTitle(processBean));
+			tEle = new SpanElement(WorkflowUtils.getProcessTitle(processBean));
 		} else {
-			tEle = new LinkElement(WorkflowUtils.getTitle(processBean)).setStrong(
+			tEle = new LinkElement(WorkflowUtils.getProcessTitle(processBean)).setStrong(
 					!workitem.isReadMark()).setOnclick(
 					"$Actions.loc('" + uFactory.getUrl(cp, WorkflowFormPage.class, workitem) + "');");
 		}
