@@ -6,8 +6,6 @@ import net.simpleframework.module.common.web.page.AbstractMgrTPage;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.SpanElement;
-import net.simpleframework.mvc.common.element.TabButton;
-import net.simpleframework.mvc.common.element.TabButtons;
 import net.simpleframework.workflow.engine.IWorkflowContextAware;
 import net.simpleframework.workflow.engine.impl.WorkflowContext;
 
@@ -49,8 +47,8 @@ public class AbstractWorkflowMgrTPage extends AbstractMgrTPage implements IWorkf
 		return el;
 	}
 
-	@Override
-	public TabButtons getTabButtons(final PageParameter pp) {
-		return TabButtons.of(new TabButton("流程实例"));
-	}
+	// @Override
+	// public TabButtons getTabButtons(final PageParameter pp) {
+	// return TabButtons.of(new TabButton("流程实例"));
+	// }
 }
