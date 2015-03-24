@@ -73,7 +73,7 @@ public class ProcessModelMgrPage extends AbstractWorkflowMgrPage {
 						new TablePagerColumn("version", $m("MyInitiateItemsTPage.4"), 80)
 								.setFilter(false).setTextAlign(ETextAlign.center))
 				.addColumn(TC_CREATEDATE().setFilter(false))
-				.addColumn(TC_STATUS().setFilter(false).setPropertyClass(EProcessModelStatus.class))
+				.addColumn(TC_STATUS().setPropertyClass(EProcessModelStatus.class))
 				.addColumn(TablePagerColumn.OPE().setWidth(90));
 
 		// 删除

@@ -64,11 +64,14 @@ public class ProcessMgrTPage extends AbstractWorkflowMgrTPage {
 		@Override
 		public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
 			final PermissionDept org = getPermissionOrg(cp);
-			if (org != null) {
+			ProcessModelBean pm;
+			if (org != null
+					&& (pm = workflowContext.getProcessModelService()
+							.getBean(cp.getParameter("modelId"))) != null) {
 				final ID orgId = org.getId();
 				cp.addFormParameter("orgId", orgId);
-				return workflowContext.getProcessService().getProcessList(orgId,
-						(ProcessModelBean) null);
+				cp.addFormParameter("modelId", pm.getId());
+				return workflowContext.getProcessService().getProcessList(orgId, pm);
 			}
 			return null;
 		}
