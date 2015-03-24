@@ -32,7 +32,7 @@ public class AbstractWorkflowMgrTPage extends AbstractMgrTPage implements IWorkf
 	@Override
 	public ElementList getLeftElements(final PageParameter pp) {
 		SpanElement oele;
-		final PermissionDept org = getOrg(pp);
+		final PermissionDept org = getPermissionOrg(pp);
 		if (org != null) {
 			oele = new SpanElement(org.getText());
 		} else {

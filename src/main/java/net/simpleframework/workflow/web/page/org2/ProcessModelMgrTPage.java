@@ -75,7 +75,7 @@ public class ProcessModelMgrTPage extends AbstractWorkflowMgrTPage {
 	public static class ProcessModelTbl extends AbstractDbTablePagerHandler {
 		@Override
 		public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
-			final PermissionDept org = getOrg(cp);
+			final PermissionDept org = getPermissionOrg(cp);
 			if (org != null) {
 				final ID orgId = org.getId();
 				cp.addFormParameter("orgId", orgId);
