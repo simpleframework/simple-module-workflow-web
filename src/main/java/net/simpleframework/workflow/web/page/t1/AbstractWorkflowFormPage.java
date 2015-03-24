@@ -47,7 +47,7 @@ public abstract class AbstractWorkflowFormPage extends T1FormTemplatePage implem
 	}
 
 	public LinkButton getBackBtn(final PageParameter pp) {
-		final LinkButton backBtn = backBtn();
+		final LinkButton backBtn = LinkButton.backBtn();
 		final WorkflowUrlsFactory uFactory = ((IWorkflowWebContext) workflowContext).getUrlsFactory();
 		String referer = pp.getRequestHeader("Referer");
 		if (StringUtils.hasText(referer) && referer.contains("/workflow/my/")) {

@@ -9,6 +9,7 @@ import net.simpleframework.ado.query.IDataQuery;
 import net.simpleframework.common.ID;
 import net.simpleframework.ctx.permission.PermissionDept;
 import net.simpleframework.mvc.PageParameter;
+import net.simpleframework.mvc.PageRequestResponse.IVal;
 import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.LinkButton;
 import net.simpleframework.mvc.component.ComponentParameter;
@@ -53,7 +54,13 @@ public class ProcessMgrTPage extends AbstractWorkflowMgrTPage {
 			final String currentVariable) throws IOException {
 		final StringBuilder sb = new StringBuilder();
 		sb.append("<div class='tbar'>");
-		sb.append(ElementList.of(LinkButton.addBtn()));
+		sb.append(ElementList.of(LinkButton.backBtn()));
+		final ProcessModelBean pm = getProcessModel(pp);
+		if (pm != null) {
+			sb.append(pm);
+		}
+		//
+		// sb.append(ElementList.of(LinkButton.addBtn()));
 		sb.append("</div>");
 		sb.append("<div id='idProcessMgrTPage_tbl'>");
 		sb.append("</div>");
@@ -65,12 +72,9 @@ public class ProcessMgrTPage extends AbstractWorkflowMgrTPage {
 		public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
 			final PermissionDept org = getPermissionOrg(cp);
 			ProcessModelBean pm;
-			if (org != null
-					&& (pm = workflowContext.getProcessModelService()
-							.getBean(cp.getParameter("modelId"))) != null) {
+			if (org != null && (pm = getProcessModel(cp)) != null) {
 				final ID orgId = org.getId();
-				cp.addFormParameter("orgId", orgId);
-				cp.addFormParameter("modelId", pm.getId());
+				cp.addFormParameter("orgId", orgId).addFormParameter("modelId", pm.getId());
 				return workflowContext.getProcessService().getProcessList(orgId, pm);
 			}
 			return null;
@@ -81,5 +85,14 @@ public class ProcessMgrTPage extends AbstractWorkflowMgrTPage {
 			// final KVMap kv = new KVMap();
 			return super.getRowData(cp, dataObject);
 		}
+	}
+
+	private static ProcessModelBean getProcessModel(final PageParameter pp) {
+		return pp.getCache("@ProcessModelBean", new IVal<ProcessModelBean>() {
+			@Override
+			public ProcessModelBean get() {
+				return workflowContext.getProcessModelService().getBean(pp.getParameter("modelId"));
+			}
+		});
 	}
 }
