@@ -17,6 +17,7 @@ import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageMapping;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.ButtonElement;
+import net.simpleframework.mvc.common.element.ETextAlign;
 import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.LinkButton;
 import net.simpleframework.mvc.common.element.LinkElement;
@@ -57,15 +58,22 @@ public class ProcessModelMgrPage extends AbstractWorkflowMgrPage {
 		super.onForward(pp);
 
 		final TablePagerBean tablePager = (TablePagerBean) addComponentBean(pp,
-				"ProcessModelMgrPage_tbl", TablePagerBean.class).setShowFilterBar(false).setSort(false)
+				"ProcessModelMgrPage_tbl", TablePagerBean.class).setSort(false)
 				.setPagerBarLayout(EPagerBarLayout.bottom).setContainerId("idProcessModelMgrPage_tbl")
 				.setHandlerClass(ProcessModelTbl.class);
-		tablePager.addColumn(new TablePagerColumn("modelText", $m("ProcessModelMgrPage.0")))
-				.addColumn(new TablePagerColumn("processCount", $m("ProcessModelMgrPage.1"), 60))
-				.addColumn(new TablePagerColumn("userText", $m("ProcessModelMgrPage.2"), 80))
-				.addColumn(new TablePagerColumn("version", $m("MyInitiateItemsTPage.4"), 80))
-				.addColumn(TC_CREATEDATE())
-				.addColumn(TC_STATUS().setPropertyClass(EProcessModelStatus.class))
+		tablePager
+				.addColumn(new TablePagerColumn("modelText", $m("ProcessModelMgrPage.0")))
+				.addColumn(
+						new TablePagerColumn("processCount", $m("ProcessModelMgrPage.1"), 60)
+								.setFilter(false))
+				.addColumn(
+						new TablePagerColumn("userText", $m("ProcessModelMgrPage.2"), 80)
+								.setFilter(false))
+				.addColumn(
+						new TablePagerColumn("version", $m("MyInitiateItemsTPage.4"), 80)
+								.setFilter(false).setTextAlign(ETextAlign.center))
+				.addColumn(TC_CREATEDATE().setFilter(false))
+				.addColumn(TC_STATUS().setFilter(false).setPropertyClass(EProcessModelStatus.class))
 				.addColumn(TablePagerColumn.OPE().setWidth(90));
 
 		// 删除
@@ -133,15 +141,25 @@ public class ProcessModelMgrPage extends AbstractWorkflowMgrPage {
 			final ProcessModelBean processModel = (ProcessModelBean) dataObject;
 			final EProcessModelStatus status = processModel.getStatus();
 			final Object id = processModel.getId();
-			final KVMap row = new KVMap()
-					.add("modelText",
-							new LinkElement(processModel).setHref(url(ProcessMgrPage.class, "modelId="
-									+ id))).add("processCount", processModel.getProcessCount())
+			final LinkElement le = new LinkElement(processModel).setHref(url(ProcessMgrPage.class,
+					"modelId=" + id));
+			if (status != EProcessModelStatus.deploy) {
+				le.setColor("#777");
+			}
+			final KVMap row = new KVMap().add("modelText", le)
+					.add("processCount", processModel.getProcessCount())
 					.add("userText", processModel.getUserText())
+					.add("version", processModel.getModelVer())
 					.add("createDate", processModel.getCreateDate())
-					.add("status", WorkflowUtils.toStatusHTML(cp, status));
+					.add("status", WorkflowUtils.toStatusHTML(cp, status))
+					.add(TablePagerColumn.OPE, toOpeHTML(cp, processModel));
+			return row;
+		}
+
+		protected String toOpeHTML(final ComponentParameter cp, final ProcessModelBean processModel) {
+			final Object id = processModel.getId();
 			final StringBuilder sb = new StringBuilder();
-			if (status == EProcessModelStatus.edit) {
+			if (processModel.getStatus() == EProcessModelStatus.edit) {
 				final EProcessModelStatus deploy = EProcessModelStatus.deploy;
 				sb.append(new ButtonElement(deploy)
 						.setOnclick("$Actions['AbstractWorkflowMgrPage_status']('modelId=" + id + "&op="
@@ -151,8 +169,7 @@ public class ProcessModelMgrPage extends AbstractWorkflowMgrPage {
 						"$Actions['AbstractWorkflowMgrPage_update_log']('modelId=" + id + "');"));
 			}
 			sb.append(SpanElement.SPACE).append(AbstractTablePagerSchema.IMG_DOWNMENU);
-			row.add(TablePagerColumn.OPE, sb.toString());
-			return row;
+			return sb.toString();
 		}
 
 		@Override

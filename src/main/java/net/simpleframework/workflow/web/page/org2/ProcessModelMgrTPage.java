@@ -6,11 +6,13 @@ import java.io.IOException;
 import java.util.Map;
 
 import net.simpleframework.ado.query.IDataQuery;
+import net.simpleframework.common.Convert;
 import net.simpleframework.common.ID;
 import net.simpleframework.common.coll.KVMap;
 import net.simpleframework.ctx.permission.PermissionDept;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.ButtonElement;
+import net.simpleframework.mvc.common.element.ETextAlign;
 import net.simpleframework.mvc.common.element.LinkElement;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.ui.pager.EPagerBarLayout;
@@ -35,17 +37,24 @@ public class ProcessModelMgrTPage extends AbstractWorkflowMgrTPage {
 		super.onForward(pp);
 
 		final TablePagerBean tablePager = (TablePagerBean) addTablePagerBean(pp,
-				"ProcessModelMgrTPage_tbl").setShowFilterBar(false).setSort(false)
-				.setPagerBarLayout(EPagerBarLayout.bottom).setPageItems(30)
-				.setContainerId("idProcessModelMgrTPage_tbl").setHandlerClass(ProcessModelTbl.class);
+				"ProcessModelMgrTPage_tbl").setSort(false).setPagerBarLayout(EPagerBarLayout.bottom)
+				.setPageItems(30).setContainerId("idProcessModelMgrTPage_tbl")
+				.setHandlerClass(ProcessModelTbl.class);
 		tablePager
 				.addColumn(new TablePagerColumn("modelText", $m("ProcessModelMgrPage.0")))
-				.addColumn(new TablePagerColumn("processCount", $m("ProcessModelMgrPage.1"), 60))
-				.addColumn(new TablePagerColumn("userText", $m("ProcessModelMgrPage.2"), 80))
-				.addColumn(new TablePagerColumn("version", $m("MyInitiateItemsTPage.4"), 80))
-				.addColumn(AbstractWorkflowMgrPage.TC_CREATEDATE())
 				.addColumn(
-						AbstractWorkflowMgrPage.TC_STATUS().setPropertyClass(EProcessModelStatus.class))
+						new TablePagerColumn("processCount", $m("ProcessModelMgrPage.1"), 60)
+								.setFilter(false))
+				.addColumn(
+						new TablePagerColumn("userText", $m("ProcessModelMgrPage.2"), 80)
+								.setFilter(false))
+				.addColumn(
+						new TablePagerColumn("version", $m("MyInitiateItemsTPage.4"), 80).setTextAlign(
+								ETextAlign.center).setFilter(false))
+				.addColumn(AbstractWorkflowMgrPage.TC_CREATEDATE().setFilter(false))
+				.addColumn(
+						AbstractWorkflowMgrPage.TC_STATUS().setFilter(false)
+								.setPropertyClass(EProcessModelStatus.class))
 				.addColumn(TablePagerColumn.OPE().setWidth(100));
 		// if (pp.getLogin().isManager())
 		// tablePager);
@@ -78,12 +87,17 @@ public class ProcessModelMgrTPage extends AbstractWorkflowMgrTPage {
 		@Override
 		protected Map<String, Object> getRowData(final ComponentParameter cp, final Object dataObject) {
 			final ProcessModelBean pm = (ProcessModelBean) dataObject;
+			final EProcessModelStatus status = pm.getStatus();
 			final KVMap row = new KVMap();
-			row.put("modelText", new LinkElement(pm));
-			row.put("createDate", pm.getCreateDate());
-			row.put("userText", pm.getUserText());
-			row.put("status", WorkflowUtils.toStatusHTML(cp, pm.getStatus()));
-			row.add(TablePagerColumn.OPE, toOpeHTML(cp, pm));
+			final LinkElement le = new LinkElement(pm);
+			if (status != EProcessModelStatus.deploy) {
+				le.setColor("#777");
+			}
+			row.add("modelText", le).add("createDate", pm.getCreateDate())
+					.add("processCount", Convert.toInt(pm.getAttr("processcount2")))
+					.add("userText", pm.getUserText()).add("version", pm.getModelVer())
+					.add("status", WorkflowUtils.toStatusHTML(cp, status))
+					.add(TablePagerColumn.OPE, toOpeHTML(cp, pm));
 			return row;
 		}
 
