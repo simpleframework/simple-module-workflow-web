@@ -7,6 +7,7 @@ import java.util.Map;
 
 import net.simpleframework.ado.query.IDataQuery;
 import net.simpleframework.common.ID;
+import net.simpleframework.common.StringUtils;
 import net.simpleframework.common.coll.KVMap;
 import net.simpleframework.ctx.permission.PermissionDept;
 import net.simpleframework.mvc.PageParameter;
@@ -94,9 +95,11 @@ public class ProcessMgrTPage extends AbstractWorkflowMgrTPage {
 		protected Map<String, Object> getRowData(final ComponentParameter cp, final Object dataObject) {
 			final ProcessBean process = (ProcessBean) dataObject;
 			final Object id = process.getId();
-			final KVMap row = new KVMap().add("title",
-					new LinkElement(WorkflowUtils.getProcessTitle(process)).setHref(getUrlsFactory()
-							.getUrl(cp, ActivityMgrTPage.class, "processId=" + id)));
+			final KVMap row = new KVMap().add(
+					"title",
+					new LinkElement(WorkflowUtils.getProcessTitle(process)).setHref(
+							getUrlsFactory().getUrl(cp, ActivityMgrTPage.class, "processId=" + id))
+							.setColor_gray(!StringUtils.hasText(process.getTitle())));
 			return row;
 		}
 	}

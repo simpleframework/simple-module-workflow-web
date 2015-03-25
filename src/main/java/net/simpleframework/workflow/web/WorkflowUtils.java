@@ -33,10 +33,7 @@ public abstract class WorkflowUtils implements IWorkflowServiceAware {
 
 	public static String getProcessTitle(final ProcessBean process) {
 		final String title = process.getTitle();
-		if (StringUtils.hasText(title)) {
-			return title;
-		}
-		return $m("WorkflowUtils.0");
+		return StringUtils.hasText(title) ? title : $m("WorkflowUtils.0");
 	}
 
 	public static ButtonElement createLogButton() {

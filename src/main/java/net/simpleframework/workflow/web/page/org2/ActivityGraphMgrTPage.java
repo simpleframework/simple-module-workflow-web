@@ -1,5 +1,7 @@
 package net.simpleframework.workflow.web.page.org2;
 
+import net.simpleframework.mvc.PageParameter;
+
 /**
  * Licensed under the Apache License, Version 2.0
  * 
@@ -8,4 +10,7 @@ package net.simpleframework.workflow.web.page.org2;
  */
 public class ActivityGraphMgrTPage extends ActivityMgrTPage {
 
+	@Override
+	protected void addComponents(final PageParameter pp) {
+	}
 }

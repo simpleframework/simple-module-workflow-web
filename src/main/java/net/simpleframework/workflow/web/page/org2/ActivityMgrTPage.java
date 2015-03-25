@@ -9,10 +9,12 @@ import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.PageRequestResponse.IVal;
 import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.LinkButton;
+import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.common.element.TabButton;
 import net.simpleframework.mvc.common.element.TabButtons;
 import net.simpleframework.workflow.engine.ProcessBean;
 import net.simpleframework.workflow.web.WorkflowUrlsFactory;
+import net.simpleframework.workflow.web.WorkflowUtils;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -21,6 +23,25 @@ import net.simpleframework.workflow.web.WorkflowUrlsFactory;
  *         http://www.simpleframework.net
  */
 public class ActivityMgrTPage extends AbstractWorkflowMgrTPage {
+
+	@Override
+	protected void onForward(final PageParameter pp) {
+		super.onForward(pp);
+		addComponents(pp);
+	}
+
+	protected void addComponents(final PageParameter pp) {
+	}
+
+	@Override
+	protected SpanElement createOrgElement(final PageParameter pp) {
+		final SpanElement oele = super.createOrgElement(pp);
+		final ProcessBean process = getProcessBean(pp);
+		if (process != null) {
+			oele.setText(oele.getText() + " - " + WorkflowUtils.getProcessTitle(process));
+		}
+		return oele;
+	}
 
 	@Override
 	protected String toHtml(final PageParameter pp, final Map<String, Object> variables,

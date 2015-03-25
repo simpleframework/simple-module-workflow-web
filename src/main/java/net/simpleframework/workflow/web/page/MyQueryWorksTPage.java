@@ -118,10 +118,7 @@ public class MyQueryWorksTPage extends AbstractItemsTPage {
 			} else {
 				le = new SpanElement(title);
 			}
-			if (!StringUtils.hasText(process.getTitle())) {
-				le.setColor("#aaa");
-			}
-			t.append(le);
+			t.append(le.setColor_gray(!StringUtils.hasText(process.getTitle())));
 
 			row.add("title", t.toString()).add("userText", process.getUserText())
 					.add("createDate", process.getCreateDate())

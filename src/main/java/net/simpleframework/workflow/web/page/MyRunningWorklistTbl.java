@@ -244,10 +244,7 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 					!workitem.isReadMark()).setOnclick(
 					"$Actions.loc('" + uFactory.getUrl(cp, WorkflowFormPage.class, workitem) + "');");
 		}
-		if (!StringUtils.hasText(processBean.getTitle())) {
-			tEle.setColor("#aaa");
-		}
-		title.append(tEle);
+		title.append(tEle.setColor_gray(!StringUtils.hasText(processBean.getTitle())));
 
 		row.add("title", title.toString()).add("userFrom", WorkflowUtils.getUserFrom(activity))
 				.add("userTo", WorkflowUtils.getUserTo(activity));
