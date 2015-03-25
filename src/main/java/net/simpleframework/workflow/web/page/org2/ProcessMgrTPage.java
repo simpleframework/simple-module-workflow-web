@@ -7,18 +7,23 @@ import java.util.Map;
 
 import net.simpleframework.ado.query.IDataQuery;
 import net.simpleframework.common.ID;
+import net.simpleframework.common.coll.KVMap;
 import net.simpleframework.ctx.permission.PermissionDept;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.PageRequestResponse.IVal;
 import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.LinkButton;
+import net.simpleframework.mvc.common.element.LinkElement;
+import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.ui.pager.EPagerBarLayout;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
 import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
 import net.simpleframework.mvc.component.ui.pager.db.AbstractDbTablePagerHandler;
 import net.simpleframework.workflow.engine.EProcessStatus;
+import net.simpleframework.workflow.engine.ProcessBean;
 import net.simpleframework.workflow.engine.ProcessModelBean;
+import net.simpleframework.workflow.web.WorkflowUtils;
 import net.simpleframework.workflow.web.page.t1.AbstractWorkflowMgrPage;
 
 /**
@@ -50,17 +55,22 @@ public class ProcessMgrTPage extends AbstractWorkflowMgrTPage {
 	}
 
 	@Override
+	protected SpanElement createOrgElement(final PageParameter pp) {
+		final SpanElement oele = super.createOrgElement(pp);
+		final ProcessModelBean pm = getProcessModel(pp);
+		if (pm != null) {
+			oele.setText(oele.getText() + " - " + pm.getModelText());
+		}
+		return oele;
+	}
+
+	@Override
 	protected String toHtml(final PageParameter pp, final Map<String, Object> variables,
 			final String currentVariable) throws IOException {
 		final StringBuilder sb = new StringBuilder();
 		sb.append("<div class='tbar'>");
-		sb.append(ElementList.of(LinkButton.backBtn()));
-		final ProcessModelBean pm = getProcessModel(pp);
-		if (pm != null) {
-			sb.append(pm);
-		}
-		//
-		// sb.append(ElementList.of(LinkButton.addBtn()));
+		sb.append(ElementList.of(LinkButton.backBtn().setOnclick(
+				"$Actions.loc('" + getUrlsFactory().getUrl(pp, ProcessModelMgrTPage.class) + "')")));
 		sb.append("</div>");
 		sb.append("<div id='idProcessMgrTPage_tbl'>");
 		sb.append("</div>");
@@ -82,8 +92,12 @@ public class ProcessMgrTPage extends AbstractWorkflowMgrTPage {
 
 		@Override
 		protected Map<String, Object> getRowData(final ComponentParameter cp, final Object dataObject) {
-			// final KVMap kv = new KVMap();
-			return super.getRowData(cp, dataObject);
+			final ProcessBean process = (ProcessBean) dataObject;
+			final Object id = process.getId();
+			final KVMap row = new KVMap().add("title",
+					new LinkElement(WorkflowUtils.getProcessTitle(process)).setHref(getUrlsFactory()
+							.getUrl(cp, ActivityMgrTPage.class, "processId=" + id)));
+			return row;
 		}
 	}
 

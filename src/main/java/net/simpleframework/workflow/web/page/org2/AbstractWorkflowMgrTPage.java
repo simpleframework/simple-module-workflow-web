@@ -8,6 +8,8 @@ import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.workflow.engine.IWorkflowContextAware;
 import net.simpleframework.workflow.engine.impl.WorkflowContext;
+import net.simpleframework.workflow.web.IWorkflowWebContext;
+import net.simpleframework.workflow.web.WorkflowUrlsFactory;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -29,8 +31,7 @@ public class AbstractWorkflowMgrTPage extends AbstractMgrTPage implements IWorkf
 		return WorkflowContext.ROLE_WORKFLOW_MANAGER;
 	}
 
-	@Override
-	public ElementList getLeftElements(final PageParameter pp) {
+	protected SpanElement createOrgElement(final PageParameter pp) {
 		SpanElement oele;
 		final PermissionDept org = getPermissionOrg(pp);
 		if (org != null) {
@@ -38,7 +39,12 @@ public class AbstractWorkflowMgrTPage extends AbstractMgrTPage implements IWorkf
 		} else {
 			oele = new SpanElement($m("AbstractMgrTPage.0"));
 		}
-		final ElementList el = ElementList.of(oele.setClassName("org_txt"));
+		return oele;
+	}
+
+	@Override
+	public ElementList getLeftElements(final PageParameter pp) {
+		final ElementList el = ElementList.of(createOrgElement(pp).setClassName("org_txt"));
 		// if (pp.getLogin().isManager()) {
 		// el.append(SpanElement.SPACE).append(
 		// new LinkElement($m("AbstractOrgMgrTPage.4"))
@@ -47,8 +53,7 @@ public class AbstractWorkflowMgrTPage extends AbstractMgrTPage implements IWorkf
 		return el;
 	}
 
-	// @Override
-	// public TabButtons getTabButtons(final PageParameter pp) {
-	// return TabButtons.of(new TabButton("流程实例"));
-	// }
+	protected static WorkflowUrlsFactory getUrlsFactory() {
+		return ((IWorkflowWebContext) workflowContext).getUrlsFactory();
+	}
 }

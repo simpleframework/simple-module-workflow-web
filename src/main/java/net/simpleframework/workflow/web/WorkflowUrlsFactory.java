@@ -13,6 +13,8 @@ import net.simpleframework.workflow.web.page.MyQueryWorks_DeptTPage;
 import net.simpleframework.workflow.web.page.MyQueryWorks_RoleTPage;
 import net.simpleframework.workflow.web.page.MyRunningWorklistTPage;
 import net.simpleframework.workflow.web.page.UserDelegateListTPage;
+import net.simpleframework.workflow.web.page.org2.ActivityGraphMgrTPage;
+import net.simpleframework.workflow.web.page.org2.ActivityMgrTPage;
 import net.simpleframework.workflow.web.page.org2.ProcessMgrTPage;
 import net.simpleframework.workflow.web.page.org2.ProcessModelMgrTPage;
 import net.simpleframework.workflow.web.page.t1.WorkflowCompleteInfoPage;
@@ -53,6 +55,8 @@ public class WorkflowUrlsFactory extends UrlsCache {
 
 		put(ProcessModelMgrTPage.class);
 		put(ProcessMgrTPage.class);
+		put(ActivityMgrTPage.class);
+		put(ActivityGraphMgrTPage.class);
 	}
 
 	public String getUrl(final PageParameter pp, final Class<? extends AbstractMVCPage> mClass,

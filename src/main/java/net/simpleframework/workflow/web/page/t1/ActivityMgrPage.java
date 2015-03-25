@@ -100,7 +100,7 @@ public class ActivityMgrPage extends AbstractWorkflowMgrPage {
 				createBackButton()
 						.setHref(url(ProcessMgrPage.class, "modelId=" + process.getModelId())),
 				SpanElement.SPACE,
-				LinkButton.of("放弃...").setOnclick(
+				LinkButton.of($m("ActivityMgrPage.9")).setOnclick(
 						"$Actions['ActivityMgrPage_abort2']('processId=" + process.getId() + "');"),
 				SpanElement.SPACE15, SpanElement.strongText(WorkflowUtils.getProcessTitle(process)));
 	}
@@ -109,9 +109,9 @@ public class ActivityMgrPage extends AbstractWorkflowMgrPage {
 	public ElementList getRightElements(final PageParameter pp) {
 		final ProcessBean process = getProcessBean(pp);
 		final Object id = process.getId();
-		return ElementList.of(createTabsElement(pp, TabButtons.of(
-				new TabButton("列表模式", url(ActivityMgrPage.class, "processId=" + id)), new TabButton(
-						"图形模式", url(ActivityGraphMgrPage.class, "processId=" + id)))));
+		return ElementList.of(createTabsElement(pp, TabButtons.of(new TabButton(
+				$m("ActivityMgrPage.7"), url(ActivityMgrPage.class, "processId=" + id)), new TabButton(
+				$m("ActivityMgrPage.8"), url(ActivityGraphMgrPage.class, "processId=" + id)))));
 	}
 
 	@Override

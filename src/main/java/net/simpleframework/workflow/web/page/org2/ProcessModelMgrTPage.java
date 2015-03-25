@@ -21,8 +21,6 @@ import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
 import net.simpleframework.mvc.component.ui.pager.db.AbstractDbTablePagerHandler;
 import net.simpleframework.workflow.engine.EProcessModelStatus;
 import net.simpleframework.workflow.engine.ProcessModelBean;
-import net.simpleframework.workflow.web.IWorkflowWebContext;
-import net.simpleframework.workflow.web.WorkflowUrlsFactory;
 import net.simpleframework.workflow.web.WorkflowUtils;
 import net.simpleframework.workflow.web.page.t1.AbstractWorkflowMgrPage;
 
@@ -90,10 +88,9 @@ public class ProcessModelMgrTPage extends AbstractWorkflowMgrTPage {
 			final ProcessModelBean pm = (ProcessModelBean) dataObject;
 			final EProcessModelStatus status = pm.getStatus();
 			final KVMap row = new KVMap();
-			final WorkflowUrlsFactory urlsFactory = ((IWorkflowWebContext) workflowContext)
-					.getUrlsFactory();
-			final LinkElement le = new LinkElement(pm).setOnclick("$Actions.loc('"
-					+ urlsFactory.getUrl(cp, ProcessMgrTPage.class, "modelId=" + pm.getId()) + "');");
+
+			final LinkElement le = new LinkElement(pm).setHref(getUrlsFactory().getUrl(cp,
+					ProcessMgrTPage.class, "modelId=" + pm.getId()));
 			if (status != EProcessModelStatus.deploy) {
 				le.setColor("#777");
 			}
@@ -107,7 +104,9 @@ public class ProcessModelMgrTPage extends AbstractWorkflowMgrTPage {
 
 		protected String toOpeHTML(final ComponentParameter cp, final ProcessModelBean pm) {
 			final StringBuilder sb = new StringBuilder();
-			sb.append(new ButtonElement("查看实例"));
+			sb.append(new ButtonElement("查看实例").setOnclick("$Actions.loc('"
+					+ getUrlsFactory().getUrl(cp, ProcessMgrTPage.class, "modelId=" + pm.getId())
+					+ "');"));
 			// sb.append(SpanElement.SPACE).append(AbstractTablePagerSchema.IMG_DOWNMENU);
 			return sb.toString();
 		}
