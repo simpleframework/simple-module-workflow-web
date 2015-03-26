@@ -16,6 +16,7 @@ import net.simpleframework.mvc.IForward;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageMapping;
 import net.simpleframework.mvc.PageParameter;
+import net.simpleframework.mvc.common.element.ButtonElement;
 import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.InputElement;
 import net.simpleframework.mvc.common.element.LinkElement;
@@ -55,7 +56,7 @@ public class ProcessMgrPage extends AbstractWorkflowMgrPage {
 				TablePagerBean.class).setPagerBarLayout(EPagerBarLayout.bottom)
 				.setContainerId("idProcessMgrPage_tbl").setHandlerClass(ProcessTbl.class);
 		tablePager.addColumn(TC_TITLE())
-				.addColumn(new TablePagerColumn("userText", $m("ProcessMgrPage.0"), 120))
+				.addColumn(new TablePagerColumn("userText", $m("ProcessMgrPage.0"), 100))
 				.addColumn(TC_CREATEDATE()).addColumn(TC_COMPLETEDATE())
 				.addColumn(TC_STATUS().setPropertyClass(EProcessStatus.class))
 				.addColumn(TablePagerColumn.OPE().setWidth(90));
@@ -117,22 +118,33 @@ public class ProcessMgrPage extends AbstractWorkflowMgrPage {
 		@Override
 		protected Map<String, Object> getRowData(final ComponentParameter cp, final Object dataObject) {
 			final ProcessBean process = (ProcessBean) dataObject;
-			final Object id = process.getId();
 			final EProcessStatus status = process.getStatus();
-			final KVMap row = new KVMap()
-					.add("title",
-							new LinkElement(WorkflowUtils.getProcessTitle(process)).setHref(
-									url(ActivityMgrPage.class, "processId=" + id)).setColor_gray(
-									!StringUtils.hasText(process.getTitle())))
+			final KVMap row = new KVMap().add("title", createTitleElement(cp, process))
 					.add("userText", process.getUserText()).add("createDate", process.getCreateDate())
 					.add("completeDate", process.getCompleteDate())
 					.add("status", WorkflowUtils.toStatusHTML(cp, status));
-			final StringBuilder sb = new StringBuilder();
-			sb.append(WorkflowUtils.createLogButton().setOnclick(
-					"$Actions['AbstractWorkflowMgrPage_update_log']('processId=" + id + "');"));
-			sb.append(SpanElement.SPACE).append(AbstractTablePagerSchema.IMG_DOWNMENU);
-			row.add(TablePagerColumn.OPE, sb.toString());
+			row.add(TablePagerColumn.OPE, toOpeHTML(cp, process));
 			return row;
+		}
+
+		protected LinkElement createTitleElement(final ComponentParameter cp,
+				final ProcessBean process) {
+			return new LinkElement(WorkflowUtils.getProcessTitle(process)).setHref(
+					url(ActivityMgrPage.class, "processId=" + process.getId())).setColor_gray(
+					!StringUtils.hasText(process.getTitle()));
+		}
+
+		protected ButtonElement createLogButton(final ComponentParameter cp, final ProcessBean process) {
+			return WorkflowUtils.createLogButton().setOnclick(
+					"$Actions['AbstractWorkflowMgrPage_update_log']('processId=" + process.getId()
+							+ "');");
+		}
+
+		protected String toOpeHTML(final ComponentParameter cp, final ProcessBean process) {
+			final StringBuilder sb = new StringBuilder();
+			sb.append(createLogButton(cp, process));
+			sb.append(SpanElement.SPACE).append(AbstractTablePagerSchema.IMG_DOWNMENU);
+			return sb.toString();
 		}
 
 		@Override

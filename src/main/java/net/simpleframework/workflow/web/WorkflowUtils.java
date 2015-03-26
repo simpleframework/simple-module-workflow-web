@@ -32,6 +32,9 @@ public abstract class WorkflowUtils implements IWorkflowServiceAware {
 	}
 
 	public static String getProcessTitle(final ProcessBean process) {
+		if (process == null) {
+			return "";
+		}
 		final String title = process.getTitle();
 		return StringUtils.hasText(title) ? title : $m("WorkflowUtils.0");
 	}

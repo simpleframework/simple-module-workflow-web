@@ -1,13 +1,16 @@
 package net.simpleframework.workflow.web.page.org2;
 
 import static net.simpleframework.common.I18n.$m;
+import net.simpleframework.ctx.IModuleRef;
 import net.simpleframework.ctx.permission.PermissionDept;
 import net.simpleframework.module.common.web.page.AbstractMgrTPage;
+import net.simpleframework.mvc.AbstractMVCPage;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.SpanElement;
+import net.simpleframework.mvc.component.base.ajaxrequest.AjaxRequestBean;
+import net.simpleframework.mvc.component.ui.window.WindowBean;
 import net.simpleframework.workflow.engine.IWorkflowContextAware;
-import net.simpleframework.workflow.engine.impl.WorkflowContext;
 import net.simpleframework.workflow.web.IWorkflowWebContext;
 import net.simpleframework.workflow.web.WorkflowUrlsFactory;
 
@@ -24,11 +27,29 @@ public class AbstractWorkflowMgrTPage extends AbstractMgrTPage implements IWorkf
 		super.onForward(pp);
 
 		pp.addImportCSS(AbstractWorkflowMgrTPage.class, "/wfmgrt.css");
+
+		addLogWindowBean(pp);
+	}
+
+	protected WindowBean addLogWindowBean(final PageParameter pp) {
+		final IModuleRef ref = ((IWorkflowWebContext) workflowContext).getLogRef();
+		Class<? extends AbstractMVCPage> lPage;
+		if (ref != null && (lPage = getUpdateLogPage()) != null) {
+			final AjaxRequestBean ajaxRequest = addAjaxRequest(pp,
+					"AbstractWorkflowMgrTPage_update_logPage", lPage);
+			return addWindowBean(pp, "AbstractWorkflowMgrTPage_update_log", ajaxRequest)
+					.setHeight(540).setWidth(864);
+		}
+		return null;
+	}
+
+	protected Class<? extends AbstractMVCPage> getUpdateLogPage() {
+		return null;
 	}
 
 	@Override
 	public String getRole(final PageParameter pp) {
-		return WorkflowContext.ROLE_WORKFLOW_MANAGER;
+		return workflowContext.getModule().getManagerRole();
 	}
 
 	protected SpanElement createOrgElement(final PageParameter pp) {

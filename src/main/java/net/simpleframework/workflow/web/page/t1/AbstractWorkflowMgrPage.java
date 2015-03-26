@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.Map;
 
 import net.simpleframework.ctx.IModuleRef;
+import net.simpleframework.ctx.permission.PermissionConst;
 import net.simpleframework.module.common.web.page.AbstractDescPage;
 import net.simpleframework.mvc.AbstractMVCPage;
 import net.simpleframework.mvc.PageParameter;
@@ -40,30 +41,34 @@ public abstract class AbstractWorkflowMgrPage extends T1ResizedTemplatePage impl
 
 		// status
 		addStatusWindowBean(pp);
-
 		// 查看日志
-		final IModuleRef ref = ((IWorkflowWebContext) workflowContext).getLogRef();
-		Class<? extends AbstractMVCPage> lPage;
-		if (ref != null && (lPage = getUpdateLogPage()) != null) {
-			pp.addComponentBean("AbstractWorkflowMgrPage_update_logPage", AjaxRequestBean.class)
-					.setUrlForward(AbstractMVCPage.url(lPage));
-			pp.addComponentBean("AbstractWorkflowMgrPage_update_log", WindowBean.class)
-					.setContentRef("AbstractWorkflowMgrPage_update_logPage").setHeight(540)
-					.setWidth(864);
-		}
+		addLogWindowBean(pp);
 	}
 
 	@Override
 	public String getRole(final PageParameter pp) {
-		return workflowContext.getModule().getManagerRole();
+		return PermissionConst.ROLE_MANAGER;
+	}
+
+	protected WindowBean addLogWindowBean(final PageParameter pp) {
+		final IModuleRef ref = ((IWorkflowWebContext) workflowContext).getLogRef();
+		Class<? extends AbstractMVCPage> lPage;
+		if (ref != null && (lPage = getUpdateLogPage()) != null) {
+			final AjaxRequestBean ajaxRequest = addAjaxRequest(pp,
+					"AbstractWorkflowMgrPage_update_logPage", lPage);
+			return addWindowBean(pp, "AbstractWorkflowMgrPage_update_log", ajaxRequest).setHeight(540)
+					.setWidth(864);
+		}
+		return null;
 	}
 
 	protected WindowBean addStatusWindowBean(final PageParameter pp) {
 		final Class<? extends AbstractMVCPage> sPage = getStatusDescPage();
 		if (sPage != null) {
-			addAjaxRequest(pp, "AbstractWorkflowMgrPage_status_page", sPage);
-			return addWindowBean(pp, "AbstractWorkflowMgrPage_status")
-					.setContentRef("AbstractWorkflowMgrPage_status_page").setWidth(420).setHeight(240);
+			final AjaxRequestBean ajaxRequest = addAjaxRequest(pp,
+					"AbstractWorkflowMgrPage_status_page", sPage);
+			return addWindowBean(pp, "AbstractWorkflowMgrPage_status", ajaxRequest).setWidth(420)
+					.setHeight(240);
 		}
 		return null;
 	}
