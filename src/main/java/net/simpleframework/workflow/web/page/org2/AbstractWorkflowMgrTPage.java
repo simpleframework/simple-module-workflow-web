@@ -25,10 +25,12 @@ public class AbstractWorkflowMgrTPage extends AbstractMgrTPage implements IWorkf
 	@Override
 	protected void onForward(final PageParameter pp) {
 		super.onForward(pp);
-
 		pp.addImportCSS(AbstractWorkflowMgrTPage.class, "/wfmgrt.css");
 
+		// 查看日志
 		addLogWindowBean(pp);
+		// status
+		addStatusWindowBean(pp);
 	}
 
 	protected WindowBean addLogWindowBean(final PageParameter pp) {
@@ -43,7 +45,22 @@ public class AbstractWorkflowMgrTPage extends AbstractMgrTPage implements IWorkf
 		return null;
 	}
 
+	protected WindowBean addStatusWindowBean(final PageParameter pp) {
+		final Class<? extends AbstractMVCPage> sPage = getStatusDescPage();
+		if (sPage != null) {
+			final AjaxRequestBean ajaxRequest = addAjaxRequest(pp,
+					"AbstractWorkflowMgrTPage_status_page", sPage);
+			return addWindowBean(pp, "AbstractWorkflowMgrTPage_status", ajaxRequest).setWidth(420)
+					.setHeight(240);
+		}
+		return null;
+	}
+
 	protected Class<? extends AbstractMVCPage> getUpdateLogPage() {
+		return null;
+	}
+
+	protected Class<? extends AbstractMVCPage> getStatusDescPage() {
 		return null;
 	}
 

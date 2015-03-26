@@ -9,6 +9,7 @@ import net.simpleframework.ado.query.IDataQuery;
 import net.simpleframework.common.ID;
 import net.simpleframework.ctx.permission.PermissionDept;
 import net.simpleframework.mvc.AbstractMVCPage;
+import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.PageRequestResponse.IVal;
 import net.simpleframework.mvc.common.element.ButtonElement;
@@ -17,6 +18,9 @@ import net.simpleframework.mvc.common.element.LinkButton;
 import net.simpleframework.mvc.common.element.LinkElement;
 import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.component.ComponentParameter;
+import net.simpleframework.mvc.component.ui.menu.MenuBean;
+import net.simpleframework.mvc.component.ui.menu.MenuItem;
+import net.simpleframework.mvc.component.ui.menu.MenuItems;
 import net.simpleframework.mvc.component.ui.pager.EPagerBarLayout;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
 import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
@@ -26,6 +30,7 @@ import net.simpleframework.workflow.engine.ProcessModelBean;
 import net.simpleframework.workflow.web.WorkflowLogRef.ProcessUpdateLogPage;
 import net.simpleframework.workflow.web.page.t1.AbstractWorkflowMgrPage;
 import net.simpleframework.workflow.web.page.t1.ProcessMgrPage.ProcessTbl;
+import net.simpleframework.workflow.web.page.t1.ProcessMgrPage.StatusDescPage;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -58,6 +63,11 @@ public class ProcessMgrTPage extends AbstractWorkflowMgrTPage {
 	@Override
 	protected Class<? extends AbstractMVCPage> getUpdateLogPage() {
 		return ProcessUpdateLogPage.class;
+	}
+
+	@Override
+	protected Class<? extends AbstractMVCPage> getStatusDescPage() {
+		return _StatusDescPage.class;
 	}
 
 	@Override
@@ -109,6 +119,19 @@ public class ProcessMgrTPage extends AbstractWorkflowMgrTPage {
 			return super.createTitleElement(cp, process).setHref(
 					getUrlsFactory().getUrl(cp, ActivityMgrTPage.class, "processId=" + process.getId()));
 		}
+
+		@Override
+		public MenuItems getContextMenu(final ComponentParameter cp, final MenuBean menuBean,
+				final MenuItem menuItem) {
+			return menuItem == null ? MenuItems.of(
+					MenuItem.of($m("AbstractWorkflowMgrPage.1")).setOnclick_act(
+							"AbstractWorkflowMgrTPage_status", "processId", "op=running"),
+					MenuItem.sep(),
+					MenuItem.of($m("AbstractWorkflowMgrPage.0")).setOnclick_act(
+							"AbstractWorkflowMgrTPage_status", "processId", "op=suspended"),
+					MenuItem.of(EProcessStatus.abort.toString()).setOnclick_act("ProcessMgrPage_abort",
+							"processId")) : null;
+		}
 	}
 
 	private static ProcessModelBean getProcessModel(final PageParameter pp) {
@@ -118,5 +141,13 @@ public class ProcessMgrTPage extends AbstractWorkflowMgrTPage {
 				return workflowContext.getProcessModelService().getBean(pp.getParameter("modelId"));
 			}
 		});
+	}
+
+	public static class _StatusDescPage extends StatusDescPage {
+
+		@Override
+		protected JavascriptForward toSavedForward(final ComponentParameter cp) {
+			return new JavascriptForward("$Actions['ProcessMgrTPage_tbl']();");
+		}
 	}
 }

@@ -10,6 +10,7 @@ import net.simpleframework.ado.query.IDataQuery;
 import net.simpleframework.common.Convert;
 import net.simpleframework.common.StringUtils;
 import net.simpleframework.common.coll.KVMap;
+import net.simpleframework.ctx.permission.PermissionConst;
 import net.simpleframework.ctx.trans.Transaction;
 import net.simpleframework.mvc.AbstractMVCPage;
 import net.simpleframework.mvc.IForward;
@@ -62,7 +63,7 @@ public class ProcessMgrPage extends AbstractWorkflowMgrPage {
 				.addColumn(TablePagerColumn.OPE().setWidth(90));
 
 		// 删除
-		addDeleteAjaxRequest(pp);
+		addDeleteAjaxRequest(pp).setRole(PermissionConst.ROLE_MANAGER);
 
 		// 放弃
 		addAjaxRequest(pp, "ProcessMgrPage_abort_page", ProcessAbortPage.class);
@@ -150,7 +151,7 @@ public class ProcessMgrPage extends AbstractWorkflowMgrPage {
 		@Override
 		public MenuItems getContextMenu(final ComponentParameter cp, final MenuBean menuBean,
 				final MenuItem menuItem) {
-			return MenuItems.of(
+			return menuItem == null ? MenuItems.of(
 					MenuItem.of($m("AbstractWorkflowMgrPage.1")).setOnclick_act(
 							"AbstractWorkflowMgrPage_status", "processId", "op=running"),
 					MenuItem.sep(),
@@ -158,7 +159,8 @@ public class ProcessMgrPage extends AbstractWorkflowMgrPage {
 							"AbstractWorkflowMgrPage_status", "processId", "op=suspended"),
 					MenuItem.of(EProcessStatus.abort.toString()).setOnclick_act("ProcessMgrPage_abort",
 							"processId"), MenuItem.sep(),
-					MenuItem.itemDelete().setOnclick_act("AbstractWorkflowMgrPage_del", "processId"));
+					MenuItem.itemDelete().setOnclick_act("AbstractWorkflowMgrPage_del", "processId"))
+					: null;
 		}
 
 		@Override
@@ -200,7 +202,13 @@ public class ProcessMgrPage extends AbstractWorkflowMgrPage {
 					pService.doResume(process);
 				}
 			}
-			return super.onSave(cp).append("$Actions['ProcessMgrPage_tbl']();");
+			final JavascriptForward js = toSavedForward(cp);
+			js.append(super.onSave(cp));
+			return js;
+		}
+
+		protected JavascriptForward toSavedForward(final ComponentParameter cp) {
+			return new JavascriptForward("$Actions['ProcessMgrPage_tbl']();");
 		}
 	}
 
