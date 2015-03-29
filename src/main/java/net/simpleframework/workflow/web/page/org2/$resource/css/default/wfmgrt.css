@@ -8,6 +8,7 @@
 }
 
 #idProcessMgrTPage_tbl,
-#idProcessModelMgrTPage_tbl {
+#idProcessModelMgrTPage_tbl,
+#idActivityMgrTPage_tbl {
   padding: 8px;
 }

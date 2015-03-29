@@ -5,7 +5,6 @@ import static net.simpleframework.common.I18n.$m;
 import java.io.IOException;
 import java.util.Map;
 
-import net.simpleframework.common.ID;
 import net.simpleframework.mvc.PageMapping;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.ElementList;
@@ -48,12 +47,11 @@ public class WorkflowMonitorPage extends AbstractWorkflowFormPage {
 		addWindowBean(pp, "WorkflowMonitorPage_workitems")
 				.setContentRef("WorkflowMonitorPage_workitems_page").setWidth(800).setHeight(480);
 
-		pp.putParameter("processId", getProcessId(pp)).putParameter("tab", 1);
-	}
-
-	protected ID getProcessId(final PageParameter pp) {
 		final WorkitemBean workitem = WorkflowUtils.getWorkitemBean(pp);
-		return aService.getBean(workitem.getActivityId()).getProcessId();
+		if (workitem != null) {
+			pp.putParameter("processId", workitem.getProcessId());
+		}
+		pp.putParameter("tab", 1);
 	}
 
 	protected TablePagerBean addTablePagerBean(final PageParameter pp) {
@@ -73,7 +71,7 @@ public class WorkflowMonitorPage extends AbstractWorkflowFormPage {
 	@Override
 	public ElementList getLeftElements(final PageParameter pp) {
 		final ElementList el = super.getLeftElements(pp);
-		final ProcessBean process = getProcessBean(pp);
+		final ProcessBean process = WorkflowUtils.getProcessBean(pp);
 		el.append(
 				SpanElement.SPACE15,
 				SpanElement.strongText(WorkflowUtils.getProcessTitle(process) + " ["
@@ -120,7 +118,6 @@ public class WorkflowMonitorPage extends AbstractWorkflowFormPage {
 	}
 
 	public static class _ActivityTbl extends ActivityTbl {
-
 		@Override
 		protected LinkElement createUserNodeLE(final ActivityBean activity) {
 			return new LinkElement(activity)
@@ -138,9 +135,5 @@ public class WorkflowMonitorPage extends AbstractWorkflowFormPage {
 				final MenuItem menuItem) {
 			return null;
 		}
-	}
-
-	protected static ProcessBean getProcessBean(final PageParameter pp) {
-		return getCacheBean(pp, pService, "processId");
 	}
 }

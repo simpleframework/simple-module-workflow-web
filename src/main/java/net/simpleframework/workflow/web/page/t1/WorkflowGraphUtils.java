@@ -36,7 +36,10 @@ import com.mxgraph.view.mxGraph;
  */
 public abstract class WorkflowGraphUtils implements IWorkflowServiceAware {
 
-	static String toGraphHTML(final PageParameter pp, final ProcessBean process) {
+	public static String toGraphHTML(final PageParameter pp, final ProcessBean process) {
+		if (process == null) {
+			return "";
+		}
 		final mxGraph graph = GraphUtils.createGraph(pService.getProcessDocument(process));
 		final List<ActivityBean> list = aService.getActivities(process);
 		final Map<String, Boolean> state = new HashMap<String, Boolean>();

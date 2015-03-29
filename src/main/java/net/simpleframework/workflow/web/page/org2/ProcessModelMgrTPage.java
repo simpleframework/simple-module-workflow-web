@@ -78,7 +78,7 @@ public class ProcessModelMgrTPage extends AbstractWorkflowMgrTPage {
 			if (org != null) {
 				final ID orgId = org.getId();
 				cp.addFormParameter("orgId", orgId);
-				return workflowContext.getProcessModelService().getModelListByDomain(orgId);
+				return mService.getModelListByDomain(orgId);
 			}
 			return null;
 		}

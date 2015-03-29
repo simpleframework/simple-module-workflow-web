@@ -163,7 +163,7 @@ public class MyQueryWorksTPage extends AbstractItemsTPage {
 		@Override
 		public String getTitle(final PageParameter pp) {
 			String t = $m("MyQueryWorksTPage.1");
-			final ProcessBean process = pService.getBean(pp.getParameter("processId"));
+			final ProcessBean process = WorkflowUtils.getProcessBean(pp);
 			if (process != null) {
 				t += " - " + process.getTitle();
 			}
@@ -175,12 +175,11 @@ public class MyQueryWorksTPage extends AbstractItemsTPage {
 
 		@Override
 		public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
-			final String pid = cp.getParameter("processId");
-			final ProcessBean process = pService.getBean(pid);
+			final ProcessBean process = WorkflowUtils.getProcessBean(cp);
 			if (process == null) {
 				return DataQueryUtils.nullQuery();
 			}
-			cp.addFormParameter("processId", pid);
+			cp.addFormParameter("processId", process.getId());
 			return new ListDataQuery<WorkitemBean>(wService.getWorkitems(process, cp.getLoginId()));
 		}
 

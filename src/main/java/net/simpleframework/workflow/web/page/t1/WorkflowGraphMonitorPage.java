@@ -11,6 +11,7 @@ import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
 import net.simpleframework.workflow.engine.ActivityBean;
 import net.simpleframework.workflow.engine.ProcessBean;
+import net.simpleframework.workflow.web.WorkflowUtils;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -48,7 +49,7 @@ public class WorkflowGraphMonitorPage extends WorkflowMonitorPage {
 
 	@Override
 	protected String toMonitorHTML(final PageParameter pp) {
-		final ProcessBean process = pService.getBean(getProcessId(pp));
+		final ProcessBean process = WorkflowUtils.getProcessBean(pp);
 		return WorkflowGraphUtils.toGraphHTML(pp, process);
 	}
 
@@ -56,7 +57,7 @@ public class WorkflowGraphMonitorPage extends WorkflowMonitorPage {
 
 		@Override
 		public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
-			final ProcessBean process = getProcessBean(cp);
+			final ProcessBean process = WorkflowUtils.getProcessBean(cp);
 			if (process != null) {
 				cp.addFormParameter("processId", process.getId());
 			}

@@ -13,6 +13,7 @@ import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
 import net.simpleframework.workflow.engine.ActivityBean;
 import net.simpleframework.workflow.engine.ProcessBean;
+import net.simpleframework.workflow.web.WorkflowUtils;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -42,7 +43,7 @@ public class ActivityGraphMgrPage extends ActivityMgrPage {
 	protected String toHtml(final PageParameter pp, final Map<String, Object> variables,
 			final String variable) throws IOException {
 		final StringBuilder sb = new StringBuilder();
-		final String gHTML = WorkflowGraphUtils.toGraphHTML(pp, getProcessBean(pp));
+		final String gHTML = WorkflowGraphUtils.toGraphHTML(pp, WorkflowUtils.getProcessBean(pp));
 		sb.append("<div align='center' class='ActivityMgrPage'>");
 		sb.append(" <div class='tb'>").append(gHTML).append("</div>");
 		sb.append("</div>");
@@ -53,7 +54,7 @@ public class ActivityGraphMgrPage extends ActivityMgrPage {
 
 		@Override
 		public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
-			final ProcessBean process = getProcessBean(cp);
+			final ProcessBean process = WorkflowUtils.getProcessBean(cp);
 			if (process != null) {
 				cp.addFormParameter("processId", process.getId());
 			}

@@ -7,10 +7,10 @@ import java.util.Set;
 
 import net.simpleframework.common.StringUtils;
 import net.simpleframework.mvc.PageParameter;
+import net.simpleframework.mvc.PageRequestResponse.IVal;
 import net.simpleframework.mvc.common.element.ButtonElement;
 import net.simpleframework.mvc.common.element.ImageElement;
 import net.simpleframework.mvc.common.element.SpanElement;
-import net.simpleframework.mvc.template.AbstractTemplatePage;
 import net.simpleframework.workflow.engine.ActivityBean;
 import net.simpleframework.workflow.engine.EWorkitemStatus;
 import net.simpleframework.workflow.engine.IWorkflowServiceAware;
@@ -26,10 +26,6 @@ import net.simpleframework.workflow.web.page.AbstractItemsTPage;
  *         http://www.simpleframework.net
  */
 public abstract class WorkflowUtils implements IWorkflowServiceAware {
-
-	public static WorkitemBean getWorkitemBean(final PageParameter pp) {
-		return AbstractTemplatePage.getCacheBean(pp, wService, "workitemId");
-	}
 
 	public static String getProcessTitle(final ProcessBean process) {
 		if (process == null) {
@@ -108,5 +104,23 @@ public abstract class WorkflowUtils implements IWorkflowServiceAware {
 			}
 		}
 		return userFrom;
+	}
+
+	public static WorkitemBean getWorkitemBean(final PageParameter pp) {
+		return pp.getCache("@WorkitemBean", new IVal<WorkitemBean>() {
+			@Override
+			public WorkitemBean get() {
+				return wService.getBean(pp.getParameter("workitemId"));
+			}
+		});
+	}
+
+	public static ProcessBean getProcessBean(final PageParameter pp) {
+		return pp.getCache("@ProcessBean", new IVal<ProcessBean>() {
+			@Override
+			public ProcessBean get() {
+				return pService.getBean(pp.getParameter("processId"));
+			}
+		});
 	}
 }

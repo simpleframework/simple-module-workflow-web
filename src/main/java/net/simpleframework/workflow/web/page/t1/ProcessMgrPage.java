@@ -215,7 +215,7 @@ public class ProcessMgrPage extends AbstractWorkflowMgrPage {
 	public static class ProcessAbortPage extends AbstractAbortPage {
 
 		public IForward doOk(final ComponentParameter cp) {
-			final ProcessBean process = pService.getBean(cp.getParameter("processId"));
+			final ProcessBean process = WorkflowUtils.getProcessBean(cp);
 			pService.doAbort(process,
 					Convert.toEnum(EProcessAbortPolicy.class, cp.getParameter("abort_policy")));
 			return new JavascriptForward(

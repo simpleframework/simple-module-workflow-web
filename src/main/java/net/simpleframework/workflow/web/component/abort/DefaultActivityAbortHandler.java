@@ -8,6 +8,7 @@ import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.workflow.engine.ActivityBean;
 import net.simpleframework.workflow.engine.IWorkflowServiceAware;
 import net.simpleframework.workflow.engine.ProcessBean;
+import net.simpleframework.workflow.web.WorkflowUtils;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -20,11 +21,8 @@ public class DefaultActivityAbortHandler extends AbstractComponentHandler implem
 
 	@Override
 	public List<ActivityBean> getActivities(final ComponentParameter cp) {
-		final ProcessBean process = pService.getBean(cp.getParameter("processId"));
-		if (process != null) {
-			return workflowContext.getActivityService().getActivities(process);
-		}
-		return null;
+		final ProcessBean process = WorkflowUtils.getProcessBean(cp);
+		return process != null ? workflowContext.getActivityService().getActivities(process) : null;
 	}
 
 	@Override

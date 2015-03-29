@@ -95,7 +95,7 @@ public class ActivityMgrPage extends AbstractWorkflowMgrPage {
 
 	@Override
 	public ElementList getLeftElements(final PageParameter pp) {
-		final ProcessBean process = getProcessBean(pp);
+		final ProcessBean process = WorkflowUtils.getProcessBean(pp);
 		return ElementList.of(
 				createBackButton()
 						.setHref(url(ProcessMgrPage.class, "modelId=" + process.getModelId())),
@@ -107,7 +107,7 @@ public class ActivityMgrPage extends AbstractWorkflowMgrPage {
 
 	@Override
 	public ElementList getRightElements(final PageParameter pp) {
-		final ProcessBean process = getProcessBean(pp);
+		final ProcessBean process = WorkflowUtils.getProcessBean(pp);
 		final Object id = process.getId();
 		return ElementList.of(createTabsElement(pp, TabButtons.of(new TabButton(
 				$m("ActivityMgrPage.7"), url(ActivityMgrPage.class, "processId=" + id)), new TabButton(
@@ -143,11 +143,14 @@ public class ActivityMgrPage extends AbstractWorkflowMgrPage {
 
 		@Override
 		public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
-			final ProcessBean process = getProcessBean(cp);
-			cp.addFormParameter("processId", process.getId());
-			final List<ActivityBean> list = toTreeList(aService.getActivities(process));
-			setRelativeDate(cp, list);
-			return new ListDataQuery<ActivityBean>(list);
+			final ProcessBean process = WorkflowUtils.getProcessBean(cp);
+			if (process != null) {
+				cp.addFormParameter("processId", process.getId());
+				final List<ActivityBean> list = toTreeList(aService.getActivities(process));
+				setRelativeDate(cp, list);
+				return new ListDataQuery<ActivityBean>(list);
+			}
+			return null;
 		}
 
 		protected List<ActivityBean> toTreeList(final List<ActivityBean> list) {
@@ -322,34 +325,30 @@ public class ActivityMgrPage extends AbstractWorkflowMgrPage {
 		}
 	}
 
-	static ProcessBean getProcessBean(final PageParameter pp) {
-		return getCacheBean(pp, pService, "processId");
-	}
-
-	static TablePagerColumn TC_TASKNODE() {
+	public static TablePagerColumn TC_TASKNODE() {
 		return new TablePagerColumn("tasknode", $m("ActivityMgrPage.1")).setFilterSort(false);
 	}
 
-	static TablePagerColumn TC_PREVIOUS() {
+	public static TablePagerColumn TC_PREVIOUS() {
 		return new TablePagerColumn("previous", $m("ActivityMgrPage.2"), 115).setFilterSort(false);
 	}
 
-	static TablePagerColumn TC_PARTICIPANTS() {
+	public static TablePagerColumn TC_PARTICIPANTS() {
 		return new TablePagerColumn("participants", $m("ActivityMgrPage.3"), 115).setNowrap(false)
 				.setFilterSort(false);
 	}
 
-	static TablePagerColumn TC_PARTICIPANTS2() {
+	public static TablePagerColumn TC_PARTICIPANTS2() {
 		return new TablePagerColumn("participants2", $m("ActivityMgrPage.4"), 115).setNowrap(false)
 				.setFilterSort(false);
 	}
 
-	static TablePagerColumn TC_TIMEOUT() {
+	public static TablePagerColumn TC_TIMEOUT() {
 		return new TablePagerColumn("timeoutDate", $m("ActivityMgrPage.5"), 105).setPropertyClass(
 				Date.class).setFilter(false);
 	}
 
-	static TablePagerColumn TC_RELATIVEDATE() {
+	public static TablePagerColumn TC_RELATIVEDATE() {
 		return new TablePagerColumn("relativeDate", $m("ActivityMgrPage.6"), 70).setFilter(false);
 	}
 }

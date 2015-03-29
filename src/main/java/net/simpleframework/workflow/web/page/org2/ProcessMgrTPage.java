@@ -101,7 +101,7 @@ public class ProcessMgrTPage extends AbstractWorkflowMgrTPage {
 			if (org != null && (pm = getProcessModel(cp)) != null) {
 				final ID orgId = org.getId();
 				cp.addFormParameter("orgId", orgId).addFormParameter("modelId", pm.getId());
-				return workflowContext.getProcessService().getProcessList(orgId, pm);
+				return pService.getProcessList(orgId, pm);
 			}
 			return null;
 		}
@@ -138,7 +138,7 @@ public class ProcessMgrTPage extends AbstractWorkflowMgrTPage {
 		return pp.getCache("@ProcessModelBean", new IVal<ProcessModelBean>() {
 			@Override
 			public ProcessModelBean get() {
-				return workflowContext.getProcessModelService().getBean(pp.getParameter("modelId"));
+				return mService.getBean(pp.getParameter("modelId"));
 			}
 		});
 	}
