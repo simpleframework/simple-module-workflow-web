@@ -130,7 +130,7 @@ public abstract class WorkflowGraphUtils implements IWorkflowServiceAware {
 				"WorkflowGraphMonitorPage_svg.html");
 	}
 
-	static boolean isVML(final PageParameter pp) {
+	public static boolean isVML(final PageParameter pp) {
 		Float ver;
 		return (ver = pp.getIEVersion()) != null && ver <= 8.0;
 	}

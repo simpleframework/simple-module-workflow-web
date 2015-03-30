@@ -37,6 +37,7 @@ import net.simpleframework.workflow.engine.EProcessStatus;
 import net.simpleframework.workflow.engine.IWorkflowContext;
 import net.simpleframework.workflow.engine.ProcessBean;
 import net.simpleframework.workflow.engine.ProcessModelBean;
+import net.simpleframework.workflow.web.IWorkflowWebContext;
 import net.simpleframework.workflow.web.WorkflowLogRef.ProcessUpdateLogPage;
 import net.simpleframework.workflow.web.WorkflowUtils;
 
@@ -91,7 +92,9 @@ public class ProcessMgrPage extends AbstractWorkflowMgrPage {
 
 	@Override
 	public ElementList getLeftElements(final PageParameter pp) {
-		return ElementList.of(createBackButton().setHref(url(ProcessModelMgrPage.class)));
+		return ElementList.of(createBackButton().setHref(
+				((IWorkflowWebContext) workflowContext).getUrlsFactory().getUrl(pp,
+						ProcessModelMgrPage.class)));
 	}
 
 	@Override

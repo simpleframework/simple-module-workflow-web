@@ -17,6 +17,7 @@ import net.simpleframework.workflow.web.page.org2.ActivityGraphMgrTPage;
 import net.simpleframework.workflow.web.page.org2.ActivityMgrTPage;
 import net.simpleframework.workflow.web.page.org2.ProcessMgrTPage;
 import net.simpleframework.workflow.web.page.org2.ProcessModelMgrTPage;
+import net.simpleframework.workflow.web.page.t1.ProcessModelMgrPage;
 import net.simpleframework.workflow.web.page.t1.WorkflowCompleteInfoPage;
 import net.simpleframework.workflow.web.page.t1.WorkflowFormPage;
 import net.simpleframework.workflow.web.page.t1.WorkflowGraphMonitorPage;
@@ -47,6 +48,8 @@ public class WorkflowUrlsFactory extends UrlsCache {
 		put(MyQueryWorksTPage.class, MyQueryWorksPage.class);
 		put(MyQueryWorks_DeptTPage.class, MyQueryWorks_DeptPage.class);
 		put(MyQueryWorks_RoleTPage.class, MyQueryWorks_RolePage.class);
+
+		put(ProcessModelMgrPage.class);
 
 		put(WorkflowFormPage.class);
 		put(WorkflowCompleteInfoPage.class);
