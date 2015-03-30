@@ -53,6 +53,10 @@ import net.simpleframework.workflow.web.WorkflowUtils;
 @PageMapping(url = "/workflow/mgr/model")
 public class ProcessModelMgrPage extends AbstractWorkflowMgrPage {
 
+	protected Class<?> getTableHandler(final PageParameter pp) {
+		return ProcessModelTbl.class;
+	}
+
 	@Override
 	protected void onForward(final PageParameter pp) {
 		super.onForward(pp);
@@ -60,7 +64,7 @@ public class ProcessModelMgrPage extends AbstractWorkflowMgrPage {
 		final TablePagerBean tablePager = (TablePagerBean) addComponentBean(pp,
 				"ProcessModelMgrPage_tbl", TablePagerBean.class).setSort(false)
 				.setPagerBarLayout(EPagerBarLayout.bottom).setContainerId("idProcessModelMgrPage_tbl")
-				.setHandlerClass(ProcessModelTbl.class);
+				.setHandlerClass(getTableHandler(pp));
 		tablePager
 				.addColumn(new TablePagerColumn("modelText", $m("ProcessModelMgrPage.0")))
 				.addColumn(
