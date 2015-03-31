@@ -53,18 +53,27 @@ import net.simpleframework.workflow.web.WorkflowUtils;
 @PageMapping(url = "/workflow/mgr/model")
 public class ProcessModelMgrPage extends AbstractWorkflowMgrPage {
 
-	protected Class<?> getTableHandler(final PageParameter pp) {
-		return ProcessModelTbl.class;
-	}
-
 	@Override
 	protected void onForward(final PageParameter pp) {
 		super.onForward(pp);
 
+		addTablePagerBean(pp);
+		// 删除
+		addDeleteAjaxRequest(pp);
+
+		// 上传模型文件
+		addComponentBean(pp, "ProcessModelMgrPage_upload_page", AttachmentBean.class)
+				.setShowSubmit(true).setShowEdit(false).setHandlerClass(ModelUploadAction.class);
+		addComponentBean(pp, "ProcessModelMgrPage_upload", WindowBean.class)
+				.setContentRef("ProcessModelMgrPage_upload_page").setTitle($m("ProcessModelMgrPage.3"))
+				.setHeight(480).setWidth(400);
+	}
+
+	protected TablePagerBean addTablePagerBean(final PageParameter pp) {
 		final TablePagerBean tablePager = (TablePagerBean) addComponentBean(pp,
 				"ProcessModelMgrPage_tbl", TablePagerBean.class).setSort(false)
 				.setPagerBarLayout(EPagerBarLayout.bottom).setContainerId("idProcessModelMgrPage_tbl")
-				.setHandlerClass(getTableHandler(pp));
+				.setHandlerClass(ProcessModelTbl.class);
 		tablePager
 				.addColumn(new TablePagerColumn("modelText", $m("ProcessModelMgrPage.0")))
 				.addColumn(
@@ -79,16 +88,7 @@ public class ProcessModelMgrPage extends AbstractWorkflowMgrPage {
 				.addColumn(TC_CREATEDATE().setFilter(false))
 				.addColumn(TC_STATUS().setPropertyClass(EProcessModelStatus.class))
 				.addColumn(TablePagerColumn.OPE().setWidth(90));
-
-		// 删除
-		addDeleteAjaxRequest(pp);
-
-		// 上传模型文件
-		addComponentBean(pp, "ProcessModelMgrPage_upload_page", AttachmentBean.class)
-				.setShowSubmit(true).setShowEdit(false).setHandlerClass(ModelUploadAction.class);
-		addComponentBean(pp, "ProcessModelMgrPage_upload", WindowBean.class)
-				.setContentRef("ProcessModelMgrPage_upload_page").setTitle($m("ProcessModelMgrPage.3"))
-				.setHeight(480).setWidth(400);
+		return tablePager;
 	}
 
 	@Transaction(context = IWorkflowContext.class)
