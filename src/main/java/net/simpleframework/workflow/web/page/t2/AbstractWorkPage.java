@@ -15,6 +15,7 @@ import net.simpleframework.workflow.web.page.MyQueryWorksTPage;
 import net.simpleframework.workflow.web.page.MyQueryWorks_DeptTPage;
 import net.simpleframework.workflow.web.page.MyQueryWorks_RoleTPage;
 import net.simpleframework.workflow.web.page.MyRunningWorklistTPage;
+import net.simpleframework.workflow.web.page.MyWorkviewsTPage;
 import net.simpleframework.workflow.web.page.UserDelegateListTPage;
 
 /**
@@ -101,6 +102,14 @@ public abstract class AbstractWorkPage extends T2TemplatePage {
 		@Override
 		protected Class<? extends AbstractItemsTPage> getWorkTPageClass() {
 			return MyQueryWorks_RoleTPage.class;
+		}
+	}
+
+	@PageMapping(url = "/workflow/my/views")
+	public static class MyWorkviewsPage extends AbstractWorkPage {
+		@Override
+		protected Class<? extends AbstractItemsTPage> getWorkTPageClass() {
+			return MyWorkviewsTPage.class;
 		}
 	}
 }

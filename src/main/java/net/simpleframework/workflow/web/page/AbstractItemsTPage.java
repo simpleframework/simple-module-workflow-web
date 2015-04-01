@@ -62,7 +62,7 @@ public abstract class AbstractItemsTPage extends Category_ListPage implements IW
 
 	public CategoryItem createCategoryItem_mywork(final PageParameter pp) {
 		final CategoryItem item = createCategoryItem(pp, $m("AbstractItemsTPage.0"),
-				MyRunningWorklistTPage.class).setIconClass("my_work_icon");
+				MyRunningWorklistTPage.class).setIconClass("my_work_icon");// .setIconClass("my_work_icon")
 		final int count = wService.getUnreadWorklist(pp.getLoginId()).getCount();
 		if (count > 0) {
 			item.setNum(new SupElement(count).setHighlight(true));
@@ -72,12 +72,12 @@ public abstract class AbstractItemsTPage extends Category_ListPage implements IW
 
 	public CategoryItem createCategoryItem_mywork_complete(final PageParameter pp) {
 		return createCategoryItem(pp, $m("AbstractItemsTPage.1"), MyFinalWorklistTPage.class)
-				.setIconClass("my_work_complete_icon");
+				.setIconClass("my_work_complete_icon");// .setIconClass("my_work_complete_icon")
 	}
 
 	public CategoryItem createCategoryItem_delegate(final PageParameter pp) {
 		final CategoryItem delegate = createCategoryItem(pp, $m("AbstractItemsTPage.3"),
-				MyDelegateListTPage.class).setIconClass("delegate_list_icon");
+				MyDelegateListTPage.class).setIconClass("my_work_complete_icon");// .setIconClass("delegate_list_icon")
 		delegate.setSelected(delegate.isSelected()
 				|| UserDelegateListTPage.class == getOriginalClass());
 		return delegate;
@@ -85,27 +85,28 @@ public abstract class AbstractItemsTPage extends Category_ListPage implements IW
 
 	public CategoryItem createCategoryItem_myinitiate(final PageParameter pp) {
 		return createCategoryItem(pp, $m("AbstractItemsTPage.2"), MyInitiateItemsTPage.class)
-				.setIconClass("my_initiate_icon");
+				.setIconClass("my_work_complete_icon");// .setIconClass("my_initiate_icon")
 	}
 
 	public CategoryItem createCategoryItem_queryworks(final PageParameter pp) {
 		return createCategoryItem(pp, $m("AbstractItemsTPage.4"), MyQueryWorksTPage.class)
-				.setIconClass("my_initiate_icon");
+				.setIconClass("my_work_complete_icon");// .setIconClass("my_initiate_icon")
+	}
+
+	public CategoryItem createCategoryItem_myWorkviews(final PageParameter pp) {
+		return createCategoryItem(pp, $m("AbstractItemsTPage.5"), MyWorkviewsTPage.class)
+				.setIconClass("my_work_icon");
 	}
 
 	@Override
 	protected CategoryItems getCategoryList(final PageParameter pp) {
 		final CategoryItem item0 = createCategoryItem_mywork(pp);
-		// final String s = pp.getParameter("s");
 		final List<CategoryItem> children = item0.getChildren();
-		// children.add(createCategoryItem(pp, "待办工作",
-		// MyRunningWorklistTPage.class,
-		// "status=running")
-		// .setSelected("running".equals(_status)));
-		// .setSelected("complete".equals(s))
+		children.add(createCategoryItem_myinitiate(pp));
 		children.add(createCategoryItem_mywork_complete(pp));
-		return CategoryItems.of(item0, createCategoryItem_myinitiate(pp),
-				createCategoryItem_delegate(pp), createCategoryItem_queryworks(pp));
+		children.add(createCategoryItem_delegate(pp));
+		children.add(createCategoryItem_queryworks(pp));
+		return CategoryItems.of(createCategoryItem_myWorkviews(pp), item0);
 	}
 
 	protected static WorkflowUrlsFactory getUrlsFactory() {

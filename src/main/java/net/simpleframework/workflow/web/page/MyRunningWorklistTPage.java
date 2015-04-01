@@ -183,6 +183,8 @@ public class MyRunningWorklistTPage extends AbstractWorkitemsTPage {
 	@Override
 	public ElementList getLeftElements(final PageParameter pp) {
 		return ElementList.of(
+				LinkButton.of($m("MyRunningWorklistTPage.12")).setHref(
+						getUrlsFactory().getUrl(pp, MyInitiateItemsTPage.class)), SpanElement.SPACE,
 				LinkButton.menu($m("MyRunningWorklistTbl.6")).setId("idMyWorklistTPage_markMenu"),
 				LinkButton.menu($m("MyRunningWorklistTbl.14")).setId("idMyWorklistTPage_viewMenu"),
 				SpanElement.SPACE,
