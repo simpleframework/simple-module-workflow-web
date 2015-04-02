@@ -104,9 +104,15 @@ public class MyRunningWorklistTPage extends AbstractWorkitemsTPage {
 		mb = createViewMenuComponent(pp);
 		mb.addItem(
 				MyRunningWorklistTbl.MENU_VIEW_ALL().setOnclick(
-						"$Actions['MyWorklistTPage_tbl']('v=');")).addItem(
-				MyRunningWorklistTbl.MENU_MARK_UNREAD().setOnclick(
-						"$Actions['MyWorklistTPage_tbl']('v=unread');"));
+						"$Actions['MyWorklistTPage_tbl']('v=');"))
+				.addItem(
+						MyRunningWorklistTbl.MENU_MARK_UNREAD().setOnclick(
+								"$Actions['MyWorklistTPage_tbl']('v=unread');"))
+				.addItem(MenuItem.sep())
+				.addItem(
+						MenuItem.of($m("AbstractItemsTPage.4")).setOnclick(
+								"$Actions.loc('" + getUrlsFactory().getUrl(pp, MyQueryWorksTPage.class)
+										+ "');"));
 
 		// 委托菜单
 		mb = createDelegateMenuComponent(pp);
