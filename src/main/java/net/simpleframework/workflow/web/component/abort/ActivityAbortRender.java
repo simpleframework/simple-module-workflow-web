@@ -13,12 +13,12 @@ import net.simpleframework.workflow.web.component.complete.WorkitemCompleteRende
 public class ActivityAbortRender extends WorkitemCompleteRender {
 
 	@Override
-	protected String _params(final ComponentParameter cp) {
+	protected String getParams(final ComponentParameter cp) {
 		return ActivityAbortUtils.BEAN_ID + "=" + cp.hashId();
 	}
 
 	@Override
-	protected String _actpath(final ComponentParameter cp) {
+	protected String getActionPath(final ComponentParameter cp) {
 		return ComponentUtils.getResourceHomePath(ActivityAbortBean.class)
 				+ "/jsp/activity_abort.jsp";
 	}
