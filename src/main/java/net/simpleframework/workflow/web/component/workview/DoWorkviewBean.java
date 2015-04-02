@@ -1,5 +1,6 @@
 package net.simpleframework.workflow.web.component.workview;
 
+import net.simpleframework.common.StringUtils;
 import net.simpleframework.mvc.component.AbstractComponentBean;
 
 /**
@@ -9,4 +10,10 @@ import net.simpleframework.mvc.component.AbstractComponentBean;
  *         http://www.simpleframework.net
  */
 public class DoWorkviewBean extends AbstractComponentBean {
+
+	@Override
+	public String getHandlerClass() {
+		final String sClass = super.getHandlerClass();
+		return StringUtils.hasText(sClass) ? sClass : DefaultDoWorkviewHandler.class.getName();
+	}
 }
