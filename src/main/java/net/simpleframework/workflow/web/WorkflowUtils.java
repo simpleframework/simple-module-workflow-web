@@ -6,8 +6,8 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 import net.simpleframework.common.StringUtils;
+import net.simpleframework.common.object.ObjectEx.IVal;
 import net.simpleframework.mvc.PageParameter;
-import net.simpleframework.mvc.PageRequestResponse.IVal;
 import net.simpleframework.mvc.common.element.ButtonElement;
 import net.simpleframework.mvc.common.element.ImageElement;
 import net.simpleframework.mvc.common.element.SpanElement;
@@ -67,23 +67,18 @@ public abstract class WorkflowUtils implements IWorkflowServiceAware {
 	}
 
 	public static String getUserTo(final ActivityBean activity) {
-		if (activity == null) {
-			return null;
-		}
-		final String key = "to_" + activity.getId();
-		String userTo = (String) activity.getAttr(key);
-		if (userTo == null) {
-			final Set<String> list = new LinkedHashSet<String>();
-			for (final ActivityBean nextActivity : aService.getNextActivities(activity)) {
-				for (final WorkitemBean workitem : wService.getWorkitems(nextActivity)) {
-					list.add(workitem.getUserText());
+		return activity.getAttrCache("to_" + activity.getId(), new IVal<String>() {
+			@Override
+			public String get() {
+				final Set<String> list = new LinkedHashSet<String>();
+				for (final ActivityBean nextActivity : aService.getNextActivities(activity)) {
+					for (final WorkitemBean workitem : wService.getWorkitems(nextActivity)) {
+						list.add(workitem.getUserText());
+					}
 				}
+				return list.size() > 0 ? StringUtils.join(list, ", ") : null;
 			}
-			if (list.size() > 0) {
-				activity.setAttr(key, userTo = StringUtils.join(list, ", "));
-			}
-		}
-		return userTo;
+		});
 	}
 
 	public static String getUserFrom(final ActivityBean activity) {
@@ -91,23 +86,21 @@ public abstract class WorkflowUtils implements IWorkflowServiceAware {
 		if (preActivity == null) {
 			return null;
 		}
-		final String key = "from_" + preActivity.getId();
-		String userFrom = (String) activity.getAttr(key);
-		if (userFrom == null) {
-			final Set<String> list = new LinkedHashSet<String>();
-			for (final WorkitemBean workitem : wService.getWorkitems(preActivity,
-					EWorkitemStatus.complete)) {
-				list.add(workitem.getUserText());
+		return activity.getAttrCache("from_" + preActivity.getId(), new IVal<String>() {
+			@Override
+			public String get() {
+				final Set<String> list = new LinkedHashSet<String>();
+				for (final WorkitemBean workitem : wService.getWorkitems(preActivity,
+						EWorkitemStatus.complete)) {
+					list.add(workitem.getUserText());
+				}
+				return list.size() > 0 ? StringUtils.join(list, ", ") : null;
 			}
-			if (list.size() > 0) {
-				activity.setAttr(key, userFrom = StringUtils.join(list, ", "));
-			}
-		}
-		return userFrom;
+		});
 	}
 
 	public static WorkitemBean getWorkitemBean(final PageParameter pp) {
-		return pp.getCache("@WorkitemBean", new IVal<WorkitemBean>() {
+		return pp.getRequestCache("@WorkitemBean", new IVal<WorkitemBean>() {
 			@Override
 			public WorkitemBean get() {
 				return wService.getBean(pp.getParameter("workitemId"));
@@ -116,7 +109,7 @@ public abstract class WorkflowUtils implements IWorkflowServiceAware {
 	}
 
 	public static ProcessBean getProcessBean(final PageParameter pp) {
-		return pp.getCache("@ProcessBean", new IVal<ProcessBean>() {
+		return pp.getRequestCache("@ProcessBean", new IVal<ProcessBean>() {
 			@Override
 			public ProcessBean get() {
 				return pService.getBean(pp.getParameter("processId"));

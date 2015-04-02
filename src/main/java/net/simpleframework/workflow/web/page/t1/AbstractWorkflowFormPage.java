@@ -37,7 +37,7 @@ public abstract class AbstractWorkflowFormPage extends T1FormTemplatePage implem
 
 	protected IWorkflowWebForm getWorkflowForm(final PageParameter pp) {
 		final WorkitemBean workitem = WorkflowUtils.getWorkitemBean(pp);
-		return (IWorkflowWebForm) aService.getWorkflowForm(wService.getActivity(workitem));
+		return (IWorkflowWebForm) aService.getWorkitemForm(wService.getActivity(workitem));
 	}
 
 	@Override

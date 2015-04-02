@@ -8,7 +8,6 @@ import net.simpleframework.common.Convert;
 import net.simpleframework.ctx.trans.Transaction;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageParameter;
-import net.simpleframework.mvc.PageRequestResponse.IVal;
 import net.simpleframework.mvc.common.element.AbstractElement;
 import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.Icon;
@@ -124,7 +123,7 @@ public abstract class AbstractWorkflowFormTPage extends FormTableRowTemplatePage
 	}
 
 	protected ProcessBean getProcess(final PageParameter pp) {
-		return pp.getCache("$ProcessBean", new IVal<ProcessBean>() {
+		return pp.getRequestCache("$ProcessBean", new IVal<ProcessBean>() {
 			@Override
 			public ProcessBean get() {
 				return aService.getProcessBean(getActivityBean(pp));
@@ -133,7 +132,7 @@ public abstract class AbstractWorkflowFormTPage extends FormTableRowTemplatePage
 	}
 
 	protected ProcessModelBean getProcessModel(final PageParameter pp) {
-		return pp.getCache("$ProcessModelBean", new IVal<ProcessModelBean>() {
+		return pp.getRequestCache("$ProcessModelBean", new IVal<ProcessModelBean>() {
 			@Override
 			public ProcessModelBean get() {
 				return mService.getBean(getProcess(pp).getModelId());
@@ -236,7 +235,7 @@ public abstract class AbstractWorkflowFormTPage extends FormTableRowTemplatePage
 		if (null == workitem) {
 			return null;
 		}
-		return pp.getCache("$ActivityBean", new IVal<ActivityBean>() {
+		return pp.getRequestCache("$ActivityBean", new IVal<ActivityBean>() {
 			@Override
 			public ActivityBean get() {
 				return wService.getActivity(workitem);
@@ -249,7 +248,7 @@ public abstract class AbstractWorkflowFormTPage extends FormTableRowTemplatePage
 		if (null == workitem) {
 			return null;
 		}
-		return pp.getCache("$ProcessNode", new IVal<ProcessNode>() {
+		return pp.getRequestCache("$ProcessNode", new IVal<ProcessNode>() {
 			@Override
 			public ProcessNode get() {
 				return pService.getProcessDocument(getProcess(pp)).getProcessNode();
@@ -261,7 +260,7 @@ public abstract class AbstractWorkflowFormTPage extends FormTableRowTemplatePage
 		if (null == getActivityBean(pp)) {
 			return null;
 		}
-		return pp.getCache("$TaskNode", new IVal<AbstractTaskNode>() {
+		return pp.getRequestCache("$TaskNode", new IVal<AbstractTaskNode>() {
 			@Override
 			public AbstractTaskNode get() {
 				return aService.getTaskNode(getActivityBean(pp));

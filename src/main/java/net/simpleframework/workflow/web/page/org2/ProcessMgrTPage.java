@@ -11,7 +11,6 @@ import net.simpleframework.ctx.permission.PermissionDept;
 import net.simpleframework.mvc.AbstractMVCPage;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageParameter;
-import net.simpleframework.mvc.PageRequestResponse.IVal;
 import net.simpleframework.mvc.common.element.ButtonElement;
 import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.LinkButton;
@@ -135,7 +134,7 @@ public class ProcessMgrTPage extends AbstractWorkflowMgrTPage {
 	}
 
 	private static ProcessModelBean getProcessModel(final PageParameter pp) {
-		return pp.getCache("@ProcessModelBean", new IVal<ProcessModelBean>() {
+		return pp.getRequestCache("@ProcessModelBean", new IVal<ProcessModelBean>() {
 			@Override
 			public ProcessModelBean get() {
 				return mService.getBean(pp.getParameter("modelId"));
