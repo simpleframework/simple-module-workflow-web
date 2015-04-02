@@ -67,7 +67,7 @@ public abstract class WorkitemCompleteUtils implements IWorkflowServiceAware {
 				.getBeanProperty("workitemIdParameterName")));
 	}
 
-	public static void doWorkitemComplete(final ComponentParameter cp) throws Exception {
+	public static void doForword(final ComponentParameter cp) throws Exception {
 		JavascriptForward js = new JavascriptForward();
 		try {
 			final WorkitemBean workitem = getWorkitemBean(cp);

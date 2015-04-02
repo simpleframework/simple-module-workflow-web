@@ -43,7 +43,7 @@ public abstract class ActivityAbortUtils implements IWorkflowContextAware {
 		return ComponentParameter.get(request, response, BEAN_ID);
 	}
 
-	public static void doActivityAbort(final ComponentParameter cp) throws IOException {
+	public static void doForword(final ComponentParameter cp) throws IOException {
 		final JavascriptForward js = new JavascriptForward();
 		final Enumeration<String> e = cp.getParameterNames();
 		final StringBuilder sb = new StringBuilder();

@@ -68,8 +68,8 @@ public abstract class StartProcessUtils implements IWorkflowServiceAware {
 		return sb.toString();
 	}
 
-	public static void doStartProcess(final HttpServletRequest request,
-			final HttpServletResponse response) throws IOException {
+	public static void doForword(final HttpServletRequest request, final HttpServletResponse response)
+			throws IOException {
 		final ComponentParameter cp = get(request, response);
 		final JavascriptForward js = new JavascriptForward();
 		final InitiateItem initiateItem = getInitiateItem(cp);

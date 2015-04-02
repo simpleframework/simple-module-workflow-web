@@ -24,4 +24,8 @@ public abstract class DoWorkviewUtils implements IWorkflowContextAware {
 			final HttpServletResponse response) {
 		return ComponentParameter.get(request, response, BEAN_ID);
 	}
+
+	public static void doForword(final ComponentParameter cp) throws Exception {
+
+	}
 }
