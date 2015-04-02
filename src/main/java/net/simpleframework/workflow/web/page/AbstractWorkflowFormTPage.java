@@ -12,6 +12,7 @@ import net.simpleframework.mvc.common.element.AbstractElement;
 import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.Icon;
 import net.simpleframework.mvc.common.element.InputElement;
+import net.simpleframework.mvc.common.element.LinkButton;
 import net.simpleframework.mvc.common.element.RowField;
 import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.common.element.TableRow;
@@ -30,6 +31,7 @@ import net.simpleframework.workflow.engine.ProcessModelBean;
 import net.simpleframework.workflow.engine.WorkitemBean;
 import net.simpleframework.workflow.engine.WorkitemComplete;
 import net.simpleframework.workflow.schema.AbstractTaskNode;
+import net.simpleframework.workflow.schema.ProcessDocument;
 import net.simpleframework.workflow.schema.ProcessNode;
 import net.simpleframework.workflow.web.IWorkflowWebContext;
 import net.simpleframework.workflow.web.IWorkflowWebForm;
@@ -38,6 +40,7 @@ import net.simpleframework.workflow.web.component.comments.IWfCommentHandler;
 import net.simpleframework.workflow.web.component.comments.WfCommentBean;
 import net.simpleframework.workflow.web.component.comments.WfCommentUtils;
 import net.simpleframework.workflow.web.component.complete.WorkitemCompleteBean;
+import net.simpleframework.workflow.web.component.workview.DoWorkviewBean;
 import net.simpleframework.workflow.web.page.t1.WorkflowCompleteInfoPage;
 import net.simpleframework.workflow.web.page.t1.WorkflowFormPage;
 
@@ -78,6 +81,10 @@ public abstract class AbstractWorkflowFormTPage extends FormTableRowTemplatePage
 				"_isSendAction=false");
 	}
 
+	protected DoWorkviewBean addDoWorkviewBean(final PageParameter pp) {
+		return addComponentBean(pp, "AbstractWorkflowFormPage_doWorkview", DoWorkviewBean.class);
+	}
+
 	protected WfCommentBean addWfCommentBean(final PageParameter pp) {
 		return addComponentBean(pp, "AbstractWorkflowFormPage_wfComment", WfCommentBean.class)
 				.setEditable(!isReadonly(getWorkitemBean(pp)));
@@ -91,7 +98,7 @@ public abstract class AbstractWorkflowFormTPage extends FormTableRowTemplatePage
 
 	@Transaction(context = IWorkflowContext.class)
 	public void onSaveForm(final PageParameter pp, final WorkitemBean workitem) {
-		final ProcessBean process = getProcess(pp);
+		final ProcessBean process = getProcessBean(pp);
 		pService.doUpdateTitle(process, pp.getParameter(getP() + "topic"));
 
 		// 添加了评论
@@ -122,20 +129,11 @@ public abstract class AbstractWorkflowFormTPage extends FormTableRowTemplatePage
 						WorkflowFormPage.class, workitem)).append("');");
 	}
 
-	protected ProcessBean getProcess(final PageParameter pp) {
-		return pp.getRequestCache("$ProcessBean", new IVal<ProcessBean>() {
-			@Override
-			public ProcessBean get() {
-				return aService.getProcessBean(getActivityBean(pp));
-			}
-		});
-	}
-
 	protected ProcessModelBean getProcessModel(final PageParameter pp) {
 		return pp.getRequestCache("$ProcessModelBean", new IVal<ProcessModelBean>() {
 			@Override
 			public ProcessModelBean get() {
-				return mService.getBean(getProcess(pp).getModelId());
+				return mService.getBean(getProcessBean(pp).getModelId());
 			}
 		});
 	}
@@ -157,13 +155,19 @@ public abstract class AbstractWorkflowFormTPage extends FormTableRowTemplatePage
 		return el;
 	}
 
-	protected AbstractElement<?> createSaveBtn() {
+	protected AbstractElement<?> createSaveBtn(final PageParameter pp) {
 		return VALIDATION_BTN2($m("AbstractWorkflowFormPage.0")).setOnclick(getSaveAction(null));
 	}
 
-	protected AbstractElement<?> createCompleteBtn() {
+	protected AbstractElement<?> createCompleteBtn(final PageParameter pp) {
 		return VALIDATION_BTN2($m("AbstractWorkflowFormPage.1")).setIconClass(Icon.check).setOnclick(
 				"$Actions['AbstractWorkflowFormPage_completeAction']();");
+	}
+
+	protected AbstractElement<?> createDoWorkviewBtn(final PageParameter pp) {
+		return LinkButton.of($m("AbstractWorkflowFormTPage.1")).setOnclick(
+				"$Actions['AbstractWorkflowFormPage_doWorkview']('workitemId="
+						+ getWorkitemBean(pp).getId() + "');");
 	}
 
 	@Override
@@ -171,7 +175,7 @@ public abstract class AbstractWorkflowFormTPage extends FormTableRowTemplatePage
 		final WorkitemBean workitem = getWorkitemBean(pp);
 		final ElementList el = ElementList.of();
 		if (!isReadonly(workitem)) {
-			el.append(createSaveBtn(), createCompleteBtn());
+			el.append(createSaveBtn(pp), createCompleteBtn(pp));
 		}
 		return el;
 	}
@@ -195,7 +199,7 @@ public abstract class AbstractWorkflowFormTPage extends FormTableRowTemplatePage
 
 	@Override
 	protected TableRows getTableRows(final PageParameter pp) {
-		final ProcessBean process = getProcess(pp);
+		final ProcessBean process = getProcessBean(pp);
 		final TableRow r1 = new TableRow(new RowField($m("AbstractWorkflowFormPage.2"),
 				getInput_topic(pp).setText(process.getTitle())));
 		final TableRow r2 = new TableRow(new RowField($m("AbstractWorkflowFormPage.3"),
@@ -231,35 +235,34 @@ public abstract class AbstractWorkflowFormTPage extends FormTableRowTemplatePage
 	}
 
 	protected ActivityBean getActivityBean(final PageParameter pp) {
-		final WorkitemBean workitem = getWorkitemBean(pp);
-		if (null == workitem) {
-			return null;
-		}
 		return pp.getRequestCache("$ActivityBean", new IVal<ActivityBean>() {
 			@Override
 			public ActivityBean get() {
-				return wService.getActivity(workitem);
+				return wService.getActivity(getWorkitemBean(pp));
+			}
+		});
+	}
+
+	protected ProcessBean getProcessBean(final PageParameter pp) {
+		return pp.getRequestCache("$ProcessBean", new IVal<ProcessBean>() {
+			@Override
+			public ProcessBean get() {
+				return wService.getProcessBean(getWorkitemBean(pp));
 			}
 		});
 	}
 
 	protected ProcessNode getProcessNode(final PageParameter pp) {
-		final WorkitemBean workitem = getWorkitemBean(pp);
-		if (null == workitem) {
-			return null;
-		}
 		return pp.getRequestCache("$ProcessNode", new IVal<ProcessNode>() {
 			@Override
 			public ProcessNode get() {
-				return pService.getProcessDocument(getProcess(pp)).getProcessNode();
+				final ProcessDocument doc = pService.getProcessDocument(getProcessBean(pp));
+				return doc == null ? null : doc.getProcessNode();
 			}
 		});
 	}
 
 	protected AbstractTaskNode getTaskNode(final PageParameter pp) {
-		if (null == getActivityBean(pp)) {
-			return null;
-		}
 		return pp.getRequestCache("$TaskNode", new IVal<AbstractTaskNode>() {
 			@Override
 			public AbstractTaskNode get() {
@@ -268,17 +271,13 @@ public abstract class AbstractWorkflowFormTPage extends FormTableRowTemplatePage
 		});
 	}
 
-	protected String getProcessProperty(final PageParameter pp, final String key) {
-		if (null == getProcessNode(pp)) {
-			return null;
-		}
-		return getProcessNode(pp).getProperty(key);
+	protected String getProcessNodeProperty(final PageParameter pp, final String key) {
+		final ProcessNode node = getProcessNode(pp);
+		return node == null ? null : node.getProperty(key);
 	}
 
 	protected String getTaskNodeProperty(final PageParameter pp, final String key) {
-		if (null == getTaskNode(pp)) {
-			return null;
-		}
-		return getTaskNode(pp).getProperty(key);
+		final AbstractTaskNode node = getTaskNode(pp);
+		return node == null ? null : node.getProperty(key);
 	}
 }

@@ -6,8 +6,10 @@ import java.util.Map;
 
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.BlockElement;
+import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.InputElement;
 import net.simpleframework.mvc.common.element.RowField;
+import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.common.element.TableRow;
 import net.simpleframework.mvc.common.element.TableRows;
 import net.simpleframework.workflow.engine.ProcessBean;
@@ -22,11 +24,17 @@ public class TestForm extends AbstractWorkflowFormTPage {
 		super.onForward(pp);
 
 		addWfCommentBean(pp).setGroupBy(EGroupBy.dept).setContainerId("idTestForm_comments");
+		addDoWorkviewBean(pp);
 	}
 
 	@Override
 	public void onSaveForm(final PageParameter pp, final WorkitemBean workitem) {
 		super.onSaveForm(pp, workitem);
+	}
+
+	@Override
+	public ElementList getRightElements(final PageParameter pp) {
+		return super.getRightElements(pp).append(SpanElement.SPACE).append(createDoWorkviewBtn(pp));
 	}
 
 	@Override
@@ -36,7 +44,7 @@ public class TestForm extends AbstractWorkflowFormTPage {
 
 	@Override
 	protected TableRows getTableRows(final PageParameter pp) {
-		final ProcessBean process = getProcess(pp);
+		final ProcessBean process = getProcessBean(pp);
 		final InputElement wf_days = new InputElement("wf_days");
 		final TableRow r1 = new TableRow(new RowField($m("AbstractWorkflowFormPage.2"),
 				getInput_topic(pp).setText(process.getTitle())),
