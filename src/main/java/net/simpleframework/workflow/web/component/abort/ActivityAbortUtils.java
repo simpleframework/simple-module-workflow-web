@@ -3,7 +3,6 @@ package net.simpleframework.workflow.web.component.abort;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,7 +11,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import net.simpleframework.common.web.JavascriptUtils;
-import net.simpleframework.mvc.IMVCConst;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageRequestResponse;
 import net.simpleframework.mvc.common.element.Checkbox;
@@ -45,20 +43,8 @@ public abstract class ActivityAbortUtils implements IWorkflowContextAware {
 
 	public static void doForword(final ComponentParameter cp) throws IOException {
 		final JavascriptForward js = new JavascriptForward();
-		final Enumeration<String> e = cp.getParameterNames();
-		final StringBuilder sb = new StringBuilder();
-		int i = 0;
-		while (e.hasMoreElements()) {
-			final String key = e.nextElement();
-			if (!IMVCConst.REQUEST_ID.equals(key)) {
-				if (i++ > 0) {
-					sb.append("&");
-				}
-				sb.append(key).append("=").append(cp.getParameter(key));
-			}
-		}
 		js.append("$Actions['").append(cp.getComponentName()).append("_win']('")
-				.append(sb.toString()).append("');");
+				.append(cp.getParamsString()).append("');");
 		final Writer out = cp.getResponseWriter();
 		out.write(JavascriptUtils.wrapFunction(js.toString()));
 		out.flush();
