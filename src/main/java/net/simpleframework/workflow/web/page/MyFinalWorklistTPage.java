@@ -34,7 +34,8 @@ public class MyFinalWorklistTPage extends MyRunningWorklistTPage {
 
 	@Override
 	protected void addComponents(final PageParameter pp) {
-		final TablePagerBean tablePager = addTablePagerBean(pp, MyCompleteWorklistTbl.class);
+		final TablePagerBean tablePager = (TablePagerBean) addTablePagerBean(pp).setHandlerClass(
+				MyCompleteWorklistTbl.class);
 		tablePager.addColumn(TablePagerColumn.ICON().setWidth(18));
 		tablePager.addColumn(TC_TITLE());
 		tablePager.addColumn(new TablePagerColumn("userTo", $m("MyFinalWorklistTPage.0"), 115)

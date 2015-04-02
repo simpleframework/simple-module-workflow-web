@@ -21,7 +21,6 @@ import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.ui.menu.EMenuEvent;
 import net.simpleframework.mvc.component.ui.menu.MenuBean;
 import net.simpleframework.mvc.component.ui.menu.MenuItem;
-import net.simpleframework.mvc.component.ui.pager.ITablePagerHandler;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
 import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
 import net.simpleframework.workflow.engine.DelegationBean;
@@ -47,13 +46,8 @@ public class MyRunningWorklistTPage extends AbstractWorkitemsTPage {
 		addComponents(pp);
 	}
 
-	protected Class<? extends ITablePagerHandler> getWorklistTbl(final PageParameter pp) {
-		return MyRunningWorklistTbl.class;
-	}
-
 	protected void addComponents(final PageParameter pp) {
-		final TablePagerBean tablePager = addTablePagerBean(pp, getWorklistTbl(pp)).setShowCheckbox(
-				true);
+		final TablePagerBean tablePager = addTablePagerBean(pp).setShowCheckbox(true);
 		tablePager.addColumn(TablePagerColumn.ICON().setWidth(18));
 		tablePager.addColumn(TC_TITLE());
 		tablePager.addColumn(new TablePagerColumn("userFrom", $m("MyRunningWorklistTPage.0"), 115)
@@ -132,9 +126,8 @@ public class MyRunningWorklistTPage extends AbstractWorkitemsTPage {
 				"$Actions['MyWorklistTPage_tbl'].doAct('MyWorklistTPage_delete', 'workitemId');"));
 	}
 
-	protected TablePagerBean addTablePagerBean(final PageParameter pp,
-			final Class<? extends ITablePagerHandler> handlerClass) {
-		return super.addTablePagerBean(pp, "MyWorklistTPage_tbl", handlerClass);
+	protected TablePagerBean addTablePagerBean(final PageParameter pp) {
+		return super.addTablePagerBean(pp, "MyWorklistTPage_tbl", MyRunningWorklistTbl.class);
 	}
 
 	@Override
