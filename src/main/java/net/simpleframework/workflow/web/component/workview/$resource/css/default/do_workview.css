@@ -1,0 +1,24 @@
+.workview_select .wv_tt {
+  background-color: #ddd;
+  padding: 4px 8px;
+  border-bottom: 1px solid #999;
+  position: relative;
+}
+
+.workview_select ul.simple_tabs {
+  bottom: 0;
+  float: right;
+  position: absolute;
+  right: 8px;
+}
+
+.workview_select ul.simple_tabs a {
+  background-color: #eee;
+  border-color: #999;
+}
+
+.workview_select ul.simple_tabs a.active {
+  background-image: none;
+  background-color: #fff;
+  border-bottom-color: #fff;
+}

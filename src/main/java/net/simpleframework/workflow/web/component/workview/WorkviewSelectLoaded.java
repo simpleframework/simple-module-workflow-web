@@ -2,6 +2,8 @@ package net.simpleframework.workflow.web.component.workview;
 
 import net.simpleframework.mvc.DefaultPageHandler;
 import net.simpleframework.mvc.PageParameter;
+import net.simpleframework.mvc.component.ComponentParameter;
+import net.simpleframework.mvc.component.ext.userselect.UserSelectBean;
 import net.simpleframework.workflow.engine.IWorkflowServiceAware;
 
 /**
@@ -15,5 +17,10 @@ public class WorkviewSelectLoaded extends DefaultPageHandler implements IWorkflo
 	@Override
 	public void onBeforeComponentRender(final PageParameter pp) {
 		super.onBeforeComponentRender(pp);
+
+		final ComponentParameter nCP = DoWorkviewUtils.get(pp);
+		final String componentName = nCP.getComponentName();
+
+		pp.addComponentBean(componentName + "_userSelect", UserSelectBean.class);
 	}
 }

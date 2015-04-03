@@ -10,6 +10,10 @@ import net.simpleframework.mvc.component.AbstractComponentBean;
  *         http://www.simpleframework.net
  */
 public class DoWorkviewBean extends AbstractComponentBean {
+	@Override
+	public boolean isRunImmediately() {
+		return false;
+	}
 
 	@Override
 	public String getHandlerClass() {
