@@ -9,7 +9,6 @@ import net.simpleframework.ado.query.IDataQuery;
 import net.simpleframework.ado.query.ListDataQuery;
 import net.simpleframework.common.coll.KVMap;
 import net.simpleframework.ctx.IModuleRef;
-import net.simpleframework.mvc.AbstractMVCPage;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.ButtonElement;
 import net.simpleframework.mvc.common.element.ElementList;
@@ -19,7 +18,6 @@ import net.simpleframework.mvc.component.base.ajaxrequest.AjaxRequestBean;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
 import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
 import net.simpleframework.mvc.component.ui.pager.db.AbstractDbTablePagerHandler;
-import net.simpleframework.mvc.component.ui.window.WindowBean;
 import net.simpleframework.mvc.template.lets.OneTableTemplatePage;
 import net.simpleframework.workflow.engine.ActivityBean;
 import net.simpleframework.workflow.engine.EWorkitemStatus;
@@ -59,10 +57,9 @@ public class WorkitemsMgrPage extends OneTableTemplatePage implements IWorkflowS
 		// log
 		final IModuleRef ref = ((IWorkflowWebContext) workflowContext).getLogRef();
 		if (ref != null) {
-			pp.addComponentBean("WorkitemsMgrPage_update_logPage", AjaxRequestBean.class)
-					.setUrlForward(AbstractMVCPage.url(WorkitemUpdateLogPage.class));
-			pp.addComponentBean("WorkitemsMgrPage_update_log", WindowBean.class)
-					.setContentRef("WorkitemsMgrPage_update_logPage").setHeight(540).setWidth(864);
+			final AjaxRequestBean ajaxRequest = addAjaxRequest(pp, "WorkitemsMgrPage_update_logPage",
+					WorkitemUpdateLogPage.class);
+			addWindowBean(pp, "WorkitemsMgrPage_update_log", ajaxRequest).setHeight(540).setWidth(864);
 		}
 	}
 

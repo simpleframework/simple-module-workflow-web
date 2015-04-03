@@ -11,7 +11,6 @@ import net.simpleframework.mvc.common.element.SupElement;
 import net.simpleframework.mvc.component.base.ajaxrequest.AjaxRequestBean;
 import net.simpleframework.mvc.component.ui.pager.ITablePagerHandler;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
-import net.simpleframework.mvc.component.ui.window.WindowBean;
 import net.simpleframework.mvc.template.lets.Category_ListPage;
 import net.simpleframework.mvc.template.struct.CategoryItem;
 import net.simpleframework.mvc.template.struct.CategoryItems;
@@ -35,10 +34,10 @@ public abstract class AbstractItemsTPage extends Category_ListPage implements IW
 		final IModuleRef ref = ((IWorkflowWebContext) workflowContext).getLogRef();
 		Class<? extends AbstractMVCPage> lPage;
 		if (ref != null && (lPage = getUpdateLogPage()) != null) {
-			pp.addComponentBean("AbstractItemsTPage_update_logPage", AjaxRequestBean.class)
-					.setUrlForward(AbstractMVCPage.url(lPage));
-			pp.addComponentBean("AbstractItemsTPage_update_log", WindowBean.class)
-					.setContentRef("AbstractItemsTPage_update_logPage").setHeight(540).setWidth(864);
+			final AjaxRequestBean ajaxRequest = addAjaxRequest(pp,
+					"AbstractItemsTPage_update_logPage", lPage);
+			addWindowBean(pp, "AbstractItemsTPage_update_log", ajaxRequest).setHeight(540).setWidth(
+					864);
 		}
 	}
 
