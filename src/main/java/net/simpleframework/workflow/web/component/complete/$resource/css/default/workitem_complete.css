@@ -3,7 +3,8 @@
   overflow-y: auto;
 }
 
-.simple_window_tcb .b {
+.participant_select .simple_window_tcb .b,
+.transition_select .simple_window_tcb .b {
   padding: 6px 8px 6px 0;
   background-color: #eee;
 }
