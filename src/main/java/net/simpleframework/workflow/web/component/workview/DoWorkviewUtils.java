@@ -46,9 +46,10 @@ public abstract class DoWorkviewUtils implements IWorkflowContextAware {
 		out.flush();
 	}
 
+	static final String SESSION_ULIST = "_ulist";
+
 	public static String toSelectHTML(final ComponentParameter cp) {
 		final String componentName = cp.getComponentName();
-
 		final StringBuilder sb = new StringBuilder();
 		sb.append("<div class='wv_tt'>");
 		sb.append(ElementList.of(
@@ -58,7 +59,14 @@ public abstract class DoWorkviewUtils implements IWorkflowContextAware {
 		sb.append(TabButtons.of(new TabButton($m("DoWorkviewUtils.2"))).toString(cp));
 		sb.append("</div>");
 		sb.append("<div class='wv_cc'>");
+		sb.append(toUserList(cp));
 		sb.append("</div>");
+		return sb.toString();
+	}
+
+	static String toUserList(final ComponentParameter cp) {
+		final StringBuilder sb = new StringBuilder();
+		sb.append("ssss");
 		return sb.toString();
 	}
 }

@@ -36,7 +36,7 @@ public class DoWorkviewRegistry extends AbstractComponentRegistry {
 				AjaxRequestBean.class).setUrlForward(
 				getComponentResourceProvider().getResourceHomePath() + "/jsp/workview_select.jsp");
 		pp.addComponentBean(componentName + "_win", WindowBean.class)
-				.setContentRef(ajaxRequest.getName()).setWidth(320).setHeight(460)
+				.setContentRef(ajaxRequest.getName()).setWidth(340).setHeight(460)
 				.setTitle($m("DoWorkviewRegistry.0"));
 
 		return doWorkview;
