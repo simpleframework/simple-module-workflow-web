@@ -4,19 +4,21 @@ import static net.simpleframework.common.I18n.$m;
 
 import java.io.IOException;
 import java.io.Writer;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import net.simpleframework.common.web.JavascriptUtils;
+import net.simpleframework.ctx.permission.PermissionUser;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageRequestResponse;
+import net.simpleframework.mvc.common.element.ButtonElement;
 import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.LinkButton;
 import net.simpleframework.mvc.common.element.SpanElement;
-import net.simpleframework.mvc.common.element.TabButton;
-import net.simpleframework.mvc.common.element.TabButtons;
 import net.simpleframework.mvc.component.ComponentParameter;
+import net.simpleframework.mvc.ctx.permission.IPagePermissionHandler;
 import net.simpleframework.workflow.engine.IWorkflowContextAware;
 
 /**
@@ -56,17 +58,34 @@ public abstract class DoWorkviewUtils implements IWorkflowContextAware {
 				LinkButton.of($m("DoWorkviewUtils.0")).setOnclick(
 						"$Actions['" + componentName + "_userSelect']();"), SpanElement.SPACE,
 				LinkButton.of($m("DoWorkviewUtils.1"))));
-		sb.append(TabButtons.of(new TabButton($m("DoWorkviewUtils.2"))).toString(cp));
 		sb.append("</div>");
 		sb.append("<div class='wv_cc'>");
 		sb.append(toUserList(cp));
 		sb.append("</div>");
+		sb.append("<div class='wv_bb'>");
+		sb.append(ButtonElement.okBtn().setHighlight(true));
+		sb.append("</div>");
 		return sb.toString();
 	}
 
+	@SuppressWarnings("unchecked")
 	static String toUserList(final ComponentParameter cp) {
 		final StringBuilder sb = new StringBuilder();
-		sb.append("ssss");
+		final Set<String> ulist = (Set<String>) cp.getSessionAttr(SESSION_ULIST);
+		if (ulist != null) {
+			final IPagePermissionHandler permission = cp.getPermission();
+			for (final String id : ulist) {
+				final PermissionUser user = permission.getUser(id);
+				sb.append("<div class='uitem'>");
+				sb.append(" <div>").append(user).append(" (").append(user.getName()).append(")</div>");
+				sb.append(" <div class='dept'>").append(user.getDept()).append("</div>");
+				sb.append(" <div class='act' style='display: none;'>");
+				sb.append("  <span class='del'></span>");
+				sb.append(" </div>");
+				sb.append("</div>");
+			}
+			sb.append("<script type='text/javascript'>DoWorkview_init();</script>");
+		}
 		return sb.toString();
 	}
 }

@@ -81,6 +81,10 @@
   line-height: 2;
 }
 
+.Category_BlankPage .category .c_item {
+  padding-left: 10px;  
+}
+
 .Category_ListPage .tabbtns {
   position: absolute;
   bottom: 0; 

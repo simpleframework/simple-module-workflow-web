@@ -150,7 +150,7 @@ public abstract class AbstractWorkflowFormTPage extends FormTableRowTemplatePage
 		final Date date = (Date) pp.getSessionAttr("time_" + workitem.getId());
 		if (date != null) {
 			el.add(new SpanElement($m("AbstractWorkflowFormTPage.0",
-					Convert.toDateString(date, "HH:mm"))).setColor("green"));
+					Convert.toDateString(date, "HH:mm"))).setStyle("line-height: 2;color: green"));
 		}
 		return el;
 	}

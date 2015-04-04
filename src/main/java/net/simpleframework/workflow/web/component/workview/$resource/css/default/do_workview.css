@@ -5,20 +5,51 @@
   position: relative;
 }
 
-.workview_select ul.simple_tabs {
-  bottom: 0;
-  float: right;
+.workview_select .wv_bb {
   position: absolute;
-  right: 8px;
-}
-
-.workview_select ul.simple_tabs a {
+  text-align: right;
+  padding: 4px 6px;
+  bottom: 0;
+  left: 0;
+  right: 0;
   background-color: #eee;
-  border-color: #999;
+  border-top: 1px solid #aaa;
 }
 
-.workview_select ul.simple_tabs a.active {
-  background-image: none;
-  background-color: #fff;
-  border-bottom-color: #fff;
+.workview_select .uitem {
+  border-bottom: 1px solid #ccc;
+  padding: 4px 8px;
+  font-size: 9.5pt;
+  position: relative;
+}
+
+.workview_select .uitem:hover {
+  background-color: #f5f5f5;
+}
+
+.workview_select .uitem .dept {
+  margin-top: 4px;
+  font-size: 9pt;
+  color: #777;
+}
+
+.workview_select .uitem .act {
+  position: absolute;
+  display: inline-block;
+  right: 6px;
+  top: 6px;
+}
+
+.workview_select .uitem .act .del {
+  display: inline-block;
+  background-repeat: no-repeat;
+  background-position: 0 0;
+  height: 12px;
+  width: 12px;
+  margin-left: 6px;
+  cursor: pointer;
+}
+
+.workview_select .uitem .act .del {
+  background-image: url(images/del.png);
 }

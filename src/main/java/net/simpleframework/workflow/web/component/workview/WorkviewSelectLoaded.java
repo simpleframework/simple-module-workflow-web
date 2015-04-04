@@ -1,6 +1,6 @@
 package net.simpleframework.workflow.web.component.workview;
 
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import net.simpleframework.common.StringUtils;
@@ -43,7 +43,7 @@ public class WorkviewSelectLoaded extends DefaultPageHandler implements IWorkflo
 			final ComponentParameter nCP = DoWorkviewUtils.get(cp);
 			Set<String> ulist = (Set<String>) nCP.getSessionAttr(DoWorkviewUtils.SESSION_ULIST);
 			if (ulist == null) {
-				nCP.setSessionAttr(DoWorkviewUtils.SESSION_ULIST, ulist = new HashSet<String>());
+				nCP.setSessionAttr(DoWorkviewUtils.SESSION_ULIST, ulist = new LinkedHashSet<String>());
 			}
 			final String[] arr = StringUtils.split(nCP.getParameter("userIds"), ";");
 			if (arr != null) {
