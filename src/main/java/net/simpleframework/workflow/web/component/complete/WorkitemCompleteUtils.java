@@ -1,6 +1,5 @@
 package net.simpleframework.workflow.web.component.complete;
 
-import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -31,6 +30,8 @@ import net.simpleframework.workflow.schema.AbstractTaskNode;
 import net.simpleframework.workflow.schema.TransitionNode;
 import net.simpleframework.workflow.schema.UserNode;
 import net.simpleframework.workflow.web.IWorkflowWebForm;
+import net.simpleframework.workflow.web.component.WfComponentUtils;
+import net.simpleframework.workflow.web.component.WfComponentUtils.IJavascriptCallback;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -68,38 +69,41 @@ public abstract class WorkitemCompleteUtils implements IWorkflowServiceAware {
 	}
 
 	public static void doForword(final ComponentParameter cp) throws Exception {
-		JavascriptForward js = new JavascriptForward();
-		try {
-			final WorkitemBean workitem = getWorkitemBean(cp);
-			final WorkitemComplete workitemComplete = WorkitemComplete.get(workitem);
+		WfComponentUtils.doForword(cp, new IJavascriptCallback() {
+			@Override
+			public void doJavascript(final JavascriptForward js) {
+				try {
+					final WorkitemBean workitem = getWorkitemBean(cp);
+					final WorkitemComplete workitemComplete = WorkitemComplete.get(workitem);
 
-			// 绑定变量
-			final IWorkflowWebForm workflowForm = (IWorkflowWebForm) workitemComplete
-					.getWorkflowForm();
-			workflowForm.bindVariables(cp, workitemComplete.getVariables());
+					// 绑定变量
+					final IWorkflowWebForm workflowForm = (IWorkflowWebForm) workitemComplete
+							.getWorkflowForm();
+					workflowForm.bindVariables(cp, workitemComplete.getVariables());
 
-			if (!workitemComplete.isAllCompleted()) {
-				_appendWorkitemComplete(cp, js, workitem);
-			} else {
-				// 是否有手动情况
-				final ActivityComplete activityComplete = getActivityComplete(cp, workitem);
-				activityComplete.reset();
-				if (activityComplete.isTransitionManual()) {
-					js.append("$Actions['").append(cp.getComponentName())
-							.append("_TransitionSelect']('").append(toParams(cp, workitem)).append("');");
-				} else if (activityComplete.isParticipantManual()) {
-					js.append("$Actions['").append(cp.getComponentName())
-							.append("_ParticipantSelect']('").append(toParams(cp, workitem)).append("');");
-				} else {
-					_appendWorkitemComplete(cp, js, workitem);
+					if (!workitemComplete.isAllCompleted()) {
+						_appendWorkitemComplete(cp, js, workitem);
+					} else {
+						// 是否有手动情况
+						final ActivityComplete activityComplete = getActivityComplete(cp, workitem);
+						activityComplete.reset();
+						if (activityComplete.isTransitionManual()) {
+							js.append("$Actions['").append(cp.getComponentName())
+									.append("_TransitionSelect']('").append(toParams(cp, workitem))
+									.append("');");
+						} else if (activityComplete.isParticipantManual()) {
+							js.append("$Actions['").append(cp.getComponentName())
+									.append("_ParticipantSelect']('").append(toParams(cp, workitem))
+									.append("');");
+						} else {
+							_appendWorkitemComplete(cp, js, workitem);
+						}
+					}
+				} catch (final Throwable ex) {
+					js.append(createErrorForward(cp, ex));
 				}
 			}
-		} catch (final Throwable ex) {
-			js = createErrorForward(cp, ex);
-		}
-		final Writer out = cp.getResponseWriter();
-		out.write(JavascriptUtils.wrapFunction(js.toString()));
-		out.flush();
+		});
 	}
 
 	private static void _appendWorkitemComplete(final ComponentParameter cp,

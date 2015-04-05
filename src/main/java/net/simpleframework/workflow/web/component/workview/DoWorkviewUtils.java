@@ -2,14 +2,11 @@ package net.simpleframework.workflow.web.component.workview;
 
 import static net.simpleframework.common.I18n.$m;
 
-import java.io.IOException;
-import java.io.Writer;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import net.simpleframework.common.web.JavascriptUtils;
 import net.simpleframework.ctx.permission.PermissionUser;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageRequestResponse;
@@ -20,6 +17,8 @@ import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.ctx.permission.IPagePermissionHandler;
 import net.simpleframework.workflow.engine.IWorkflowContextAware;
+import net.simpleframework.workflow.web.component.WfComponentUtils;
+import net.simpleframework.workflow.web.component.WfComponentUtils.IJavascriptCallback;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -39,13 +38,14 @@ public abstract class DoWorkviewUtils implements IWorkflowContextAware {
 		return ComponentParameter.get(request, response, BEAN_ID);
 	}
 
-	public static void doForword(final ComponentParameter cp) throws IOException {
-		final JavascriptForward js = new JavascriptForward();
-		js.append("$Actions['").append(cp.getComponentName()).append("_win']('")
-				.append(cp.getParamsString()).append("');");
-		final Writer out = cp.getResponseWriter();
-		out.write(JavascriptUtils.wrapFunction(js.toString()));
-		out.flush();
+	public static void doForword(final ComponentParameter cp) throws Exception {
+		WfComponentUtils.doForword(cp, new IJavascriptCallback() {
+			@Override
+			public void doJavascript(final JavascriptForward js) {
+				js.append("$Actions['").append(cp.getComponentName()).append("_win']('")
+						.append(cp.getParamsString()).append("');");
+			}
+		});
 	}
 
 	static final String SESSION_ULIST = "_ulist";
@@ -63,7 +63,8 @@ public abstract class DoWorkviewUtils implements IWorkflowContextAware {
 		sb.append(toUserList(cp));
 		sb.append("</div>");
 		sb.append("<div class='wv_bb'>");
-		sb.append(ButtonElement.okBtn().setHighlight(true));
+		sb.append(ButtonElement.okBtn().setHighlight(true)).append(SpanElement.SPACE);
+		sb.append(ButtonElement.WINDOW_CLOSE);
 		sb.append("</div>");
 		return sb.toString();
 	}

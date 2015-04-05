@@ -2,8 +2,6 @@ package net.simpleframework.workflow.web.component.startprocess;
 
 import static net.simpleframework.common.I18n.$m;
 
-import java.io.IOException;
-import java.io.Writer;
 import java.util.Collection;
 
 import javax.servlet.http.HttpServletRequest;
@@ -26,6 +24,8 @@ import net.simpleframework.workflow.engine.IWorkflowServiceAware;
 import net.simpleframework.workflow.engine.InitiateItem;
 import net.simpleframework.workflow.engine.ProcessBean;
 import net.simpleframework.workflow.engine.ProcessModelBean;
+import net.simpleframework.workflow.web.component.WfComponentUtils;
+import net.simpleframework.workflow.web.component.WfComponentUtils.IJavascriptCallback;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -68,32 +68,31 @@ public abstract class StartProcessUtils implements IWorkflowServiceAware {
 		return sb.toString();
 	}
 
-	public static void doForword(final HttpServletRequest request, final HttpServletResponse response)
-			throws IOException {
-		final ComponentParameter cp = get(request, response);
-		final JavascriptForward js = new JavascriptForward();
-		final InitiateItem initiateItem = getInitiateItem(cp);
-		if (initiateItem == null) {
-			js.append("alert('").append($m("StartProcessUtils.0")).append("');");
-		} else {
-			try {
-				final String confirmMessage = (String) cp.getBeanProperty("confirmMessage");
-				if (StringUtils.hasText(confirmMessage)) {
-					js.append("if (!confirm('").append(JavascriptUtils.escape(confirmMessage))
-							.append("')) return;");
+	public static void doForword(final ComponentParameter cp) throws Exception {
+		WfComponentUtils.doForword(cp, new IJavascriptCallback() {
+			@Override
+			public void doJavascript(final JavascriptForward js) {
+				final InitiateItem initiateItem = getInitiateItem(cp);
+				if (initiateItem == null) {
+					js.append("alert('").append($m("StartProcessUtils.0")).append("');");
+				} else {
+					try {
+						final String confirmMessage = (String) cp.getBeanProperty("confirmMessage");
+						if (StringUtils.hasText(confirmMessage)) {
+							js.append("if (!confirm('").append(JavascriptUtils.escape(confirmMessage))
+									.append("')) return;");
+						}
+						final String componentName = cp.getComponentName();
+						js.append("$Actions['").append(componentName).append("_startProcess']('")
+								.append(toParams(cp, initiateItem)).append("');");
+					} catch (final Throwable th) {
+						log.error(th);
+						js.append("$error(").append(JsonUtils.toJSON(MVCUtils.createException(cp, th)))
+								.append(");");
+					}
 				}
-				final String componentName = cp.getComponentName();
-				js.append("$Actions['").append(componentName).append("_startProcess']('")
-						.append(toParams(cp, initiateItem)).append("');");
-			} catch (final Throwable th) {
-				log.error(th);
-				js.append("$error(").append(JsonUtils.toJSON(MVCUtils.createException(cp, th)))
-						.append(");");
 			}
-		}
-		final Writer out = cp.getResponseWriter();
-		out.write(JavascriptUtils.wrapFunction(js.toString()));
-		out.flush();
+		});
 	}
 
 	static JavascriptForward doStartProcess(final ComponentParameter nCP,
