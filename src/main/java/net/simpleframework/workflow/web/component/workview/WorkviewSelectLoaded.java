@@ -6,6 +6,7 @@ import java.util.Set;
 import net.simpleframework.common.StringUtils;
 import net.simpleframework.mvc.DefaultPageHandler;
 import net.simpleframework.mvc.IForward;
+import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.TextForward;
 import net.simpleframework.mvc.component.ComponentParameter;
@@ -29,17 +30,22 @@ public class WorkviewSelectLoaded extends DefaultPageHandler implements IWorkflo
 		final ComponentParameter nCP = DoWorkviewUtils.get(pp);
 		final String componentName = nCP.getComponentName();
 
-		pp.addComponentBean(componentName + "_ulist", AjaxRequestBean.class).setHandlerClass(
-				UserListAction.class);
-
+		// 用户选取
 		pp.addComponentBean(componentName + "_userSelect", UserSelectBean.class).setMultiple(true)
 				.setJsSelectCallback("return DoWorkview_user_selected(selects)");
+
+		// 列表
+		pp.addComponentBean(componentName + "_ulist", AjaxRequestBean.class)
+				.setHandlerMethod("doLoad").setHandlerClass(UserListAction.class);
+		// 删除
+		pp.addComponentBean(componentName + "_del", AjaxRequestBean.class)
+				.setHandlerMethod("doDelete").setHandlerClass(UserListAction.class);
 	}
 
 	public static class UserListAction extends DefaultAjaxRequestHandler {
+
 		@SuppressWarnings("unchecked")
-		@Override
-		public IForward ajaxProcess(final ComponentParameter cp) throws Exception {
+		public IForward doLoad(final ComponentParameter cp) throws Exception {
 			final ComponentParameter nCP = DoWorkviewUtils.get(cp);
 			Set<String> ulist = (Set<String>) nCP.getSessionAttr(DoWorkviewUtils.SESSION_ULIST);
 			if (ulist == null) {
@@ -52,6 +58,23 @@ public class WorkviewSelectLoaded extends DefaultPageHandler implements IWorkflo
 				}
 			}
 			return new TextForward(DoWorkviewUtils.toUserList(nCP));
+		}
+
+		@SuppressWarnings("unchecked")
+		public IForward doDelete(final ComponentParameter cp) throws Exception {
+			final ComponentParameter nCP = DoWorkviewUtils.get(cp);
+			final Set<String> ulist = (Set<String>) nCP.getSessionAttr(DoWorkviewUtils.SESSION_ULIST);
+			if (ulist != null) {
+				final String uid = nCP.getParameter("uid");
+				for (final String id : ulist) {
+					if (id.equals(uid)) {
+						ulist.remove(id);
+						break;
+					}
+				}
+			}
+
+			return new JavascriptForward("DoWorkview_user_selected();");
 		}
 	}
 }

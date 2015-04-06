@@ -23,10 +23,11 @@
   function DoWorkview_user_selected(selects) {
     var act = $Actions['<%=componentName%>_ulist'];
     act.container = $(".workview_select .wv_cc");
-    act('<%=params%>&userIds=' + $(selects).inject([], function(r, o) {
+    var userIds = selects ? $(selects).inject([], function(r, o) {
       r.push(o.id);
       return r;
-    }).join(";"));
+    }).join(";") : '';
+    act('<%=params%>&userIds=' + userIds);
     return true;
   }
   

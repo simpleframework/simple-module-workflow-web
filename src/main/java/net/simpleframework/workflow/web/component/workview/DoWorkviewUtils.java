@@ -74,6 +74,7 @@ public abstract class DoWorkviewUtils implements IWorkflowContextAware {
 		final StringBuilder sb = new StringBuilder();
 		final Set<String> ulist = (Set<String>) cp.getSessionAttr(SESSION_ULIST);
 		if (ulist != null) {
+			final String componentName = cp.getComponentName();
 			final IPagePermissionHandler permission = cp.getPermission();
 			for (final String id : ulist) {
 				final PermissionUser user = permission.getUser(id);
@@ -81,7 +82,8 @@ public abstract class DoWorkviewUtils implements IWorkflowContextAware {
 				sb.append(" <div>").append(user).append(" (").append(user.getName()).append(")</div>");
 				sb.append(" <div class='dept'>").append(user.getDept()).append("</div>");
 				sb.append(" <div class='act' style='display: none;'>");
-				sb.append("  <span class='del'></span>");
+				sb.append("  <span class='del' onclick=\"$Actions['").append(componentName)
+						.append("_del']('uid=").append(user.getId()).append("');\"></span>");
 				sb.append(" </div>");
 				sb.append("</div>");
 			}
