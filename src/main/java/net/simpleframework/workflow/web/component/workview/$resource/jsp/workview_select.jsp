@@ -29,4 +29,17 @@
     }).join(";"));
     return true;
   }
+  
+  $ready(function() {
+    var ts = $(".workview_select .wv_cc");
+       
+    var w = $Actions['<%=componentName%>_win'].window;
+    w.content.setStyle("overflow:hidden;");
+    var s = function() {
+      var h = w.getSize(true).height;
+      ts.setStyle('height: ' + (h - 67) + 'px;');
+    };
+    s();
+    w.observe("resize:ended", s);
+  });
 </script>

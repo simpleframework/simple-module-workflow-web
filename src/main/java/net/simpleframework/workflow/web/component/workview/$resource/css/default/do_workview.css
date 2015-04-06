@@ -5,6 +5,10 @@
   position: relative;
 }
 
+.workview_select .wv_cc {
+  overflow: auto;
+}
+
 .workview_select .wv_bb {
   position: absolute;
   text-align: right;
