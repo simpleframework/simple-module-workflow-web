@@ -1,5 +1,7 @@
 package net.simpleframework.workflow.web.component.workview;
 
+import static net.simpleframework.common.I18n.$m;
+
 import java.util.List;
 
 import net.simpleframework.common.ID;
@@ -22,6 +24,7 @@ public class DefaultDoWorkviewHandler extends AbstractComponentHandler implement
 	public JavascriptForward doSent(final ComponentParameter cp, final List<ID> ids) {
 		vService.createWorkviews(WorkflowUtils.getWorkitemBean(cp), ids.toArray(new ID[ids.size()]));
 		final JavascriptForward js = new JavascriptForward();
+		js.append("alert('").append($m("DefaultDoWorkviewHandler.0")).append("');");
 		js.append("$Actions['").append(cp.getComponentName()).append("_win'].close();");
 		return js;
 	}

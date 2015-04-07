@@ -17,6 +17,7 @@ import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.ctx.permission.IPagePermissionHandler;
 import net.simpleframework.workflow.engine.IWorkflowContextAware;
+import net.simpleframework.workflow.engine.IWorkflowServiceAware;
 import net.simpleframework.workflow.engine.WorkitemBean;
 import net.simpleframework.workflow.web.WorkflowUtils;
 import net.simpleframework.workflow.web.component.WfComponentUtils;
@@ -28,7 +29,7 @@ import net.simpleframework.workflow.web.component.WfComponentUtils.IJavascriptCa
  * @author 陈侃(cknet@126.com, 13910090885) https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
-public abstract class DoWorkviewUtils implements IWorkflowContextAware {
+public abstract class DoWorkviewUtils implements IWorkflowContextAware, IWorkflowServiceAware {
 	public static final String BEAN_ID = "doworkview_@bid";
 
 	public static ComponentParameter get(final PageRequestResponse rRequest) {
@@ -89,16 +90,22 @@ public abstract class DoWorkviewUtils implements IWorkflowContextAware {
 		final StringBuilder sb = new StringBuilder();
 		final Set<String> ulist = (Set<String>) cp.getSessionAttr(SESSION_ULIST);
 		if (ulist != null) {
+			final WorkitemBean workitem = WorkflowUtils.getWorkitemBean(cp);
 			final String componentName = cp.getComponentName();
 			final IPagePermissionHandler permission = cp.getPermission();
 			for (final String id : ulist) {
 				final PermissionUser user = permission.getUser(id);
-				sb.append("<div class='uitem'>");
+				sb.append("<div class='uitem");
+				if (vService.getWorkviewBean(workitem.getProcessId(), user.getId()) != null) {
+					sb.append(" workview");
+				}
+				sb.append("'>");
 				sb.append(" <div>").append(user).append(" (").append(user.getName()).append(")</div>");
 				sb.append(" <div class='dept'>").append(user.getDept()).append("</div>");
 				sb.append(" <div class='act' style='display: none;'>");
 				sb.append("  <span class='del' onclick=\"$Actions['").append(componentName)
-						.append("_del']('uid=").append(user.getId()).append("');\"></span>");
+						.append("_del']('uid=").append(user.getId()).append("&").append(toParams(cp))
+						.append("');\"></span>");
 				sb.append(" </div>");
 				sb.append("</div>");
 			}

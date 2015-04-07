@@ -31,6 +31,12 @@
   background-color: #f5f5f5;
 }
 
+.workview_select .uitem.workview {
+  background: url("images/sent.png") no-repeat 8px center #f9f9f9;
+  color: #aaa;
+  padding-left: 42px;
+}
+
 .workview_select .uitem .dept {
   margin-top: 4px;
   font-size: 9pt;

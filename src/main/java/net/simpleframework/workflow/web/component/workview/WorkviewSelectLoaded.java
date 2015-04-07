@@ -83,7 +83,8 @@ public class WorkviewSelectLoaded extends DefaultPageHandler implements IWorkflo
 					}
 				}
 			}
-			return new JavascriptForward("DoWorkview_user_selected();");
+			return new JavascriptForward("DoWorkview_user_selected(null, '").append(
+					DoWorkviewUtils.toParams(nCP)).append("');");
 		}
 
 		@SuppressWarnings("unchecked")
@@ -107,6 +108,7 @@ public class WorkviewSelectLoaded extends DefaultPageHandler implements IWorkflo
 				if (js2 != null) {
 					js.append(js2);
 				}
+				nCP.removeSessionAttr(DoWorkviewUtils.SESSION_ULIST);
 			}
 			return js;
 		}
