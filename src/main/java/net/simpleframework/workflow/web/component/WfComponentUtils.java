@@ -20,7 +20,7 @@ public abstract class WfComponentUtils {
 	public static void doForword(final ComponentParameter cp, final IJavascriptCallback callback)
 			throws Exception {
 		final JavascriptForward js = new JavascriptForward();
-		cp.putParameter("HTTP-REQUEST", "true");
+		cp.setHttpRequest();
 		final IForward forward = cp.getPermission().accessForward(
 				cp,
 				cp.componentBean != null ? cp.getBeanProperty("role")

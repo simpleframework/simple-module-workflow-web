@@ -63,8 +63,16 @@ public abstract class DoWorkviewUtils implements IWorkflowContextAware {
 		sb.append(toUserList(cp));
 		sb.append("</div>");
 		sb.append("<div class='wv_bb'>");
-		sb.append(ButtonElement.okBtn().setHighlight(true)).append(SpanElement.SPACE);
+		sb.append(
+				ButtonElement
+						.okBtn()
+						.setHighlight(true)
+						.setOnclick(
+								"$Actions['" + componentName + "_save']('" + cp.getParamsString() + "');"))
+				.append(SpanElement.SPACE);
 		sb.append(ButtonElement.WINDOW_CLOSE);
+		// BEAN_ID + "=" + cp.hashId()
+
 		sb.append("</div>");
 		return sb.toString();
 	}

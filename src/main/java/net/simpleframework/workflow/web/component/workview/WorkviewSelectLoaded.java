@@ -40,6 +40,9 @@ public class WorkviewSelectLoaded extends DefaultPageHandler implements IWorkflo
 		// 删除
 		pp.addComponentBean(componentName + "_del", AjaxRequestBean.class)
 				.setHandlerMethod("doDelete").setHandlerClass(UserListAction.class);
+		// 保存
+		pp.addComponentBean(componentName + "_save", AjaxRequestBean.class)
+				.setHandlerMethod("doSave").setHandlerClass(UserListAction.class);
 	}
 
 	public static class UserListAction extends DefaultAjaxRequestHandler {
@@ -73,8 +76,14 @@ public class WorkviewSelectLoaded extends DefaultPageHandler implements IWorkflo
 					}
 				}
 			}
-
 			return new JavascriptForward("DoWorkview_user_selected();");
+		}
+
+		public IForward doSave(final ComponentParameter cp) throws Exception {
+			final ComponentParameter nCP = DoWorkviewUtils.get(cp);
+			final IDoWorkviewHandler hdl = (IDoWorkviewHandler) nCP.getComponentHandler();
+			System.out.println(hdl);
+			return null;
 		}
 	}
 }
