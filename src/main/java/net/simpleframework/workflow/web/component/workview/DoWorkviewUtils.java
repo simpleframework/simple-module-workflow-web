@@ -17,6 +17,8 @@ import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.ctx.permission.IPagePermissionHandler;
 import net.simpleframework.workflow.engine.IWorkflowContextAware;
+import net.simpleframework.workflow.engine.WorkitemBean;
+import net.simpleframework.workflow.web.WorkflowUtils;
 import net.simpleframework.workflow.web.component.WfComponentUtils;
 import net.simpleframework.workflow.web.component.WfComponentUtils.IJavascriptCallback;
 
@@ -38,12 +40,22 @@ public abstract class DoWorkviewUtils implements IWorkflowContextAware {
 		return ComponentParameter.get(request, response, BEAN_ID);
 	}
 
+	public static String toParams(final ComponentParameter cp) {
+		final StringBuilder sb = new StringBuilder();
+		final WorkitemBean workitem = WorkflowUtils.getWorkitemBean(cp);
+		if (workitem != null) {
+			sb.append("workitemId=").append(workitem.getId()).append("&");
+		}
+		sb.append(BEAN_ID).append("=").append(cp.hashId());
+		return sb.toString();
+	}
+
 	public static void doForword(final ComponentParameter cp) throws Exception {
 		WfComponentUtils.doForword(cp, new IJavascriptCallback() {
 			@Override
 			public void doJavascript(final JavascriptForward js) {
 				js.append("$Actions['").append(cp.getComponentName()).append("_win']('")
-						.append(cp.getParamsString()).append("');");
+						.append(toParams(cp)).append("');");
 			}
 		});
 	}
@@ -64,15 +76,10 @@ public abstract class DoWorkviewUtils implements IWorkflowContextAware {
 		sb.append("</div>");
 		sb.append("<div class='wv_bb'>");
 		sb.append(
-				ButtonElement
-						.okBtn()
-						.setHighlight(true)
-						.setOnclick(
-								"$Actions['" + componentName + "_save']('" + cp.getParamsString() + "');"))
+				ButtonElement.okBtn().setHighlight(true)
+						.setOnclick("$Actions['" + componentName + "_save']('" + toParams(cp) + "');"))
 				.append(SpanElement.SPACE);
 		sb.append(ButtonElement.WINDOW_CLOSE);
-		// BEAN_ID + "=" + cp.hashId()
-
 		sb.append("</div>");
 		return sb.toString();
 	}

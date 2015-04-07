@@ -1,7 +1,6 @@
 package net.simpleframework.workflow.web.component.complete;
 
 import net.simpleframework.common.StringUtils;
-import net.simpleframework.ctx.common.bean.BeanDefaults;
 import net.simpleframework.workflow.web.component.AbstractWfActionBean;
 
 /**
@@ -11,11 +10,6 @@ import net.simpleframework.workflow.web.component.AbstractWfActionBean;
  *         http://www.simpleframework.net
  */
 public class WorkitemCompleteBean extends AbstractWfActionBean {
-
-	/* workitemId的参数名 */
-	private String workitemIdParameterName = BeanDefaults.getString(getClass(),
-			"workitemIdParameterName", "workitemId");
-
 	/* 是否完成当前环节，当前环节可以不完成，而直接创建后续环节 */
 	private boolean bcomplete = true;
 
@@ -30,15 +24,6 @@ public class WorkitemCompleteBean extends AbstractWfActionBean {
 	@Override
 	public boolean isRunImmediately() {
 		return false;
-	}
-
-	public String getWorkitemIdParameterName() {
-		return workitemIdParameterName;
-	}
-
-	public WorkitemCompleteBean setWorkitemIdParameterName(final String workitemIdParameterName) {
-		this.workitemIdParameterName = workitemIdParameterName;
-		return this;
 	}
 
 	public String getConfirmMessage() {

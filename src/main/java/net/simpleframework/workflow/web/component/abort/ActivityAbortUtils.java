@@ -40,12 +40,18 @@ public abstract class ActivityAbortUtils implements IWorkflowContextAware {
 		return ComponentParameter.get(request, response, BEAN_ID);
 	}
 
+	public static String toParams(final ComponentParameter cp) {
+		final StringBuilder sb = new StringBuilder();
+		sb.append(BEAN_ID).append("=").append(cp.hashId());
+		return sb.toString();
+	}
+
 	public static void doForword(final ComponentParameter cp) throws Exception {
 		WfComponentUtils.doForword(cp, new IJavascriptCallback() {
 			@Override
 			public void doJavascript(final JavascriptForward js) {
 				js.append("$Actions['").append(cp.getComponentName()).append("_win']('")
-						.append(cp.getParamsString()).append("');");
+						.append(toParams(cp)).append("');");
 			}
 		});
 	}

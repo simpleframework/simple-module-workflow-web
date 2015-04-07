@@ -1,7 +1,13 @@
 package net.simpleframework.workflow.web.component.workview;
 
+import java.util.List;
+
+import net.simpleframework.common.ID;
+import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.component.AbstractComponentHandler;
+import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.workflow.engine.IWorkflowServiceAware;
+import net.simpleframework.workflow.web.WorkflowUtils;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -11,4 +17,12 @@ import net.simpleframework.workflow.engine.IWorkflowServiceAware;
  */
 public class DefaultDoWorkviewHandler extends AbstractComponentHandler implements
 		IDoWorkviewHandler, IWorkflowServiceAware {
+
+	@Override
+	public JavascriptForward doSent(final ComponentParameter cp, final List<ID> ids) {
+		vService.createWorkviews(WorkflowUtils.getWorkitemBean(cp), ids.toArray(new ID[ids.size()]));
+		final JavascriptForward js = new JavascriptForward();
+		js.append("$Actions['").append(cp.getComponentName()).append("_win'].close();");
+		return js;
+	}
 }

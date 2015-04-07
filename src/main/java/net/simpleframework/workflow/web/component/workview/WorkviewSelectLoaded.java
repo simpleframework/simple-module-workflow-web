@@ -1,8 +1,13 @@
 package net.simpleframework.workflow.web.component.workview;
 
+import static net.simpleframework.common.I18n.$m;
+
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
+import net.simpleframework.common.ID;
 import net.simpleframework.common.StringUtils;
 import net.simpleframework.mvc.DefaultPageHandler;
 import net.simpleframework.mvc.IForward;
@@ -13,6 +18,7 @@ import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.base.ajaxrequest.AjaxRequestBean;
 import net.simpleframework.mvc.component.base.ajaxrequest.DefaultAjaxRequestHandler;
 import net.simpleframework.mvc.component.ext.userselect.UserSelectBean;
+import net.simpleframework.mvc.ctx.permission.IPagePermissionHandler;
 import net.simpleframework.workflow.engine.IWorkflowServiceAware;
 
 /**
@@ -39,7 +45,8 @@ public class WorkviewSelectLoaded extends DefaultPageHandler implements IWorkflo
 				.setHandlerMethod("doLoad").setHandlerClass(UserListAction.class);
 		// 删除
 		pp.addComponentBean(componentName + "_del", AjaxRequestBean.class)
-				.setHandlerMethod("doDelete").setHandlerClass(UserListAction.class);
+				.setConfirmMessage($m("Confirm.Delete")).setHandlerMethod("doDelete")
+				.setHandlerClass(UserListAction.class);
 		// 保存
 		pp.addComponentBean(componentName + "_save", AjaxRequestBean.class)
 				.setHandlerMethod("doSave").setHandlerClass(UserListAction.class);
@@ -79,11 +86,29 @@ public class WorkviewSelectLoaded extends DefaultPageHandler implements IWorkflo
 			return new JavascriptForward("DoWorkview_user_selected();");
 		}
 
+		@SuppressWarnings("unchecked")
 		public IForward doSave(final ComponentParameter cp) throws Exception {
 			final ComponentParameter nCP = DoWorkviewUtils.get(cp);
 			final IDoWorkviewHandler hdl = (IDoWorkviewHandler) nCP.getComponentHandler();
-			System.out.println(hdl);
-			return null;
+			final Set<String> ulist = (Set<String>) nCP.getSessionAttr(DoWorkviewUtils.SESSION_ULIST);
+			final JavascriptForward js = new JavascriptForward();
+			if (ulist == null || ulist.size() == 0) {
+				js.append("alert('").append($m("WorkviewSelectLoaded.0")).append("');");
+			} else {
+				final List<ID> list = new ArrayList<ID>();
+				final IPagePermissionHandler permission = cp.getPermission();
+				for (final String id : ulist) {
+					final ID oid = permission.getUser(id).getId();
+					if (oid != null) {
+						list.add(oid);
+					}
+				}
+				final JavascriptForward js2 = hdl.doSent(nCP, list);
+				if (js2 != null) {
+					js.append(js2);
+				}
+			}
+			return js;
 		}
 	}
 }

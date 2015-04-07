@@ -55,17 +55,14 @@ public abstract class WorkitemCompleteUtils implements IWorkflowServiceAware {
 	public static String toParams(final ComponentParameter cp, final WorkitemBean workitem) {
 		final StringBuilder sb = new StringBuilder();
 		if (workitem != null) {
-			final String workitemIdParameterName = (String) cp
-					.getBeanProperty("workitemIdParameterName");
-			sb.append(workitemIdParameterName).append("=").append(workitem.getId()).append("&");
+			sb.append("workitemId=").append(workitem.getId()).append("&");
 		}
 		sb.append(BEAN_ID).append("=").append(cp.hashId());
 		return sb.toString();
 	}
 
 	public static WorkitemBean getWorkitemBean(final ComponentParameter cp) {
-		return wService.getBean(cp.getParameter((String) cp
-				.getBeanProperty("workitemIdParameterName")));
+		return wService.getBean(cp.getParameter("workitemId"));
 	}
 
 	public static void doForword(final ComponentParameter cp) throws Exception {

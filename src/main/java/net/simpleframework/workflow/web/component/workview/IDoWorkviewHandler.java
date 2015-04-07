@@ -1,5 +1,10 @@
 package net.simpleframework.workflow.web.component.workview;
 
+import java.util.List;
+
+import net.simpleframework.common.ID;
+import net.simpleframework.mvc.JavascriptForward;
+import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.IComponentHandler;
 
 /**
@@ -9,4 +14,12 @@ import net.simpleframework.mvc.component.IComponentHandler;
  *         http://www.simpleframework.net
  */
 public interface IDoWorkviewHandler extends IComponentHandler {
+
+	/**
+	 * 发送传阅
+	 * 
+	 * @param cp
+	 * @param ids
+	 */
+	JavascriptForward doSent(ComponentParameter cp, List<ID> ids);
 }
