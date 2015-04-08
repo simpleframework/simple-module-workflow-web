@@ -1,7 +1,14 @@
 package net.simpleframework.workflow.web.page;
 
+import java.util.Map;
+
+import net.simpleframework.ado.query.IDataQuery;
 import net.simpleframework.mvc.PageParameter;
+import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
+import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
+import net.simpleframework.mvc.component.ui.pager.db.AbstractDbTablePagerHandler;
+import net.simpleframework.workflow.web.page.t1.AbstractWorkflowMgrPage;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -19,8 +26,22 @@ public class MyWorkviewsTPage extends AbstractItemsTPage {
 	}
 
 	protected TablePagerBean addTablePagerBean(final PageParameter pp) {
-		final TablePagerBean tablePager = super.addTablePagerBean(pp, "MyWorkviewsTPage_tbl",
-				MyRunningWorklistTbl.class);
+		final TablePagerBean tablePager = addTablePagerBean(pp, "MyWorkviewsTPage_tbl",
+				MyWorkviewsTbl.class);
+		tablePager.addColumn(AbstractWorkflowMgrPage.TC_TITLE()).addColumn(
+				TablePagerColumn.OPE().setWidth(90));
 		return tablePager;
+	}
+
+	public static class MyWorkviewsTbl extends AbstractDbTablePagerHandler {
+		@Override
+		public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
+			return super.createDataObjectQuery(cp);
+		}
+
+		@Override
+		protected Map<String, Object> getRowData(final ComponentParameter cp, final Object dataObject) {
+			return super.getRowData(cp, dataObject);
+		}
 	}
 }
