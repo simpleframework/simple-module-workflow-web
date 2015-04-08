@@ -11,6 +11,7 @@ import net.simpleframework.mvc.common.element.SupElement;
 import net.simpleframework.mvc.component.base.ajaxrequest.AjaxRequestBean;
 import net.simpleframework.mvc.component.ui.pager.ITablePagerHandler;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
+import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
 import net.simpleframework.mvc.template.lets.Category_ListPage;
 import net.simpleframework.mvc.template.struct.CategoryItem;
 import net.simpleframework.mvc.template.struct.CategoryItems;
@@ -106,6 +107,10 @@ public abstract class AbstractItemsTPage extends Category_ListPage implements IW
 		children.add(createCategoryItem_delegate(pp));
 		children.add(createCategoryItem_queryworks(pp));
 		return CategoryItems.of(createCategoryItem_myWorkviews(pp), item0);
+	}
+
+	protected TablePagerColumn TC_TITLE() {
+		return new TablePagerColumn("title", $m("AbstractWorkitemsTPage.0")).setSort(false);
 	}
 
 	protected static WorkflowUrlsFactory getUrlsFactory() {

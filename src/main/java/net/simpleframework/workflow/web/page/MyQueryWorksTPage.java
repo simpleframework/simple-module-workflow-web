@@ -49,15 +49,7 @@ public class MyQueryWorksTPage extends AbstractItemsTPage {
 	protected void onForward(final PageParameter pp) {
 		super.onForward(pp);
 
-		final TablePagerBean tablePager = addTablePagerBean(pp);
-		tablePager
-				.addColumn(AbstractWorkflowMgrPage.TC_TITLE())
-				.addColumn(new TablePagerColumn("userText", $m("ProcessMgrPage.0"), 100))
-				.addColumn(AbstractWorkflowMgrPage.TC_CREATEDATE())
-				.addColumn(
-						AbstractWorkflowMgrPage.TC_STATUS().setColumnAlias("p.status")
-								.setPropertyClass(EProcessStatus.class))
-				.addColumn(TablePagerColumn.OPE().setWidth(90));
+		addTablePagerBean(pp);
 
 		// 工作列表窗口
 		addAjaxRequest(pp, "MyQueryWorksTPage_workitems_page", ProcessWorkitemsPage.class);
@@ -66,13 +58,23 @@ public class MyQueryWorksTPage extends AbstractItemsTPage {
 				.setTitle($m("MyQueryWorksTPage.1"));
 	}
 
+	protected TablePagerBean addTablePagerBean(final PageParameter pp) {
+		final TablePagerBean tablePager = addTablePagerBean(pp, "MyQueryWorksTPage_tbl",
+				MyQueryWorksTbl.class);
+		tablePager
+				.addColumn(TC_TITLE())
+				.addColumn(new TablePagerColumn("userText", $m("ProcessMgrPage.0"), 100))
+				.addColumn(AbstractWorkflowMgrPage.TC_CREATEDATE())
+				.addColumn(
+						AbstractWorkflowMgrPage.TC_STATUS().setColumnAlias("p.status")
+								.setPropertyClass(EProcessStatus.class))
+				.addColumn(TablePagerColumn.OPE().setWidth(90));
+		return tablePager;
+	}
+
 	@Override
 	protected String getPageCSS(final PageParameter pp) {
 		return "MyQueryWorksTPage";
-	}
-
-	protected TablePagerBean addTablePagerBean(final PageParameter pp) {
-		return addTablePagerBean(pp, "MyQueryWorksTPage_tbl", MyQueryWorksTbl.class);
 	}
 
 	@Override

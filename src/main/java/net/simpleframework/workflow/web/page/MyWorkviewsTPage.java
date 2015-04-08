@@ -3,12 +3,15 @@ package net.simpleframework.workflow.web.page;
 import java.util.Map;
 
 import net.simpleframework.ado.query.IDataQuery;
+import net.simpleframework.common.coll.KVMap;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
 import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
 import net.simpleframework.mvc.component.ui.pager.db.AbstractDbTablePagerHandler;
-import net.simpleframework.workflow.web.page.t1.AbstractWorkflowMgrPage;
+import net.simpleframework.workflow.engine.ProcessBean;
+import net.simpleframework.workflow.engine.WorkviewBean;
+import net.simpleframework.workflow.web.WorkflowUtils;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -28,20 +31,23 @@ public class MyWorkviewsTPage extends AbstractItemsTPage {
 	protected TablePagerBean addTablePagerBean(final PageParameter pp) {
 		final TablePagerBean tablePager = addTablePagerBean(pp, "MyWorkviewsTPage_tbl",
 				MyWorkviewsTbl.class);
-		tablePager.addColumn(AbstractWorkflowMgrPage.TC_TITLE()).addColumn(
-				TablePagerColumn.OPE().setWidth(90));
+		tablePager.addColumn(TC_TITLE()).addColumn(TablePagerColumn.OPE().setWidth(90));
 		return tablePager;
 	}
 
 	public static class MyWorkviewsTbl extends AbstractDbTablePagerHandler {
 		@Override
-		public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
-			return super.createDataObjectQuery(cp);
+		public IDataQuery<WorkviewBean> createDataObjectQuery(final ComponentParameter cp) {
+			return vService.getWorkviewsList(cp.getLoginId());
 		}
 
 		@Override
 		protected Map<String, Object> getRowData(final ComponentParameter cp, final Object dataObject) {
-			return super.getRowData(cp, dataObject);
+			final WorkviewBean workview = (WorkviewBean) dataObject;
+			final ProcessBean process = pService.getBean(workview.getProcessId());
+			final KVMap row = new KVMap();
+			row.add("title", WorkflowUtils.getProcessTitle(process));
+			return row;
 		}
 	}
 }

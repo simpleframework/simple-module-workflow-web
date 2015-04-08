@@ -39,6 +39,14 @@ public class MyInitiateItemsTPage extends AbstractItemsTPage {
 	protected void onForward(final PageParameter pp) {
 		super.onForward(pp);
 
+		addTablePagerBean(pp);
+		// 发起流程
+		pp.addComponentBean("MyInitiateItemsTPage_startProcess", StartProcessBean.class)
+				.setConfirmMessage($m("MyInitiateItemsTPage.0"))
+				.setHandlerClass(_StartProcessHandler.class);
+	}
+
+	protected TablePagerBean addTablePagerBean(final PageParameter pp) {
 		final TablePagerBean tablePager = addTablePagerBean(pp, "MyInitiateItemsTPage_tbl",
 				MyInitiateItemsTbl.class);
 		tablePager.addColumn(TablePagerColumn.ICON().setWidth(18));
@@ -47,11 +55,7 @@ public class MyInitiateItemsTPage extends AbstractItemsTPage {
 				.setPropertyClass(Integer.class));
 		tablePager.addColumn(new TablePagerColumn("version", $m("MyInitiateItemsTPage.4"), 80));
 		tablePager.addColumn(TablePagerColumn.OPE().setWidth(70));
-
-		// 发起流程
-		pp.addComponentBean("MyInitiateItemsTPage_startProcess", StartProcessBean.class)
-				.setConfirmMessage($m("MyInitiateItemsTPage.0"))
-				.setHandlerClass(_StartProcessHandler.class);
+		return tablePager;
 	}
 
 	public static class MyInitiateItemsTbl extends AbstractDbTablePagerHandler {

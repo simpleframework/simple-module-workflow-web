@@ -27,10 +27,6 @@ public class AbstractWorkitemsTPage extends AbstractItemsTPage {
 		return "modelname";
 	}
 
-	protected TablePagerColumn TC_TITLE() {
-		return new TablePagerColumn("title", $m("AbstractWorkitemsTPage.0")).setSort(false);
-	}
-
 	protected TablePagerColumn TC_STATUS() {
 		return new TablePagerColumn("status", $m("AbstractWorkitemsTPage.3"), 55);
 	}
