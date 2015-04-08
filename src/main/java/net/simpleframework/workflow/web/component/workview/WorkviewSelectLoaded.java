@@ -18,6 +18,9 @@ import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.base.ajaxrequest.AjaxRequestBean;
 import net.simpleframework.mvc.component.base.ajaxrequest.DefaultAjaxRequestHandler;
 import net.simpleframework.mvc.component.ext.userselect.UserSelectBean;
+import net.simpleframework.mvc.component.ui.menu.EMenuEvent;
+import net.simpleframework.mvc.component.ui.menu.MenuBean;
+import net.simpleframework.mvc.component.ui.menu.MenuItem;
 import net.simpleframework.mvc.ctx.permission.IPagePermissionHandler;
 import net.simpleframework.workflow.engine.IWorkflowServiceAware;
 
@@ -39,7 +42,6 @@ public class WorkviewSelectLoaded extends DefaultPageHandler implements IWorkflo
 		// 用户选取
 		pp.addComponentBean(componentName + "_userSelect", UserSelectBean.class).setMultiple(true)
 				.setJsSelectCallback("return DoWorkview_user_selected(selects)");
-
 		// 列表
 		pp.addComponentBean(componentName + "_ulist", AjaxRequestBean.class)
 				.setHandlerMethod("doLoad").setHandlerClass(UserListAction.class);
@@ -49,7 +51,17 @@ public class WorkviewSelectLoaded extends DefaultPageHandler implements IWorkflo
 				.setHandlerClass(UserListAction.class);
 		// 保存
 		pp.addComponentBean(componentName + "_save", AjaxRequestBean.class)
-				.setHandlerMethod("doSave").setHandlerClass(UserListAction.class);
+				.setConfirmMessage($m("WorkviewSelectLoaded.1")).setHandlerMethod("doSave")
+				.setHandlerClass(UserListAction.class);
+
+		// 添加菜单
+		final MenuBean mb = (MenuBean) pp
+				.addComponentBean("WorkviewSelectLoaded_addMenu", MenuBean.class)
+				.setMenuEvent(EMenuEvent.click).setSelector("#idWorkviewSelectLoaded_addMenu");
+		mb.addItem(
+				MenuItem.of($m("DoWorkviewUtils.0")).setOnclick(
+						"$Actions['" + componentName + "_userSelect']();")).addItem(MenuItem.sep())
+				.addItem(MenuItem.of($m("DoWorkviewUtils.1")));
 	}
 
 	public static class UserListAction extends DefaultAjaxRequestHandler {

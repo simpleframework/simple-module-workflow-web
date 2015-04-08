@@ -2,11 +2,14 @@ package net.simpleframework.workflow.web.component.workview;
 
 import static net.simpleframework.common.I18n.$m;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import net.simpleframework.common.ID;
 import net.simpleframework.ctx.permission.PermissionUser;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageRequestResponse;
@@ -66,11 +69,13 @@ public abstract class DoWorkviewUtils implements IWorkflowContextAware, IWorkflo
 	public static String toSelectHTML(final ComponentParameter cp) {
 		final String componentName = cp.getComponentName();
 		final StringBuilder sb = new StringBuilder();
-		sb.append("<div class='wv_tt'>");
-		sb.append(ElementList.of(
-				LinkButton.of($m("DoWorkviewUtils.0")).setOnclick(
-						"$Actions['" + componentName + "_userSelect']();"), SpanElement.SPACE,
-				LinkButton.of($m("DoWorkviewUtils.1"))));
+		sb.append("<div class='wv_tt clearfix'>");
+		sb.append(" <div class='left'>");
+		sb.append(ElementList.of(LinkButton.menu($m("Add")).setId("idWorkviewSelectLoaded_addMenu")));
+		sb.append(" </div>");
+		sb.append(" <div class='right'>");
+		sb.append(LinkButton.corner($m("DoWorkviewUtils.2")));
+		sb.append(" </div>");
 		sb.append("</div>");
 		sb.append("<div class='wv_cc'>");
 		sb.append(toUserList(cp));
@@ -91,26 +96,41 @@ public abstract class DoWorkviewUtils implements IWorkflowContextAware, IWorkflo
 		final Set<String> ulist = (Set<String>) cp.getSessionAttr(SESSION_ULIST);
 		if (ulist != null) {
 			final WorkitemBean workitem = WorkflowUtils.getWorkitemBean(cp);
-			final String componentName = cp.getComponentName();
 			final IPagePermissionHandler permission = cp.getPermission();
+			final ID processId = workitem.getProcessId();
+			final List<PermissionUser> slist = new ArrayList<PermissionUser>();
 			for (final String id : ulist) {
 				final PermissionUser user = permission.getUser(id);
-				sb.append("<div class='uitem");
-				if (vService.getWorkviewBean(workitem.getProcessId(), user.getId()) != null) {
-					sb.append(" workview");
+				if (vService.getWorkviewBean(processId, id) != null) {
+					slist.add(user);
+				} else {
+					sb.append(toItemHTML(cp, user, false));
 				}
-				sb.append("'>");
-				sb.append(" <div>").append(user).append(" (").append(user.getName()).append(")</div>");
-				sb.append(" <div class='dept'>").append(user.getDept()).append("</div>");
-				sb.append(" <div class='act' style='display: none;'>");
-				sb.append("  <span class='del' onclick=\"$Actions['").append(componentName)
-						.append("_del']('uid=").append(user.getId()).append("&").append(toParams(cp))
-						.append("');\"></span>");
-				sb.append(" </div>");
-				sb.append("</div>");
+			}
+			for (final PermissionUser user : slist) {
+				sb.append(toItemHTML(cp, user, true));
 			}
 			sb.append("<script type='text/javascript'>DoWorkview_init();</script>");
 		}
+		return sb.toString();
+	}
+
+	private static String toItemHTML(final ComponentParameter cp, final PermissionUser user,
+			final boolean sent) {
+		final StringBuilder sb = new StringBuilder();
+		sb.append("<div class='uitem");
+		if (sent) {
+			sb.append(" workview");
+		}
+		sb.append("'>");
+		sb.append(" <div>").append(user).append(" (").append(user.getName()).append(")</div>");
+		sb.append(" <div class='dept'>").append(user.getDept()).append("</div>");
+		sb.append(" <div class='act' style='display: none;'>");
+		sb.append("  <span class='del' onclick=\"$Actions['").append(cp.getComponentName())
+				.append("_del']('uid=").append(user.getId()).append("&").append(toParams(cp))
+				.append("');\"></span>");
+		sb.append(" </div>");
+		sb.append("</div>");
 		return sb.toString();
 	}
 }

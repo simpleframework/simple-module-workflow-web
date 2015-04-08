@@ -33,8 +33,9 @@
 
 .workview_select .uitem.workview {
   background: url("images/sent.png") no-repeat 8px center #f9f9f9;
+  background-size: 18px 18px;
   color: #aaa;
-  padding-left: 42px;
+  padding-left: 40px;
 }
 
 .workview_select .uitem .dept {
