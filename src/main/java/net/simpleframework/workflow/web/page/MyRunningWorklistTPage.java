@@ -43,24 +43,13 @@ public class MyRunningWorklistTPage extends AbstractWorkitemsTPage {
 	@Override
 	protected void onForward(final PageParameter pp) {
 		super.onForward(pp);
+
 		addComponents(pp);
 	}
 
 	protected void addComponents(final PageParameter pp) {
-		final TablePagerBean tablePager = addTablePagerBean(pp).setShowCheckbox(true);
-		tablePager.addColumn(TablePagerColumn.ICON().setWidth(18));
-		tablePager.addColumn(TC_TITLE());
-		tablePager.addColumn(new TablePagerColumn("userFrom", $m("MyRunningWorklistTPage.0"), 115)
-				.setFilterSort(false).setNowrap(false));
-		tablePager.addColumn(new TablePagerColumn("createDate", $m("MyRunningWorklistTPage.1"), 90)
-				.setPropertyClass(Date.class));
-		tablePager.addColumn(new TablePagerColumn("status", $m("AbstractWorkitemsTPage.3"), 55) {
-			@Override
-			protected Option[] getFilterOptions() {
-				return Option.from(EWorkitemStatus.running, EWorkitemStatus.delegate,
-						EWorkitemStatus.suspended);
-			};
-		}.setPropertyClass(EWorkitemStatus.class)).addColumn(TablePagerColumn.OPE().setWidth(70));
+		// 添加表格
+		addTablePagerBean(pp);
 
 		// 回退
 		addAjaxRequest(pp, "MyWorklistTPage_fallback").setHandlerMethod("doFallback")
@@ -127,7 +116,22 @@ public class MyRunningWorklistTPage extends AbstractWorkitemsTPage {
 	}
 
 	protected TablePagerBean addTablePagerBean(final PageParameter pp) {
-		return super.addTablePagerBean(pp, "MyWorklistTPage_tbl", MyRunningWorklistTbl.class);
+		final TablePagerBean tablePager = addTablePagerBean(pp, "MyWorklistTPage_tbl",
+				MyRunningWorklistTbl.class).setShowCheckbox(true);
+		tablePager.addColumn(TablePagerColumn.ICON().setWidth(18));
+		tablePager.addColumn(TC_TITLE());
+		tablePager.addColumn(new TablePagerColumn("userFrom", $m("MyRunningWorklistTPage.0"), 115)
+				.setFilterSort(false).setNowrap(false));
+		tablePager.addColumn(new TablePagerColumn("createDate", $m("MyRunningWorklistTPage.1"), 90)
+				.setPropertyClass(Date.class));
+		tablePager.addColumn(new TablePagerColumn("status", $m("AbstractWorkitemsTPage.3"), 55) {
+			@Override
+			protected Option[] getFilterOptions() {
+				return Option.from(EWorkitemStatus.running, EWorkitemStatus.delegate,
+						EWorkitemStatus.suspended);
+			};
+		}.setPropertyClass(EWorkitemStatus.class)).addColumn(TablePagerColumn.OPE().setWidth(70));
+		return tablePager;
 	}
 
 	@Override

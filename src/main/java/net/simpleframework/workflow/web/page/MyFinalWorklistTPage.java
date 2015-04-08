@@ -34,7 +34,21 @@ public class MyFinalWorklistTPage extends MyRunningWorklistTPage {
 
 	@Override
 	protected void addComponents(final PageParameter pp) {
-		final TablePagerBean tablePager = (TablePagerBean) addTablePagerBean(pp).setHandlerClass(
+		addTablePagerBean(pp);
+		// 取回
+		addAjaxRequest(pp, "MyWorklistTPage_retake").setHandlerMethod("doRetake").setConfirmMessage(
+				$m("MyFinalWorklistTPage.2"));
+
+		// 标记置顶
+		addAjaxRequest(pp, "MyWorklistTPage_topMark").setHandlerMethod("doTopMark");
+
+		final MenuBean mb = createViewMenuComponent(pp);
+		mb.addItem(MyRunningWorklistTbl.MENU_VIEW_ALL());
+	}
+
+	@Override
+	protected TablePagerBean addTablePagerBean(final PageParameter pp) {
+		final TablePagerBean tablePager = addTablePagerBean(pp, "MyWorklistTPage_tbl",
 				MyCompleteWorklistTbl.class);
 		tablePager.addColumn(TablePagerColumn.ICON().setWidth(18));
 		tablePager.addColumn(TC_TITLE());
@@ -49,16 +63,7 @@ public class MyFinalWorklistTPage extends MyRunningWorklistTPage {
 						EWorkitemStatus.abort);
 			};
 		}.setPropertyClass(EWorkitemStatus.class)).addColumn(TablePagerColumn.OPE().setWidth(70));
-
-		// 取回
-		addAjaxRequest(pp, "MyWorklistTPage_retake").setHandlerMethod("doRetake").setConfirmMessage(
-				$m("MyFinalWorklistTPage.2"));
-
-		// 标记置顶
-		addAjaxRequest(pp, "MyWorklistTPage_topMark").setHandlerMethod("doTopMark");
-
-		final MenuBean mb = createViewMenuComponent(pp);
-		mb.addItem(MyRunningWorklistTbl.MENU_VIEW_ALL());
+		return tablePager;
 	}
 
 	@Transaction(context = IWorkflowContext.class)
