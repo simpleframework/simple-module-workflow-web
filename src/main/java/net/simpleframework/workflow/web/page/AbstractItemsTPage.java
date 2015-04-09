@@ -7,7 +7,10 @@ import java.util.List;
 import net.simpleframework.ctx.IModuleRef;
 import net.simpleframework.mvc.AbstractMVCPage;
 import net.simpleframework.mvc.PageParameter;
+import net.simpleframework.mvc.common.element.EVerticalAlign;
+import net.simpleframework.mvc.common.element.ImageElement;
 import net.simpleframework.mvc.common.element.SupElement;
+import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.base.ajaxrequest.AjaxRequestBean;
 import net.simpleframework.mvc.component.ui.pager.ITablePagerHandler;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
@@ -111,6 +114,19 @@ public abstract class AbstractItemsTPage extends Category_ListPage implements IW
 
 	protected TablePagerColumn TC_TITLE() {
 		return new TablePagerColumn("title", $m("AbstractWorkitemsTPage.0")).setSort(false);
+	}
+
+	protected static ImageElement _createImageMark(final ComponentParameter cp, final String img) {
+		return new ImageElement(cp.getCssResourceHomePath(AbstractItemsTPage.class) + "/images/"
+				+ img).setVerticalAlign(EVerticalAlign.middle);
+	}
+
+	protected static ImageElement MARK_TOP(final ComponentParameter cp) {
+		return _createImageMark(cp, "mark_top.png").setTitle($m("MyRunningWorklistTbl.1"));
+	}
+
+	protected static ImageElement MARK_UNREAD(final ComponentParameter cp) {
+		return _createImageMark(cp, "mark_unread.png").setTitle($m("MyRunningWorklistTbl.2"));
 	}
 
 	protected static WorkflowUrlsFactory getUrlsFactory() {

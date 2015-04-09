@@ -21,7 +21,6 @@ import net.simpleframework.common.object.NamedObject;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.AbstractElement;
 import net.simpleframework.mvc.common.element.ButtonElement;
-import net.simpleframework.mvc.common.element.EVerticalAlign;
 import net.simpleframework.mvc.common.element.ImageElement;
 import net.simpleframework.mvc.common.element.LabelElement;
 import net.simpleframework.mvc.common.element.LinkElement;
@@ -141,26 +140,14 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 		return super.getGroupWrapper(cp, groupVal);
 	}
 
-	protected ImageElement _createImageMark(final ComponentParameter cp, final String img) {
-		return new ImageElement(cp.getCssResourceHomePath(MyRunningWorklistTPage.class) + "/images/"
-				+ img).setVerticalAlign(EVerticalAlign.middle);
-	}
-
 	protected ImageElement MARK_RETAKE(final ComponentParameter cp) {
-		return _createImageMark(cp, "status_retake.png").setTitle($m("MyRunningWorklistTbl.13"));
+		return AbstractItemsTPage._createImageMark(cp, "status_retake.png").setTitle(
+				$m("MyRunningWorklistTbl.13"));
 	}
 
 	protected ImageElement MARK_DELEGATE(final ComponentParameter cp, final WorkitemBean workitem) {
 		return PhotoImage.icon12(cp.getPhotoUrl(workitem.getUserId())).setTitle(
 				$m("MyRunningWorklistTbl.0", permission.getUser(workitem.getUserId())));
-	}
-
-	protected ImageElement MARK_TOP(final ComponentParameter cp) {
-		return _createImageMark(cp, "mark_top.png").setTitle($m("MyRunningWorklistTbl.1"));
-	}
-
-	protected ImageElement MARK_UNREAD(final ComponentParameter cp) {
-		return _createImageMark(cp, "mark_unread.png").setTitle($m("MyRunningWorklistTbl.2"));
 	}
 
 	protected AbstractElement<?> createImageMark(final ComponentParameter cp,
@@ -172,9 +159,9 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 		} else if (status == EWorkitemStatus.delegate) {
 			img = MARK_DELEGATE(cp, workitem);
 		} else if (workitem.isTopMark()) {
-			img = MARK_TOP(cp);
+			img = AbstractItemsTPage.MARK_TOP(cp);
 		} else if (!workitem.isReadMark()) {
-			img = MARK_UNREAD(cp);
+			img = AbstractItemsTPage.MARK_UNREAD(cp);
 		}
 		return img;
 	}

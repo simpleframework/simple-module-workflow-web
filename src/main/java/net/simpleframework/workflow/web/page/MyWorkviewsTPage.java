@@ -5,6 +5,8 @@ import java.util.Map;
 import net.simpleframework.ado.query.IDataQuery;
 import net.simpleframework.common.coll.KVMap;
 import net.simpleframework.mvc.PageParameter;
+import net.simpleframework.mvc.common.element.AbstractElement;
+import net.simpleframework.mvc.common.element.LinkElement;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
 import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
@@ -31,7 +33,8 @@ public class MyWorkviewsTPage extends AbstractItemsTPage {
 	protected TablePagerBean addTablePagerBean(final PageParameter pp) {
 		final TablePagerBean tablePager = addTablePagerBean(pp, "MyWorkviewsTPage_tbl",
 				MyWorkviewsTbl.class);
-		tablePager.addColumn(TC_TITLE()).addColumn(TablePagerColumn.OPE().setWidth(90));
+		tablePager.addColumn(TablePagerColumn.ICON().setWidth(18)).addColumn(TC_TITLE())
+				.addColumn(TablePagerColumn.OPE().setWidth(90));
 		return tablePager;
 	}
 
@@ -41,12 +44,30 @@ public class MyWorkviewsTPage extends AbstractItemsTPage {
 			return vService.getWorkviewsList(cp.getLoginId());
 		}
 
+		protected AbstractElement<?> createImageMark(final ComponentParameter cp,
+				final WorkviewBean workview) {
+			AbstractElement<?> img = null;
+			if (workview.isTopMark()) {
+				img = AbstractItemsTPage.MARK_TOP(cp);
+			} else if (!workview.isReadMark()) {
+				img = AbstractItemsTPage.MARK_UNREAD(cp);
+			}
+			return img;
+		}
+
 		@Override
 		protected Map<String, Object> getRowData(final ComponentParameter cp, final Object dataObject) {
 			final WorkviewBean workview = (WorkviewBean) dataObject;
 			final ProcessBean process = pService.getBean(workview.getProcessId());
 			final KVMap row = new KVMap();
-			row.add("title", WorkflowUtils.getProcessTitle(process));
+			final AbstractElement<?> img = createImageMark(cp, workview);
+			if (img != null) {
+				row.add(TablePagerColumn.ICON, img);
+			}
+
+			final LinkElement le = new LinkElement(WorkflowUtils.getProcessTitle(process))
+					.setStrong(!workview.isReadMark());
+			row.add("title", le);
 			return row;
 		}
 	}
