@@ -21,11 +21,9 @@ import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.base.validation.EValidatorMethod;
 import net.simpleframework.mvc.component.base.validation.ValidationBean;
 import net.simpleframework.mvc.component.base.validation.Validator;
-import net.simpleframework.mvc.template.lets.FormTableRowTemplatePage;
 import net.simpleframework.workflow.engine.ActivityBean;
 import net.simpleframework.workflow.engine.EWorkitemStatus;
 import net.simpleframework.workflow.engine.IWorkflowContext;
-import net.simpleframework.workflow.engine.IWorkflowServiceAware;
 import net.simpleframework.workflow.engine.ProcessBean;
 import net.simpleframework.workflow.engine.ProcessModelBean;
 import net.simpleframework.workflow.engine.WorkitemBean;
@@ -50,9 +48,8 @@ import net.simpleframework.workflow.web.page.t1.WorkflowFormPage;
  * @author 陈侃(cknet@126.com, 13910090885) https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
-public abstract class AbstractWorkflowFormTPage extends FormTableRowTemplatePage implements
-		IWorkflowWebForm, IWorkflowServiceAware {
-
+public abstract class AbstractWorkflowFormTPage extends AbstractFormTableRowTPage implements
+		IWorkflowWebForm {
 	@Override
 	protected boolean isPage404(final PageParameter pp) {
 		return getWorkitemBean(pp) == null;
