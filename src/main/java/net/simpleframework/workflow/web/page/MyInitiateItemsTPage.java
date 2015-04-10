@@ -113,8 +113,7 @@ public class MyInitiateItemsTPage extends AbstractItemsTPage {
 			if (workitem != null) {
 				final JavascriptForward js = new JavascriptForward();
 				js.append("$Actions.loc('")
-						.append(getUrlsFactory().getUrl(cp, WorkflowFormPage.class, workitem))
-						.append("');");
+						.append(uFactory.getUrl(cp, WorkflowFormPage.class, workitem)).append("');");
 				return js;
 			} else {
 				return null;

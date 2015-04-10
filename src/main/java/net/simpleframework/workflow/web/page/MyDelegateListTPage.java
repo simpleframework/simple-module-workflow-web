@@ -33,7 +33,6 @@ import net.simpleframework.workflow.engine.EDelegationStatus;
 import net.simpleframework.workflow.engine.IWorkflowContext;
 import net.simpleframework.workflow.engine.WorkitemBean;
 import net.simpleframework.workflow.web.WorkflowLogRef.DelegateUpdateLogPage;
-import net.simpleframework.workflow.web.WorkflowUrlsFactory;
 import net.simpleframework.workflow.web.WorkflowUtils;
 import net.simpleframework.workflow.web.page.AbstractDelegateFormPage.WorkitemDelegateViewPage;
 
@@ -101,10 +100,9 @@ public class MyDelegateListTPage extends AbstractWorkitemsTPage {
 	}
 
 	protected SpanElement getDelegateTabs(final PageParameter pp) {
-		final WorkflowUrlsFactory urlsFactory = getUrlsFactory();
 		return createTabsElement(pp, TabButtons.of(new TabButton($m("MyDelegateListTPage.4"),
-				urlsFactory.getUrl(pp, MyDelegateListTPage.class)), new TabButton(
-				$m("MyDelegateListTPage.5"), urlsFactory.getUrl(pp, UserDelegateListTPage.class))));
+				uFactory.getUrl(pp, MyDelegateListTPage.class)), new TabButton(
+				$m("MyDelegateListTPage.5"), uFactory.getUrl(pp, UserDelegateListTPage.class))));
 	}
 
 	@Override

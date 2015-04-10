@@ -14,6 +14,7 @@ import net.simpleframework.mvc.component.ui.pager.db.AbstractDbTablePagerHandler
 import net.simpleframework.workflow.engine.ProcessBean;
 import net.simpleframework.workflow.engine.WorkviewBean;
 import net.simpleframework.workflow.web.WorkflowUtils;
+import net.simpleframework.workflow.web.page.t1.WorkflowViewPage;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -65,8 +66,12 @@ public class MyWorkviewsTPage extends AbstractItemsTPage {
 				row.add(TablePagerColumn.ICON, img);
 			}
 
-			final LinkElement le = new LinkElement(WorkflowUtils.getProcessTitle(process))
-					.setStrong(!workview.isReadMark());
+			final LinkElement le = new LinkElement(WorkflowUtils.getProcessTitle(process)).setStrong(
+					!workview.isReadMark())
+					.setOnclick(
+							"$Actions.loc('"
+									+ uFactory.getUrl(cp, WorkflowViewPage.class,
+											"workviewId=" + workview.getId()) + "');");
 			row.add("title", le);
 			return row;
 		}

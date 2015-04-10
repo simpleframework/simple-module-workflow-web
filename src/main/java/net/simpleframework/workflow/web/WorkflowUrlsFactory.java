@@ -1,6 +1,5 @@
 package net.simpleframework.workflow.web;
 
-import net.simpleframework.common.StringUtils;
 import net.simpleframework.mvc.AbstractMVCPage;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.UrlsCache;
@@ -23,6 +22,7 @@ import net.simpleframework.workflow.web.page.t1.WorkflowCompleteInfoPage;
 import net.simpleframework.workflow.web.page.t1.WorkflowFormPage;
 import net.simpleframework.workflow.web.page.t1.WorkflowGraphMonitorPage;
 import net.simpleframework.workflow.web.page.t1.WorkflowMonitorPage;
+import net.simpleframework.workflow.web.page.t1.WorkflowViewPage;
 import net.simpleframework.workflow.web.page.t2.AbstractWorkPage.MyDelegateListPage;
 import net.simpleframework.workflow.web.page.t2.AbstractWorkPage.MyFinalWorklistPage;
 import net.simpleframework.workflow.web.page.t2.AbstractWorkPage.MyInitiateItemsPage;
@@ -58,6 +58,7 @@ public class WorkflowUrlsFactory extends UrlsCache {
 		put(WorkflowCompleteInfoPage.class);
 		put(WorkflowMonitorPage.class);
 		put(WorkflowGraphMonitorPage.class);
+		put(WorkflowViewPage.class);
 
 		put(ProcessModelMgrTPage.class);
 		put(ProcessMgrTPage.class);
@@ -67,12 +68,6 @@ public class WorkflowUrlsFactory extends UrlsCache {
 
 	public String getUrl(final PageParameter pp, final Class<? extends AbstractMVCPage> mClass,
 			final WorkitemBean workitem) {
-		return getUrl(pp, mClass, workitem, null);
-	}
-
-	public String getUrl(final PageParameter pp, final Class<? extends AbstractMVCPage> mClass,
-			final WorkitemBean workitem, final String params) {
-		return getUrl(pp, mClass,
-				StringUtils.join(new String[] { "workitemId=" + workitem.getId(), params }, "&"));
+		return getUrl(pp, mClass, "workitemId=" + workitem.getId());
 	}
 }

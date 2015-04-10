@@ -94,8 +94,7 @@ public class MyRunningWorklistTPage extends AbstractWorkitemsTPage {
 				.addItem(MenuItem.sep())
 				.addItem(
 						MenuItem.of($m("AbstractItemsTPage.4")).setOnclick(
-								"$Actions.loc('" + getUrlsFactory().getUrl(pp, MyQueryWorksTPage.class)
-										+ "');"));
+								"$Actions.loc('" + uFactory.getUrl(pp, MyQueryWorksTPage.class) + "');"));
 
 		// 委托菜单
 		mb = createDelegateMenuComponent(pp);
@@ -176,8 +175,8 @@ public class MyRunningWorklistTPage extends AbstractWorkitemsTPage {
 			txt.append($m("MyRunningWorklistTPage.8",
 					new SpanElement(pp.getUser(delegation.getUserId())).setStrong(true)));
 			txt.append(SpanElement.SPACE15);
-			txt.append(new LinkElement($m("MyRunningWorklistTPage.10")).setHref(getUrlsFactory()
-					.getUrl(pp, UserDelegateListTPage.class)));
+			txt.append(new LinkElement($m("MyRunningWorklistTPage.10")).setHref(uFactory.getUrl(pp,
+					UserDelegateListTPage.class)));
 			txt.append(SpanElement.SPACE);
 			txt.append(new LinkElement($m("MyRunningWorklistTPage.9"))
 					.setOnclick("$Actions['MyRunningWorklistTPage_user_undelegate']();"));
@@ -191,8 +190,8 @@ public class MyRunningWorklistTPage extends AbstractWorkitemsTPage {
 	public ElementList getLeftElements(final PageParameter pp) {
 		return ElementList.of(
 				LinkButton.of($m("MyRunningWorklistTPage.12")).setHref(
-						getUrlsFactory().getUrl(pp, MyInitiateItemsTPage.class)), SpanElement.SPACE,
-				LinkButton.menu($m("MyRunningWorklistTbl.6")).setId("idMyWorklistTPage_markMenu"),
+						uFactory.getUrl(pp, MyInitiateItemsTPage.class)), SpanElement.SPACE, LinkButton
+						.menu($m("MyRunningWorklistTbl.6")).setId("idMyWorklistTPage_markMenu"),
 				LinkButton.menu($m("MyRunningWorklistTbl.14")).setId("idMyWorklistTPage_viewMenu"),
 				SpanElement.SPACE,
 				LinkButton.menu($m("MyRunningWorklistTbl.5")).setId("idMyWorklistTPage_delegateMenu"),

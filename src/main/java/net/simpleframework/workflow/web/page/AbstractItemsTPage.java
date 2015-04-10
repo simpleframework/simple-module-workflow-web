@@ -59,7 +59,7 @@ public abstract class AbstractItemsTPage extends Category_ListPage implements IW
 
 	public CategoryItem createCategoryItem(final PageParameter pp, final String text,
 			final Class<? extends AbstractItemsTPage> mClass) {
-		return new CategoryItem(text).setHref(getUrlsFactory().getUrl(pp, mClass)).setSelected(
+		return new CategoryItem(text).setHref(uFactory.getUrl(pp, mClass)).setSelected(
 				mClass.isAssignableFrom(getClass()));
 	}
 
@@ -129,7 +129,6 @@ public abstract class AbstractItemsTPage extends Category_ListPage implements IW
 		return _createImageMark(cp, "mark_unread.png").setTitle($m("MyRunningWorklistTbl.2"));
 	}
 
-	protected static WorkflowUrlsFactory getUrlsFactory() {
-		return ((IWorkflowWebContext) workflowContext).getUrlsFactory();
-	}
+	protected static final WorkflowUrlsFactory uFactory = ((IWorkflowWebContext) workflowContext)
+			.getUrlsFactory();
 }
