@@ -67,11 +67,10 @@ public class MyWorkviewsTPage extends AbstractItemsTPage {
 			}
 
 			final LinkElement le = new LinkElement(WorkflowUtils.getProcessTitle(process)).setStrong(
-					!workview.isReadMark())
-					.setOnclick(
-							"$Actions.loc('"
-									+ uFactory.getUrl(cp, WorkflowViewPage.class,
-											"workviewId=" + workview.getId()) + "');");
+					!workview.isReadMark()).setOnclick(
+					"$Actions.loc('"
+							+ uFactory.getUrl(cp, WorkflowViewPage.class,
+									workview != null ? ("workviewId=" + workview.getId()) : null) + "');");
 			row.add("title", le);
 			return row;
 		}

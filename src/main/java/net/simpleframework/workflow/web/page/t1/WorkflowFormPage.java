@@ -7,6 +7,7 @@ import java.util.Map;
 
 import net.simpleframework.mvc.PageMapping;
 import net.simpleframework.mvc.PageParameter;
+import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.common.element.TabButton;
 import net.simpleframework.mvc.common.element.TabButtons;
 import net.simpleframework.workflow.engine.WorkitemBean;
@@ -32,6 +33,8 @@ public class WorkflowFormPage extends AbstractWorkflowFormPage {
 		final IWorkflowWebForm workflowForm = getWorkflowForm(pp);
 		if (workflowForm != null) {
 			sb.append(pp.includeUrl(workflowForm.getForwardUrl(pp)));
+		} else {
+			sb.append(SpanElement.warnText($m("WorkflowFormPage.2")));
 		}
 		sb.append("</div>");
 		return sb.toString();

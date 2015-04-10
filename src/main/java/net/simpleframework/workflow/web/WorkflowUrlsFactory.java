@@ -68,6 +68,6 @@ public class WorkflowUrlsFactory extends UrlsCache {
 
 	public String getUrl(final PageParameter pp, final Class<? extends AbstractMVCPage> mClass,
 			final WorkitemBean workitem) {
-		return getUrl(pp, mClass, "workitemId=" + workitem.getId());
+		return getUrl(pp, mClass, workitem != null ? ("workitemId=" + workitem.getId()) : null);
 	}
 }

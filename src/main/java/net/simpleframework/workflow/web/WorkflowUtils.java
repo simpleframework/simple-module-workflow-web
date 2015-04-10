@@ -113,7 +113,7 @@ public abstract class WorkflowUtils implements IWorkflowServiceAware {
 		return pp.getRequestCache("@WorkviewBean", new IVal<WorkviewBean>() {
 			@Override
 			public WorkviewBean get() {
-				return vService.getBean(pp.getParameter("WorkviewId"));
+				return vService.getBean(pp.getParameter("workviewId"));
 			}
 		});
 	}

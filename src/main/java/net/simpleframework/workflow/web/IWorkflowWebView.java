@@ -11,5 +11,11 @@ import net.simpleframework.workflow.engine.IWorkflowView;
  */
 public interface IWorkflowWebView extends IWorkflowView {
 
+	/**
+	 * 获取view的url
+	 * 
+	 * @param pp
+	 * @return
+	 */
 	String getForwardUrl(PageParameter pp);
 }
