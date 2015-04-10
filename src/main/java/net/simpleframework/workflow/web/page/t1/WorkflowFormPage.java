@@ -31,7 +31,7 @@ public class WorkflowFormPage extends AbstractWorkflowFormPage {
 		sb.append("<div class='WorkflowFormPage'>");
 		final IWorkflowWebForm workflowForm = getWorkflowForm(pp);
 		if (workflowForm != null) {
-			sb.append(pp.includeUrl(workflowForm.getFormForward(pp)));
+			sb.append(pp.includeUrl(workflowForm.getForwardUrl(pp)));
 		}
 		sb.append("</div>");
 		return sb.toString();

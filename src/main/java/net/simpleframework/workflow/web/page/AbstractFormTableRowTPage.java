@@ -1,5 +1,6 @@
 package net.simpleframework.workflow.web.page;
 
+import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.template.lets.FormTableRowTemplatePage;
 import net.simpleframework.workflow.engine.IWorkflowServiceAware;
 
@@ -11,4 +12,8 @@ import net.simpleframework.workflow.engine.IWorkflowServiceAware;
  */
 public class AbstractFormTableRowTPage extends FormTableRowTemplatePage implements
 		IWorkflowServiceAware {
+
+	public String getForwardUrl(final PageParameter pp) {
+		return url(getClass());
+	}
 }

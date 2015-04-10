@@ -16,6 +16,7 @@ import net.simpleframework.workflow.engine.EWorkitemStatus;
 import net.simpleframework.workflow.engine.IWorkflowServiceAware;
 import net.simpleframework.workflow.engine.ProcessBean;
 import net.simpleframework.workflow.engine.WorkitemBean;
+import net.simpleframework.workflow.engine.WorkviewBean;
 import net.simpleframework.workflow.engine.participant.Participant;
 import net.simpleframework.workflow.web.page.AbstractItemsTPage;
 
@@ -104,6 +105,15 @@ public abstract class WorkflowUtils implements IWorkflowServiceAware {
 			@Override
 			public WorkitemBean get() {
 				return wService.getBean(pp.getParameter("workitemId"));
+			}
+		});
+	}
+
+	public static WorkviewBean getWorkviewBean(final PageParameter pp) {
+		return pp.getRequestCache("@WorkviewBean", new IVal<WorkviewBean>() {
+			@Override
+			public WorkviewBean get() {
+				return vService.getBean(pp.getParameter("WorkviewId"));
 			}
 		});
 	}

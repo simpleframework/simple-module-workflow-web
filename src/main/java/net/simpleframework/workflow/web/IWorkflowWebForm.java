@@ -4,7 +4,7 @@ import java.util.Map;
 
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageParameter;
-import net.simpleframework.workflow.engine.IWorkitemForm;
+import net.simpleframework.workflow.engine.IWorkflowForm;
 import net.simpleframework.workflow.engine.WorkitemComplete;
 
 /**
@@ -13,14 +13,14 @@ import net.simpleframework.workflow.engine.WorkitemComplete;
  * @author 陈侃(cknet@126.com, 13910090885) https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
-public interface IWorkflowWebForm extends IWorkitemForm {
+public interface IWorkflowWebForm extends IWorkflowForm {
 
 	/**
 	 * 获取表单的装载地址
 	 * 
 	 * @return
 	 */
-	String getFormForward(PageParameter pp);
+	String getForwardUrl(PageParameter pp);
 
 	/**
 	 * 完成事件

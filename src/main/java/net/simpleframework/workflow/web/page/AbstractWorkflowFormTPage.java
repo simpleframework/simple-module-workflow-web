@@ -136,11 +136,6 @@ public abstract class AbstractWorkflowFormTPage extends AbstractFormTableRowTPag
 	}
 
 	@Override
-	public String getFormForward(final PageParameter pp) {
-		return url(getClass());
-	}
-
-	@Override
 	public ElementList getLeftElements(final PageParameter pp) {
 		final ElementList el = ElementList.of();
 		final WorkitemBean workitem = getWorkitemBean(pp);
