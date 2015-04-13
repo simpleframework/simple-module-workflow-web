@@ -157,9 +157,10 @@ public abstract class AbstractWorkflowFormTPage extends AbstractFormTableRowTPag
 	}
 
 	protected AbstractElement<?> createDoWorkviewBtn(final PageParameter pp) {
+		final WorkitemBean item = getWorkitemBean(pp);
 		return LinkButton.of($m("AbstractWorkflowFormTPage.1")).setOnclick(
 				"$Actions['AbstractWorkflowFormPage_doWorkview']('workitemId="
-						+ getWorkitemBean(pp).getId() + "');");
+						+ (null != item ? item.getId() : "") + "');");
 	}
 
 	@Override
