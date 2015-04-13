@@ -17,4 +17,11 @@ public class AbstractWorkflowViewPage extends AbstractFormTemplatePage {
 		final WorkviewBean workview = WorkflowUtils.getWorkviewBean(pp);
 		return (IWorkflowWebView) pService.getWorkflowView(pService.getBean(workview.getProcessId()));
 	}
+
+	@Override
+	protected void onForward(PageParameter pp) {
+		super.onForward(pp);
+
+		pp.addImportCSS(AbstractWorkflowViewPage.class, "/form.css");
+	}
 }
