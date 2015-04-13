@@ -233,8 +233,14 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 		}
 		title.append(tEle.setColor_gray(!StringUtils.hasText(processBean.getTitle())));
 
-		row.add("title", title.toString())
-				.add("pstat", processBean.getComments() + "/" + processBean.getViews())
+		final StringBuilder stat = new StringBuilder();
+		final SpanElement commentsEle = new SpanElement(processBean.getComments()).setItalic(true);
+		if (workitem.isNcommentFlag()) {
+			commentsEle.setStrong(true).setColor("#a00");
+		}
+		stat.append(commentsEle).append("/")
+				.append(new SpanElement(processBean.getViews()).setItalic(true));
+		row.add("title", title.toString()).add("pstat", stat.toString())
 				.add("userFrom", WorkflowUtils.getUserFrom(activity))
 				.add("userTo", WorkflowUtils.getUserTo(activity));
 		final Date createDate = workitem.getCreateDate();
@@ -344,7 +350,7 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 	static NumberConvert DATE_NUMBERCONVERT = new NumberConvert() {
 		@Override
 		public Object convert(final Number n) {
-			return SpanElement.num(n).addStyle("margin-right: 2px;");
+			return new SpanElement(n).setItalic(true).addStyle("margin-right: 2px;");
 		}
 	};
 }
