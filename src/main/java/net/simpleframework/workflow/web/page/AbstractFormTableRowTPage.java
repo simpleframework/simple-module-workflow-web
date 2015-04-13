@@ -49,6 +49,8 @@ public abstract class AbstractFormTableRowTPage<T extends AbstractWorkitemBean> 
 			@Override
 			public ProcessBean get() {
 				final T item = getWorkitemBean(pp);
+				if (null == item)
+					return null;
 				return pService.getBean(item.getProcessId());
 			}
 		});
