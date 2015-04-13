@@ -12,6 +12,7 @@ import net.simpleframework.mvc.IForward;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.BlockElement;
+import net.simpleframework.mvc.common.element.ETextAlign;
 import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.LinkButton;
 import net.simpleframework.mvc.common.element.LinkElement;
@@ -121,11 +122,14 @@ public class MyRunningWorklistTPage extends AbstractWorkitemsTPage {
 				.addColumn(TablePagerColumn.ICON().setWidth(18))
 				.addColumn(TC_TITLE())
 				.addColumn(
-						new TablePagerColumn("userFrom", $m("MyRunningWorklistTPage.0"), 115)
-								.setFilterSort(false).setNowrap(false))
+						new TablePagerColumn("userFrom", $m("MyRunningWorklistTPage.0"), 85)
+								.setTextAlign(ETextAlign.center).setFilterSort(false).setNowrap(false))
 				.addColumn(
-						new TablePagerColumn("createDate", $m("MyRunningWorklistTPage.1"), 90)
-								.setPropertyClass(Date.class))
+						new TablePagerColumn("pstat", $m("MyRunningWorklistTPage.13"), 65).setTextAlign(
+								ETextAlign.center).setFilterSort(false))
+				.addColumn(
+						new TablePagerColumn("createDate", $m("MyRunningWorklistTPage.1"), 65)
+								.setTextAlign(ETextAlign.center).setPropertyClass(Date.class))
 				.addColumn(new TablePagerColumn("status", $m("AbstractWorkitemsTPage.3"), 55) {
 					@Override
 					protected Option[] getFilterOptions() {

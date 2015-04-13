@@ -233,7 +233,9 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 		}
 		title.append(tEle.setColor_gray(!StringUtils.hasText(processBean.getTitle())));
 
-		row.add("title", title.toString()).add("userFrom", WorkflowUtils.getUserFrom(activity))
+		row.add("title", title.toString())
+				.add("pstat", processBean.getComments() + "/" + processBean.getViews())
+				.add("userFrom", WorkflowUtils.getUserFrom(activity))
 				.add("userTo", WorkflowUtils.getUserTo(activity));
 		final Date createDate = workitem.getCreateDate();
 		row.add("createDate",
