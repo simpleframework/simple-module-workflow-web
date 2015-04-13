@@ -21,19 +21,13 @@ import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.base.validation.EValidatorMethod;
 import net.simpleframework.mvc.component.base.validation.ValidationBean;
 import net.simpleframework.mvc.component.base.validation.Validator;
-import net.simpleframework.workflow.engine.ActivityBean;
 import net.simpleframework.workflow.engine.EWorkitemStatus;
 import net.simpleframework.workflow.engine.IWorkflowContext;
 import net.simpleframework.workflow.engine.ProcessBean;
-import net.simpleframework.workflow.engine.ProcessModelBean;
 import net.simpleframework.workflow.engine.WorkitemBean;
 import net.simpleframework.workflow.engine.WorkitemComplete;
-import net.simpleframework.workflow.schema.AbstractTaskNode;
-import net.simpleframework.workflow.schema.ProcessDocument;
-import net.simpleframework.workflow.schema.ProcessNode;
 import net.simpleframework.workflow.web.IWorkflowWebContext;
 import net.simpleframework.workflow.web.IWorkflowWebForm;
-import net.simpleframework.workflow.web.WorkflowUtils;
 import net.simpleframework.workflow.web.component.comments.IWfCommentHandler;
 import net.simpleframework.workflow.web.component.comments.WfCommentBean;
 import net.simpleframework.workflow.web.component.comments.WfCommentUtils;
@@ -126,15 +120,6 @@ public abstract class AbstractWorkflowFormTPage extends AbstractFormTableRowTPag
 						WorkflowFormPage.class, workitem)).append("');");
 	}
 
-	protected ProcessModelBean getProcessModel(final PageParameter pp) {
-		return pp.getRequestCache("$ProcessModelBean", new IVal<ProcessModelBean>() {
-			@Override
-			public ProcessModelBean get() {
-				return mService.getBean(getProcessBean(pp).getModelId());
-			}
-		});
-	}
-
 	@Override
 	public ElementList getLeftElements(final PageParameter pp) {
 		final ElementList el = ElementList.of();
@@ -171,11 +156,6 @@ public abstract class AbstractWorkflowFormTPage extends AbstractFormTableRowTPag
 			el.append(createSaveBtn(pp), createCompleteBtn(pp));
 		}
 		return el;
-	}
-
-	@Override
-	public boolean isButtonsOnTop(final PageParameter pp) {
-		return true;
 	}
 
 	protected String getP() {
@@ -221,56 +201,5 @@ public abstract class AbstractWorkflowFormTPage extends AbstractFormTableRowTPag
 		final EWorkitemStatus status = workitem.getStatus();
 		return status != EWorkitemStatus.running && status != EWorkitemStatus.suspended
 				&& status != EWorkitemStatus.delegate;
-	}
-
-	protected WorkitemBean getWorkitemBean(final PageParameter pp) {
-		return WorkflowUtils.getWorkitemBean(pp);
-	}
-
-	protected ActivityBean getActivityBean(final PageParameter pp) {
-		return pp.getRequestCache("$ActivityBean", new IVal<ActivityBean>() {
-			@Override
-			public ActivityBean get() {
-				return wService.getActivity(getWorkitemBean(pp));
-			}
-		});
-	}
-
-	protected ProcessBean getProcessBean(final PageParameter pp) {
-		return pp.getRequestCache("$ProcessBean", new IVal<ProcessBean>() {
-			@Override
-			public ProcessBean get() {
-				return wService.getProcessBean(getWorkitemBean(pp));
-			}
-		});
-	}
-
-	protected ProcessNode getProcessNode(final PageParameter pp) {
-		return pp.getRequestCache("$ProcessNode", new IVal<ProcessNode>() {
-			@Override
-			public ProcessNode get() {
-				final ProcessDocument doc = pService.getProcessDocument(getProcessBean(pp));
-				return doc == null ? null : doc.getProcessNode();
-			}
-		});
-	}
-
-	protected AbstractTaskNode getTaskNode(final PageParameter pp) {
-		return pp.getRequestCache("$TaskNode", new IVal<AbstractTaskNode>() {
-			@Override
-			public AbstractTaskNode get() {
-				return aService.getTaskNode(getActivityBean(pp));
-			}
-		});
-	}
-
-	protected String getProcessNodeProperty(final PageParameter pp, final String key) {
-		final ProcessNode node = getProcessNode(pp);
-		return node == null ? null : node.getProperty(key);
-	}
-
-	protected String getTaskNodeProperty(final PageParameter pp, final String key) {
-		final AbstractTaskNode node = getTaskNode(pp);
-		return node == null ? null : node.getProperty(key);
 	}
 }
