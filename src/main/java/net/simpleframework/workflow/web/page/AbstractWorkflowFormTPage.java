@@ -12,7 +12,6 @@ import net.simpleframework.mvc.common.element.AbstractElement;
 import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.Icon;
 import net.simpleframework.mvc.common.element.InputElement;
-import net.simpleframework.mvc.common.element.LinkButton;
 import net.simpleframework.mvc.common.element.RowField;
 import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.common.element.TableRow;
@@ -32,7 +31,6 @@ import net.simpleframework.workflow.web.component.comments.IWfCommentHandler;
 import net.simpleframework.workflow.web.component.comments.WfCommentBean;
 import net.simpleframework.workflow.web.component.comments.WfCommentUtils;
 import net.simpleframework.workflow.web.component.complete.WorkitemCompleteBean;
-import net.simpleframework.workflow.web.component.workview.DoWorkviewBean;
 import net.simpleframework.workflow.web.page.t1.WorkflowCompleteInfoPage;
 import net.simpleframework.workflow.web.page.t1.WorkflowFormPage;
 
@@ -70,10 +68,6 @@ public abstract class AbstractWorkflowFormTPage extends AbstractFormTableRowTPag
 		return (WorkitemCompleteBean) addComponentBean(pp, "AbstractWorkflowFormPage_completeAction",
 				WorkitemCompleteBean.class).setSelector(getFormSelector()).setParameters(
 				"_isSendAction=false");
-	}
-
-	protected DoWorkviewBean addDoWorkviewBean(final PageParameter pp) {
-		return addComponentBean(pp, "AbstractWorkflowFormPage_doWorkview", DoWorkviewBean.class);
 	}
 
 	protected WfCommentBean addWfCommentBean(final PageParameter pp) {
@@ -139,13 +133,6 @@ public abstract class AbstractWorkflowFormTPage extends AbstractFormTableRowTPag
 	protected AbstractElement<?> createCompleteBtn(final PageParameter pp) {
 		return VALIDATION_BTN2($m("AbstractWorkflowFormPage.1")).setIconClass(Icon.check).setOnclick(
 				"$Actions['AbstractWorkflowFormPage_completeAction']();");
-	}
-
-	protected AbstractElement<?> createDoWorkviewBtn(final PageParameter pp) {
-		final WorkitemBean item = getWorkitemBean(pp);
-		return LinkButton.of($m("AbstractWorkflowFormTPage.1")).setOnclick(
-				"$Actions['AbstractWorkflowFormPage_doWorkview']('workitemId="
-						+ (null != item ? item.getId() : "") + "');");
 	}
 
 	@Override

@@ -1,6 +1,9 @@
 package net.simpleframework.workflow.web.page;
 
+import static net.simpleframework.common.I18n.$m;
 import net.simpleframework.mvc.PageParameter;
+import net.simpleframework.mvc.common.element.AbstractElement;
+import net.simpleframework.mvc.common.element.LinkButton;
 import net.simpleframework.mvc.template.lets.FormTableRowTemplatePage;
 import net.simpleframework.workflow.engine.ActivityBean;
 import net.simpleframework.workflow.engine.IWorkflowServiceAware;
@@ -11,6 +14,7 @@ import net.simpleframework.workflow.schema.AbstractTaskNode;
 import net.simpleframework.workflow.schema.ProcessDocument;
 import net.simpleframework.workflow.schema.ProcessNode;
 import net.simpleframework.workflow.web.WorkflowUtils;
+import net.simpleframework.workflow.web.component.workview.DoWorkviewBean;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -23,6 +27,17 @@ public class AbstractFormTableRowTPage extends FormTableRowTemplatePage implemen
 
 	public String getForwardUrl(final PageParameter pp) {
 		return url(getClass());
+	}
+
+	protected DoWorkviewBean addDoWorkviewBean(final PageParameter pp) {
+		return addComponentBean(pp, "AbstractWorkflowFormPage_doWorkview", DoWorkviewBean.class);
+	}
+
+	protected AbstractElement<?> createDoWorkviewBtn(final PageParameter pp) {
+		final WorkitemBean item = getWorkitemBean(pp);
+		return LinkButton.of($m("AbstractWorkflowFormTPage.1")).setOnclick(
+				"$Actions['AbstractWorkflowFormPage_doWorkview']('workitemId="
+						+ (null != item ? item.getId() : "") + "');");
 	}
 
 	@Override
