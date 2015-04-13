@@ -20,13 +20,16 @@ import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.base.validation.EValidatorMethod;
 import net.simpleframework.mvc.component.base.validation.ValidationBean;
 import net.simpleframework.mvc.component.base.validation.Validator;
+import net.simpleframework.workflow.engine.ActivityBean;
 import net.simpleframework.workflow.engine.EWorkitemStatus;
 import net.simpleframework.workflow.engine.IWorkflowContext;
 import net.simpleframework.workflow.engine.ProcessBean;
 import net.simpleframework.workflow.engine.WorkitemBean;
 import net.simpleframework.workflow.engine.WorkitemComplete;
+import net.simpleframework.workflow.schema.AbstractTaskNode;
 import net.simpleframework.workflow.web.IWorkflowWebContext;
 import net.simpleframework.workflow.web.IWorkflowWebForm;
+import net.simpleframework.workflow.web.WorkflowUtils;
 import net.simpleframework.workflow.web.component.comments.IWfCommentHandler;
 import net.simpleframework.workflow.web.component.comments.WfCommentBean;
 import net.simpleframework.workflow.web.component.comments.WfCommentUtils;
@@ -40,8 +43,8 @@ import net.simpleframework.workflow.web.page.t1.WorkflowFormPage;
  * @author 陈侃(cknet@126.com, 13910090885) https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
-public abstract class AbstractWorkflowFormTPage extends AbstractFormTableRowTPage implements
-		IWorkflowWebForm {
+public abstract class AbstractWorkflowFormTPage extends AbstractFormTableRowTPage<WorkitemBean>
+		implements IWorkflowWebForm {
 	@Override
 	protected boolean isPage404(final PageParameter pp) {
 		return getWorkitemBean(pp) == null;
@@ -188,5 +191,33 @@ public abstract class AbstractWorkflowFormTPage extends AbstractFormTableRowTPag
 		final EWorkitemStatus status = workitem.getStatus();
 		return status != EWorkitemStatus.running && status != EWorkitemStatus.suspended
 				&& status != EWorkitemStatus.delegate;
+	}
+
+	@Override
+	protected WorkitemBean getWorkitemBean(final PageParameter pp) {
+		return WorkflowUtils.getWorkitemBean(pp);
+	}
+
+	protected ActivityBean getActivityBean(final PageParameter pp) {
+		return pp.getRequestCache("$ActivityBean", new IVal<ActivityBean>() {
+			@Override
+			public ActivityBean get() {
+				return wService.getActivity(getWorkitemBean(pp));
+			}
+		});
+	}
+
+	protected AbstractTaskNode getTaskNode(final PageParameter pp) {
+		return pp.getRequestCache("$TaskNode", new IVal<AbstractTaskNode>() {
+			@Override
+			public AbstractTaskNode get() {
+				return aService.getTaskNode(getActivityBean(pp));
+			}
+		});
+	}
+
+	protected String getTaskNodeProperty(final PageParameter pp, final String key) {
+		final AbstractTaskNode node = getTaskNode(pp);
+		return node == null ? null : node.getProperty(key);
 	}
 }
