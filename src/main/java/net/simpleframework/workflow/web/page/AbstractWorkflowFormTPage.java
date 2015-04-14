@@ -61,9 +61,12 @@ public abstract class AbstractWorkflowFormTPage extends AbstractFormTableRowTPag
 		addFormValidationBean(pp);
 
 		final WorkitemBean workitem = getWorkitemBean(pp);
-		// wService.doUnNcomments(workitem);
-		if (workitem != null && !workitem.isReadMark()) {
-			wService.doReadMark(workitem);
+		if (workitem != null) {
+			// 重置新到意见
+			commentUserService.resetCommentUser(workitem.getUserId(), workitem.getProcessId());
+			if (!workitem.isReadMark()) {
+				wService.doReadMark(workitem);
+			}
 		}
 	}
 

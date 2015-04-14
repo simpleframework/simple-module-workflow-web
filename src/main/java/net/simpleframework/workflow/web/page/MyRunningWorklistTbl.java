@@ -235,13 +235,12 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 
 		final StringBuilder stat = new StringBuilder();
 		SpanElement commentsEle;
-		// final int ncomments;
-		// if ((ncomments = workitem.getNcomments()) > 0) {
-		// commentsEle = new
-		// SpanElement(ncomments).setStrong(true).setColor("#a00");
-		// } else {
-		commentsEle = new SpanElement(processBean.getComments());
-		// }
+		final int ncomments;
+		if ((ncomments = commentUserService.getCommentUser(workitem).getNcomments()) > 0) {
+			commentsEle = new SpanElement(ncomments).setStrong(true).setColor("#a00");
+		} else {
+			commentsEle = new SpanElement(processBean.getComments());
+		}
 		stat.append(commentsEle.setItalic(true)).append("/")
 				.append(new SpanElement(processBean.getViews()).setItalic(true));
 		row.add("title", title.toString()).add("pstat", stat.toString())
