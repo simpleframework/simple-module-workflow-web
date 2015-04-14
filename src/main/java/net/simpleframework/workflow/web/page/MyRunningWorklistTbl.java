@@ -43,6 +43,7 @@ import net.simpleframework.workflow.engine.IWorkflowServiceAware;
 import net.simpleframework.workflow.engine.ProcessBean;
 import net.simpleframework.workflow.engine.ProcessModelBean;
 import net.simpleframework.workflow.engine.WorkitemBean;
+import net.simpleframework.workflow.engine.ext.WfCommentUser;
 import net.simpleframework.workflow.schema.AbstractTaskNode;
 import net.simpleframework.workflow.web.IWorkflowWebContext;
 import net.simpleframework.workflow.web.WorkflowUrlsFactory;
@@ -235,8 +236,10 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 
 		final StringBuilder stat = new StringBuilder();
 		SpanElement commentsEle;
+		final WfCommentUser commentUser = commentUserService.getCommentUser(workitem.getUserId(),
+				workitem.getProcessId());
 		final int ncomments;
-		if ((ncomments = commentUserService.getCommentUser(workitem).getNcomments()) > 0) {
+		if (commentUser != null && (ncomments = commentUser.getNcomments()) > 0) {
 			commentsEle = new SpanElement(ncomments).setStrong(true).setColor("#a00");
 		} else {
 			commentsEle = new SpanElement(processBean.getComments());
