@@ -234,11 +234,14 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 		title.append(tEle.setColor_gray(!StringUtils.hasText(processBean.getTitle())));
 
 		final StringBuilder stat = new StringBuilder();
-		final SpanElement commentsEle = new SpanElement(processBean.getComments()).setItalic(true);
-		if (workitem.isNcommentFlag()) {
-			commentsEle.setStrong(true).setColor("#a00");
+		SpanElement commentsEle;
+		int ncomments;
+		if ((ncomments = workitem.getNcomments()) > 0) {
+			commentsEle = new SpanElement(ncomments).setStrong(true).setColor("#a00");
+		} else {
+			commentsEle = new SpanElement(processBean.getComments());
 		}
-		stat.append(commentsEle).append("/")
+		stat.append(commentsEle.setItalic(true)).append("/")
 				.append(new SpanElement(processBean.getViews()).setItalic(true));
 		row.add("title", title.toString()).add("pstat", stat.toString())
 				.add("userFrom", WorkflowUtils.getUserFrom(activity))

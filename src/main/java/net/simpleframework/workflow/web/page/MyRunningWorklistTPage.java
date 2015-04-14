@@ -123,7 +123,7 @@ public class MyRunningWorklistTPage extends AbstractWorkitemsTPage {
 				.addColumn(TC_TITLE())
 				.addColumn(
 						new TablePagerColumn("userFrom", $m("MyRunningWorklistTPage.0"), 85)
-								.setTextAlign(ETextAlign.center).setFilterSort(false).setNowrap(false))
+								.setFilterSort(false).setNowrap(false))
 				.addColumn(
 						new TablePagerColumn("pstat", $m("MyRunningWorklistTPage.13"), 65).setTextAlign(
 								ETextAlign.center).setFilterSort(false))
