@@ -9,7 +9,9 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import net.simpleframework.common.Convert;
 import net.simpleframework.common.ID;
+import net.simpleframework.common.web.HttpUtils;
 import net.simpleframework.ctx.permission.PermissionUser;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageRequestResponse;
@@ -54,12 +56,27 @@ public abstract class DoWorkviewUtils implements IWorkflowContextAware, IWorkflo
 		return sb.toString();
 	}
 
+	static String jsActions(final ComponentParameter cp, final String postfix) {
+		return jsActions(cp, postfix, null);
+	}
+
+	static String jsActions(final ComponentParameter cp, final String postfix, final String params) {
+		final StringBuilder sb = new StringBuilder();
+		sb.append("$Actions['").append(cp.getComponentName()).append(postfix).append("']('");
+		if (params != null) {
+			sb.append(HttpUtils.addParameters(toParams(cp), params));
+		} else {
+			sb.append(toParams(cp));
+		}
+		sb.append("');");
+		return sb.toString();
+	}
+
 	public static void doForword(final ComponentParameter cp) throws Exception {
 		WfComponentUtils.doForword(cp, new IJavascriptCallback() {
 			@Override
 			public void doJavascript(final JavascriptForward js) {
-				js.append("$Actions['").append(cp.getComponentName()).append("_win']('")
-						.append(toParams(cp)).append("');");
+				js.append(jsActions(cp, "_win"));
 			}
 		});
 	}
@@ -67,7 +84,6 @@ public abstract class DoWorkviewUtils implements IWorkflowContextAware, IWorkflo
 	static final String SESSION_ULIST = "_ulist";
 
 	public static String toSelectHTML(final ComponentParameter cp) {
-		final String componentName = cp.getComponentName();
 		final StringBuilder sb = new StringBuilder();
 		sb.append("<div class='wv_tt clearfix'>");
 		sb.append(" <div class='left'>");
@@ -78,9 +94,7 @@ public abstract class DoWorkviewUtils implements IWorkflowContextAware, IWorkflo
 		sb.append(toUserList(cp));
 		sb.append("</div>");
 		sb.append("<div class='wv_bb'>");
-		sb.append(
-				ButtonElement.okBtn().setHighlight(true)
-						.setOnclick("$Actions['" + componentName + "_save']('" + toParams(cp) + "');"))
+		sb.append(ButtonElement.okBtn().setHighlight(true).setOnclick(jsActions(cp, "_save")))
 				.append(SpanElement.SPACE);
 		sb.append(ButtonElement.WINDOW_CLOSE);
 		sb.append("</div>");
@@ -104,11 +118,17 @@ public abstract class DoWorkviewUtils implements IWorkflowContextAware, IWorkflo
 					sb.append(toItemHTML(cp, user, false));
 				}
 			}
+			if (cp.getBoolParameter("clearAll2")) {
+				for (final PermissionUser user : slist) {
+					ulist.remove(Convert.toString(user.getId()));
+				}
+				slist.clear();
+			}
 			if (slist.size() > 0) {
 				sb.append("<div class='uitem2'>");
 				sb.append(" <span>").append($m("DoWorkviewUtils.3")).append("</span>");
-				sb.append(" <a class='simple_btn2' onclick=\"\">").append($m("DoWorkviewUtils.2"))
-						.append("</a>");
+				sb.append(" <a class='simple_btn2' onclick=\"").append(jsActions(cp, "_clearAll2"))
+						.append("\">").append($m("DoWorkviewUtils.2")).append("</a>");
 				sb.append("</div>");
 				for (final PermissionUser user : slist) {
 					sb.append(toItemHTML(cp, user, true));
@@ -131,9 +151,8 @@ public abstract class DoWorkviewUtils implements IWorkflowContextAware, IWorkflo
 		sb.append(" <div class='dept'>").append(user.getDept()).append("</div>");
 		if (!sent) {
 			sb.append(" <div class='act' style='display: none;'>");
-			sb.append("  <span class='del' onclick=\"$Actions['").append(cp.getComponentName())
-					.append("_del']('uid=").append(user.getId()).append("&").append(toParams(cp))
-					.append("');\"></span>");
+			sb.append("  <span class='del' onclick=\"")
+					.append(jsActions(cp, "_del", "uid=" + user.getId())).append("\"></span>");
 			sb.append(" </div>");
 		}
 		sb.append("</div>");

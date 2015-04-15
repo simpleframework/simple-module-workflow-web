@@ -47,8 +47,10 @@ public class WorkviewSelectLoaded extends DefaultPageHandler implements IWorkflo
 				.setHandlerMethod("doLoad").setHandlerClass(UserListAction.class);
 		// 删除
 		pp.addComponentBean(componentName + "_del", AjaxRequestBean.class)
-				.setConfirmMessage($m("Confirm.Delete")).setHandlerMethod("doDelete")
-				.setHandlerClass(UserListAction.class);
+				.setHandlerMethod("doDelete").setHandlerClass(UserListAction.class);
+		pp.addComponentBean(componentName + "_clearAll2", AjaxRequestBean.class)
+				.setHandlerMethod("doClearAll2").setHandlerClass(UserListAction.class);
+
 		// 保存
 		pp.addComponentBean(componentName + "_save", AjaxRequestBean.class)
 				.setConfirmMessage($m("WorkviewSelectLoaded.1")).setHandlerMethod("doSave")
@@ -95,8 +97,7 @@ public class WorkviewSelectLoaded extends DefaultPageHandler implements IWorkflo
 					}
 				}
 			}
-			return new JavascriptForward("DoWorkview_user_selected(null, '").append(
-					DoWorkviewUtils.toParams(nCP)).append("');");
+			return new JavascriptForward("DoWorkview_user_selected();");
 		}
 
 		@SuppressWarnings("unchecked")
@@ -123,6 +124,11 @@ public class WorkviewSelectLoaded extends DefaultPageHandler implements IWorkflo
 				nCP.removeSessionAttr(DoWorkviewUtils.SESSION_ULIST);
 			}
 			return js;
+		}
+
+		public IForward doClearAll2(final ComponentParameter cp) throws Exception {
+			// final ComponentParameter nCP = DoWorkviewUtils.get(cp);
+			return new JavascriptForward("DoWorkview_user_selected(null, 'clearAll2=true');");
 		}
 	}
 }

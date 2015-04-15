@@ -30,7 +30,7 @@
       r.push(o.id);
       return r;
     }).join(";") : '';
-    act(('userIds=' + userIds).addParameter(params));
+    act(('<%=DoWorkviewUtils.toParams(nCP)%>&userIds=' + userIds).addParameter(params));
     return true;
   }
   
