@@ -136,7 +136,7 @@ public class MyRunningWorklistTPage extends AbstractWorkitemsTPage {
 						return Option.from(EWorkitemStatus.running, EWorkitemStatus.delegate,
 								EWorkitemStatus.suspended);
 					};
-				}.setPropertyClass(EWorkitemStatus.class))
+				}.setSort(false).setPropertyClass(EWorkitemStatus.class))
 				.addColumn(TablePagerColumn.OPE().setWidth(70));
 		return tablePager;
 	}
