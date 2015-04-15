@@ -73,9 +73,6 @@ public abstract class DoWorkviewUtils implements IWorkflowContextAware, IWorkflo
 		sb.append(" <div class='left'>");
 		sb.append(ElementList.of(LinkButton.menu($m("Add")).setId("idWorkviewSelectLoaded_addMenu")));
 		sb.append(" </div>");
-		sb.append(" <div class='right'>");
-		sb.append(LinkButton.corner($m("DoWorkviewUtils.2")));
-		sb.append(" </div>");
 		sb.append("</div>");
 		sb.append("<div class='wv_cc'>");
 		sb.append(toUserList(cp));
@@ -107,8 +104,15 @@ public abstract class DoWorkviewUtils implements IWorkflowContextAware, IWorkflo
 					sb.append(toItemHTML(cp, user, false));
 				}
 			}
-			for (final PermissionUser user : slist) {
-				sb.append(toItemHTML(cp, user, true));
+			if (slist.size() > 0) {
+				sb.append("<div class='uitem2'>");
+				sb.append(" <span>").append($m("DoWorkviewUtils.3")).append("</span>");
+				sb.append(" <a class='simple_btn2' onclick=\"\">").append($m("DoWorkviewUtils.2"))
+						.append("</a>");
+				sb.append("</div>");
+				for (final PermissionUser user : slist) {
+					sb.append(toItemHTML(cp, user, true));
+				}
 			}
 			sb.append("<script type='text/javascript'>DoWorkview_init();</script>");
 		}
@@ -125,11 +129,13 @@ public abstract class DoWorkviewUtils implements IWorkflowContextAware, IWorkflo
 		sb.append("'>");
 		sb.append(" <div>").append(user).append(" (").append(user.getName()).append(")</div>");
 		sb.append(" <div class='dept'>").append(user.getDept()).append("</div>");
-		sb.append(" <div class='act' style='display: none;'>");
-		sb.append("  <span class='del' onclick=\"$Actions['").append(cp.getComponentName())
-				.append("_del']('uid=").append(user.getId()).append("&").append(toParams(cp))
-				.append("');\"></span>");
-		sb.append(" </div>");
+		if (!sent) {
+			sb.append(" <div class='act' style='display: none;'>");
+			sb.append("  <span class='del' onclick=\"$Actions['").append(cp.getComponentName())
+					.append("_del']('uid=").append(user.getId()).append("&").append(toParams(cp))
+					.append("');\"></span>");
+			sb.append(" </div>");
+		}
 		sb.append("</div>");
 		return sb.toString();
 	}

@@ -27,6 +27,12 @@
   position: relative;
 }
 
+.workview_select .uitem2 {
+  background-color: #def;
+  border-bottom: 1px solid #ccc;
+  padding: 8px;
+}
+
 .workview_select .uitem:hover {
   background-color: #f5f5f5;
 }

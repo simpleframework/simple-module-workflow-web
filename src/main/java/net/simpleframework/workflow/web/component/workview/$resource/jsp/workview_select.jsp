@@ -13,9 +13,13 @@
 	function DoWorkview_init() {
 	  $(".workview_select .wv_cc").select(".uitem").invoke("observe",
         "mouseenter", function(evn) {
-          $(this).down(".act").show();
+	    		var act = $(this).down(".act");
+	    		if (act)
+	    			act.show();
         }).invoke("observe", "mouseleave", function(evn) {
-      $(this).down(".act").hide();
+          var act = $(this).down(".act");
+          if (act)
+          	act.hide();
     });
 	}
 	
@@ -37,7 +41,7 @@
     w.content.setStyle("overflow:hidden;");
     var s = function() {
       var h = w.getSize(true).height;
-      ts.setStyle('height: ' + (h - 67) + 'px;');
+      ts.setStyle('height: ' + (h - 66) + 'px;');
     };
     s();
     w.observe("resize:ended", s);
