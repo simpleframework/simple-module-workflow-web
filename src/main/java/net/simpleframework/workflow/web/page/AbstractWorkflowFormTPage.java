@@ -203,12 +203,7 @@ public abstract class AbstractWorkflowFormTPage extends AbstractFormTableRowTPag
 	}
 
 	protected ActivityBean getActivityBean(final PageParameter pp) {
-		return pp.getRequestCache("$ActivityBean", new IVal<ActivityBean>() {
-			@Override
-			public ActivityBean get() {
-				return wService.getActivity(getWorkitemBean(pp));
-			}
-		});
+		return WorkflowUtils.getActivityBean(pp);
 	}
 
 	protected AbstractTaskNode getTaskNode(final PageParameter pp) {

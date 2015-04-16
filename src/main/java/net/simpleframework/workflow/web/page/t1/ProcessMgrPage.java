@@ -111,7 +111,7 @@ public class ProcessMgrPage extends AbstractWorkflowMgrPage {
 
 		@Override
 		public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
-			final ProcessModelBean processModel = getProcessModelBean(cp);
+			final ProcessModelBean processModel = WorkflowUtils.getProcessModel(cp);
 			if (processModel == null) {
 				return DataQueryUtils.nullQuery();
 			}
@@ -234,9 +234,5 @@ public class ProcessMgrPage extends AbstractWorkflowMgrPage {
 		protected InputElement getIdInput(final PageParameter pp) {
 			return InputElement.hidden("processId").setValue(pp);
 		}
-	}
-
-	private static ProcessModelBean getProcessModelBean(final PageParameter pp) {
-		return getCacheBean(pp, mService, "modelId");
 	}
 }

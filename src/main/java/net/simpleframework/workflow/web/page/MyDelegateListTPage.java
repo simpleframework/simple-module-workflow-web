@@ -130,7 +130,7 @@ public class MyDelegateListTPage extends AbstractWorkitemsTPage {
 							+ "');");
 		}
 
-		protected Object toOpe(final DelegationBean delegation) {
+		protected String toOpeHTML(final ComponentParameter cp, final DelegationBean delegation) {
 			final StringBuilder sb = new StringBuilder();
 			final Object id = delegation.getId();
 			if (dService.isFinalStatus(delegation)) {
@@ -142,7 +142,7 @@ public class MyDelegateListTPage extends AbstractWorkitemsTPage {
 			}
 
 			sb.append(SpanElement.SPACE).append(AbstractTablePagerSchema.IMG_DOWNMENU);
-			return sb;
+			return sb.toString();
 		}
 
 		@Override
@@ -159,7 +159,7 @@ public class MyDelegateListTPage extends AbstractWorkitemsTPage {
 			row.add("createDate", delegation.getCreateDate());
 			final EDelegationStatus status = delegation.getStatus();
 			row.add("status", WorkflowUtils.toStatusHTML(cp, status));
-			row.add(TablePagerColumn.OPE, toOpe(delegation));
+			row.add(TablePagerColumn.OPE, toOpeHTML(cp, delegation));
 			return row;
 		}
 

@@ -65,7 +65,7 @@ public class WorkitemsMgrPage extends OneTableTemplatePage implements IWorkflowS
 
 	@Override
 	public String getTitle(final PageParameter pp) {
-		return $m("WorkitemsMgrPage.5") + " - " + getActivityBean(pp);
+		return $m("WorkitemsMgrPage.5") + " - " + WorkflowUtils.getActivityBean(pp);
 	}
 
 	@Override
@@ -77,7 +77,7 @@ public class WorkitemsMgrPage extends OneTableTemplatePage implements IWorkflowS
 
 		@Override
 		public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
-			final ActivityBean activity = getActivityBean(cp);
+			final ActivityBean activity = WorkflowUtils.getActivityBean(cp);
 			cp.addFormParameter("activityId", activity.getId());
 			return new ListDataQuery<WorkitemBean>(wService.getWorkitems(activity));
 		}
@@ -102,9 +102,5 @@ public class WorkitemsMgrPage extends OneTableTemplatePage implements IWorkflowS
 			row.add(TablePagerColumn.OPE, sb.toString());
 			return row;
 		}
-	}
-
-	private static ActivityBean getActivityBean(final PageParameter pp) {
-		return getCacheBean(pp, aService, "activityId");
 	}
 }

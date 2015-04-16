@@ -11,6 +11,7 @@ import net.simpleframework.workflow.engine.ProcessBean;
 import net.simpleframework.workflow.engine.ProcessModelBean;
 import net.simpleframework.workflow.schema.ProcessDocument;
 import net.simpleframework.workflow.schema.ProcessNode;
+import net.simpleframework.workflow.web.WorkflowUtils;
 import net.simpleframework.workflow.web.component.workview.DoWorkviewBean;
 
 /**
@@ -45,24 +46,11 @@ public abstract class AbstractFormTableRowTPage<T extends AbstractWorkitemBean> 
 	protected abstract T getWorkitemBean(final PageParameter pp);
 
 	protected ProcessBean getProcessBean(final PageParameter pp) {
-		return pp.getRequestCache("$ProcessBean", new IVal<ProcessBean>() {
-			@Override
-			public ProcessBean get() {
-				final T item = getWorkitemBean(pp);
-				if (null == item)
-					return null;
-				return pService.getBean(item.getProcessId());
-			}
-		});
+		return WorkflowUtils.getProcessBean(pp);
 	}
 
 	protected ProcessModelBean getProcessModel(final PageParameter pp) {
-		return pp.getRequestCache("$ProcessModelBean", new IVal<ProcessModelBean>() {
-			@Override
-			public ProcessModelBean get() {
-				return mService.getBean(getProcessBean(pp).getModelId());
-			}
-		});
+		return WorkflowUtils.getProcessModel(pp);
 	}
 
 	protected ProcessNode getProcessNode(final PageParameter pp) {

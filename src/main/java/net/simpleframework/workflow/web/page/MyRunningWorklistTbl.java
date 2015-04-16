@@ -186,12 +186,12 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 		final WorkitemBean workitem = (WorkitemBean) dataObject;
 		final KVMap row = new KVMap();
 
-		final ActivityBean activity = wService.getActivity(workitem);
-
 		final AbstractElement<?> img = createImageMark(cp, workitem);
 		if (img != null) {
 			row.add(TablePagerColumn.ICON, img);
 		}
+
+		final ActivityBean activity = WorkflowUtils.getActivityBean(cp, workitem);
 
 		final StringBuilder title = new StringBuilder();
 		appendTaskname(title, cp, activity);
@@ -224,7 +224,7 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 		final boolean receiving = delegation != null
 				&& delegation.getStatus() == EDelegationStatus.receiving;
 		AbstractElement<?> tEle;
-		final ProcessBean processBean = aService.getProcessBean(activity);
+		final ProcessBean processBean = WorkflowUtils.getProcessBean(cp, workitem);
 		if (receiving) {
 			tEle = new SpanElement(WorkflowUtils.getProcessTitle(processBean));
 		} else {
@@ -233,6 +233,7 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 					"$Actions.loc('" + uFactory.getUrl(cp, WorkflowFormPage.class, workitem) + "');");
 		}
 		title.append(tEle.setColor_gray(!StringUtils.hasText(processBean.getTitle())));
+		row.add("title", title.toString());
 
 		final StringBuilder stat = new StringBuilder();
 		SpanElement commentsEle;
@@ -246,9 +247,10 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 		}
 		stat.append(commentsEle.setItalic(true)).append("/")
 				.append(new SpanElement(processBean.getViews()).setItalic(true));
-		row.add("title", title.toString()).add("pstat", stat.toString())
-				.add("userFrom", WorkflowUtils.getUserFrom(activity))
-				.add("userTo", WorkflowUtils.getUserTo(activity));
+		row.add("pstat", stat.toString());
+
+		row.add("userFrom", WorkflowUtils.getUserFrom(activity)).add("userTo",
+				WorkflowUtils.getUserTo(activity));
 		final Date createDate = workitem.getCreateDate();
 		row.add("createDate",
 				new SpanElement(DateUtils.getRelativeDate(createDate, DATE_NUMBERCONVERT))
@@ -256,6 +258,12 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 		row.add("completeDate", workitem.getCompleteDate()).add("status",
 				WorkflowUtils.toStatusHTML(cp, status));
 
+		row.put(TablePagerColumn.OPE, toOpeHTML(cp, workitem, receiving));
+		return row;
+	}
+
+	protected String toOpeHTML(final ComponentParameter cp, final WorkitemBean workitem,
+			final boolean receiving) {
 		final StringBuilder ope = new StringBuilder();
 		if (receiving) {
 			ope.append(new ButtonElement(EDelegationStatus.receiving).setHighlight(true).setOnclick(
@@ -266,8 +274,7 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 					+ uFactory.getUrl(cp, WorkflowMonitorPage.class, workitem) + "');"));
 		}
 		ope.append(SpanElement.SPACE).append(AbstractTablePagerSchema.IMG_DOWNMENU);
-		row.put(TablePagerColumn.OPE, ope.toString());
-		return row;
+		return ope.toString();
 	}
 
 	@Override

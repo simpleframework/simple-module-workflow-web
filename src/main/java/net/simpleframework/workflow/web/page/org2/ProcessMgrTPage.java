@@ -27,6 +27,7 @@ import net.simpleframework.workflow.engine.EProcessStatus;
 import net.simpleframework.workflow.engine.ProcessBean;
 import net.simpleframework.workflow.engine.ProcessModelBean;
 import net.simpleframework.workflow.web.WorkflowLogRef.ProcessUpdateLogPage;
+import net.simpleframework.workflow.web.WorkflowUtils;
 import net.simpleframework.workflow.web.page.t1.AbstractWorkflowMgrPage;
 import net.simpleframework.workflow.web.page.t1.ProcessMgrPage.ProcessTbl;
 import net.simpleframework.workflow.web.page.t1.ProcessMgrPage.StatusDescPage;
@@ -72,7 +73,7 @@ public class ProcessMgrTPage extends AbstractWorkflowMgrTPage {
 	@Override
 	protected SpanElement createOrgElement(final PageParameter pp) {
 		final SpanElement oele = super.createOrgElement(pp);
-		final ProcessModelBean pm = getProcessModel(pp);
+		final ProcessModelBean pm = WorkflowUtils.getProcessModel(pp);
 		if (pm != null) {
 			oele.setText(oele.getText() + " - " + pm.getModelText());
 		}
@@ -97,7 +98,7 @@ public class ProcessMgrTPage extends AbstractWorkflowMgrTPage {
 		public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
 			final PermissionDept org = getPermissionOrg(cp);
 			ProcessModelBean pm;
-			if (org != null && (pm = getProcessModel(cp)) != null) {
+			if (org != null && (pm = WorkflowUtils.getProcessModel(cp)) != null) {
 				final ID orgId = org.getId();
 				cp.addFormParameter("orgId", orgId).addFormParameter("modelId", pm.getId());
 				return pService.getProcessList(orgId, pm);
@@ -131,15 +132,6 @@ public class ProcessMgrTPage extends AbstractWorkflowMgrTPage {
 					MenuItem.of(EProcessStatus.abort.toString()).setOnclick_act("ProcessMgrPage_abort",
 							"processId")) : null;
 		}
-	}
-
-	private static ProcessModelBean getProcessModel(final PageParameter pp) {
-		return pp.getRequestCache("@ProcessModelBean", new IVal<ProcessModelBean>() {
-			@Override
-			public ProcessModelBean get() {
-				return mService.getBean(pp.getParameter("modelId"));
-			}
-		});
 	}
 
 	public static class _StatusDescPage extends StatusDescPage {

@@ -89,7 +89,7 @@ public class UserDelegateListTPage extends MyDelegateListTPage {
 			row.add("createDate", delegation.getCreateDate());
 			final EDelegationStatus status = delegation.getStatus();
 			row.add("status", WorkflowUtils.toStatusHTML(cp, status));
-			row.add(TablePagerColumn.OPE, toOpe(delegation));
+			row.add(TablePagerColumn.OPE, toOpeHTML(cp, delegation));
 			return row;
 		}
 	}

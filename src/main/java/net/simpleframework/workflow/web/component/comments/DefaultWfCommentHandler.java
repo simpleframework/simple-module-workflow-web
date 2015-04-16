@@ -48,6 +48,10 @@ import net.simpleframework.workflow.web.component.comments.WfCommentBean.EGroupB
 public class DefaultWfCommentHandler extends ComponentHandlerEx implements IWfCommentHandler,
 		IWorkflowContextAware {
 
+	protected ProcessBean getProcessBean(final ComponentParameter cp) {
+		return WorkflowUtils.getProcessBean(cp);
+	}
+
 	@Override
 	public IDataQuery<WfComment> comments(final ComponentParameter cp) {
 		final ProcessBean processBean = getProcessBean(cp);
@@ -57,21 +61,9 @@ public class DefaultWfCommentHandler extends ComponentHandlerEx implements IWfCo
 		return workflowContext.getCommentService().queryComments(processBean.getId());
 	}
 
-	protected ProcessBean getProcessBean(final ComponentParameter cp) {
-		final WorkitemBean workitem = getWorkitemBean(cp);
-		if (workitem != null) {
-			return workflowContext.getProcessService().getBean(workitem.getProcessId());
-		}
-		return null;
-	}
-
-	protected WorkitemBean getWorkitemBean(final ComponentParameter cp) {
-		return WorkflowUtils.getWorkitemBean(cp);
-	}
-
 	@Override
 	public void onSave(final ComponentParameter cp) {
-		final WorkitemBean workitem = getWorkitemBean(cp);
+		final WorkitemBean workitem = WorkflowUtils.getWorkitemBean(cp);
 		final String ccomment = cp.getParameter("ta_wfcomment");
 		if (!StringUtils.hasText(ccomment)) {
 			return;
@@ -173,7 +165,7 @@ public class DefaultWfCommentHandler extends ComponentHandlerEx implements IWfCo
 
 	@Override
 	public String toHTML(final ComponentParameter cp) {
-		final WorkitemBean workitem = getWorkitemBean(cp);
+		final WorkitemBean workitem = WorkflowUtils.getWorkitemBean(cp);
 
 		EGroupBy groupBy = cp.getEnumParameter(EGroupBy.class, "groupBy");
 		if (groupBy == null) {
