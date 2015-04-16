@@ -6,6 +6,7 @@ import java.util.List;
 
 import net.simpleframework.common.ID;
 import net.simpleframework.mvc.JavascriptForward;
+import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.component.AbstractComponentHandler;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.workflow.engine.IWorkflowServiceAware;
@@ -26,7 +27,11 @@ public class DefaultDoWorkviewHandler extends AbstractComponentHandler implement
 		final List<WorkviewBean> list = vService.createWorkviews(WorkflowUtils.getWorkitemBean(cp),
 				ids.toArray(new ID[ids.size()]));
 		final JavascriptForward js = new JavascriptForward();
-		js.append("alert('").append($m("DefaultDoWorkviewHandler.0", list.size())).append("');");
+		js.append("alert('")
+				.append(
+						$m("DefaultDoWorkviewHandler.0", new SpanElement(list.size())
+								.setStyle("color: #c00;font-size: 14pt;font-style: italic;margin: 0 3px;")))
+				.append("');");
 		js.append("$Actions['").append(cp.getComponentName()).append("_win'].close();");
 		return js;
 	}

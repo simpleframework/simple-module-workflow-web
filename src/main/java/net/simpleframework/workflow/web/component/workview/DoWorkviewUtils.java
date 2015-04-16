@@ -89,6 +89,10 @@ public abstract class DoWorkviewUtils implements IWorkflowContextAware, IWorkflo
 		sb.append(" <div class='left'>");
 		sb.append(ElementList.of(LinkButton.menu($m("Add")).setId("idWorkviewSelectLoaded_addMenu")));
 		sb.append(" </div>");
+		sb.append(" <div class='right'>");
+		sb.append(ElementList.of(LinkButton.of($m("DoWorkviewUtils.4")).addClassName("clearall")
+				.setOnclick(jsActions(cp, "_clearAll", "op=clearAll"))));
+		sb.append(" </div>");
 		sb.append("</div>");
 		sb.append("<div class='wv_cc'>");
 		sb.append(toUserList(cp));
@@ -104,6 +108,10 @@ public abstract class DoWorkviewUtils implements IWorkflowContextAware, IWorkflo
 	@SuppressWarnings("unchecked")
 	static String toUserList(final ComponentParameter cp) {
 		final StringBuilder sb = new StringBuilder();
+		final String op = cp.getParameter("op");
+		if ("clearAll".equals(op)) {
+			cp.removeSessionAttr(SESSION_ULIST);
+		}
 		final Set<String> ulist = (Set<String>) cp.getSessionAttr(SESSION_ULIST);
 		if (ulist != null) {
 			final WorkitemBean workitem = WorkflowUtils.getWorkitemBean(cp);
@@ -118,7 +126,7 @@ public abstract class DoWorkviewUtils implements IWorkflowContextAware, IWorkflo
 					sb.append(toItemHTML(cp, user, false));
 				}
 			}
-			if (cp.getBoolParameter("clearAll2")) {
+			if ("clearAll2".equals(op)) {
 				for (final PermissionUser user : slist) {
 					ulist.remove(Convert.toString(user.getId()));
 				}
@@ -127,15 +135,16 @@ public abstract class DoWorkviewUtils implements IWorkflowContextAware, IWorkflo
 			if (slist.size() > 0) {
 				sb.append("<div class='uitem2'>");
 				sb.append(" <span>").append($m("DoWorkviewUtils.3")).append("</span>");
-				sb.append(" <a class='simple_btn2' onclick=\"").append(jsActions(cp, "_clearAll2"))
-						.append("\">").append($m("DoWorkviewUtils.2")).append("</a>");
+				sb.append(" <a class='simple_btn2' onclick=\"")
+						.append(jsActions(cp, "_clearAll", "op=clearAll2")).append("\">")
+						.append($m("DoWorkviewUtils.2")).append("</a>");
 				sb.append("</div>");
 				for (final PermissionUser user : slist) {
 					sb.append(toItemHTML(cp, user, true));
 				}
 			}
-			sb.append("<script type='text/javascript'>DoWorkview_init();</script>");
 		}
+		sb.append("<script type='text/javascript'>DoWorkview_init();</script>");
 		return sb.toString();
 	}
 

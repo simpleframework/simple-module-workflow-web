@@ -11,7 +11,15 @@
 </div>
 <script type="text/javascript">
 	function DoWorkview_init() {
-	  $(".workview_select .wv_cc").select(".uitem").invoke("observe",
+	  var items = $(".workview_select .wv_cc").select(".uitem");
+	  var clearall = $(".workview_select .clearall");
+	  if (clearall) {
+	    if (items.length > 0)
+	    	clearall.innerHTML = "#(DoWorkviewUtils.4)" + " (" + items.length + ")";
+	    else 
+	      clearall.innerHTML = "#(DoWorkviewUtils.4)";
+	  }
+	  items.invoke("observe",
         "mouseenter", function(evn) {
 	    		var act = $(this).down(".act");
 	    		if (act)

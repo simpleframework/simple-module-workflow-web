@@ -48,8 +48,9 @@ public class WorkviewSelectLoaded extends DefaultPageHandler implements IWorkflo
 		// 删除
 		pp.addComponentBean(componentName + "_del", AjaxRequestBean.class)
 				.setHandlerMethod("doDelete").setHandlerClass(UserListAction.class);
-		pp.addComponentBean(componentName + "_clearAll2", AjaxRequestBean.class)
-				.setHandlerMethod("doClearAll2").setHandlerClass(UserListAction.class);
+
+		pp.addComponentBean(componentName + "_clearAll", AjaxRequestBean.class)
+				.setHandlerMethod("doClearAll").setHandlerClass(UserListAction.class);
 
 		// 保存
 		pp.addComponentBean(componentName + "_save", AjaxRequestBean.class)
@@ -126,9 +127,9 @@ public class WorkviewSelectLoaded extends DefaultPageHandler implements IWorkflo
 			return js;
 		}
 
-		public IForward doClearAll2(final ComponentParameter cp) throws Exception {
-			// final ComponentParameter nCP = DoWorkviewUtils.get(cp);
-			return new JavascriptForward("DoWorkview_user_selected(null, 'clearAll2=true');");
+		public IForward doClearAll(final ComponentParameter cp) throws Exception {
+			return new JavascriptForward("DoWorkview_user_selected(null, 'op="
+					+ StringUtils.blank(cp.getParameter("op")) + "');");
 		}
 	}
 }
