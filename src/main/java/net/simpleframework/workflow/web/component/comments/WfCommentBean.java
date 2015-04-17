@@ -12,7 +12,8 @@ import net.simpleframework.mvc.component.AbstractContainerBean;
 public class WfCommentBean extends AbstractContainerBean {
 	/* 是否允许编辑 */
 	private boolean editable = true;
-
+	/* 允许填写意见的最大字符数 */
+	private int maxlength = 200;
 	/* 分组 */
 	private EGroupBy groupBy;
 
@@ -27,6 +28,14 @@ public class WfCommentBean extends AbstractContainerBean {
 	public WfCommentBean setEditable(final boolean editable) {
 		this.editable = editable;
 		return this;
+	}
+
+	public int getMaxlength() {
+		return maxlength;
+	}
+
+	public void setMaxlength(final int maxlength) {
+		this.maxlength = maxlength;
 	}
 
 	public EGroupBy getGroupBy() {

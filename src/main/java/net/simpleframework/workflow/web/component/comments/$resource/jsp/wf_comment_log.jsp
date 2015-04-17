@@ -33,6 +33,7 @@
     var act = $Actions['<%=commentName%>_log_popup'];
     var ta = $(act.trigger).up(".wf_comment").down("textarea");
     $Actions.setValue(ta, $(o).down(".l1 textarea").value);
+    wf_comment_ta_valchange(ta);
     act.close();
   }
   

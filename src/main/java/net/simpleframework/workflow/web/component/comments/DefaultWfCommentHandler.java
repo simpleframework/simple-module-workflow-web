@@ -97,8 +97,9 @@ public class DefaultWfCommentHandler extends ComponentHandlerEx implements IWfCo
 		}
 	}
 
-	protected InputElement createCommentTa(final WorkitemBean workitem) {
-		final InputElement ele = InputElement.textarea().setRows(4).setName("ta_wfcomment");
+	protected InputElement createCommentTa(final ComponentParameter cp, final WorkitemBean workitem) {
+		final InputElement ele = InputElement.textarea().setRows(4).setName("ta_wfcomment")
+				.addAttribute("maxlength", cp.getBeanProperty("maxlength"));
 		final WfComment bean = workflowContext.getCommentService().getCurComment(workitem);
 		if (bean != null) {
 			ele.setValue(bean.getCcomment());
@@ -177,11 +178,13 @@ public class DefaultWfCommentHandler extends ComponentHandlerEx implements IWfCo
 		final boolean editable = (Boolean) cp.getBeanProperty("editable");
 		if (editable) {
 			sb.append("<div class='ta'>");
-			sb.append(createCommentTa(workitem));
+			sb.append(createCommentTa(cp,workitem));
 			sb.append("</div>");
 			sb.append("<div class='btns clearfix'>");
-			sb.append(" <div class='left'>").append("<a onclick=\"$Actions['").append(commentName)
+			sb.append(" <div class='left'>");
+			sb.append("   <a onclick=\"$Actions['").append(commentName)
 					.append("_log_popup']();\">#(DefaultWfCommentHandler.0)</a>");
+			sb.append("	  <span class='ltxt'></span>");
 			sb.append(" </div>");
 			sb.append(" <div class='right'>");
 			int i = 0;

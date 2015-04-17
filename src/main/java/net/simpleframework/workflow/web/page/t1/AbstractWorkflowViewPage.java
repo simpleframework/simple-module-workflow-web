@@ -19,7 +19,7 @@ public class AbstractWorkflowViewPage extends AbstractFormTemplatePage {
 	}
 
 	@Override
-	protected void onForward(PageParameter pp) {
+	protected void onForward(final PageParameter pp) {
 		super.onForward(pp);
 
 		pp.addImportCSS(AbstractWorkflowViewPage.class, "/form.css");
