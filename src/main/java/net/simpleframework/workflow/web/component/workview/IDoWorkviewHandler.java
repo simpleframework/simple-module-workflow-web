@@ -22,4 +22,11 @@ public interface IDoWorkviewHandler extends IComponentHandler {
 	 * @param ids
 	 */
 	JavascriptForward doSent(ComponentParameter cp, List<ID> ids);
+
+	/**
+	 * 
+	 * @param cp
+	 * @return
+	 */
+	String getSelectedRoles(ComponentParameter cp);
 }

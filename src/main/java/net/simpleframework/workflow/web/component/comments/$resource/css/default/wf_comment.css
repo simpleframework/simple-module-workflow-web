@@ -24,12 +24,13 @@
 
 .FormTableRowTemplatePage .wf_comment .btns .ltxt {
   margin-left: 8px;
+  color: #888;
 }
 
 .FormTableRowTemplatePage .wf_comment .btns .ltxt label {
   color: #c00;
   font-size: 10.5pt;
-  font-weight: bold;
+  font-style: italic;
   margin: 0 3px;
 }
 

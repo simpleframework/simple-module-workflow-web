@@ -30,9 +30,14 @@ public class DefaultDoWorkviewHandler extends AbstractComponentHandler implement
 		js.append("alert('")
 				.append(
 						$m("DefaultDoWorkviewHandler.0", new SpanElement(list.size())
-								.setStyle("color: #c00;font-size: 14pt;font-style: italic;margin: 0 3px;")))
+								.setStyle("color:#c00;font-size:14pt;font-style:italic;margin:0 3px;")))
 				.append("');");
 		js.append("$Actions['").append(cp.getComponentName()).append("_win'].close();");
 		return js;
+	}
+
+	@Override
+	public String getSelectedRoles(final ComponentParameter cp) {
+		return null;
 	}
 }

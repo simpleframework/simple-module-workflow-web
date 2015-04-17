@@ -5,6 +5,7 @@ import static net.simpleframework.common.I18n.$m;
 import java.util.Date;
 
 import net.simpleframework.common.Convert;
+import net.simpleframework.common.ID;
 import net.simpleframework.ctx.trans.Transaction;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageParameter;
@@ -62,10 +63,20 @@ public abstract class AbstractWorkflowFormTPage extends AbstractFormTableRowTPag
 
 		final WorkitemBean workitem = getWorkitemBean(pp);
 		if (workitem != null) {
+			final ID processId = workitem.getProcessId();
+
 			// 重置新到意见
-			commentUserService.resetCommentUser(workitem.getUserId(), workitem.getProcessId());
+			commentUserService.resetCommentUser(workitem.getUserId(), processId);
 			if (!workitem.isReadMark()) {
 				wService.doReadMark(workitem);
+			}
+
+			// 更新
+			final String k = "views_" + processId;
+			final Object o = pp.getSessionAttr(k);
+			if (o == null) {
+				pService.doUpdateViews(pService.getBean(processId));
+				pp.setSessionAttr(k, Boolean.TRUE);
 			}
 		}
 	}
