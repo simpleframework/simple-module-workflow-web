@@ -178,11 +178,11 @@ public class DefaultWfCommentHandler extends ComponentHandlerEx implements IWfCo
 		final boolean editable = (Boolean) cp.getBeanProperty("editable");
 		if (editable) {
 			sb.append("<div class='ta'>");
-			sb.append(createCommentTa(cp,workitem));
+			sb.append(createCommentTa(cp, workitem));
 			sb.append("</div>");
 			sb.append("<div class='btns clearfix'>");
 			sb.append(" <div class='left'>");
-			sb.append("   <a onclick=\"$Actions['").append(commentName)
+			sb.append("   <a class='simple_btn2' onclick=\"$Actions['").append(commentName)
 					.append("_log_popup']();\">#(DefaultWfCommentHandler.0)</a>");
 			sb.append("	  <span class='ltxt'></span>");
 			sb.append(" </div>");
