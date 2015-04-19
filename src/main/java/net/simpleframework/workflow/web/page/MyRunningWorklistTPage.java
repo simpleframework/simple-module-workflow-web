@@ -202,6 +202,10 @@ public class MyRunningWorklistTPage extends AbstractWorkitemsTPage {
 				LinkButton.menu($m("MyRunningWorklistTbl.17")).setId("idMyWorklistTPage_opeMenu"));
 	}
 
+	protected BlockElement createStatElement(final PageParameter pp) {
+		return new BlockElement();
+	}
+
 	@Transaction(context = IWorkflowContext.class)
 	public IForward doUserUndelegate(final ComponentParameter cp) {
 		final DelegationBean delegation = dService.queryRunningDelegation(cp.getLoginId());
