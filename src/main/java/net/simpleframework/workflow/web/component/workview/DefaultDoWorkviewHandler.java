@@ -5,6 +5,7 @@ import static net.simpleframework.common.I18n.$m;
 import java.util.List;
 
 import net.simpleframework.common.ID;
+import net.simpleframework.ctx.permission.PermissionConst;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.component.AbstractComponentHandler;
@@ -37,7 +38,7 @@ public class DefaultDoWorkviewHandler extends AbstractComponentHandler implement
 	}
 
 	@Override
-	public String getSelectedRoles(final ComponentParameter cp) {
-		return null;
+	public String[] getSelectedRoles(final ComponentParameter cp) {
+		return new String[] { PermissionConst.ROLE_INDEPT };
 	}
 }

@@ -39,6 +39,11 @@ public abstract class AbstractFormTableRowTPage<T extends AbstractWorkitemBean> 
 	}
 
 	@Override
+	public int getLabelWidth(final PageParameter pp) {
+		return 85;
+	}
+
+	@Override
 	public boolean isButtonsOnTop(final PageParameter pp) {
 		return true;
 	}

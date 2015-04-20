@@ -28,5 +28,5 @@ public interface IDoWorkviewHandler extends IComponentHandler {
 	 * @param cp
 	 * @return
 	 */
-	String getSelectedRoles(ComponentParameter cp);
+	String[] getSelectedRoles(ComponentParameter cp);
 }

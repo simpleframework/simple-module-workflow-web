@@ -9,6 +9,7 @@ import java.util.Set;
 
 import net.simpleframework.common.ID;
 import net.simpleframework.common.StringUtils;
+import net.simpleframework.ctx.permission.PermissionRole;
 import net.simpleframework.mvc.DefaultPageHandler;
 import net.simpleframework.mvc.IForward;
 import net.simpleframework.mvc.JavascriptForward;
@@ -18,6 +19,11 @@ import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.base.ajaxrequest.AjaxRequestBean;
 import net.simpleframework.mvc.component.base.ajaxrequest.DefaultAjaxRequestHandler;
 import net.simpleframework.mvc.component.ext.userselect.UserSelectBean;
+import net.simpleframework.mvc.component.ui.dictionary.DictionaryBean;
+import net.simpleframework.mvc.component.ui.listbox.AbstractListboxHandler;
+import net.simpleframework.mvc.component.ui.listbox.ListItem;
+import net.simpleframework.mvc.component.ui.listbox.ListItems;
+import net.simpleframework.mvc.component.ui.listbox.ListboxBean;
 import net.simpleframework.mvc.component.ui.menu.EMenuEvent;
 import net.simpleframework.mvc.component.ui.menu.MenuBean;
 import net.simpleframework.mvc.component.ui.menu.MenuItem;
@@ -42,6 +48,13 @@ public class WorkviewSelectLoaded extends DefaultPageHandler implements IWorkflo
 		// 用户选取
 		pp.addComponentBean(componentName + "_userSelect", UserSelectBean.class).setMultiple(true)
 				.setJsSelectCallback("return DoWorkview_user_selected(selects)");
+		// 预设列表字典
+		final ListboxBean listbox = (ListboxBean) pp.addComponentBean(componentName + "_roleList",
+				ListboxBean.class).setHandlerClass(SelectedRolesHandler.class);
+		pp.addComponentBean(componentName + "_roleDictSelect", DictionaryBean.class)
+				.addListboxRef(pp, listbox.getName()).setClearAction("false").setShowHelpTooltip(false)
+				.setTitle($m("WorkviewSelectLoaded.2"));
+
 		// 列表
 		pp.addComponentBean(componentName + "_ulist", AjaxRequestBean.class)
 				.setHandlerMethod("doLoad").setHandlerClass(UserListAction.class);
@@ -61,10 +74,14 @@ public class WorkviewSelectLoaded extends DefaultPageHandler implements IWorkflo
 		final MenuBean mb = (MenuBean) pp
 				.addComponentBean("WorkviewSelectLoaded_addMenu", MenuBean.class)
 				.setMenuEvent(EMenuEvent.click).setSelector("#idWorkviewSelectLoaded_addMenu");
+
 		mb.addItem(
 				MenuItem.of($m("DoWorkviewUtils.0")).setOnclick(
-						"$Actions['" + componentName + "_userSelect']();")).addItem(MenuItem.sep())
-				.addItem(MenuItem.of($m("DoWorkviewUtils.1")));
+						DoWorkviewUtils.jsActions(nCP, "_userSelect")))
+				.addItem(MenuItem.sep())
+				.addItem(
+						MenuItem.of($m("DoWorkviewUtils.1")).setOnclick(
+								DoWorkviewUtils.jsActions(nCP, "_roleDictSelect")));
 	}
 
 	public static class UserListAction extends DefaultAjaxRequestHandler {
@@ -130,6 +147,28 @@ public class WorkviewSelectLoaded extends DefaultPageHandler implements IWorkflo
 		public IForward doClearAll(final ComponentParameter cp) throws Exception {
 			return new JavascriptForward("DoWorkview_user_selected(null, 'op="
 					+ StringUtils.blank(cp.getParameter("op")) + "');");
+		}
+	}
+
+	public static class SelectedRolesHandler extends AbstractListboxHandler {
+
+		@Override
+		public ListItems getListItems(final ComponentParameter cp) {
+			final ComponentParameter nCP = DoWorkviewUtils.get(cp);
+			final IDoWorkviewHandler hdl = (IDoWorkviewHandler) nCP.getComponentHandler();
+			final String[] roles = hdl.getSelectedRoles(nCP);
+			if (roles != null) {
+				final ListItems items = ListItems.of();
+				final ListboxBean listbox = (ListboxBean) cp.componentBean;
+				for (final String r : roles) {
+					final PermissionRole role = cp.getRole(r);
+					if (role.getId() != null) {
+						items.append(new ListItem(listbox, role));
+					}
+				}
+				return items;
+			}
+			return null;
 		}
 	}
 }
