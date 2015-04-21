@@ -4,7 +4,6 @@ import static net.simpleframework.common.I18n.$m;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -96,13 +95,9 @@ public class WorkviewSelectLoaded extends DefaultPageHandler implements IWorkflo
 
 	public static class UserListAction extends DefaultAjaxRequestHandler {
 
-		@SuppressWarnings("unchecked")
 		public IForward doLoad(final ComponentParameter cp) throws Exception {
 			final ComponentParameter nCP = DoWorkviewUtils.get(cp);
-			Set<String> ulist = (Set<String>) nCP.getSessionAttr(DoWorkviewUtils.SESSION_ULIST);
-			if (ulist == null) {
-				nCP.setSessionAttr(DoWorkviewUtils.SESSION_ULIST, ulist = new LinkedHashSet<String>());
-			}
+			final Set<String> ulist = DoWorkviewUtils.getSessionUlist(nCP);
 			final String[] arr = StringUtils.split(nCP.getParameter("userIds"), ";");
 			if (arr != null) {
 				for (final String s : arr) {
@@ -112,27 +107,23 @@ public class WorkviewSelectLoaded extends DefaultPageHandler implements IWorkflo
 			return new TextForward(DoWorkviewUtils.toUserList(nCP));
 		}
 
-		@SuppressWarnings("unchecked")
 		public IForward doDelete(final ComponentParameter cp) throws Exception {
 			final ComponentParameter nCP = DoWorkviewUtils.get(cp);
-			final Set<String> ulist = (Set<String>) nCP.getSessionAttr(DoWorkviewUtils.SESSION_ULIST);
-			if (ulist != null) {
-				final String uid = nCP.getParameter("uid");
-				for (final String id : ulist) {
-					if (id.equals(uid)) {
-						ulist.remove(id);
-						break;
-					}
+			final Set<String> ulist = DoWorkviewUtils.getSessionUlist(nCP);
+			final String uid = nCP.getParameter("uid");
+			for (final String id : ulist) {
+				if (id.equals(uid)) {
+					ulist.remove(id);
+					break;
 				}
 			}
 			return new JavascriptForward("DoWorkview_user_selected();");
 		}
 
-		@SuppressWarnings("unchecked")
 		public IForward doSave(final ComponentParameter cp) throws Exception {
 			final ComponentParameter nCP = DoWorkviewUtils.get(cp);
 			final IDoWorkviewHandler hdl = (IDoWorkviewHandler) nCP.getComponentHandler();
-			final Set<String> ulist = (Set<String>) nCP.getSessionAttr(DoWorkviewUtils.SESSION_ULIST);
+			final Set<String> ulist = DoWorkviewUtils.getSessionUlist(nCP);
 			final JavascriptForward js = new JavascriptForward();
 			if (ulist == null || ulist.size() == 0) {
 				js.append("alert('").append($m("WorkviewSelectLoaded.0")).append("');");
@@ -149,7 +140,7 @@ public class WorkviewSelectLoaded extends DefaultPageHandler implements IWorkflo
 				if (js2 != null) {
 					js.append(js2);
 				}
-				nCP.removeSessionAttr(DoWorkviewUtils.SESSION_ULIST);
+				DoWorkviewUtils.removeSessionUlist(nCP);
 			}
 			return js;
 		}
@@ -163,10 +154,11 @@ public class WorkviewSelectLoaded extends DefaultPageHandler implements IWorkflo
 			final ComponentParameter nCP = DoWorkviewUtils.get(cp);
 			final PermissionRole role = nCP.getRole(nCP.toID("roleId"));
 			final Iterator<ID> it = nCP.getPermission().users(cp, role.getId());
+			final Set<String> ulist = DoWorkviewUtils.getSessionUlist(nCP);
 			while (it.hasNext()) {
-				System.out.println(it.next());
+				ulist.add(it.next().toString());
 			}
-			return null;
+			return new JavascriptForward("DoWorkview_user_selected();");
 		}
 	}
 
