@@ -2,6 +2,7 @@ package net.simpleframework.workflow.web.component.workview;
 
 import static net.simpleframework.common.I18n.$m;
 
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -70,6 +71,9 @@ public class WorkviewSelectLoaded extends DefaultPageHandler implements IWorkflo
 		// 删除
 		pp.addComponentBean(componentName + "_del", AjaxRequestBean.class)
 				.setHandlerMethod("doDelete").setHandlerClass(UserListAction.class);
+		// 选择上次发送
+		pp.addComponentBean(componentName + "_lastUlist", AjaxRequestBean.class)
+				.setHandlerMethod("doLastUlist").setHandlerClass(UserListAction.class);
 
 		pp.addComponentBean(componentName + "_clearAll", AjaxRequestBean.class)
 				.setHandlerMethod("doClearAll").setHandlerClass(UserListAction.class);
@@ -87,11 +91,16 @@ public class WorkviewSelectLoaded extends DefaultPageHandler implements IWorkflo
 		mb.addItem(
 				MenuItem.of($m("DoWorkviewUtils.0")).setOnclick(
 						DoWorkviewUtils.jsActions(nCP, "_userSelect")))
-				.addItem(MenuItem.sep())
 				.addItem(
 						MenuItem.of($m("DoWorkviewUtils.1")).setOnclick(
-								DoWorkviewUtils.jsActions(nCP, "_roleDictSelect")));
+								DoWorkviewUtils.jsActions(nCP, "_roleDictSelect")))
+				.addItem(MenuItem.sep())
+				.addItem(
+						MenuItem.of($m("DoWorkviewUtils.6")).setOnclick(
+								DoWorkviewUtils.jsActions(nCP, "_lastUlist")));
 	}
+
+	private final static String COOKIE_ULIST = "doworkview_ulist";
 
 	public static class UserListAction extends DefaultAjaxRequestHandler {
 
@@ -141,6 +150,8 @@ public class WorkviewSelectLoaded extends DefaultPageHandler implements IWorkflo
 					js.append(js2);
 				}
 				DoWorkviewUtils.removeSessionUlist(nCP);
+				js.append("document.setCookie('").append(COOKIE_ULIST).append("', '")
+						.append(StringUtils.join(list, "#")).append("');");
 			}
 			return js;
 		}
@@ -159,6 +170,23 @@ public class WorkviewSelectLoaded extends DefaultPageHandler implements IWorkflo
 				ulist.add(it.next().toString());
 			}
 			return new JavascriptForward("DoWorkview_user_selected();");
+		}
+
+		public IForward doLastUlist(final ComponentParameter cp) throws Exception {
+			final ComponentParameter nCP = DoWorkviewUtils.get(cp);
+			final Set<String> ulist = DoWorkviewUtils.getSessionUlist(nCP);
+			final String[] arr = StringUtils.split(
+					URLDecoder.decode(cp.getCookie(COOKIE_ULIST), "utf-8"), "#");
+			final JavascriptForward js = new JavascriptForward();
+			if (arr.length == 0) {
+				js.append("alert('").append($m("WorkviewSelectLoaded.3")).append("');");
+			} else {
+				for (final String id : arr) {
+					ulist.add(id);
+				}
+				js.append("DoWorkview_user_selected();");
+			}
+			return js;
 		}
 	}
 

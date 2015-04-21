@@ -138,7 +138,9 @@ public abstract class DoWorkviewUtils implements IWorkflowContextAware, IWorkflo
 				if (vService.getWorkviewBean(processId, id) != null) {
 					slist.add(user);
 				} else {
-					sb.append(toItemHTML(cp, user, false));
+					if (user.getId() != null) {
+						sb.append(toItemHTML(cp, user, false));
+					}
 				}
 			}
 			if ("clearAll2".equals(op)) {
@@ -147,15 +149,18 @@ public abstract class DoWorkviewUtils implements IWorkflowContextAware, IWorkflo
 				}
 				slist.clear();
 			}
-
-			sb.append("<div class='uitem2'>");
-			sb.append(" <span>").append($m("DoWorkviewUtils.3")).append("</span>");
-			sb.append(" <a class='simple_btn2' onclick=\"")
-					.append(jsActions(cp, "_clearAll", "op=clearAll2")).append("\">")
-					.append($m("DoWorkviewUtils.2")).append("</a>");
-			sb.append("</div>");
-			for (final PermissionUser user : slist) {
-				sb.append(toItemHTML(cp, user, true));
+			if (slist.size() > 0) {
+				sb.append("<div class='uitem2'>");
+				sb.append(" <span>").append($m("DoWorkviewUtils.3")).append("</span>");
+				sb.append(" <a class='simple_btn2' onclick=\"")
+						.append(jsActions(cp, "_clearAll", "op=clearAll2")).append("\">")
+						.append($m("DoWorkviewUtils.2")).append("</a>");
+				sb.append("</div>");
+				for (final PermissionUser user : slist) {
+					if (user.getId() != null) {
+						sb.append(toItemHTML(cp, user, true));
+					}
+				}
 			}
 		}
 		sb.append("<script type='text/javascript'>DoWorkview_init();</script>");
