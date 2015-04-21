@@ -112,8 +112,9 @@ public abstract class DoWorkviewUtils implements IWorkflowContextAware, IWorkflo
 		sb.append(toUserList(cp));
 		sb.append("</div>");
 		sb.append("<div class='wv_bb'>");
-		sb.append(ButtonElement.okBtn().setHighlight(true).setOnclick(jsActions(cp, "_save")))
-				.append(SpanElement.SPACE);
+		sb.append(
+				new ButtonElement($m("DoWorkviewUtils.5")).setHighlight(true).setOnclick(
+						jsActions(cp, "_save"))).append(SpanElement.SPACE);
 		sb.append(ButtonElement.WINDOW_CLOSE);
 		sb.append("</div>");
 		return sb.toString();
