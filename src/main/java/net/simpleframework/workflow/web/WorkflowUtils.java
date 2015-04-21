@@ -57,7 +57,8 @@ public abstract class WorkflowUtils implements IWorkflowServiceAware {
 		return toStatusHTML(pp, status, null);
 	}
 
-	public static String getParticipants(final ActivityBean activity, final boolean r) {
+	public static String getParticipants(final PageParameter pp, final ActivityBean activity,
+			final boolean r) {
 		final StringBuilder sb = new StringBuilder();
 		int i = 0;
 		for (final Participant p : (r ? aService.getParticipants2(activity) : aService
@@ -65,7 +66,7 @@ public abstract class WorkflowUtils implements IWorkflowServiceAware {
 			if (i++ > 0) {
 				sb.append(", ");
 			}
-			sb.append(permission.getUser(p.userId).getText());
+			sb.append(pp.getUser(p.userId).getText());
 		}
 		return sb.toString();
 	}

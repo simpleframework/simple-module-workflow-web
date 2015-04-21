@@ -3,6 +3,7 @@ package net.simpleframework.workflow.web.component.workview;
 import static net.simpleframework.common.I18n.$m;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -51,9 +52,18 @@ public class WorkviewSelectLoaded extends DefaultPageHandler implements IWorkflo
 		// 预设列表字典
 		final ListboxBean listbox = (ListboxBean) pp.addComponentBean(componentName + "_roleList",
 				ListboxBean.class).setHandlerClass(SelectedRolesHandler.class);
+		final StringBuilder js = new StringBuilder();
+		js.append("$Actions['").append(componentName).append("_roleDictSelect_OK']('")
+				.append(DoWorkviewUtils.toParams(nCP)).append("&roleId=' + selects[0].id);");
+		js.append("return true;");
 		pp.addComponentBean(componentName + "_roleDictSelect", DictionaryBean.class)
-				.addListboxRef(pp, listbox.getName()).setClearAction("false").setShowHelpTooltip(false)
+				.addListboxRef(pp, listbox.getName()).setJsSelectCallback(js.toString())
+				.setClearAction("false").setShowHelpTooltip(false)
 				.setTitle($m("WorkviewSelectLoaded.2"));
+
+		// 列表选取
+		pp.addComponentBean(componentName + "_roleDictSelect_OK", AjaxRequestBean.class)
+				.setHandlerMethod("doRoleDictSelect").setHandlerClass(UserListAction.class);
 
 		// 列表
 		pp.addComponentBean(componentName + "_ulist", AjaxRequestBean.class)
@@ -147,6 +157,16 @@ public class WorkviewSelectLoaded extends DefaultPageHandler implements IWorkflo
 		public IForward doClearAll(final ComponentParameter cp) throws Exception {
 			return new JavascriptForward("DoWorkview_user_selected(null, 'op="
 					+ StringUtils.blank(cp.getParameter("op")) + "');");
+		}
+
+		public IForward doRoleDictSelect(final ComponentParameter cp) throws Exception {
+			final ComponentParameter nCP = DoWorkviewUtils.get(cp);
+			final PermissionRole role = nCP.getRole(nCP.toID("roleId"));
+			final Iterator<ID> it = nCP.getPermission().users(cp, role.getId());
+			while (it.hasNext()) {
+				System.out.println(it.next());
+			}
+			return null;
 		}
 	}
 

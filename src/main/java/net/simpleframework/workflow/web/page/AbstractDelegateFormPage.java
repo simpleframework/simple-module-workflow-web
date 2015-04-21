@@ -73,8 +73,8 @@ public abstract class AbstractDelegateFormPage extends FormTableRowTemplatePage 
 		@Override
 		public JavascriptForward onSave(final ComponentParameter cp) throws Exception {
 			final String wd_userId = cp.getParameter("wd_userId");
-			final PermissionUser user = StringUtils.hasText(wd_userId) ? permission.getUser(wd_userId)
-					: permission.getUser(cp.getParameter("wd_userTxt"));
+			final PermissionUser user = StringUtils.hasText(wd_userId) ? cp.getUser(wd_userId) : cp
+					.getUser(cp.getParameter("wd_userTxt"));
 			final Date wd_startDate = cp.getDateParameter("wd_startDate");
 			final Date wd_endDate = cp.getDateParameter("wd_endDate");
 			final String wd_description = cp.getParameter("wd_description");

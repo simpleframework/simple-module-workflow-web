@@ -232,8 +232,8 @@ public class ActivityMgrPage extends AbstractWorkflowMgrPage {
 				final EActivityStatus pstatus = pre.getStatus();
 				row.add("previous", WorkflowUtils.toStatusHTML(cp, pstatus, toTasknode(pre)));
 			}
-			row.add("participants", WorkflowUtils.getParticipants(activity, false));
-			row.add("participants2", WorkflowUtils.getParticipants(activity, true));
+			row.add("participants", WorkflowUtils.getParticipants(cp, activity, false));
+			row.add("participants2", WorkflowUtils.getParticipants(cp, activity, true));
 
 			final Date createDate = activity.getCreateDate();
 			row.add("createDate", createDate);

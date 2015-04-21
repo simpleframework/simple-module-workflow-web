@@ -191,7 +191,7 @@ public abstract class WorkitemCompleteUtils implements IWorkflowServiceAware {
 				for (final Participant participant : coll) {
 					sb.append("<div class='ritem'>");
 					final String val = participant.toString();
-					Object user = permission.getUser(participant.userId);
+					Object user = cp.getUser(participant.userId);
 					if (ArrayUtils.contains(deptdispTasks, to.getName())) {
 						user = ((PermissionUser) user).getDept().getText();
 					}

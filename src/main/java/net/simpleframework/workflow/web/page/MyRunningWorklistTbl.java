@@ -148,7 +148,7 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 
 	protected ImageElement MARK_DELEGATE(final ComponentParameter cp, final WorkitemBean workitem) {
 		return PhotoImage.icon12(cp.getPhotoUrl(workitem.getUserId())).setTitle(
-				$m("MyRunningWorklistTbl.0", permission.getUser(workitem.getUserId())));
+				$m("MyRunningWorklistTbl.0", cp.getUser(workitem.getUserId())));
 	}
 
 	protected AbstractElement<?> createImageMark(final ComponentParameter cp,

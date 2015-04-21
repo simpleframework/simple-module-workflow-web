@@ -98,7 +98,7 @@ public abstract class StartProcessUtils implements IWorkflowServiceAware {
 	static JavascriptForward doStartProcess(final ComponentParameter nCP,
 			final InitiateItem initiateItem) {
 		// 设置选择的其他角色
-		final PermissionRole role = nCP.getRole(ID.of(nCP.getParameter("initiator")));
+		final PermissionRole role = nCP.getRole(nCP.toID("initiator"));
 		if (role != null) {
 			initiateItem.setSelectedRoleId(role.getId());
 		}

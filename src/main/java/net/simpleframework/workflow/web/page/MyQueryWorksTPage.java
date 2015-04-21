@@ -83,7 +83,7 @@ public class MyQueryWorksTPage extends AbstractItemsTPage {
 		final WorkflowUrlsFactory urlsFactory = ctx.getUrlsFactory();
 		final TabButtons tabs = TabButtons.of(new TabButton($m("MyQueryWorksTPage.4"), urlsFactory
 				.getUrl(pp, MyQueryWorksTPage.class)));
-		if (pp.getLogin().isMember(ctx.getDepartmentMgrRole(pp))) {
+		if (pp.isLmember(ctx.getDepartmentMgrRole(pp))) {
 			tabs.append(new TabButton($m("MyQueryWorksTPage.5"), urlsFactory.getUrl(pp,
 					MyQueryWorks_DeptTPage.class)));
 		}
