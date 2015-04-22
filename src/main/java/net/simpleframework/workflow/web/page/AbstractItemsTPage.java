@@ -21,6 +21,7 @@ import net.simpleframework.mvc.template.struct.CategoryItems;
 import net.simpleframework.workflow.engine.IWorkflowServiceAware;
 import net.simpleframework.workflow.web.IWorkflowWebContext;
 import net.simpleframework.workflow.web.WorkflowUrlsFactory;
+import net.simpleframework.workflow.web.WorkflowUtils;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -71,7 +72,7 @@ public abstract class AbstractItemsTPage extends Category_ListPage implements IW
 	public CategoryItem createCategoryItem_mywork(final PageParameter pp) {
 		final CategoryItem item = createCategoryItem(pp, $m("AbstractItemsTPage.0"),
 				MyRunningWorklistTPage.class).setIconClass("my_work_icon");// .setIconClass("my_work_icon")
-		final int count = wService.getUnreadWorklist(pp.getLoginId()).getCount();
+		final int count = WorkflowUtils.getUserStat(pp).getWorkitem_unread();
 		if (count > 0) {
 			item.setNum(new SupElement(count).setHighlight(true));
 		}

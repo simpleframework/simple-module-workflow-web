@@ -18,6 +18,7 @@ import net.simpleframework.workflow.engine.bean.AbstractWorkitemBean;
 import net.simpleframework.workflow.engine.bean.ActivityBean;
 import net.simpleframework.workflow.engine.bean.ProcessBean;
 import net.simpleframework.workflow.engine.bean.ProcessModelBean;
+import net.simpleframework.workflow.engine.bean.UserStatBean;
 import net.simpleframework.workflow.engine.bean.WorkitemBean;
 import net.simpleframework.workflow.engine.bean.WorkviewBean;
 import net.simpleframework.workflow.engine.participant.Participant;
@@ -214,5 +215,14 @@ public abstract class WorkflowUtils implements IWorkflowServiceAware {
 						return mService.getBean(_modelId);
 					}
 				});
+	}
+
+	public static UserStatBean getUserStat(final PageParameter pp) {
+		return pp.getRequestCache("_getUserStat", new IVal<UserStatBean>() {
+			@Override
+			public UserStatBean get() {
+				return usService.getUserStat(pp.getLoginId());
+			}
+		});
 	}
 }
