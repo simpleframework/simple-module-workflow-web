@@ -24,7 +24,7 @@ import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.ctx.permission.IPagePermissionHandler;
 import net.simpleframework.workflow.engine.IWorkflowContextAware;
 import net.simpleframework.workflow.engine.IWorkflowServiceAware;
-import net.simpleframework.workflow.engine.bean.WorkitemBean;
+import net.simpleframework.workflow.engine.bean.AbstractWorkitemBean;
 import net.simpleframework.workflow.web.WorkflowUtils;
 import net.simpleframework.workflow.web.component.WfComponentUtils;
 import net.simpleframework.workflow.web.component.WfComponentUtils.IJavascriptCallback;
@@ -49,9 +49,11 @@ public abstract class DoWorkviewUtils implements IWorkflowContextAware, IWorkflo
 
 	public static String toParams(final ComponentParameter cp) {
 		final StringBuilder sb = new StringBuilder();
-		final WorkitemBean workitem = WorkflowUtils.getWorkitemBean(cp);
-		if (workitem != null) {
+		AbstractWorkitemBean workitem;
+		if ((workitem = WorkflowUtils.getWorkitemBean(cp)) != null) {
 			sb.append("workitemId=").append(workitem.getId()).append("&");
+		} else if ((workitem = WorkflowUtils.getWorkviewBean(cp)) != null) {
+			sb.append("workviewId=").append(workitem.getId()).append("&");
 		}
 		sb.append(BEAN_ID).append("=").append(cp.hashId());
 		return sb.toString();
@@ -129,7 +131,10 @@ public abstract class DoWorkviewUtils implements IWorkflowContextAware, IWorkflo
 
 		final Set<String> ulist = getSessionUlist(cp);
 		if (ulist.size() > 0) {
-			final WorkitemBean workitem = WorkflowUtils.getWorkitemBean(cp);
+			AbstractWorkitemBean workitem = WorkflowUtils.getWorkitemBean(cp);
+			if (workitem == null) {
+				workitem = WorkflowUtils.getWorkviewBean(cp);
+			}
 			final IPagePermissionHandler permission = cp.getPermission();
 			final ID processId = workitem.getProcessId();
 			final List<PermissionUser> slist = new ArrayList<PermissionUser>();

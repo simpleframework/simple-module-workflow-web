@@ -11,6 +11,7 @@ import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.component.AbstractComponentHandler;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.workflow.engine.IWorkflowServiceAware;
+import net.simpleframework.workflow.engine.bean.WorkitemBean;
 import net.simpleframework.workflow.engine.bean.WorkviewBean;
 import net.simpleframework.workflow.web.WorkflowUtils;
 
@@ -22,10 +23,21 @@ import net.simpleframework.workflow.web.WorkflowUtils;
  */
 public class DefaultDoWorkviewHandler extends AbstractComponentHandler implements
 		IDoWorkviewHandler, IWorkflowServiceAware {
+
 	@Override
 	public JavascriptForward doSent(final ComponentParameter cp, final List<ID> ids) {
-		final List<WorkviewBean> list = vService.createWorkviews(WorkflowUtils.getWorkitemBean(cp),
-				ids.toArray(new ID[ids.size()]));
+		final WorkitemBean workitem = WorkflowUtils.getWorkitemBean(cp);
+		List<WorkviewBean> list = null;
+		if (workitem != null) {
+			list = vService.createWorkviews(WorkflowUtils.getWorkitemBean(cp),
+					ids.toArray(new ID[ids.size()]));
+		} else {
+			final WorkviewBean workview = WorkflowUtils.getWorkviewBean(cp);
+			if (workview != null) {
+				list = vService.createForwardWorkviews(WorkflowUtils.getWorkviewBean(cp),
+						ids.toArray(new ID[ids.size()]));
+			}
+		}
 		return createJavascriptForward(cp, list);
 	}
 
@@ -34,9 +46,8 @@ public class DefaultDoWorkviewHandler extends AbstractComponentHandler implement
 		final JavascriptForward js = new JavascriptForward();
 		js.append("alert('")
 				.append(
-						$m("DefaultDoWorkviewHandler.0",
-								new SpanElement(list.size()).setClassName("workview_select_num")))
-				.append("');");
+						$m("DefaultDoWorkviewHandler.0", new SpanElement(list != null ? list.size() : 0)
+								.setClassName("workview_select_num"))).append("');");
 		return js;
 	}
 
