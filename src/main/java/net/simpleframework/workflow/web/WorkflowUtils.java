@@ -172,8 +172,11 @@ public abstract class WorkflowUtils implements IWorkflowServiceAware {
 						public ProcessBean get() {
 							Object _processId = processId;
 							if (_processId == null) {
-								AbstractWorkitemBean workitem2;
-								if ((workitem2 = getWorkitemBean(pp)) != null) {
+								AbstractWorkitemBean workitem2 = getWorkitemBean(pp);
+								if (workitem2 == null) {
+									workitem2 = getWorkviewBean(pp);
+								}
+								if (workitem2 != null) {
 									_processId = workitem2.getProcessId();
 								}
 							}
