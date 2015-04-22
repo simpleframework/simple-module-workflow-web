@@ -8,9 +8,9 @@ import net.simpleframework.mvc.IForward;
 import net.simpleframework.mvc.IForwardCallback.IJsonForwardCallback;
 import net.simpleframework.mvc.JsonForward;
 import net.simpleframework.mvc.PageParameter;
-import net.simpleframework.workflow.engine.ActivityBean;
 import net.simpleframework.workflow.engine.IMappingVal;
-import net.simpleframework.workflow.engine.ProcessBean;
+import net.simpleframework.workflow.engine.bean.ActivityBean;
+import net.simpleframework.workflow.engine.bean.ProcessBean;
 import net.simpleframework.workflow.engine.remote.IProcessRemote;
 
 /**

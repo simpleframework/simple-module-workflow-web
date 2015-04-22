@@ -6,7 +6,7 @@ import net.simpleframework.module.log.LogRef;
 import net.simpleframework.module.log.web.page.EntityUpdateLogPage;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.workflow.engine.IWorkflowServiceAware;
-import net.simpleframework.workflow.engine.ProcessBean;
+import net.simpleframework.workflow.engine.bean.ProcessBean;
 
 /**
  * Licensed under the Apache License, Version 2.0

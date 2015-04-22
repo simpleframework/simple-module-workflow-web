@@ -3,7 +3,7 @@ package net.simpleframework.workflow.web.component.comments;
 import net.simpleframework.ado.query.IDataQuery;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.IComponentHandler;
-import net.simpleframework.workflow.engine.ext.WfComment;
+import net.simpleframework.workflow.engine.comment.WfComment;
 
 /**
  * Licensed under the Apache License, Version 2.0

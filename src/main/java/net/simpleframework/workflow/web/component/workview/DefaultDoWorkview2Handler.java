@@ -5,7 +5,7 @@ import java.util.List;
 import net.simpleframework.common.ID;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.component.ComponentParameter;
-import net.simpleframework.workflow.engine.WorkviewBean;
+import net.simpleframework.workflow.engine.bean.WorkviewBean;
 import net.simpleframework.workflow.web.WorkflowUtils;
 
 /**

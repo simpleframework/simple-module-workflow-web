@@ -10,9 +10,9 @@ import net.simpleframework.ctx.common.xml.XmlDocument;
 import net.simpleframework.ctx.script.MVEL2Template;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.AbstractElement;
-import net.simpleframework.workflow.engine.ActivityBean;
 import net.simpleframework.workflow.engine.IWorkflowServiceAware;
-import net.simpleframework.workflow.engine.ProcessBean;
+import net.simpleframework.workflow.engine.bean.ActivityBean;
+import net.simpleframework.workflow.engine.bean.ProcessBean;
 import net.simpleframework.workflow.graph.GraphUtils;
 
 import org.w3c.dom.Document;

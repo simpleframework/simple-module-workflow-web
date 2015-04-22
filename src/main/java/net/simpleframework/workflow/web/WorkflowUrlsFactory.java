@@ -3,7 +3,7 @@ package net.simpleframework.workflow.web;
 import net.simpleframework.mvc.AbstractMVCPage;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.UrlsCache;
-import net.simpleframework.workflow.engine.WorkitemBean;
+import net.simpleframework.workflow.engine.bean.WorkitemBean;
 import net.simpleframework.workflow.web.page.MyDelegateListTPage;
 import net.simpleframework.workflow.web.page.MyFinalWorklistTPage;
 import net.simpleframework.workflow.web.page.MyInitiateItemsTPage;

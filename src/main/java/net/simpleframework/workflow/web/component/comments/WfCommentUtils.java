@@ -13,11 +13,11 @@ import net.simpleframework.mvc.common.element.InputElement;
 import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.workflow.engine.IWorkflowContextAware;
-import net.simpleframework.workflow.engine.ext.IWfCommentLogService;
-import net.simpleframework.workflow.engine.ext.IWfCommentService;
-import net.simpleframework.workflow.engine.ext.WfComment;
-import net.simpleframework.workflow.engine.ext.WfCommentLog;
-import net.simpleframework.workflow.engine.ext.WfCommentLog.ELogType;
+import net.simpleframework.workflow.engine.comment.IWfCommentLogService;
+import net.simpleframework.workflow.engine.comment.IWfCommentService;
+import net.simpleframework.workflow.engine.comment.WfComment;
+import net.simpleframework.workflow.engine.comment.WfCommentLog;
+import net.simpleframework.workflow.engine.comment.WfCommentLog.ELogType;
 
 /**
  * Licensed under the Apache License, Version 2.0

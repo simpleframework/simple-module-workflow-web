@@ -5,7 +5,7 @@ import java.util.List;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.IComponentHandler;
-import net.simpleframework.workflow.engine.ActivityBean;
+import net.simpleframework.workflow.engine.bean.ActivityBean;
 
 /**
  * Licensed under the Apache License, Version 2.0

@@ -11,8 +11,8 @@ import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
 import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
 import net.simpleframework.mvc.component.ui.pager.db.AbstractDbTablePagerHandler;
-import net.simpleframework.workflow.engine.ProcessBean;
-import net.simpleframework.workflow.engine.WorkviewBean;
+import net.simpleframework.workflow.engine.bean.ProcessBean;
+import net.simpleframework.workflow.engine.bean.WorkviewBean;
 import net.simpleframework.workflow.web.WorkflowUtils;
 import net.simpleframework.workflow.web.page.t1.WorkflowViewPage;
 

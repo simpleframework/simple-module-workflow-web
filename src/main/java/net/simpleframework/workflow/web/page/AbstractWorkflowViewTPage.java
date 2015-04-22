@@ -1,7 +1,7 @@
 package net.simpleframework.workflow.web.page;
 
 import net.simpleframework.mvc.PageParameter;
-import net.simpleframework.workflow.engine.WorkviewBean;
+import net.simpleframework.workflow.engine.bean.WorkviewBean;
 import net.simpleframework.workflow.web.IWorkflowWebView;
 import net.simpleframework.workflow.web.WorkflowUtils;
 

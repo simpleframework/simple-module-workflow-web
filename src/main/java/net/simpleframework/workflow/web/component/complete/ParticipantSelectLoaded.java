@@ -13,7 +13,7 @@ import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.base.ajaxrequest.AjaxRequestBean;
 import net.simpleframework.mvc.component.base.ajaxrequest.DefaultAjaxRequestHandler;
 import net.simpleframework.workflow.engine.ActivityComplete;
-import net.simpleframework.workflow.engine.WorkitemBean;
+import net.simpleframework.workflow.engine.bean.WorkitemBean;
 
 /**
  * Licensed under the Apache License, Version 2.0

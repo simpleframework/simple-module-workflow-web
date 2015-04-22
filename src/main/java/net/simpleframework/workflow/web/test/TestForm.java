@@ -12,8 +12,8 @@ import net.simpleframework.mvc.common.element.RowField;
 import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.common.element.TableRow;
 import net.simpleframework.mvc.common.element.TableRows;
-import net.simpleframework.workflow.engine.ProcessBean;
-import net.simpleframework.workflow.engine.WorkitemBean;
+import net.simpleframework.workflow.engine.bean.ProcessBean;
+import net.simpleframework.workflow.engine.bean.WorkitemBean;
 import net.simpleframework.workflow.web.component.comments.WfCommentBean.EGroupBy;
 import net.simpleframework.workflow.web.page.AbstractWorkflowFormTPage;
 

@@ -3,7 +3,7 @@ package net.simpleframework.workflow.web.component.complete;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.IComponentHandler;
-import net.simpleframework.workflow.engine.WorkitemBean;
+import net.simpleframework.workflow.engine.bean.WorkitemBean;
 
 /**
  * Licensed under the Apache License, Version 2.0

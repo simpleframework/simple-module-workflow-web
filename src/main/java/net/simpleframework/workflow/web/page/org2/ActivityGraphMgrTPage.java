@@ -1,7 +1,7 @@
 package net.simpleframework.workflow.web.page.org2;
 
 import net.simpleframework.mvc.PageParameter;
-import net.simpleframework.workflow.engine.ProcessBean;
+import net.simpleframework.workflow.engine.bean.ProcessBean;
 import net.simpleframework.workflow.web.WorkflowUtils;
 import net.simpleframework.workflow.web.page.t1.WorkflowGraphMonitorPage;
 import net.simpleframework.workflow.web.page.t1.WorkflowGraphUtils;

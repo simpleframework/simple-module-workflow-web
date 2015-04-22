@@ -24,7 +24,7 @@ import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.ctx.permission.IPagePermissionHandler;
 import net.simpleframework.workflow.engine.IWorkflowContextAware;
 import net.simpleframework.workflow.engine.IWorkflowServiceAware;
-import net.simpleframework.workflow.engine.WorkitemBean;
+import net.simpleframework.workflow.engine.bean.WorkitemBean;
 import net.simpleframework.workflow.web.WorkflowUtils;
 import net.simpleframework.workflow.web.component.WfComponentUtils;
 import net.simpleframework.workflow.web.component.WfComponentUtils.IJavascriptCallback;

@@ -22,8 +22,8 @@ import net.simpleframework.mvc.common.element.LinkButton;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.workflow.engine.IWorkflowServiceAware;
 import net.simpleframework.workflow.engine.InitiateItem;
-import net.simpleframework.workflow.engine.ProcessBean;
-import net.simpleframework.workflow.engine.ProcessModelBean;
+import net.simpleframework.workflow.engine.bean.ProcessBean;
+import net.simpleframework.workflow.engine.bean.ProcessModelBean;
 import net.simpleframework.workflow.web.component.WfComponentUtils;
 import net.simpleframework.workflow.web.component.WfComponentUtils.IJavascriptCallback;
 

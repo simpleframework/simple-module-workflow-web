@@ -10,7 +10,7 @@ import net.simpleframework.mvc.IForward;
 import net.simpleframework.mvc.IForwardCallback.IJsonForwardCallback;
 import net.simpleframework.mvc.JsonForward;
 import net.simpleframework.mvc.PageParameter;
-import net.simpleframework.workflow.engine.ProcessModelBean;
+import net.simpleframework.workflow.engine.bean.ProcessModelBean;
 import net.simpleframework.workflow.schema.ProcessDocument;
 import net.simpleframework.workflow.schema.ProcessNode;
 
