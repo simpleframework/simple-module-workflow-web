@@ -22,18 +22,11 @@ import net.simpleframework.workflow.web.WorkflowUtils;
  */
 public class DefaultDoWorkviewHandler extends AbstractComponentHandler implements
 		IDoWorkviewHandler, IWorkflowServiceAware {
-
 	@Override
 	public JavascriptForward doSent(final ComponentParameter cp, final List<ID> ids) {
 		final List<WorkviewBean> list = vService.createWorkviews(WorkflowUtils.getWorkitemBean(cp),
 				ids.toArray(new ID[ids.size()]));
 		return createJavascriptForward(cp, list);
-	}
-
-	protected List<WorkviewBean> createForwardWorkviews(final ComponentParameter cp,
-			final List<ID> ids) {
-		return vService.createForwardWorkviews(WorkflowUtils.getWorkviewBean(cp),
-				ids.toArray(new ID[ids.size()]));
 	}
 
 	protected JavascriptForward createJavascriptForward(final ComponentParameter cp,
