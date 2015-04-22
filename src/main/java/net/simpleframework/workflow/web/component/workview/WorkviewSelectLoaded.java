@@ -150,6 +150,7 @@ public class WorkviewSelectLoaded extends DefaultPageHandler implements IWorkflo
 					js.append(js2);
 				}
 				DoWorkviewUtils.removeSessionUlist(nCP);
+				js.append("$Actions['").append(nCP.getComponentName()).append("_win'].close();");
 				js.append("document.setCookie('").append(COOKIE_ULIST).append("', '")
 						.append(StringUtils.join(list, "#")).append("');");
 			}
@@ -176,7 +177,7 @@ public class WorkviewSelectLoaded extends DefaultPageHandler implements IWorkflo
 			final ComponentParameter nCP = DoWorkviewUtils.get(cp);
 			final Set<String> ulist = DoWorkviewUtils.getSessionUlist(nCP);
 			final String[] arr = StringUtils.split(
-					URLDecoder.decode(cp.getCookie(COOKIE_ULIST), "utf-8"), "#");
+					URLDecoder.decode(StringUtils.blank(cp.getCookie(COOKIE_ULIST)), "utf-8"), "#");
 			final JavascriptForward js = new JavascriptForward();
 			if (arr.length == 0) {
 				js.append("alert('").append($m("WorkviewSelectLoaded.3")).append("');");

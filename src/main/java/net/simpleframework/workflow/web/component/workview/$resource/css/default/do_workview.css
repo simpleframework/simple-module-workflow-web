@@ -70,3 +70,10 @@
 .workview_select .uitem .act .del {
   background-image: url(images/del.png);
 }
+
+.workview_select_num {
+  color: #c00;
+  font-size: 14pt;
+  font-style: italic;
+  margin: 0 3px;
+}

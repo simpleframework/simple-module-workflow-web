@@ -41,10 +41,9 @@ public class DefaultDoWorkviewHandler extends AbstractComponentHandler implement
 		final JavascriptForward js = new JavascriptForward();
 		js.append("alert('")
 				.append(
-						$m("DefaultDoWorkviewHandler.0", new SpanElement(list.size())
-								.setStyle("color:#c00;font-size:14pt;font-style:italic;margin:0 3px;")))
+						$m("DefaultDoWorkviewHandler.0",
+								new SpanElement(list.size()).setClassName("workview_select_num")))
 				.append("');");
-		js.append("$Actions['").append(cp.getComponentName()).append("_win'].close();");
 		return js;
 	}
 
