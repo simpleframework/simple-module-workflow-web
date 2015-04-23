@@ -103,8 +103,13 @@ public abstract class AbstractItemsTPage extends Category_ListPage implements IW
 	}
 
 	public CategoryItem createCategoryItem_myWorkviews(final PageParameter pp) {
-		return createCategoryItem(pp, $m("AbstractItemsTPage.5"), MyWorkviewsTPage.class)
-				.setIconClass("my_work_icon");
+		final CategoryItem item = createCategoryItem(pp, $m("AbstractItemsTPage.5"),
+				MyWorkviewsTPage.class).setIconClass("my_work_icon");
+		final int count = WorkflowUtils.getUserStat(pp).getWorkview_unread();
+		if (count > 0) {
+			item.setNum(new SupElement(count).setHighlight(true));
+		}
+		return item;
 	}
 
 	@Override
