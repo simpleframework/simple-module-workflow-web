@@ -21,6 +21,7 @@ import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
 import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
 import net.simpleframework.mvc.component.ui.pager.db.AbstractDbTablePagerHandler;
 import net.simpleframework.workflow.engine.bean.ProcessBean;
+import net.simpleframework.workflow.engine.bean.WorkitemBean;
 import net.simpleframework.workflow.engine.bean.WorkviewBean;
 import net.simpleframework.workflow.web.WorkflowUtils;
 import net.simpleframework.workflow.web.page.t1.WorkflowViewPage;
@@ -47,9 +48,12 @@ public class MyWorkviewsTPage extends AbstractItemsTPage {
 				.addColumn(TablePagerColumn.ICON().setWidth(18))
 				.addColumn(TC_TITLE())
 				.addColumn(
-						new TablePagerColumn("createDate", $m("MyRunningWorklistTPage.1"), 65)
-								.setTextAlign(ETextAlign.center).setPropertyClass(Date.class))
-				.addColumn(TablePagerColumn.OPE().setWidth(90));
+						new TablePagerColumn("sent", $m("MyRunningWorklistTPage.0"), 120)
+								.setFilterSort(false))
+				.addColumn(
+						new TablePagerColumn("createDate", $m("MyRunningWorklistTPage.1"), 120)
+								.setTextAlign(ETextAlign.center).setPropertyClass(Date.class));
+		// .addColumn(TablePagerColumn.OPE().setWidth(90))
 		return tablePager;
 	}
 
@@ -104,7 +108,15 @@ public class MyWorkviewsTPage extends AbstractItemsTPage {
 					"$Actions.loc('"
 							+ uFactory.getUrl(cp, WorkflowViewPage.class,
 									workview != null ? ("workviewId=" + workview.getId()) : null) + "');");
-			row.add("title", le);
+			row.add("title", le).add("createDate", workview.getCreateDate());
+
+			// sent
+			final WorkviewBean workview2 = vService.getBean(workview.getParentId());
+			final WorkitemBean workitem = wService.getBean(workview2 != null ? workview2
+					.getWorkitemId() : workview.getWorkitemId());
+			if (workitem != null) {
+				row.add("sent", workitem.getUserText2());
+			}
 			return row;
 		}
 	}

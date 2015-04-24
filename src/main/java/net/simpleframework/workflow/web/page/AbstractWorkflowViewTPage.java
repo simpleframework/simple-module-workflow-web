@@ -20,6 +20,7 @@ public abstract class AbstractWorkflowViewTPage extends AbstractFormTableRowTPag
 
 		final WorkviewBean workview = getWorkitemBean(pp);
 		if (workview != null) {
+			// 标记已读
 			vService.doReadMark(workview);
 		}
 	}
