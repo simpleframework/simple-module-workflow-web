@@ -1,7 +1,12 @@
 package net.simpleframework.workflow.web.page;
 
+import java.util.Iterator;
 import java.util.Map;
 
+import net.simpleframework.ado.FilterItem;
+import net.simpleframework.ado.db.DbDataQuery;
+import net.simpleframework.ado.db.common.ExpressionValue;
+import net.simpleframework.ado.db.common.SQLValue;
 import net.simpleframework.ado.query.IDataQuery;
 import net.simpleframework.common.coll.KVMap;
 import net.simpleframework.mvc.PageParameter;
@@ -43,6 +48,25 @@ public class MyWorkviewsTPage extends AbstractItemsTPage {
 		@Override
 		public IDataQuery<WorkviewBean> createDataObjectQuery(final ComponentParameter cp) {
 			return vService.getWorkviewsList(cp.getLoginId());
+		}
+
+		@Override
+		protected ExpressionValue createFilterExpressionValue(final DbDataQuery<?> qs,
+				final TablePagerColumn oCol, final Iterator<FilterItem> it) {
+			if ("title".equals(oCol.getColumnName())) {
+				final TablePagerColumn oCol2 = (TablePagerColumn) oCol.clone();
+				oCol2.setColumnAlias("p.title");
+				final ExpressionValue ev = super.createFilterExpressionValue(qs, oCol2, it);
+				final SQLValue sv = qs.getSqlValue();
+				final StringBuilder sb = new StringBuilder();
+				sb.append("select * from (").append(sv.getSql()).append(") t left join ")
+						.append(pService.getTablename(ProcessBean.class))
+						.append(" p on t.processid=p.id where " + ev.getExpression());
+				sv.setSql(sb.toString());
+				sv.addValues(ev.getValues());
+				return null;
+			}
+			return super.createFilterExpressionValue(qs, oCol, it);
 		}
 
 		protected AbstractElement<?> createImageMark(final ComponentParameter cp,
