@@ -43,11 +43,11 @@ public abstract class ActivityAbortUtils implements IWorkflowContextAware {
 
 	public static String toParams(final ComponentParameter cp) {
 		final StringBuilder sb = new StringBuilder();
-		sb.append(BEAN_ID).append("=").append(cp.hashId());
 		WorkitemBean workitem;
 		if ((workitem = WorkflowUtils.getWorkitemBean(cp)) != null) {
 			sb.append("workitemId=").append(workitem.getId()).append("&");
 		}
+		sb.append(BEAN_ID).append("=").append(cp.hashId());
 		return sb.toString();
 	}
 
