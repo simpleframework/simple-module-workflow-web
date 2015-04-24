@@ -14,6 +14,7 @@ import net.simpleframework.ado.query.IDataQuery;
 import net.simpleframework.common.coll.KVMap;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.AbstractElement;
+import net.simpleframework.mvc.common.element.ButtonElement;
 import net.simpleframework.mvc.common.element.ETextAlign;
 import net.simpleframework.mvc.common.element.LinkElement;
 import net.simpleframework.mvc.component.ComponentParameter;
@@ -52,8 +53,8 @@ public class MyWorkviewsTPage extends AbstractItemsTPage {
 								.setFilterSort(false))
 				.addColumn(
 						new TablePagerColumn("createDate", $m("MyRunningWorklistTPage.1"), 120)
-								.setTextAlign(ETextAlign.center).setPropertyClass(Date.class));
-		// .addColumn(TablePagerColumn.OPE().setWidth(90))
+								.setTextAlign(ETextAlign.center).setPropertyClass(Date.class))
+				.addColumn(TablePagerColumn.OPE().setWidth(90));
 		return tablePager;
 	}
 
@@ -104,10 +105,9 @@ public class MyWorkviewsTPage extends AbstractItemsTPage {
 			}
 
 			final LinkElement le = new LinkElement(WorkflowUtils.getProcessTitle(process)).setStrong(
-					!workview.isReadMark()).setOnclick(
-					"$Actions.loc('"
-							+ uFactory.getUrl(cp, WorkflowViewPage.class,
-									workview != null ? ("workviewId=" + workview.getId()) : null) + "');");
+					!workview.isReadMark()).setHref(
+					uFactory.getUrl(cp, WorkflowViewPage.class,
+							workview != null ? ("workviewId=" + workview.getId()) : null));
 			row.add("title", le).add("createDate", workview.getCreateDate());
 
 			// sent
@@ -117,7 +117,16 @@ public class MyWorkviewsTPage extends AbstractItemsTPage {
 			if (workitem != null) {
 				row.add("sent", workitem.getUserText2());
 			}
+			row.put(TablePagerColumn.OPE, toOpeHTML(cp, workview));
 			return row;
+		}
+
+		protected String toOpeHTML(final ComponentParameter cp, final WorkviewBean workview) {
+			final StringBuilder ope = new StringBuilder();
+			ope.append(new ButtonElement($m("MyWorkviewsTPage。0")).setOnclick("$Actions.loc('"
+					+ uFactory.getUrl(cp, WorkflowViewPage.class,
+							workview != null ? ("workviewId=" + workview.getId()) : null) + "');"));
+			return ope.toString();
 		}
 	}
 }
