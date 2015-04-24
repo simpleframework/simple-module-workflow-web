@@ -52,8 +52,9 @@ public class MyInitiateItemsTPage extends AbstractItemsTPage {
 		tablePager.addColumn(TablePagerColumn.ICON().setWidth(18));
 		tablePager.addColumn(new TablePagerColumn("modelText", $m("MyInitiateItemsTPage.1")));
 		tablePager.addColumn(new TablePagerColumn("processCount", $m("MyInitiateItemsTPage.3"), 80)
-				.setPropertyClass(Integer.class));
-		tablePager.addColumn(new TablePagerColumn("version", $m("MyInitiateItemsTPage.4"), 80));
+				.setFilter(false).setPropertyClass(Integer.class));
+		tablePager.addColumn(new TablePagerColumn("version", $m("MyInitiateItemsTPage.4"), 80)
+				.setFilter(false));
 		tablePager.addColumn(TablePagerColumn.OPE().setWidth(70));
 		return tablePager;
 	}
