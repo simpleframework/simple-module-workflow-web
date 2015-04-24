@@ -13,7 +13,7 @@ import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.base.ajaxrequest.AjaxRequestBean;
 import net.simpleframework.mvc.component.base.ajaxrequest.DefaultAjaxRequestHandler;
 import net.simpleframework.workflow.engine.ActivityComplete;
-import net.simpleframework.workflow.engine.bean.WorkitemBean;
+import net.simpleframework.workflow.web.WorkflowUtils;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -46,7 +46,6 @@ public class ParticipantSelectLoaded extends DefaultPageHandler {
 		@Override
 		public IForward ajaxProcess(final ComponentParameter cp) throws Exception {
 			final ComponentParameter nCP = WorkitemCompleteUtils.get(cp);
-			final WorkitemBean workitem = WorkitemCompleteUtils.getWorkitemBean(nCP);
 
 			final Map<String, String[]> participantIds = new HashMap<String, String[]>();
 			for (final Object o : JsonUtils.toList(nCP.getParameter("json"))) {
@@ -56,10 +55,10 @@ public class ParticipantSelectLoaded extends DefaultPageHandler {
 			}
 
 			try {
-				final ActivityComplete aComplete = WorkitemCompleteUtils.getActivityComplete(nCP,
-						workitem);
+				final ActivityComplete aComplete = WorkitemCompleteUtils.getActivityComplete(nCP);
 				aComplete.resetParticipants(participantIds);
-				return ((IWorkitemCompleteHandler) nCP.getComponentHandler()).onComplete(nCP, workitem);
+				return ((IWorkitemCompleteHandler) nCP.getComponentHandler()).onComplete(nCP,
+						WorkflowUtils.getWorkitemBean(nCP));
 			} catch (final Throwable th) {
 				final JavascriptForward js = WorkitemCompleteUtils.createErrorForward(cp, th);
 				js.append("$Actions['").append(nCP.getComponentName())

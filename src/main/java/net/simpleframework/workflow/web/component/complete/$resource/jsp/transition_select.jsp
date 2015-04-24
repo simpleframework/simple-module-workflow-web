@@ -1,6 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="net.simpleframework.workflow.web.component.complete.WorkitemCompleteUtils"%>
-<%@ page import="net.simpleframework.workflow.engine.bean.WorkitemBean"%>
 <%@ page import="net.simpleframework.mvc.component.ComponentParameter"%>
 <%@ page import="net.simpleframework.workflow.schema.TransitionNode"%>
 <%@ page import="net.simpleframework.mvc.common.element.Checkbox"%>
@@ -9,11 +8,9 @@
 	final ComponentParameter nCP = WorkitemCompleteUtils.get(request,
 			response);
   final String componentName = nCP.getComponentName();
-	final WorkitemBean workitem = WorkitemCompleteUtils
-			.getWorkitemBean(nCP);
 %>
 <div class="simple_window_tcb transition_select">
-  <%=WorkitemCompleteUtils.toTransitionsHTML(nCP, workitem)%>
+  <%=WorkitemCompleteUtils.toTransitionsHTML(nCP)%>
   <div class="msg"></div>
   <div class="b">
     <input type="button" class="button2" value="#(Button.Ok)" />
@@ -24,7 +21,7 @@
   $ready(function() {
     var ts = $(".transition_select");
     
-    var PARAMS = "<%=WorkitemCompleteUtils.toParams(nCP, workitem)%>&transitions=";
+    var PARAMS = "<%=WorkitemCompleteUtils.toParams(nCP)%>&transitions=";
 
     ts.down(".button2").observe("click", function(evn) {
       var id = "";

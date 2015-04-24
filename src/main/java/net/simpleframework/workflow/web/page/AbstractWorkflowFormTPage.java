@@ -218,12 +218,7 @@ public abstract class AbstractWorkflowFormTPage extends AbstractFormTableRowTPag
 	}
 
 	protected AbstractTaskNode getTaskNode(final PageParameter pp) {
-		return pp.getRequestCache("$TaskNode", new IVal<AbstractTaskNode>() {
-			@Override
-			public AbstractTaskNode get() {
-				return aService.getTaskNode(getActivityBean(pp));
-			}
-		});
+		return WorkflowUtils.getTaskNode(pp);
 	}
 
 	protected String getTaskNodeProperty(final PageParameter pp, final String key) {

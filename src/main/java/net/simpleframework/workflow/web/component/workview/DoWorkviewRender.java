@@ -14,7 +14,7 @@ public class DoWorkviewRender extends WorkitemCompleteRender {
 
 	@Override
 	protected String getParams(final ComponentParameter cp) {
-		return DoWorkviewUtils.BEAN_ID + "=" + cp.hashId();
+		return DoWorkviewUtils.toParams(cp);
 	}
 
 	@Override

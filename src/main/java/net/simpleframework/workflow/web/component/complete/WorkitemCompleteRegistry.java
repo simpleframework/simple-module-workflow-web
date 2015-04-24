@@ -14,6 +14,7 @@ import net.simpleframework.mvc.component.base.ajaxrequest.AjaxRequestBean;
 import net.simpleframework.mvc.component.base.ajaxrequest.DefaultAjaxRequestHandler;
 import net.simpleframework.mvc.component.ui.window.WindowBean;
 import net.simpleframework.workflow.engine.bean.WorkitemBean;
+import net.simpleframework.workflow.web.WorkflowUtils;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -73,7 +74,7 @@ public class WorkitemCompleteRegistry extends AbstractComponentRegistry {
 		public IForward ajaxProcess(final ComponentParameter cp) throws Exception {
 			final ComponentParameter nCP = ComponentParameter.getByAttri(cp, "_workitemComplete");
 			try {
-				final WorkitemBean workitem = WorkitemCompleteUtils.getWorkitemBean(nCP);
+				final WorkitemBean workitem = WorkflowUtils.getWorkitemBean(nCP);
 				return ((IWorkitemCompleteHandler) nCP.getComponentHandler()).onComplete(nCP, workitem);
 			} catch (final Throwable th) {
 				return WorkitemCompleteUtils.createErrorForward(cp, th);

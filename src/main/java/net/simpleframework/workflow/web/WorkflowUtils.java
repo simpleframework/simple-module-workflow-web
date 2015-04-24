@@ -22,6 +22,7 @@ import net.simpleframework.workflow.engine.bean.UserStatBean;
 import net.simpleframework.workflow.engine.bean.WorkitemBean;
 import net.simpleframework.workflow.engine.bean.WorkviewBean;
 import net.simpleframework.workflow.engine.participant.Participant;
+import net.simpleframework.workflow.schema.AbstractTaskNode;
 import net.simpleframework.workflow.web.page.AbstractItemsTPage;
 
 /**
@@ -161,6 +162,15 @@ public abstract class WorkflowUtils implements IWorkflowServiceAware {
 
 	public static ActivityBean getActivityBean(final PageParameter pp) {
 		return getActivityBean(pp, null);
+	}
+
+	public static AbstractTaskNode getTaskNode(final PageParameter pp) {
+		return pp.getRequestCache("_TaskNode", new IVal<AbstractTaskNode>() {
+			@Override
+			public AbstractTaskNode get() {
+				return aService.getTaskNode(getActivityBean(pp));
+			}
+		});
 	}
 
 	public static ProcessBean getProcessBean(final PageParameter pp,

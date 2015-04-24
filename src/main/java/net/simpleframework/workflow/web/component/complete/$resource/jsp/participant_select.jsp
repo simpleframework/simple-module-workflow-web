@@ -18,8 +18,7 @@
   $ready(function() {
     var ts = $(".participant_select");
 	
-    var PARAMS = "<%=WorkitemCompleteUtils.toParams(nCP,
-					WorkitemCompleteUtils.getWorkitemBean(nCP))%>";
+    var PARAMS = "<%=WorkitemCompleteUtils.toParams(nCP)%>";
     ts.down(".button2").observe("click", function(evn) {
       var data = ts.select(".transition").inject([], function(r, p) {
         var o = {

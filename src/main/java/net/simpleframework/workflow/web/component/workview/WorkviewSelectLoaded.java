@@ -48,7 +48,7 @@ public class WorkviewSelectLoaded extends DefaultPageHandler implements IWorkflo
 
 		// 用户选取
 		pp.addComponentBean(componentName + "_userSelect", UserSelectBean.class).setMultiple(true)
-				.setJsSelectCallback("return DoWorkview_user_selected(selects)");
+				.setJsSelectCallback("return DoWorkview_user_selected(selects);");
 		// 预设列表字典
 		final ListboxBean listbox = (ListboxBean) pp.addComponentBean(componentName + "_roleList",
 				ListboxBean.class).setHandlerClass(SelectedRolesHandler.class);

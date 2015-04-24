@@ -14,7 +14,7 @@ public class ActivityAbortRender extends WorkitemCompleteRender {
 
 	@Override
 	protected String getParams(final ComponentParameter cp) {
-		return ActivityAbortUtils.BEAN_ID + "=" + cp.hashId();
+		return ActivityAbortUtils.toParams(cp);
 	}
 
 	@Override

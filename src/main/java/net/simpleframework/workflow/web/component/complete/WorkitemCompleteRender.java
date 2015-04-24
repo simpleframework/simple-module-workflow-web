@@ -14,7 +14,7 @@ import net.simpleframework.mvc.component.ComponentUtils;
 public class WorkitemCompleteRender extends ComponentJavascriptRender {
 
 	protected String getParams(final ComponentParameter cp) {
-		return WorkitemCompleteUtils.BEAN_ID + "=" + cp.hashId();
+		return WorkitemCompleteUtils.toParams(cp);
 	}
 
 	protected String getActionPath(final ComponentParameter cp) {

@@ -30,6 +30,7 @@ import net.simpleframework.workflow.schema.AbstractTaskNode;
 import net.simpleframework.workflow.schema.TransitionNode;
 import net.simpleframework.workflow.schema.UserNode;
 import net.simpleframework.workflow.web.IWorkflowWebForm;
+import net.simpleframework.workflow.web.WorkflowUtils;
 import net.simpleframework.workflow.web.component.WfComponentUtils;
 import net.simpleframework.workflow.web.component.WfComponentUtils.IJavascriptCallback;
 
@@ -52,8 +53,9 @@ public abstract class WorkitemCompleteUtils implements IWorkflowServiceAware {
 		return ComponentParameter.get(request, response, BEAN_ID);
 	}
 
-	public static String toParams(final ComponentParameter cp, final WorkitemBean workitem) {
+	public static String toParams(final ComponentParameter cp) {
 		final StringBuilder sb = new StringBuilder();
+		final WorkitemBean workitem = WorkflowUtils.getWorkitemBean(cp);
 		if (workitem != null) {
 			sb.append("workitemId=").append(workitem.getId()).append("&");
 		}
@@ -61,16 +63,12 @@ public abstract class WorkitemCompleteUtils implements IWorkflowServiceAware {
 		return sb.toString();
 	}
 
-	public static WorkitemBean getWorkitemBean(final ComponentParameter cp) {
-		return wService.getBean(cp.getParameter("workitemId"));
-	}
-
 	public static void doForword(final ComponentParameter cp) throws Exception {
 		WfComponentUtils.doForword(cp, new IJavascriptCallback() {
 			@Override
 			public void doJavascript(final JavascriptForward js) {
 				try {
-					final WorkitemBean workitem = getWorkitemBean(cp);
+					final WorkitemBean workitem = WorkflowUtils.getWorkitemBean(cp);
 					final WorkitemComplete workitemComplete = WorkitemComplete.get(workitem);
 
 					// 绑定变量
@@ -79,21 +77,19 @@ public abstract class WorkitemCompleteUtils implements IWorkflowServiceAware {
 					workflowForm.bindVariables(cp, workitemComplete.getVariables());
 
 					if (!workitemComplete.isAllCompleted()) {
-						_appendWorkitemComplete(cp, js, workitem);
+						_appendWorkitemComplete(cp, js);
 					} else {
 						// 是否有手动情况
-						final ActivityComplete activityComplete = getActivityComplete(cp, workitem);
+						final ActivityComplete activityComplete = getActivityComplete(cp);
 						activityComplete.reset();
 						if (activityComplete.isTransitionManual()) {
 							js.append("$Actions['").append(cp.getComponentName())
-									.append("_TransitionSelect']('").append(toParams(cp, workitem))
-									.append("');");
+									.append("_TransitionSelect']('").append(toParams(cp)).append("');");
 						} else if (activityComplete.isParticipantManual()) {
 							js.append("$Actions['").append(cp.getComponentName())
-									.append("_ParticipantSelect']('").append(toParams(cp, workitem))
-									.append("');");
+									.append("_ParticipantSelect']('").append(toParams(cp)).append("');");
 						} else {
-							_appendWorkitemComplete(cp, js, workitem);
+							_appendWorkitemComplete(cp, js);
 						}
 					}
 				} catch (final Throwable ex) {
@@ -104,16 +100,16 @@ public abstract class WorkitemCompleteUtils implements IWorkflowServiceAware {
 	}
 
 	private static void _appendWorkitemComplete(final ComponentParameter cp,
-			final JavascriptForward js, final WorkitemBean workitem) throws Exception {
+			final JavascriptForward js) throws Exception {
 		final String confirmMessage = (String) cp.getBeanProperty("confirmMessage");
 		if (StringUtils.hasText(confirmMessage)) {
 			js.append("if (!confirm('");
 			js.append(JavascriptUtils.escape(confirmMessage)).append("')) return;");
 			js.append("$Actions['").append(cp.getComponentName()).append("_Comfirm']('")
-					.append(toParams(cp, workitem)).append("');");
+					.append(toParams(cp)).append("');");
 		} else {
 			final IWorkitemCompleteHandler hdl = (IWorkitemCompleteHandler) cp.getComponentHandler();
-			js.append(hdl.onComplete(cp, workitem));
+			js.append(hdl.onComplete(cp, WorkflowUtils.getWorkitemBean(cp)));
 		}
 	}
 
@@ -126,11 +122,10 @@ public abstract class WorkitemCompleteUtils implements IWorkflowServiceAware {
 		return js;
 	}
 
-	private static Collection<TransitionNode> getTransitions(final ComponentParameter cp,
-			final WorkitemBean workitem) {
+	private static Collection<TransitionNode> getTransitions(final ComponentParameter cp) {
 		final ArrayList<TransitionNode> al = new ArrayList<TransitionNode>();
 		final String[] transitions = StringUtils.split(cp.getParameter("transitions"));
-		final ActivityComplete activityComplete = getActivityComplete(cp, workitem);
+		final ActivityComplete activityComplete = getActivityComplete(cp);
 		// 通过手动方式选取的路由
 		if (transitions.length > 0) {
 			for (final String id : transitions) {
@@ -145,11 +140,11 @@ public abstract class WorkitemCompleteUtils implements IWorkflowServiceAware {
 		return al;
 	}
 
-	public static String toTransitionsHTML(final ComponentParameter cp, final WorkitemBean workitem) {
+	public static String toTransitionsHTML(final ComponentParameter cp) {
 		final StringBuilder sb = new StringBuilder();
-		final UserNode node = (UserNode) aService.getTaskNode(wService.getActivity(workitem));
+		final UserNode node = (UserNode) WorkflowUtils.getTaskNode(cp);
 		int i = 0;
-		for (final TransitionNode transition : getTransitions(cp, workitem)) {
+		for (final TransitionNode transition : getTransitions(cp)) {
 			final String val = transition.getId();
 			sb.append("<div class='ritem'>");
 			if (!TransitionUtils.isTransitionManual(transition)) {
@@ -172,9 +167,8 @@ public abstract class WorkitemCompleteUtils implements IWorkflowServiceAware {
 		final StringBuilder sb = new StringBuilder();
 		final String[] deptdispTasks = (String[]) cp.getBeanProperty("deptdispTasks");
 		final String[] novalidationTasks = (String[]) cp.getBeanProperty("novalidationTasks");
-		final WorkitemBean workitem = getWorkitemBean(cp);
-		final ActivityComplete activityComplete = getActivityComplete(cp, workitem);
-		for (final TransitionNode transition : getTransitions(cp, workitem)) {
+		final ActivityComplete activityComplete = getActivityComplete(cp);
+		for (final TransitionNode transition : getTransitions(cp)) {
 			final AbstractTaskNode to = transition.to();
 			sb.append("<div class='transition' novalidation='")
 					.append(ArrayUtils.contains(novalidationTasks, to.getName()))
@@ -216,9 +210,8 @@ public abstract class WorkitemCompleteUtils implements IWorkflowServiceAware {
 		return sb.toString();
 	}
 
-	static ActivityComplete getActivityComplete(final ComponentParameter cp,
-			final WorkitemBean workitem) {
-		return WorkitemComplete.get(workitem).getActivityComplete()
+	static ActivityComplete getActivityComplete(final ComponentParameter cp) {
+		return WorkitemComplete.get(WorkflowUtils.getWorkitemBean(cp)).getActivityComplete()
 				.setBcomplete((Boolean) cp.getBeanProperty("bcomplete"));
 	}
 

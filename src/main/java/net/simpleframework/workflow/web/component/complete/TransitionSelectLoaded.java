@@ -8,7 +8,7 @@ import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.base.ajaxrequest.AjaxRequestBean;
 import net.simpleframework.workflow.engine.ActivityComplete;
-import net.simpleframework.workflow.engine.bean.WorkitemBean;
+import net.simpleframework.workflow.web.WorkflowUtils;
 import net.simpleframework.workflow.web.component.complete.ParticipantSelectLoaded.ParticipantSelectAction;
 
 /**
@@ -33,22 +33,20 @@ public class TransitionSelectLoaded extends DefaultPageHandler {
 		@Override
 		public IForward ajaxProcess(final ComponentParameter cp) throws Exception {
 			final ComponentParameter nCP = WorkitemCompleteUtils.get(cp);
-			final WorkitemBean workitem = WorkitemCompleteUtils.getWorkitemBean(nCP);
 			final String transitions = nCP.getParameter("transitions");
 			final String[] transitionIds = StringUtils.split(transitions);
-			final ActivityComplete aComplete = WorkitemCompleteUtils
-					.getActivityComplete(nCP, workitem);
+			final ActivityComplete aComplete = WorkitemCompleteUtils.getActivityComplete(nCP);
 			if (aComplete.isParticipantManual(transitionIds)) {
 				final JavascriptForward js = new JavascriptForward();
 				js.append("$Actions['").append(nCP.getComponentName()).append("_ParticipantSelect']('")
-						.append(WorkitemCompleteUtils.toParams(nCP, workitem)).append("&transitions=")
+						.append(WorkitemCompleteUtils.toParams(nCP)).append("&transitions=")
 						.append(transitions).append("');");
 				return js;
 			} else {
 				try {
 					aComplete.resetTransitions(transitionIds);
 					return ((IWorkitemCompleteHandler) nCP.getComponentHandler()).onComplete(nCP,
-							workitem);
+							WorkflowUtils.getWorkitemBean(nCP));
 				} catch (final Throwable th) {
 					final JavascriptForward js = WorkitemCompleteUtils.createErrorForward(cp, th);
 					js.append("$Actions['").append(nCP.getComponentName())
