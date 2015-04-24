@@ -15,6 +15,7 @@ import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.workflow.engine.IActivityService;
 import net.simpleframework.workflow.engine.IWorkflowContextAware;
 import net.simpleframework.workflow.engine.bean.ActivityBean;
+import net.simpleframework.workflow.engine.bean.WorkitemBean;
 import net.simpleframework.workflow.schema.AbstractTaskNode;
 import net.simpleframework.workflow.schema.UserNode;
 import net.simpleframework.workflow.web.WorkflowUtils;
@@ -43,6 +44,10 @@ public abstract class ActivityAbortUtils implements IWorkflowContextAware {
 	public static String toParams(final ComponentParameter cp) {
 		final StringBuilder sb = new StringBuilder();
 		sb.append(BEAN_ID).append("=").append(cp.hashId());
+		WorkitemBean workitem;
+		if ((workitem = WorkflowUtils.getWorkitemBean(cp)) != null) {
+			sb.append("workitemId=").append(workitem.getId()).append("&");
+		}
 		return sb.toString();
 	}
 

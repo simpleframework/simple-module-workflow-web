@@ -6,8 +6,7 @@
 	final ComponentParameter nCP = ActivityAbortUtils.get(request,
 			response);
 	final String componentName = nCP.getComponentName();
-	final String params = ActivityAbortUtils.BEAN_ID + "="
-			+ nCP.hashId();
+	final String params = ActivityAbortUtils.toParams(nCP);
 %>
 <div class="simple_window_tcb activity_select">
   <%=ActivityAbortUtils.toListHTML(nCP)%>
@@ -30,7 +29,8 @@
       });
       
       if (id.length > 0) {
-        $Actions['<%=componentName%>_ActivitySelect_OK']('<%=params%>&activityIds=' + id.substring(1));
+        $Actions['<%=componentName%>_ActivitySelect_OK'](
+            '<%=params%>&activityIds=' + id.substring(1));
       } else {
         $UI.shakeMsg(ts.down(".msg"), "<span>#(activity_select.0)</span>");
       }
