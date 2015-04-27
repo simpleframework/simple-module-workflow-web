@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import net.simpleframework.common.Convert;
 import net.simpleframework.common.ID;
 import net.simpleframework.common.web.HttpUtils;
+import net.simpleframework.common.web.JavascriptUtils;
 import net.simpleframework.ctx.permission.PermissionUser;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageRequestResponse;
@@ -168,7 +169,7 @@ public abstract class DoWorkviewUtils implements IWorkflowContextAware, IWorkflo
 				}
 			}
 		}
-		sb.append("<script type='text/javascript'>DoWorkview_init();</script>");
+		sb.append(JavascriptUtils.wrapScriptTag("DoWorkview_init();"));
 		return sb.toString();
 	}
 

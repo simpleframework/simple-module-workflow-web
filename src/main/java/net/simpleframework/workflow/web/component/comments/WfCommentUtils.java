@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import net.simpleframework.ado.query.IDataQuery;
 import net.simpleframework.common.DateUtils;
+import net.simpleframework.common.web.JavascriptUtils;
 import net.simpleframework.common.web.html.HtmlUtils;
 import net.simpleframework.mvc.PageRequestResponse;
 import net.simpleframework.mvc.common.element.InputElement;
@@ -70,7 +71,7 @@ public abstract class WfCommentUtils implements IWorkflowContextAware {
 			sb.append(" </span>");
 			sb.append("</div>");
 		}
-		sb.append("<script type='text/javascript'>wf_comment_init();</script>");
+		sb.append(JavascriptUtils.wrapScriptTag("wf_comment_init();"));
 		return sb.toString();
 	}
 }
