@@ -7,7 +7,7 @@ import java.util.Set;
 
 import net.simpleframework.common.ID;
 import net.simpleframework.common.StringUtils;
-import net.simpleframework.common.object.ObjectEx.IVal;
+import net.simpleframework.common.object.ObjectEx.CacheV;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.ButtonElement;
 import net.simpleframework.mvc.common.element.ImageElement;
@@ -74,7 +74,7 @@ public abstract class WorkflowUtils implements IWorkflowServiceAware {
 	}
 
 	public static String getUserTo(final ActivityBean activity) {
-		return activity.getAttrCache("to_" + activity.getId(), new IVal<String>() {
+		return activity.getAttrCache("to_" + activity.getId(), new CacheV<String>() {
 			@Override
 			public String get() {
 				final Set<String> list = new LinkedHashSet<String>();
@@ -93,7 +93,7 @@ public abstract class WorkflowUtils implements IWorkflowServiceAware {
 		if (preActivity == null) {
 			return null;
 		}
-		return activity.getAttrCache("from_" + preActivity.getId(), new IVal<String>() {
+		return activity.getAttrCache("from_" + preActivity.getId(), new CacheV<String>() {
 			@Override
 			public String get() {
 				final Set<String> list = new LinkedHashSet<String>();
@@ -111,7 +111,7 @@ public abstract class WorkflowUtils implements IWorkflowServiceAware {
 		if (workviewId == null) {
 			return null;
 		}
-		return pp.getRequestCache(workviewId, new IVal<WorkviewBean>() {
+		return pp.getRequestCache(workviewId, new CacheV<WorkviewBean>() {
 			@Override
 			public WorkviewBean get() {
 				return vService.getBean(workviewId);
@@ -124,7 +124,7 @@ public abstract class WorkflowUtils implements IWorkflowServiceAware {
 		if (workitemId == null) {
 			return null;
 		}
-		return pp.getRequestCache(workitemId, new IVal<WorkitemBean>() {
+		return pp.getRequestCache(workitemId, new CacheV<WorkitemBean>() {
 			@Override
 			public WorkitemBean get() {
 				return wService.getBean(workitemId);
@@ -136,7 +136,7 @@ public abstract class WorkflowUtils implements IWorkflowServiceAware {
 		if (workitem == null) {
 			final String activityId = pp.getParameter("activityId");
 			return pp.getRequestCache("activity_" + StringUtils.blank(activityId),
-					new IVal<ActivityBean>() {
+					new CacheV<ActivityBean>() {
 						@Override
 						public ActivityBean get() {
 							Object _activityId = activityId;
@@ -151,7 +151,7 @@ public abstract class WorkflowUtils implements IWorkflowServiceAware {
 					});
 		} else {
 			final ID activityId = workitem.getActivityId();
-			return pp.getRequestCache("activity_" + activityId, new IVal<ActivityBean>() {
+			return pp.getRequestCache("activity_" + activityId, new CacheV<ActivityBean>() {
 				@Override
 				public ActivityBean get() {
 					return aService.getBean(activityId);
@@ -165,7 +165,7 @@ public abstract class WorkflowUtils implements IWorkflowServiceAware {
 	}
 
 	public static AbstractTaskNode getTaskNode(final PageParameter pp) {
-		return pp.getRequestCache("_TaskNode", new IVal<AbstractTaskNode>() {
+		return pp.getRequestCache("_TaskNode", new CacheV<AbstractTaskNode>() {
 			@Override
 			public AbstractTaskNode get() {
 				return aService.getTaskNode(getActivityBean(pp));
@@ -178,7 +178,7 @@ public abstract class WorkflowUtils implements IWorkflowServiceAware {
 		if (workitem == null) {
 			final String processId = pp.getParameter("processId");
 			return pp.getRequestCache("process_" + StringUtils.blank(processId),
-					new IVal<ProcessBean>() {
+					new CacheV<ProcessBean>() {
 						@Override
 						public ProcessBean get() {
 							Object _processId = processId;
@@ -196,7 +196,7 @@ public abstract class WorkflowUtils implements IWorkflowServiceAware {
 					});
 		} else {
 			final ID processId = workitem.getProcessId();
-			return pp.getRequestCache("process_" + processId, new IVal<ProcessBean>() {
+			return pp.getRequestCache("process_" + processId, new CacheV<ProcessBean>() {
 				@Override
 				public ProcessBean get() {
 					return pService.getBean(processId);
@@ -212,7 +212,7 @@ public abstract class WorkflowUtils implements IWorkflowServiceAware {
 	public static ProcessModelBean getProcessModel(final PageParameter pp) {
 		final String modelId = pp.getParameter("modelId");
 		return pp.getRequestCache("model_" + StringUtils.blank(modelId),
-				new IVal<ProcessModelBean>() {
+				new CacheV<ProcessModelBean>() {
 					@Override
 					public ProcessModelBean get() {
 						Object _modelId = modelId;
@@ -228,7 +228,7 @@ public abstract class WorkflowUtils implements IWorkflowServiceAware {
 	}
 
 	public static UserStatBean getUserStat(final PageParameter pp) {
-		return pp.getRequestCache("_getUserStat", new IVal<UserStatBean>() {
+		return pp.getRequestCache("_getUserStat", new CacheV<UserStatBean>() {
 			@Override
 			public UserStatBean get() {
 				return usService.getUserStat(pp.getLoginId());
