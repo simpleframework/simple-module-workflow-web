@@ -360,6 +360,18 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 		return MenuItem.of($m("MyRunningWorklistTbl.15"));
 	}
 
+	static MenuItem MENU_VIEW_GROUP0() {
+		return MenuItem.of($m("AbstractTemplatePage.0"));
+	}
+
+	static MenuItem MENU_VIEW_GROUP1() {
+		return MenuItem.of($m("AbstractWorkitemsTPage.1"));
+	}
+
+	static MenuItem MENU_VIEW_GROUP2() {
+		return MenuItem.of($m("AbstractWorkitemsTPage.2"));
+	}
+
 	static NumberConvert DATE_NUMBERCONVERT = new NumberConvert() {
 		@Override
 		public Object convert(final Number n) {

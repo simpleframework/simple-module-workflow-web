@@ -86,12 +86,19 @@ public class MyRunningWorklistTPage extends AbstractWorkitemsTPage {
 
 		// 查看菜单
 		mb = createViewMenuComponent(pp);
+
 		mb.addItem(
 				MyRunningWorklistTbl.MENU_VIEW_ALL().setOnclick(
-						"$Actions['MyWorklistTPage_tbl']('v=');"))
+						"$Actions.loc('" + uFactory.getUrl(pp, MyRunningWorklistTPage.class) + "');"))
 				.addItem(
 						MyRunningWorklistTbl.MENU_MARK_UNREAD().setOnclick(
-								"$Actions['MyWorklistTPage_tbl']('v=unread');"))
+								"$Actions.loc('"
+										+ uFactory.getUrl(pp, MyRunningWorklistTPage.class, "v=unread")
+										+ "');"))
+				.addItem(MenuItem.sep())
+				.addItem(MyRunningWorklistTbl.MENU_VIEW_GROUP0())
+				.addItem(MyRunningWorklistTbl.MENU_VIEW_GROUP1())
+				.addItem(MyRunningWorklistTbl.MENU_VIEW_GROUP2())
 				.addItem(MenuItem.sep())
 				.addItem(
 						MenuItem.of($m("AbstractItemsTPage.4")).setOnclick(

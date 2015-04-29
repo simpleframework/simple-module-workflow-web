@@ -43,7 +43,10 @@ public class MyFinalWorklistTPage extends MyRunningWorklistTPage {
 		addAjaxRequest(pp, "MyWorklistTPage_topMark").setHandlerMethod("doTopMark");
 
 		final MenuBean mb = createViewMenuComponent(pp);
-		mb.addItem(MyRunningWorklistTbl.MENU_VIEW_ALL());
+		mb.addItem(MyRunningWorklistTbl.MENU_VIEW_ALL()).addItem(MenuItem.sep())
+				.addItem(MyRunningWorklistTbl.MENU_VIEW_GROUP0())
+				.addItem(MyRunningWorklistTbl.MENU_VIEW_GROUP1())
+				.addItem(MyRunningWorklistTbl.MENU_VIEW_GROUP2());
 	}
 
 	@Override
