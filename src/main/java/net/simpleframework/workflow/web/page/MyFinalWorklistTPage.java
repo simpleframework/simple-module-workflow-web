@@ -50,6 +50,20 @@ public class MyFinalWorklistTPage extends MyRunningWorklistTPage {
 	}
 
 	@Override
+	protected void setGroupParam(final PageParameter pp) {
+		String g = pp.getParameter("g");
+		if (g == null) {
+			g = pp.getCookie("group_worklist_final");
+		}
+		if ("modelname".equals(g) || "taskname".equals(g) || "none".equals(g)) {
+			pp.putParameter("g", g);
+			pp.addCookie("group_worklist_final", g, 365 * 60 * 60 * 24);
+		} else {
+			pp.putParameter("g", "taskname");
+		}
+	}
+
+	@Override
 	protected TablePagerBean addTablePagerBean(final PageParameter pp) {
 		final TablePagerBean tablePager = addTablePagerBean(pp, "MyWorklistTPage_tbl",
 				MyCompleteWorklistTbl.class);
@@ -81,13 +95,7 @@ public class MyFinalWorklistTPage extends MyRunningWorklistTPage {
 				"idMyWorklistTPage_viewMenu"));
 	}
 
-	@Override
-	protected String getDefaultGroupVal() {
-		return "taskname";
-	}
-
 	public static class MyCompleteWorklistTbl extends MyRunningWorklistTbl {
-
 		@Override
 		public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
 			return wService.getWorklist(cp.getLoginId(), EWorkitemStatus.complete,

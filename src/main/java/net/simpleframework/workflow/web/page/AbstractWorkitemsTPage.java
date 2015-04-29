@@ -3,7 +3,6 @@ package net.simpleframework.workflow.web.page;
 import static net.simpleframework.common.I18n.$m;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.ElementList;
-import net.simpleframework.mvc.common.element.Option;
 import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
 
 /**
@@ -16,15 +15,13 @@ public class AbstractWorkitemsTPage extends AbstractItemsTPage {
 
 	@Override
 	public ElementList getRightElements(final PageParameter pp) {
-		setDefaultGroupVal(pp, getDefaultGroupVal());
-		return ElementList
-				.of(createGroupElement(pp, "MyWorklistTPage_tbl", new Option("modelname",
-						$m("AbstractWorkitemsTPage.1")), new Option("taskname",
-						$m("AbstractWorkitemsTPage.2"))));
-	}
-
-	protected String getDefaultGroupVal() {
-		return "modelname";
+		// setDefaultGroupVal(pp, getDefaultGroupVal());
+		// return ElementList
+		// .of(createGroupElement(pp, "MyWorklistTPage_tbl", new
+		// Option("modelname",
+		// $m("AbstractWorkitemsTPage.1")), new Option("taskname",
+		// $m("AbstractWorkitemsTPage.2"))));
+		return null;
 	}
 
 	protected TablePagerColumn TC_STATUS() {

@@ -6,6 +6,7 @@ import java.util.Date;
 
 import net.simpleframework.ado.query.IDataQuery;
 import net.simpleframework.common.StringUtils;
+import net.simpleframework.common.web.HttpUtils;
 import net.simpleframework.ctx.trans.Transaction;
 import net.simpleframework.mvc.AbstractMVCPage;
 import net.simpleframework.mvc.IForward;
@@ -44,8 +45,22 @@ public class MyRunningWorklistTPage extends AbstractWorkitemsTPage {
 	@Override
 	protected void onForward(final PageParameter pp) {
 		super.onForward(pp);
+		setGroupParam(pp);
 
 		addComponents(pp);
+	}
+
+	protected void setGroupParam(final PageParameter pp) {
+		String g = pp.getParameter("g");
+		if (g == null) {
+			g = pp.getCookie("group_worklist_running");
+		}
+		if ("modelname".equals(g) || "taskname".equals(g) || "none".equals(g)) {
+			pp.putParameter("g", g);
+			pp.addCookie("group_worklist_running", g, 365 * 60 * 60 * 24);
+		} else {
+			pp.putParameter("g", "modelname");
+		}
 	}
 
 	protected void addComponents(final PageParameter pp) {
@@ -87,18 +102,21 @@ public class MyRunningWorklistTPage extends AbstractWorkitemsTPage {
 		// 查看菜单
 		mb = createViewMenuComponent(pp);
 
-		mb.addItem(
-				MyRunningWorklistTbl.MENU_VIEW_ALL().setOnclick(
-						"$Actions.loc('" + uFactory.getUrl(pp, MyRunningWorklistTPage.class) + "');"))
+		final String url = uFactory.getUrl(pp, MyRunningWorklistTPage.class);
+		mb.addItem(MyRunningWorklistTbl.MENU_VIEW_ALL().setOnclick("$Actions.loc('" + url + "');"))
 				.addItem(
 						MyRunningWorklistTbl.MENU_MARK_UNREAD().setOnclick(
-								"$Actions.loc('"
-										+ uFactory.getUrl(pp, MyRunningWorklistTPage.class, "v=unread")
-										+ "');"))
+								"$Actions.loc('" + HttpUtils.addParameters(url, "v=unread") + "');"))
 				.addItem(MenuItem.sep())
-				.addItem(MyRunningWorklistTbl.MENU_VIEW_GROUP0())
-				.addItem(MyRunningWorklistTbl.MENU_VIEW_GROUP1())
-				.addItem(MyRunningWorklistTbl.MENU_VIEW_GROUP2())
+				.addItem(
+						MyRunningWorklistTbl.MENU_VIEW_GROUP0().setOnclick(
+								"$Actions.loc('" + HttpUtils.addParameters(url, "g=none") + "');"))
+				.addItem(
+						MyRunningWorklistTbl.MENU_VIEW_GROUP1().setOnclick(
+								"$Actions.loc('" + HttpUtils.addParameters(url, "g=modelname") + "');"))
+				.addItem(
+						MyRunningWorklistTbl.MENU_VIEW_GROUP2().setOnclick(
+								"$Actions.loc('" + HttpUtils.addParameters(url, "g=taskname") + "');"))
 				.addItem(MenuItem.sep())
 				.addItem(
 						MenuItem.of($m("AbstractItemsTPage.4")).setOnclick(
