@@ -107,20 +107,11 @@ public class MyRunningWorklistTPage extends AbstractWorkitemsTPage {
 				.addItem(
 						MyRunningWorklistTbl.MENU_MARK_UNREAD().setOnclick(
 								"$Actions.loc('" + HttpUtils.addParameters(url, "v=unread") + "');"))
-				.addItem(MenuItem.sep())
-				.addItem(
-						MyRunningWorklistTbl.MENU_VIEW_GROUP0().setOnclick(
-								"$Actions.loc('" + HttpUtils.addParameters(url, "g=none") + "');"))
-				.addItem(
-						MyRunningWorklistTbl.MENU_VIEW_GROUP1().setOnclick(
-								"$Actions.loc('" + HttpUtils.addParameters(url, "g=modelname") + "');"))
-				.addItem(
-						MyRunningWorklistTbl.MENU_VIEW_GROUP2().setOnclick(
-								"$Actions.loc('" + HttpUtils.addParameters(url, "g=taskname") + "');"))
-				.addItem(MenuItem.sep())
-				.addItem(
-						MenuItem.of($m("AbstractItemsTPage.4")).setOnclick(
-								"$Actions.loc('" + uFactory.getUrl(pp, MyQueryWorksTPage.class) + "');"));
+				.addItem(MenuItem.sep());
+		addGroupMenuItems(pp, mb, url);
+		mb.addItem(MenuItem.sep()).addItem(
+				MenuItem.of($m("AbstractItemsTPage.4")).setOnclick(
+						"$Actions.loc('" + uFactory.getUrl(pp, MyQueryWorksTPage.class) + "');"));
 
 		// 委托菜单
 		mb = createDelegateMenuComponent(pp);
@@ -138,6 +129,24 @@ public class MyRunningWorklistTPage extends AbstractWorkitemsTPage {
 		mb = createOpeMenuComponent(pp);
 		mb.addItem(MenuItem.of($m("MyRunningWorklistTbl.16")).setOnclick(
 				"$Actions['MyWorklistTPage_tbl'].doAct('MyWorklistTPage_delete', 'workitemId');"));
+	}
+
+	protected void addGroupMenuItems(final PageParameter pp, final MenuBean mb, final String url) {
+		final MenuItem g0 = MyRunningWorklistTbl.MENU_VIEW_GROUP0().setOnclick(
+				"$Actions.loc('" + HttpUtils.addParameters(url, "g=none") + "');");
+		final MenuItem g1 = MyRunningWorklistTbl.MENU_VIEW_GROUP1().setOnclick(
+				"$Actions.loc('" + HttpUtils.addParameters(url, "g=modelname") + "');");
+		final MenuItem g2 = MyRunningWorklistTbl.MENU_VIEW_GROUP2().setOnclick(
+				"$Actions.loc('" + HttpUtils.addParameters(url, "g=taskname") + "');");
+		final String g = pp.getParameter("g");
+		if ("none".equals(g)) {
+			g0.setIconClass(MenuItem.ICON_SELECTED);
+		} else if ("modelname".equals(g)) {
+			g1.setIconClass(MenuItem.ICON_SELECTED);
+		} else if ("taskname".equals(g)) {
+			g2.setIconClass(MenuItem.ICON_SELECTED);
+		}
+		mb.addItem(g0).addItem(g1).addItem(g2);
 	}
 
 	protected TablePagerBean addTablePagerBean(final PageParameter pp) {
