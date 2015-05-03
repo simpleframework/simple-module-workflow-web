@@ -89,7 +89,7 @@
   background-color: transparent;
   background-image: none;
   border: none;
-  border-bottom: 1px solid #433;
+  border-bottom: 1px solid #999;
   width: 280px;
   font-size: 9.5pt;
   padding: 0 0 4px 6px;  
@@ -101,14 +101,14 @@
 .worklist_search a {
   position: absolute;
   right: 0px;
-  background-color: #544;
-  border-color: #322;
+  background-color: #d66;
+  border-color: #a33;
   color: #eee;
 }
 
 .worklist_search a:HOVER {
-  background-color: #766;
-  border-color: #544;
+  background-color: #e77;
+  border-color: #b44;
   -webkit-box-shadow: 0px 0px 5px #bbb;
 	box-shadow: 0px 0px 5px #bbb;
   -moz-transition: all 0.3s;

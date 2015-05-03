@@ -42,10 +42,14 @@ public class MyFinalWorklistTPage extends MyRunningWorklistTPage {
 		// 标记置顶
 		addAjaxRequest(pp, "MyWorklistTPage_topMark").setHandlerMethod("doTopMark");
 
-		final String url = uFactory.getUrl(pp, MyFinalWorklistTPage.class);
 		final MenuBean mb = createViewMenuComponent(pp);
 		mb.addItem(MyRunningWorklistTbl.MENU_VIEW_ALL()).addItem(MenuItem.sep());
-		addGroupMenuItems(pp, mb, url);
+		addGroupMenuItems(pp, mb, getWorklistPageUrl(pp));
+	}
+
+	@Override
+	protected String getWorklistPageUrl(final PageParameter pp) {
+		return uFactory.getUrl(pp, MyFinalWorklistTPage.class);
 	}
 
 	@Override

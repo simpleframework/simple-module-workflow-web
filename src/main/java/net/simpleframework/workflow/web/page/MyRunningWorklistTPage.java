@@ -7,6 +7,7 @@ import java.util.Date;
 import net.simpleframework.ado.query.IDataQuery;
 import net.simpleframework.common.StringUtils;
 import net.simpleframework.common.web.HttpUtils;
+import net.simpleframework.common.web.JavascriptUtils;
 import net.simpleframework.ctx.trans.Transaction;
 import net.simpleframework.mvc.AbstractMVCPage;
 import net.simpleframework.mvc.IForward;
@@ -102,7 +103,7 @@ public class MyRunningWorklistTPage extends AbstractWorkitemsTPage {
 		// 查看菜单
 		mb = createViewMenuComponent(pp);
 
-		final String url = uFactory.getUrl(pp, MyRunningWorklistTPage.class);
+		final String url = getWorklistPageUrl(pp);
 		mb.addItem(MyRunningWorklistTbl.MENU_VIEW_ALL().setOnclick("$Actions.loc('" + url + "');"))
 				.addItem(
 						MyRunningWorklistTbl.MENU_MARK_UNREAD().setOnclick(
@@ -221,7 +222,26 @@ public class MyRunningWorklistTPage extends AbstractWorkitemsTPage {
 			sb.append(new BlockElement().setClassName("worklist_tip").setText(txt.toString()));
 		}
 		sb.append(super.toToolbarHTML(pp));
+		final String url = getWorklistPageUrl(pp);
+		final StringBuilder js = new StringBuilder();
+		js.append("var s = $('idAbstractWorkitemsTPage_search');");
+		js.append("$UI.addBackgroundTitle(s, '").append($m("AbstractWorkitemsTPage.4")).append("');");
+		js.append("var Func = function() {");
+		js.append(" var v = $F(s).trim();");
+		js.append(" if (v == '')");
+		js.append("   $Actions.loc('").append(url).append("');");
+		js.append(" else");
+		js.append("	  $Actions.loc('").append(HttpUtils.addParameters(url, "s="))
+				.append("' + encodeURIComponent(v));");
+		js.append("};");
+		js.append("$Actions.observeSubmit(s, Func);");
+		js.append("s.next().observe('click', Func);");
+		sb.append(JavascriptUtils.wrapScriptTag(js.toString(), true));
 		return sb.toString();
+	}
+
+	protected String getWorklistPageUrl(final PageParameter pp) {
+		return uFactory.getUrl(pp, MyRunningWorklistTPage.class);
 	}
 
 	@Override

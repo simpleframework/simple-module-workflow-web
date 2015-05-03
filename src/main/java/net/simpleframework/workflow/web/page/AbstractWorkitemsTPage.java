@@ -1,6 +1,7 @@
 package net.simpleframework.workflow.web.page;
 
 import static net.simpleframework.common.I18n.$m;
+import net.simpleframework.common.StringUtils;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.BlockElement;
 import net.simpleframework.mvc.common.element.ElementList;
@@ -18,9 +19,13 @@ public class AbstractWorkitemsTPage extends AbstractItemsTPage {
 
 	@Override
 	public ElementList getRightElements(final PageParameter pp) {
-		return ElementList.of(new BlockElement().setClassName("worklist_search").addElements(
-				new InputElement().setPlaceholder("请输入全文搜索内容"),
-				new LinkElement("搜索").setClassName("simple_btn2")));
+		final InputElement txt = new InputElement().setId("idAbstractWorkitemsTPage_search");
+		final String s = pp.getLocaleParameter("s");
+		if (StringUtils.hasText(s)) {
+			txt.setValue(s);
+		}
+		return ElementList.of(new BlockElement().setClassName("worklist_search").addElements(txt,
+				new LinkElement($m("AbstractWorkitemsTPage.5")).setClassName("simple_btn2")));
 	}
 
 	protected TablePagerColumn TC_STATUS() {
