@@ -62,14 +62,17 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 	@Override
 	public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
 		final ID userId = cp.getLoginId();
+		// final String t = cp.getLocaleParameter("t");
+		// if (StringUtils.hasText(t)) {
+		//
+		// } else {
 		final String v = cp.getParameter("v");
-		if (StringUtils.hasText(v)) {
-			cp.addFormParameter("v", v);
-		}
+		cp.addFormParameter("v", v);
 		if ("unread".equals(v)) {
 			return wService.getUnreadWorklist(userId);
 		}
 		return wService.getRunningWorklist(userId);
+		// }
 	}
 
 	@Override

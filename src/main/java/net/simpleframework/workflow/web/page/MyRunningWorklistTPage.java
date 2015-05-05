@@ -231,7 +231,7 @@ public class MyRunningWorklistTPage extends AbstractWorkitemsTPage {
 		js.append(" if (v == '')");
 		js.append("   $Actions.loc('").append(url).append("');");
 		js.append(" else");
-		js.append("	  $Actions.loc('").append(HttpUtils.addParameters(url, "s="))
+		js.append("	  $Actions.loc('").append(HttpUtils.addParameters(url, "t="))
 				.append("' + encodeURIComponent(v));");
 		js.append("};");
 		js.append("$Actions.observeSubmit(s, Func);");

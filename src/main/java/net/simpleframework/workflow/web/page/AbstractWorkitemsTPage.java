@@ -20,9 +20,9 @@ public class AbstractWorkitemsTPage extends AbstractItemsTPage {
 	@Override
 	public ElementList getRightElements(final PageParameter pp) {
 		final InputElement txt = new InputElement().setId("idAbstractWorkitemsTPage_search");
-		final String s = pp.getLocaleParameter("s");
-		if (StringUtils.hasText(s)) {
-			txt.setValue(s);
+		final String t = pp.getLocaleParameter("t");
+		if (StringUtils.hasText(t)) {
+			txt.setValue(t);
 		}
 		return ElementList.of(new BlockElement().setClassName("worklist_search").addElements(txt,
 				new LinkElement($m("AbstractWorkitemsTPage.5")).setClassName("simple_btn2")));

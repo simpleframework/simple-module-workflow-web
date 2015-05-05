@@ -11,8 +11,9 @@ import net.simpleframework.ado.query.ListDataQuery;
 import net.simpleframework.common.Convert;
 import net.simpleframework.common.StringUtils;
 import net.simpleframework.common.coll.KVMap;
+import net.simpleframework.mvc.IForward;
+import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageParameter;
-import net.simpleframework.mvc.common.element.AbstractElement;
 import net.simpleframework.mvc.common.element.ButtonElement;
 import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.LinkElement;
@@ -51,6 +52,8 @@ public class MyQueryWorksTPage extends AbstractItemsTPage {
 
 		addTablePagerBean(pp);
 
+		addAjaxRequest(pp, "MyQueryWorksTPage_workitem").setHandlerMethod("doWorkitem");
+
 		// 工作列表窗口
 		addAjaxRequest(pp, "MyQueryWorksTPage_workitems_page", ProcessWorkitemsPage.class);
 		addWindowBean(pp, "MyQueryWorksTPage_workitems")
@@ -75,6 +78,21 @@ public class MyQueryWorksTPage extends AbstractItemsTPage {
 	@Override
 	protected String getPageCSS(final PageParameter pp) {
 		return "MyQueryWorksTPage";
+	}
+
+	public IForward doWorkitem(final ComponentParameter cp) {
+		final ProcessBean process = WorkflowUtils.getProcessBean(cp);
+		WorkitemBean workitem;
+		if (process != null && (workitem = getOpenWorkitem(cp, process)) != null) {
+			return new JavascriptForward("$Actions.loc('"
+					+ uFactory.getUrl(cp, WorkflowFormPage.class, workitem) + "');");
+		} else {
+			return new JavascriptForward("alert('").append($m("MyQueryWorksTPage.7")).append("');");
+		}
+	}
+
+	protected WorkitemBean getOpenWorkitem(final PageParameter pp, final ProcessBean process) {
+		return wService.getWorkitems(process, pp.getLoginId()).iterator().next();
 	}
 
 	@Override
@@ -105,28 +123,24 @@ public class MyQueryWorksTPage extends AbstractItemsTPage {
 		protected Map<String, Object> getRowData(final ComponentParameter cp, final Object dataObject) {
 			final ProcessBean process = (ProcessBean) dataObject;
 			final KVMap row = new KVMap();
+
+			row.add("title", toTitleHTML(cp, process)).add("userText", process.getUserText())
+					.add("createDate", process.getCreateDate())
+					.add("status", WorkflowUtils.toStatusHTML(cp, process.getStatus()));
+			row.add(TablePagerColumn.OPE, toOpeHTML(cp, process));
+			return row;
+		}
+
+		protected String toTitleHTML(final ComponentParameter cp, final ProcessBean process) {
 			final StringBuilder t = new StringBuilder();
 			final int c = Convert.toInt(process.getAttr("c"));
 			if (c > 0) {
 				t.append("[").append(c).append("] ");
 			}
-
-			final WorkitemBean workitem = wService.getBean(process.getAttr("workitemid"));
-			final String title = WorkflowUtils.getProcessTitle(process);
-			final AbstractElement<?> le;
-			if (workitem != null) {
-				le = new LinkElement(title).setOnclick("$Actions.loc('"
-						+ uFactory.getUrl(cp, WorkflowFormPage.class, workitem) + "');");
-			} else {
-				le = new SpanElement(title);
-			}
-			t.append(le.setColor_gray(!StringUtils.hasText(process.getTitle())));
-
-			row.add("title", t.toString()).add("userText", process.getUserText())
-					.add("createDate", process.getCreateDate())
-					.add("status", WorkflowUtils.toStatusHTML(cp, process.getStatus()));
-			row.add(TablePagerColumn.OPE, toOpeHTML(cp, process));
-			return row;
+			t.append(new LinkElement(WorkflowUtils.getProcessTitle(process)).setOnclick(
+					"$Actions['MyQueryWorksTPage_workitem']('processId=" + process.getId() + "');")
+					.setColor_gray(!StringUtils.hasText(process.getTitle())));
+			return t.toString();
 		}
 
 		protected String toOpeHTML(final ComponentParameter cp, final ProcessBean process) {
