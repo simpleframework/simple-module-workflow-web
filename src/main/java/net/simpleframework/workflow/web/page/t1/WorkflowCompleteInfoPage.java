@@ -3,6 +3,7 @@ package net.simpleframework.workflow.web.page.t1;
 import static net.simpleframework.common.I18n.$m;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -12,6 +13,7 @@ import net.simpleframework.mvc.common.element.BlockElement;
 import net.simpleframework.workflow.engine.EWorkitemStatus;
 import net.simpleframework.workflow.engine.bean.ActivityBean;
 import net.simpleframework.workflow.engine.bean.WorkitemBean;
+import net.simpleframework.workflow.schema.AbstractTaskNode;
 import net.simpleframework.workflow.web.WorkflowUtils;
 
 /**
@@ -23,6 +25,20 @@ import net.simpleframework.workflow.web.WorkflowUtils;
 @PageMapping(url = "/workflow/completeInfo")
 public class WorkflowCompleteInfoPage extends AbstractWorkflowFormPage {
 
+	private List<ActivityBean> removeMergeNodes(final List<ActivityBean> nextActivities) {
+		final List<ActivityBean> l = new ArrayList<ActivityBean>();
+		if (nextActivities != null) {
+			for (final ActivityBean next : nextActivities) {
+				if (next.getTasknodeType() == AbstractTaskNode.TT_MERGE) {
+					l.addAll(removeMergeNodes(aService.getLastNextActivities(next)));
+				} else {
+					l.add(next);
+				}
+			}
+		}
+		return l;
+	}
+
 	@Override
 	protected String toHtml(final PageParameter pp, final Map<String, Object> variables,
 			final String currentVariable) throws IOException {
@@ -30,11 +46,13 @@ public class WorkflowCompleteInfoPage extends AbstractWorkflowFormPage {
 		sb.append("<div class='WorkflowCompleteInfoPage'>");
 		sb.append(" <div class='l1'>#(WorkflowCompleteInfoPage.0)</div>");
 		sb.append(" <div class='l2'>");
-		final List<ActivityBean> nextActivities = aService.getLastNextActivities(wService
-				.getActivity(WorkflowUtils.getWorkitemBean(pp)));
-		if (null != nextActivities && nextActivities.size() > 0) {
+		final List<ActivityBean> nextActivities = removeMergeNodes(aService
+				.getLastNextActivities(wService.getActivity(WorkflowUtils.getWorkitemBean(pp))));
+		if (nextActivities.size() > 0) {
 			sb.append("<table>");
 			for (final ActivityBean next : nextActivities) {
+				if (next.getTasknodeType() == AbstractTaskNode.TT_MERGE) {
+				}
 				sb.append("<tr>");
 				sb.append("<td class='task'>").append(next).append("</td>");
 				sb.append("<td>");
@@ -50,8 +68,8 @@ public class WorkflowCompleteInfoPage extends AbstractWorkflowFormPage {
 			}
 			sb.append("</table>");
 		} else {
-			sb.append(new BlockElement().setText($m("WorkflowCompleteInfoPage.1")).addStyle(
-					"margin: 12px;"));
+			sb.append(new BlockElement().setClassName("winfo").setText(
+					$m("WorkflowCompleteInfoPage.1")));
 		}
 		sb.append(" </div>");
 		sb.append("</div>");

@@ -37,6 +37,10 @@
   color: #888;
 }
 
+.WorkflowCompleteInfoPage .winfo {
+  margin: 12px;
+}
+
 .WorkflowMonitorPage {
   width: 80%;
   -webkit-box-shadow: 5px 5px 5px #aaa;
