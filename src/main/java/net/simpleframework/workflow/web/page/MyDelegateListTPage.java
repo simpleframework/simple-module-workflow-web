@@ -42,7 +42,7 @@ import net.simpleframework.workflow.web.page.AbstractDelegateFormPage.WorkitemDe
  * @author 陈侃(cknet@126.com, 13910090885) https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
-public class MyDelegateListTPage extends AbstractWorkitemsTPage {
+public class MyDelegateListTPage extends AbstractItemsTPage {
 
 	@Override
 	protected void onForward(final PageParameter pp) {
@@ -107,9 +107,7 @@ public class MyDelegateListTPage extends AbstractWorkitemsTPage {
 
 	@Override
 	public ElementList getRightElements(final PageParameter pp) {
-		final ElementList el = super.getRightElements(pp);
-		el.add(0, getDelegateTabs(pp));
-		return el;
+		return ElementList.of(getDelegateTabs(pp));
 	}
 
 	public static class MyWorkDelegateTbl extends MyRunningWorklistTbl {

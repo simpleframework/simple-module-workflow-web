@@ -52,7 +52,7 @@ public class UserDelegateListTPage extends MyDelegateListTPage {
 				.addColumn(
 						new TablePagerColumn("createDate", $m("MyDelegateListTPage.1"), 115)
 								.setPropertyClass(Date.class))
-				.addColumn(new TablePagerColumn("status", $m("AbstractWorkitemsTPage.3"), 55) {
+				.addColumn(new TablePagerColumn("status", $m("AbstractItemsTPage.9"), 55) {
 					@Override
 					protected Option[] getFilterOptions() {
 						return Option.from(EDelegationStatus.ready, EDelegationStatus.running,

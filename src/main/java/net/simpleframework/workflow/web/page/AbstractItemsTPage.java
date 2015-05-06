@@ -4,11 +4,17 @@ import static net.simpleframework.common.I18n.$m;
 
 import java.util.List;
 
+import net.simpleframework.common.StringUtils;
+import net.simpleframework.common.web.HttpUtils;
 import net.simpleframework.ctx.IModuleRef;
 import net.simpleframework.mvc.AbstractMVCPage;
 import net.simpleframework.mvc.PageParameter;
+import net.simpleframework.mvc.common.element.BlockElement;
 import net.simpleframework.mvc.common.element.EVerticalAlign;
+import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.ImageElement;
+import net.simpleframework.mvc.common.element.InputElement;
+import net.simpleframework.mvc.common.element.LinkElement;
 import net.simpleframework.mvc.common.element.SupElement;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.base.ajaxrequest.AjaxRequestBean;
@@ -123,8 +129,39 @@ public abstract class AbstractItemsTPage extends Category_ListPage implements IW
 		return CategoryItems.of(createCategoryItem_myWorkviews(pp), item0);
 	}
 
+	protected ElementList getIndexSearchElements(final PageParameter pp) {
+		final InputElement txt = new InputElement().setId("idAbstractItemsTPage_search");
+		final String t = pp.getLocaleParameter("t");
+		if (StringUtils.hasText(t)) {
+			txt.setValue(t);
+		}
+		return ElementList.of(new BlockElement().setClassName("worklist_search").addElements(txt,
+				new LinkElement($m("AbstractItemsTPage.11")).setClassName("simple_btn2")));
+	}
+
+	protected String getIndexSearchJavascript(final String url) {
+		final StringBuilder js = new StringBuilder();
+		js.append("var s = $('idAbstractItemsTPage_search');");
+		js.append("$UI.addBackgroundTitle(s, '").append($m("AbstractItemsTPage.10")).append("');");
+		js.append("var Func = function() {");
+		js.append(" var v = $F(s).trim();");
+		js.append(" if (v == '')");
+		js.append("   $Actions.loc('").append(url).append("');");
+		js.append(" else");
+		js.append("	  $Actions.loc('").append(HttpUtils.addParameters(url, "t="))
+				.append("' + encodeURIComponent(v));");
+		js.append("};");
+		js.append("$Actions.observeSubmit(s, Func);");
+		js.append("s.next().observe('click', Func);");
+		return js.toString();
+	}
+
 	protected TablePagerColumn TC_TITLE() {
-		return new TablePagerColumn("title", $m("AbstractWorkitemsTPage.0")).setSort(false);
+		return new TablePagerColumn("title", $m("AbstractItemsTPage.6")).setSort(false);
+	}
+
+	protected TablePagerColumn TC_STATUS() {
+		return new TablePagerColumn("status", $m("AbstractItemsTPage.9"), 55);
 	}
 
 	protected static ImageElement _createImageMark(final ComponentParameter cp, final String img) {

@@ -41,7 +41,7 @@ import net.simpleframework.workflow.web.page.AbstractDelegateFormPage.WorkitemDe
  * @author 陈侃(cknet@126.com, 13910090885) https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
-public class MyRunningWorklistTPage extends AbstractWorkitemsTPage {
+public class MyRunningWorklistTPage extends AbstractItemsTPage {
 
 	@Override
 	protected void onForward(final PageParameter pp) {
@@ -165,7 +165,7 @@ public class MyRunningWorklistTPage extends AbstractWorkitemsTPage {
 				.addColumn(
 						new TablePagerColumn("createDate", $m("MyRunningWorklistTPage.1"), 65)
 								.setTextAlign(ETextAlign.center).setPropertyClass(Date.class))
-				.addColumn(new TablePagerColumn("status", $m("AbstractWorkitemsTPage.3"), 55) {
+				.addColumn(new TablePagerColumn("status", $m("AbstractItemsTPage.9"), 55) {
 					@Override
 					protected Option[] getFilterOptions() {
 						return Option.from(EWorkitemStatus.running, EWorkitemStatus.delegate,
@@ -222,22 +222,14 @@ public class MyRunningWorklistTPage extends AbstractWorkitemsTPage {
 			sb.append(new BlockElement().setClassName("worklist_tip").setText(txt.toString()));
 		}
 		sb.append(super.toToolbarHTML(pp));
-		final String url = getWorklistPageUrl(pp);
-		final StringBuilder js = new StringBuilder();
-		js.append("var s = $('idAbstractWorkitemsTPage_search');");
-		js.append("$UI.addBackgroundTitle(s, '").append($m("AbstractWorkitemsTPage.4")).append("');");
-		js.append("var Func = function() {");
-		js.append(" var v = $F(s).trim();");
-		js.append(" if (v == '')");
-		js.append("   $Actions.loc('").append(url).append("');");
-		js.append(" else");
-		js.append("	  $Actions.loc('").append(HttpUtils.addParameters(url, "t="))
-				.append("' + encodeURIComponent(v));");
-		js.append("};");
-		js.append("$Actions.observeSubmit(s, Func);");
-		js.append("s.next().observe('click', Func);");
-		sb.append(JavascriptUtils.wrapScriptTag(js.toString(), true));
+		sb.append(JavascriptUtils.wrapScriptTag(getIndexSearchJavascript(getWorklistPageUrl(pp)),
+				true));
 		return sb.toString();
+	}
+
+	@Override
+	public ElementList getRightElements(final PageParameter pp) {
+		return getIndexSearchElements(pp);
 	}
 
 	protected String getWorklistPageUrl(final PageParameter pp) {

@@ -368,11 +368,11 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 	}
 
 	static MenuItem MENU_VIEW_GROUP1() {
-		return MenuItem.of($m("AbstractWorkitemsTPage.1"));
+		return MenuItem.of($m("AbstractItemsTPage.7"));
 	}
 
 	static MenuItem MENU_VIEW_GROUP2() {
-		return MenuItem.of($m("AbstractWorkitemsTPage.2"));
+		return MenuItem.of($m("AbstractItemsTPage.8"));
 	}
 
 	static NumberConvert DATE_NUMBERCONVERT = new NumberConvert() {

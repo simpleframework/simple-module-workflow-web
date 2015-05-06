@@ -76,7 +76,7 @@ public class MyFinalWorklistTPage extends MyRunningWorklistTPage {
 				.setFilterSort(false).setNowrap(false));
 		tablePager.addColumn(new TablePagerColumn("completeDate", $m("MyFinalWorklistTPage.1"), 115)
 				.setPropertyClass(Date.class));
-		tablePager.addColumn(new TablePagerColumn("status", $m("AbstractWorkitemsTPage.3"), 55) {
+		tablePager.addColumn(new TablePagerColumn("status", $m("AbstractItemsTPage.9"), 55) {
 			@Override
 			protected Option[] getFilterOptions() {
 				return Option.from(EWorkitemStatus.complete, EWorkitemStatus.retake,
