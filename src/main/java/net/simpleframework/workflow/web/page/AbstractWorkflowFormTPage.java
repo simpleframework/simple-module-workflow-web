@@ -6,6 +6,7 @@ import java.util.Date;
 
 import net.simpleframework.common.Convert;
 import net.simpleframework.common.ID;
+import net.simpleframework.common.coll.KVMap;
 import net.simpleframework.ctx.trans.Transaction;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageParameter;
@@ -96,13 +97,15 @@ public abstract class AbstractWorkflowFormTPage extends AbstractFormTableRowTPag
 	@Override
 	protected ValidationBean addFormValidationBean(final PageParameter pp) {
 		return super.addFormValidationBean(pp).addValidators(
-				new Validator(EValidatorMethod.required, "#" + getP() + "topic"));
+				new Validator(EValidatorMethod.required, "#" + getParamKey_title()));
 	}
 
 	@Transaction(context = IWorkflowContext.class)
 	public void onSaveForm(final PageParameter pp, final WorkitemBean workitem) {
 		final ProcessBean process = getProcessBean(pp);
-		pService.doUpdateTitle(process, pp.getParameter(getP() + "topic"));
+
+		pService.doUpdateKV(process, new KVMap().add("title", pp.getParameter(getParamKey_title()))
+				.add("pno", pp.getParameter(getParamKey_pno())));
 
 		// 添加了评论
 		final ComponentParameter nCP = WfCommentUtils.get(pp);
@@ -163,16 +166,24 @@ public abstract class AbstractWorkflowFormTPage extends AbstractFormTableRowTPag
 		return el;
 	}
 
-	protected String getP() {
-		return "wf_";
+	protected String getParamKey_title() {
+		return "wf_topic";
+	}
+
+	protected String getParamKey_pno() {
+		return "wf_pno";
+	}
+
+	protected String getParamKey_description() {
+		return "wf_description";
 	}
 
 	protected InputElement getInput_topic(final PageParameter pp) {
-		return new InputElement(getP() + "topic");
+		return new InputElement(getParamKey_title());
 	}
 
 	protected InputElement getInput_description(final PageParameter pp) {
-		return InputElement.textarea(getP() + "description").setRows(5);
+		return InputElement.textarea(getParamKey_description()).setRows(5);
 	}
 
 	@Override

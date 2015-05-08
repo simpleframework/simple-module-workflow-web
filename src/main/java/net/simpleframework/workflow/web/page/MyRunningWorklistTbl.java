@@ -62,25 +62,21 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 	@Override
 	public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
 		final ID userId = cp.getLoginId();
-		// final String t = cp.getLocaleParameter("t");
-		// if (StringUtils.hasText(t)) {
-		//
-		// } else {
 		final String v = cp.getParameter("v");
 		cp.addFormParameter("v", v);
 		if ("unread".equals(v)) {
 			return wService.getUnreadWorklist(userId);
 		}
 		return wService.getRunningWorklist(userId);
-		// }
 	}
 
 	@Override
 	protected ExpressionValue createFilterExpressionValue(final DbDataQuery<?> qs,
 			final TablePagerColumn oCol, final Iterator<FilterItem> it) {
-		if ("title".equals(oCol.getColumnName())) {
+		final String col = oCol.getColumnName();
+		if ("title".equals(col) || "pno".equals(col)) {
 			final TablePagerColumn oCol2 = (TablePagerColumn) oCol.clone();
-			oCol2.setColumnAlias("p.title");
+			oCol2.setColumnAlias("p." + col);
 			final ExpressionValue ev = super.createFilterExpressionValue(qs, oCol2, it);
 			final SQLValue sv = qs.getSqlValue();
 			final StringBuilder sb = new StringBuilder();
@@ -227,16 +223,16 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 		final boolean receiving = delegation != null
 				&& delegation.getStatus() == EDelegationStatus.receiving;
 		AbstractElement<?> tEle;
-		final ProcessBean processBean = WorkflowUtils.getProcessBean(cp, workitem);
+		final ProcessBean process = WorkflowUtils.getProcessBean(cp, workitem);
 		if (receiving) {
-			tEle = new SpanElement(WorkflowUtils.getProcessTitle(processBean));
+			tEle = new SpanElement(WorkflowUtils.getProcessTitle(process));
 		} else {
-			tEle = new LinkElement(WorkflowUtils.getProcessTitle(processBean)).setStrong(
+			tEle = new LinkElement(WorkflowUtils.getProcessTitle(process)).setStrong(
 					!workitem.isReadMark()).setOnclick(
 					"$Actions.loc('" + uFactory.getUrl(cp, WorkflowFormPage.class, workitem) + "');");
 		}
-		title.append(tEle.setColor_gray(!StringUtils.hasText(processBean.getTitle())));
-		row.add("title", title.toString());
+		title.append(tEle.setColor_gray(!StringUtils.hasText(process.getTitle())));
+		row.add("pno", process.getPno()).add("title", title.toString());
 
 		final StringBuilder stat = new StringBuilder();
 		SpanElement commentsEle;
@@ -246,10 +242,10 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 		if (commentUser != null && (ncomments = commentUser.getNcomments()) > 0) {
 			commentsEle = new SpanElement(ncomments).setStrong(true).setColor("#a00");
 		} else {
-			commentsEle = new SpanElement(processBean.getComments());
+			commentsEle = new SpanElement(process.getComments());
 		}
 		stat.append(commentsEle.setItalic(true)).append("/")
-				.append(new SpanElement(processBean.getViews()).setItalic(true));
+				.append(new SpanElement(process.getViews()).setItalic(true));
 		row.add("pstat", stat.toString());
 
 		row.add("userFrom", WorkflowUtils.getUserFrom(activity)).add("userTo",

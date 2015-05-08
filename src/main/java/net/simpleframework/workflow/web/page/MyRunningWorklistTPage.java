@@ -155,17 +155,19 @@ public class MyRunningWorklistTPage extends AbstractItemsTPage {
 				MyRunningWorklistTbl.class).setShowCheckbox(true);
 		tablePager
 				.addColumn(TablePagerColumn.ICON().setWidth(18))
+				.addColumn(
+						new TablePagerColumn("pno", $m("MyRunningWorklistTPage.14"), 100).setSort(false))
 				.addColumn(TC_TITLE())
 				.addColumn(
 						new TablePagerColumn("userFrom", $m("MyRunningWorklistTPage.0"), 85)
 								.setFilterSort(false).setNowrap(false))
 				.addColumn(
-						new TablePagerColumn("pstat", $m("MyRunningWorklistTPage.13"), 65).setTextAlign(
+						new TablePagerColumn("pstat", $m("MyRunningWorklistTPage.13"), 60).setTextAlign(
 								ETextAlign.center).setFilterSort(false))
 				.addColumn(
 						new TablePagerColumn("createDate", $m("MyRunningWorklistTPage.1"), 65)
 								.setTextAlign(ETextAlign.center).setPropertyClass(Date.class))
-				.addColumn(new TablePagerColumn("status", $m("AbstractItemsTPage.9"), 55) {
+				.addColumn(new TablePagerColumn("status", $m("AbstractItemsTPage.9"), 50) {
 					@Override
 					protected Option[] getFilterOptions() {
 						return Option.from(EWorkitemStatus.running, EWorkitemStatus.delegate,
