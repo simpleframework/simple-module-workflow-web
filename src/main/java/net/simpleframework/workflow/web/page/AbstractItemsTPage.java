@@ -52,11 +52,6 @@ public abstract class AbstractItemsTPage extends Category_ListPage implements IW
 		}
 	}
 
-	@Override
-	protected int getCategoryWidth(final PageParameter pp) {
-		return 160;
-	}
-
 	protected Class<? extends AbstractMVCPage> getUpdateLogPage() {
 		return null;
 	}
