@@ -272,7 +272,7 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 			ope.append(new ButtonElement($m("MyRunningWorklistTbl.3")).setOnclick("$Actions.loc('"
 					+ uFactory.getUrl(cp, WorkflowMonitorPage.class, workitem) + "');"));
 		}
-		ope.append(SpanElement.SPACE).append(AbstractTablePagerSchema.IMG_DOWNMENU);
+		ope.append(SpanElement.SPACE(2)).append(AbstractTablePagerSchema.IMG_DOWNMENU);
 		return ope.toString();
 	}
 

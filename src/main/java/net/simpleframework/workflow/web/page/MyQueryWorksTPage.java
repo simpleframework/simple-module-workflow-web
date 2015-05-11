@@ -66,6 +66,7 @@ public class MyQueryWorksTPage extends AbstractItemsTPage {
 				MyQueryWorksTbl.class);
 		tablePager
 				.addColumn(TC_TITLE())
+				.addColumn(TC_PNO())
 				.addColumn(new TablePagerColumn("userText", $m("ProcessMgrPage.0"), 100))
 				.addColumn(AbstractWorkflowMgrPage.TC_CREATEDATE())
 				.addColumn(

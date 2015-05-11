@@ -154,28 +154,36 @@ public class MyRunningWorklistTPage extends AbstractItemsTPage {
 		final TablePagerBean tablePager = addTablePagerBean(pp, "MyWorklistTPage_tbl",
 				MyRunningWorklistTbl.class).setShowCheckbox(true);
 		tablePager
-				.addColumn(TablePagerColumn.ICON().setWidth(18))
-				.addColumn(
-						new TablePagerColumn("pno", $m("MyRunningWorklistTPage.14"), 100).setSort(false))
+				.addColumn(TC_ICON())
 				.addColumn(TC_TITLE())
+				.addColumn(TC_PNO())
 				.addColumn(
 						new TablePagerColumn("userFrom", $m("MyRunningWorklistTPage.0"), 85)
 								.setFilterSort(false).setNowrap(false))
 				.addColumn(
 						new TablePagerColumn("createDate", $m("MyRunningWorklistTPage.1"), 65)
 								.setTextAlign(ETextAlign.center).setPropertyClass(Date.class))
+				.addColumn(TC_PSTAT())
 				.addColumn(
-						new TablePagerColumn("pstat", $m("MyRunningWorklistTPage.13"), 60).setTextAlign(
-								ETextAlign.center).setFilterSort(false))
-				.addColumn(new TablePagerColumn("status", $m("AbstractItemsTPage.9"), 50) {
-					@Override
-					protected Option[] getFilterOptions() {
-						return Option.from(EWorkitemStatus.running, EWorkitemStatus.delegate,
-								EWorkitemStatus.suspended);
-					};
-				}.setSort(false).setPropertyClass(EWorkitemStatus.class))
-				.addColumn(TablePagerColumn.OPE().setWidth(70));
+						TC_STATUS().setFilterOptions(
+								Option.from(EWorkitemStatus.running, EWorkitemStatus.delegate,
+										EWorkitemStatus.suspended)))
+				.addColumn(TablePagerColumn.OPE().setWidth(68));
 		return tablePager;
+	}
+
+	protected TablePagerColumn TC_ICON() {
+		return TablePagerColumn.ICON().setWidth(16);
+	}
+
+	@Override
+	protected TablePagerColumn TC_STATUS() {
+		return super.TC_STATUS().setPropertyClass(EWorkitemStatus.class);
+	}
+
+	protected TablePagerColumn TC_PSTAT() {
+		return new TablePagerColumn("pstat", $m("MyRunningWorklistTPage.13"), 56).setTextAlign(
+				ETextAlign.center).setFilterSort(false);
 	}
 
 	@Override

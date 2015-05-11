@@ -50,7 +50,7 @@ public abstract class WorkflowUtils implements IWorkflowServiceAware {
 		final StringBuilder sb = new StringBuilder();
 		sb.append(new ImageElement(pp.getCssResourceHomePath(AbstractItemsTPage.class)
 				+ "/images/status_" + status.name() + ".png").setClassName("icon16").addStyle(
-				"margin: 0 4px;"));
+				"margin: 0 3px 0 2px;"));
 		sb.append(new SpanElement(txt != null ? txt : status.toString()).setClassName("icon_txt"));
 		return sb.toString();
 	}

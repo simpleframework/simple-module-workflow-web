@@ -70,19 +70,22 @@ public class MyFinalWorklistTPage extends MyRunningWorklistTPage {
 	protected TablePagerBean addTablePagerBean(final PageParameter pp) {
 		final TablePagerBean tablePager = addTablePagerBean(pp, "MyWorklistTPage_tbl",
 				MyCompleteWorklistTbl.class);
-		tablePager.addColumn(TablePagerColumn.ICON().setWidth(18));
-		tablePager.addColumn(TC_TITLE());
-		tablePager.addColumn(new TablePagerColumn("userTo", $m("MyFinalWorklistTPage.0"), 115)
-				.setFilterSort(false).setNowrap(false));
-		tablePager.addColumn(new TablePagerColumn("completeDate", $m("MyFinalWorklistTPage.1"), 115)
-				.setPropertyClass(Date.class));
-		tablePager.addColumn(new TablePagerColumn("status", $m("AbstractItemsTPage.9"), 55) {
-			@Override
-			protected Option[] getFilterOptions() {
-				return Option.from(EWorkitemStatus.complete, EWorkitemStatus.retake,
-						EWorkitemStatus.abort);
-			};
-		}.setPropertyClass(EWorkitemStatus.class)).addColumn(TablePagerColumn.OPE().setWidth(70));
+		tablePager
+				.addColumn(TC_ICON())
+				.addColumn(TC_TITLE())
+				.addColumn(TC_PNO())
+				.addColumn(
+						new TablePagerColumn("userTo", $m("MyFinalWorklistTPage.0"), 85).setFilterSort(
+								false).setNowrap(false))
+				.addColumn(
+						new TablePagerColumn("completeDate", $m("MyFinalWorklistTPage.1"), 115)
+								.setPropertyClass(Date.class))
+				.addColumn(TC_PSTAT())
+				.addColumn(
+						TC_STATUS().setFilterOptions(
+								Option.from(EWorkitemStatus.complete, EWorkitemStatus.retake,
+										EWorkitemStatus.abort)))
+				.addColumn(TablePagerColumn.OPE().setWidth(70));
 		return tablePager;
 	}
 
