@@ -230,7 +230,7 @@ public class MyRunningWorklistTPage extends AbstractItemsTPage {
 
 	@Override
 	public ElementList getRightElements(final PageParameter pp) {
-		return getIndexSearchElements(pp);
+		return null; // getIndexSearchElements(pp);
 	}
 
 	protected String getWorklistPageUrl(final PageParameter pp) {
