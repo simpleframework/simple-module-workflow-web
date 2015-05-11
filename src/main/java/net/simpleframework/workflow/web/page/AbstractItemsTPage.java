@@ -28,6 +28,7 @@ import net.simpleframework.workflow.engine.IWorkflowServiceAware;
 import net.simpleframework.workflow.web.IWorkflowWebContext;
 import net.simpleframework.workflow.web.WorkflowUrlsFactory;
 import net.simpleframework.workflow.web.WorkflowUtils;
+import net.simpleframework.workflow.web.page.t1.AbstractWorkflowMgrPage;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -151,6 +152,10 @@ public abstract class AbstractItemsTPage extends Category_ListPage implements IW
 		return js.toString();
 	}
 
+	protected TablePagerColumn TC_ICON() {
+		return TablePagerColumn.ICON().setWidth(16);
+	}
+
 	protected TablePagerColumn TC_TITLE() {
 		return new TablePagerColumn("title", $m("AbstractItemsTPage.6")).setSort(false);
 	}
@@ -161,6 +166,10 @@ public abstract class AbstractItemsTPage extends Category_ListPage implements IW
 
 	protected TablePagerColumn TC_STATUS() {
 		return new TablePagerColumn("status", $m("AbstractItemsTPage.9"), 42).setSort(false);
+	}
+
+	protected TablePagerColumn TC_CREATEDATE() {
+		return AbstractWorkflowMgrPage.TC_CREATEDATE();
 	}
 
 	protected static ImageElement _createImageMark(final ComponentParameter cp, final String img) {

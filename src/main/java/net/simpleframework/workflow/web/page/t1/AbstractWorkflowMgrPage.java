@@ -12,6 +12,7 @@ import net.simpleframework.module.common.web.page.AbstractDescPage;
 import net.simpleframework.mvc.AbstractMVCPage;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.ButtonElement;
+import net.simpleframework.mvc.common.element.ETextAlign;
 import net.simpleframework.mvc.common.element.Icon;
 import net.simpleframework.mvc.common.element.InputElement;
 import net.simpleframework.mvc.common.element.LinkButton;
@@ -146,8 +147,8 @@ public abstract class AbstractWorkflowMgrPage extends T1ResizedTemplatePage impl
 	}
 
 	public static TablePagerColumn TC_CREATEDATE() {
-		return new TablePagerColumn("createDate", $m("AbstractWorkflowMgrPage.4"), 115)
-				.setPropertyClass(Date.class);
+		return new TablePagerColumn("createDate", $m("AbstractWorkflowMgrPage.4"), 115).setTextAlign(
+				ETextAlign.center).setPropertyClass(Date.class);
 	}
 
 	public static TablePagerColumn TC_COMPLETEDATE() {

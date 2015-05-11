@@ -1,9 +1,6 @@
 package net.simpleframework.workflow.web.page;
 
 import static net.simpleframework.common.I18n.$m;
-
-import java.util.Date;
-
 import net.simpleframework.ado.query.IDataQuery;
 import net.simpleframework.common.StringUtils;
 import net.simpleframework.common.web.HttpUtils;
@@ -160,9 +157,7 @@ public class MyRunningWorklistTPage extends AbstractItemsTPage {
 				.addColumn(
 						new TablePagerColumn("userFrom", $m("MyRunningWorklistTPage.0"), 85)
 								.setFilterSort(false).setNowrap(false))
-				.addColumn(
-						new TablePagerColumn("createDate", $m("MyRunningWorklistTPage.1"), 65)
-								.setTextAlign(ETextAlign.center).setPropertyClass(Date.class))
+				.addColumn(TC_CREATEDATE().setColumnText($m("MyRunningWorklistTPage.1")).setWidth(65))
 				.addColumn(TC_PSTAT())
 				.addColumn(
 						TC_STATUS().setFilterOptions(
@@ -170,10 +165,6 @@ public class MyRunningWorklistTPage extends AbstractItemsTPage {
 										EWorkitemStatus.suspended)))
 				.addColumn(TablePagerColumn.OPE().setWidth(68));
 		return tablePager;
-	}
-
-	protected TablePagerColumn TC_ICON() {
-		return TablePagerColumn.ICON().setWidth(16);
 	}
 
 	@Override

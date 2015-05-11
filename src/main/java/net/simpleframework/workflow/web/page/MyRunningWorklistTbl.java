@@ -256,7 +256,6 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 						.setTitle(Convert.toDateString(createDate)));
 		row.add("completeDate", workitem.getCompleteDate()).add("status",
 				WorkflowUtils.toStatusHTML(cp, status));
-
 		row.put(TablePagerColumn.OPE, toOpeHTML(cp, workitem, receiving));
 		return row;
 	}

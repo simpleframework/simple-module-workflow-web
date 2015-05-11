@@ -2,7 +2,6 @@ package net.simpleframework.workflow.web.page;
 
 import static net.simpleframework.common.I18n.$m;
 
-import java.util.Date;
 import java.util.Map;
 
 import net.simpleframework.ado.query.IDataQuery;
@@ -64,9 +63,9 @@ public class MyDelegateListTPage extends AbstractItemsTPage {
 	protected TablePagerBean addTablePagerBean(final PageParameter pp) {
 		final TablePagerBean tablePager = addTablePagerBean(pp, "MyWorklistTPage_tbl",
 				MyWorkDelegateTbl.class);
-		tablePager.addColumn(TablePagerColumn.ICON().setWidth(16));
-		tablePager.addColumn(TC_TITLE()).addColumn(TC_USERTEXT()).addColumn(TC_CREATEDATE())
-				.addColumn(TC_STATUS()).addColumn(TablePagerColumn.OPE().setWidth(70));
+		tablePager.addColumn(TC_ICON()).addColumn(TC_TITLE()).addColumn(TC_USERTEXT())
+				.addColumn(TC_CREATEDATE()).addColumn(TC_STATUS())
+				.addColumn(TablePagerColumn.OPE().setWidth(70));
 		return tablePager;
 	}
 
@@ -75,9 +74,10 @@ public class MyDelegateListTPage extends AbstractItemsTPage {
 		return super.TC_STATUS().setPropertyClass(EDelegationStatus.class).setColumnAlias("d.status");
 	}
 
+	@Override
 	protected TablePagerColumn TC_CREATEDATE() {
-		return new TablePagerColumn("createDate", $m("MyDelegateListTPage.1"), 115).setPropertyClass(
-				Date.class).setColumnAlias("d.createdate");
+		return super.TC_CREATEDATE().setColumnText($m("MyDelegateListTPage.1"))
+				.setColumnAlias("d.createdate");
 	}
 
 	protected TablePagerColumn TC_USERTEXT() {

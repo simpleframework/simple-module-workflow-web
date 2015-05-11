@@ -2,7 +2,6 @@ package net.simpleframework.workflow.web.page;
 
 import static net.simpleframework.common.I18n.$m;
 
-import java.util.Date;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -15,7 +14,6 @@ import net.simpleframework.common.coll.KVMap;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.AbstractElement;
 import net.simpleframework.mvc.common.element.ButtonElement;
-import net.simpleframework.mvc.common.element.ETextAlign;
 import net.simpleframework.mvc.common.element.LinkElement;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
@@ -46,14 +44,12 @@ public class MyWorkviewsTPage extends AbstractItemsTPage {
 		final TablePagerBean tablePager = addTablePagerBean(pp, "MyWorkviewsTPage_tbl",
 				MyWorkviewsTbl.class);
 		tablePager
-				.addColumn(TablePagerColumn.ICON().setWidth(18))
+				.addColumn(TC_ICON())
 				.addColumn(TC_TITLE())
 				.addColumn(
 						new TablePagerColumn("sent", $m("MyRunningWorklistTPage.0"), 120)
 								.setFilterSort(false))
-				.addColumn(
-						new TablePagerColumn("createDate", $m("MyRunningWorklistTPage.1"), 120)
-								.setTextAlign(ETextAlign.center).setPropertyClass(Date.class))
+				.addColumn(TC_CREATEDATE().setColumnText($m("MyRunningWorklistTPage.1")))
 				.addColumn(TablePagerColumn.OPE().setWidth(90));
 		return tablePager;
 	}

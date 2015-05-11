@@ -68,10 +68,9 @@ public class MyQueryWorksTPage extends AbstractItemsTPage {
 				.addColumn(TC_TITLE())
 				.addColumn(TC_PNO())
 				.addColumn(new TablePagerColumn("userText", $m("ProcessMgrPage.0"), 100))
-				.addColumn(AbstractWorkflowMgrPage.TC_CREATEDATE())
+				.addColumn(TC_CREATEDATE())
 				.addColumn(
-						AbstractWorkflowMgrPage.TC_STATUS().setColumnAlias("p.status")
-								.setPropertyClass(EProcessStatus.class))
+						TC_STATUS().setColumnAlias("p.status").setPropertyClass(EProcessStatus.class))
 				.addColumn(TablePagerColumn.OPE().setWidth(90));
 		return tablePager;
 	}

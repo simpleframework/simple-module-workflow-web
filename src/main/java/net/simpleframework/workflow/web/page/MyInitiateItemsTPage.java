@@ -49,13 +49,15 @@ public class MyInitiateItemsTPage extends AbstractItemsTPage {
 	protected TablePagerBean addTablePagerBean(final PageParameter pp) {
 		final TablePagerBean tablePager = addTablePagerBean(pp, "MyInitiateItemsTPage_tbl",
 				MyInitiateItemsTbl.class);
-		tablePager.addColumn(TablePagerColumn.ICON().setWidth(18));
-		tablePager.addColumn(new TablePagerColumn("modelText", $m("MyInitiateItemsTPage.1")));
-		tablePager.addColumn(new TablePagerColumn("processCount", $m("MyInitiateItemsTPage.3"), 80)
-				.setFilter(false).setPropertyClass(Integer.class));
-		tablePager.addColumn(new TablePagerColumn("version", $m("MyInitiateItemsTPage.4"), 80)
-				.setFilter(false));
-		tablePager.addColumn(TablePagerColumn.OPE().setWidth(70));
+		tablePager
+				.addColumn(TC_ICON())
+				.addColumn(new TablePagerColumn("modelText", $m("MyInitiateItemsTPage.1")))
+				.addColumn(
+						new TablePagerColumn("processCount", $m("MyInitiateItemsTPage.3"), 80).setFilter(
+								false).setPropertyClass(Integer.class))
+				.addColumn(
+						new TablePagerColumn("version", $m("MyInitiateItemsTPage.4"), 80)
+								.setFilter(false)).addColumn(TablePagerColumn.OPE().setWidth(70));
 		return tablePager;
 	}
 
