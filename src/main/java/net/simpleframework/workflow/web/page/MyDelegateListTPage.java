@@ -65,15 +65,23 @@ public class MyDelegateListTPage extends AbstractItemsTPage {
 		final TablePagerBean tablePager = addTablePagerBean(pp, "MyWorklistTPage_tbl",
 				MyWorkDelegateTbl.class);
 		tablePager.addColumn(TablePagerColumn.ICON().setWidth(16));
-		tablePager
-				.addColumn(TC_TITLE())
-				.addColumn(new TablePagerColumn("userText", $m("MyDelegateListTPage.0"), 70))
-				.addColumn(
-						new TablePagerColumn("createDate", $m("MyDelegateListTPage.1"), 115)
-								.setPropertyClass(Date.class))
-				.addColumn(TC_STATUS().setPropertyClass(EDelegationStatus.class));
-		tablePager.addColumn(TablePagerColumn.OPE().setWidth(70));
+		tablePager.addColumn(TC_TITLE()).addColumn(TC_USERTEXT()).addColumn(TC_CREATEDATE())
+				.addColumn(TC_STATUS()).addColumn(TablePagerColumn.OPE().setWidth(70));
 		return tablePager;
+	}
+
+	@Override
+	protected TablePagerColumn TC_STATUS() {
+		return super.TC_STATUS().setPropertyClass(EDelegationStatus.class).setColumnAlias("d.status");
+	}
+
+	protected TablePagerColumn TC_CREATEDATE() {
+		return new TablePagerColumn("createDate", $m("MyDelegateListTPage.1"), 115).setPropertyClass(
+				Date.class).setColumnAlias("d.createdate");
+	}
+
+	protected TablePagerColumn TC_USERTEXT() {
+		return new TablePagerColumn("userText", $m("MyDelegateListTPage.0"), 70).setFilterSort(false);
 	}
 
 	@Transaction(context = IWorkflowContext.class)

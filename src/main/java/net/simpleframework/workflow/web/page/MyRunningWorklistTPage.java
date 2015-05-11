@@ -162,11 +162,11 @@ public class MyRunningWorklistTPage extends AbstractItemsTPage {
 						new TablePagerColumn("userFrom", $m("MyRunningWorklistTPage.0"), 85)
 								.setFilterSort(false).setNowrap(false))
 				.addColumn(
-						new TablePagerColumn("pstat", $m("MyRunningWorklistTPage.13"), 60).setTextAlign(
-								ETextAlign.center).setFilterSort(false))
-				.addColumn(
 						new TablePagerColumn("createDate", $m("MyRunningWorklistTPage.1"), 65)
 								.setTextAlign(ETextAlign.center).setPropertyClass(Date.class))
+				.addColumn(
+						new TablePagerColumn("pstat", $m("MyRunningWorklistTPage.13"), 60).setTextAlign(
+								ETextAlign.center).setFilterSort(false))
 				.addColumn(new TablePagerColumn("status", $m("AbstractItemsTPage.9"), 50) {
 					@Override
 					protected Option[] getFilterOptions() {

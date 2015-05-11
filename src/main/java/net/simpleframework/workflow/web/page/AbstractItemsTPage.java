@@ -156,7 +156,7 @@ public abstract class AbstractItemsTPage extends Category_ListPage implements IW
 	}
 
 	protected TablePagerColumn TC_STATUS() {
-		return new TablePagerColumn("status", $m("AbstractItemsTPage.9"), 55);
+		return new TablePagerColumn("status", $m("AbstractItemsTPage.9"), 55).setSort(false);
 	}
 
 	protected static ImageElement _createImageMark(final ComponentParameter cp, final String img) {

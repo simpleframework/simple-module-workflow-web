@@ -2,7 +2,6 @@ package net.simpleframework.workflow.web.page;
 
 import static net.simpleframework.common.I18n.$m;
 
-import java.util.Date;
 import java.util.Map;
 
 import net.simpleframework.ado.query.IDataQuery;
@@ -48,18 +47,13 @@ public class UserDelegateListTPage extends MyDelegateListTPage {
 				.addColumn(
 						new TablePagerColumn("description", $m("WorkitemDelegateSetPage.3"))
 								.setSort(false))
-				.addColumn(new TablePagerColumn("userText", $m("MyDelegateListTPage.0"), 70))
+				.addColumn(TC_USERTEXT())
+				.addColumn(TC_CREATEDATE())
 				.addColumn(
-						new TablePagerColumn("createDate", $m("MyDelegateListTPage.1"), 115)
-								.setPropertyClass(Date.class))
-				.addColumn(new TablePagerColumn("status", $m("AbstractItemsTPage.9"), 55) {
-					@Override
-					protected Option[] getFilterOptions() {
-						return Option.from(EDelegationStatus.ready, EDelegationStatus.running,
-								EDelegationStatus.complete, EDelegationStatus.abort);
-					};
-				}.setPropertyClass(EDelegationStatus.class));
-		tablePager.addColumn(TablePagerColumn.OPE().setWidth(70));
+						TC_STATUS().setFilterOptions(
+								Option.from(EDelegationStatus.ready, EDelegationStatus.running,
+										EDelegationStatus.complete, EDelegationStatus.abort)))
+				.addColumn(TablePagerColumn.OPE().setWidth(70));
 		return tablePager;
 	}
 
