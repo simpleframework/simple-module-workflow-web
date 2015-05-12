@@ -91,7 +91,6 @@ public class AbstractWorkflowMgrTPage extends AbstractMgrTPage implements IWorkf
 		return el;
 	}
 
-	protected static WorkflowUrlsFactory getUrlsFactory() {
-		return ((IWorkflowWebContext) workflowContext).getUrlsFactory();
-	}
+	protected static WorkflowUrlsFactory uFactory = ((IWorkflowWebContext) workflowContext)
+			.getUrlsFactory();
 }

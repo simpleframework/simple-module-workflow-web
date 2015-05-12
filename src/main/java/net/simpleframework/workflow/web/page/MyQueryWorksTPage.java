@@ -32,7 +32,6 @@ import net.simpleframework.workflow.engine.bean.ActivityBean;
 import net.simpleframework.workflow.engine.bean.ProcessBean;
 import net.simpleframework.workflow.engine.bean.WorkitemBean;
 import net.simpleframework.workflow.web.IWorkflowWebContext;
-import net.simpleframework.workflow.web.WorkflowUrlsFactory;
 import net.simpleframework.workflow.web.WorkflowUtils;
 import net.simpleframework.workflow.web.page.t1.AbstractWorkflowMgrPage;
 import net.simpleframework.workflow.web.page.t1.WorkflowFormPage;
@@ -95,20 +94,16 @@ public class MyQueryWorksTPage extends AbstractItemsTPage {
 	@Override
 	public ElementList getRightElements(final PageParameter pp) {
 		final IWorkflowWebContext ctx = ((IWorkflowWebContext) workflowContext);
-		final WorkflowUrlsFactory urlsFactory = ctx.getUrlsFactory();
-		final TabButtons tabs = TabButtons.of(new TabButton($m("MyQueryWorksTPage.4"), urlsFactory
+		final TabButtons tabs = TabButtons.of(new TabButton($m("MyQueryWorksTPage.4"), uFactory
 				.getUrl(pp, MyQueryWorksTPage.class)));
 		if (pp.isLmember(ctx.getDepartmentMgrRole(pp))) {
-			tabs.append(new TabButton($m("MyQueryWorksTPage.5"), urlsFactory.getUrl(pp,
+			tabs.append(new TabButton($m("MyQueryWorksTPage.5"), uFactory.getUrl(pp,
 					MyQueryWorks_DeptTPage.class)));
 		}
-		tabs.append(new TabButton($m("MyQueryWorksTPage.6"), urlsFactory.getUrl(pp,
+		tabs.append(new TabButton($m("MyQueryWorksTPage.6"), uFactory.getUrl(pp,
 				MyQueryWorks_RoleTPage.class)));
 		return ElementList.of(createTabsElement(pp, tabs));
 	}
-
-	private static final WorkflowUrlsFactory uFactory = ((IWorkflowWebContext) workflowContext)
-			.getUrlsFactory();
 
 	public static class MyQueryWorksTbl extends AbstractDbTablePagerHandler {
 		@Override

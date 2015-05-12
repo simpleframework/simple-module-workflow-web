@@ -11,7 +11,6 @@ import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.common.element.TabButton;
 import net.simpleframework.mvc.common.element.TabButtons;
 import net.simpleframework.workflow.engine.bean.WorkitemBean;
-import net.simpleframework.workflow.web.IWorkflowWebContext;
 import net.simpleframework.workflow.web.IWorkflowWebForm;
 import net.simpleframework.workflow.web.WorkflowUrlsFactory;
 import net.simpleframework.workflow.web.WorkflowUtils;
@@ -43,7 +42,7 @@ public class WorkflowFormPage extends AbstractWorkflowFormPage {
 	@Override
 	public TabButtons getTabButtons(final PageParameter pp) {
 		final WorkitemBean workitem = WorkflowUtils.getWorkitemBean(pp);
-		final WorkflowUrlsFactory uFactory = ((IWorkflowWebContext) workflowContext).getUrlsFactory();
+		final WorkflowUrlsFactory uFactory = AbstractWorkflowMgrPage.uFactory;
 		return TabButtons.of(
 				new TabButton($m("WorkflowFormPage.0")).setHref(uFactory.getUrl(pp,
 						WorkflowFormPage.class, workitem)),

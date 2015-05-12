@@ -45,8 +45,6 @@ import net.simpleframework.workflow.engine.bean.ProcessModelBean;
 import net.simpleframework.workflow.engine.bean.WorkitemBean;
 import net.simpleframework.workflow.engine.comment.WfCommentUser;
 import net.simpleframework.workflow.schema.AbstractTaskNode;
-import net.simpleframework.workflow.web.IWorkflowWebContext;
-import net.simpleframework.workflow.web.WorkflowUrlsFactory;
 import net.simpleframework.workflow.web.WorkflowUtils;
 import net.simpleframework.workflow.web.page.t1.WorkflowFormPage;
 import net.simpleframework.workflow.web.page.t1.WorkflowMonitorPage;
@@ -177,9 +175,6 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 		}
 	}
 
-	private final WorkflowUrlsFactory uFactory = ((IWorkflowWebContext) workflowContext)
-			.getUrlsFactory();
-
 	@Override
 	protected Map<String, Object> getRowData(final ComponentParameter cp, final Object dataObject) {
 		final WorkitemBean workitem = (WorkitemBean) dataObject;
@@ -229,7 +224,9 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 		} else {
 			tEle = new LinkElement(WorkflowUtils.getProcessTitle(process)).setStrong(
 					!workitem.isReadMark()).setOnclick(
-					"$Actions.loc('" + uFactory.getUrl(cp, WorkflowFormPage.class, workitem) + "');");
+					"$Actions.loc('"
+							+ AbstractItemsTPage.uFactory.getUrl(cp, WorkflowFormPage.class, workitem)
+							+ "');");
 		}
 		title.append(tEle.setColor_gray(!StringUtils.hasText(process.getTitle())));
 		row.add("pno", process.getPno()).add("title", title.toString());
@@ -269,7 +266,8 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 							+ "');"));
 		} else {
 			ope.append(new ButtonElement($m("MyRunningWorklistTbl.3")).setOnclick("$Actions.loc('"
-					+ uFactory.getUrl(cp, WorkflowMonitorPage.class, workitem) + "');"));
+					+ AbstractItemsTPage.uFactory.getUrl(cp, WorkflowMonitorPage.class, workitem)
+					+ "');"));
 		}
 		ope.append(SpanElement.SPACE(2)).append(AbstractTablePagerSchema.IMG_DOWNMENU);
 		return ope.toString();
@@ -308,9 +306,7 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 
 	static MenuItem MENU_MONITOR(final PageParameter pp) {
 		return MenuItem.of($m("MyRunningWorklistTbl.7")).setOnclick(
-				"$Actions.loc('"
-						+ ((IWorkflowWebContext) workflowContext).getUrlsFactory().getUrl(pp,
-								WorkflowMonitorPage.class)
+				"$Actions.loc('" + AbstractItemsTPage.uFactory.getUrl(pp, WorkflowMonitorPage.class)
 						+ "?workitemId=' + $pager_action(item).rowId());");
 	}
 

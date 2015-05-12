@@ -52,10 +52,9 @@ public class ProcessModelMgrTPage extends AbstractWorkflowMgrTPage {
 								ETextAlign.center).setFilter(false))
 				.addColumn(AbstractWorkflowMgrPage.TC_CREATEDATE().setFilter(false))
 				.addColumn(AbstractWorkflowMgrPage.TC_STATUS(EProcessModelStatus.class))
-				.addColumn(TablePagerColumn.OPE().setWidth(100));
+				.addColumn(TablePagerColumn.OPE().setWidth(90));
 		// if (pp.getLogin().isManager())
 		// tablePager);
-
 	}
 
 	@Override
@@ -88,7 +87,7 @@ public class ProcessModelMgrTPage extends AbstractWorkflowMgrTPage {
 			final EProcessModelStatus status = pm.getStatus();
 			final KVMap row = new KVMap();
 
-			final LinkElement le = new LinkElement(pm).setHref(getUrlsFactory().getUrl(cp,
+			final LinkElement le = new LinkElement(pm).setHref(uFactory.getUrl(cp,
 					ProcessMgrTPage.class, "modelId=" + pm.getId()));
 			if (status != EProcessModelStatus.deploy) {
 				le.setColor("#777");
@@ -107,9 +106,8 @@ public class ProcessModelMgrTPage extends AbstractWorkflowMgrTPage {
 
 		protected String toOpeHTML(final ComponentParameter cp, final ProcessModelBean pm) {
 			final StringBuilder sb = new StringBuilder();
-			sb.append(new ButtonElement("查看实例").setOnclick("$Actions.loc('"
-					+ getUrlsFactory().getUrl(cp, ProcessMgrTPage.class, "modelId=" + pm.getId())
-					+ "');"));
+			sb.append(new ButtonElement($m("ProcessModelMgrTPage.0")).setOnclick("$Actions.loc('"
+					+ uFactory.getUrl(cp, ProcessMgrTPage.class, "modelId=" + pm.getId()) + "');"));
 			// sb.append(SpanElement.SPACE).append(AbstractTablePagerSchema.IMG_DOWNMENU);
 			return sb.toString();
 		}

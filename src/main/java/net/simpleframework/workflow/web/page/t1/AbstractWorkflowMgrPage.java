@@ -25,6 +25,7 @@ import net.simpleframework.mvc.template.AbstractTemplatePage;
 import net.simpleframework.mvc.template.t1.T1ResizedTemplatePage;
 import net.simpleframework.workflow.engine.IWorkflowServiceAware;
 import net.simpleframework.workflow.web.IWorkflowWebContext;
+import net.simpleframework.workflow.web.WorkflowUrlsFactory;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -164,4 +165,7 @@ public abstract class AbstractWorkflowMgrPage extends T1ResizedTemplatePage impl
 		}
 		return col;
 	}
+
+	protected static WorkflowUrlsFactory uFactory = ((IWorkflowWebContext) workflowContext)
+			.getUrlsFactory();
 }

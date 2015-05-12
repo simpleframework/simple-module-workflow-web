@@ -29,7 +29,6 @@ import net.simpleframework.workflow.engine.bean.ActivityBean;
 import net.simpleframework.workflow.engine.bean.ProcessBean;
 import net.simpleframework.workflow.engine.bean.WorkitemBean;
 import net.simpleframework.workflow.schema.AbstractTaskNode;
-import net.simpleframework.workflow.web.IWorkflowWebContext;
 import net.simpleframework.workflow.web.IWorkflowWebForm;
 import net.simpleframework.workflow.web.WorkflowUtils;
 import net.simpleframework.workflow.web.component.comments.IWfCommentHandler;
@@ -121,8 +120,8 @@ public abstract class AbstractWorkflowFormTPage extends AbstractFormTableRowTPag
 		onSaveForm(pp, workitem);
 		pp.removeSessionAttr("time_" + workitem.getId());
 		return new JavascriptForward("$Actions.loc('").append(
-				((IWorkflowWebContext) workflowContext).getUrlsFactory().getUrl(pp,
-						WorkflowCompleteInfoPage.class, workitem)).append("');");
+				AbstractItemsTPage.uFactory.getUrl(pp, WorkflowCompleteInfoPage.class, workitem))
+				.append("');");
 	}
 
 	@Override
@@ -131,8 +130,7 @@ public abstract class AbstractWorkflowFormTPage extends AbstractFormTableRowTPag
 		onSaveForm(cp, workitem);
 		cp.setSessionAttr("time_" + workitem.getId(), new Date());
 		return new JavascriptForward("$Actions.loc('").append(
-				((IWorkflowWebContext) workflowContext).getUrlsFactory().getUrl(cp,
-						WorkflowFormPage.class, workitem)).append("');");
+				AbstractItemsTPage.uFactory.getUrl(cp, WorkflowFormPage.class, workitem)).append("');");
 	}
 
 	@Override

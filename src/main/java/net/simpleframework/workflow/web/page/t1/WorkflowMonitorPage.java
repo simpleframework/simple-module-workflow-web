@@ -22,7 +22,6 @@ import net.simpleframework.workflow.engine.EActivityStatus;
 import net.simpleframework.workflow.engine.bean.ActivityBean;
 import net.simpleframework.workflow.engine.bean.ProcessBean;
 import net.simpleframework.workflow.engine.bean.WorkitemBean;
-import net.simpleframework.workflow.web.IWorkflowWebContext;
 import net.simpleframework.workflow.web.WorkflowUrlsFactory;
 import net.simpleframework.workflow.web.WorkflowUtils;
 import net.simpleframework.workflow.web.page.t1.ActivityMgrPage.ActivityTbl;
@@ -95,7 +94,7 @@ public class WorkflowMonitorPage extends AbstractWorkflowFormPage {
 
 	public TabButtons getLeftTabButtons(final PageParameter pp) {
 		final WorkitemBean workitem = WorkflowUtils.getWorkitemBean(pp);
-		final WorkflowUrlsFactory uFactory = ((IWorkflowWebContext) workflowContext).getUrlsFactory();
+		final WorkflowUrlsFactory uFactory = AbstractWorkflowMgrPage.uFactory;
 		final TabButtons tabs = TabButtons.of(
 				new TabButton($m("WorkflowMonitorPage.0")).setHref(uFactory.getUrl(pp,
 						WorkflowMonitorPage.class, workitem)),
@@ -113,8 +112,8 @@ public class WorkflowMonitorPage extends AbstractWorkflowFormPage {
 
 	@Override
 	public TabButtons getTabButtons(final PageParameter pp) {
-		return ((AbstractWorkflowFormPage) singleton(((IWorkflowWebContext) workflowContext)
-				.getUrlsFactory().getPageClass(WorkflowFormPage.class.getName()))).getTabButtons(pp);
+		return ((AbstractWorkflowFormPage) singleton(AbstractWorkflowMgrPage.uFactory
+				.getPageClass(WorkflowFormPage.class.getName()))).getTabButtons(pp);
 	}
 
 	public static class _ActivityTbl extends ActivityTbl {

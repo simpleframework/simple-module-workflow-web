@@ -86,7 +86,7 @@ public class ProcessMgrTPage extends AbstractWorkflowMgrTPage {
 		final StringBuilder sb = new StringBuilder();
 		sb.append("<div class='tbar'>");
 		sb.append(ElementList.of(LinkButton.backBtn().setOnclick(
-				"$Actions.loc('" + getUrlsFactory().getUrl(pp, ProcessModelMgrTPage.class) + "')")));
+				"$Actions.loc('" + uFactory.getUrl(pp, ProcessModelMgrTPage.class) + "')")));
 		sb.append("</div>");
 		sb.append("<div id='idProcessMgrTPage_tbl'>");
 		sb.append("</div>");
@@ -117,7 +117,7 @@ public class ProcessMgrTPage extends AbstractWorkflowMgrTPage {
 		protected LinkElement createTitleElement(final ComponentParameter cp,
 				final ProcessBean process) {
 			return super.createTitleElement(cp, process).setHref(
-					getUrlsFactory().getUrl(cp, ActivityMgrTPage.class, "processId=" + process.getId()));
+					uFactory.getUrl(cp, ActivityMgrTPage.class, "processId=" + process.getId()));
 		}
 
 		@Override
