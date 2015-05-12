@@ -64,13 +64,10 @@ public class MyQueryWorksTPage extends AbstractItemsTPage {
 	protected TablePagerBean addTablePagerBean(final PageParameter pp) {
 		final TablePagerBean tablePager = addTablePagerBean(pp, "MyQueryWorksTPage_tbl",
 				MyQueryWorksTbl.class);
-		tablePager
-				.addColumn(TC_TITLE())
-				.addColumn(TC_PNO())
+		tablePager.addColumn(TC_TITLE()).addColumn(TC_PNO())
 				.addColumn(new TablePagerColumn("userText", $m("ProcessMgrPage.0"), 100))
 				.addColumn(TC_CREATEDATE())
-				.addColumn(
-						TC_STATUS().setColumnAlias("p.status").setPropertyClass(EProcessStatus.class))
+				.addColumn(TC_STATUS(EProcessStatus.class).setColumnAlias("p.status"))
 				.addColumn(TablePagerColumn.OPE().setWidth(90));
 		return tablePager;
 	}
@@ -171,8 +168,7 @@ public class MyQueryWorksTPage extends AbstractItemsTPage {
 					.addColumn(
 							new TablePagerColumn("completeDate", $m("MyFinalWorklistTPage.1"), 115)
 									.setPropertyClass(Date.class))
-					.addColumn(
-							AbstractWorkflowMgrPage.TC_STATUS().setPropertyClass(EWorkitemStatus.class))
+					.addColumn(AbstractWorkflowMgrPage.TC_STATUS(EWorkitemStatus.class))
 					.addColumn(TablePagerColumn.OPE().setWidth(110));
 		}
 

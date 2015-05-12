@@ -60,7 +60,7 @@ public class ProcessMgrPage extends AbstractWorkflowMgrPage {
 		tablePager.addColumn(TC_TITLE())
 				.addColumn(new TablePagerColumn("userText", $m("ProcessMgrPage.0"), 100))
 				.addColumn(TC_CREATEDATE()).addColumn(TC_COMPLETEDATE())
-				.addColumn(TC_STATUS().setPropertyClass(EProcessStatus.class))
+				.addColumn(TC_STATUS(EProcessStatus.class))
 				.addColumn(TablePagerColumn.OPE().setWidth(90));
 
 		// 删除

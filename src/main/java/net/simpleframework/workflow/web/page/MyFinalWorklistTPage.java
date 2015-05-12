@@ -82,7 +82,7 @@ public class MyFinalWorklistTPage extends MyRunningWorklistTPage {
 								.setPropertyClass(Date.class))
 				.addColumn(TC_PSTAT())
 				.addColumn(
-						TC_STATUS().setFilterOptions(
+						TC_STATUS(EWorkitemStatus.class).setFilterOptions(
 								Option.from(EWorkitemStatus.complete, EWorkitemStatus.retake,
 										EWorkitemStatus.abort)))
 				.addColumn(TablePagerColumn.OPE().setWidth(70));

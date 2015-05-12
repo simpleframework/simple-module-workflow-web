@@ -59,7 +59,7 @@ public class WorkflowMonitorPage extends AbstractWorkflowFormPage {
 				"WorkflowMonitorPage_tbl").setPagerBarLayout(EPagerBarLayout.none)
 				.setContainerId("idWorkflowMonitorPage_tbl").setHandlerClass(_ActivityTbl.class);
 		tablePager.addColumn(ActivityMgrPage.TC_TASKNODE())
-				.addColumn(AbstractWorkflowMgrPage.TC_STATUS().setPropertyClass(EActivityStatus.class))
+				.addColumn(AbstractWorkflowMgrPage.TC_STATUS(EActivityStatus.class))
 				.addColumn(ActivityMgrPage.TC_PARTICIPANTS())
 				.addColumn(ActivityMgrPage.TC_PARTICIPANTS2())
 				.addColumn(AbstractWorkflowMgrPage.TC_CREATEDATE())

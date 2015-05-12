@@ -156,7 +156,12 @@ public abstract class AbstractWorkflowMgrPage extends T1ResizedTemplatePage impl
 				.setPropertyClass(Date.class);
 	}
 
-	public static TablePagerColumn TC_STATUS() {
-		return new TablePagerColumn("status", $m("AbstractWorkflowMgrPage.6"), 60);
+	public static <T extends Enum<T>> TablePagerColumn TC_STATUS(final Class<T> e) {
+		final TablePagerColumn col = new TablePagerColumn("status", $m("AbstractWorkflowMgrPage.6"),
+				60).setSort(false);
+		if (e != null) {
+			col.setPropertyClass(e);
+		}
+		return col;
 	}
 }

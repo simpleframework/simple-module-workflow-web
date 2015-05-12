@@ -69,9 +69,8 @@ public class MyDelegateListTPage extends AbstractItemsTPage {
 		return tablePager;
 	}
 
-	@Override
 	protected TablePagerColumn TC_STATUS() {
-		return super.TC_STATUS().setPropertyClass(EDelegationStatus.class).setColumnAlias("d.status");
+		return super.TC_STATUS(EDelegationStatus.class).setColumnAlias("d.status");
 	}
 
 	@Override

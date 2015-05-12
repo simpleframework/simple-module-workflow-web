@@ -160,16 +160,11 @@ public class MyRunningWorklistTPage extends AbstractItemsTPage {
 				.addColumn(TC_CREATEDATE().setColumnText($m("MyRunningWorklistTPage.1")).setWidth(65))
 				.addColumn(TC_PSTAT())
 				.addColumn(
-						TC_STATUS().setFilterOptions(
+						TC_STATUS(EWorkitemStatus.class).setFilterOptions(
 								Option.from(EWorkitemStatus.running, EWorkitemStatus.delegate,
 										EWorkitemStatus.suspended)))
 				.addColumn(TablePagerColumn.OPE().setWidth(68));
 		return tablePager;
-	}
-
-	@Override
-	protected TablePagerColumn TC_STATUS() {
-		return super.TC_STATUS().setPropertyClass(EWorkitemStatus.class);
 	}
 
 	protected TablePagerColumn TC_PSTAT() {

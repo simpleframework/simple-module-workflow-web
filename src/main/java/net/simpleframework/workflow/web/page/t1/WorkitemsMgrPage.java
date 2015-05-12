@@ -51,7 +51,7 @@ public class WorkitemsMgrPage extends OneTableTemplatePage implements IWorkflowS
 				.addColumn(
 						new TablePagerColumn("completeDate", $m("WorkitemsMgrPage.3"), 115)
 								.setPropertyClass(Date.class))
-				.addColumn(AbstractWorkflowMgrPage.TC_STATUS().setPropertyClass(EWorkitemStatus.class))
+				.addColumn(AbstractWorkflowMgrPage.TC_STATUS(EWorkitemStatus.class))
 				.addColumn(TablePagerColumn.OPE().setWidth(70));
 
 		// log

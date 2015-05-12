@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.util.Map;
 
 import net.simpleframework.ado.query.IDataQuery;
-import net.simpleframework.common.Convert;
 import net.simpleframework.common.ID;
 import net.simpleframework.common.coll.KVMap;
 import net.simpleframework.ctx.permission.PermissionDept;
@@ -52,11 +51,11 @@ public class ProcessModelMgrTPage extends AbstractWorkflowMgrTPage {
 						new TablePagerColumn("version", $m("MyInitiateItemsTPage.4"), 80).setTextAlign(
 								ETextAlign.center).setFilter(false))
 				.addColumn(AbstractWorkflowMgrPage.TC_CREATEDATE().setFilter(false))
-				.addColumn(
-						AbstractWorkflowMgrPage.TC_STATUS().setPropertyClass(EProcessModelStatus.class))
+				.addColumn(AbstractWorkflowMgrPage.TC_STATUS(EProcessModelStatus.class))
 				.addColumn(TablePagerColumn.OPE().setWidth(100));
 		// if (pp.getLogin().isManager())
 		// tablePager);
+
 	}
 
 	@Override
@@ -94,9 +93,13 @@ public class ProcessModelMgrTPage extends AbstractWorkflowMgrTPage {
 			if (status != EProcessModelStatus.deploy) {
 				le.setColor("#777");
 			}
-			row.add("modelText", le).add("createDate", pm.getCreateDate())
-					.add("processCount", Convert.toInt(pm.getAttr("processcount2")))
-					.add("userText", pm.getUserText()).add("version", pm.getModelVer())
+
+			row.add("modelText", le)
+					.add("createDate", pm.getCreateDate())
+					.add("processCount",
+							drService.getProcessModelDomainR(getPermissionOrg(cp).getId(), pm)
+									.getProcessCount()).add("userText", pm.getUserText())
+					.add("version", pm.getModelVer())
 					.add("status", WorkflowUtils.toStatusHTML(cp, status))
 					.add(TablePagerColumn.OPE, toOpeHTML(cp, pm));
 			return row;
