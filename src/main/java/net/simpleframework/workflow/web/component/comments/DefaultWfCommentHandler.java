@@ -99,7 +99,7 @@ public class DefaultWfCommentHandler extends ComponentHandlerEx implements IWfCo
 
 	protected InputElement createCommentTa(final ComponentParameter cp, final WorkitemBean workitem) {
 		final InputElement ele = InputElement.textarea().setRows(4).setName("ta_wfcomment")
-				.addAttribute("maxlength", cp.getBeanProperty("maxlength"));
+				.setId("ta_wfcomment").addAttribute("maxlength", cp.getBeanProperty("maxlength"));
 		final WfComment bean = workflowContext.getCommentService().getCurComment(workitem);
 		if (bean != null) {
 			ele.setValue(bean.getCcomment());
