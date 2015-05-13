@@ -31,6 +31,7 @@ import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.common.element.TabButton;
 import net.simpleframework.mvc.common.element.TabButtons;
 import net.simpleframework.mvc.component.ComponentParameter;
+import net.simpleframework.mvc.component.base.ajaxrequest.AjaxRequestBean;
 import net.simpleframework.mvc.component.ui.menu.MenuBean;
 import net.simpleframework.mvc.component.ui.menu.MenuItem;
 import net.simpleframework.mvc.component.ui.menu.MenuItems;
@@ -76,9 +77,9 @@ public class ActivityMgrPage extends AbstractWorkflowMgrPage {
 		addComponentBean(pp, "ActivityMgrPage_abort2", ActivityAbortBean.class);
 
 		// workitems
-		addAjaxRequest(pp, "ActivityMgrPage_workitems_page", WorkitemsMgrPage.class);
-		addWindowBean(pp, "ActivityMgrPage_workitems")
-				.setContentRef("ActivityMgrPage_workitems_page").setWidth(800).setHeight(480);
+		final AjaxRequestBean ajaxRequest = addAjaxRequest(pp, "ActivityMgrPage_workitems_page",
+				WorkitemsMgrPage.class);
+		addWindowBean(pp, "ActivityMgrPage_workitems", ajaxRequest).setWidth(800).setHeight(480);
 	}
 
 	protected TablePagerBean addTablePagerBean(final PageParameter pp) {

@@ -8,18 +8,22 @@ import java.util.Map;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.LinkButton;
+import net.simpleframework.mvc.common.element.LinkElement;
 import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.common.element.TabButton;
 import net.simpleframework.mvc.common.element.TabButtons;
+import net.simpleframework.mvc.component.base.ajaxrequest.AjaxRequestBean;
 import net.simpleframework.mvc.component.ui.pager.EPagerBarLayout;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
 import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
 import net.simpleframework.workflow.engine.EActivityStatus;
+import net.simpleframework.workflow.engine.bean.ActivityBean;
 import net.simpleframework.workflow.engine.bean.ProcessBean;
 import net.simpleframework.workflow.web.WorkflowUtils;
 import net.simpleframework.workflow.web.page.t1.AbstractWorkflowMgrPage;
 import net.simpleframework.workflow.web.page.t1.ActivityMgrPage;
 import net.simpleframework.workflow.web.page.t1.ActivityMgrPage.ActivityTbl;
+import net.simpleframework.workflow.web.page.t1.WorkitemsMgrPage;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -32,11 +36,13 @@ public class ActivityMgrTPage extends AbstractWorkflowMgrTPage {
 	@Override
 	protected void onForward(final PageParameter pp) {
 		super.onForward(pp);
-		addComponents(pp);
-	}
 
-	protected void addComponents(final PageParameter pp) {
 		addTablePagerBean(pp);
+
+		// workitems
+		final AjaxRequestBean ajaxRequest = addAjaxRequest(pp, "ActivityMgrTPage_workitems_page",
+				WorkitemsMgrPage.class);
+		addWindowBean(pp, "ActivityMgrTPage_workitems", ajaxRequest).setWidth(800).setHeight(480);
 	}
 
 	protected TablePagerBean addTablePagerBean(final PageParameter pp) {
@@ -98,5 +104,11 @@ public class ActivityMgrTPage extends AbstractWorkflowMgrTPage {
 	}
 
 	public static class _ActivityTbl extends ActivityTbl {
+		@Override
+		protected LinkElement createUserNodeLE(final ActivityBean activity) {
+			return new LinkElement(activity)
+					.setOnclick("$Actions['ActivityMgrTPage_workitems']('activityId=" + activity.getId()
+							+ "');");
+		}
 	}
 }

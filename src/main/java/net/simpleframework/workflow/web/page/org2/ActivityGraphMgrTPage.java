@@ -4,6 +4,7 @@ import net.simpleframework.ado.query.IDataQuery;
 import net.simpleframework.common.coll.KVMap;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.component.ComponentParameter;
+import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
 import net.simpleframework.workflow.engine.bean.ProcessBean;
 import net.simpleframework.workflow.web.WorkflowUtils;
 import net.simpleframework.workflow.web.page.t1.WorkflowGraphMonitorPage;
@@ -24,8 +25,8 @@ public class ActivityGraphMgrTPage extends ActivityMgrTPage {
 	}
 
 	@Override
-	protected void addComponents(final PageParameter pp) {
-		addTablePagerBean(pp).setHandlerClass(_ActivityGraphTbl.class);
+	protected TablePagerBean addTablePagerBean(final PageParameter pp) {
+		return (TablePagerBean) super.addTablePagerBean(pp).setHandlerClass(_ActivityGraphTbl.class);
 	}
 
 	@Override
