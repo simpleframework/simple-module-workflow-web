@@ -1,6 +1,9 @@
 package net.simpleframework.workflow.web.page.org2;
 
+import net.simpleframework.ado.query.IDataQuery;
+import net.simpleframework.common.coll.KVMap;
 import net.simpleframework.mvc.PageParameter;
+import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.workflow.engine.bean.ProcessBean;
 import net.simpleframework.workflow.web.WorkflowUtils;
 import net.simpleframework.workflow.web.page.t1.WorkflowGraphMonitorPage;
@@ -22,6 +25,7 @@ public class ActivityGraphMgrTPage extends ActivityMgrTPage {
 
 	@Override
 	protected void addComponents(final PageParameter pp) {
+		addTablePagerBean(pp).setHandlerClass(_ActivityGraphTbl.class);
 	}
 
 	@Override
@@ -36,6 +40,17 @@ public class ActivityGraphMgrTPage extends ActivityMgrTPage {
 	@Override
 	protected String toMonitorHTML(final PageParameter pp) {
 		final ProcessBean process = WorkflowUtils.getProcessBean(pp);
-		return WorkflowGraphUtils.toGraphHTML(pp, process);
+		final StringBuilder sb = new StringBuilder();
+		sb.append(WorkflowGraphUtils.toGraphHTML(pp, process,
+				new KVMap().add("tbl", "ActivityMgrTPage_tbl")));
+		sb.append("<div id='idActivityMgrTPage_tbl'></div>");
+		return sb.toString();
+	}
+
+	public static class _ActivityGraphTbl extends _ActivityTbl {
+		@Override
+		public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
+			return createDataObjectQuery_bytask(cp);
+		}
 	}
 }

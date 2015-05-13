@@ -16,8 +16,7 @@
 <script type="text/javascript">
   $ready(function() {
     var click = function(o) {
-      $Actions['WorkflowGraphMonitorPage_tbl']('taskid='
-          + o.getAttribute("taskid"));
+      $Actions['${tbl}']('taskid=' + o.getAttribute("taskid"));
     };
 
     Prototype.Selector.select(".WorkflowGraphMonitorPage .graph .tasknode")

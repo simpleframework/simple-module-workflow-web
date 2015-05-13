@@ -152,6 +152,21 @@ public class ActivityMgrPage extends AbstractWorkflowMgrPage {
 			return null;
 		}
 
+		protected IDataQuery<?> createDataObjectQuery_bytask(final ComponentParameter cp) {
+			final ProcessBean process = WorkflowUtils.getProcessBean(cp);
+			if (process != null) {
+				cp.addFormParameter("processId", process.getId());
+			}
+			final String taskid = cp.getParameter("taskid");
+			if (StringUtils.hasText(taskid)) {
+				cp.addFormParameter("taskid", taskid);
+				final List<ActivityBean> list = toTreeList(aService.getActivities(process, taskid));
+				setRelativeDate(cp, list);
+				return new ListDataQuery<ActivityBean>(list);
+			}
+			return null;
+		}
+
 		protected List<ActivityBean> toTreeList(final List<ActivityBean> list) {
 			ActivityBean root = null;
 			final Map<ID, List<ActivityBean>> cache = new LinkedHashMap<ID, List<ActivityBean>>();

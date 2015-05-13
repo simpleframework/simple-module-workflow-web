@@ -37,6 +37,11 @@ import com.mxgraph.view.mxGraph;
 public abstract class WorkflowGraphUtils implements IWorkflowServiceAware {
 
 	public static String toGraphHTML(final PageParameter pp, final ProcessBean process) {
+		return toGraphHTML(pp, process, new KVMap().add("tbl", "WorkflowGraphMonitorPage_tbl"));
+	}
+
+	public static String toGraphHTML(final PageParameter pp, final ProcessBean process,
+			final Map<String, Object> variables) {
 		if (process == null) {
 			return "";
 		}
@@ -126,7 +131,12 @@ public abstract class WorkflowGraphUtils implements IWorkflowServiceAware {
 					});
 			gObj = new XmlDocument(canvas.getDocument());
 		}
-		return MVEL2Template.replace(new KVMap().add("graph", gObj), WorkflowGraphUtils.class,
+
+		final KVMap _variables = new KVMap();
+		if (variables != null) {
+			_variables.putAll(variables);
+		}
+		return MVEL2Template.replace(_variables.add("graph", gObj), WorkflowGraphUtils.class,
 				"WorkflowGraphMonitorPage_svg.html");
 	}
 

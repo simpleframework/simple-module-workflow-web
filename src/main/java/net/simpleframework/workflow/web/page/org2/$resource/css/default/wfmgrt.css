@@ -12,3 +12,11 @@
 #idActivityMgrTPage_tbl {
   padding: 8px;
 }
+
+.WorkflowGraphMonitorPage .tb {
+  border-width: 0 !important;
+}
+
+.WorkflowGraphMonitorPage .graph {
+  border-width: 1px 0 1px 0 !important;
+}

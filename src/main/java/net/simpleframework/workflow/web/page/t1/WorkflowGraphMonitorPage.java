@@ -1,15 +1,10 @@
 package net.simpleframework.workflow.web.page.t1;
 
-import java.util.List;
-
 import net.simpleframework.ado.query.IDataQuery;
-import net.simpleframework.ado.query.ListDataQuery;
-import net.simpleframework.common.StringUtils;
 import net.simpleframework.mvc.PageMapping;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
-import net.simpleframework.workflow.engine.bean.ActivityBean;
 import net.simpleframework.workflow.engine.bean.ProcessBean;
 import net.simpleframework.workflow.web.WorkflowUtils;
 
@@ -34,7 +29,7 @@ public class WorkflowGraphMonitorPage extends WorkflowMonitorPage {
 		// pp.putParameter(G, "tasknode");
 		final TablePagerBean tablePager = (TablePagerBean) super.addTablePagerBean(pp)
 				.setShowFilterBar(false).setContainerId("idWorkflowGraphMonitorPage_tbl")
-				.setName("WorkflowGraphMonitorPage_tbl").setHandlerClass(ActivityGraphTbl2.class);
+				.setName("WorkflowGraphMonitorPage_tbl").setHandlerClass(_ActivityGraphTbl2.class);
 		return tablePager;
 	}
 
@@ -53,22 +48,11 @@ public class WorkflowGraphMonitorPage extends WorkflowMonitorPage {
 		return WorkflowGraphUtils.toGraphHTML(pp, process);
 	}
 
-	public static class ActivityGraphTbl2 extends _ActivityTbl {
+	public static class _ActivityGraphTbl2 extends _ActivityTbl {
 
 		@Override
 		public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
-			final ProcessBean process = WorkflowUtils.getProcessBean(cp);
-			if (process != null) {
-				cp.addFormParameter("processId", process.getId());
-			}
-			final String taskid = cp.getParameter("taskid");
-			cp.addFormParameter("taskid", taskid);
-			if (StringUtils.hasText(taskid)) {
-				final List<ActivityBean> list = toTreeList(aService.getActivities(process, taskid));
-				setRelativeDate(cp, list);
-				return new ListDataQuery<ActivityBean>(list);
-			}
-			return null;
+			return createDataObjectQuery_bytask(cp);
 		}
 	}
 }
