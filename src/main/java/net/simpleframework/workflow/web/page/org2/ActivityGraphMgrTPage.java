@@ -26,7 +26,8 @@ public class ActivityGraphMgrTPage extends ActivityMgrTPage {
 
 	@Override
 	protected TablePagerBean addTablePagerBean(final PageParameter pp) {
-		return (TablePagerBean) super.addTablePagerBean(pp).setHandlerClass(_ActivityGraphTbl.class);
+		return (TablePagerBean) super.addTablePagerBean(pp)
+				.setContainerId("ActivityGraphMgrTPage_tbl").setHandlerClass(_ActivityGraphTbl.class);
 	}
 
 	@Override
@@ -44,7 +45,7 @@ public class ActivityGraphMgrTPage extends ActivityMgrTPage {
 		final StringBuilder sb = new StringBuilder();
 		sb.append(WorkflowGraphUtils.toGraphHTML(pp, process,
 				new KVMap().add("tbl", "ActivityMgrTPage_tbl")));
-		sb.append("<div id='idActivityMgrTPage_tbl'></div>");
+		sb.append("<div id='ActivityGraphMgrTPage_tbl'></div>");
 		return sb.toString();
 	}
 

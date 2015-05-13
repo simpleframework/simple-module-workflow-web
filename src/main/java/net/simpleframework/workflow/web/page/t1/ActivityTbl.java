@@ -192,16 +192,25 @@ public class ActivityTbl extends GroupDbTablePagerHandler implements IWorkflowSe
 		return sb.toString();
 	}
 
+	protected MenuItem MI_STATUS_RUNNING() {
+		return MenuItem.of($m("AbstractWorkflowMgrPage.1")).setOnclick_act(
+				"AbstractWorkflowMgrPage_status", "activityId", "op=running");
+	}
+
+	protected MenuItem MI_STATUS_SUSPENDED() {
+		return MenuItem.of($m("AbstractWorkflowMgrPage.0")).setOnclick_act(
+				"AbstractWorkflowMgrPage_status", "activityId", "op=suspended");
+	}
+
+	protected MenuItem MI_STATUS_DO_ABORT() {
+		return MenuItem.of(EActivityStatus.abort.toString()).setOnclick_act("ActivityMgrPage_abort",
+				"activityId");
+	}
+
 	@Override
 	public MenuItems getContextMenu(final ComponentParameter cp, final MenuBean menuBean,
 			final MenuItem menuItem) {
-		return MenuItems.of(
-				MenuItem.of($m("AbstractWorkflowMgrPage.1")).setOnclick_act(
-						"AbstractWorkflowMgrPage_status", "activityId", "op=running"),
-				MenuItem.sep(),
-				MenuItem.of($m("AbstractWorkflowMgrPage.0")).setOnclick_act(
-						"AbstractWorkflowMgrPage_status", "activityId", "op=suspended"),
-				MenuItem.of(EActivityStatus.abort.toString()).setOnclick_act("ActivityMgrPage_abort",
-						"activityId"));
+		return MenuItems.of(MI_STATUS_RUNNING(), MenuItem.sep(), MI_STATUS_SUSPENDED(),
+				MenuItem.sep(), MI_STATUS_DO_ABORT());
 	}
 }

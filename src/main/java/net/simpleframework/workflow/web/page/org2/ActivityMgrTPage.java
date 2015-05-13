@@ -16,6 +16,7 @@ import net.simpleframework.mvc.common.element.TabButton;
 import net.simpleframework.mvc.common.element.TabButtons;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.base.ajaxrequest.AjaxRequestBean;
+import net.simpleframework.mvc.component.ui.menu.MenuItem;
 import net.simpleframework.mvc.component.ui.pager.EPagerBarLayout;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
 import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
@@ -135,6 +136,18 @@ public class ActivityMgrTPage extends AbstractWorkflowMgrTPage {
 			return new LinkElement(activity)
 					.setOnclick("$Actions['ActivityMgrTPage_workitems']('activityId=" + activity.getId()
 							+ "');");
+		}
+
+		@Override
+		protected MenuItem MI_STATUS_RUNNING() {
+			return super.MI_STATUS_RUNNING().setOnclick_act("AbstractWorkflowMgrTPage_status",
+					"activityId", "op=running");
+		}
+
+		@Override
+		protected MenuItem MI_STATUS_SUSPENDED() {
+			return super.MI_STATUS_SUSPENDED().setOnclick_act("AbstractWorkflowMgrTPage_status",
+					"activityId", "op=suspended");
 		}
 	}
 }
