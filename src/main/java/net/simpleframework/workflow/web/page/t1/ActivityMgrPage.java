@@ -69,17 +69,16 @@ public class ActivityMgrPage extends AbstractWorkflowMgrPage {
 		addTablePagerBean(pp);
 
 		// 放弃
-		addAjaxRequest(pp, "ActivityMgrPage_abort_page", ActivityAbortPage.class);
-		addWindowBean(pp, "ActivityMgrPage_abort").setResizable(false)
-				.setContentRef("ActivityMgrPage_abort_page").setTitle(EProcessStatus.abort.toString())
-				.setWidth(420).setHeight(240);
-
-		addComponentBean(pp, "ActivityMgrPage_abort2", ActivityAbortBean.class);
+		AjaxRequestBean ajaxRequest = addAjaxRequest(pp, "ActivityMgrPage_abort_page",
+				ActivityAbortPage.class);
+		addWindowBean(pp, "ActivityMgrPage_abort", ajaxRequest).setResizable(false)
+				.setTitle(EProcessStatus.abort.toString()).setWidth(420).setHeight(240);
 
 		// workitems
-		final AjaxRequestBean ajaxRequest = addAjaxRequest(pp, "ActivityMgrPage_workitems_page",
-				WorkitemsMgrPage.class);
+		ajaxRequest = addAjaxRequest(pp, "ActivityMgrPage_workitems_page", WorkitemsMgrPage.class);
 		addWindowBean(pp, "ActivityMgrPage_workitems", ajaxRequest).setWidth(800).setHeight(480);
+
+		addComponentBean(pp, "ActivityMgrPage_abort2", ActivityAbortBean.class);
 	}
 
 	protected TablePagerBean addTablePagerBean(final PageParameter pp) {
