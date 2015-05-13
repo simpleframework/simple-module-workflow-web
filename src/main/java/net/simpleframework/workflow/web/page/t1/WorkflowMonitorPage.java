@@ -24,7 +24,6 @@ import net.simpleframework.workflow.engine.bean.ProcessBean;
 import net.simpleframework.workflow.engine.bean.WorkitemBean;
 import net.simpleframework.workflow.web.WorkflowUrlsFactory;
 import net.simpleframework.workflow.web.WorkflowUtils;
-import net.simpleframework.workflow.web.page.t1.ActivityMgrPage.ActivityTbl;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -118,20 +117,20 @@ public class WorkflowMonitorPage extends AbstractWorkflowFormPage {
 
 	public static class _ActivityTbl extends ActivityTbl {
 		@Override
-		protected LinkElement createUserNodeLE(final ActivityBean activity) {
+		protected LinkElement createUsernodeElement(final ActivityBean activity) {
 			return new LinkElement(activity)
 					.setOnclick("$Actions['WorkflowMonitorPage_workitems']('activityId="
 							+ activity.getId() + "');");
 		}
 
 		@Override
-		protected String getOpe(final ActivityBean activity) {
+		public MenuItems getContextMenu(final ComponentParameter cp, final MenuBean menuBean,
+				final MenuItem menuItem) {
 			return null;
 		}
 
 		@Override
-		public MenuItems getContextMenu(final ComponentParameter cp, final MenuBean menuBean,
-				final MenuItem menuItem) {
+		protected String toOpeHTML(final ComponentParameter cp, final ActivityBean activity) {
 			return null;
 		}
 	}

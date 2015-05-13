@@ -29,8 +29,8 @@ import net.simpleframework.workflow.engine.bean.ProcessModelBean;
 import net.simpleframework.workflow.web.WorkflowLogRef.ProcessUpdateLogPage;
 import net.simpleframework.workflow.web.WorkflowUtils;
 import net.simpleframework.workflow.web.page.t1.AbstractWorkflowMgrPage;
+import net.simpleframework.workflow.web.page.t1.ProcessMgrPage.ProcessStatusDescPage;
 import net.simpleframework.workflow.web.page.t1.ProcessMgrPage.ProcessTbl;
-import net.simpleframework.workflow.web.page.t1.ProcessMgrPage.StatusDescPage;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -61,13 +61,13 @@ public class ProcessMgrTPage extends AbstractWorkflowMgrTPage {
 	}
 
 	@Override
-	protected Class<? extends AbstractMVCPage> getUpdateLogPage() {
-		return ProcessUpdateLogPage.class;
+	protected Class<? extends AbstractMVCPage> getStatusDescPage() {
+		return _ProcessStatusDescPage.class;
 	}
 
 	@Override
-	protected Class<? extends AbstractMVCPage> getStatusDescPage() {
-		return _StatusDescPage.class;
+	protected Class<? extends AbstractMVCPage> getUpdateLogPage() {
+		return ProcessUpdateLogPage.class;
 	}
 
 	@Override
@@ -134,7 +134,7 @@ public class ProcessMgrTPage extends AbstractWorkflowMgrTPage {
 		}
 	}
 
-	public static class _StatusDescPage extends StatusDescPage {
+	public static class _ProcessStatusDescPage extends ProcessStatusDescPage {
 
 		@Override
 		protected JavascriptForward toSavedForward(final ComponentParameter cp) {

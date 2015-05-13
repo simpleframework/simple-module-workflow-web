@@ -5,13 +5,16 @@ import static net.simpleframework.common.I18n.$m;
 import java.io.IOException;
 import java.util.Map;
 
+import net.simpleframework.mvc.AbstractMVCPage;
 import net.simpleframework.mvc.PageParameter;
+import net.simpleframework.mvc.common.element.ButtonElement;
 import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.LinkButton;
 import net.simpleframework.mvc.common.element.LinkElement;
 import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.common.element.TabButton;
 import net.simpleframework.mvc.common.element.TabButtons;
+import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.base.ajaxrequest.AjaxRequestBean;
 import net.simpleframework.mvc.component.ui.pager.EPagerBarLayout;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
@@ -19,10 +22,12 @@ import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
 import net.simpleframework.workflow.engine.EActivityStatus;
 import net.simpleframework.workflow.engine.bean.ActivityBean;
 import net.simpleframework.workflow.engine.bean.ProcessBean;
+import net.simpleframework.workflow.web.WorkflowLogRef.ActivityUpdateLogPage;
 import net.simpleframework.workflow.web.WorkflowUtils;
 import net.simpleframework.workflow.web.page.t1.AbstractWorkflowMgrPage;
 import net.simpleframework.workflow.web.page.t1.ActivityMgrPage;
-import net.simpleframework.workflow.web.page.t1.ActivityMgrPage.ActivityTbl;
+import net.simpleframework.workflow.web.page.t1.ActivityMgrPage.ActivityStatusDescPage;
+import net.simpleframework.workflow.web.page.t1.ActivityTbl;
 import net.simpleframework.workflow.web.page.t1.WorkitemsMgrPage;
 
 /**
@@ -59,6 +64,16 @@ public class ActivityMgrTPage extends AbstractWorkflowMgrTPage {
 				// .addColumn(ActivityMgrPage.TC_PREVIOUS())
 				.addColumn(TablePagerColumn.OPE().setWidth(70));
 		return tablePager;
+	}
+
+	@Override
+	protected Class<? extends AbstractMVCPage> getUpdateLogPage() {
+		return ActivityUpdateLogPage.class;
+	}
+
+	@Override
+	protected Class<? extends AbstractMVCPage> getStatusDescPage() {
+		return _ActivityStatusDescPage.class;
 	}
 
 	@Override
@@ -103,9 +118,20 @@ public class ActivityMgrTPage extends AbstractWorkflowMgrTPage {
 						params)));
 	}
 
+	public static class _ActivityStatusDescPage extends ActivityStatusDescPage {
+	}
+
 	public static class _ActivityTbl extends ActivityTbl {
 		@Override
-		protected LinkElement createUserNodeLE(final ActivityBean activity) {
+		protected ButtonElement createLogButton(final ComponentParameter cp,
+				final ActivityBean activity) {
+			return super.createLogButton(cp, activity).setOnclick(
+					"$Actions['AbstractWorkflowMgrTPage_update_log']('activityId=" + activity.getId()
+							+ "');");
+		}
+
+		@Override
+		protected LinkElement createUsernodeElement(final ActivityBean activity) {
 			return new LinkElement(activity)
 					.setOnclick("$Actions['ActivityMgrTPage_workitems']('activityId=" + activity.getId()
 							+ "');");

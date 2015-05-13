@@ -186,10 +186,10 @@ public class ProcessMgrPage extends AbstractWorkflowMgrPage {
 
 	@Override
 	protected Class<? extends AbstractMVCPage> getStatusDescPage() {
-		return StatusDescPage.class;
+		return ProcessStatusDescPage.class;
 	}
 
-	public static class StatusDescPage extends AbstractStatusDescPage {
+	public static class ProcessStatusDescPage extends AbstractStatusDescPage {
 
 		@Override
 		public JavascriptForward onSave(final ComponentParameter cp) throws Exception {
