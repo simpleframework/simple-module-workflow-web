@@ -121,6 +121,16 @@
   transition: all 0.3s ease 0s;
 }
 
+#idWorklistProgressBar {
+  height: 4px;
+  margin-top: 1px;
+  width: 240px;
+}
+
+#idWorklistProgressBar .pb_text {
+  margin-top: 12px;
+}
+
 .Category_BlankPage .category .c_item {
   padding-left: 10px;
 }

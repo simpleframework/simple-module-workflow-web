@@ -4,6 +4,7 @@ import static net.simpleframework.common.I18n.$m;
 import net.simpleframework.ado.query.IDataQuery;
 import net.simpleframework.common.StringUtils;
 import net.simpleframework.common.web.HttpUtils;
+import net.simpleframework.common.web.JavascriptUtils;
 import net.simpleframework.ctx.trans.Transaction;
 import net.simpleframework.mvc.AbstractMVCPage;
 import net.simpleframework.mvc.IForward;
@@ -22,6 +23,7 @@ import net.simpleframework.mvc.component.ui.menu.MenuBean;
 import net.simpleframework.mvc.component.ui.menu.MenuItem;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
 import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
+import net.simpleframework.mvc.component.ui.progressbar.ProgressBarRegistry;
 import net.simpleframework.workflow.engine.EWorkitemStatus;
 import net.simpleframework.workflow.engine.IWorkflowContext;
 import net.simpleframework.workflow.engine.bean.DelegationBean;
@@ -42,10 +44,7 @@ public class MyRunningWorklistTPage extends AbstractItemsTPage {
 	@Override
 	protected void onForward(final PageParameter pp) {
 		super.onForward(pp);
-		pp.addImportJavascript(MyRunningWorklistTPage.class, "/js/worklist_running.js");
-
 		setGroupParam(pp);
-
 		addComponents(pp);
 	}
 
@@ -219,12 +218,37 @@ public class MyRunningWorklistTPage extends AbstractItemsTPage {
 			sb.append(new BlockElement().setClassName("worklist_tip").setText(txt.toString()));
 		}
 		sb.append(super.toToolbarHTML(pp));
+		sb.append(JavascriptUtils.wrapScriptTag(getProgressBarJavascript(), true));
 		return sb.toString();
+	}
+
+	protected String getProgressBarJavascript() {
+		final StringBuilder js = new StringBuilder();
+		js.append("var container = $('idWorklistProgressBar');");
+		js.append("if (container) {");
+		js.append("  var bar = new $UI.ProgressBar(container, {");
+		js.append("    maxProgressValue : 100,");
+		js.append("    startAfterCreate : false,");
+		js.append("    showAbortAction : false,");
+		js.append("    showDetailAction : false");
+		js.append("  });");
+		js.append("  bar.setProgress(50, function() {");
+		js.append("    var txt = container.down('.pb_text');");
+		// js.append("    var l = parseInt(txt.innerHTML);");
+		js.append("    txt.update(txt.innerHTML + '已完成');");
+		js.append("  });");
+		js.append("}");
+		return js.toString();
 	}
 
 	@Override
 	public ElementList getRightElements(final PageParameter pp) {
-		return null; // getIndexSearchElements(pp);
+		return ElementList.of(new BlockElement().setId("idWorklistProgressBar"));
+	}
+
+	@Override
+	public String[] getDependentComponents(final PageParameter pp) {
+		return new String[] { ProgressBarRegistry.PROGRESSBAR };
 	}
 
 	protected String getWorklistPageUrl(final PageParameter pp) {
