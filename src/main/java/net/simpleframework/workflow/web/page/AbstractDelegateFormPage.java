@@ -132,7 +132,7 @@ public abstract class AbstractDelegateFormPage extends FormTableRowTemplatePage 
 
 		@Override
 		public ElementList getRightElements(final PageParameter pp) {
-			return ElementList.of(ButtonElement.WINDOW_CLOSE);
+			return ElementList.of(ButtonElement.closeBtn());
 		}
 
 		@Override

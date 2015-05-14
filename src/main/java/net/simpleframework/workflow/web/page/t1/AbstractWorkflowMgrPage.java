@@ -136,7 +136,7 @@ public abstract class AbstractWorkflowMgrPage extends T1ResizedTemplatePage impl
 			sb.append(
 					ButtonElement.okBtn().setHighlight(true)
 							.setOnclick("$Actions['AbstractAbortPage_ok']();")).append(SpanElement.SPACE)
-					.append(ButtonElement.WINDOW_CLOSE);
+					.append(ButtonElement.closeBtn());
 			sb.append(" </div>");
 			sb.append("</div>");
 			return sb.toString();
