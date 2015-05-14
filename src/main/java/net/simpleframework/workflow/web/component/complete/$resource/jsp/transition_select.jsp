@@ -14,7 +14,7 @@
   <div class="msg"></div>
   <div class="b">
     <input type="button" class="button2" value="#(Button.Ok)" />
-    <%=ButtonElement.WINDOW_CLOSE%>
+    <%=ButtonElement.closeBtn()%>
   </div>
 </div>
 <script type="text/javascript">
