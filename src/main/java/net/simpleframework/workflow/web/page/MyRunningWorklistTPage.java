@@ -4,7 +4,6 @@ import static net.simpleframework.common.I18n.$m;
 import net.simpleframework.ado.query.IDataQuery;
 import net.simpleframework.common.StringUtils;
 import net.simpleframework.common.web.HttpUtils;
-import net.simpleframework.common.web.JavascriptUtils;
 import net.simpleframework.ctx.trans.Transaction;
 import net.simpleframework.mvc.AbstractMVCPage;
 import net.simpleframework.mvc.IForward;
@@ -43,6 +42,8 @@ public class MyRunningWorklistTPage extends AbstractItemsTPage {
 	@Override
 	protected void onForward(final PageParameter pp) {
 		super.onForward(pp);
+		pp.addImportJavascript(MyRunningWorklistTPage.class, "/js/worklist_running.js");
+
 		setGroupParam(pp);
 
 		addComponents(pp);
@@ -218,8 +219,6 @@ public class MyRunningWorklistTPage extends AbstractItemsTPage {
 			sb.append(new BlockElement().setClassName("worklist_tip").setText(txt.toString()));
 		}
 		sb.append(super.toToolbarHTML(pp));
-		sb.append(JavascriptUtils.wrapScriptTag(getIndexSearchJavascript(getWorklistPageUrl(pp)),
-				true));
 		return sb.toString();
 	}
 
