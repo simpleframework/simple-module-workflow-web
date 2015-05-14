@@ -242,13 +242,13 @@ public class MyRunningWorklistTPage extends AbstractItemsTPage {
 	}
 
 	@Override
-	public ElementList getRightElements(final PageParameter pp) {
-		return ElementList.of(new BlockElement().setId("idWorklistProgressBar"));
+	public String[] getDependentComponents(final PageParameter pp) {
+		return new String[] { ProgressBarRegistry.PROGRESSBAR };
 	}
 
 	@Override
-	public String[] getDependentComponents(final PageParameter pp) {
-		return new String[] { ProgressBarRegistry.PROGRESSBAR };
+	public ElementList getRightElements(final PageParameter pp) {
+		return ElementList.of(new BlockElement().setId("idWorklistProgressBar"));
 	}
 
 	protected String getWorklistPageUrl(final PageParameter pp) {
