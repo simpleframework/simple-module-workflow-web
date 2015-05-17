@@ -2,6 +2,7 @@ package net.simpleframework.workflow.web.page;
 
 import static net.simpleframework.common.I18n.$m;
 import net.simpleframework.ado.query.IDataQuery;
+import net.simpleframework.common.NumberUtils;
 import net.simpleframework.common.StringUtils;
 import net.simpleframework.common.web.HttpUtils;
 import net.simpleframework.common.web.JavascriptUtils;
@@ -27,6 +28,7 @@ import net.simpleframework.mvc.component.ui.progressbar.ProgressBarRegistry;
 import net.simpleframework.workflow.engine.EWorkitemStatus;
 import net.simpleframework.workflow.engine.IWorkflowContext;
 import net.simpleframework.workflow.engine.bean.DelegationBean;
+import net.simpleframework.workflow.engine.bean.UserStatBean;
 import net.simpleframework.workflow.engine.bean.WorkitemBean;
 import net.simpleframework.workflow.web.WorkflowLogRef.WorkitemUpdateLogPage;
 import net.simpleframework.workflow.web.WorkflowUtils;
@@ -218,25 +220,31 @@ public class MyRunningWorklistTPage extends AbstractItemsTPage {
 			sb.append(new BlockElement().setClassName("worklist_tip").setText(txt.toString()));
 		}
 		sb.append(super.toToolbarHTML(pp));
-		sb.append(JavascriptUtils.wrapScriptTag(getProgressBarJavascript(), true));
+		sb.append(JavascriptUtils.wrapScriptTag(getProgressBarJavascript(pp), true));
 		return sb.toString();
 	}
 
-	protected String getProgressBarJavascript() {
+	protected String getProgressBarJavascript(final PageParameter pp) {
+		final UserStatBean userStat = usService.getUserStat(pp.getLoginId());
 		final StringBuilder js = new StringBuilder();
 		js.append("var container = $('idWorklistProgressBar');");
 		js.append("if (container) {");
 		js.append("  var bar = new $UI.ProgressBar(container, {");
-		js.append("    maxProgressValue : 100,");
+		int maxValue = usService.getAllWorkitems(userStat);
+		if (maxValue <= 0) {
+			maxValue = 100;
+		}
+		js.append("    maxProgressValue : ").append(maxValue).append(",");
 		js.append("    startAfterCreate : false,");
+		js.append("    showText : false,");
 		js.append("    showAbortAction : false,");
 		js.append("    showDetailAction : false");
 		js.append("  });");
-		js.append("  bar.setProgress(50, function() {");
-		js.append("    var txt = container.down('.pb_text');");
-		// js.append("    var l = parseInt(txt.innerHTML);");
-		js.append("    txt.update(txt.innerHTML + '已完成');");
-		js.append("  });");
+		final int complete = userStat.getWorkitem_complete();
+		js.append("  bar.setProgress(").append(complete).append(");");
+		js.append("  container.insert(\"<div class='pinfo'>工作已完成<span>")
+				.append(NumberUtils.formatPercent((double) complete / maxValue))
+				.append(",</span><a>查看详细</a></div>\");");
 		js.append("}");
 		return js.toString();
 	}

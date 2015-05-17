@@ -127,8 +127,14 @@
   width: 240px;
 }
 
-#idWorklistProgressBar .pb_text {
-  margin-top: 12px;
+#idWorklistProgressBar .pinfo {
+  margin-top: 3px;
+  text-align: right;
+}
+
+#idWorklistProgressBar .pinfo span {
+  font-style: italic;
+  margin: 0 2px;
 }
 
 .Category_BlankPage .category .c_item {
