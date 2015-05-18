@@ -114,14 +114,21 @@ public abstract class AbstractItemsTPage extends Category_ListPage implements IW
 		return item;
 	}
 
+	public CategoryItem createCategoryItem_myWorkstat(final PageParameter pp) {
+		final CategoryItem item = createCategoryItem(pp, $m("AbstractItemsTPage.12"),
+				MyWorkstatTPage.class).setIconClass("my_work_complete_icon");
+		return item;
+	}
+
 	@Override
 	protected CategoryItems getCategoryList(final PageParameter pp) {
 		final CategoryItem item0 = createCategoryItem_mywork(pp);
 		final List<CategoryItem> children = item0.getChildren();
-		children.add(createCategoryItem_myinitiate(pp));
 		children.add(createCategoryItem_mywork_complete(pp));
-		children.add(createCategoryItem_delegate(pp));
 		children.add(createCategoryItem_queryworks(pp));
+		children.add(createCategoryItem_myinitiate(pp));
+		children.add(createCategoryItem_delegate(pp));
+		children.add(createCategoryItem_myWorkstat(pp));
 		return CategoryItems.of(createCategoryItem_myWorkviews(pp), item0);
 	}
 

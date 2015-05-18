@@ -242,9 +242,10 @@ public class MyRunningWorklistTPage extends AbstractItemsTPage {
 		js.append("  });");
 		final int complete = userStat.getWorkitem_complete();
 		js.append("  bar.setProgress(").append(complete).append(");");
-		js.append("  container.insert(\"<div class='pinfo'>工作已完成<span>")
-				.append(NumberUtils.formatPercent((double) complete / maxValue))
-				.append(",</span><a>查看详细</a></div>\");");
+		js.append("  container.insert(\"<div class='pinfo'>").append($m("MyRunningWorklistTPage.15"))
+				.append("<span>").append(NumberUtils.formatPercent((double) complete / maxValue))
+				.append(",</span><a href='").append(uFactory.getUrl(pp, MyWorkstatTPage.class))
+				.append("'>").append($m("MyRunningWorklistTPage.16")).append("</a></div>\");");
 		js.append("}");
 		return js.toString();
 	}

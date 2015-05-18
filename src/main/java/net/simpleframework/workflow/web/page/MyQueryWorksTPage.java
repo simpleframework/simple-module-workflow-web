@@ -93,10 +93,9 @@ public class MyQueryWorksTPage extends AbstractItemsTPage {
 
 	@Override
 	public ElementList getRightElements(final PageParameter pp) {
-		final IWorkflowWebContext ctx = ((IWorkflowWebContext) workflowContext);
 		final TabButtons tabs = TabButtons.of(new TabButton($m("MyQueryWorksTPage.4"), uFactory
 				.getUrl(pp, MyQueryWorksTPage.class)));
-		if (pp.isLmember(ctx.getDepartmentMgrRole(pp))) {
+		if (pp.isLmember(((IWorkflowWebContext) workflowContext).getDepartmentMgrRole(pp))) {
 			tabs.append(new TabButton($m("MyQueryWorksTPage.5"), uFactory.getUrl(pp,
 					MyQueryWorks_DeptTPage.class)));
 		}

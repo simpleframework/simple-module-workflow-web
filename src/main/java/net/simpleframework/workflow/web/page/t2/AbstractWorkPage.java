@@ -112,4 +112,12 @@ public abstract class AbstractWorkPage extends T2TemplatePage {
 			return MyWorkviewsTPage.class;
 		}
 	}
+
+	@PageMapping(url = "/workflow/my/stat")
+	public static class MyWorkstatPage extends AbstractWorkPage {
+		@Override
+		protected Class<? extends AbstractItemsTPage> getWorkTPageClass() {
+			return MyWorkviewsTPage.class;
+		}
+	}
 }

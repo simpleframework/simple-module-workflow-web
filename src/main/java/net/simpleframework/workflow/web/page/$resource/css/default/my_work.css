@@ -130,11 +130,28 @@
 #idWorklistProgressBar .pinfo {
   margin-top: 3px;
   text-align: right;
+  color: #777;
+}
+
+#idWorklistProgressBar .pinfo a {
+  color: #777;
+}
+
+#idWorklistProgressBar .pinfo a:HOVER {
+  color: #111;
+  text-decoration: none;
 }
 
 #idWorklistProgressBar .pinfo span {
-  font-style: italic;
   margin: 0 2px;
+  color: #111;
+  font-style: italic;
+}
+
+.MyWorkstatTPage {
+  background-color: #eee;
+  border: 1px solid #bbb;
+  padding: 10px;
 }
 
 .Category_BlankPage .category .c_item {
