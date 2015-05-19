@@ -183,6 +183,11 @@
   background-color: #fff;
 }
 
+.MyWorkstatTPage .stat2 .highcharts-tooltip>span {
+  font-family: Verdana, "Microsoft YaHei", sans-serif, Tahoma, Arial !important;
+  line-height: 1.5;
+}
+
 .Category_BlankPage .category .c_item {
   padding-left: 10px;
 }
