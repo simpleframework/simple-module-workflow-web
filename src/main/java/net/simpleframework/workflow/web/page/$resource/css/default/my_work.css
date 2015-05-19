@@ -148,6 +148,41 @@
   font-style: italic;
 }
 
+.MyWorkstatTPage {
+  background-color: #eee;
+  border: 1px solid #bbb;
+}
+
+.MyWorkstatTPage .topic {
+  font-size: 10.5pt;
+  padding: 8px 0;
+}
+
+.MyWorkstatTPage .stat1, 
+.MyWorkstatTPage .stat2 {
+  padding: 10px;
+}
+
+.MyWorkstatTPage .stat1 {
+  border-bottom: 1px solid #ccc;
+}
+
+.MyWorkstatTPage .stat1 .col {
+  float: left;
+  width: 12%;
+  border-right: 1px solid #ccc;
+  text-align: center;
+  margin: 6px 0;
+}
+
+.MyWorkstatTPage .stat1 .col .num {
+  font-size: 18pt;
+}
+
+.MyWorkstatTPage .stat2 {
+  background-color: #fff;
+}
+
 .Category_BlankPage .category .c_item {
   padding-left: 10px;
 }
