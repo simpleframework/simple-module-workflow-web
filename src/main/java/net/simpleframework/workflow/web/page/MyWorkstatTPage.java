@@ -59,9 +59,13 @@ public class MyWorkstatTPage extends AbstractItemsTPage {
 			final Date nDate = cal.getTime();
 			final String lbl = Convert.toDateString(nDate, "MM-dd");
 			final int[] arr = usService.getComplete_AllWorkitems(pp.getLoginId(), nDate);
-			final float p = arr[1] == 0 ? 0 : ((float) arr[0] / arr[1]) * 100;
-			h.addData(new DataObj(lbl, NumberUtils.toFloat(p)).addAttribute("complete", arr[0])
-					.addAttribute("all", arr[1]));
+			final float p = arr[1] == 0 ? 100 : ((float) arr[0] / arr[1]) * 100;
+			final DataObj data = new DataObj(lbl, NumberUtils.toFloat(p)).addAttribute("complete",
+					arr[0]).addAttribute("all", arr[1]);
+			// if (arr[1] == 0) {
+			// data.setColor("#f00");
+			// }
+			h.addData(data);
 			cal.add(Calendar.DATE, -1);
 		}
 
