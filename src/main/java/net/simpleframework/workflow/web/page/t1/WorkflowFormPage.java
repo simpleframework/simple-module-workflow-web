@@ -7,6 +7,7 @@ import java.util.Map;
 
 import net.simpleframework.mvc.PageMapping;
 import net.simpleframework.mvc.PageParameter;
+import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.common.element.TabButton;
 import net.simpleframework.mvc.common.element.TabButtons;
@@ -37,6 +38,13 @@ public class WorkflowFormPage extends AbstractWorkflowFormPage {
 		}
 		sb.append("</div>");
 		return sb.toString();
+	}
+
+	@Override
+	public ElementList getLeftElements(final PageParameter pp) {
+		final ElementList el = super.getLeftElements(pp);
+		el.append(SpanElement.SPACE15, SpanElement.strongText(WorkflowUtils.getTaskNode(pp)));
+		return el;
 	}
 
 	@Override

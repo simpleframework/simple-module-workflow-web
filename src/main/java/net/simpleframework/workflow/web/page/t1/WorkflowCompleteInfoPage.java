@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import net.simpleframework.ctx.permission.PermissionUser;
 import net.simpleframework.mvc.PageMapping;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.BlockElement;
@@ -63,6 +64,10 @@ public class WorkflowCompleteInfoPage extends AbstractWorkflowFormPage {
 						sb.append(", ");
 					}
 					sb.append(workitem2.getUserText());
+					final PermissionUser oUser = pp.getUser(workitem2.getUserId());
+					if (oUser.getId() != null) {
+						sb.append(" (").append(oUser.getName()).append(")");
+					}
 				}
 				sb.append("</td></tr>");
 			}
