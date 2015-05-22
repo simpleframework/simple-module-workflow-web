@@ -30,7 +30,6 @@ public abstract class MyQueryWorksTPages {
 		}
 
 		public static class MyQueryWorks_OrgTbl extends MyQueryWorksTbl {
-
 			@Override
 			public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
 				return pService.getProcessListInDomain(cp.getLogin().getDomainId());
@@ -39,7 +38,6 @@ public abstract class MyQueryWorksTPages {
 	}
 
 	public static class MyQueryWorks_DeptTPage extends MyQueryWorks_OrgTPage {
-
 		@Override
 		protected TablePagerBean addTablePagerBean(final PageParameter pp) {
 			return (TablePagerBean) super.addTablePagerBean(pp).setHandlerClass(
@@ -54,7 +52,6 @@ public abstract class MyQueryWorksTPages {
 		}
 
 		public static class MyQueryWorks_DeptTbl extends MyQueryWorksTbl {
-
 			@Override
 			public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
 				return pService.getProcessListInDept(cp.getLogin().getDept().getId());
@@ -70,7 +67,6 @@ public abstract class MyQueryWorksTPages {
 		}
 
 		public static class MyQueryWorks_RoleTbl extends MyQueryWorksTbl {
-
 			@Override
 			public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
 				return null;
