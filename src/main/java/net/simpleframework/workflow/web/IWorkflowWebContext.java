@@ -14,14 +14,6 @@ import net.simpleframework.workflow.engine.IWorkflowContext;
 public interface IWorkflowWebContext extends IWorkflowContext, IMVCContextVar {
 
 	/**
-	 * 获取部门管理角色名
-	 * 
-	 * @param pp
-	 * @return
-	 */
-	String getDepartmentMgrRole(PageParameter pp);
-
-	/**
 	 * 获取日志模块的引用
 	 * 
 	 * @return
@@ -31,4 +23,20 @@ public interface IWorkflowWebContext extends IWorkflowContext, IMVCContextVar {
 	IModuleRef getOrganizationRef();
 
 	WorkflowUrlsFactory getUrlsFactory();
+
+	/**
+	 * 获取部门级别的流程查询角色
+	 * 
+	 * @param pp
+	 * @return
+	 */
+	String getQueryWorks_DeptRole(PageParameter pp);
+
+	/**
+	 * 获取机构级别的流程查询角色
+	 * 
+	 * @param pp
+	 * @return
+	 */
+	String getQueryWorks_OrgRole(PageParameter pp);
 }

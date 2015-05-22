@@ -34,6 +34,7 @@ import net.simpleframework.workflow.engine.bean.WorkitemBean;
 import net.simpleframework.workflow.web.IWorkflowWebContext;
 import net.simpleframework.workflow.web.WorkflowUtils;
 import net.simpleframework.workflow.web.page.MyQueryWorksTPages.MyQueryWorks_DeptTPage;
+import net.simpleframework.workflow.web.page.MyQueryWorksTPages.MyQueryWorks_OrgTPage;
 import net.simpleframework.workflow.web.page.MyQueryWorksTPages.MyQueryWorks_RoleTPage;
 import net.simpleframework.workflow.web.page.t1.AbstractWorkflowMgrPage;
 import net.simpleframework.workflow.web.page.t1.WorkflowFormPage;
@@ -97,9 +98,14 @@ public class MyQueryWorksTPage extends AbstractItemsTPage {
 	public ElementList getRightElements(final PageParameter pp) {
 		final TabButtons tabs = TabButtons.of(new TabButton($m("MyQueryWorksTPage.4"), uFactory
 				.getUrl(pp, MyQueryWorksTPage.class)));
-		if (pp.isLmember(((IWorkflowWebContext) workflowContext).getDepartmentMgrRole(pp))) {
+		final IWorkflowWebContext ctx = (IWorkflowWebContext) workflowContext;
+		if (pp.isLmember(ctx.getQueryWorks_DeptRole(pp))) {
 			tabs.append(new TabButton($m("MyQueryWorksTPage.5"), uFactory.getUrl(pp,
 					MyQueryWorks_DeptTPage.class)));
+		}
+		if (pp.isLmember(ctx.getQueryWorks_OrgRole(pp))) {
+			tabs.append(new TabButton($m("MyQueryWorksTPage.8"), uFactory.getUrl(pp,
+					MyQueryWorks_OrgTPage.class)));
 		}
 		tabs.append(new TabButton($m("MyQueryWorksTPage.6"), uFactory.getUrl(pp,
 				MyQueryWorks_RoleTPage.class)));

@@ -18,9 +18,27 @@ import net.simpleframework.workflow.engine.bean.WorkitemBean;
 public abstract class MyQueryWorksTPages {
 
 	public static class MyQueryWorks_OrgTPage extends MyQueryWorksTPage {
+		@Override
+		protected TablePagerBean addTablePagerBean(final PageParameter pp) {
+			return (TablePagerBean) super.addTablePagerBean(pp).setHandlerClass(
+					MyQueryWorks_OrgTbl.class);
+		}
+
+		@Override
+		protected WorkitemBean getOpenWorkitem(final PageParameter pp, final ProcessBean process) {
+			return wService.getWorkitems(process, null).iterator().next();
+		}
+
+		public static class MyQueryWorks_OrgTbl extends MyQueryWorksTbl {
+
+			@Override
+			public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
+				return pService.getProcessListInDomain(cp.getLogin().getDomainId());
+			}
+		}
 	}
 
-	public static class MyQueryWorks_DeptTPage extends MyQueryWorksTPage {
+	public static class MyQueryWorks_DeptTPage extends MyQueryWorks_OrgTPage {
 
 		@Override
 		protected TablePagerBean addTablePagerBean(final PageParameter pp) {
@@ -33,11 +51,6 @@ public abstract class MyQueryWorksTPages {
 			final ElementList el = ElementList.of();
 			el.append(new SpanElement(pp.getLogin().getDept()).setClassName("worklist_dept"));
 			return el;
-		}
-
-		@Override
-		protected WorkitemBean getOpenWorkitem(final PageParameter pp, final ProcessBean process) {
-			return wService.getWorkitems(process, null).iterator().next();
 		}
 
 		public static class MyQueryWorks_DeptTbl extends MyQueryWorksTbl {

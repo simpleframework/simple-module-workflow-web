@@ -21,7 +21,12 @@ import net.simpleframework.workflow.web.participant.WorkflowPermissionHandler;
 public class WorkflowWebContext extends WorkflowContext implements IWorkflowWebContext {
 
 	@Override
-	public String getDepartmentMgrRole(final PageParameter pp) {
+	public String getQueryWorks_DeptRole(final PageParameter pp) {
+		return null;
+	}
+
+	@Override
+	public String getQueryWorks_OrgRole(final PageParameter pp) {
 		return null;
 	}
 

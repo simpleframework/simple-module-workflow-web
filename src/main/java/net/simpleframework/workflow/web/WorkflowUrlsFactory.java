@@ -9,6 +9,7 @@ import net.simpleframework.workflow.web.page.MyFinalWorklistTPage;
 import net.simpleframework.workflow.web.page.MyInitiateItemsTPage;
 import net.simpleframework.workflow.web.page.MyQueryWorksTPage;
 import net.simpleframework.workflow.web.page.MyQueryWorksTPages.MyQueryWorks_DeptTPage;
+import net.simpleframework.workflow.web.page.MyQueryWorksTPages.MyQueryWorks_OrgTPage;
 import net.simpleframework.workflow.web.page.MyQueryWorksTPages.MyQueryWorks_RoleTPage;
 import net.simpleframework.workflow.web.page.MyRunningWorklistTPage;
 import net.simpleframework.workflow.web.page.MyWorkstatTPage;
@@ -29,6 +30,7 @@ import net.simpleframework.workflow.web.page.t2.AbstractWorkPage.MyFinalWorklist
 import net.simpleframework.workflow.web.page.t2.AbstractWorkPage.MyInitiateItemsPage;
 import net.simpleframework.workflow.web.page.t2.AbstractWorkPage.MyQueryWorksPage;
 import net.simpleframework.workflow.web.page.t2.AbstractWorkPage.MyQueryWorks_DeptPage;
+import net.simpleframework.workflow.web.page.t2.AbstractWorkPage.MyQueryWorks_OrgPage;
 import net.simpleframework.workflow.web.page.t2.AbstractWorkPage.MyQueryWorks_RolePage;
 import net.simpleframework.workflow.web.page.t2.AbstractWorkPage.MyRunningWorklistPage;
 import net.simpleframework.workflow.web.page.t2.AbstractWorkPage.MyWorkstatPage;
@@ -51,6 +53,7 @@ public class WorkflowUrlsFactory extends UrlsCache {
 		put(UserDelegateListTPage.class, UserDelegateListPage.class);
 		put(MyQueryWorksTPage.class, MyQueryWorksPage.class);
 		put(MyQueryWorks_DeptTPage.class, MyQueryWorks_DeptPage.class);
+		put(MyQueryWorks_OrgTPage.class, MyQueryWorks_OrgPage.class);
 		put(MyQueryWorks_RoleTPage.class, MyQueryWorks_RolePage.class);
 		put(MyWorkviewsTPage.class, MyWorkviewsPage.class);
 		put(MyWorkstatTPage.class, MyWorkstatPage.class);
