@@ -18,6 +18,7 @@ import net.simpleframework.workflow.engine.bean.WorkitemBean;
 import net.simpleframework.workflow.engine.participant.IParticipantHandler.AbstractParticipantHandler;
 import net.simpleframework.workflow.engine.participant.Participant;
 import net.simpleframework.workflow.schema.AbstractTaskNode;
+import net.simpleframework.workflow.schema.TransitionNode;
 import net.simpleframework.workflow.schema.UserNode;
 
 public class PRelativeRoleHandler extends AbstractParticipantHandler implements
@@ -34,6 +35,8 @@ public class PRelativeRoleHandler extends AbstractParticipantHandler implements
 	private final String PARAMS_KEY_level = "level";
 	// 指定部门，默认为空
 	private final String PARAMS_KEY_dept = "dept";
+	// send=1时,过虑已经过送过的并还在处理中的用户
+	private final String PARAMS_KEY_send = "send";
 
 	public enum Level {
 		internal {// 本部门
@@ -48,6 +51,10 @@ public class PRelativeRoleHandler extends AbstractParticipantHandler implements
 		higher {// 上级
 
 		}
+	}
+
+	protected UserNode getUserNode(final Map<String, Object> variables) {
+		return (UserNode) ((TransitionNode) variables.get("transition")).to();
 	}
 
 	@Override
@@ -129,8 +136,50 @@ public class PRelativeRoleHandler extends AbstractParticipantHandler implements
 
 		if (_participants != null && _participants.size() > 0) {
 			participants.addAll(_participants);
+
+			final String send = params.get(PARAMS_KEY_send);
+			if (StringUtils.hasText(send) && "1".equals(send)) {
+				// send=1时,过虑已经过送过的并还在处理中的用户
+				final UserNode unode = getUserNode(variables);
+				ID pid = activityComplete.getActivity().getProcessId();
+				List<ActivityBean> sends = aService.getActivities(pService.getBean(pid), unode.getId());
+				if (null != sends) {
+					for (ActivityBean act : sends) {
+						if (isFinalRunning(act)) {
+							List<WorkitemBean> items = wService.getWorkitems(act);
+							if (null != items) {
+								for (WorkitemBean item : items) {
+									for (Participant p : participants) {
+										if (p.userId.toString().equals(item.getUserId().toString())
+												&& p.deptId.toString().equals(item.getDeptId().toString())) {
+											participants.remove(p);
+											break;
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
 		}
 		return participants;
+	}
+
+	private boolean isFinalRunning(ActivityBean act) {
+		if (aService.isFinalStatus(act)) {
+			List<ActivityBean> nexts = aService.getNextActivities(act);
+			if (null != nexts) {
+				for (ActivityBean next : nexts) {
+					if (isFinalRunning(next)) {
+						return true;
+					}
+				}
+			}
+		} else {
+			return true;
+		}
+		return false;
 	}
 
 	/**
