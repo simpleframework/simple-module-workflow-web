@@ -147,7 +147,11 @@ public class PRelativeRoleHandler extends AbstractParticipantHandler implements
 				if (null != sends) {
 					for (ActivityBean act : sends) {
 						if (isFinalRunning(act, "1".equals(send))) {
-							List<WorkitemBean> items = wService.getWorkitems(act);
+							List<WorkitemBean> items = null;
+							if ("2".equals(send))
+								items = wService.getWorkitems(act, EWorkitemStatus.running);
+							else
+								items = wService.getWorkitems(act);
 							if (null != items) {
 								for (WorkitemBean item : items) {
 									for (Participant p : participants) {
