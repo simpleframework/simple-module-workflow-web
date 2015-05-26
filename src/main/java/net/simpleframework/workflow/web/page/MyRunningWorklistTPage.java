@@ -244,8 +244,9 @@ public class MyRunningWorklistTPage extends AbstractItemsTPage {
 		js.append("  bar.setProgress(").append(complete).append(");");
 		js.append("  container.insert(\"<div class='pinfo'>").append($m("MyRunningWorklistTPage.15"))
 				.append("<span>").append(NumberUtils.formatPercent((double) complete / maxValue))
-				.append(",</span><a href='").append(uFactory.getUrl(pp, MyWorkstatTPage.class))
-				.append("'>").append($m("MyRunningWorklistTPage.16")).append("</a></div>\");");
+				.append(",</span><a href='")
+				.append(pp.wrapContextPath(uFactory.getUrl(pp, MyWorkstatTPage.class))).append("'>")
+				.append($m("MyRunningWorklistTPage.16")).append("</a></div>\");");
 		js.append("}");
 		return js.toString();
 	}
