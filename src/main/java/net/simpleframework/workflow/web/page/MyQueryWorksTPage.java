@@ -100,11 +100,11 @@ public class MyQueryWorksTPage extends AbstractItemsTPage {
 				.getUrl(pp, MyQueryWorksTPage.class)));
 		final IWorkflowWebContext ctx = (IWorkflowWebContext) workflowContext;
 		if (pp.isLmember(ctx.getQueryWorks_DeptRole(pp))) {
-			tabs.append(new TabButton($m("MyQueryWorksTPage.5"), uFactory.getUrl(pp,
+			tabs.append(new TabButton(pp.getLogin().getDept(), uFactory.getUrl(pp,
 					MyQueryWorks_DeptTPage.class)));
 		}
 		if (pp.isLmember(ctx.getQueryWorks_OrgRole(pp))) {
-			tabs.append(new TabButton($m("MyQueryWorksTPage.8"), uFactory.getUrl(pp,
+			tabs.append(new TabButton($m("MyQueryWorksTPage.5"), uFactory.getUrl(pp,
 					MyQueryWorks_OrgTPage.class)));
 		}
 		tabs.append(new TabButton($m("MyQueryWorksTPage.6"), uFactory.getUrl(pp,

@@ -1,9 +1,10 @@
 package net.simpleframework.workflow.web.page;
 
+import static net.simpleframework.common.I18n.$m;
 import net.simpleframework.ado.query.IDataQuery;
 import net.simpleframework.mvc.PageParameter;
+import net.simpleframework.mvc.common.element.Checkbox;
 import net.simpleframework.mvc.common.element.ElementList;
-import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
 import net.simpleframework.workflow.engine.bean.ProcessBean;
@@ -47,7 +48,9 @@ public abstract class MyQueryWorksTPages {
 		@Override
 		public ElementList getLeftElements(final PageParameter pp) {
 			final ElementList el = ElementList.of();
-			el.append(new SpanElement(pp.getLogin().getDept()).setClassName("worklist_dept"));
+			if (pp.getLogin().getDept().hasChild()) {
+				el.add(new Checkbox("idMyQueryWorks_DeptTPage_children", $m("MyQueryWorksTPage.8")));
+			}
 			return el;
 		}
 
