@@ -167,6 +167,7 @@ public class PRelativeRoleHandler extends AbstractParticipantHandler implements
 		return participants;
 	}
 
+	// n是否包括后续
 	private boolean isFinalRunning(ActivityBean act, boolean n) {
 		if (aService.isFinalStatus(act)) {
 			if (n) {
