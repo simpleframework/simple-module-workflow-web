@@ -35,7 +35,8 @@ public class PRelativeRoleHandler extends AbstractParticipantHandler implements
 	private final String PARAMS_KEY_level = "level";
 	// 指定部门，默认为空
 	private final String PARAMS_KEY_dept = "dept";
-	// send=1时,过虑已经过送过的并还在处理中的用户
+	// send=1时，过虑已经过送过的并还在处理中的用户,并且包括后续有处理
+	// send=2时，过虑已经过送过的并还在处理中的用户,不包括后续
 	private final String PARAMS_KEY_send = "send";
 
 	public enum Level {
@@ -138,14 +139,14 @@ public class PRelativeRoleHandler extends AbstractParticipantHandler implements
 			participants.addAll(_participants);
 
 			final String send = params.get(PARAMS_KEY_send);
-			if (StringUtils.hasText(send) && "1".equals(send)) {
+			if (StringUtils.hasText(send) && ("1".equals(send) || "2".equals(send))) {
 				// send=1时,过虑已经过送过的并还在处理中的用户
 				final UserNode unode = getUserNode(variables);
 				ID pid = activityComplete.getActivity().getProcessId();
 				List<ActivityBean> sends = aService.getActivities(pService.getBean(pid), unode.getId());
 				if (null != sends) {
 					for (ActivityBean act : sends) {
-						if (isFinalRunning(act)) {
+						if (isFinalRunning(act, "1".equals(send))) {
 							List<WorkitemBean> items = wService.getWorkitems(act);
 							if (null != items) {
 								for (WorkitemBean item : items) {
@@ -166,13 +167,15 @@ public class PRelativeRoleHandler extends AbstractParticipantHandler implements
 		return participants;
 	}
 
-	private boolean isFinalRunning(ActivityBean act) {
+	private boolean isFinalRunning(ActivityBean act, boolean n) {
 		if (aService.isFinalStatus(act)) {
-			List<ActivityBean> nexts = aService.getNextActivities(act);
-			if (null != nexts) {
-				for (ActivityBean next : nexts) {
-					if (isFinalRunning(next)) {
-						return true;
+			if (n) {
+				List<ActivityBean> nexts = aService.getNextActivities(act);
+				if (null != nexts) {
+					for (ActivityBean next : nexts) {
+						if (isFinalRunning(next, n)) {
+							return true;
+						}
 					}
 				}
 			}
