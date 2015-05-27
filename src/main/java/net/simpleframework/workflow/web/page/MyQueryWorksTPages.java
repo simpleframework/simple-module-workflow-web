@@ -49,7 +49,7 @@ public abstract class MyQueryWorksTPages {
 		public ElementList getLeftElements(final PageParameter pp) {
 			final ElementList el = ElementList.of();
 			if (pp.getLdept().hasChild()) {
-				el.add(new Checkbox("idMyQueryWorks_DeptTPage_children", $m("MyQueryWorksTPage.8"))
+				el.add(new Checkbox("idMyQueryWorks_DeptTPage_children", $m("MyQueryWorksTPage.2"))
 						.setOnchange("$Actions['MyQueryWorksTPage_tbl']('child=true');"));
 			}
 			return el;

@@ -143,7 +143,7 @@ public class MyQueryWorksTPage extends AbstractItemsTPage {
 
 		protected String toOpeHTML(final ComponentParameter cp, final ProcessBean process) {
 			final StringBuilder ope = new StringBuilder();
-			ope.append(new ButtonElement($m("MyQueryWorksTPage.2"))
+			ope.append(new ButtonElement($m("MyQueryWorksTPage.1"))
 					.setOnclick("$Actions['MyQueryWorksTPage_workitems']('processId=" + process.getId()
 							+ "');"));
 			return ope.toString();
@@ -178,7 +178,7 @@ public class MyQueryWorksTPage extends AbstractItemsTPage {
 			String t = $m("MyQueryWorksTPage.1");
 			final ProcessBean process = WorkflowUtils.getProcessBean(pp);
 			if (process != null) {
-				t += " - " + process.getTitle();
+				t += " - " + WorkflowUtils.getProcessTitle(process);
 			}
 			return t;
 		}
