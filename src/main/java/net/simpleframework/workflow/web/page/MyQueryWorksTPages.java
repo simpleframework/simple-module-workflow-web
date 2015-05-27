@@ -50,7 +50,7 @@ public abstract class MyQueryWorksTPages {
 			final ElementList el = ElementList.of();
 			if (pp.getLdept().hasChild()) {
 				el.add(new Checkbox("idMyQueryWorks_DeptTPage_children", $m("MyQueryWorksTPage.8"))
-						.setOnchange("alert(2)"));
+						.setOnchange("$Actions['MyQueryWorksTPage_tbl']('child=true');"));
 			}
 			return el;
 		}
@@ -58,7 +58,9 @@ public abstract class MyQueryWorksTPages {
 		public static class MyQueryWorks_DeptTbl extends MyQueryWorksTbl {
 			@Override
 			public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
-				return pService.getProcessListInDept(cp.getLdept().getId(), false);
+				final boolean child = cp.getBoolParameter("child");
+				cp.addFormParameter("child", child);
+				return pService.getProcessListInDept(cp.getLdept().getId(), child);
 			}
 		}
 	}

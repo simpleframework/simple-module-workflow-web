@@ -209,16 +209,19 @@ public class MyQueryWorksTPage extends AbstractItemsTPage {
 					.add("userFrom", WorkflowUtils.getUserFrom(activity))
 					.add("createDate", workitem.getCreateDate())
 					.add("completeDate", workitem.getCompleteDate())
-					.add("status", WorkflowUtils.toStatusHTML(cp, workitem.getStatus()));
+					.add("status", WorkflowUtils.toStatusHTML(cp, workitem.getStatus()))
+					.add(TablePagerColumn.OPE, toOpeHTML(cp, workitem));
+			return row;
+		}
 
+		protected String toOpeHTML(final ComponentParameter cp, final WorkitemBean workitem) {
 			final StringBuilder ope = new StringBuilder();
 			ope.append(new ButtonElement($m("MyQueryWorksTPage.3")).setOnclick("$Actions.loc('"
 					+ uFactory.getUrl(cp, WorkflowFormPage.class, workitem) + "');"));
 			ope.append(SpanElement.SPACE);
 			ope.append(new ButtonElement($m("WorkflowFormPage.1")).setOnclick("$Actions.loc('"
 					+ uFactory.getUrl(cp, WorkflowMonitorPage.class, workitem) + "');"));
-			row.add(TablePagerColumn.OPE, ope.toString());
-			return row;
+			return ope.toString();
 		}
 	}
 }
