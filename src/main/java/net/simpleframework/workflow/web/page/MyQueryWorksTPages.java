@@ -48,7 +48,7 @@ public abstract class MyQueryWorksTPages {
 		@Override
 		public ElementList getLeftElements(final PageParameter pp) {
 			final ElementList el = ElementList.of();
-			if (pp.getLogin().getDept().hasChild()) {
+			if (pp.getLdept().hasChild()) {
 				el.add(new Checkbox("idMyQueryWorks_DeptTPage_children", $m("MyQueryWorksTPage.8"))
 						.setOnchange("alert(2)"));
 			}
@@ -58,7 +58,7 @@ public abstract class MyQueryWorksTPages {
 		public static class MyQueryWorks_DeptTbl extends MyQueryWorksTbl {
 			@Override
 			public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
-				return pService.getProcessListInDept(cp.getLogin().getDept().getId());
+				return pService.getProcessListInDept(cp.getLdept().getId(), false);
 			}
 		}
 	}
