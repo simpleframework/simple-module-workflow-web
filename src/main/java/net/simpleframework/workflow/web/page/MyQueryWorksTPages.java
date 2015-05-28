@@ -1,7 +1,13 @@
 package net.simpleframework.workflow.web.page;
 
 import static net.simpleframework.common.I18n.$m;
+
+import java.util.List;
+
 import net.simpleframework.ado.query.IDataQuery;
+import net.simpleframework.common.ID;
+import net.simpleframework.common.coll.ArrayUtils;
+import net.simpleframework.ctx.permission.PermissionDept;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.Checkbox;
 import net.simpleframework.mvc.common.element.ElementList;
@@ -50,7 +56,7 @@ public abstract class MyQueryWorksTPages {
 			final ElementList el = ElementList.of();
 			if (pp.getLdept().hasChild()) {
 				el.add(new Checkbox("idMyQueryWorks_DeptTPage_children", $m("MyQueryWorksTPage.2"))
-						.setOnchange("$Actions['MyQueryWorksTPage_tbl']('child=true');"));
+						.setOnchange("$Actions['MyQueryWorksTPage_tbl']('child=' + this.checked);"));
 			}
 			return el;
 		}
@@ -60,7 +66,14 @@ public abstract class MyQueryWorksTPages {
 			public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
 				final boolean child = cp.getBoolParameter("child");
 				cp.addFormParameter("child", child);
-				return pService.getProcessListInDept(cp.getLdept().getId(), child);
+				final PermissionDept dept = cp.getLogin().getDept();
+				final List<Object> deptIds = ArrayUtils.toParams(dept.getId());
+				if (child) {
+					for (final PermissionDept _dept : dept.getChildren()) {
+						deptIds.add(_dept.getId());
+					}
+				}
+				return pService.getProcessListInDept(deptIds.toArray(new ID[deptIds.size()]));
 			}
 		}
 	}
