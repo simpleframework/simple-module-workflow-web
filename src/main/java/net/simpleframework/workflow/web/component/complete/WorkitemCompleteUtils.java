@@ -177,7 +177,9 @@ public abstract class WorkitemCompleteUtils implements IWorkflowServiceAware {
 			sb.append(" <div class='participants'>");
 			final Collection<Participant> coll = activityComplete.getParticipants(transition);
 			if (coll == null || coll.size() == 0) {
-				sb.append("#(participant_select.0)");
+				sb.append("<div class='msg'>");
+				sb.append(" <span>#(participant_select.1)</span>");
+				sb.append("</div>");
 			} else {
 				final boolean manual = activityComplete.isParticipantManual(to);
 				final boolean multi = activityComplete.isParticipantMultiSelected(to);

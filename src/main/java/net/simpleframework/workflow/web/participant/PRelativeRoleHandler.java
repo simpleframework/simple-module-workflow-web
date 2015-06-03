@@ -142,19 +142,21 @@ public class PRelativeRoleHandler extends AbstractParticipantHandler implements
 			if (StringUtils.hasText(send) && ("1".equals(send) || "2".equals(send))) {
 				// send=1时,过虑已经过送过的并还在处理中的用户
 				final UserNode unode = getUserNode(variables);
-				ID pid = activityComplete.getActivity().getProcessId();
-				List<ActivityBean> sends = aService.getActivities(pService.getBean(pid), unode.getId());
+				final ID pid = activityComplete.getActivity().getProcessId();
+				final List<ActivityBean> sends = aService.getActivities(pService.getBean(pid),
+						unode.getId());
 				if (null != sends) {
-					for (ActivityBean act : sends) {
+					for (final ActivityBean act : sends) {
 						if (isFinalRunning(act, "1".equals(send))) {
 							List<WorkitemBean> items = null;
-							if ("2".equals(send))
+							if ("2".equals(send)) {
 								items = wService.getWorkitems(act, EWorkitemStatus.running);
-							else
+							} else {
 								items = wService.getWorkitems(act);
+							}
 							if (null != items) {
-								for (WorkitemBean item : items) {
-									for (Participant p : participants) {
+								for (final WorkitemBean item : items) {
+									for (final Participant p : participants) {
 										if (p.userId.toString().equals(item.getUserId().toString())
 												&& p.deptId.toString().equals(item.getDeptId().toString())) {
 											participants.remove(p);
@@ -172,12 +174,12 @@ public class PRelativeRoleHandler extends AbstractParticipantHandler implements
 	}
 
 	// n是否包括后续
-	private boolean isFinalRunning(ActivityBean act, boolean n) {
+	private boolean isFinalRunning(final ActivityBean act, final boolean n) {
 		if (aService.isFinalStatus(act)) {
 			if (n) {
-				List<ActivityBean> nexts = aService.getNextActivities(act);
+				final List<ActivityBean> nexts = aService.getNextActivities(act);
 				if (null != nexts) {
-					for (ActivityBean next : nexts) {
+					for (final ActivityBean next : nexts) {
 						if (isFinalRunning(next, n)) {
 							return true;
 						}
