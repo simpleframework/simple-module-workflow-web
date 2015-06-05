@@ -1,8 +1,12 @@
 package net.simpleframework.workflow.web.component.comments;
 
+import net.simpleframework.mvc.PageParameter;
+import net.simpleframework.mvc.component.AbstractComponentBean;
 import net.simpleframework.mvc.component.AbstractComponentRegistry;
 import net.simpleframework.mvc.component.ComponentBean;
+import net.simpleframework.mvc.component.ComponentHtmlRenderEx;
 import net.simpleframework.mvc.component.ComponentName;
+import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.ComponentRender;
 import net.simpleframework.mvc.component.ComponentResourceProvider;
 
@@ -19,4 +23,11 @@ import net.simpleframework.mvc.component.ComponentResourceProvider;
 public class WfCommentRegistry extends AbstractComponentRegistry {
 
 	public static final String WF_COMMENT = "wf_comment";
+
+	@Override
+	public AbstractComponentBean createComponentBean(final PageParameter pp, final Object attriData) {
+		final WfCommentBean commentBean = (WfCommentBean) super.createComponentBean(pp, attriData);
+		ComponentHtmlRenderEx.createAjaxRequest(ComponentParameter.get(pp, commentBean));
+		return commentBean;
+	}
 }

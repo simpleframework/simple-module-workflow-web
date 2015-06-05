@@ -2,12 +2,17 @@ package net.simpleframework.workflow.web.page;
 
 import static net.simpleframework.common.I18n.$m;
 
+import java.io.IOException;
 import java.util.Date;
+import java.util.Map;
 
 import net.simpleframework.common.Convert;
 import net.simpleframework.common.ID;
 import net.simpleframework.common.coll.KVMap;
+import net.simpleframework.common.web.JavascriptUtils;
 import net.simpleframework.ctx.trans.Transaction;
+import net.simpleframework.mvc.AbstractMVCPage;
+import net.simpleframework.mvc.IForward;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.AbstractElement;
@@ -22,6 +27,7 @@ import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.base.validation.EValidatorMethod;
 import net.simpleframework.mvc.component.base.validation.ValidationBean;
 import net.simpleframework.mvc.component.base.validation.Validator;
+import net.simpleframework.mvc.template.lets.FormTableRowTemplatePage;
 import net.simpleframework.workflow.engine.EWorkitemStatus;
 import net.simpleframework.workflow.engine.IWorkflowContext;
 import net.simpleframework.workflow.engine.WorkitemComplete;
@@ -55,6 +61,8 @@ public abstract class AbstractWorkflowFormTPage extends AbstractFormTableRowTPag
 	protected void onForward(final PageParameter pp) {
 		super.onForward(pp);
 
+		// 自动保存
+		addAutoSaveComponentBean(pp);
 		// 完成
 		addWorkitemCompleteComponentBean(pp);
 
@@ -79,6 +87,10 @@ public abstract class AbstractWorkflowFormTPage extends AbstractFormTableRowTPag
 				pp.setSessionAttr(k, Boolean.TRUE);
 			}
 		}
+	}
+
+	protected void addAutoSaveComponentBean(final PageParameter pp) {
+		addAjaxRequest(pp, "AbstractWorkflowFormTPage_autosave").setHandlerMethod("onAutosave");
 	}
 
 	protected WorkitemCompleteBean addWorkitemCompleteComponentBean(final PageParameter pp) {
@@ -233,5 +245,47 @@ public abstract class AbstractWorkflowFormTPage extends AbstractFormTableRowTPag
 	protected String getTaskNodeProperty(final PageParameter pp, final String key) {
 		final AbstractTaskNode node = getTaskNode(pp);
 		return node == null ? null : node.getProperty(key);
+	}
+
+	public IForward onAutosave(final ComponentParameter cp) {
+		System.out.println("onAutosave");
+		return null;
+	}
+
+	protected int getAutosaveFrequency() {
+		return 5;
+	}
+
+	@Override
+	protected String toHtml(final PageParameter pp,
+			final Class<? extends AbstractMVCPage> pageClass, final Map<String, Object> variables,
+			final String currentVariable) throws IOException {
+		String html = super.toHtml(pp, pageClass, variables, currentVariable);
+		if (FormTableRowTemplatePage.class.equals(pageClass)) {
+			final StringBuffer js = new StringBuffer();
+			js.append("var CHANGE_MARK;");
+			js.append("var _form = $('#").append(getBlockId()).append(" form');");
+			js.append("if (_form) {");
+			js.append(" var _func = function() { CHANGE_MARK = true; };");
+			js.append(" _form.getElements().invoke('observe', 'input', _func).invoke('observe', 'propertychange', _func);");
+			js.append("}");
+
+			// 添加确定退出
+			// js.append("window.onbeforeunload = function(event) {");
+			// js.append(" if (CHANGE_MARK) { return '确定退出吗'; }");
+			// js.append("};");
+
+			// 添加自动保存代码
+			js.append("new PeriodicalExecuter(function(executer) {");
+			js.append(" if (CHANGE_MARK) {");
+			js.append("	 var act = $Actions['AbstractWorkflowFormTPage_autosave'];");
+			js.append("  act.jsCompleteCallback = function() { CHANGE_MARK = false; };");
+			js.append("  act();");
+			js.append(" }");
+			js.append("}, ").append(getAutosaveFrequency()).append(");");
+
+			html += JavascriptUtils.wrapScriptTag(js.toString(), true);
+		}
+		return html;
 	}
 }
