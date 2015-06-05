@@ -267,7 +267,8 @@ public abstract class AbstractWorkflowFormTPage extends AbstractFormTableRowTPag
 			js.append("var _form = $('#").append(getBlockId()).append(" form');");
 			js.append("if (_form) {");
 			js.append(" var _func = function() { CHANGE_MARK = true; };");
-			js.append(" _form.getElements().invoke('observe', 'input', _func).invoke('observe', 'propertychange', _func);");
+			js.append(" _form.getElements().invoke('observe', 'input', _func).").append(
+					"invoke('observe', 'propertychange', _func);");
 			js.append("}");
 
 			// 添加确定退出
