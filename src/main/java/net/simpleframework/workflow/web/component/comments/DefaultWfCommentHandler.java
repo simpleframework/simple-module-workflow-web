@@ -10,6 +10,7 @@ import java.util.Map;
 
 import net.simpleframework.ado.query.DataQueryUtils;
 import net.simpleframework.ado.query.IDataQuery;
+import net.simpleframework.common.Convert;
 import net.simpleframework.common.DateUtils;
 import net.simpleframework.common.StringUtils;
 import net.simpleframework.common.coll.ArrayUtils;
@@ -165,11 +166,16 @@ public class DefaultWfCommentHandler extends ComponentHandlerEx implements IWfCo
 		return data;
 	}
 
+	protected final static String COOKIE_GROUPBY = "wfcomment_groupby";
+
 	@Override
 	public String toHTML(final ComponentParameter cp) {
 		final WorkitemBean workitem = WorkflowUtils.getWorkitemBean(cp);
 
 		EGroupBy groupBy = cp.getEnumParameter(EGroupBy.class, "groupBy");
+		if (groupBy == null) {
+			groupBy = Convert.toEnum(EGroupBy.class, cp.getCookie(COOKIE_GROUPBY));
+		}
 		if (groupBy == null) {
 			groupBy = (EGroupBy) cp.getBeanProperty("groupBy");
 		}
@@ -205,7 +211,11 @@ public class DefaultWfCommentHandler extends ComponentHandlerEx implements IWfCo
 			sb.append("function _wf_comment_radio_click(groupBy) {");
 			sb.append(" var val = $F('ta_wfcomment');");
 			sb.append(" var act = $Actions['").append(cp.getComponentName()).append("'];");
-			sb.append(" act.jsCompleteCallback = function() { $('ta_wfcomment').setValue(val); };");
+			sb.append(" act.jsCompleteCallback = function() {");
+			sb.append("  $('ta_wfcomment').setValue(val);");
+			sb.append("  document.setCookie('").append(COOKIE_GROUPBY)
+					.append("', groupBy, 24 * 365);");
+			sb.append(" };");
 			sb.append(" act('workitemId=").append(workitem.getId()).append("&groupBy=' + groupBy);");
 			sb.append("}");
 			sb.append(HtmlConst.TAG_SCRIPT_END);
