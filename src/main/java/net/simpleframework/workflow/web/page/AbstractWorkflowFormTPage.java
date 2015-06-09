@@ -90,7 +90,8 @@ public abstract class AbstractWorkflowFormTPage extends AbstractFormTableRowTPag
 	}
 
 	protected void addAutoSaveComponentBean(final PageParameter pp) {
-		addAjaxRequest(pp, "AbstractWorkflowFormTPage_autosave").setHandlerMethod("onAutosave");
+		addAjaxRequest(pp, "AbstractWorkflowFormTPage_autosave").setHandlerMethod("doAutosave")
+				.setSelector(getFormSelector());
 	}
 
 	protected WorkitemCompleteBean addWorkitemCompleteComponentBean(final PageParameter pp) {
@@ -118,7 +119,11 @@ public abstract class AbstractWorkflowFormTPage extends AbstractFormTableRowTPag
 		pService.doUpdateKV(process, new KVMap().add("title", pp.getParameter(getParamKey_title()))
 				.add("pno", pp.getParameter(getParamKey_pno())));
 
-		// 添加了评论
+		// 添加评论
+		doCommentSave(pp);
+	}
+
+	protected void doCommentSave(final PageParameter pp) {
 		final ComponentParameter nCP = WfCommentUtils.get(pp);
 		if (nCP.componentBean != null) {
 			((IWfCommentHandler) nCP.getComponentHandler()).onSave(nCP);
@@ -147,12 +152,13 @@ public abstract class AbstractWorkflowFormTPage extends AbstractFormTableRowTPag
 
 	@Override
 	public ElementList getLeftElements(final PageParameter pp) {
-		final ElementList el = ElementList.of();
+		final SpanElement sEle = new SpanElement().setId("idAbstractWorkflowFormTPage_saveInfo")
+				.setStyle("line-height: 2;color: green");
+		final ElementList el = ElementList.of(sEle);
 		final WorkitemBean workitem = getWorkitemBean(pp);
 		final Date date = (Date) pp.getSessionAttr("time_" + workitem.getId());
 		if (date != null) {
-			el.add(new SpanElement($m("AbstractWorkflowFormTPage.0",
-					Convert.toDateString(date, "HH:mm"))).setStyle("line-height: 2;color: green"));
+			sEle.setText($m("AbstractWorkflowFormTPage.0", Convert.toDateString(date, "HH:mm")));
 		}
 		return el;
 	}
@@ -247,13 +253,32 @@ public abstract class AbstractWorkflowFormTPage extends AbstractFormTableRowTPag
 		return node == null ? null : node.getProperty(key);
 	}
 
-	public IForward onAutosave(final ComponentParameter cp) {
-		System.out.println("onAutosave");
-		return null;
+	public void onAutosaveForm(final PageParameter pp, final WorkitemBean workitem) {
+		// 保存意见
+		doCommentSave(pp);
+	}
+
+	public IForward doAutosave(final ComponentParameter cp) {
+		final WorkitemBean workitem = getWorkitemBean(cp);
+		onAutosaveForm(cp, workitem);
+		final Date date = new Date();
+		cp.setSessionAttr("time_" + workitem.getId(), date);
+		return toAutosaveJavascriptForward(cp, date);
+	}
+
+	protected JavascriptForward toAutosaveJavascriptForward(final ComponentParameter cp,
+			final Date date) {
+		final JavascriptForward js = new JavascriptForward();
+		js.append("var act = $Actions['AbstractWorkflowFormTPage_autosave'];");
+		js.append("act.CHANGE_MARK = false;");
+		js.append("$('idAbstractWorkflowFormTPage_saveInfo').innerHTML = '")
+				.append($m("AbstractWorkflowFormTPage.2", Convert.toDateString(date, "HH:mm")))
+				.append("';");
+		return js;
 	}
 
 	protected int getAutosaveFrequency() {
-		return 5;
+		return 60;
 	}
 
 	@Override
@@ -263,12 +288,12 @@ public abstract class AbstractWorkflowFormTPage extends AbstractFormTableRowTPag
 		String html = super.toHtml(pp, pageClass, variables, currentVariable);
 		if (FormTableRowTemplatePage.class.equals(pageClass)) {
 			final StringBuffer js = new StringBuffer();
-			js.append("var CHANGE_MARK;");
 			js.append("var _form = $('#").append(getBlockId()).append(" form');");
 			js.append("if (_form) {");
-			js.append(" var _func = function() { CHANGE_MARK = true; };");
-			js.append(" _form.getElements().invoke('observe', 'input', _func).").append(
-					"invoke('observe', 'propertychange', _func);");
+			js.append("	var act = $Actions['AbstractWorkflowFormTPage_autosave'];");
+			js.append(" var _func = function() { act.CHANGE_MARK = true; };");
+			js.append(" var eles = _form.select('#ta_wfcomment');"); // _form.getElements()
+			js.append(" eles.invoke('observe', 'input', _func).invoke('observe', 'propertychange', _func);");
 			js.append("}");
 
 			// 添加确定退出
@@ -278,11 +303,8 @@ public abstract class AbstractWorkflowFormTPage extends AbstractFormTableRowTPag
 
 			// 添加自动保存代码
 			js.append("new PeriodicalExecuter(function(executer) {");
-			js.append(" if (CHANGE_MARK) {");
-			js.append("	 var act = $Actions['AbstractWorkflowFormTPage_autosave'];");
-			js.append("  act.jsCompleteCallback = function() { CHANGE_MARK = false; };");
-			js.append("  act();");
-			js.append(" }");
+			js.append("	var act = $Actions['AbstractWorkflowFormTPage_autosave'];");
+			js.append(" if (act.CHANGE_MARK) { act(); }");
 			js.append("}, ").append(getAutosaveFrequency()).append(");");
 
 			html += JavascriptUtils.wrapScriptTag(js.toString(), true);

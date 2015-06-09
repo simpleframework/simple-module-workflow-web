@@ -12,6 +12,7 @@ import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.common.element.TabButton;
 import net.simpleframework.mvc.common.element.TabButtons;
 import net.simpleframework.workflow.engine.bean.WorkitemBean;
+import net.simpleframework.workflow.schema.AbstractTaskNode;
 import net.simpleframework.workflow.web.IWorkflowWebForm;
 import net.simpleframework.workflow.web.WorkflowUrlsFactory;
 import net.simpleframework.workflow.web.WorkflowUtils;
@@ -43,7 +44,9 @@ public class WorkflowFormPage extends AbstractWorkflowFormPage {
 	@Override
 	public ElementList getLeftElements(final PageParameter pp) {
 		final ElementList el = super.getLeftElements(pp);
-		el.append(SpanElement.SPACE15, SpanElement.strongText(WorkflowUtils.getTaskNode(pp)));
+		final AbstractTaskNode taskNode = WorkflowUtils.getTaskNode(pp);
+		el.append(SpanElement.SPACE15,
+				SpanElement.strongText(taskNode.getParent() + " - " + taskNode));
 		return el;
 	}
 
