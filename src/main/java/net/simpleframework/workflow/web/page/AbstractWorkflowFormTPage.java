@@ -168,8 +168,9 @@ public abstract class AbstractWorkflowFormTPage extends AbstractFormTableRowTPag
 	}
 
 	protected AbstractElement<?> createCompleteBtn(final PageParameter pp) {
-		return VALIDATION_BTN2($m("AbstractWorkflowFormPage.1")).setIconClass(Icon.check).setOnclick(
-				"$Actions['AbstractWorkflowFormPage_completeAction']();");
+		return VALIDATION_BTN2($m("AbstractWorkflowFormPage.1")).setIconClass(Icon.check)
+				.setHighlight(true)
+				.setOnclick("$Actions['AbstractWorkflowFormPage_completeAction']();");
 	}
 
 	@Override
@@ -177,7 +178,7 @@ public abstract class AbstractWorkflowFormTPage extends AbstractFormTableRowTPag
 		final WorkitemBean workitem = getWorkitemBean(pp);
 		final ElementList el = ElementList.of();
 		if (!isReadonly(workitem)) {
-			el.append(createSaveBtn(pp), createCompleteBtn(pp));
+			el.append(createSaveBtn(pp), SpanElement.SPACE, createCompleteBtn(pp));
 		}
 		return el;
 	}
