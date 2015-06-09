@@ -152,13 +152,19 @@ public abstract class AbstractWorkflowFormTPage extends AbstractFormTableRowTPag
 
 	@Override
 	public ElementList getLeftElements(final PageParameter pp) {
-		final SpanElement sEle = new SpanElement().setId("idAbstractWorkflowFormTPage_saveInfo")
-				.setStyle("line-height: 2;color: green");
-		final ElementList el = ElementList.of(sEle);
 		final WorkitemBean workitem = getWorkitemBean(pp);
-		final Date date = (Date) pp.getSessionAttr("time_" + workitem.getId());
-		if (date != null) {
-			sEle.setText($m("AbstractWorkflowFormTPage.0", Convert.toDateString(date, "HH:mm")));
+		final ElementList el = ElementList.of();
+		if (!isReadonly(workitem)) {
+			final SpanElement sEle = new SpanElement().setId("idAbstractWorkflowFormTPage_saveInfo")
+					.setStyle("line-height: 2;color: green");
+			el.add(sEle);
+			final Date date = (Date) pp.getSessionAttr("time_" + workitem.getId());
+			if (date != null) {
+				sEle.setText($m("AbstractWorkflowFormTPage.0", Convert.toDateString(date, "HH:mm")));
+			}
+		} else {
+			el.add(SpanElement.strongText(WorkflowUtils.getProcessTitle(WorkflowUtils.getProcessBean(
+					pp, workitem))));
 		}
 		return el;
 	}

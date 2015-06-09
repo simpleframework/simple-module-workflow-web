@@ -7,12 +7,13 @@ import java.util.Map;
 
 import net.simpleframework.mvc.PageMapping;
 import net.simpleframework.mvc.PageParameter;
+import net.simpleframework.mvc.common.element.BlockElement;
 import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.common.element.TabButton;
 import net.simpleframework.mvc.common.element.TabButtons;
+import net.simpleframework.workflow.engine.bean.ActivityBean;
 import net.simpleframework.workflow.engine.bean.WorkitemBean;
-import net.simpleframework.workflow.schema.AbstractTaskNode;
 import net.simpleframework.workflow.web.IWorkflowWebForm;
 import net.simpleframework.workflow.web.WorkflowUrlsFactory;
 import net.simpleframework.workflow.web.WorkflowUtils;
@@ -44,9 +45,16 @@ public class WorkflowFormPage extends AbstractWorkflowFormPage {
 	@Override
 	public ElementList getLeftElements(final PageParameter pp) {
 		final ElementList el = super.getLeftElements(pp);
-		final AbstractTaskNode taskNode = WorkflowUtils.getTaskNode(pp);
-		el.append(SpanElement.SPACE15,
-				SpanElement.strongText(taskNode.getParent() + " - " + taskNode));
+		final StringBuilder sb = new StringBuilder();
+		final ActivityBean activity = WorkflowUtils.getActivityBean(pp);
+		sb.append("<span class='l1'>").append(activity);
+		final String userFrom = WorkflowUtils.getUserFrom(activity);
+		if (userFrom != null) {
+			sb.append(" (来自").append(userFrom).append(")");
+		}
+		sb.append("</span><br>");
+		sb.append("<span class='l2'>").append(WorkflowUtils.getProcessModel(pp)).append("</span>");
+		el.append(new BlockElement().setClassName("taskinfo").addHtml(sb.toString()));
 		return el;
 	}
 
