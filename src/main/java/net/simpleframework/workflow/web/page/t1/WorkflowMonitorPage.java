@@ -104,7 +104,8 @@ public class WorkflowMonitorPage extends AbstractWorkflowFormPage {
 
 	protected String toMonitorHTML(final PageParameter pp) {
 		final StringBuilder sb = new StringBuilder();
-		sb.append("<div class='tb'>").append("</div>");
+		sb.append("<div class='tb'>");
+		sb.append("</div>");
 		sb.append("<div id='idWorkflowMonitorPage_tbl'></div>");
 		return sb.toString();
 	}
