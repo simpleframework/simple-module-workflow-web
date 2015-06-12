@@ -187,45 +187,49 @@ public class DefaultWfCommentHandler extends ComponentHandlerEx implements IWfCo
 			sb.append("<div class='ta'>");
 			sb.append(createCommentTa(cp, workitem));
 			sb.append("</div>");
-			sb.append("<div class='btns clearfix'>");
+		}
+		sb.append("<div class='btns clearfix'>");
+		if (editable) {
 			sb.append(" <div class='left'>");
 			sb.append("   <a class='simple_btn2' onclick=\"$Actions['").append(commentName)
 					.append("_log_popup']();\">#(DefaultWfCommentHandler.0)</a>");
 			sb.append("	  <span class='ltxt'></span>");
 			sb.append(" </div>");
-			sb.append(" <div class='right'>");
-			int i = 0;
-			for (final EGroupBy g : EGroupBy.values()) {
-				final String rn = "comments_groupby";
-				sb.append(
-						new Radio(rn + i++, g).setName(rn).setChecked(groupBy == g)
-								.setOnclick("_wf_comment_radio_click('" + g.name() + "');")).append(
-						SpanElement.SPACE);
-			}
-			sb.append(SpanElement.SPACE(20)).append(
-					new Checkbox("id" + commentName + "_addCheck", $m("DefaultWfCommentHandler.1"))
-							.setName("cb_wfcomment").setValue("true"));
-			sb.append(" </div>");
-			sb.append("</div>");
-			sb.append(HtmlConst.TAG_SCRIPT_START);
-			sb.append("function _wf_comment_radio_click(groupBy) {");
-			sb.append(" var val = $F('ta_wfcomment');");
-			sb.append(" var act = $Actions['").append(cp.getComponentName()).append("'];");
-			sb.append(" act.jsCompleteCallback = function() {");
-			sb.append("  $('ta_wfcomment').setValue(val);");
-			sb.append("  document.setCookie('").append(COOKIE_GROUPBY)
-					.append("', groupBy, 24 * 365);");
-			sb.append(" };");
-			sb.append(" act('workitemId=").append(workitem.getId()).append("&groupBy=' + groupBy);");
-			sb.append("}");
-			sb.append(HtmlConst.TAG_SCRIPT_END);
 		}
+		sb.append(" <div class='right'>");
+		int i = 0;
+		for (final EGroupBy g : EGroupBy.values()) {
+			final String rn = "comments_groupby";
+			sb.append(
+					new Radio(rn + i++, g).setName(rn).setChecked(groupBy == g)
+							.setOnclick("_wf_comment_radio_click('" + g.name() + "');")).append(
+					SpanElement.SPACE);
+		}
+		sb.append(SpanElement.SPACE(20));
+		if (editable) {
+			sb.append(new Checkbox("id" + commentName + "_addCheck", $m("DefaultWfCommentHandler.1"))
+					.setName("cb_wfcomment").setValue("true"));
+		}
+		sb.append(" </div>");
+		sb.append("</div>");
+		sb.append(HtmlConst.TAG_SCRIPT_START);
+		sb.append("function _wf_comment_radio_click(groupBy) {");
+		sb.append(" var val = $F('ta_wfcomment');");
+		sb.append(" var act = $Actions['").append(cp.getComponentName()).append("'];");
+		sb.append(" act.jsCompleteCallback = function() {");
+		sb.append("  var ta = $('ta_wfcomment');");
+		sb.append("  if (ta) ta.setValue(val);");
+		sb.append("  document.setCookie('").append(COOKIE_GROUPBY).append("', groupBy, 24 * 365);");
+		sb.append(" };");
+		sb.append(" act('workitemId=").append(workitem.getId()).append("&groupBy=' + groupBy);");
+		sb.append("}");
+		sb.append(HtmlConst.TAG_SCRIPT_END);
 
 		final WfComment comment2 = workflowContext.getCommentService().getCurComment(workitem);
 
 		final StringBuilder sb2 = new StringBuilder();
 		if (groupBy == EGroupBy.none) {
-			int i = 0;
+			i = 0;
 			final IDataQuery<WfComment> dq = comments(cp);
 			WfComment comment;
 			while ((comment = dq.next()) != null) {
@@ -246,7 +250,7 @@ public class DefaultWfCommentHandler extends ComponentHandlerEx implements IWfCo
 				}
 				if (list.size() > 0) {
 					sb2.append("<div class='comment-group-item'>").append(e.getKey()).append("</div>");
-					int i = 0;
+					i = 0;
 					for (final WfComment comment : list) {
 						sb2.append(toCommentItemHTML(cp, comment, i++ == 0, groupBy));
 					}
