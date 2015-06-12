@@ -16,6 +16,7 @@ import net.simpleframework.common.ID;
 import net.simpleframework.common.NumberUtils;
 import net.simpleframework.common.StringUtils;
 import net.simpleframework.common.coll.KVMap;
+import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.ButtonElement;
 import net.simpleframework.mvc.common.element.LinkElement;
 import net.simpleframework.mvc.common.element.ProgressElement;
@@ -47,7 +48,10 @@ public class ActivityTbl extends GroupDbTablePagerHandler implements IWorkflowSe
 		final ProcessBean process = WorkflowUtils.getProcessBean(cp);
 		if (process != null) {
 			cp.addFormParameter("processId", process.getId());
-			final List<ActivityBean> list = toTreeList(aService.getActivities(process));
+			List<ActivityBean> list = aService.getActivities(process);
+			if (isTreeview(cp)) {
+				list = toTreeList(list);
+			}
 			setRelativeDate(cp, list);
 			return new ListDataQuery<ActivityBean>(list);
 		}
@@ -62,11 +66,24 @@ public class ActivityTbl extends GroupDbTablePagerHandler implements IWorkflowSe
 		final String taskid = cp.getParameter("taskid");
 		if (StringUtils.hasText(taskid)) {
 			cp.addFormParameter("taskid", taskid);
-			final List<ActivityBean> list = toTreeList(aService.getActivities(process, taskid));
+			List<ActivityBean> list = aService.getActivities(process, taskid);
+			if (isTreeview(cp)) {
+				list = toTreeList(list);
+			}
 			setRelativeDate(cp, list);
 			return new ListDataQuery<ActivityBean>(list);
 		}
 		return null;
+	}
+
+	public final static String COOKIE_TREEVIEW = "wf_monitor_treeview";
+
+	protected boolean isTreeview(final PageParameter pp) {
+		String treeview = pp.getParameter("treeview");
+		if (!StringUtils.hasText(treeview)) {
+			treeview = pp.getCookie(COOKIE_TREEVIEW);
+		}
+		return Convert.toBool(treeview, true);
 	}
 
 	protected List<ActivityBean> toTreeList(final List<ActivityBean> list) {
@@ -138,11 +155,18 @@ public class ActivityTbl extends GroupDbTablePagerHandler implements IWorkflowSe
 	protected Map<String, Object> getRowData(final ComponentParameter cp, final Object dataObject) {
 		final ActivityBean activity = (ActivityBean) dataObject;
 		final KVMap row = new KVMap();
-		String space = "";
-		for (int i = 0; i < Convert.toInt(activity.getAttr("_margin")); i++) {
-			space += i == 0 ? "| -- " : " -- ";
+
+		final StringBuilder tn = new StringBuilder();
+		if (isTreeview(cp)) {
+			String space = "";
+			for (int i = 0; i < Convert.toInt(activity.getAttr("_margin")); i++) {
+				space += i == 0 ? "| -- " : " -- ";
+			}
+			tn.append(space);
 		}
-		row.add("tasknode", space + toTasknode(activity));
+		tn.append(toTasknode(activity));
+		row.add("tasknode", tn.toString());
+
 		final ActivityBean pre = aService.getPreActivity(activity);
 		if (pre != null) {
 			final EActivityStatus pstatus = pre.getStatus();

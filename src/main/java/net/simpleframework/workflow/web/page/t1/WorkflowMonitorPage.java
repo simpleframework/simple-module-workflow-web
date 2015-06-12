@@ -7,6 +7,7 @@ import java.util.Map;
 
 import net.simpleframework.mvc.PageMapping;
 import net.simpleframework.mvc.PageParameter;
+import net.simpleframework.mvc.common.element.Checkbox;
 import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.LinkElement;
 import net.simpleframework.mvc.common.element.SpanElement;
@@ -37,6 +38,7 @@ public class WorkflowMonitorPage extends AbstractWorkflowFormPage {
 	@Override
 	protected void onForward(final PageParameter pp) {
 		super.onForward(pp);
+		pp.addImportCSS(WorkflowMonitorPage.class, "/monitor.css");
 
 		addTablePagerBean(pp);
 
@@ -105,6 +107,10 @@ public class WorkflowMonitorPage extends AbstractWorkflowFormPage {
 	protected String toMonitorHTML(final PageParameter pp) {
 		final StringBuilder sb = new StringBuilder();
 		sb.append("<div class='tb'>");
+		sb.append(new Checkbox("idWorkflowMonitorPage_treeview", $m("WorkflowMonitorPage.2"))
+				.setChecked(singleton(_ActivityTbl.class).isTreeview(pp)).setOnclick(
+						"var c=this.checked; $Actions['WorkflowMonitorPage_tbl']('treeview=' + c); document.setCookie('"
+								+ ActivityTbl.COOKIE_TREEVIEW + "', c, 24 * 365);"));
 		sb.append("</div>");
 		sb.append("<div id='idWorkflowMonitorPage_tbl'></div>");
 		return sb.toString();

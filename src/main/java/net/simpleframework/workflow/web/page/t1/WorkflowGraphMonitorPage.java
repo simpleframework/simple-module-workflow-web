@@ -18,13 +18,6 @@ import net.simpleframework.workflow.web.WorkflowUtils;
 public class WorkflowGraphMonitorPage extends WorkflowMonitorPage {
 
 	@Override
-	protected void onForward(final PageParameter pp) {
-		super.onForward(pp);
-
-		pp.addImportCSS(WorkflowGraphMonitorPage.class, "/monitor.css");
-	}
-
-	@Override
 	protected TablePagerBean addTablePagerBean(final PageParameter pp) {
 		// pp.putParameter(G, "tasknode");
 		final TablePagerBean tablePager = (TablePagerBean) super.addTablePagerBean(pp)

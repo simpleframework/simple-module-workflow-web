@@ -37,9 +37,10 @@ public class MyWorkstatTPage extends AbstractItemsTPage {
 
 		final HighchartBean hc1 = (HighchartBean) addComponentBean(pp, "MyWorkstatTPage_chart",
 				HighchartBean.class)
-				.setChart(new HcChart().setHeight(300).setMarginTop(20).setMarginRight(30))
-				.setTitle("").setLegend(new HcLegend().setEnabled(false))
-				.setContainerId("idMyWorkstatTPage_chart");
+				.setChart(
+						new HcChart().setHeight(300).setBackgroundColor("#FFF").setMarginTop(20)
+								.setMarginRight(30)).setTitle("")
+				.setLegend(new HcLegend().setEnabled(false)).setContainerId("idMyWorkstatTPage_chart");
 		hc1.setxAxis(new HcXAxis());
 		hc1.setyAxis(new HcYAxis().setTitle($m("MyWorkstatTPage.0")).setMin(0).setMax(100));
 		final StringBuilder sb = new StringBuilder();
