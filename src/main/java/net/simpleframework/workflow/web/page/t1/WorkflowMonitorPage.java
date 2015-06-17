@@ -107,12 +107,24 @@ public class WorkflowMonitorPage extends AbstractWorkflowFormPage {
 	protected String toMonitorHTML(final PageParameter pp) {
 		final StringBuilder sb = new StringBuilder();
 		sb.append("<div class='tb'>");
+		final _ActivityTbl tbl = singleton(_ActivityTbl.class);
 		sb.append(new Checkbox("idWorkflowMonitorPage_treeview", $m("WorkflowMonitorPage.2"))
-				.setChecked(singleton(_ActivityTbl.class).isTreeview(pp)).setOnclick(
-						"var c=this.checked; $Actions['WorkflowMonitorPage_tbl']('treeview=' + c); document.setCookie('"
-								+ ActivityTbl.COOKIE_TREEVIEW + "', c, 24 * 365);"));
+				.setChecked(tbl.isTreeview_opt(pp)).setOnclick(
+						checkClick("treeview", ActivityTbl.COOKIE_TREEVIEW)));
+		sb.append(SpanElement.SPACE15);
+		sb.append(new Checkbox("idWorkflowMonitorPage_hideNulltask", $m("WorkflowMonitorPage.3"))
+				.setChecked(tbl.isNulltask_opt(pp)).setOnclick(
+						checkClick("nulltask", ActivityTbl.COOKIE_HIDE_NULLTASK)));
 		sb.append("</div>");
 		sb.append("<div id='idWorkflowMonitorPage_tbl'></div>");
+		return sb.toString();
+	}
+
+	private String checkClick(final String opt, final String cookie) {
+		final StringBuilder sb = new StringBuilder();
+		sb.append("var c = this.checked;");
+		sb.append("$Actions['WorkflowMonitorPage_tbl']('").append(opt).append("=' + c);");
+		sb.append("document.setCookie('").append(cookie).append("', c, 24 * 365);");
 		return sb.toString();
 	}
 

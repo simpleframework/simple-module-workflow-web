@@ -49,7 +49,7 @@ public class ActivityTbl extends GroupDbTablePagerHandler implements IWorkflowSe
 		if (process != null) {
 			cp.addFormParameter("processId", process.getId());
 			List<ActivityBean> list = aService.getActivities(process);
-			if (isTreeview(cp)) {
+			if (isTreeview_opt(cp)) {
 				list = toTreeList(list);
 			}
 			setRelativeDate(cp, list);
@@ -67,7 +67,7 @@ public class ActivityTbl extends GroupDbTablePagerHandler implements IWorkflowSe
 		if (StringUtils.hasText(taskid)) {
 			cp.addFormParameter("taskid", taskid);
 			List<ActivityBean> list = aService.getActivities(process, taskid);
-			if (isTreeview(cp)) {
+			if (isTreeview_opt(cp)) {
 				list = toTreeList(list);
 			}
 			setRelativeDate(cp, list);
@@ -76,14 +76,23 @@ public class ActivityTbl extends GroupDbTablePagerHandler implements IWorkflowSe
 		return null;
 	}
 
-	public final static String COOKIE_TREEVIEW = "wf_monitor_treeview";
+	final static String COOKIE_TREEVIEW = "wf_monitor_treeview";
+	final static String COOKIE_HIDE_NULLTASK = "wf_monitor_hide_nulltask";
 
-	protected boolean isTreeview(final PageParameter pp) {
+	protected boolean isTreeview_opt(final PageParameter pp) {
 		String treeview = pp.getParameter("treeview");
 		if (!StringUtils.hasText(treeview)) {
 			treeview = pp.getCookie(COOKIE_TREEVIEW);
 		}
-		return Convert.toBool(treeview, true);
+		return Convert.toBool(treeview);
+	}
+
+	protected boolean isNulltask_opt(final PageParameter pp) {
+		String nulltask = pp.getParameter("nulltask");
+		if (!StringUtils.hasText(nulltask)) {
+			nulltask = pp.getCookie(COOKIE_HIDE_NULLTASK);
+		}
+		return Convert.toBool(nulltask, true);
 	}
 
 	protected List<ActivityBean> toTreeList(final List<ActivityBean> list) {
@@ -154,10 +163,17 @@ public class ActivityTbl extends GroupDbTablePagerHandler implements IWorkflowSe
 	@Override
 	protected Map<String, Object> getRowData(final ComponentParameter cp, final Object dataObject) {
 		final ActivityBean activity = (ActivityBean) dataObject;
+		if (isNulltask_opt(cp)) {
+			final AbstractTaskNode tasknode = aService.getTaskNode(activity);
+			if (!(tasknode instanceof UserNode) || ((UserNode) tasknode).isEmpty()) {
+				return null;
+			}
+		}
+
 		final KVMap row = new KVMap();
 
 		final StringBuilder tn = new StringBuilder();
-		if (isTreeview(cp)) {
+		if (isTreeview_opt(cp)) {
 			String space = "";
 			for (int i = 0; i < Convert.toInt(activity.getAttr("_margin")); i++) {
 				space += i == 0 ? "| -- " : " -- ";
