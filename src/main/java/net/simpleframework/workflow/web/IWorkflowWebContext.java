@@ -13,6 +13,8 @@ import net.simpleframework.workflow.engine.IWorkflowContext;
  */
 public interface IWorkflowWebContext extends IWorkflowContext, IMVCContextVar {
 
+	IModuleRef getOrganizationRef();
+
 	/**
 	 * 获取日志模块的引用
 	 * 
@@ -20,7 +22,12 @@ public interface IWorkflowWebContext extends IWorkflowContext, IMVCContextVar {
 	 */
 	IModuleRef getLogRef();
 
-	IModuleRef getOrganizationRef();
+	/**
+	 * 获取收藏的引用
+	 * 
+	 * @return
+	 */
+	IModuleRef getFavoriteRef();
 
 	WorkflowUrlsFactory getUrlsFactory();
 
