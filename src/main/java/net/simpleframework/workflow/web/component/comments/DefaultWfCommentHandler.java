@@ -127,10 +127,9 @@ public class DefaultWfCommentHandler extends ComponentHandlerEx implements IWfCo
 	}
 
 	private Map<String, List<WfComment>> comments_map(final ComponentParameter cp,
-			final WorkitemBean workitem, final EGroupBy groupBy) {
+			final IDataQuery<WfComment> dq, final WorkitemBean workitem, final EGroupBy groupBy) {
 		final Map<String, List<WfComment>> data = new LinkedHashMap<String, List<WfComment>>();
 		Map<String, String[]> tasknames = null;
-		final IDataQuery<WfComment> dq = comments(cp);
 		final IPermissionHandler phdl = cp.getPermission();
 		WfComment comment;
 		while ((comment = dq.next()) != null) {
@@ -170,8 +169,6 @@ public class DefaultWfCommentHandler extends ComponentHandlerEx implements IWfCo
 
 	@Override
 	public String toHTML(final ComponentParameter cp) {
-		final WorkitemBean workitem = WorkflowUtils.getWorkitemBean(cp);
-
 		EGroupBy groupBy = cp.getEnumParameter(EGroupBy.class, "groupBy");
 		if (groupBy == null) {
 			groupBy = Convert.toEnum(EGroupBy.class, cp.getCookie(COOKIE_GROUPBY));
@@ -180,6 +177,8 @@ public class DefaultWfCommentHandler extends ComponentHandlerEx implements IWfCo
 			groupBy = (EGroupBy) cp.getBeanProperty("groupBy");
 		}
 
+		final WorkitemBean workitem = WorkflowUtils.getWorkitemBean(cp);
+		final IDataQuery<WfComment> dq = comments(cp);
 		final String commentName = cp.getComponentName();
 		final StringBuilder sb = new StringBuilder();
 		final boolean editable = (Boolean) cp.getBeanProperty("editable");
@@ -230,7 +229,6 @@ public class DefaultWfCommentHandler extends ComponentHandlerEx implements IWfCo
 		final StringBuilder sb2 = new StringBuilder();
 		if (groupBy == EGroupBy.none) {
 			i = 0;
-			final IDataQuery<WfComment> dq = comments(cp);
 			WfComment comment;
 			while ((comment = dq.next()) != null) {
 				if (editable && comment2 != null && comment2.equals(comment)) {
@@ -239,7 +237,7 @@ public class DefaultWfCommentHandler extends ComponentHandlerEx implements IWfCo
 				sb2.append(toCommentItemHTML(cp, comment, i++ == 0, groupBy));
 			}
 		} else {
-			for (final Map.Entry<String, List<WfComment>> e : comments_map(cp, workitem, groupBy)
+			for (final Map.Entry<String, List<WfComment>> e : comments_map(cp, dq, workitem, groupBy)
 					.entrySet()) {
 				final List<WfComment> list = new ArrayList<WfComment>();
 				for (final WfComment comment : e.getValue()) {
