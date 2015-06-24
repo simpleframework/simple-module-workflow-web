@@ -47,11 +47,6 @@ public class WorkflowWebContext extends WorkflowContext implements IWorkflowWebC
 	}
 
 	@Override
-	public IModuleRef getFavoriteRef() {
-		return getRef("net.simpleframework.workflow.web.WorkflowFavoriteRef");
-	}
-
-	@Override
 	public IModuleRef getOrganizationRef() {
 		return getRef("net.simpleframework.workflow.web.participant.WfOrganizationRef");
 	}

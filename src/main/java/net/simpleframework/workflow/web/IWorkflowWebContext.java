@@ -22,13 +22,6 @@ public interface IWorkflowWebContext extends IWorkflowContext, IMVCContextVar {
 	 */
 	IModuleRef getLogRef();
 
-	/**
-	 * 获取收藏的引用
-	 * 
-	 * @return
-	 */
-	IModuleRef getFavoriteRef();
-
 	WorkflowUrlsFactory getUrlsFactory();
 
 	/**

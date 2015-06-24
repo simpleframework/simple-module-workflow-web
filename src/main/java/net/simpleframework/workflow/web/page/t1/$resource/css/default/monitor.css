@@ -25,6 +25,7 @@ v\:shape,v\:image,v\:stroke,v\:fill {
   background-color: #fff;
   overflow-x: auto;
   margin-bottom: -1px;
+  min-height: 400px;
 }
 
 .WorkflowGraphMonitorPage .graph->div {
