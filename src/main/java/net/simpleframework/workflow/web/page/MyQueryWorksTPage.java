@@ -49,7 +49,7 @@ import net.simpleframework.workflow.web.page.t1.WorkflowMonitorPage;
 public class MyQueryWorksTPage extends AbstractItemsTPage {
 
 	@Override
-	protected void onForward(final PageParameter pp) {
+	protected void onForward(final PageParameter pp) throws Exception {
 		super.onForward(pp);
 
 		addTablePagerBean(pp);
@@ -152,7 +152,7 @@ public class MyQueryWorksTPage extends AbstractItemsTPage {
 
 	public static class ProcessWorkitemsPage extends OneTableTemplatePage {
 		@Override
-		protected void onForward(final PageParameter pp) {
+		protected void onForward(final PageParameter pp) throws Exception {
 			super.onForward(pp);
 
 			final TablePagerBean tablePager = (TablePagerBean) addTablePagerBean(pp,

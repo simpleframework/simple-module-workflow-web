@@ -40,7 +40,7 @@ import net.simpleframework.workflow.web.page.t1.WorkitemsMgrPage;
 public class ActivityMgrTPage extends AbstractWorkflowMgrTPage {
 
 	@Override
-	protected void onForward(final PageParameter pp) {
+	protected void onForward(final PageParameter pp) throws Exception {
 		super.onForward(pp);
 
 		addTablePagerBean(pp);

@@ -32,7 +32,7 @@ import net.simpleframework.workflow.engine.bean.UserStatBean;
 public class MyWorkstatTPage extends AbstractItemsTPage {
 
 	@Override
-	protected void onForward(final PageParameter pp) {
+	protected void onForward(final PageParameter pp) throws Exception {
 		super.onForward(pp);
 
 		final HighchartBean hc1 = (HighchartBean) addComponentBean(pp, "MyWorkstatTPage_chart",

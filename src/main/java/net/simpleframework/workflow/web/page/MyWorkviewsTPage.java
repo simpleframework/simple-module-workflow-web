@@ -34,7 +34,7 @@ import net.simpleframework.workflow.web.page.t1.WorkflowViewPage;
 public class MyWorkviewsTPage extends AbstractItemsTPage {
 
 	@Override
-	protected void onForward(final PageParameter pp) {
+	protected void onForward(final PageParameter pp) throws Exception {
 		super.onForward(pp);
 
 		addTablePagerBean(pp);

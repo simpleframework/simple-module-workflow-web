@@ -19,7 +19,7 @@ import net.simpleframework.workflow.web.page.t1.WorkflowGraphUtils;
 public class ActivityGraphMgrTPage extends ActivityMgrTPage {
 
 	@Override
-	protected void onForward(final PageParameter pp) {
+	protected void onForward(final PageParameter pp) throws Exception {
 		super.onForward(pp);
 		pp.addImportCSS(WorkflowGraphMonitorPage.class, "/monitor.css");
 	}

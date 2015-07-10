@@ -44,7 +44,7 @@ import net.simpleframework.workflow.web.page.AbstractDelegateFormPage.WorkitemDe
 public class MyRunningWorklistTPage extends AbstractItemsTPage {
 
 	@Override
-	protected void onForward(final PageParameter pp) {
+	protected void onForward(final PageParameter pp) throws Exception {
 		super.onForward(pp);
 		setGroupParam(pp);
 		addComponents(pp);

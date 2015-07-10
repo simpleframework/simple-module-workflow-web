@@ -23,7 +23,7 @@ import net.simpleframework.workflow.web.WorkflowUrlsFactory;
 public class AbstractWorkflowMgrTPage extends AbstractMgrTPage implements IWorkflowServiceAware {
 
 	@Override
-	protected void onForward(final PageParameter pp) {
+	protected void onForward(final PageParameter pp) throws Exception {
 		super.onForward(pp);
 		pp.addImportCSS(AbstractWorkflowMgrTPage.class, "/wfmgrt.css");
 

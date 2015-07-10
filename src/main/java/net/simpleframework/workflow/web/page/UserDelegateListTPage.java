@@ -28,7 +28,7 @@ import net.simpleframework.workflow.web.page.AbstractDelegateFormPage.WorkitemDe
 public class UserDelegateListTPage extends MyDelegateListTPage {
 
 	@Override
-	protected void onForward(final PageParameter pp) {
+	protected void onForward(final PageParameter pp) throws Exception {
 		super.onForward(pp);
 
 		// 委托设置

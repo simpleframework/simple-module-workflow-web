@@ -44,7 +44,7 @@ import net.simpleframework.workflow.web.component.abort.ActivityAbortBean;
 public class ActivityMgrPage extends AbstractWorkflowMgrPage {
 
 	@Override
-	protected void onForward(final PageParameter pp) {
+	protected void onForward(final PageParameter pp) throws Exception {
 		super.onForward(pp);
 
 		// 表格

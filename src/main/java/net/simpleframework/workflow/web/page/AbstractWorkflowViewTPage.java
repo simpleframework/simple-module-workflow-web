@@ -15,7 +15,7 @@ public abstract class AbstractWorkflowViewTPage extends AbstractFormTableRowTPag
 		implements IWorkflowWebView {
 
 	@Override
-	protected void onForward(final PageParameter pp) {
+	protected void onForward(final PageParameter pp) throws Exception {
 		super.onForward(pp);
 
 		final WorkviewBean workview = getWorkitemBean(pp);

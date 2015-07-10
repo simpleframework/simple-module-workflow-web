@@ -41,7 +41,7 @@ import net.simpleframework.workflow.web.page.t1.ProcessMgrPage.ProcessTbl;
 public class ProcessMgrTPage extends AbstractWorkflowMgrTPage {
 
 	@Override
-	protected void onForward(final PageParameter pp) {
+	protected void onForward(final PageParameter pp) throws Exception {
 		super.onForward(pp);
 
 		addTablePagerBean(pp);

@@ -39,7 +39,7 @@ import net.simpleframework.workflow.web.page.t1.AbstractWorkflowMgrPage;
 public abstract class AbstractItemsTPage extends Category_ListPage implements IWorkflowServiceAware {
 
 	@Override
-	protected void onForward(final PageParameter pp) {
+	protected void onForward(final PageParameter pp) throws Exception {
 		super.onForward(pp);
 		pp.addImportCSS(AbstractItemsTPage.class, "/my_work.css");
 

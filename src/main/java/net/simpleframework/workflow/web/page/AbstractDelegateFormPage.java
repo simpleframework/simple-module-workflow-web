@@ -52,7 +52,7 @@ public abstract class AbstractDelegateFormPage extends FormTableRowTemplatePage 
 	public static class WorkitemDelegateSetPage extends AbstractDelegateFormPage {
 
 		@Override
-		protected void onForward(final PageParameter pp) {
+		protected void onForward(final PageParameter pp) throws Exception {
 			super.onForward(pp);
 
 			addFormValidationBean(pp).addValidators(
@@ -157,7 +157,7 @@ public abstract class AbstractDelegateFormPage extends FormTableRowTemplatePage 
 
 	public static class WorkitemDelegateReceivingPage extends WorkitemDelegateViewPage {
 		@Override
-		protected void onForward(final PageParameter pp) {
+		protected void onForward(final PageParameter pp) throws Exception {
 			super.onForward(pp);
 
 			addFormValidationBean(pp).addValidators(

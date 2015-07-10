@@ -21,7 +21,7 @@ public abstract class AbstractWorkflowRemotePage extends AbstractTemplatePage im
 		IWorkflowServiceAware {
 
 	@Override
-	protected void onForward(final PageParameter pp) {
+	protected void onForward(final PageParameter pp) throws Exception {
 		super.onForward(pp);
 	}
 

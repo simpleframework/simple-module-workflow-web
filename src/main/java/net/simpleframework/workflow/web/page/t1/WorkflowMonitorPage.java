@@ -36,7 +36,7 @@ import net.simpleframework.workflow.web.WorkflowUtils;
 public class WorkflowMonitorPage extends AbstractWorkflowFormPage {
 
 	@Override
-	protected void onForward(final PageParameter pp) {
+	protected void onForward(final PageParameter pp) throws Exception {
 		super.onForward(pp);
 		pp.addImportCSS(WorkflowMonitorPage.class, "/monitor.css");
 

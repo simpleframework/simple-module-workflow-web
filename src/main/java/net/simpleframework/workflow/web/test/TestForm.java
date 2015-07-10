@@ -20,7 +20,7 @@ import net.simpleframework.workflow.web.page.AbstractWorkflowFormTPage;
 public class TestForm extends AbstractWorkflowFormTPage {
 
 	@Override
-	protected void onForward(final PageParameter pp) {
+	protected void onForward(final PageParameter pp) throws Exception {
 		super.onForward(pp);
 
 		addWfCommentBean(pp).setGroupBy(EGroupBy.dept).setContainerId("idTestForm_comments");

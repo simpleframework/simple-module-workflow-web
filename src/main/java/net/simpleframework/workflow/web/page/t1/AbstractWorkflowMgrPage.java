@@ -37,7 +37,7 @@ public abstract class AbstractWorkflowMgrPage extends T1ResizedTemplatePage impl
 		IWorkflowServiceAware {
 
 	@Override
-	protected void onForward(final PageParameter pp) {
+	protected void onForward(final PageParameter pp) throws Exception {
 		super.onForward(pp);
 		pp.addImportCSS(ProcessModelMgrPage.class, "/pmgr.css");
 
@@ -104,7 +104,7 @@ public abstract class AbstractWorkflowMgrPage extends T1ResizedTemplatePage impl
 
 	public static abstract class AbstractAbortPage extends AbstractTemplatePage {
 		@Override
-		protected void onForward(final PageParameter pp) {
+		protected void onForward(final PageParameter pp) throws Exception {
 			super.onForward(pp);
 
 			addAjaxRequest(pp, "AbstractAbortPage_ok").setConfirmMessage($m("Comfirm.Save"))
