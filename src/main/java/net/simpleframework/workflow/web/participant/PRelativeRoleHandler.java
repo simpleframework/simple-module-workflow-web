@@ -207,7 +207,7 @@ public class PRelativeRoleHandler extends AbstractParticipantHandler implements
 	// if (ab.getTasknodeText().equals(preNodeName)) {
 	// return ab;
 	// }
-	// return getPreActivityBean(aService.getBean(ab.getPreviousId()),
+	// return getPreActivityBean(accountService.getBean(ab.getPreviousId()),
 	// preNodeName);
 	// }
 
