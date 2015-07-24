@@ -220,13 +220,15 @@ public class DefaultWfCommentHandler extends ComponentHandlerEx implements IWfCo
 		sb.append("  if (ta) ta.setValue(val);");
 		sb.append("  document.setCookie('").append(COOKIE_GROUPBY).append("', groupBy, 24 * 365);");
 		sb.append(" };");
-		sb.append(" act('workitemId=").append((null==workitem?"":workitem.getId())).append("&groupBy=' + groupBy);");
+		sb.append(" act('workitemId=").append((null == workitem ? "" : workitem.getId()))
+				.append("&groupBy=' + groupBy);");
 		sb.append("}");
 		sb.append(HtmlConst.TAG_SCRIPT_END);
 
 		WfComment comment2 = null;
-		if(null!=workitem)
-		comment2 = workflowContext.getCommentService().getCurComment(workitem);
+		if (null != workitem) {
+			comment2 = workflowContext.getCommentService().getCurComment(workitem);
+		}
 
 		final StringBuilder sb2 = new StringBuilder();
 		if (groupBy == EGroupBy.none) {
