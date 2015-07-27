@@ -8,6 +8,7 @@ import java.util.Map;
 
 import net.simpleframework.common.Convert;
 import net.simpleframework.common.StringUtils;
+import net.simpleframework.ctx.trans.Transaction;
 import net.simpleframework.mvc.AbstractMVCPage;
 import net.simpleframework.mvc.IForward;
 import net.simpleframework.mvc.JavascriptForward;
@@ -28,6 +29,7 @@ import net.simpleframework.mvc.template.struct.NavigationButtons;
 import net.simpleframework.workflow.engine.EActivityAbortPolicy;
 import net.simpleframework.workflow.engine.EActivityStatus;
 import net.simpleframework.workflow.engine.EProcessStatus;
+import net.simpleframework.workflow.engine.IWorkflowContext;
 import net.simpleframework.workflow.engine.bean.ActivityBean;
 import net.simpleframework.workflow.engine.bean.ProcessBean;
 import net.simpleframework.workflow.web.WorkflowLogRef.ActivityUpdateLogPage;
@@ -122,6 +124,7 @@ public class ActivityMgrPage extends AbstractWorkflowMgrPage {
 
 	public static class ActivityStatusDescPage extends AbstractStatusDescPage {
 
+		@Transaction(context = IWorkflowContext.class)
 		@Override
 		public JavascriptForward onSave(final ComponentParameter cp) throws Exception {
 			final EActivityStatus op = cp.getEnumParameter(EActivityStatus.class, "op");
@@ -140,6 +143,7 @@ public class ActivityMgrPage extends AbstractWorkflowMgrPage {
 
 	public static class ActivityAbortPage extends AbstractAbortPage {
 
+		@Transaction(context = IWorkflowContext.class)
 		public IForward doOk(final ComponentParameter cp) {
 			final ActivityBean activity = aService.getBean(cp.getParameter("activityId"));
 			aService.doAbort(activity,

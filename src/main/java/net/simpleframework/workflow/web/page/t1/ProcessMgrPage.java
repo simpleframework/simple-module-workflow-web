@@ -191,6 +191,7 @@ public class ProcessMgrPage extends AbstractWorkflowMgrPage {
 
 	public static class ProcessStatusDescPage extends AbstractStatusDescPage {
 
+		@Transaction(context = IWorkflowContext.class)
 		@Override
 		public JavascriptForward onSave(final ComponentParameter cp) throws Exception {
 			final EProcessStatus op = cp.getEnumParameter(EProcessStatus.class, "op");
@@ -215,6 +216,7 @@ public class ProcessMgrPage extends AbstractWorkflowMgrPage {
 
 	public static class ProcessAbortPage extends AbstractAbortPage {
 
+		@Transaction(context = IWorkflowContext.class)
 		public IForward doOk(final ComponentParameter cp) {
 			final ProcessBean process = WorkflowUtils.getProcessBean(cp);
 			pService.doAbort(process,
