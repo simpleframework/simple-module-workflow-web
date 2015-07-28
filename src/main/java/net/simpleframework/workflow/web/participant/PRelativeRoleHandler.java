@@ -111,7 +111,7 @@ public class PRelativeRoleHandler extends AbstractParticipantHandler implements
 		}
 		final String deptName = params.get(PARAMS_KEY_dept);
 		if (StringUtils.hasText(deptName)) {// 指定部门
-			final Department dept = orgContext.getDepartmentService().getDepartmentByName(deptName);
+			final Department dept = _deptService.getDepartmentByName(deptName);
 			deptId = dept.getId();
 		}
 		if (null == userId || null == roleId || null == deptId) {
@@ -130,7 +130,7 @@ public class PRelativeRoleHandler extends AbstractParticipantHandler implements
 		if ((_participants == null || _participants.size() == 0) && level.equals(Level.internal)
 				&& null != autoparent && autoparent.equals("true")) {
 			// 本部门,自动查找上一部门角色
-			final Department dept = orgContext.getDepartmentService().getBean(deptId);
+			final Department dept = _deptService.getBean(deptId);
 			_participants = wph.getRelativeParticipantsOfLevel(userId, roleId, dept.getParentId(),
 					variables, role, level);
 		}
