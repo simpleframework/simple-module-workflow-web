@@ -1,4 +1,4 @@
-package net.simpleframework.workflow.web.page.org2;
+package net.simpleframework.workflow.web.page.mgr2;
 
 import net.simpleframework.ado.query.IDataQuery;
 import net.simpleframework.common.coll.KVMap;

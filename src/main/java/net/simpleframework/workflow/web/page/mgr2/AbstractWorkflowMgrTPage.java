@@ -1,4 +1,4 @@
-package net.simpleframework.workflow.web.page.org2;
+package net.simpleframework.workflow.web.page.mgr2;
 
 import static net.simpleframework.common.I18n.$m;
 import net.simpleframework.ctx.IModuleRef;
