@@ -59,7 +59,7 @@ public class MyWorkstatTPage extends AbstractItemsTPage {
 		for (int i = 0; i < 7; i++) {
 			final Date nDate = cal.getTime();
 			final String lbl = Convert.toDateString(nDate, "MM-dd");
-			final int[] arr = usService.getComplete_AllWorkitems(pp.getLoginId(), nDate);
+			final int[] arr = wfusService.getComplete_AllWorkitems(pp.getLoginId(), nDate);
 			final float p = arr[1] == 0 ? 100 : ((float) arr[0] / arr[1]) * 100;
 			final DataObj data = new DataObj(lbl, NumberUtils.toFloat(p)).addAttribute("complete",
 					arr[0]).addAttribute("all", arr[1]);
@@ -80,12 +80,13 @@ public class MyWorkstatTPage extends AbstractItemsTPage {
 	}
 
 	protected String toStat1HTML(final PageParameter pp) {
-		final UserStatBean userStat = usService.getUserStat(pp.getLoginId());
+		final UserStatBean userStat = wfusService.getUserStat(pp.getLoginId());
 		final StringBuilder sb = new StringBuilder();
 		sb.append("<div class='stat1 clearfix'>");
 		sb.append(" <div class='topic'>#(MyWorkstatTPage.8)</div>");
 		sb.append(" <div class='col'>");
-		sb.append("  <div class='num'>").append(usService.getAllWorkitems(userStat)).append("</div>");
+		sb.append("  <div class='num'>").append(wfusService.getAllWorkitems(userStat))
+				.append("</div>");
 		sb.append("  <div class='lbl'>#(MyWorkstatTPage.9)</div>");
 		sb.append(" </div>");
 		for (final EWorkitemStatus s : EWorkitemStatus.values()) {

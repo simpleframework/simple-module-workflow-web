@@ -141,7 +141,7 @@ public abstract class DoWorkviewUtils implements IWorkflowContextAware, IWorkflo
 			final List<PermissionUser> slist = new ArrayList<PermissionUser>();
 			for (final String id : ulist) {
 				final PermissionUser user = permission.getUser(id);
-				if (vService.getWorkviewBean(processId, id) != null) {
+				if (wfvService.getWorkviewBean(processId, id) != null) {
 					slist.add(user);
 				} else {
 					if (user.getId() != null) {

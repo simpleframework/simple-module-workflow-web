@@ -28,7 +28,7 @@ public class DefaultActivityAbortHandler extends AbstractComponentHandler implem
 	@Override
 	public JavascriptForward doAbort(final ComponentParameter cp, final List<ActivityBean> list) {
 		for (final ActivityBean activity : list) {
-			aService.doAbort(activity);
+			wfaService.doAbort(activity);
 		}
 		return new JavascriptForward("$Actions['" + cp.getComponentName() + "_win'].close();");
 	}

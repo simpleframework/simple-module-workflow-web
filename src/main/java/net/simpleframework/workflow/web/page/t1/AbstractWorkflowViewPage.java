@@ -15,7 +15,8 @@ public class AbstractWorkflowViewPage extends AbstractFormTemplatePage {
 
 	protected IWorkflowWebView getWorkflowView(final PageParameter pp) {
 		final WorkviewBean workview = WorkflowUtils.getWorkviewBean(pp);
-		return (IWorkflowWebView) pService.getWorkflowView(pService.getBean(workview.getProcessId()));
+		return (IWorkflowWebView) wfpService.getWorkflowView(wfpService.getBean(workview
+				.getProcessId()));
 	}
 
 	@Override

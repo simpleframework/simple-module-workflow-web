@@ -45,15 +45,15 @@ public abstract class WorkflowGraphUtils implements IWorkflowServiceAware {
 		if (process == null) {
 			return "";
 		}
-		final mxGraph graph = GraphUtils.createGraph(pService.getProcessDocument(process));
-		final List<ActivityBean> list = aService.getActivities(process);
+		final mxGraph graph = GraphUtils.createGraph(wfpService.getProcessDocument(process));
+		final List<ActivityBean> list = wfaService.getActivities(process);
 		final Map<String, Boolean> state = new HashMap<String, Boolean>();
 		for (final ActivityBean activity : list) {
 			final String tasknodeId = activity.getTasknodeId();
 			if (state.get(tasknodeId) == null) {
 				state.put(tasknodeId, true);
 			}
-			if (!aService.isFinalStatus(activity)) {
+			if (!wfaService.isFinalStatus(activity)) {
 				state.put(tasknodeId, false);
 			}
 		}

@@ -57,7 +57,7 @@ public class ModelerRemotePage extends AbstractWorkflowRemotePage {
 			public void doAction(final JsonForward json) {
 				final ArrayList<Map<?, ?>> models = new ArrayList<Map<?, ?>>();
 				ProcessModelBean pm;
-				final IDataQuery<ProcessModelBean> query = mService.getModelList();
+				final IDataQuery<ProcessModelBean> query = wfpmService.getModelList();
 				while ((pm = query.next()) != null) {
 					models.add(new KVMap().add("text", pm.toString()).add("id", pm.getId()).map());
 				}
@@ -80,7 +80,7 @@ public class ModelerRemotePage extends AbstractWorkflowRemotePage {
 				final ProcessNode processNode = document.getProcessNode();
 				processNode.setName(pp.getLocaleParameter("name"));
 				processNode.setDescription(pp.getLocaleParameter("description"));
-				final ProcessModelBean model = mService.doAddModel(pp.getLoginId(), document);
+				final ProcessModelBean model = wfpmService.doAddModel(pp.getLoginId(), document);
 				json.put("id", model.getId().getValue());
 				json.put("text", processNode.toString());
 			}
@@ -91,8 +91,8 @@ public class ModelerRemotePage extends AbstractWorkflowRemotePage {
 		return doJsonForward(new IJsonForwardCallback() {
 			@Override
 			public void doAction(final JsonForward json) {
-				final ProcessModelBean pm = mService.getBean(pp.getParameter("id"));
-				json.put("doc", mService.getProcessDocument(pm).toString());
+				final ProcessModelBean pm = wfpmService.getBean(pp.getParameter("id"));
+				json.put("doc", wfpmService.getProcessDocument(pm).toString());
 			}
 		});
 	}
@@ -101,7 +101,7 @@ public class ModelerRemotePage extends AbstractWorkflowRemotePage {
 		return doJsonForward(new IJsonForwardCallback() {
 			@Override
 			public void doAction(final JsonForward json) {
-				mService.delete(pp.getParameter("id"));
+				wfpmService.delete(pp.getParameter("id"));
 			}
 		});
 	}
@@ -110,9 +110,9 @@ public class ModelerRemotePage extends AbstractWorkflowRemotePage {
 		return doJsonForward(new IJsonForwardCallback() {
 			@Override
 			public void doAction(final JsonForward json) {
-				final ProcessModelBean bean = mService.getBean(pp.getParameter("id"));
+				final ProcessModelBean bean = wfpmService.getBean(pp.getParameter("id"));
 				final String doc = pp.getLocaleParameter("doc");
-				mService.doUpdateModel(bean, doc.toCharArray());
+				wfpmService.doUpdateModel(bean, doc.toCharArray());
 				json.put("result", Boolean.TRUE);
 			}
 		});

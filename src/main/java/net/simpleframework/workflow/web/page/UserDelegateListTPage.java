@@ -71,7 +71,7 @@ public class UserDelegateListTPage extends MyDelegateListTPage {
 	public static class UserDelegateTbl extends MyWorkDelegateTbl {
 		@Override
 		public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
-			return dService.queryDelegations(cp.getLoginId(), EDelegationSource.user);
+			return wfdService.queryDelegations(cp.getLoginId(), EDelegationSource.user);
 		}
 
 		@Override

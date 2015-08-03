@@ -33,13 +33,13 @@ public abstract class MyQueryWorksTPages {
 
 		@Override
 		protected WorkitemBean getOpenWorkitem(final PageParameter pp, final ProcessBean process) {
-			return wService.getWorkitems(process, null).iterator().next();
+			return wfwService.getWorkitems(process, null).iterator().next();
 		}
 
 		public static class MyQueryWorks_OrgTbl extends MyQueryWorksTbl {
 			@Override
 			public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
-				return pService.getProcessListInDomain(cp.getLogin().getDomainId());
+				return wfpService.getProcessListInDomain(cp.getLogin().getDomainId());
 			}
 		}
 	}
@@ -80,7 +80,7 @@ public abstract class MyQueryWorksTPages {
 						deptIds.add(_dept.getId());
 					}
 				}
-				return pService.getProcessListInDept(deptIds.toArray(new ID[deptIds.size()]));
+				return wfpService.getProcessListInDept(deptIds.toArray(new ID[deptIds.size()]));
 			}
 		}
 	}

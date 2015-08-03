@@ -19,7 +19,7 @@ public class WorkflowLogRef extends LogRef implements IWorkflowServiceAware {
 	public static class ProcessModelUpdateLogPage extends EntityUpdateLogPage {
 		@Override
 		protected IDbBeanService<?> getBeanService() {
-			return mService;
+			return wfpmService;
 		}
 
 		@Override
@@ -31,7 +31,7 @@ public class WorkflowLogRef extends LogRef implements IWorkflowServiceAware {
 	public static class ProcessUpdateLogPage extends EntityUpdateLogPage {
 		@Override
 		protected IDbBeanService<?> getBeanService() {
-			return pService;
+			return wfpService;
 		}
 
 		@Override
@@ -48,7 +48,7 @@ public class WorkflowLogRef extends LogRef implements IWorkflowServiceAware {
 	public static class ActivityUpdateLogPage extends EntityUpdateLogPage {
 		@Override
 		protected IDbBeanService<?> getBeanService() {
-			return aService;
+			return wfaService;
 		}
 
 		@Override
@@ -60,7 +60,7 @@ public class WorkflowLogRef extends LogRef implements IWorkflowServiceAware {
 	public static class WorkitemUpdateLogPage extends EntityUpdateLogPage {
 		@Override
 		protected IDbBeanService<?> getBeanService() {
-			return wService;
+			return wfwService;
 		}
 
 		@Override
@@ -72,7 +72,7 @@ public class WorkflowLogRef extends LogRef implements IWorkflowServiceAware {
 	public static class DelegateUpdateLogPage extends EntityUpdateLogPage {
 		@Override
 		protected IDbBeanService<?> getBeanService() {
-			return dService;
+			return wfdService;
 		}
 
 		@Override

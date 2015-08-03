@@ -48,7 +48,7 @@ public class ActivityTbl extends GroupDbTablePagerHandler implements IWorkflowSe
 		final ProcessBean process = WorkflowUtils.getProcessBean(cp);
 		if (process != null) {
 			cp.addFormParameter("processId", process.getId());
-			List<ActivityBean> list = aService.getActivities(process);
+			List<ActivityBean> list = wfaService.getActivities(process);
 			if (isTreeview_opt(cp)) {
 				list = toTreeList(list);
 			}
@@ -66,7 +66,7 @@ public class ActivityTbl extends GroupDbTablePagerHandler implements IWorkflowSe
 		final String taskid = cp.getParameter("taskid");
 		if (StringUtils.hasText(taskid)) {
 			cp.addFormParameter("taskid", taskid);
-			List<ActivityBean> list = aService.getActivities(process, taskid);
+			List<ActivityBean> list = wfaService.getActivities(process, taskid);
 			if (isTreeview_opt(cp)) {
 				list = toTreeList(list);
 			}
@@ -143,7 +143,7 @@ public class ActivityTbl extends GroupDbTablePagerHandler implements IWorkflowSe
 	}
 
 	protected Object toTasknode(final ActivityBean activity) {
-		final AbstractTaskNode tasknode = aService.getTaskNode(activity);
+		final AbstractTaskNode tasknode = wfaService.getTaskNode(activity);
 		if (tasknode instanceof UserNode) {
 			if (((UserNode) tasknode).isEmpty()) {
 				return new SpanElement(activity).setStyle("color: #999;");
@@ -164,7 +164,7 @@ public class ActivityTbl extends GroupDbTablePagerHandler implements IWorkflowSe
 	protected Map<String, Object> getRowData(final ComponentParameter cp, final Object dataObject) {
 		final ActivityBean activity = (ActivityBean) dataObject;
 		if (isNulltask_opt(cp)) {
-			final AbstractTaskNode tasknode = aService.getTaskNode(activity);
+			final AbstractTaskNode tasknode = wfaService.getTaskNode(activity);
 			if (!(tasknode instanceof UserNode) || ((UserNode) tasknode).isEmpty()) {
 				return null;
 			}
@@ -183,7 +183,7 @@ public class ActivityTbl extends GroupDbTablePagerHandler implements IWorkflowSe
 		tn.append(toTasknode(activity));
 		row.add("tasknode", tn.toString());
 
-		final ActivityBean pre = aService.getPreActivity(activity);
+		final ActivityBean pre = wfaService.getPreActivity(activity);
 		if (pre != null) {
 			final EActivityStatus pstatus = pre.getStatus();
 			row.add("previous", WorkflowUtils.toStatusHTML(cp, pstatus, toTasknode(pre)));

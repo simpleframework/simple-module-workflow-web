@@ -39,7 +39,7 @@ public class ActivitySelectLoaded extends DefaultPageHandler implements IWorkflo
 			final String[] activityIds = StringUtils.split(cp.getParameter("activityIds"), ";");
 			if (activityIds != null) {
 				for (final String id : activityIds) {
-					final ActivityBean activity = aService.getBean(id);
+					final ActivityBean activity = wfaService.getBean(id);
 					if (activity != null) {
 						list.add(activity);
 					}

@@ -80,12 +80,12 @@ public abstract class AbstractDelegateFormPage extends FormTableRowTemplatePage 
 			final String wd_description = cp.getParameter("wd_description");
 
 			if ("user".equals(cp.getParameter("delegationSource"))) {
-				dService.doUserDelegation(cp.getLoginId(), user.getId(), wd_startDate, wd_endDate,
+				wfdService.doUserDelegation(cp.getLoginId(), user.getId(), wd_startDate, wd_endDate,
 						wd_description);
 				return JavascriptForward.RELOC;
 			} else {
 				for (final String workitemId : StringUtils.split(cp.getParameter("workitemId"))) {
-					wService.doWorkitemDelegation(wService.getBean(workitemId), user.getId(),
+					wfwService.doWorkitemDelegation(wfwService.getBean(workitemId), user.getId(),
 							wd_startDate, wd_endDate, wd_description);
 				}
 				return super.onSave(cp).append("$Actions['MyWorklistTPage_tbl']();");
@@ -121,7 +121,7 @@ public abstract class AbstractDelegateFormPage extends FormTableRowTemplatePage 
 	public static class WorkitemDelegateViewPage extends AbstractDelegateFormPage {
 
 		protected DelegationBean _getDelegation(final PageParameter pp) {
-			return dService.getBean(pp.getParameter("delegationId"));
+			return wfdService.getBean(pp.getParameter("delegationId"));
 		}
 
 		protected RowField createUser(final PageParameter pp) {
@@ -173,7 +173,7 @@ public abstract class AbstractDelegateFormPage extends FormTableRowTemplatePage 
 		public JavascriptForward onSave(final ComponentParameter cp) throws Exception {
 			final DelegationBean delegation = _getDelegation(cp);
 			DescriptionLogUtils.set(delegation, cp.getParameter("wd_description"));
-			dService.doAccept(delegation);
+			wfdService.doAccept(delegation);
 			return super.onSave(cp).append("$Actions['MyWorklistTPage_tbl']();");
 		}
 
@@ -181,7 +181,7 @@ public abstract class AbstractDelegateFormPage extends FormTableRowTemplatePage 
 		public IForward doRefuse(final ComponentParameter cp) throws Exception {
 			final DelegationBean delegation = _getDelegation(cp);
 			DescriptionLogUtils.set(delegation, cp.getParameter("wd_description"));
-			dService.doAbort(delegation);
+			wfdService.doAbort(delegation);
 			return super.onSave(cp).append("$Actions['MyWorklistTPage_tbl']();");
 		}
 
@@ -197,7 +197,7 @@ public abstract class AbstractDelegateFormPage extends FormTableRowTemplatePage 
 
 		@Override
 		protected DelegationBean _getDelegation(final PageParameter pp) {
-			return dService.queryRunningDelegation(WorkflowUtils.getWorkitemBean(pp));
+			return wfdService.queryRunningDelegation(WorkflowUtils.getWorkitemBean(pp));
 		}
 
 		@Override

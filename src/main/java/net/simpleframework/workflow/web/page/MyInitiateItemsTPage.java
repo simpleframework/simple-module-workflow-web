@@ -67,7 +67,7 @@ public class MyInitiateItemsTPage extends AbstractItemsTPage {
 		public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
 			final ID loginId = cp.getLoginId();
 			InitiateItems items;
-			if (loginId == null || (items = mService.getInitiateItems(loginId)) == null) {
+			if (loginId == null || (items = wfpmService.getInitiateItems(loginId)) == null) {
 				return DataQueryUtils.nullQuery();
 			}
 			return new ListDataQuery<InitiateItem>(items);
@@ -76,13 +76,13 @@ public class MyInitiateItemsTPage extends AbstractItemsTPage {
 		@Override
 		protected Object getVal(final Object dataObject, final String key) {
 			final InitiateItem initiateItem = (InitiateItem) dataObject;
-			final ProcessModelBean processModel = mService.getBean(initiateItem.getModelId());
+			final ProcessModelBean processModel = wfpmService.getBean(initiateItem.getModelId());
 			if ("modelText".equals(key)) {
 				return processModel.toString();
 			} else if ("processCount".equals(key)) {
 				return processModel.getProcessCount();
 			} else if ("version".equals(key)) {
-				final ProcessDocument doc = mService.getProcessDocument(processModel);
+				final ProcessDocument doc = wfpmService.getProcessDocument(processModel);
 				return doc.getProcessNode().getVersion();
 			}
 			return super.getVal(dataObject, key);
@@ -92,7 +92,7 @@ public class MyInitiateItemsTPage extends AbstractItemsTPage {
 		protected Map<String, Object> getRowData(final ComponentParameter cp, final Object dataObject) {
 			final InitiateItem initiateItem = (InitiateItem) dataObject;
 			final Object modelId = initiateItem.getModelId();
-			final ProcessModelBean processModel = mService.getBean(modelId);
+			final ProcessModelBean processModel = wfpmService.getBean(modelId);
 			final KVMap row = new KVMap();
 			row.add("modelText", new LinkElement(initiateItem)
 					.setOnclick("$Actions['MyInitiateItemsTPage_startProcess']('modelId=" + modelId
@@ -112,7 +112,7 @@ public class MyInitiateItemsTPage extends AbstractItemsTPage {
 
 		@Override
 		public JavascriptForward onStartProcess(final ComponentParameter cp, final ProcessBean process) {
-			final WorkitemBean workitem = pService.getFirstWorkitem(process);
+			final WorkitemBean workitem = wfpService.getFirstWorkitem(process);
 			if (workitem != null) {
 				final JavascriptForward js = new JavascriptForward();
 				js.append("$Actions.loc('")

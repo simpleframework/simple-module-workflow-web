@@ -76,7 +76,7 @@ public class ProcessModelMgrTPage extends AbstractWorkflowMgrTPage {
 			if (org != null) {
 				final ID orgId = org.getId();
 				cp.addFormParameter("orgId", orgId);
-				return mService.getModelListByDomain(orgId);
+				return wfpmService.getModelListByDomain(orgId);
 			}
 			return null;
 		}
@@ -96,7 +96,7 @@ public class ProcessModelMgrTPage extends AbstractWorkflowMgrTPage {
 			row.add("modelText", le)
 					.add("createDate", pm.getCreateDate())
 					.add("processCount",
-							drService.getProcessModelDomainR(getPermissionOrg(cp).getId(), pm)
+							wfpmdService.getProcessModelDomainR(getPermissionOrg(cp).getId(), pm)
 									.getProcessCount()).add("userText", pm.getUserText())
 					.add("version", pm.getModelVer())
 					.add("status", WorkflowUtils.toStatusHTML(cp, status))

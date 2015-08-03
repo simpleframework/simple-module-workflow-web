@@ -91,7 +91,7 @@ public class MyFinalWorklistTPage extends MyRunningWorklistTPage {
 
 	@Transaction(context = IWorkflowContext.class)
 	public IForward doRetake(final ComponentParameter cp) {
-		wService.doRetake(WorkflowUtils.getWorkitemBean(cp));
+		wfwService.doRetake(WorkflowUtils.getWorkitemBean(cp));
 		return new JavascriptForward("$Actions['MyWorklistTPage_tbl']();");
 	}
 
@@ -104,7 +104,7 @@ public class MyFinalWorklistTPage extends MyRunningWorklistTPage {
 	public static class MyCompleteWorklistTbl extends MyRunningWorklistTbl {
 		@Override
 		public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
-			return wService.getWorklist(cp.getLoginId(), EWorkitemStatus.complete,
+			return wfwService.getWorklist(cp.getLoginId(), EWorkitemStatus.complete,
 					EWorkitemStatus.abort, EWorkitemStatus.retake);
 		}
 

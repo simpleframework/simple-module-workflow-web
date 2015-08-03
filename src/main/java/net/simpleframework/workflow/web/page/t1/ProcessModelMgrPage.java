@@ -94,7 +94,7 @@ public class ProcessModelMgrPage extends AbstractWorkflowMgrPage {
 	@Transaction(context = IWorkflowContext.class)
 	public IForward doDelete(final ComponentParameter cp) {
 		final Object[] ids = StringUtils.split(cp.getParameter("modelId"));
-		mService.delete(ids);
+		wfpmService.delete(ids);
 		return new JavascriptForward("$Actions['ProcessModelMgrPage_tbl']();");
 	}
 
@@ -127,7 +127,7 @@ public class ProcessModelMgrPage extends AbstractWorkflowMgrPage {
 	public static class ProcessModelTbl extends AbstractDbTablePagerHandler {
 		@Override
 		public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
-			return mService.getModelList();
+			return wfpmService.getModelList();
 		}
 
 		@Override
@@ -207,7 +207,7 @@ public class ProcessModelMgrPage extends AbstractWorkflowMgrPage {
 				final IAttachmentSaveCallback callback) throws IOException {
 			final Map<String, AttachmentFile> attachments = getUploadCache(cp);
 			for (final AttachmentFile aFile : attachments.values()) {
-				mService.doAddModel(cp.getLoginId(),
+				wfpmService.doAddModel(cp.getLoginId(),
 						new ProcessDocument(new FileInputStream(aFile.getAttachment())));
 			}
 			// 清除
@@ -229,12 +229,12 @@ public class ProcessModelMgrPage extends AbstractWorkflowMgrPage {
 		public JavascriptForward onSave(final ComponentParameter cp) throws Exception {
 			final EProcessModelStatus op = cp.getEnumParameter(EProcessModelStatus.class, "op");
 			for (final String aId : StringUtils.split(cp.getParameter("modelId"), ";")) {
-				final ProcessModelBean processModel = mService.getBean(aId);
+				final ProcessModelBean processModel = wfpmService.getBean(aId);
 				setLogDescription(cp, processModel);
 				if (op == EProcessModelStatus.deploy) {
-					mService.doDeploy(processModel);
+					wfpmService.doDeploy(processModel);
 				} else if (op == EProcessModelStatus.edit) {
-					mService.doResume(processModel);
+					wfpmService.doResume(processModel);
 				}
 			}
 			return super.onSave(cp).append("$Actions['ProcessModelMgrPage_tbl']();");

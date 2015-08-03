@@ -29,12 +29,12 @@ public class DefaultDoWorkviewHandler extends AbstractComponentHandler implement
 		final WorkitemBean workitem = WorkflowUtils.getWorkitemBean(cp);
 		List<WorkviewBean> list = null;
 		if (workitem != null) {
-			list = vService.createWorkviews(WorkflowUtils.getWorkitemBean(cp),
+			list = wfvService.createWorkviews(WorkflowUtils.getWorkitemBean(cp),
 					ids.toArray(new ID[ids.size()]));
 		} else {
 			final WorkviewBean workview = WorkflowUtils.getWorkviewBean(cp);
 			if (workview != null) {
-				list = vService.createForwardWorkviews(WorkflowUtils.getWorkviewBean(cp),
+				list = wfvService.createForwardWorkviews(WorkflowUtils.getWorkviewBean(cp),
 						ids.toArray(new ID[ids.size()]));
 			}
 		}

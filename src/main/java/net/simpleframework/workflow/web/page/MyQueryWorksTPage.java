@@ -8,6 +8,7 @@ import java.util.Map;
 import net.simpleframework.ado.query.DataQueryUtils;
 import net.simpleframework.ado.query.IDataQuery;
 import net.simpleframework.ado.query.ListDataQuery;
+import net.simpleframework.common.BeanUtils;
 import net.simpleframework.common.Convert;
 import net.simpleframework.common.StringUtils;
 import net.simpleframework.common.coll.KVMap;
@@ -21,6 +22,7 @@ import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.common.element.TabButton;
 import net.simpleframework.mvc.common.element.TabButtons;
 import net.simpleframework.mvc.component.ComponentParameter;
+import net.simpleframework.mvc.component.base.ajaxrequest.AjaxRequestBean;
 import net.simpleframework.mvc.component.ui.pager.EPagerBarLayout;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
 import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
@@ -57,10 +59,16 @@ public class MyQueryWorksTPage extends AbstractItemsTPage {
 		addAjaxRequest(pp, "MyQueryWorksTPage_workitem").setHandlerMethod("doWorkitem");
 
 		// 工作列表窗口
-		addAjaxRequest(pp, "MyQueryWorksTPage_workitems_page", ProcessWorkitemsPage.class);
-		addWindowBean(pp, "MyQueryWorksTPage_workitems")
-				.setContentRef("MyQueryWorksTPage_workitems_page").setWidth(800).setHeight(480)
+		AjaxRequestBean ajaxRequest = addAjaxRequest(pp, "MyQueryWorksTPage_workitems_page",
+				ProcessWorkitemsPage.class);
+		addWindowBean(pp, "MyQueryWorksTPage_workitems", ajaxRequest).setWidth(800).setHeight(480)
 				.setTitle($m("MyQueryWorksTPage.1"));
+
+		// 流程选择
+		ajaxRequest = addAjaxRequest(pp, "MyQueryWorksTPage_pmselect_page",
+				ProcessModelSelectPage.class);
+		addWindowBean(pp, "MyQueryWorksTPage_pmselect", ajaxRequest).setPopup(true).setWidth(800)
+				.setHeight(480).setTitle($m("MyQueryWorksTPage.9"));
 	}
 
 	protected TablePagerBean addTablePagerBean(final PageParameter pp) {
@@ -91,13 +99,14 @@ public class MyQueryWorksTPage extends AbstractItemsTPage {
 	}
 
 	protected WorkitemBean getOpenWorkitem(final PageParameter pp, final ProcessBean process) {
-		return wService.getWorkitems(process, pp.getLoginId()).iterator().next();
+		return wfwService.getWorkitems(process, pp.getLoginId()).iterator().next();
 	}
 
 	@Override
 	public ElementList getLeftElements(final PageParameter pp) {
 		final ElementList el = ElementList.of();
-		el.add(new LinkElement($m("MyQueryWorksTPage.8")).setClassName("simple_btn2"));
+		el.add(new LinkElement($m("MyQueryWorksTPage.8")).setClassName("simple_btn2").setOnclick(
+				"$Actions['MyQueryWorksTPage_pmselect']();"));
 		return el;
 	}
 
@@ -121,7 +130,7 @@ public class MyQueryWorksTPage extends AbstractItemsTPage {
 	public static class MyQueryWorksTbl extends AbstractDbTablePagerHandler {
 		@Override
 		public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
-			return pService.getProcessList(cp.getLoginId());
+			return wfpService.getProcessList(cp.getLoginId());
 		}
 
 		@Override
@@ -200,7 +209,7 @@ public class MyQueryWorksTPage extends AbstractItemsTPage {
 				return DataQueryUtils.nullQuery();
 			}
 			cp.addFormParameter("processId", process.getId());
-			return new ListDataQuery<WorkitemBean>(wService.getWorkitems(process, cp.getLoginId()));
+			return new ListDataQuery<WorkitemBean>(wfwService.getWorkitems(process, cp.getLoginId()));
 		}
 
 		@Override
@@ -208,7 +217,7 @@ public class MyQueryWorksTPage extends AbstractItemsTPage {
 			final WorkitemBean workitem = (WorkitemBean) dataObject;
 			final KVMap row = new KVMap();
 
-			final ActivityBean activity = wService.getActivity(workitem);
+			final ActivityBean activity = wfwService.getActivity(workitem);
 			row.add(
 					"taskname",
 					new LinkElement(activity).setOnclick("$Actions.loc('"
@@ -229,6 +238,32 @@ public class MyQueryWorksTPage extends AbstractItemsTPage {
 			ope.append(new ButtonElement($m("WorkflowFormPage.1")).setOnclick("$Actions.loc('"
 					+ uFactory.getUrl(cp, WorkflowMonitorPage.class, workitem) + "');"));
 			return ope.toString();
+		}
+	}
+
+	public static class ProcessModelSelectPage extends OneTableTemplatePage {
+
+		@Override
+		protected void onForward(final PageParameter pp) throws Exception {
+			super.onForward(pp);
+			final TablePagerBean tablePager = (TablePagerBean) addTablePagerBean(pp,
+					"ProcessModelSelectPage_tbl", ProcessModelSelectTbl.class).setShowCheckbox(false)
+					.setShowLineNo(false).setPagerBarLayout(EPagerBarLayout.none);
+			tablePager.addColumn(new TablePagerColumn("activityId", "activityId")).addColumn(
+					TablePagerColumn.OPE().setWidth(110));
+		}
+	}
+
+	public static class ProcessModelSelectTbl extends AbstractDbTablePagerHandler {
+		@Override
+		public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
+
+			return wfwService.getRunningWorklist(cp.getLoginId());
+		}
+
+		@Override
+		protected Map<String, Object> getRowData(final ComponentParameter cp, final Object dataObject) {
+			return BeanUtils.toMap(dataObject);
 		}
 	}
 }

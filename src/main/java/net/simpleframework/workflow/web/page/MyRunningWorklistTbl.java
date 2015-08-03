@@ -63,9 +63,9 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 		final String v = cp.getParameter("v");
 		cp.addFormParameter("v", v);
 		if ("unread".equals(v)) {
-			return wService.getUnreadWorklist(userId);
+			return wfwService.getUnreadWorklist(userId);
 		}
-		return wService.getRunningWorklist(userId);
+		return wfwService.getRunningWorklist(userId);
 	}
 
 	@Override
@@ -79,7 +79,7 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 			final SQLValue sv = qs.getSqlValue();
 			final StringBuilder sb = new StringBuilder();
 			sb.append("select * from (").append(sv.getSql()).append(") t left join ")
-					.append(pService.getTablename(ProcessBean.class))
+					.append(wfpService.getTablename(ProcessBean.class))
 					.append(" p on t.processid=p.id where " + ev.getExpression());
 			sv.setSql(sb.toString());
 			sv.addValues(ev.getValues());
@@ -93,13 +93,13 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 			final String groupColumn) {
 		final boolean bModelname = "modelname".equals(groupColumn);
 		if (bModelname || "taskname".equals(groupColumn)) {
-			final ActivityBean activity = wService.getActivity(getWorkitem(bean));
-			final ProcessModelBean processModel = pService.getProcessModel(aService
+			final ActivityBean activity = wfwService.getActivity(getWorkitem(bean));
+			final ProcessModelBean processModel = wfpService.getProcessModel(wfaService
 					.getProcessBean(activity));
 			if (bModelname) {
 				return processModel;
 			} else {
-				return new TaskWrapper(aService.getTaskNode(activity), processModel);
+				return new TaskWrapper(wfaService.getTaskNode(activity), processModel);
 			}
 		}
 		return groupColumn;
@@ -191,7 +191,7 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 		appendTaskname(title, cp, activity);
 
 		final Date timeoutDate = activity.getTimeoutDate();
-		if (timeoutDate != null && !aService.isFinalStatus(activity)) {
+		if (timeoutDate != null && !wfaService.isFinalStatus(activity)) {
 			if (activity.getStatus() == EActivityStatus.timeout) {
 				int d = 0;
 				if (activity.getCompleteDate() == null) {
@@ -213,7 +213,7 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 		}
 
 		final EWorkitemStatus status = workitem.getStatus();
-		final DelegationBean delegation = (status == EWorkitemStatus.delegate) ? dService
+		final DelegationBean delegation = (status == EWorkitemStatus.delegate) ? wfdService
 				.queryRunningDelegation(workitem) : null;
 		final boolean receiving = delegation != null
 				&& delegation.getStatus() == EDelegationStatus.receiving;
@@ -233,7 +233,7 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 
 		final StringBuilder stat = new StringBuilder();
 		SpanElement commentsEle;
-		final WfCommentUser commentUser = commentUserService.getCommentUser(workitem.getUserId(),
+		final WfCommentUser commentUser = wfcuService.getCommentUser(workitem.getUserId(),
 				workitem.getProcessId());
 		final int ncomments;
 		if (commentUser != null && (ncomments = commentUser.getNcomments()) > 0) {

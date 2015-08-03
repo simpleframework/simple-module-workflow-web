@@ -74,16 +74,16 @@ public abstract class AbstractWorkflowFormTPage extends AbstractFormTableRowTPag
 			final ID processId = workitem.getProcessId();
 
 			// 重置新到意见
-			commentUserService.resetCommentUser(workitem.getUserId(), processId);
+			wfcuService.resetCommentUser(workitem.getUserId(), processId);
 			if (!workitem.isReadMark()) {
-				wService.doReadMark(workitem);
+				wfwService.doReadMark(workitem);
 			}
 
 			// 更新
 			final String k = "views_" + processId;
 			final Object o = pp.getSessionAttr(k);
 			if (o == null) {
-				pService.doUpdateViews(pService.getBean(processId));
+				wfpService.doUpdateViews(wfpService.getBean(processId));
 				pp.setSessionAttr(k, Boolean.TRUE);
 			}
 		}
@@ -116,7 +116,7 @@ public abstract class AbstractWorkflowFormTPage extends AbstractFormTableRowTPag
 	public void onSaveForm(final PageParameter pp, final WorkitemBean workitem) {
 		final ProcessBean process = getProcessBean(pp);
 
-		pService.doUpdateKV(process, new KVMap().add("title", pp.getParameter(getParamKey_title()))
+		wfpService.doUpdateKV(process, new KVMap().add("title", pp.getParameter(getParamKey_title()))
 				.add("pno", pp.getParameter(getParamKey_pno())));
 
 		// 添加评论

@@ -203,7 +203,7 @@ public class MyRunningWorklistTPage extends AbstractItemsTPage {
 	@Override
 	public String toToolbarHTML(final PageParameter pp) {
 		final StringBuilder sb = new StringBuilder();
-		final DelegationBean delegation = dService.queryRunningDelegation(pp.getLoginId());
+		final DelegationBean delegation = wfdService.queryRunningDelegation(pp.getLoginId());
 		if (delegation != null) {
 			addAjaxRequest(pp, "MyRunningWorklistTPage_user_undelegate").setConfirmMessage(
 					$m("MyRunningWorklistTPage.11")).setHandlerMethod("doUserUndelegate");
@@ -225,12 +225,12 @@ public class MyRunningWorklistTPage extends AbstractItemsTPage {
 	}
 
 	protected String getProgressBarJavascript(final PageParameter pp) {
-		final UserStatBean userStat = usService.getUserStat(pp.getLoginId());
+		final UserStatBean userStat = wfusService.getUserStat(pp.getLoginId());
 		final StringBuilder js = new StringBuilder();
 		js.append("var container = $('idWorklistProgressBar');");
 		js.append("if (container) {");
 		js.append("  var bar = new $UI.ProgressBar(container, {");
-		int maxValue = usService.getAllWorkitems(userStat);
+		int maxValue = wfusService.getAllWorkitems(userStat);
 		if (maxValue <= 0) {
 			maxValue = 100;
 		}
@@ -283,9 +283,9 @@ public class MyRunningWorklistTPage extends AbstractItemsTPage {
 
 	@Transaction(context = IWorkflowContext.class)
 	public IForward doUserUndelegate(final ComponentParameter cp) {
-		final DelegationBean delegation = dService.queryRunningDelegation(cp.getLoginId());
+		final DelegationBean delegation = wfdService.queryRunningDelegation(cp.getLoginId());
 		if (delegation != null) {
-			dService.doAbort(delegation);
+			wfdService.doAbort(delegation);
 		}
 		return JavascriptForward.RELOC;
 	}
@@ -294,20 +294,20 @@ public class MyRunningWorklistTPage extends AbstractItemsTPage {
 	public IForward doReadMark(final ComponentParameter cp) {
 		final String op = cp.getParameter("op");
 		if ("allread".equals(op)) {
-			final IDataQuery<WorkitemBean> dq = wService.getRunningWorklist(cp.getLoginId());
+			final IDataQuery<WorkitemBean> dq = wfwService.getRunningWorklist(cp.getLoginId());
 			WorkitemBean workitem;
 			while ((workitem = dq.next()) != null) {
 				if (!workitem.isReadMark()) {
-					wService.doReadMark(workitem);
+					wfwService.doReadMark(workitem);
 				}
 			}
 		} else {
 			for (final Object id : StringUtils.split(cp.getParameter("workitemId"))) {
-				final WorkitemBean workitem = wService.getBean(id);
+				final WorkitemBean workitem = wfwService.getBean(id);
 				if ("unread".equals(op)) {
-					wService.doUnReadMark(workitem);
+					wfwService.doUnReadMark(workitem);
 				} else {
-					wService.doReadMark(workitem);
+					wfwService.doReadMark(workitem);
 				}
 			}
 		}
@@ -316,11 +316,11 @@ public class MyRunningWorklistTPage extends AbstractItemsTPage {
 
 	public IForward doTopMark(final ComponentParameter cp) {
 		for (final Object id : StringUtils.split(cp.getParameter("workitemId"))) {
-			final WorkitemBean workitem = wService.getBean(id);
+			final WorkitemBean workitem = wfwService.getBean(id);
 			if ("untop".equals(cp.getParameter("op"))) {
-				wService.doUnTopMark(workitem);
+				wfwService.doUnTopMark(workitem);
 			} else {
-				wService.doTopMark(workitem);
+				wfwService.doTopMark(workitem);
 			}
 		}
 		return new JavascriptForward("$Actions['MyWorklistTPage_tbl']();");
@@ -328,14 +328,14 @@ public class MyRunningWorklistTPage extends AbstractItemsTPage {
 
 	@Transaction(context = IWorkflowContext.class)
 	public IForward doFallback(final ComponentParameter cp) {
-		aService.doFallback(wService.getActivity(WorkflowUtils.getWorkitemBean(cp)));
+		wfaService.doFallback(wfwService.getActivity(WorkflowUtils.getWorkitemBean(cp)));
 		return new JavascriptForward("$Actions['MyWorklistTPage_tbl']();");
 	}
 
 	@Transaction(context = IWorkflowContext.class)
 	public IForward doDelete(final ComponentParameter cp) {
 		for (final String workitemId : StringUtils.split(cp.getParameter("workitemId"))) {
-			wService.doDeleteProcess(wService.getBean(workitemId));
+			wfwService.doDeleteProcess(wfwService.getBean(workitemId));
 		}
 		return new JavascriptForward("$Actions['MyWorklistTPage_tbl']();");
 	}

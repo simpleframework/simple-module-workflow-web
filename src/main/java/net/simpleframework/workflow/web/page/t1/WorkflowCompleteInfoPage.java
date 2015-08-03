@@ -31,7 +31,7 @@ public class WorkflowCompleteInfoPage extends AbstractWorkflowFormPage {
 		if (nextActivities != null) {
 			for (final ActivityBean next : nextActivities) {
 				if (next.getTasknodeType() == AbstractTaskNode.TT_MERGE) {
-					l.addAll(removeMergeNodes(aService.getLastNextActivities(next)));
+					l.addAll(removeMergeNodes(wfaService.getLastNextActivities(next)));
 				} else {
 					l.add(next);
 				}
@@ -47,8 +47,8 @@ public class WorkflowCompleteInfoPage extends AbstractWorkflowFormPage {
 		sb.append("<div class='WorkflowCompleteInfoPage'>");
 		sb.append(" <div class='l1'>#(WorkflowCompleteInfoPage.0)</div>");
 		sb.append(" <div class='l2'>");
-		final List<ActivityBean> nextActivities = removeMergeNodes(aService
-				.getLastNextActivities(wService.getActivity(WorkflowUtils.getWorkitemBean(pp))));
+		final List<ActivityBean> nextActivities = removeMergeNodes(wfaService
+				.getLastNextActivities(wfwService.getActivity(WorkflowUtils.getWorkitemBean(pp))));
 		if (nextActivities.size() > 0) {
 			sb.append("<table>");
 			for (final ActivityBean next : nextActivities) {
@@ -58,8 +58,8 @@ public class WorkflowCompleteInfoPage extends AbstractWorkflowFormPage {
 				sb.append("<td class='task'>").append(next).append("</td>");
 				sb.append("<td>");
 				int i = 0;
-				for (final WorkitemBean workitem2 : wService
-						.getWorkitems(next, EWorkitemStatus.running)) {
+				for (final WorkitemBean workitem2 : wfwService.getWorkitems(next,
+						EWorkitemStatus.running)) {
 					if (i++ > 0) {
 						sb.append(", ");
 					}

@@ -62,7 +62,7 @@ public abstract class AbstractFormTableRowTPage<T extends AbstractWorkitemBean> 
 		return pp.getRequestCache("$ProcessNode", new CacheV<ProcessNode>() {
 			@Override
 			public ProcessNode get() {
-				final ProcessDocument doc = pService.getProcessDocument(getProcessBean(pp));
+				final ProcessDocument doc = wfpService.getProcessDocument(getProcessBean(pp));
 				return doc == null ? null : doc.getProcessNode();
 			}
 		});

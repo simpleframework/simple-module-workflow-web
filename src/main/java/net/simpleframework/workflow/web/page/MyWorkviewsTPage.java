@@ -57,7 +57,7 @@ public class MyWorkviewsTPage extends AbstractItemsTPage {
 	public static class MyWorkviewsTbl extends AbstractDbTablePagerHandler {
 		@Override
 		public IDataQuery<WorkviewBean> createDataObjectQuery(final ComponentParameter cp) {
-			return vService.getWorkviewsList(cp.getLoginId());
+			return wfvService.getWorkviewsList(cp.getLoginId());
 		}
 
 		@Override
@@ -70,7 +70,7 @@ public class MyWorkviewsTPage extends AbstractItemsTPage {
 				final SQLValue sv = qs.getSqlValue();
 				final StringBuilder sb = new StringBuilder();
 				sb.append("select * from (").append(sv.getSql()).append(") t left join ")
-						.append(pService.getTablename(ProcessBean.class))
+						.append(wfpService.getTablename(ProcessBean.class))
 						.append(" p on t.processid=p.id where " + ev.getExpression());
 				sv.setSql(sb.toString());
 				sv.addValues(ev.getValues());
@@ -93,7 +93,7 @@ public class MyWorkviewsTPage extends AbstractItemsTPage {
 		@Override
 		protected Map<String, Object> getRowData(final ComponentParameter cp, final Object dataObject) {
 			final WorkviewBean workview = (WorkviewBean) dataObject;
-			final ProcessBean process = pService.getBean(workview.getProcessId());
+			final ProcessBean process = wfpService.getBean(workview.getProcessId());
 			final KVMap row = new KVMap();
 			final AbstractElement<?> img = createImageMark(cp, workview);
 			if (img != null) {
@@ -107,8 +107,8 @@ public class MyWorkviewsTPage extends AbstractItemsTPage {
 			row.add("title", le).add("createDate", workview.getCreateDate());
 
 			// sent
-			final WorkviewBean workview2 = vService.getBean(workview.getParentId());
-			final WorkitemBean workitem = wService.getBean(workview2 != null ? workview2
+			final WorkviewBean workview2 = wfvService.getBean(workview.getParentId());
+			final WorkitemBean workitem = wfwService.getBean(workview2 != null ? workview2
 					.getWorkitemId() : workview.getWorkitemId());
 			if (workitem != null) {
 				row.add("sent", workitem.getUserText2());

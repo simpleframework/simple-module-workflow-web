@@ -63,7 +63,7 @@ public abstract class WorkflowUtils implements IWorkflowServiceAware {
 			final boolean r) {
 		final StringBuilder sb = new StringBuilder();
 		int i = 0;
-		for (final Participant p : (r ? aService.getParticipants2(activity) : aService
+		for (final Participant p : (r ? wfaService.getParticipants2(activity) : wfaService
 				.getParticipants(activity, true))) {
 			if (i++ > 0) {
 				sb.append(", ");
@@ -78,8 +78,8 @@ public abstract class WorkflowUtils implements IWorkflowServiceAware {
 			@Override
 			public String get() {
 				final Set<String> list = new LinkedHashSet<String>();
-				for (final ActivityBean nextActivity : aService.getNextActivities(activity)) {
-					for (final WorkitemBean workitem : wService.getWorkitems(nextActivity)) {
+				for (final ActivityBean nextActivity : wfaService.getNextActivities(activity)) {
+					for (final WorkitemBean workitem : wfwService.getWorkitems(nextActivity)) {
 						list.add(workitem.getUserText());
 					}
 				}
@@ -89,7 +89,7 @@ public abstract class WorkflowUtils implements IWorkflowServiceAware {
 	}
 
 	public static String getUserFrom(final ActivityBean activity) {
-		final ActivityBean preActivity = aService.getPreActivity(activity);
+		final ActivityBean preActivity = wfaService.getPreActivity(activity);
 		if (preActivity == null) {
 			return null;
 		}
@@ -97,7 +97,7 @@ public abstract class WorkflowUtils implements IWorkflowServiceAware {
 			@Override
 			public String get() {
 				final Set<String> list = new LinkedHashSet<String>();
-				for (final WorkitemBean workitem : wService.getWorkitems(preActivity,
+				for (final WorkitemBean workitem : wfwService.getWorkitems(preActivity,
 						EWorkitemStatus.complete)) {
 					list.add(workitem.getUserText());
 				}
@@ -114,7 +114,7 @@ public abstract class WorkflowUtils implements IWorkflowServiceAware {
 		return pp.getRequestCache(workviewId, new CacheV<WorkviewBean>() {
 			@Override
 			public WorkviewBean get() {
-				return vService.getBean(workviewId);
+				return wfvService.getBean(workviewId);
 			}
 		});
 	}
@@ -127,7 +127,7 @@ public abstract class WorkflowUtils implements IWorkflowServiceAware {
 		return pp.getRequestCache(workitemId, new CacheV<WorkitemBean>() {
 			@Override
 			public WorkitemBean get() {
-				return wService.getBean(workitemId);
+				return wfwService.getBean(workitemId);
 			}
 		});
 	}
@@ -146,7 +146,7 @@ public abstract class WorkflowUtils implements IWorkflowServiceAware {
 									_activityId = workitem2.getActivityId();
 								}
 							}
-							return aService.getBean(_activityId);
+							return wfaService.getBean(_activityId);
 						}
 					});
 		} else {
@@ -154,7 +154,7 @@ public abstract class WorkflowUtils implements IWorkflowServiceAware {
 			return pp.getRequestCache("activity_" + activityId, new CacheV<ActivityBean>() {
 				@Override
 				public ActivityBean get() {
-					return aService.getBean(activityId);
+					return wfaService.getBean(activityId);
 				}
 			});
 		}
@@ -168,7 +168,7 @@ public abstract class WorkflowUtils implements IWorkflowServiceAware {
 		return pp.getRequestCache("_TaskNode", new CacheV<AbstractTaskNode>() {
 			@Override
 			public AbstractTaskNode get() {
-				return aService.getTaskNode(getActivityBean(pp));
+				return wfaService.getTaskNode(getActivityBean(pp));
 			}
 		});
 	}
@@ -191,7 +191,7 @@ public abstract class WorkflowUtils implements IWorkflowServiceAware {
 									_processId = workitem2.getProcessId();
 								}
 							}
-							return pService.getBean(_processId);
+							return wfpService.getBean(_processId);
 						}
 					});
 		} else {
@@ -199,7 +199,7 @@ public abstract class WorkflowUtils implements IWorkflowServiceAware {
 			return pp.getRequestCache("process_" + processId, new CacheV<ProcessBean>() {
 				@Override
 				public ProcessBean get() {
-					return pService.getBean(processId);
+					return wfpService.getBean(processId);
 				}
 			});
 		}
@@ -222,7 +222,7 @@ public abstract class WorkflowUtils implements IWorkflowServiceAware {
 								_modelId = process.getModelId();
 							}
 						}
-						return mService.getBean(_modelId);
+						return wfpmService.getBean(_modelId);
 					}
 				});
 	}
@@ -231,7 +231,7 @@ public abstract class WorkflowUtils implements IWorkflowServiceAware {
 		return pp.getRequestCache("_getUserStat", new CacheV<UserStatBean>() {
 			@Override
 			public UserStatBean get() {
-				return usService.getUserStat(pp.getLoginId());
+				return wfusService.getUserStat(pp.getLoginId());
 			}
 		});
 	}

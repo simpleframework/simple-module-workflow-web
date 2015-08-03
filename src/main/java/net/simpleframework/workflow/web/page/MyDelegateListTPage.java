@@ -85,14 +85,14 @@ public class MyDelegateListTPage extends AbstractItemsTPage {
 
 	@Transaction(context = IWorkflowContext.class)
 	public IForward doAbort(final ComponentParameter cp) {
-		dService.doAbort(dService.getBean(cp.getParameter("delegationId")));
+		wfdService.doAbort(wfdService.getBean(cp.getParameter("delegationId")));
 		return new JavascriptForward("$Actions['MyWorklistTPage_tbl']();");
 	}
 
 	@Transaction(context = IWorkflowContext.class)
 	public IForward doDelete(final ComponentParameter cp) {
 		final Object[] ids = StringUtils.split(cp.getParameter("delegationId"));
-		dService.delete(ids);
+		wfdService.delete(ids);
 		return new JavascriptForward("$Actions['MyWorklistTPage_tbl']();");
 	}
 
@@ -121,12 +121,12 @@ public class MyDelegateListTPage extends AbstractItemsTPage {
 
 		@Override
 		public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
-			return dService.queryDelegations(cp.getLoginId(), EDelegationSource.workitem);
+			return wfdService.queryDelegations(cp.getLoginId(), EDelegationSource.workitem);
 		}
 
 		@Override
 		protected WorkitemBean getWorkitem(final Object dataObject) {
-			return wService.getBean(((DelegationBean) dataObject).getSourceId());
+			return wfwService.getBean(((DelegationBean) dataObject).getSourceId());
 		}
 
 		protected Object toTitle(final DelegationBean delegation, final Object title) {
@@ -138,7 +138,7 @@ public class MyDelegateListTPage extends AbstractItemsTPage {
 		protected String toOpeHTML(final ComponentParameter cp, final DelegationBean delegation) {
 			final StringBuilder sb = new StringBuilder();
 			final Object id = delegation.getId();
-			if (dService.isFinalStatus(delegation)) {
+			if (wfdService.isFinalStatus(delegation)) {
 				sb.append(WorkflowUtils.createLogButton().setOnclick(
 						"$Actions['AbstractItemsTPage_update_log']('delegationId=" + id + "');"));
 			} else {
@@ -154,11 +154,11 @@ public class MyDelegateListTPage extends AbstractItemsTPage {
 		protected Map<String, Object> getRowData(final ComponentParameter cp, final Object dataObject) {
 			final DelegationBean delegation = (DelegationBean) dataObject;
 			final WorkitemBean workitem = getWorkitem(delegation);
-			final ActivityBean activity = wService.getActivity(workitem);
+			final ActivityBean activity = wfwService.getActivity(workitem);
 			final StringBuilder title = new StringBuilder();
 			appendTaskname(title, cp, activity);
 			title.append(toTitle(delegation,
-					WorkflowUtils.getProcessTitle(aService.getProcessBean(activity))));
+					WorkflowUtils.getProcessTitle(wfaService.getProcessBean(activity))));
 			final KVMap row = new KVMap().add("title", title.toString());
 			row.add("userText", delegation.getUserText());
 			row.add("createDate", delegation.getCreateDate());

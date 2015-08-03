@@ -75,7 +75,7 @@ public class ProcessMgrPage extends AbstractWorkflowMgrPage {
 	@Transaction(context = IWorkflowContext.class)
 	public IForward doDelete(final ComponentParameter cp) {
 		final Object[] ids = StringUtils.split(cp.getParameter("processId"));
-		pService.delete(ids);
+		wfpService.delete(ids);
 		return new JavascriptForward("$Actions['ProcessMgrPage_tbl']();");
 	}
 
@@ -114,7 +114,7 @@ public class ProcessMgrPage extends AbstractWorkflowMgrPage {
 				return DataQueryUtils.nullQuery();
 			}
 			cp.addFormParameter("modelId", processModel.getId());
-			return pService.getProcessList(null, processModel);
+			return wfpService.getProcessList(null, processModel);
 		}
 
 		@Override
@@ -196,12 +196,12 @@ public class ProcessMgrPage extends AbstractWorkflowMgrPage {
 		public JavascriptForward onSave(final ComponentParameter cp) throws Exception {
 			final EProcessStatus op = cp.getEnumParameter(EProcessStatus.class, "op");
 			for (final String aId : StringUtils.split(cp.getParameter("processId"), ";")) {
-				final ProcessBean process = pService.getBean(aId);
+				final ProcessBean process = wfpService.getBean(aId);
 				setLogDescription(cp, process);
 				if (op == EProcessStatus.suspended) {
-					pService.doSuspend(process);
+					wfpService.doSuspend(process);
 				} else if (op == EProcessStatus.running) {
-					pService.doResume(process);
+					wfpService.doResume(process);
 				}
 			}
 			final JavascriptForward js = toSavedForward(cp);
@@ -219,7 +219,7 @@ public class ProcessMgrPage extends AbstractWorkflowMgrPage {
 		@Transaction(context = IWorkflowContext.class)
 		public IForward doOk(final ComponentParameter cp) {
 			final ProcessBean process = WorkflowUtils.getProcessBean(cp);
-			pService.doAbort(process,
+			wfpService.doAbort(process,
 					Convert.toEnum(EProcessAbortPolicy.class, cp.getParameter("abort_policy")));
 			return new JavascriptForward(
 					"$Actions['ProcessMgrPage_abort'].close(); $Actions['ProcessMgrPage_tbl']();");

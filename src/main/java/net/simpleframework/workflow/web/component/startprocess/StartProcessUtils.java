@@ -50,12 +50,12 @@ public abstract class StartProcessUtils implements IWorkflowServiceAware {
 		ProcessModelBean processModel = null;
 		final String modelId = cp.getParameter((String) cp.getBeanProperty("modelIdParameterName"));
 		if (StringUtils.hasText(modelId)) {
-			processModel = mService.getBean(modelId);
+			processModel = wfpmService.getBean(modelId);
 		}
 		if (processModel == null) {
-			processModel = mService.getProcessModelByName(cp.getParameter("modelName"));
+			processModel = wfpmService.getProcessModelByName(cp.getParameter("modelName"));
 		}
-		return mService.getInitiateItems(cp.getLoginId()).get(processModel);
+		return wfpmService.getInitiateItems(cp.getLoginId()).get(processModel);
 	}
 
 	public static String toParams(final ComponentParameter cp, final InitiateItem initiateItem) {
@@ -104,7 +104,7 @@ public abstract class StartProcessUtils implements IWorkflowServiceAware {
 		}
 
 		// 发起流程实例
-		final ProcessBean process = pService.doStartProcess(initiateItem);
+		final ProcessBean process = wfpService.doStartProcess(initiateItem);
 		// 触发onStartProcess回调
 		return ((IStartProcessHandler) nCP.getComponentHandler()).onStartProcess(nCP, process);
 	}
