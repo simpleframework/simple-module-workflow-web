@@ -95,6 +95,13 @@ public class MyQueryWorksTPage extends AbstractItemsTPage {
 	}
 
 	@Override
+	public ElementList getLeftElements(final PageParameter pp) {
+		final ElementList el = ElementList.of();
+		el.add(new LinkElement($m("MyQueryWorksTPage.8")).setClassName("simple_btn2"));
+		return el;
+	}
+
+	@Override
 	public ElementList getRightElements(final PageParameter pp) {
 		final TabButtons tabs = TabButtons.of(new TabButton($m("MyQueryWorksTPage.4"), uFactory
 				.getUrl(pp, MyQueryWorksTPage.class)));
