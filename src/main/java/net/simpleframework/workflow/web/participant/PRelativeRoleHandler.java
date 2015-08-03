@@ -52,8 +52,8 @@ public class PRelativeRoleHandler extends AbstractParticipantHandler implements
 		higher {// 上级
 
 		},
-		all{//指定角色,即所有部门
-			
+		all {// 指定角色,即所有部门
+
 		}
 	}
 
@@ -75,7 +75,7 @@ public class PRelativeRoleHandler extends AbstractParticipantHandler implements
 		final String autoparent = params.get(PARAMS_KEY_AUTOPARENT);
 		if (StringUtils.hasText(node)) {
 			// 获取前一指定任务步骤实例
-			preActivity = aService.getPreActivity(preActivity, node);
+			preActivity = wfaService.getPreActivity(preActivity, node);
 			if (null == preActivity) {
 				return null;
 			}
@@ -89,7 +89,7 @@ public class PRelativeRoleHandler extends AbstractParticipantHandler implements
 			// 如果前一指定节点就是上一节点
 			workitem = activityComplete.getWorkitem();
 		} else {
-			final List<WorkitemBean> items = wService.getWorkitems(preActivity,
+			final List<WorkitemBean> items = wfwService.getWorkitems(preActivity,
 					EWorkitemStatus.complete);
 			if (null != items && items.size() > 0) {
 				workitem = items.get(0);
@@ -100,10 +100,10 @@ public class PRelativeRoleHandler extends AbstractParticipantHandler implements
 			roleId = workitem.getRoleId();
 			deptId = workitem.getDeptId();
 		} else {
-			final AbstractTaskNode tasknode = aService.getTaskNode(preActivity);
+			final AbstractTaskNode tasknode = wfaService.getTaskNode(preActivity);
 			if (tasknode instanceof UserNode && ((UserNode) tasknode).isEmpty()) {
 				// 处理空节点的执行者
-				final List<Participant> mps = aService.getEmptyParticipants(preActivity);
+				final List<Participant> mps = wfaService.getEmptyParticipants(preActivity);
 				if (null != mps && mps.size() > 0) {
 					final Participant mp = mps.get(0);
 					userId = mp.userId;
@@ -146,16 +146,16 @@ public class PRelativeRoleHandler extends AbstractParticipantHandler implements
 				// send=1时,过虑已经过送过的并还在处理中的用户
 				final UserNode unode = getUserNode(variables);
 				final ID pid = activityComplete.getActivity().getProcessId();
-				final List<ActivityBean> sends = aService.getActivities(pService.getBean(pid),
+				final List<ActivityBean> sends = wfaService.getActivities(wfpService.getBean(pid),
 						unode.getId());
 				if (null != sends) {
 					for (final ActivityBean act : sends) {
 						if (isFinalRunning(act, "1".equals(send))) {
 							List<WorkitemBean> items = null;
 							if ("2".equals(send)) {
-								items = wService.getWorkitems(act, EWorkitemStatus.running);
+								items = wfwService.getWorkitems(act, EWorkitemStatus.running);
 							} else {
-								items = wService.getWorkitems(act);
+								items = wfwService.getWorkitems(act);
 							}
 							if (null != items) {
 								for (final WorkitemBean item : items) {
@@ -178,9 +178,9 @@ public class PRelativeRoleHandler extends AbstractParticipantHandler implements
 
 	// n是否包括后续
 	private boolean isFinalRunning(final ActivityBean act, final boolean n) {
-		if (aService.isFinalStatus(act)) {
+		if (wfaService.isFinalStatus(act)) {
 			if (n) {
-				final List<ActivityBean> nexts = aService.getNextActivities(act);
+				final List<ActivityBean> nexts = wfaService.getNextActivities(act);
 				if (null != nexts) {
 					for (final ActivityBean next : nexts) {
 						if (isFinalRunning(next, n)) {

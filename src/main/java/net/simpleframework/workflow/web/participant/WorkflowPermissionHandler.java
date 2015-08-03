@@ -69,7 +69,7 @@ public class WorkflowPermissionHandler extends OrganizationPermissionHandler imp
 						while (users.hasNext()) {
 							participants.add(new Participant(users.next(), roleId, deptId));
 						}
-					}else if(level.equals(Level.all)){//指定角色
+					} else if (level.equals(Level.all)) {// 指定角色
 						final Iterator<ID> users = users(roleId, null, variables);
 						while (users.hasNext()) {
 							participants.add(new Participant(users.next(), roleId, null));
