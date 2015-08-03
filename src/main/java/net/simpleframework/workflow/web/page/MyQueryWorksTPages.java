@@ -15,6 +15,7 @@ import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
 import net.simpleframework.workflow.engine.bean.ProcessBean;
 import net.simpleframework.workflow.engine.bean.WorkitemBean;
+import net.simpleframework.workflow.web.WorkflowUtils;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -39,7 +40,8 @@ public abstract class MyQueryWorksTPages {
 		public static class MyQueryWorks_OrgTbl extends MyQueryWorksTbl {
 			@Override
 			public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
-				return wfpService.getProcessWlistInDomain(cp.getLogin().getDomainId());
+				return wfpService.getProcessWlistInDomain(cp.getLogin().getDomainId(),
+						WorkflowUtils.getProcessModel(cp));
 			}
 		}
 	}
@@ -73,7 +75,8 @@ public abstract class MyQueryWorksTPages {
 						deptIds.add(_dept.getId());
 					}
 				}
-				return wfpService.getProcessWlistInDept(deptIds.toArray(new ID[deptIds.size()]));
+				return wfpService.getProcessWlistInDept(deptIds.toArray(new ID[deptIds.size()]),
+						WorkflowUtils.getProcessModel(cp));
 			}
 		}
 	}

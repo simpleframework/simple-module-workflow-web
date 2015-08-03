@@ -70,8 +70,8 @@ public class MyQueryWorksTPage extends AbstractItemsTPage {
 		// 流程选择
 		ajaxRequest = addAjaxRequest(pp, "MyQueryWorksTPage_pmselect_page",
 				ProcessModelSelectPage.class);
-		addWindowBean(pp, "MyQueryWorksTPage_pmselect", ajaxRequest).setPopup(true).setWidth(800)
-				.setHeight(480).setTitle($m("MyQueryWorksTPage.9"));
+		addWindowBean(pp, "MyQueryWorksTPage_pmselect", ajaxRequest).setPopup(true).setWidth(680)
+				.setHeight(450).setTitle($m("MyQueryWorksTPage.9"));
 	}
 
 	protected TablePagerBean addTablePagerBean(final PageParameter pp) {
@@ -108,8 +108,15 @@ public class MyQueryWorksTPage extends AbstractItemsTPage {
 	@Override
 	public ElementList getLeftElements(final PageParameter pp) {
 		final ElementList el = ElementList.of();
-		el.add(new LinkElement($m("MyQueryWorksTPage.8")).setClassName("simple_btn2").setOnclick(
-				"$Actions['MyQueryWorksTPage_pmselect']();"));
+		final ProcessModelBean pm = WorkflowUtils.getProcessModel(pp);
+		if (pm != null) {
+			el.append(
+					new LinkElement("取消过滤").setClassName("simple_btn2").setOnclick(
+							"location.href = location.href.addParameter('modelId=');")).append(
+					SpanElement.SPACE);
+		}
+		el.append(new LinkElement(pm != null ? pm.getModelText() : $m("MyQueryWorksTPage.8"))
+				.setClassName("simple_btn2").setOnclick("$Actions['MyQueryWorksTPage_pmselect']();"));
 		return el;
 	}
 
@@ -133,7 +140,7 @@ public class MyQueryWorksTPage extends AbstractItemsTPage {
 	public static class MyQueryWorksTbl extends AbstractDbTablePagerHandler {
 		@Override
 		public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
-			return wfpService.getProcessWlist(cp.getLoginId());
+			return wfpService.getProcessWlist(cp.getLoginId(), WorkflowUtils.getProcessModel(cp));
 		}
 
 		@Override
