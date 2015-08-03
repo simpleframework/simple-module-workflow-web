@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Map;
 
 import net.simpleframework.ado.query.IDataQuery;
-import net.simpleframework.common.Convert;
 import net.simpleframework.common.ID;
 import net.simpleframework.common.StringUtils;
 import net.simpleframework.common.coll.KVMap;
@@ -160,10 +159,10 @@ public class MyQueryWorksTPage extends AbstractItemsTPage {
 
 		protected String toTitleHTML(final ComponentParameter cp, final ProcessBean process) {
 			final StringBuilder t = new StringBuilder();
-			final int c = Convert.toInt(process.getAttr("c"));
-			if (c > 0) {
-				t.append("[").append(c).append("] ");
-			}
+			// final int c = Convert.toInt(process.getAttr("c"));
+			// if (c > 0) {
+			// t.append("[").append(c).append("] ");
+			// }
 			t.append(new LinkElement(WorkflowUtils.getProcessTitle(process)).setOnclick(
 					"$Actions['MyQueryWorksTPage_workitem']('processId=" + process.getId() + "');")
 					.setColor_gray(!StringUtils.hasText(process.getTitle())));
