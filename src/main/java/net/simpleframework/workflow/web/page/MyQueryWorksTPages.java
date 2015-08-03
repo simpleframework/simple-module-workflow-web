@@ -39,7 +39,7 @@ public abstract class MyQueryWorksTPages {
 		public static class MyQueryWorks_OrgTbl extends MyQueryWorksTbl {
 			@Override
 			public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
-				return wfpService.getProcessListInDomain(cp.getLogin().getDomainId());
+				return wfpService.getProcessWlistInDomain(cp.getLogin().getDomainId());
 			}
 		}
 	}
@@ -61,13 +61,6 @@ public abstract class MyQueryWorksTPages {
 			return el;
 		}
 
-		// @Override
-		// public ElementList getLeftElements(final PageParameter pp) {
-		// final ElementList el = super.getLeftElements(pp);
-
-		// return el;
-		// }
-
 		public static class MyQueryWorks_DeptTbl extends MyQueryWorksTbl {
 			@Override
 			public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
@@ -80,7 +73,7 @@ public abstract class MyQueryWorksTPages {
 						deptIds.add(_dept.getId());
 					}
 				}
-				return wfpService.getProcessListInDept(deptIds.toArray(new ID[deptIds.size()]));
+				return wfpService.getProcessWlistInDept(deptIds.toArray(new ID[deptIds.size()]));
 			}
 		}
 	}

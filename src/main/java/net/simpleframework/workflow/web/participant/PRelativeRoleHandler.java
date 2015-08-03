@@ -231,5 +231,4 @@ public class PRelativeRoleHandler extends AbstractParticipantHandler implements
 		}
 		return params;
 	}
-
 }

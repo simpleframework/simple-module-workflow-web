@@ -8,7 +8,6 @@ import java.util.Map;
 import net.simpleframework.ado.query.DataQueryUtils;
 import net.simpleframework.ado.query.IDataQuery;
 import net.simpleframework.ado.query.ListDataQuery;
-import net.simpleframework.common.BeanUtils;
 import net.simpleframework.common.Convert;
 import net.simpleframework.common.StringUtils;
 import net.simpleframework.common.coll.KVMap;
@@ -16,7 +15,9 @@ import net.simpleframework.mvc.IForward;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.ButtonElement;
+import net.simpleframework.mvc.common.element.ETextAlign;
 import net.simpleframework.mvc.common.element.ElementList;
+import net.simpleframework.mvc.common.element.LinkButton;
 import net.simpleframework.mvc.common.element.LinkElement;
 import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.common.element.TabButton;
@@ -28,10 +29,12 @@ import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
 import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
 import net.simpleframework.mvc.component.ui.pager.db.AbstractDbTablePagerHandler;
 import net.simpleframework.mvc.template.lets.OneTableTemplatePage;
+import net.simpleframework.workflow.engine.EProcessModelStatus;
 import net.simpleframework.workflow.engine.EProcessStatus;
 import net.simpleframework.workflow.engine.EWorkitemStatus;
 import net.simpleframework.workflow.engine.bean.ActivityBean;
 import net.simpleframework.workflow.engine.bean.ProcessBean;
+import net.simpleframework.workflow.engine.bean.ProcessModelBean;
 import net.simpleframework.workflow.engine.bean.WorkitemBean;
 import net.simpleframework.workflow.web.IWorkflowWebContext;
 import net.simpleframework.workflow.web.WorkflowUtils;
@@ -130,7 +133,7 @@ public class MyQueryWorksTPage extends AbstractItemsTPage {
 	public static class MyQueryWorksTbl extends AbstractDbTablePagerHandler {
 		@Override
 		public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
-			return wfpService.getProcessList(cp.getLoginId());
+			return wfpService.getProcessWlist(cp.getLoginId());
 		}
 
 		@Override
@@ -249,21 +252,35 @@ public class MyQueryWorksTPage extends AbstractItemsTPage {
 			final TablePagerBean tablePager = (TablePagerBean) addTablePagerBean(pp,
 					"ProcessModelSelectPage_tbl", ProcessModelSelectTbl.class).setShowCheckbox(false)
 					.setShowLineNo(false).setPagerBarLayout(EPagerBarLayout.none);
-			tablePager.addColumn(new TablePagerColumn("activityId", "activityId")).addColumn(
-					TablePagerColumn.OPE().setWidth(110));
+			tablePager
+					.addColumn(new TablePagerColumn("modelText", $m("MyQueryWorksTPage.10")))
+					.addColumn(
+							new TablePagerColumn("modelVer", $m("MyQueryWorksTPage.11"), 80)
+									.setFilterSort(false).setTextAlign(ETextAlign.center))
+					.addColumn(TablePagerColumn.OPE().setWidth(80));
 		}
 	}
 
 	public static class ProcessModelSelectTbl extends AbstractDbTablePagerHandler {
 		@Override
 		public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
-
-			return wfwService.getRunningWorklist(cp.getLoginId());
+			return wfpmService.getModelList(EProcessModelStatus.deploy);
 		}
 
 		@Override
 		protected Map<String, Object> getRowData(final ComponentParameter cp, final Object dataObject) {
-			return BeanUtils.toMap(dataObject);
+			final ProcessModelBean pm = (ProcessModelBean) dataObject;
+			final KVMap data = new KVMap();
+			data.add("modelText", pm.getModelText()).add("modelVer", pm.getModelVer())
+					.add(TablePagerColumn.OPE, toOpeHTML(cp, pm));
+			return data;
+		}
+
+		protected String toOpeHTML(final ComponentParameter cp, final ProcessModelBean pm) {
+			final StringBuilder ope = new StringBuilder();
+			ope.append(LinkButton.corner($m("MyQueryWorksTPage.12")).setOnclick(
+					"location.href = location.href.addParameter('modelId=" + pm.getId() + "');"));
+			return ope.toString();
 		}
 	}
 }
