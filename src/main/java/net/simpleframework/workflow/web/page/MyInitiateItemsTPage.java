@@ -42,7 +42,7 @@ public class MyInitiateItemsTPage extends AbstractItemsTPage {
 		addTablePagerBean(pp);
 		// 发起流程
 		pp.addComponentBean("MyInitiateItemsTPage_startProcess", StartProcessBean.class)
-				.setConfirmMessage($m("MyInitiateItemsTPage.0"))
+		// .setConfirmMessage($m("MyInitiateItemsTPage.0"))
 				.setHandlerClass(_StartProcessHandler.class);
 	}
 
