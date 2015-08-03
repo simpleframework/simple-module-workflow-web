@@ -16,11 +16,17 @@
 <script type="text/javascript">
   function wf_comment_ta_valchange(ta) {
     var vlen = ta.value.length;
-    var l = Math.max(<%=maxlength%> - vlen, 0);
-    if (vlen == 0)
+    var maxlength = <%=maxlength%>;
+    var l = Math.max(maxlength - vlen, 0);
+    if (vlen == 0) {
       ta.ltxt.innerHTML = "";
-    else
+    } else {
       ta.ltxt.innerHTML = "#(wf_comment.0)<label>" + l + "</label>#(wf_comment.1)";
+    }
+    
+    if (vlen > maxlength) {
+      ta.value = ta.value.substring(0, maxlength);
+    }  
   }
   
   $ready(function() {
