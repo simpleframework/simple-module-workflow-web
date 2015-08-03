@@ -2,15 +2,18 @@ package net.simpleframework.workflow.web.page;
 
 import static net.simpleframework.common.I18n.$m;
 
-import java.util.Date;
+import java.io.IOException;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
 
-import net.simpleframework.ado.query.DataQueryUtils;
 import net.simpleframework.ado.query.IDataQuery;
-import net.simpleframework.ado.query.ListDataQuery;
 import net.simpleframework.common.Convert;
+import net.simpleframework.common.ID;
 import net.simpleframework.common.StringUtils;
 import net.simpleframework.common.coll.KVMap;
+import net.simpleframework.ctx.permission.PermissionDept;
 import net.simpleframework.mvc.IForward;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageParameter;
@@ -28,22 +31,22 @@ import net.simpleframework.mvc.component.ui.pager.EPagerBarLayout;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
 import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
 import net.simpleframework.mvc.component.ui.pager.db.AbstractDbTablePagerHandler;
+import net.simpleframework.mvc.ctx.permission.IPagePermissionHandler;
+import net.simpleframework.mvc.template.AbstractTemplatePage;
 import net.simpleframework.mvc.template.lets.OneTableTemplatePage;
 import net.simpleframework.workflow.engine.EProcessModelStatus;
 import net.simpleframework.workflow.engine.EProcessStatus;
-import net.simpleframework.workflow.engine.EWorkitemStatus;
 import net.simpleframework.workflow.engine.bean.ActivityBean;
 import net.simpleframework.workflow.engine.bean.ProcessBean;
 import net.simpleframework.workflow.engine.bean.ProcessModelBean;
 import net.simpleframework.workflow.engine.bean.WorkitemBean;
+import net.simpleframework.workflow.schema.AbstractTaskNode;
 import net.simpleframework.workflow.web.IWorkflowWebContext;
 import net.simpleframework.workflow.web.WorkflowUtils;
 import net.simpleframework.workflow.web.page.MyQueryWorksTPages.MyQueryWorks_DeptTPage;
 import net.simpleframework.workflow.web.page.MyQueryWorksTPages.MyQueryWorks_OrgTPage;
 import net.simpleframework.workflow.web.page.MyQueryWorksTPages.MyQueryWorks_RoleTPage;
-import net.simpleframework.workflow.web.page.t1.AbstractWorkflowMgrPage;
 import net.simpleframework.workflow.web.page.t1.WorkflowFormPage;
-import net.simpleframework.workflow.web.page.t1.WorkflowMonitorPage;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -62,9 +65,9 @@ public class MyQueryWorksTPage extends AbstractItemsTPage {
 		addAjaxRequest(pp, "MyQueryWorksTPage_workitem").setHandlerMethod("doWorkitem");
 
 		// 工作列表窗口
-		AjaxRequestBean ajaxRequest = addAjaxRequest(pp, "MyQueryWorksTPage_workitems_page",
-				ProcessWorkitemsPage.class);
-		addWindowBean(pp, "MyQueryWorksTPage_workitems", ajaxRequest).setWidth(800).setHeight(480)
+		AjaxRequestBean ajaxRequest = addAjaxRequest(pp, "MyQueryWorksTPage_detail_page",
+				ProcessDetailPage.class);
+		addWindowBean(pp, "MyQueryWorksTPage_detail", ajaxRequest).setWidth(400).setHeight(480)
 				.setTitle($m("MyQueryWorksTPage.1"));
 
 		// 流程选择
@@ -81,7 +84,7 @@ public class MyQueryWorksTPage extends AbstractItemsTPage {
 				.addColumn(new TablePagerColumn("userText", $m("ProcessMgrPage.0"), 100))
 				.addColumn(TC_CREATEDATE())
 				.addColumn(TC_STATUS(EProcessStatus.class).setColumnAlias("p.status"))
-				.addColumn(TablePagerColumn.OPE().setWidth(90));
+				.addColumn(TablePagerColumn.OPE().setWidth(70));
 		return tablePager;
 	}
 
@@ -170,84 +173,94 @@ public class MyQueryWorksTPage extends AbstractItemsTPage {
 		protected String toOpeHTML(final ComponentParameter cp, final ProcessBean process) {
 			final StringBuilder ope = new StringBuilder();
 			ope.append(new ButtonElement($m("MyQueryWorksTPage.1"))
-					.setOnclick("$Actions['MyQueryWorksTPage_workitems']('processId=" + process.getId()
+					.setOnclick("$Actions['MyQueryWorksTPage_detail']('processId=" + process.getId()
 							+ "');"));
 			return ope.toString();
 		}
 	}
 
-	public static class ProcessWorkitemsPage extends OneTableTemplatePage {
-		@Override
-		protected void onForward(final PageParameter pp) throws Exception {
-			super.onForward(pp);
+	public static class ProcessDetailPage extends AbstractTemplatePage {
 
-			final TablePagerBean tablePager = (TablePagerBean) addTablePagerBean(pp,
-					"ProcessWorkitemsPage_tbl", ProcessWorkitemsTbl.class).setShowCheckbox(false)
-					.setShowLineNo(false).setPagerBarLayout(EPagerBarLayout.none);
-			tablePager
-					.addColumn(new TablePagerColumn("taskname", $m("MyQueryWorksTPage.0")))
-					.addColumn(
-							new TablePagerColumn("userFrom", $m("MyRunningWorklistTPage.0"))
-									.setFilter(false))
-					.addColumn(
-							new TablePagerColumn("createDate", $m("MyRunningWorklistTPage.1"), 115)
-									.setPropertyClass(Date.class))
-					.addColumn(
-							new TablePagerColumn("completeDate", $m("MyFinalWorklistTPage.1"), 115)
-									.setPropertyClass(Date.class))
-					.addColumn(AbstractWorkflowMgrPage.TC_STATUS(EWorkitemStatus.class))
-					.addColumn(TablePagerColumn.OPE().setWidth(110));
+		class Tag {
+			int c;
+
+			String s;
 		}
 
 		@Override
-		public String getTitle(final PageParameter pp) {
-			String t = $m("MyQueryWorksTPage.1");
+		protected String toHtml(final PageParameter pp, final Map<String, Object> variables,
+				final String currentVariable) throws IOException {
+			final StringBuilder sb = new StringBuilder();
+			final ID loginId = pp.getLoginId();
 			final ProcessBean process = WorkflowUtils.getProcessBean(pp);
-			if (process != null) {
-				t += " - " + WorkflowUtils.getProcessTitle(process);
+			sb.append("<div class='ProcessDetailPage'>");
+			sb.append("<div class='ptitle'>").append(process).append("</div>");
+			sb.append("<table class='form_tbl' cellspacing='1'>");
+			sb.append("  <tr>");
+			sb.append("    <td class='l'>参与的部门</td>");
+			sb.append("    <td class='v'>");
+			final LinkedHashSet<String> dtags = new LinkedHashSet<String>();
+			final LinkedHashMap<ID, Integer> utags = new LinkedHashMap<ID, Integer>();
+			List<WorkitemBean> list = wfwService.getWorkitems(process, null);
+			final IPagePermissionHandler hdl = pp.getPermission();
+			for (int i = list.size() - 1; i >= 0; i--) {
+				// 部门
+				final WorkitemBean workitem = list.get(i);
+				final PermissionDept dept = hdl.getDept(workitem.getDeptId2());
+				dtags.add(dept.toString());
+
+				// 用户
+				final ID userId = workitem.getUserId2();
+				if (userId.equals(loginId)) {
+					continue;
+				}
+				final Integer oj = utags.get(userId);
+				if (oj == null) {
+					utags.put(userId, 1);
+				} else {
+					utags.put(userId, oj + 1);
+				}
 			}
-			return t;
-		}
-	}
-
-	public static class ProcessWorkitemsTbl extends AbstractDbTablePagerHandler {
-
-		@Override
-		public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
-			final ProcessBean process = WorkflowUtils.getProcessBean(cp);
-			if (process == null) {
-				return DataQueryUtils.nullQuery();
+			for (final String e : dtags) {
+				sb.append("<span class='ptag'>").append(e).append("</span>");
 			}
-			cp.addFormParameter("processId", process.getId());
-			return new ListDataQuery<WorkitemBean>(wfwService.getWorkitems(process, cp.getLoginId()));
-		}
-
-		@Override
-		protected Map<String, Object> getRowData(final ComponentParameter cp, final Object dataObject) {
-			final WorkitemBean workitem = (WorkitemBean) dataObject;
-			final KVMap row = new KVMap();
-
-			final ActivityBean activity = wfwService.getActivity(workitem);
-			row.add(
-					"taskname",
-					new LinkElement(activity).setOnclick("$Actions.loc('"
-							+ uFactory.getUrl(cp, WorkflowFormPage.class, workitem) + "');"))
-					.add("userFrom", WorkflowUtils.getUserFrom(activity))
-					.add("createDate", workitem.getCreateDate())
-					.add("completeDate", workitem.getCompleteDate())
-					.add("status", WorkflowUtils.toStatusHTML(cp, workitem.getStatus()))
-					.add(TablePagerColumn.OPE, toOpeHTML(cp, workitem));
-			return row;
-		}
-
-		protected String toOpeHTML(final ComponentParameter cp, final WorkitemBean workitem) {
-			final StringBuilder ope = new StringBuilder();
-			ope.append(new ButtonElement($m("MyQueryWorksTPage.3")).setOnclick("$Actions.loc('"
-					+ uFactory.getUrl(cp, WorkflowFormPage.class, workitem) + "');"));
-			ope.append(SpanElement.SPACE);
-			ope.append(new ButtonElement($m("WorkflowFormPage.1")).setOnclick("$Actions.loc('"
-					+ uFactory.getUrl(cp, WorkflowMonitorPage.class, workitem) + "');"));
-			return ope.toString();
+			sb.append("    </td>");
+			sb.append("  </tr>");
+			sb.append("  <tr>");
+			sb.append("    <td class='l'>我参与的工作</td>");
+			sb.append("    <td class='v'>");
+			final LinkedHashMap<AbstractTaskNode, Integer> wtags = new LinkedHashMap<AbstractTaskNode, Integer>();
+			list = wfwService.getWorkitems(process, loginId);
+			for (int i = list.size() - 1; i >= 0; i--) {
+				final ActivityBean activity = wfwService.getActivity(list.get(i));
+				final AbstractTaskNode tasknode = wfaService.getTaskNode(activity);
+				final Integer oj = wtags.get(tasknode);
+				if (oj == null) {
+					wtags.put(tasknode, 1);
+				} else {
+					wtags.put(tasknode, oj + 1);
+				}
+			}
+			for (final Map.Entry<AbstractTaskNode, Integer> e : wtags.entrySet()) {
+				sb.append("<span class='ptag'>");
+				sb.append(e.getKey()).append(" (").append(e.getValue()).append(")");
+				sb.append("</span>");
+			}
+			sb.append("    </td>");
+			sb.append("  </tr>");
+			sb.append("  <tr>");
+			sb.append("    <td class='l'>其他参与人员</td>");
+			sb.append("    <td class='v'>");
+			for (final Map.Entry<ID, Integer> e : utags.entrySet()) {
+				sb.append("<span class='ptag'>");
+				sb.append(hdl.getUser(e.getKey())).append(" (").append(e.getValue()).append(")");
+				sb.append("</span>");
+			}
+			sb.append("    </td>");
+			sb.append("  </tr>");
+			sb.append("</table>");
+			sb.append("</div>");
+			return sb.toString();
 		}
 	}
 
