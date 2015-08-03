@@ -51,6 +51,9 @@ public class PRelativeRoleHandler extends AbstractParticipantHandler implements
 		},
 		higher {// 上级
 
+		},
+		all{//指定角色,即所有部门
+			
 		}
 	}
 
