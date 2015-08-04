@@ -173,7 +173,7 @@ public abstract class AbstractItemsTPage extends Category_ListPage implements IW
 	}
 
 	protected TablePagerColumn TC_USER(final String columnName, final String columnText) {
-		return new TablePagerColumn(columnName, columnText, 55).setTextAlign(ETextAlign.right)
+		return new TablePagerColumn(columnName, columnText, 55).setTextAlign(ETextAlign.center)
 				.setFilterSort(false).setNowrap(false);
 	}
 
