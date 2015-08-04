@@ -10,6 +10,7 @@ import net.simpleframework.ctx.IModuleRef;
 import net.simpleframework.mvc.AbstractMVCPage;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.BlockElement;
+import net.simpleframework.mvc.common.element.ETextAlign;
 import net.simpleframework.mvc.common.element.EVerticalAlign;
 import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.ImageElement;
@@ -169,6 +170,11 @@ public abstract class AbstractItemsTPage extends Category_ListPage implements IW
 
 	protected TablePagerColumn TC_PNO() {
 		return new TablePagerColumn("pno", $m("MyRunningWorklistTPage.14"), 110).setSort(false);
+	}
+
+	protected TablePagerColumn TC_USER(final String columnName, final String columnText) {
+		return new TablePagerColumn(columnName, columnText, 55).setTextAlign(ETextAlign.right)
+				.setFilterSort(false).setNowrap(false);
 	}
 
 	protected <T extends Enum<T>> TablePagerColumn TC_STATUS(final Class<T> e) {

@@ -229,8 +229,12 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 							+ "');");
 		}
 		title.append(tEle.setColor_gray(!StringUtils.hasText(process.getTitle())));
-		row.add("pno", process.getPno()).add("title", title.toString());
+		row.add("title", title.toString());
 
+		final String pno = process.getPno();
+		row.add("pno", new SpanElement(pno).setTitle(pno));
+
+		// stat
 		final StringBuilder stat = new StringBuilder();
 		SpanElement commentsEle;
 		final WfCommentUser commentUser = wfcuService.getCommentUser(workitem.getUserId(),
@@ -245,16 +249,22 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 				.append(new SpanElement(process.getViews()).setItalic(true));
 		row.add("pstat", stat.toString());
 
-		row.add("userFrom", WorkflowUtils.getUserFrom(activity, "<br>")).add("userTo",
-				WorkflowUtils.getUserTo(activity, "<br>"));
+		row.add("status", WorkflowUtils.toStatusHTML(cp, status)).put(TablePagerColumn.OPE,
+				toOpeHTML(cp, workitem, receiving));
+
+		doRowData(cp, row, workitem);
+		return row;
+	}
+
+	protected void doRowData(final ComponentParameter cp, final KVMap row,
+			final WorkitemBean workitem) {
+		final ActivityBean activity = WorkflowUtils.getActivityBean(cp, workitem);
+		row.add("userFrom",
+				new SpanElement(WorkflowUtils.getUserFrom(activity, "<br>")).setColor("#060"));
 		final Date createDate = workitem.getCreateDate();
 		row.add("createDate",
 				new SpanElement(DateUtils.getRelativeDate(createDate, DATE_NUMBERCONVERT))
 						.setTitle(Convert.toDateString(createDate)));
-		row.add("completeDate", workitem.getCompleteDate()).add("status",
-				WorkflowUtils.toStatusHTML(cp, status));
-		row.put(TablePagerColumn.OPE, toOpeHTML(cp, workitem, receiving));
-		return row;
 	}
 
 	protected String toOpeHTML(final ComponentParameter cp, final WorkitemBean workitem,

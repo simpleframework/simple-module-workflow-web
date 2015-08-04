@@ -8,6 +8,7 @@ import net.simpleframework.ado.EFilterRelation;
 import net.simpleframework.ado.FilterItem;
 import net.simpleframework.ado.FilterItems;
 import net.simpleframework.ado.query.IDataQuery;
+import net.simpleframework.common.coll.KVMap;
 import net.simpleframework.ctx.trans.Transaction;
 import net.simpleframework.mvc.IForward;
 import net.simpleframework.mvc.JavascriptForward;
@@ -16,6 +17,7 @@ import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.ImageElement;
 import net.simpleframework.mvc.common.element.LinkButton;
 import net.simpleframework.mvc.common.element.Option;
+import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.ui.menu.MenuBean;
 import net.simpleframework.mvc.component.ui.menu.MenuItem;
@@ -24,6 +26,7 @@ import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
 import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
 import net.simpleframework.workflow.engine.EWorkitemStatus;
 import net.simpleframework.workflow.engine.IWorkflowContext;
+import net.simpleframework.workflow.engine.bean.ActivityBean;
 import net.simpleframework.workflow.engine.bean.WorkitemBean;
 import net.simpleframework.workflow.web.WorkflowUtils;
 
@@ -85,9 +88,7 @@ public class MyFinalWorklistTPage extends MyRunningWorklistTPage {
 				.addColumn(TC_ICON())
 				.addColumn(TC_TITLE())
 				.addColumn(TC_PNO())
-				.addColumn(
-						new TablePagerColumn("userTo", $m("MyFinalWorklistTPage.0"), 55).setFilterSort(
-								false).setNowrap(false))
+				.addColumn(TC_USER("userTo", $m("MyFinalWorklistTPage.0")))
 				.addColumn(
 						new TablePagerColumn("completeDate", $m("MyFinalWorklistTPage.1"), 115)
 								.setPropertyClass(Date.class))
@@ -133,6 +134,15 @@ public class MyFinalWorklistTPage extends MyRunningWorklistTPage {
 				img = MARK_DELEGATE(cp, workitem);
 			}
 			return img;
+		}
+
+		@Override
+		protected void doRowData(final ComponentParameter cp, final KVMap row,
+				final WorkitemBean workitem) {
+			final ActivityBean activity = WorkflowUtils.getActivityBean(cp, workitem);
+			row.add("userTo",
+					new SpanElement(WorkflowUtils.getUserTo(activity, "<br>")).setColor("#060")).add(
+					"completeDate", workitem.getCompleteDate());
 		}
 
 		@Override
