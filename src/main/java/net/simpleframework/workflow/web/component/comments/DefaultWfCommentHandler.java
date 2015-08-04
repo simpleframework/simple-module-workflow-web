@@ -193,7 +193,7 @@ public class DefaultWfCommentHandler extends ComponentHandlerEx implements IWfCo
 			sb.append(" <div class='left'>");
 			sb.append("   <a class='simple_btn2' onclick=\"$Actions['").append(commentName)
 					.append("_log_popup']();\">#(DefaultWfCommentHandler.0)</a>");
-			sb.append("	  <span class='ltxt'></span>");
+			sb.append("	  <span class='ltxt'>&nbsp;</span>");
 			sb.append(" </div>");
 		}
 		sb.append(" <div class='right'>");

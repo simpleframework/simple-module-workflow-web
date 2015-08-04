@@ -10,7 +10,6 @@
 
 .FormTableRowTemplatePage .wf_comment textarea {
   line-height: 1.6;
-  resize: vertical;
   width: 100%;
 }
 
