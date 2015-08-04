@@ -48,7 +48,7 @@ public class WorkflowFormPage extends AbstractWorkflowFormPage {
 		final StringBuilder sb = new StringBuilder();
 		final ActivityBean activity = WorkflowUtils.getActivityBean(pp);
 		sb.append("<span class='l1'>").append(activity);
-		final String userFrom = WorkflowUtils.getUserFrom(activity);
+		final String userFrom = WorkflowUtils.getUserFrom(activity, ", ");
 		if (userFrom != null) {
 			sb.append(" (来自").append(userFrom).append(")");
 		}

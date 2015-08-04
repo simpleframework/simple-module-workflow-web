@@ -133,11 +133,11 @@ public class MyRunningWorklistTPage extends AbstractItemsTPage {
 
 	protected void addGroupMenuItems(final PageParameter pp, final MenuBean mb, final String url) {
 		final MenuItem g0 = MyRunningWorklistTbl.MENU_VIEW_GROUP0().setOnclick(
-				"$Actions.loc('" + HttpUtils.addParameters(url, "g=none") + "');");
+				"$Actions.reloc('g=none');");
 		final MenuItem g1 = MyRunningWorklistTbl.MENU_VIEW_GROUP1().setOnclick(
-				"$Actions.loc('" + HttpUtils.addParameters(url, "g=modelname") + "');");
+				"$Actions.reloc('g=modelname');");
 		final MenuItem g2 = MyRunningWorklistTbl.MENU_VIEW_GROUP2().setOnclick(
-				"$Actions.loc('" + HttpUtils.addParameters(url, "g=taskname") + "');");
+				"$Actions.reloc('g=taskname');");
 		final String g = pp.getParameter("g");
 		if ("none".equals(g)) {
 			g0.setIconClass(MenuItem.ICON_SELECTED);
@@ -157,7 +157,7 @@ public class MyRunningWorklistTPage extends AbstractItemsTPage {
 				.addColumn(TC_TITLE())
 				.addColumn(TC_PNO())
 				.addColumn(
-						new TablePagerColumn("userFrom", $m("MyRunningWorklistTPage.0"), 85)
+						new TablePagerColumn("userFrom", $m("MyRunningWorklistTPage.0"), 55)
 								.setFilterSort(false).setNowrap(false))
 				.addColumn(TC_CREATEDATE().setColumnText($m("MyRunningWorklistTPage.1")).setWidth(65))
 				.addColumn(TC_PSTAT())

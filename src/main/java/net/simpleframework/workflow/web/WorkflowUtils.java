@@ -73,7 +73,7 @@ public abstract class WorkflowUtils implements IWorkflowServiceAware {
 		return sb.toString();
 	}
 
-	public static String getUserTo(final ActivityBean activity) {
+	public static String getUserTo(final ActivityBean activity, final String sep) {
 		return activity.getAttrCache("to_" + activity.getId(), new CacheV<String>() {
 			@Override
 			public String get() {
@@ -83,12 +83,12 @@ public abstract class WorkflowUtils implements IWorkflowServiceAware {
 						list.add(workitem.getUserText());
 					}
 				}
-				return list.size() > 0 ? StringUtils.join(list, ", ") : null;
+				return list.size() > 0 ? StringUtils.join(list, StringUtils.text(sep, ", ")) : null;
 			}
 		});
 	}
 
-	public static String getUserFrom(final ActivityBean activity) {
+	public static String getUserFrom(final ActivityBean activity, final String sep) {
 		final ActivityBean preActivity = wfaService.getPreActivity(activity);
 		if (preActivity == null) {
 			return null;
@@ -101,7 +101,7 @@ public abstract class WorkflowUtils implements IWorkflowServiceAware {
 						EWorkitemStatus.complete)) {
 					list.add(workitem.getUserText());
 				}
-				return list.size() > 0 ? StringUtils.join(list, ", ") : null;
+				return list.size() > 0 ? StringUtils.join(list, StringUtils.text(sep, ", ")) : null;
 			}
 		});
 	}

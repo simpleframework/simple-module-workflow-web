@@ -4,6 +4,9 @@ import static net.simpleframework.common.I18n.$m;
 
 import java.util.Date;
 
+import net.simpleframework.ado.EFilterRelation;
+import net.simpleframework.ado.FilterItem;
+import net.simpleframework.ado.FilterItems;
 import net.simpleframework.ado.query.IDataQuery;
 import net.simpleframework.ctx.trans.Transaction;
 import net.simpleframework.mvc.IForward;
@@ -42,9 +45,17 @@ public class MyFinalWorklistTPage extends MyRunningWorklistTPage {
 		// 标记置顶
 		addAjaxRequest(pp, "MyWorklistTPage_topMark").setHandlerMethod("doTopMark");
 
+		final String url = getWorklistPageUrl(pp);
 		final MenuBean mb = createViewMenuComponent(pp);
-		mb.addItem(MyRunningWorklistTbl.MENU_VIEW_ALL()).addItem(MenuItem.sep());
-		addGroupMenuItems(pp, mb, getWorklistPageUrl(pp));
+		mb.addItem(MyRunningWorklistTbl.MENU_VIEW_ALL().setOnclick("$Actions.loc('" + url + "');"))
+				.addItem(MenuItem.sep());
+		final MenuItem item = MyRunningWorklistTbl.MENU_VIEW_DELEGATION().setOnclick(
+				"$Actions.reloc('delegation=true');");
+		if (pp.getBoolParameter("delegation")) {
+			item.setIconClass(MenuItem.ICON_SELECTED);
+		}
+		mb.addItem(item).addItem(MenuItem.sep());
+		addGroupMenuItems(pp, mb, url);
 	}
 
 	@Override
@@ -75,7 +86,7 @@ public class MyFinalWorklistTPage extends MyRunningWorklistTPage {
 				.addColumn(TC_TITLE())
 				.addColumn(TC_PNO())
 				.addColumn(
-						new TablePagerColumn("userTo", $m("MyFinalWorklistTPage.0"), 85).setFilterSort(
+						new TablePagerColumn("userTo", $m("MyFinalWorklistTPage.0"), 55).setFilterSort(
 								false).setNowrap(false))
 				.addColumn(
 						new TablePagerColumn("completeDate", $m("MyFinalWorklistTPage.1"), 115)
@@ -104,7 +115,11 @@ public class MyFinalWorklistTPage extends MyRunningWorklistTPage {
 	public static class MyCompleteWorklistTbl extends MyRunningWorklistTbl {
 		@Override
 		public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
-			return wfwService.getWorklist(cp.getLoginId(), EWorkitemStatus.complete,
+			FilterItems items = null;
+			if (cp.getBoolParameter("delegation")) {
+				items = FilterItems.of(new FilterItem("userId", EFilterRelation.not_equal, "@userId2"));
+			}
+			return wfwService.getWorklist(cp.getLoginId(), items, EWorkitemStatus.complete,
 					EWorkitemStatus.abort, EWorkitemStatus.retake);
 		}
 
@@ -114,6 +129,8 @@ public class MyFinalWorklistTPage extends MyRunningWorklistTPage {
 			ImageElement img = null;
 			if (workitem.isTopMark()) {
 				img = MARK_TOP(cp);
+			} else if (!workitem.getUserId().equals(workitem.getUserId2())) {
+				img = MARK_DELEGATE(cp, workitem);
 			}
 			return img;
 		}

@@ -78,7 +78,7 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 			final ExpressionValue ev = super.createFilterExpressionValue(qs, oCol2, it);
 			final SQLValue sv = qs.getSqlValue();
 			final StringBuilder sb = new StringBuilder();
-			sb.append("select * from (").append(sv.getSql()).append(") t left join ")
+			sb.append("select t.* from (").append(sv.getSql()).append(") t left join ")
 					.append(wfpService.getTablename(ProcessBean.class))
 					.append(" p on t.processid=p.id where " + ev.getExpression());
 			sv.setSql(sb.toString());
@@ -245,8 +245,8 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 				.append(new SpanElement(process.getViews()).setItalic(true));
 		row.add("pstat", stat.toString());
 
-		row.add("userFrom", WorkflowUtils.getUserFrom(activity)).add("userTo",
-				WorkflowUtils.getUserTo(activity));
+		row.add("userFrom", WorkflowUtils.getUserFrom(activity, "<br>")).add("userTo",
+				WorkflowUtils.getUserTo(activity, "<br>"));
 		final Date createDate = workitem.getCreateDate();
 		row.add("createDate",
 				new SpanElement(DateUtils.getRelativeDate(createDate, DATE_NUMBERCONVERT))
@@ -352,6 +352,10 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 
 	static MenuItem MENU_VIEW_ALL() {
 		return MenuItem.of($m("MyRunningWorklistTbl.15"));
+	}
+
+	static MenuItem MENU_VIEW_DELEGATION() {
+		return MenuItem.of($m("MyRunningWorklistTbl.22"));
 	}
 
 	static MenuItem MENU_VIEW_GROUP0() {

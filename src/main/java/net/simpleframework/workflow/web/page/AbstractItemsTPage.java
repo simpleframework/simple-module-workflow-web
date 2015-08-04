@@ -168,7 +168,7 @@ public abstract class AbstractItemsTPage extends Category_ListPage implements IW
 	}
 
 	protected TablePagerColumn TC_PNO() {
-		return new TablePagerColumn("pno", $m("MyRunningWorklistTPage.14"), 100).setSort(false);
+		return new TablePagerColumn("pno", $m("MyRunningWorklistTPage.14"), 110).setSort(false);
 	}
 
 	protected <T extends Enum<T>> TablePagerColumn TC_STATUS(final Class<T> e) {

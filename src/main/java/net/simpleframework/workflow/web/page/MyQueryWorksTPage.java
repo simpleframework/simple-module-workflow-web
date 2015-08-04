@@ -114,8 +114,7 @@ public class MyQueryWorksTPage extends AbstractItemsTPage {
 		if (pm != null) {
 			el.append(
 					new LinkElement("取消过滤").setClassName("simple_btn2").setOnclick(
-							"location.href = location.href.addParameter('modelId=');")).append(
-					SpanElement.SPACE);
+							"$Actions.reloc('modelId=');")).append(SpanElement.SPACE);
 		}
 		el.append(new LinkElement(pm != null ? pm.getModelText() : $m("MyQueryWorksTPage.8"))
 				.setClassName("simple_btn2").setOnclick("$Actions['MyQueryWorksTPage_pmselect']();"));
@@ -298,7 +297,7 @@ public class MyQueryWorksTPage extends AbstractItemsTPage {
 		protected String toOpeHTML(final ComponentParameter cp, final ProcessModelBean pm) {
 			final StringBuilder ope = new StringBuilder();
 			ope.append(LinkButton.corner($m("MyQueryWorksTPage.12")).setOnclick(
-					"location.href = location.href.addParameter('modelId=" + pm.getId() + "');"));
+					"$Actions.reloc('modelId=" + pm.getId() + "');"));
 			return ope.toString();
 		}
 	}
