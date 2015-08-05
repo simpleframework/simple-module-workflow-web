@@ -13,7 +13,6 @@ import net.simpleframework.ado.db.common.SQLValue;
 import net.simpleframework.ado.query.IDataQuery;
 import net.simpleframework.common.Convert;
 import net.simpleframework.common.DateUtils;
-import net.simpleframework.common.DateUtils.NumberConvert;
 import net.simpleframework.common.ID;
 import net.simpleframework.common.StringUtils;
 import net.simpleframework.common.coll.KVMap;
@@ -262,9 +261,10 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 		row.add("userFrom",
 				new SpanElement(WorkflowUtils.getUserFrom(activity, "<br>")).setColor("#060"));
 		final Date createDate = workitem.getCreateDate();
-		row.add("createDate",
-				new SpanElement(DateUtils.getRelativeDate(createDate, DATE_NUMBERCONVERT))
-						.setTitle(Convert.toDateString(createDate)));
+		final Date d = DateUtils.getZeroPoint().getTime();
+		final String dtxt = createDate.after(d) ? Convert.toDateString(createDate, "HH:mm") : Convert
+				.toDateString(createDate, "yy-MM-dd");
+		row.add("createDate", new SpanElement(dtxt).setTitle(Convert.toDateString(createDate)));
 	}
 
 	protected String toOpeHTML(final ComponentParameter cp, final WorkitemBean workitem,
@@ -379,11 +379,4 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 	static MenuItem MENU_VIEW_GROUP2() {
 		return MenuItem.of($m("AbstractItemsTPage.8"));
 	}
-
-	static NumberConvert DATE_NUMBERCONVERT = new NumberConvert() {
-		@Override
-		public Object convert(final Number n) {
-			return new SpanElement(n).setItalic(true).addStyle("margin-right: 2px;");
-		}
-	};
 }

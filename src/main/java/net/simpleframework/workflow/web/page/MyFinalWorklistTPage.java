@@ -90,13 +90,12 @@ public class MyFinalWorklistTPage extends MyRunningWorklistTPage {
 				.addColumn(TC_PNO())
 				.addColumn(TC_USER("userTo", $m("MyFinalWorklistTPage.0")))
 				.addColumn(
-						new TablePagerColumn("completeDate", $m("MyFinalWorklistTPage.1"), 115)
-								.setPropertyClass(Date.class))
+						new TablePagerColumn("completeDate", $m("MyFinalWorklistTPage.1"), 105)
+								.setPropertyClass(Date.class).setFormat("yy-MM-dd HH:mm"))
 				.addColumn(TC_PSTAT())
 				.addColumn(
 						TC_STATUS(EWorkitemStatus.class).setFilterOptions(
-								Option.from(EWorkitemStatus.complete, EWorkitemStatus.retake,
-										EWorkitemStatus.abort)))
+								Option.from(EWorkitemStatus.complete, EWorkitemStatus.abort)))
 				.addColumn(TablePagerColumn.OPE().setWidth(70));
 		return tablePager;
 	}
@@ -121,7 +120,7 @@ public class MyFinalWorklistTPage extends MyRunningWorklistTPage {
 				items = FilterItems.of(new FilterItem("userId", EFilterRelation.not_equal, "@userId2"));
 			}
 			return wfwService.getWorklist(cp.getLoginId(), items, EWorkitemStatus.complete,
-					EWorkitemStatus.abort, EWorkitemStatus.retake);
+					EWorkitemStatus.abort);
 		}
 
 		@Override
