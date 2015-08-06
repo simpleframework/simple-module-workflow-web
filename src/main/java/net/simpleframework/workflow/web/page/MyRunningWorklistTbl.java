@@ -151,7 +151,11 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 			final WorkitemBean workitem) {
 		AbstractElement<?> img = null;
 		final EWorkitemStatus status = workitem.getStatus();
-		if (workitem.getRetakeRef() != null) {
+		ActivityBean fallback;
+		if ((fallback = wfaService.getBean(workitem.getFallbackId())) != null) {
+			img = AbstractItemsTPage._createImageMark(cp, "status_fallback.png").setTitle(
+					$m("MyRunningWorklistTbl.23", wfaService.getTaskNode(fallback)));
+		} else if (workitem.getRetakeRef() != null) {
 			img = MARK_RETAKE(cp);
 		} else if (status == EWorkitemStatus.delegate) {
 			img = MARK_DELEGATE(cp, workitem);
@@ -238,7 +242,7 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 				workitem.getProcessId());
 		final int ncomments;
 		if (commentUser != null && (ncomments = commentUser.getNcomments()) > 0) {
-			commentsEle = new SpanElement(ncomments).setStrong(true).setColor("#a00");
+			commentsEle = SpanElement.colora00(ncomments).setStrong(true);
 		} else {
 			commentsEle = new SpanElement(process.getComments());
 		}
@@ -256,8 +260,7 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 	protected void doRowData(final ComponentParameter cp, final KVMap row,
 			final WorkitemBean workitem) {
 		final ActivityBean activity = WorkflowUtils.getActivityBean(cp, workitem);
-		row.add("userFrom",
-				new SpanElement(WorkflowUtils.getUserFrom(activity, "<br>")).setColor("#060"));
+		row.add("userFrom", SpanElement.color060(WorkflowUtils.getUserFrom(activity, "<br>")));
 		final Date createDate = workitem.getCreateDate();
 		final Date d = DateUtils.getZeroPoint().getTime();
 		final String dtxt = createDate.after(d) ? Convert.toDateString(createDate, "HH:mm") : Convert

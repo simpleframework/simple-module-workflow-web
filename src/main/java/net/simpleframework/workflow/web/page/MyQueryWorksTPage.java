@@ -81,11 +81,14 @@ public class MyQueryWorksTPage extends AbstractItemsTPage {
 	protected TablePagerBean addTablePagerBean(final PageParameter pp) {
 		final TablePagerBean tablePager = addTablePagerBean(pp, "MyQueryWorksTPage_tbl",
 				MyQueryWorksTbl.class);
-		tablePager.addColumn(TC_TITLE()).addColumn(TC_PNO())
-				.addColumn(new TablePagerColumn("userText", $m("ProcessMgrPage.0"), 100))
+		tablePager
+				.addColumn(TC_TITLE())
+				.addColumn(TC_PNO())
+				.addColumn(
+						new TablePagerColumn("userText", $m("ProcessMgrPage.0"), 65).setFilterSort(false))
 				.addColumn(TC_CREATEDATE().setWidth(100).setFormat("yy-MM-dd HH:mm"))
 				.addColumn(TC_STATUS(EProcessStatus.class).setColumnAlias("p.status"))
-				.addColumn(TablePagerColumn.OPE().setWidth(110));
+				.addColumn(TablePagerColumn.OPE().setWidth(100));
 		return tablePager;
 	}
 
@@ -153,11 +156,19 @@ public class MyQueryWorksTPage extends AbstractItemsTPage {
 			final ProcessBean process = (ProcessBean) dataObject;
 			final KVMap row = new KVMap();
 
-			row.add("title", toTitleHTML(cp, process)).add("userText", process.getUserText())
+			row.add("title", toTitleHTML(cp, process)).add("userText", toUserHTML(cp, process))
 					.add("createDate", process.getCreateDate())
 					.add("status", WorkflowUtils.toStatusHTML(cp, process.getStatus()));
 			row.add(TablePagerColumn.OPE, toOpeHTML(cp, process));
 			return row;
+		}
+
+		protected String toUserHTML(final ComponentParameter cp, final ProcessBean process) {
+			final StringBuilder sb = new StringBuilder();
+			sb.append(process.getUserText());
+			final String deptTxt = cp.getPermission().getDept(process.getDeptId()).toString();
+			sb.append("<br>").append(SpanElement.color777(deptTxt).setTitle(deptTxt));
+			return sb.toString();
 		}
 
 		protected String toTitleHTML(final ComponentParameter cp, final ProcessBean process) {
@@ -203,7 +214,7 @@ public class MyQueryWorksTPage extends AbstractItemsTPage {
 			sb.append("<div class='ptitle'>").append(process).append("</div>");
 			sb.append("<table class='form_tbl' cellspacing='1'>");
 			sb.append("  <tr>");
-			sb.append("    <td class='l'>参与的部门</td>");
+			sb.append("    <td class='l'>#(MyQueryWorksTPage.13)</td>");
 			sb.append("    <td class='v'>");
 			final LinkedHashSet<String> dtags = new LinkedHashSet<String>();
 			final LinkedHashMap<ID, Integer> utags = new LinkedHashMap<ID, Integer>();
@@ -233,7 +244,7 @@ public class MyQueryWorksTPage extends AbstractItemsTPage {
 			sb.append("    </td>");
 			sb.append("  </tr>");
 			sb.append("  <tr>");
-			sb.append("    <td class='l'>我参与的工作</td>");
+			sb.append("    <td class='l'>#(MyQueryWorksTPage.14)</td>");
 			sb.append("    <td class='v'>");
 			final LinkedHashMap<AbstractTaskNode, Integer> wtags = new LinkedHashMap<AbstractTaskNode, Integer>();
 			list = wfwService.getWorkitems(process, loginId);
@@ -255,7 +266,7 @@ public class MyQueryWorksTPage extends AbstractItemsTPage {
 			sb.append("    </td>");
 			sb.append("  </tr>");
 			sb.append("  <tr>");
-			sb.append("    <td class='l'>其他参与人员</td>");
+			sb.append("    <td class='l'>#(MyQueryWorksTPage.15)</td>");
 			sb.append("    <td class='v'>");
 			for (final Map.Entry<ID, Integer> e : utags.entrySet()) {
 				sb.append("<span class='ptag'>");

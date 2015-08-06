@@ -3,6 +3,7 @@ package net.simpleframework.workflow.web.component.comments;
 import static net.simpleframework.common.I18n.$m;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -11,7 +12,6 @@ import java.util.Map;
 import net.simpleframework.ado.query.DataQueryUtils;
 import net.simpleframework.ado.query.IDataQuery;
 import net.simpleframework.common.Convert;
-import net.simpleframework.common.DateUtils;
 import net.simpleframework.common.StringUtils;
 import net.simpleframework.common.coll.ArrayUtils;
 import net.simpleframework.common.web.html.HtmlConst;
@@ -290,7 +290,13 @@ public class DefaultWfCommentHandler extends ComponentHandlerEx implements IWfCo
 		if (groupBy != EGroupBy.dept) {
 			sb2.append("@").append(ouser.getDept().getText());
 		}
-		sb2.append(", ").append(DateUtils.getRelativeDate(comment.getCreateDate())).append("</div>");
+
+		final int nYear = Calendar.getInstance().get(Calendar.YEAR);
+		final Calendar cal = Calendar.getInstance();
+		final Date commentDate = comment.getCreateDate();
+		cal.setTime(commentDate);
+		final String format = nYear == cal.get(Calendar.YEAR) ? "MM-dd HH:mm" : "yy-MM-dd HH:mm";
+		sb2.append(", ").append(Convert.toDateString(commentDate, format)).append("</div>");
 		sb2.append("  <div class='right'>").append(comment.getTaskname()).append("</div>");
 		sb2.append(" </div>");
 		sb2.append("</div>");

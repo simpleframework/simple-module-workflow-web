@@ -128,7 +128,7 @@ public class MyFinalWorklistTPage extends MyRunningWorklistTPage {
 		protected ImageElement createImageMark(final ComponentParameter cp,
 				final WorkitemBean workitem) {
 			ImageElement img = null;
-			if (workitem.getRetake() != null) {
+			if (workitem.getRetakeId() != null) {
 				img = MARK_RETAKE(cp);
 			} else if (!workitem.getUserId().equals(workitem.getUserId2())) {
 				img = MARK_DELEGATE(cp, workitem);
@@ -142,8 +142,7 @@ public class MyFinalWorklistTPage extends MyRunningWorklistTPage {
 		protected void doRowData(final ComponentParameter cp, final KVMap row,
 				final WorkitemBean workitem) {
 			final ActivityBean activity = WorkflowUtils.getActivityBean(cp, workitem);
-			row.add("userTo",
-					new SpanElement(WorkflowUtils.getUserTo(activity, "<br>")).setColor("#060")).add(
+			row.add("userTo", SpanElement.color060(WorkflowUtils.getUserTo(activity, "<br>"))).add(
 					"completeDate", workitem.getCompleteDate());
 		}
 
