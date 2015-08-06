@@ -81,11 +81,8 @@ public class MyQueryWorksTPage extends AbstractItemsTPage {
 	protected TablePagerBean addTablePagerBean(final PageParameter pp) {
 		final TablePagerBean tablePager = addTablePagerBean(pp, "MyQueryWorksTPage_tbl",
 				MyQueryWorksTbl.class);
-		tablePager
-				.addColumn(TC_TITLE())
-				.addColumn(TC_PNO())
-				.addColumn(
-						new TablePagerColumn("userText", $m("ProcessMgrPage.0"), 65).setFilterSort(false))
+		tablePager.addColumn(TC_TITLE()).addColumn(TC_PNO())
+				.addColumn(TC_USER("userText", $m("ProcessMgrPage.0")))
 				.addColumn(TC_CREATEDATE().setWidth(100).setFormat("yy-MM-dd HH:mm"))
 				.addColumn(TC_STATUS(EProcessStatus.class).setColumnAlias("p.status"))
 				.addColumn(TablePagerColumn.OPE().setWidth(100));
@@ -120,11 +117,11 @@ public class MyQueryWorksTPage extends AbstractItemsTPage {
 		final ProcessModelBean pm = WorkflowUtils.getProcessModel(pp);
 		if (pm != null) {
 			el.append(
-					new LinkElement("取消过滤").setClassName("simple_btn2").setOnclick(
+					LinkElement.style2($m("MyQueryWorksTPage.16")).setOnclick(
 							"$Actions.reloc('modelId=');")).append(SpanElement.SPACE);
 		}
-		el.append(new LinkElement(pm != null ? pm.getModelText() : $m("MyQueryWorksTPage.8"))
-				.setClassName("simple_btn2").setOnclick("$Actions['MyQueryWorksTPage_pmselect']();"));
+		el.append(LinkElement.style2(pm != null ? pm.getModelText() : $m("MyQueryWorksTPage.8"))
+				.setOnclick("$Actions['MyQueryWorksTPage_pmselect']();"));
 		return el;
 	}
 
@@ -156,19 +153,12 @@ public class MyQueryWorksTPage extends AbstractItemsTPage {
 			final ProcessBean process = (ProcessBean) dataObject;
 			final KVMap row = new KVMap();
 
-			row.add("title", toTitleHTML(cp, process)).add("userText", toUserHTML(cp, process))
+			row.add("title", toTitleHTML(cp, process))
+					.add("userText", SpanElement.color060(process.getUserText()))
 					.add("createDate", process.getCreateDate())
 					.add("status", WorkflowUtils.toStatusHTML(cp, process.getStatus()));
 			row.add(TablePagerColumn.OPE, toOpeHTML(cp, process));
 			return row;
-		}
-
-		protected String toUserHTML(final ComponentParameter cp, final ProcessBean process) {
-			final StringBuilder sb = new StringBuilder();
-			sb.append(process.getUserText());
-			final String deptTxt = cp.getPermission().getDept(process.getDeptId()).toString();
-			sb.append("<br>").append(SpanElement.color777(deptTxt).setTitle(deptTxt));
-			return sb.toString();
 		}
 
 		protected String toTitleHTML(final ComponentParameter cp, final ProcessBean process) {
@@ -177,6 +167,9 @@ public class MyQueryWorksTPage extends AbstractItemsTPage {
 			// if (c > 0) {
 			// t.append("[").append(c).append("] ");
 			// }
+
+			final String deptTxt = cp.getPermission().getDept(process.getDeptId()).toString();
+			t.append("[").append(SpanElement.color777(deptTxt).setTitle(deptTxt)).append("] ");
 			t.append(new LinkElement(WorkflowUtils.getProcessTitle(process)).setOnclick(
 					"$Actions['MyQueryWorksTPage_workitem']('processId=" + process.getId() + "');")
 					.setColor_gray(!StringUtils.hasText(process.getTitle())));

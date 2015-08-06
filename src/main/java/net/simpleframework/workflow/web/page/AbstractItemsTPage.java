@@ -138,7 +138,7 @@ public abstract class AbstractItemsTPage extends Category_ListPage implements IW
 			txt.setValue(t);
 		}
 		return ElementList.of(new BlockElement().setClassName("worklist_search").addElements(txt,
-				new LinkElement($m("AbstractItemsTPage.11")).setClassName("simple_btn2")));
+				LinkElement.style2($m("AbstractItemsTPage.11"))));
 	}
 
 	protected String getIndexSearchJavascript(final String url) {
