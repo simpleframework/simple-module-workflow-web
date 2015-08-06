@@ -9,6 +9,7 @@ import net.simpleframework.mvc.AbstractMVCPage;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.ButtonElement;
 import net.simpleframework.mvc.common.element.ElementList;
+import net.simpleframework.mvc.common.element.JS;
 import net.simpleframework.mvc.common.element.LinkButton;
 import net.simpleframework.mvc.common.element.LinkElement;
 import net.simpleframework.mvc.common.element.SpanElement;
@@ -94,9 +95,8 @@ public class ActivityMgrTPage extends AbstractWorkflowMgrTPage {
 		sb.append("<div class='tbar'>");
 		final ProcessBean process = WorkflowUtils.getProcessBean(pp);
 		sb.append(ElementList.of(LinkButton.backBtn().setOnclick(
-				"$Actions.loc('"
-						+ uFactory.getUrl(pp, ProcessMgrTPage.class, "modelId="
-								+ (process != null ? process.getModelId() : "")) + "')")));
+				JS.loc(uFactory.getUrl(pp, ProcessMgrTPage.class, "modelId="
+						+ (process != null ? process.getModelId() : ""))))));
 		sb.append("</div>");
 		sb.append(toMonitorHTML(pp));
 		return sb.toString();

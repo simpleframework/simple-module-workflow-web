@@ -6,8 +6,7 @@ import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.LinkButton;
 import net.simpleframework.mvc.template.t1.T1FormTemplatePage;
-import net.simpleframework.workflow.engine.IWorkflowServiceAware;
-import net.simpleframework.workflow.web.WorkflowUrlsFactory;
+import net.simpleframework.workflow.web.page.IWorkflowPageAware;
 import net.simpleframework.workflow.web.page.MyRunningWorklistTPage;
 
 /**
@@ -16,7 +15,7 @@ import net.simpleframework.workflow.web.page.MyRunningWorklistTPage;
  * @author 陈侃(cknet@126.com, 13910090885) https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
-public class AbstractFormTemplatePage extends T1FormTemplatePage implements IWorkflowServiceAware {
+public class AbstractFormTemplatePage extends T1FormTemplatePage implements IWorkflowPageAware {
 
 	@Override
 	public ElementList getLeftElements(final PageParameter pp) {
@@ -26,7 +25,6 @@ public class AbstractFormTemplatePage extends T1FormTemplatePage implements IWor
 
 	public LinkButton getBackBtn(final PageParameter pp) {
 		final LinkButton backBtn = LinkButton.backBtn();
-		final WorkflowUrlsFactory uFactory = AbstractWorkflowMgrPage.uFactory;
 		String referer = pp.getRequestHeader("Referer");
 		if (StringUtils.hasText(referer) && referer.contains("/workflow/my/")) {
 			backBtn.setHref(referer);

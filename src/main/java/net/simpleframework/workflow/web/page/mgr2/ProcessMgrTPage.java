@@ -13,6 +13,7 @@ import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.ButtonElement;
 import net.simpleframework.mvc.common.element.ElementList;
+import net.simpleframework.mvc.common.element.JS;
 import net.simpleframework.mvc.common.element.LinkButton;
 import net.simpleframework.mvc.common.element.LinkElement;
 import net.simpleframework.mvc.common.element.SpanElement;
@@ -86,7 +87,7 @@ public class ProcessMgrTPage extends AbstractWorkflowMgrTPage {
 		final StringBuilder sb = new StringBuilder();
 		sb.append("<div class='tbar'>");
 		sb.append(ElementList.of(LinkButton.backBtn().setOnclick(
-				"$Actions.loc('" + uFactory.getUrl(pp, ProcessModelMgrTPage.class) + "')")));
+				JS.loc(uFactory.getUrl(pp, ProcessModelMgrTPage.class)))));
 		sb.append("</div>");
 		sb.append("<div id='idProcessMgrTPage_tbl'>");
 		sb.append("</div>");

@@ -11,6 +11,7 @@ import net.simpleframework.common.ID;
 import net.simpleframework.common.coll.KVMap;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageParameter;
+import net.simpleframework.mvc.common.element.JS;
 import net.simpleframework.mvc.common.element.LinkButton;
 import net.simpleframework.mvc.common.element.LinkElement;
 import net.simpleframework.mvc.component.ComponentParameter;
@@ -115,8 +116,7 @@ public class MyInitiateItemsTPage extends AbstractItemsTPage {
 			final WorkitemBean workitem = wfpService.getFirstWorkitem(process);
 			if (workitem != null) {
 				final JavascriptForward js = new JavascriptForward();
-				js.append("$Actions.loc('")
-						.append(uFactory.getUrl(cp, WorkflowFormPage.class, workitem)).append("');");
+				js.append(JS.loc(uFactory.getUrl(cp, WorkflowFormPage.class, workitem)));
 				return js;
 			} else {
 				return null;

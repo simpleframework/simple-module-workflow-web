@@ -15,6 +15,7 @@ import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.ImageElement;
+import net.simpleframework.mvc.common.element.JS;
 import net.simpleframework.mvc.common.element.LinkButton;
 import net.simpleframework.mvc.common.element.Option;
 import net.simpleframework.mvc.common.element.SpanElement;
@@ -50,8 +51,8 @@ public class MyFinalWorklistTPage extends MyRunningWorklistTPage {
 
 		final String url = getWorklistPageUrl(pp);
 		final MenuBean mb = createViewMenuComponent(pp);
-		mb.addItem(MyRunningWorklistTbl.MENU_VIEW_ALL().setOnclick("$Actions.loc('" + url + "');"))
-				.addItem(MenuItem.sep());
+		mb.addItem(MyRunningWorklistTbl.MENU_VIEW_ALL().setOnclick(JS.loc(url))).addItem(
+				MenuItem.sep());
 		final MenuItem item = MyRunningWorklistTbl.MENU_VIEW_DELEGATION().setOnclick(
 				"$Actions.reloc('delegation=true');");
 		if (pp.getBoolParameter("delegation")) {
@@ -90,7 +91,7 @@ public class MyFinalWorklistTPage extends MyRunningWorklistTPage {
 				.addColumn(TC_PNO())
 				.addColumn(TC_USER("userTo", $m("MyFinalWorklistTPage.0")))
 				.addColumn(
-						new TablePagerColumn("completeDate", $m("MyFinalWorklistTPage.1"), 105)
+						new TablePagerColumn("completeDate", $m("MyFinalWorklistTPage.1"), 100)
 								.setPropertyClass(Date.class).setFormat("yy-MM-dd HH:mm"))
 				.addColumn(TC_PSTAT())
 				.addColumn(
@@ -127,10 +128,12 @@ public class MyFinalWorklistTPage extends MyRunningWorklistTPage {
 		protected ImageElement createImageMark(final ComponentParameter cp,
 				final WorkitemBean workitem) {
 			ImageElement img = null;
-			if (workitem.isTopMark()) {
-				img = MARK_TOP(cp);
+			if (workitem.getRetake() != null) {
+				img = MARK_RETAKE(cp);
 			} else if (!workitem.getUserId().equals(workitem.getUserId2())) {
 				img = MARK_DELEGATE(cp, workitem);
+			} else if (workitem.isTopMark()) {
+				img = MARK_TOP(cp);
 			}
 			return img;
 		}

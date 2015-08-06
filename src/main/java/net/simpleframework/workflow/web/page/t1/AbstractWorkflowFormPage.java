@@ -1,6 +1,8 @@
 package net.simpleframework.workflow.web.page.t1;
 
+import static net.simpleframework.common.I18n.$m;
 import net.simpleframework.mvc.PageParameter;
+import net.simpleframework.mvc.common.element.TabButton;
 import net.simpleframework.workflow.engine.bean.WorkitemBean;
 import net.simpleframework.workflow.web.IWorkflowWebForm;
 import net.simpleframework.workflow.web.WorkflowUtils;
@@ -28,5 +30,15 @@ public abstract class AbstractWorkflowFormPage extends AbstractFormTemplatePage 
 	protected IWorkflowWebForm getWorkflowForm(final PageParameter pp) {
 		final WorkitemBean workitem = WorkflowUtils.getWorkitemBean(pp);
 		return (IWorkflowWebForm) wfaService.getWorkflowForm(wfwService.getActivity(workitem));
+	}
+
+	protected TabButton createFormTab(final PageParameter pp, final WorkitemBean workitem) {
+		return new TabButton($m("WorkflowFormPage.0")).setHref(uFactory.getUrl(pp,
+				WorkflowFormPage.class, workitem));
+	}
+
+	protected TabButton createMonitorTab(final PageParameter pp, final WorkitemBean workitem) {
+		return new TabButton($m("WorkflowFormPage.1")).setHref(uFactory.getUrl(pp,
+				WorkflowMonitorPage.class, workitem));
 	}
 }

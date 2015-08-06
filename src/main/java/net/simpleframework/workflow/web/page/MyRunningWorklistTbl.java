@@ -21,6 +21,7 @@ import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.AbstractElement;
 import net.simpleframework.mvc.common.element.ButtonElement;
 import net.simpleframework.mvc.common.element.ImageElement;
+import net.simpleframework.mvc.common.element.JS;
 import net.simpleframework.mvc.common.element.LabelElement;
 import net.simpleframework.mvc.common.element.LinkElement;
 import net.simpleframework.mvc.common.element.PhotoImage;
@@ -36,7 +37,6 @@ import net.simpleframework.mvc.component.ui.pager.db.GroupDbTablePagerHandler;
 import net.simpleframework.workflow.engine.EActivityStatus;
 import net.simpleframework.workflow.engine.EDelegationStatus;
 import net.simpleframework.workflow.engine.EWorkitemStatus;
-import net.simpleframework.workflow.engine.IWorkflowServiceAware;
 import net.simpleframework.workflow.engine.bean.ActivityBean;
 import net.simpleframework.workflow.engine.bean.DelegationBean;
 import net.simpleframework.workflow.engine.bean.ProcessBean;
@@ -54,7 +54,7 @@ import net.simpleframework.workflow.web.page.t1.WorkflowMonitorPage;
  * @author 陈侃(cknet@126.com, 13910090885) https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
-public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IWorkflowServiceAware {
+public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IWorkflowPageAware {
 
 	@Override
 	public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
@@ -223,9 +223,7 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 		} else {
 			tEle = new LinkElement(WorkflowUtils.getProcessTitle(process)).setStrong(
 					!workitem.isReadMark()).setOnclick(
-					"$Actions.loc('"
-							+ AbstractItemsTPage.uFactory.getUrl(cp, WorkflowFormPage.class, workitem)
-							+ "');");
+					JS.loc(uFactory.getUrl(cp, WorkflowFormPage.class, workitem)));
 		}
 		title.append(tEle.setColor_gray(!StringUtils.hasText(process.getTitle())));
 		row.add("title", title.toString());
@@ -275,9 +273,8 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 					"$Actions['MyWorklistTPage_delegate_receiving']('workitemId=" + workitem.getId()
 							+ "');"));
 		} else {
-			ope.append(new ButtonElement($m("MyRunningWorklistTbl.3")).setOnclick("$Actions.loc('"
-					+ AbstractItemsTPage.uFactory.getUrl(cp, WorkflowMonitorPage.class, workitem)
-					+ "');"));
+			ope.append(new ButtonElement($m("MyRunningWorklistTbl.3")).setOnclick(JS.loc(uFactory
+					.getUrl(cp, WorkflowMonitorPage.class, workitem))));
 		}
 		ope.append(SpanElement.SPACE(2)).append(AbstractTablePagerSchema.IMG_DOWNMENU);
 		return ope.toString();
@@ -316,7 +313,7 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 
 	static MenuItem MENU_MONITOR(final PageParameter pp) {
 		return MenuItem.of($m("MyRunningWorklistTbl.7")).setOnclick(
-				"$Actions.loc('" + AbstractItemsTPage.uFactory.getUrl(pp, WorkflowMonitorPage.class)
+				"$Actions.loc('" + uFactory.getUrl(pp, WorkflowMonitorPage.class)
 						+ "?workitemId=' + $pager_action(item).rowId());");
 	}
 

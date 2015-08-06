@@ -14,6 +14,7 @@ import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.BlockElement;
 import net.simpleframework.mvc.common.element.ETextAlign;
 import net.simpleframework.mvc.common.element.ElementList;
+import net.simpleframework.mvc.common.element.JS;
 import net.simpleframework.mvc.common.element.LinkButton;
 import net.simpleframework.mvc.common.element.LinkElement;
 import net.simpleframework.mvc.common.element.Option;
@@ -103,15 +104,14 @@ public class MyRunningWorklistTPage extends AbstractItemsTPage {
 		mb = createViewMenuComponent(pp);
 
 		final String url = getWorklistPageUrl(pp);
-		mb.addItem(MyRunningWorklistTbl.MENU_VIEW_ALL().setOnclick("$Actions.loc('" + url + "');"))
+		mb.addItem(MyRunningWorklistTbl.MENU_VIEW_ALL().setOnclick(JS.loc(url)))
 				.addItem(
 						MyRunningWorklistTbl.MENU_MARK_UNREAD().setOnclick(
-								"$Actions.loc('" + HttpUtils.addParameters(url, "v=unread") + "');"))
-				.addItem(MenuItem.sep());
+								JS.loc(HttpUtils.addParameters(url, "v=unread")))).addItem(MenuItem.sep());
 		addGroupMenuItems(pp, mb, url);
 		mb.addItem(MenuItem.sep()).addItem(
 				MenuItem.of($m("AbstractItemsTPage.4")).setOnclick(
-						"$Actions.loc('" + uFactory.getUrl(pp, MyQueryWorksTPage.class) + "');"));
+						JS.loc(uFactory.getUrl(pp, MyQueryWorksTPage.class))));
 
 		// 委托菜单
 		mb = createDelegateMenuComponent(pp);

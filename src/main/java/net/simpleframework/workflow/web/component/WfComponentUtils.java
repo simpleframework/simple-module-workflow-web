@@ -7,6 +7,7 @@ import net.simpleframework.ctx.permission.PermissionConst;
 import net.simpleframework.mvc.IForward;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.UrlForward;
+import net.simpleframework.mvc.common.element.JS;
 import net.simpleframework.mvc.component.ComponentParameter;
 
 /**
@@ -26,7 +27,7 @@ public abstract class WfComponentUtils {
 				cp.componentBean != null ? cp.getBeanProperty("role")
 						: PermissionConst.ROLE_ALL_ACCOUNT);
 		if (forward instanceof UrlForward) {
-			js.append("$Actions.loc('").append(((UrlForward) forward).getUrl()).append("');");
+			js.append(JS.loc(((UrlForward) forward).getUrl()));
 		} else {
 			if (callback != null) {
 				callback.doJavascript(js);

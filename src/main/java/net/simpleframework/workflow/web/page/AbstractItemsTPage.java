@@ -25,9 +25,7 @@ import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
 import net.simpleframework.mvc.template.lets.Category_ListPage;
 import net.simpleframework.mvc.template.struct.CategoryItem;
 import net.simpleframework.mvc.template.struct.CategoryItems;
-import net.simpleframework.workflow.engine.IWorkflowServiceAware;
 import net.simpleframework.workflow.web.IWorkflowWebContext;
-import net.simpleframework.workflow.web.WorkflowUrlsFactory;
 import net.simpleframework.workflow.web.WorkflowUtils;
 import net.simpleframework.workflow.web.page.t1.AbstractWorkflowMgrPage;
 
@@ -37,7 +35,7 @@ import net.simpleframework.workflow.web.page.t1.AbstractWorkflowMgrPage;
  * @author 陈侃(cknet@126.com, 13910090885) https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
-public abstract class AbstractItemsTPage extends Category_ListPage implements IWorkflowServiceAware {
+public abstract class AbstractItemsTPage extends Category_ListPage implements IWorkflowPageAware {
 
 	@Override
 	protected void onForward(final PageParameter pp) throws Exception {
@@ -202,7 +200,4 @@ public abstract class AbstractItemsTPage extends Category_ListPage implements IW
 	protected static ImageElement MARK_UNREAD(final ComponentParameter cp) {
 		return _createImageMark(cp, "mark_unread.png").setTitle($m("MyRunningWorklistTbl.2"));
 	}
-
-	protected static final WorkflowUrlsFactory uFactory = ((IWorkflowWebContext) workflowContext)
-			.getUrlsFactory();
 }

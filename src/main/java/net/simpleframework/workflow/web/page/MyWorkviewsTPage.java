@@ -14,6 +14,7 @@ import net.simpleframework.common.coll.KVMap;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.AbstractElement;
 import net.simpleframework.mvc.common.element.ButtonElement;
+import net.simpleframework.mvc.common.element.JS;
 import net.simpleframework.mvc.common.element.LinkElement;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
@@ -119,9 +120,9 @@ public class MyWorkviewsTPage extends AbstractItemsTPage {
 
 		protected String toOpeHTML(final ComponentParameter cp, final WorkviewBean workview) {
 			final StringBuilder ope = new StringBuilder();
-			ope.append(new ButtonElement($m("MyWorkviewsTPage。0")).setOnclick("$Actions.loc('"
-					+ uFactory.getUrl(cp, WorkflowViewPage.class,
-							workview != null ? ("workviewId=" + workview.getId()) : null) + "');"));
+			final String url = uFactory.getUrl(cp, WorkflowViewPage.class,
+					workview != null ? ("workviewId=" + workview.getId()) : null);
+			ope.append(new ButtonElement($m("MyWorkviewsTPage。0")).setOnclick(JS.loc(url)));
 			return ope.toString();
 		}
 	}

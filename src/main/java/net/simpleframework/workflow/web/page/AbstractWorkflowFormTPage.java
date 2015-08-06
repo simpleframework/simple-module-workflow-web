@@ -19,6 +19,7 @@ import net.simpleframework.mvc.common.element.AbstractElement;
 import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.Icon;
 import net.simpleframework.mvc.common.element.InputElement;
+import net.simpleframework.mvc.common.element.JS;
 import net.simpleframework.mvc.common.element.RowField;
 import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.common.element.TableRow;
@@ -51,7 +52,7 @@ import net.simpleframework.workflow.web.page.t1.WorkflowFormPage;
  *         http://www.simpleframework.net
  */
 public abstract class AbstractWorkflowFormTPage extends AbstractFormTableRowTPage<WorkitemBean>
-		implements IWorkflowWebForm {
+		implements IWorkflowWebForm, IWorkflowPageAware {
 	@Override
 	protected boolean isPage404(final PageParameter pp) {
 		return getWorkitemBean(pp) == null;
@@ -136,9 +137,8 @@ public abstract class AbstractWorkflowFormTPage extends AbstractFormTableRowTPag
 		final WorkitemBean workitem = getWorkitemBean(pp);
 		onSaveForm(pp, workitem);
 		pp.removeSessionAttr("time_" + workitem.getId());
-		return new JavascriptForward("$Actions.loc('").append(
-				AbstractItemsTPage.uFactory.getUrl(pp, WorkflowCompleteInfoPage.class, workitem))
-				.append("');");
+		return new JavascriptForward(JS.loc(uFactory.getUrl(pp, WorkflowCompleteInfoPage.class,
+				workitem)));
 	}
 
 	@Override
@@ -146,8 +146,7 @@ public abstract class AbstractWorkflowFormTPage extends AbstractFormTableRowTPag
 		final WorkitemBean workitem = getWorkitemBean(cp);
 		onSaveForm(cp, workitem);
 		cp.setSessionAttr("time_" + workitem.getId(), new Date());
-		return new JavascriptForward("$Actions.loc('").append(
-				AbstractItemsTPage.uFactory.getUrl(cp, WorkflowFormPage.class, workitem)).append("');");
+		return new JavascriptForward(JS.loc(uFactory.getUrl(cp, WorkflowFormPage.class, workitem)));
 	}
 
 	@Override

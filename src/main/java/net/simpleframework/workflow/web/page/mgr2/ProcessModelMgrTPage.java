@@ -12,6 +12,7 @@ import net.simpleframework.ctx.permission.PermissionDept;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.ButtonElement;
 import net.simpleframework.mvc.common.element.ETextAlign;
+import net.simpleframework.mvc.common.element.JS;
 import net.simpleframework.mvc.common.element.LinkElement;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.ui.pager.EPagerBarLayout;
@@ -106,8 +107,8 @@ public class ProcessModelMgrTPage extends AbstractWorkflowMgrTPage {
 
 		protected String toOpeHTML(final ComponentParameter cp, final ProcessModelBean pm) {
 			final StringBuilder sb = new StringBuilder();
-			sb.append(new ButtonElement($m("ProcessModelMgrTPage.0")).setOnclick("$Actions.loc('"
-					+ uFactory.getUrl(cp, ProcessMgrTPage.class, "modelId=" + pm.getId()) + "');"));
+			sb.append(new ButtonElement($m("ProcessModelMgrTPage.0")).setOnclick(JS.loc(uFactory
+					.getUrl(cp, ProcessMgrTPage.class, "modelId=" + pm.getId()))));
 			// sb.append(SpanElement.SPACE).append(AbstractTablePagerSchema.IMG_DOWNMENU);
 			return sb.toString();
 		}

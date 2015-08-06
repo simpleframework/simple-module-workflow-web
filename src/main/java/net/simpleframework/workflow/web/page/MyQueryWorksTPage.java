@@ -19,6 +19,7 @@ import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.ButtonElement;
 import net.simpleframework.mvc.common.element.ETextAlign;
 import net.simpleframework.mvc.common.element.ElementList;
+import net.simpleframework.mvc.common.element.JS;
 import net.simpleframework.mvc.common.element.LinkButton;
 import net.simpleframework.mvc.common.element.LinkElement;
 import net.simpleframework.mvc.common.element.SpanElement;
@@ -46,6 +47,7 @@ import net.simpleframework.workflow.web.page.MyQueryWorksTPages.MyQueryWorks_Dep
 import net.simpleframework.workflow.web.page.MyQueryWorksTPages.MyQueryWorks_OrgTPage;
 import net.simpleframework.workflow.web.page.MyQueryWorksTPages.MyQueryWorks_RoleTPage;
 import net.simpleframework.workflow.web.page.t1.WorkflowFormPage;
+import net.simpleframework.workflow.web.page.t1.WorkflowMonitorPage;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -81,9 +83,9 @@ public class MyQueryWorksTPage extends AbstractItemsTPage {
 				MyQueryWorksTbl.class);
 		tablePager.addColumn(TC_TITLE()).addColumn(TC_PNO())
 				.addColumn(new TablePagerColumn("userText", $m("ProcessMgrPage.0"), 100))
-				.addColumn(TC_CREATEDATE())
+				.addColumn(TC_CREATEDATE().setWidth(100).setFormat("yy-MM-dd HH:mm"))
 				.addColumn(TC_STATUS(EProcessStatus.class).setColumnAlias("p.status"))
-				.addColumn(TablePagerColumn.OPE().setWidth(70));
+				.addColumn(TablePagerColumn.OPE().setWidth(110));
 		return tablePager;
 	}
 
@@ -96,8 +98,10 @@ public class MyQueryWorksTPage extends AbstractItemsTPage {
 		final ProcessBean process = WorkflowUtils.getProcessBean(cp);
 		WorkitemBean workitem;
 		if (process != null && (workitem = getOpenWorkitem(cp, process)) != null) {
-			return new JavascriptForward("$Actions.loc('"
-					+ uFactory.getUrl(cp, WorkflowFormPage.class, workitem) + "');");
+			return new JavascriptForward(
+					JS.loc(uFactory.getUrl(cp,
+							(cp.getBoolParameter("monitor") ? WorkflowMonitorPage.class
+									: WorkflowFormPage.class), workitem)));
 		} else {
 			return new JavascriptForward("alert('").append($m("MyQueryWorksTPage.7")).append("');");
 		}
@@ -173,6 +177,10 @@ public class MyQueryWorksTPage extends AbstractItemsTPage {
 			ope.append(new ButtonElement($m("MyQueryWorksTPage.1"))
 					.setOnclick("$Actions['MyQueryWorksTPage_detail']('processId=" + process.getId()
 							+ "');"));
+			ope.append(SpanElement.SPACE).append(
+					new ButtonElement($m("MyRunningWorklistTbl.3"))
+							.setOnclick("$Actions['MyQueryWorksTPage_workitem']('processId="
+									+ process.getId() + "&monitor=true');"));
 			return ope.toString();
 		}
 	}

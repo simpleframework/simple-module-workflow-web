@@ -23,9 +23,8 @@ import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
 import net.simpleframework.mvc.component.ui.window.WindowBean;
 import net.simpleframework.mvc.template.AbstractTemplatePage;
 import net.simpleframework.mvc.template.t1.T1ResizedTemplatePage;
-import net.simpleframework.workflow.engine.IWorkflowServiceAware;
 import net.simpleframework.workflow.web.IWorkflowWebContext;
-import net.simpleframework.workflow.web.WorkflowUrlsFactory;
+import net.simpleframework.workflow.web.page.IWorkflowPageAware;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -34,7 +33,7 @@ import net.simpleframework.workflow.web.WorkflowUrlsFactory;
  *         http://www.simpleframework.net
  */
 public abstract class AbstractWorkflowMgrPage extends T1ResizedTemplatePage implements
-		IWorkflowServiceAware {
+		IWorkflowPageAware {
 
 	@Override
 	protected void onForward(final PageParameter pp) throws Exception {
@@ -165,7 +164,4 @@ public abstract class AbstractWorkflowMgrPage extends T1ResizedTemplatePage impl
 		}
 		return col;
 	}
-
-	protected static WorkflowUrlsFactory uFactory = ((IWorkflowWebContext) workflowContext)
-			.getUrlsFactory();
 }
