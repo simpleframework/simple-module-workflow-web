@@ -171,13 +171,6 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 		return (WorkitemBean) dataObject;
 	}
 
-	protected void appendTaskname(final StringBuilder sb, final ComponentParameter cp,
-			final ActivityBean activity) {
-		if (!"taskname".equals(cp.getParameter(G))) {
-			sb.append("[").append(new SpanElement(activity).setClassName("tasknode_txt")).append("] ");
-		}
-	}
-
 	@Override
 	protected Map<String, Object> getRowData(final ComponentParameter cp, final Object dataObject) {
 		final WorkitemBean workitem = (WorkitemBean) dataObject;
@@ -188,10 +181,37 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 			row.add(TablePagerColumn.ICON, img);
 		}
 
+		final EWorkitemStatus status = workitem.getStatus();
+		final DelegationBean delegation = (status == EWorkitemStatus.delegate) ? wfdService
+				.queryRunningDelegation(workitem) : null;
+		final boolean receiving = delegation != null
+				&& delegation.getStatus() == EDelegationStatus.receiving;
+
+		row.add("title", toTitleHTML(cp, workitem, receiving));
+
+		final ProcessBean process = WorkflowUtils.getProcessBean(cp, workitem);
+		final String pno = process.getPno();
+		row.add("pno", new SpanElement(pno).setTitle(pno)).add("pstat", toPstatHTML(cp, workitem))
+				.add("status", WorkflowUtils.toStatusHTML(cp, status))
+				.put(TablePagerColumn.OPE, toOpeHTML(cp, workitem, receiving));
+
+		doRowData(cp, row, workitem);
+		return row;
+	}
+
+	protected void appendTaskname(final StringBuilder sb, final ComponentParameter cp,
+			final ActivityBean activity) {
+		if (!"taskname".equals(cp.getParameter(G))) {
+			sb.append("[").append(new SpanElement(activity).setClassName("tasknode_txt")).append("] ");
+		}
+	}
+
+	protected String toTitleHTML(final ComponentParameter cp, final WorkitemBean workitem,
+			final boolean receiving) {
+		final StringBuilder sb = new StringBuilder();
 		final ActivityBean activity = WorkflowUtils.getActivityBean(cp, workitem);
 
-		final StringBuilder title = new StringBuilder();
-		appendTaskname(title, cp, activity);
+		appendTaskname(sb, cp, activity);
 
 		final Date timeoutDate = activity.getTimeoutDate();
 		if (timeoutDate != null && !wfaService.isFinalStatus(activity)) {
@@ -202,24 +222,19 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 							(System.currentTimeMillis() - timeoutDate.getTime()) / (1000 * 60 * 60 * 24))
 							.intValue();
 				}
-				title.append(new SpanElement(d > 0 ? $m("MyRunningWorklistTbl.20", d)
+				sb.append(new SpanElement(d > 0 ? $m("MyRunningWorklistTbl.20", d)
 						: $m("MyRunningWorklistTbl.21")).setClassName("worklist_timeout"));
 			} else {
 				final int m = Double.valueOf(
 						(timeoutDate.getTime() - System.currentTimeMillis()) / (1000 * 60)).intValue();
 				if (m < wfSettings.getHoursToTimeoutWarning() * 60) {
 					final int h = m / 60;
-					title.append(new SpanElement(h > 0 ? $m("MyRunningWorklistTbl.19", m)
+					sb.append(new SpanElement(h > 0 ? $m("MyRunningWorklistTbl.19", m)
 							: $m("MyRunningWorklistTbl.18")).setClassName("worklist_timeout2"));
 				}
 			}
 		}
 
-		final EWorkitemStatus status = workitem.getStatus();
-		final DelegationBean delegation = (status == EWorkitemStatus.delegate) ? wfdService
-				.queryRunningDelegation(workitem) : null;
-		final boolean receiving = delegation != null
-				&& delegation.getStatus() == EDelegationStatus.receiving;
 		AbstractElement<?> tEle;
 		final ProcessBean process = WorkflowUtils.getProcessBean(cp, workitem);
 		if (receiving) {
@@ -229,14 +244,13 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 					!workitem.isReadMark()).setOnclick(
 					JS.loc(uFactory.getUrl(cp, WorkflowFormPage.class, workitem)));
 		}
-		title.append(tEle.setColor_gray(!StringUtils.hasText(process.getTitle())));
-		row.add("title", title.toString());
+		sb.append(tEle.setColor_gray(!StringUtils.hasText(process.getTitle())));
+		return sb.toString();
+	}
 
-		final String pno = process.getPno();
-		row.add("pno", new SpanElement(pno).setTitle(pno));
-
-		// stat
-		final StringBuilder stat = new StringBuilder();
+	protected String toPstatHTML(final ComponentParameter cp, final WorkitemBean workitem) {
+		final StringBuilder sb = new StringBuilder();
+		final ProcessBean process = WorkflowUtils.getProcessBean(cp, workitem);
 		SpanElement commentsEle;
 		final WfCommentUser commentUser = wfcuService.getCommentUser(workitem.getUserId(),
 				workitem.getProcessId());
@@ -246,15 +260,24 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 		} else {
 			commentsEle = new SpanElement(process.getComments());
 		}
-		stat.append(commentsEle.setItalic(true)).append("/")
+		sb.append(commentsEle.setItalic(true)).append("/")
 				.append(new SpanElement(process.getViews()).setItalic(true));
-		row.add("pstat", stat.toString());
+		return sb.toString();
+	}
 
-		row.add("status", WorkflowUtils.toStatusHTML(cp, status)).put(TablePagerColumn.OPE,
-				toOpeHTML(cp, workitem, receiving));
-
-		doRowData(cp, row, workitem);
-		return row;
+	protected String toOpeHTML(final ComponentParameter cp, final WorkitemBean workitem,
+			final boolean receiving) {
+		final StringBuilder sb = new StringBuilder();
+		if (receiving) {
+			sb.append(new ButtonElement(EDelegationStatus.receiving).setHighlight(true).setOnclick(
+					"$Actions['MyWorklistTPage_delegate_receiving']('workitemId=" + workitem.getId()
+							+ "');"));
+		} else {
+			sb.append(new ButtonElement($m("MyRunningWorklistTbl.3")).setOnclick(JS.loc(uFactory
+					.getUrl(cp, WorkflowMonitorPage.class, workitem))));
+		}
+		sb.append(SpanElement.SPACE(2)).append(AbstractTablePagerSchema.IMG_DOWNMENU);
+		return sb.toString();
 	}
 
 	protected void doRowData(final ComponentParameter cp, final KVMap row,
@@ -266,21 +289,6 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 		final String dtxt = createDate.after(d) ? Convert.toDateString(createDate, "HH:mm") : Convert
 				.toDateString(createDate, "yy-MM-dd");
 		row.add("createDate", new SpanElement(dtxt).setTitle(Convert.toDateString(createDate)));
-	}
-
-	protected String toOpeHTML(final ComponentParameter cp, final WorkitemBean workitem,
-			final boolean receiving) {
-		final StringBuilder ope = new StringBuilder();
-		if (receiving) {
-			ope.append(new ButtonElement(EDelegationStatus.receiving).setHighlight(true).setOnclick(
-					"$Actions['MyWorklistTPage_delegate_receiving']('workitemId=" + workitem.getId()
-							+ "');"));
-		} else {
-			ope.append(new ButtonElement($m("MyRunningWorklistTbl.3")).setOnclick(JS.loc(uFactory
-					.getUrl(cp, WorkflowMonitorPage.class, workitem))));
-		}
-		ope.append(SpanElement.SPACE(2)).append(AbstractTablePagerSchema.IMG_DOWNMENU);
-		return ope.toString();
 	}
 
 	@Override

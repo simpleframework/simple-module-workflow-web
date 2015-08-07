@@ -51,7 +51,7 @@ public class MyWorkviewsTPage extends AbstractItemsTPage {
 						new TablePagerColumn("sent", $m("MyRunningWorklistTPage.0"), 120)
 								.setFilterSort(false))
 				.addColumn(TC_CREATEDATE().setColumnText($m("MyRunningWorklistTPage.1")))
-				.addColumn(TablePagerColumn.OPE().setWidth(90));
+				.addColumn(TablePagerColumn.OPE(90));
 		return tablePager;
 	}
 

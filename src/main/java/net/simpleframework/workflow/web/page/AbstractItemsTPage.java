@@ -185,7 +185,7 @@ public abstract class AbstractItemsTPage extends Category_ListPage implements IW
 	}
 
 	protected TablePagerColumn TC_CREATEDATE() {
-		return AbstractWorkflowMgrPage.TC_CREATEDATE();
+		return AbstractWorkflowMgrPage.TC_CREATEDATE().setFilterSort(false);
 	}
 
 	protected static ImageElement _createImageMark(final ComponentParameter cp, final String img) {

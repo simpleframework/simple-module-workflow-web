@@ -17,7 +17,6 @@ import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.JS;
 import net.simpleframework.mvc.common.element.LinkButton;
 import net.simpleframework.mvc.common.element.LinkElement;
-import net.simpleframework.mvc.common.element.Option;
 import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.ui.menu.EMenuEvent;
@@ -26,7 +25,6 @@ import net.simpleframework.mvc.component.ui.menu.MenuItem;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
 import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
 import net.simpleframework.mvc.component.ui.progressbar.ProgressBarRegistry;
-import net.simpleframework.workflow.engine.EWorkitemStatus;
 import net.simpleframework.workflow.engine.IWorkflowContext;
 import net.simpleframework.workflow.engine.bean.DelegationBean;
 import net.simpleframework.workflow.engine.bean.UserStatBean;
@@ -152,24 +150,21 @@ public class MyRunningWorklistTPage extends AbstractItemsTPage {
 	protected TablePagerBean addTablePagerBean(final PageParameter pp) {
 		final TablePagerBean tablePager = addTablePagerBean(pp, "MyWorklistTPage_tbl",
 				MyRunningWorklistTbl.class).setShowCheckbox(true);
-		tablePager
-				.addColumn(TC_ICON())
-				.addColumn(TC_TITLE())
-				.addColumn(TC_PNO())
+		tablePager.addColumn(TC_ICON()).addColumn(TC_TITLE()).addColumn(TC_PNO().setWidth(150))
 				.addColumn(TC_USER("userFrom", $m("MyRunningWorklistTPage.0")))
-				.addColumn(TC_CREATEDATE().setColumnText($m("MyRunningWorklistTPage.1")).setWidth(65))
+				.addColumn(TC_CREATEDATE().setColumnText($m("MyRunningWorklistTPage.1")).setWidth(60))
 				.addColumn(TC_PSTAT())
-				.addColumn(
-						TC_STATUS(EWorkitemStatus.class).setFilterOptions(
-								Option.from(EWorkitemStatus.running, EWorkitemStatus.delegate,
-										EWorkitemStatus.suspended)))
-				.addColumn(TablePagerColumn.OPE().setWidth(68));
+				// .addColumn(
+				// TC_STATUS(EWorkitemStatus.class).setFilterOptions(
+				// Option.from(EWorkitemStatus.running, EWorkitemStatus.delegate,
+				// EWorkitemStatus.suspended)))
+				.addColumn(TablePagerColumn.OPE(68));
 		return tablePager;
 	}
 
 	protected TablePagerColumn TC_PSTAT() {
 		return new TablePagerColumn("pstat", $m("MyRunningWorklistTPage.13"), 56).setTextAlign(
-				ETextAlign.center).setFilterSort(false);
+				ETextAlign.right).setFilterSort(false);
 	}
 
 	@Override

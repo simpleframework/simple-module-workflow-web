@@ -3,7 +3,6 @@ package net.simpleframework.workflow.web.page.t1;
 import static net.simpleframework.common.I18n.$m;
 
 import java.io.IOException;
-import java.util.Date;
 import java.util.Map;
 
 import net.simpleframework.ctx.IModuleRef;
@@ -12,7 +11,6 @@ import net.simpleframework.module.common.web.page.AbstractDescPage;
 import net.simpleframework.mvc.AbstractMVCPage;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.ButtonElement;
-import net.simpleframework.mvc.common.element.ETextAlign;
 import net.simpleframework.mvc.common.element.Icon;
 import net.simpleframework.mvc.common.element.InputElement;
 import net.simpleframework.mvc.common.element.LinkButton;
@@ -147,13 +145,11 @@ public abstract class AbstractWorkflowMgrPage extends T1ResizedTemplatePage impl
 	}
 
 	public static TablePagerColumn TC_CREATEDATE() {
-		return new TablePagerColumn("createDate", $m("AbstractWorkflowMgrPage.4"), 115).setTextAlign(
-				ETextAlign.center).setPropertyClass(Date.class);
+		return TablePagerColumn.DATE("createDate", $m("AbstractWorkflowMgrPage.4"));
 	}
 
 	public static TablePagerColumn TC_COMPLETEDATE() {
-		return new TablePagerColumn("completeDate", $m("AbstractWorkflowMgrPage.5"), 115)
-				.setPropertyClass(Date.class);
+		return TablePagerColumn.DATE("completeDate", $m("AbstractWorkflowMgrPage.5"));
 	}
 
 	public static <T extends Enum<T>> TablePagerColumn TC_STATUS(final Class<T> e) {

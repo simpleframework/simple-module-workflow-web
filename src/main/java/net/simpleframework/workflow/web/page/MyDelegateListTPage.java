@@ -64,8 +64,7 @@ public class MyDelegateListTPage extends AbstractItemsTPage {
 		final TablePagerBean tablePager = addTablePagerBean(pp, "MyWorklistTPage_tbl",
 				MyWorkDelegateTbl.class);
 		tablePager.addColumn(TC_ICON()).addColumn(TC_TITLE()).addColumn(TC_USERTEXT())
-				.addColumn(TC_CREATEDATE()).addColumn(TC_STATUS())
-				.addColumn(TablePagerColumn.OPE().setWidth(70));
+				.addColumn(TC_CREATEDATE()).addColumn(TC_STATUS()).addColumn(TablePagerColumn.OPE(70));
 		return tablePager;
 	}
 

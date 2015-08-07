@@ -85,7 +85,7 @@ public class MyQueryWorksTPage extends AbstractItemsTPage {
 				.addColumn(TC_USER("userText", $m("ProcessMgrPage.0")))
 				.addColumn(TC_CREATEDATE().setWidth(100).setFormat("yy-MM-dd HH:mm"))
 				.addColumn(TC_STATUS(EProcessStatus.class).setColumnAlias("p.status"))
-				.addColumn(TablePagerColumn.OPE().setWidth(100));
+				.addColumn(TablePagerColumn.OPE(105));
 		return tablePager;
 	}
 
@@ -287,7 +287,7 @@ public class MyQueryWorksTPage extends AbstractItemsTPage {
 					.addColumn(
 							new TablePagerColumn("modelVer", $m("MyQueryWorksTPage.11"), 80)
 									.setFilterSort(false).setTextAlign(ETextAlign.center))
-					.addColumn(TablePagerColumn.OPE().setWidth(80));
+					.addColumn(TablePagerColumn.OPE(80));
 		}
 	}
 

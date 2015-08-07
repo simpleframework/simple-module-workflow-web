@@ -53,7 +53,7 @@ public class ProcessModelMgrTPage extends AbstractWorkflowMgrTPage {
 								ETextAlign.center).setFilter(false))
 				.addColumn(AbstractWorkflowMgrPage.TC_CREATEDATE().setFilter(false))
 				.addColumn(AbstractWorkflowMgrPage.TC_STATUS(EProcessModelStatus.class))
-				.addColumn(TablePagerColumn.OPE().setWidth(90));
+				.addColumn(TablePagerColumn.OPE(90));
 		// if (pp.getLogin().isManager())
 		// tablePager);
 	}

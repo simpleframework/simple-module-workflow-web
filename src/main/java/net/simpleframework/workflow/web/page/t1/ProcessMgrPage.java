@@ -59,8 +59,7 @@ public class ProcessMgrPage extends AbstractWorkflowMgrPage {
 		tablePager.addColumn(TC_TITLE())
 				.addColumn(new TablePagerColumn("userText", $m("ProcessMgrPage.0"), 100))
 				.addColumn(TC_CREATEDATE()).addColumn(TC_COMPLETEDATE())
-				.addColumn(TC_STATUS(EProcessStatus.class))
-				.addColumn(TablePagerColumn.OPE().setWidth(90));
+				.addColumn(TC_STATUS(EProcessStatus.class)).addColumn(TablePagerColumn.OPE(90));
 
 		// 删除
 		addDeleteAjaxRequest(pp).setRole(PermissionConst.ROLE_MANAGER);

@@ -3,21 +3,25 @@ package net.simpleframework.workflow.web.page;
 import static net.simpleframework.common.I18n.$m;
 
 import java.util.Date;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 import net.simpleframework.ado.EFilterRelation;
 import net.simpleframework.ado.FilterItem;
 import net.simpleframework.ado.FilterItems;
 import net.simpleframework.ado.query.IDataQuery;
+import net.simpleframework.common.Convert;
+import net.simpleframework.common.StringUtils;
 import net.simpleframework.common.coll.KVMap;
 import net.simpleframework.ctx.trans.Transaction;
 import net.simpleframework.mvc.IForward;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageParameter;
+import net.simpleframework.mvc.common.element.ETextAlign;
 import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.ImageElement;
 import net.simpleframework.mvc.common.element.JS;
 import net.simpleframework.mvc.common.element.LinkButton;
-import net.simpleframework.mvc.common.element.Option;
 import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.ui.menu.MenuBean;
@@ -89,15 +93,13 @@ public class MyFinalWorklistTPage extends MyRunningWorklistTPage {
 				.addColumn(TC_ICON())
 				.addColumn(TC_TITLE())
 				.addColumn(TC_PNO())
-				.addColumn(TC_USER("userTo", $m("MyFinalWorklistTPage.0")))
 				.addColumn(
-						new TablePagerColumn("completeDate", $m("MyFinalWorklistTPage.1"), 100)
-								.setPropertyClass(Date.class).setFormat("yy-MM-dd HH:mm"))
-				.addColumn(TC_PSTAT())
+						TC_USER("userTo", $m("MyFinalWorklistTPage.0")).setTextAlign(ETextAlign.left)
+								.setWidth(130))
 				.addColumn(
-						TC_STATUS(EWorkitemStatus.class).setFilterOptions(
-								Option.from(EWorkitemStatus.complete, EWorkitemStatus.abort)))
-				.addColumn(TablePagerColumn.OPE().setWidth(70));
+						TablePagerColumn.DATE("completeDate", $m("MyFinalWorklistTPage.1")).setWidth(60)
+								.setFilterSort(false)).addColumn(TC_PSTAT())
+				.addColumn(TablePagerColumn.OPE(70));
 		return tablePager;
 	}
 
@@ -142,8 +144,30 @@ public class MyFinalWorklistTPage extends MyRunningWorklistTPage {
 		protected void doRowData(final ComponentParameter cp, final KVMap row,
 				final WorkitemBean workitem) {
 			final ActivityBean activity = WorkflowUtils.getActivityBean(cp, workitem);
-			row.add("userTo", SpanElement.color060(WorkflowUtils.getUserTo(activity, "<br>"))).add(
-					"completeDate", workitem.getCompleteDate());
+			row.add("userTo", SpanElement.color060(getUserTo(activity)));
+
+			final Date completeDate = workitem.getCompleteDate();
+			if (completeDate != null) {
+				row.add("completeDate", new SpanElement(Convert.toDateString(completeDate, "yy-MM-dd"))
+						.setTitle(Convert.toDateString(completeDate)));
+			}
+		}
+
+		String getUserTo(final ActivityBean activity) {
+			return activity.getAttrCache("to_" + activity.getId(), new CacheV<String>() {
+				@Override
+				public String get() {
+					final Set<String> list = new LinkedHashSet<String>();
+					for (final ActivityBean nextActivity : wfaService.getNextActivities(activity)) {
+						final String tasknode = wfaService.getTaskNode(nextActivity).toString();
+						for (final WorkitemBean workitem : wfwService.getWorkitems(nextActivity)) {
+							list.add(new SpanElement("[" + tasknode + "] " + workitem.getUserText())
+									.setTitle(tasknode).toString());
+						}
+					}
+					return list.size() > 0 ? StringUtils.join(list, "<br>") : null;
+				}
+			});
 		}
 
 		@Override

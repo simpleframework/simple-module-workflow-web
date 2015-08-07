@@ -53,7 +53,7 @@ public class UserDelegateListTPage extends MyDelegateListTPage {
 						TC_STATUS().setFilterOptions(
 								Option.from(EDelegationStatus.ready, EDelegationStatus.running,
 										EDelegationStatus.complete, EDelegationStatus.abort)))
-				.addColumn(TablePagerColumn.OPE().setWidth(70));
+				.addColumn(TablePagerColumn.OPE(70));
 		return tablePager;
 	}
 

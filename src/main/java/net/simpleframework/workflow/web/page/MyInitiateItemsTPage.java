@@ -58,7 +58,7 @@ public class MyInitiateItemsTPage extends AbstractItemsTPage {
 								false).setPropertyClass(Integer.class))
 				.addColumn(
 						new TablePagerColumn("version", $m("MyInitiateItemsTPage.4"), 80)
-								.setFilter(false)).addColumn(TablePagerColumn.OPE().setWidth(70));
+								.setFilter(false)).addColumn(TablePagerColumn.OPE(70));
 		return tablePager;
 	}
 

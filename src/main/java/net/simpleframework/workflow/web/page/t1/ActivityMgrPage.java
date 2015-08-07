@@ -72,7 +72,7 @@ public class ActivityMgrPage extends AbstractWorkflowMgrPage {
 		tablePager.addColumn(TC_TASKNODE()).addColumn(TC_STATUS(EActivityStatus.class))
 				.addColumn(TC_PARTICIPANTS()).addColumn(TC_PARTICIPANTS2()).addColumn(TC_CREATEDATE())
 				.addColumn(TC_TIMEOUT()).addColumn(TC_COMPLETEDATE()).addColumn(TC_PREVIOUS())
-				.addColumn(TablePagerColumn.OPE().setWidth(70));
+				.addColumn(TablePagerColumn.OPE(70));
 		return tablePager;
 	}
 

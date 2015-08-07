@@ -2,7 +2,6 @@ package net.simpleframework.workflow.web.page.t1;
 
 import static net.simpleframework.common.I18n.$m;
 
-import java.util.Date;
 import java.util.Map;
 
 import net.simpleframework.ado.query.IDataQuery;
@@ -42,17 +41,12 @@ public class WorkitemsMgrPage extends OneTableTemplatePage implements IWorkflowS
 		// workitems
 		final TablePagerBean tablePager = addTablePagerBean(pp, "WorkitemsPage_tbl",
 				WorkitemsTbl.class).setShowLineNo(false);
-		tablePager
-				.addColumn(new TablePagerColumn("userText", $m("WorkitemsMgrPage.0")))
+		tablePager.addColumn(new TablePagerColumn("userText", $m("WorkitemsMgrPage.0")))
 				.addColumn(new TablePagerColumn("userText2", $m("WorkitemsMgrPage.1")))
-				.addColumn(
-						new TablePagerColumn("createDate", $m("WorkitemsMgrPage.2"), 115)
-								.setPropertyClass(Date.class))
-				.addColumn(
-						new TablePagerColumn("completeDate", $m("WorkitemsMgrPage.3"), 115)
-								.setPropertyClass(Date.class))
+				.addColumn(TablePagerColumn.DATE("createDate", $m("WorkitemsMgrPage.2")))
+				.addColumn(TablePagerColumn.DATE("completeDate", $m("WorkitemsMgrPage.3")))
 				.addColumn(AbstractWorkflowMgrPage.TC_STATUS(EWorkitemStatus.class))
-				.addColumn(TablePagerColumn.OPE().setWidth(70));
+				.addColumn(TablePagerColumn.OPE(70));
 
 		// log
 		final IModuleRef ref = ((IWorkflowWebContext) workflowContext).getLogRef();

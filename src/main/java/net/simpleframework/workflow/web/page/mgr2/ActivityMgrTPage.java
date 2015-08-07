@@ -64,7 +64,7 @@ public class ActivityMgrTPage extends AbstractWorkflowMgrTPage {
 				.addColumn(ActivityMgrPage.TC_TIMEOUT())
 				.addColumn(AbstractWorkflowMgrPage.TC_COMPLETEDATE())
 				// .addColumn(ActivityMgrPage.TC_PREVIOUS())
-				.addColumn(TablePagerColumn.OPE().setWidth(70));
+				.addColumn(TablePagerColumn.OPE(70));
 		return tablePager;
 	}
 
