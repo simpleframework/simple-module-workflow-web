@@ -144,7 +144,7 @@ public class ProcessMgrPage extends AbstractWorkflowMgrPage {
 		protected String toOpeHTML(final ComponentParameter cp, final ProcessBean process) {
 			final StringBuilder sb = new StringBuilder();
 			sb.append(createLogButton(cp, process));
-			sb.append(SpanElement.SPACE).append(AbstractTablePagerSchema.IMG_DOWNMENU);
+			sb.append(AbstractTablePagerSchema.IMG_DOWNMENU);
 			return sb.toString();
 		}
 

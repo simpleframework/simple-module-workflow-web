@@ -171,7 +171,7 @@ public class ProcessModelMgrPage extends AbstractWorkflowMgrPage {
 				sb.append(WorkflowUtils.createLogButton().setOnclick(
 						"$Actions['AbstractWorkflowMgrPage_update_log']('modelId=" + id + "');"));
 			}
-			sb.append(SpanElement.SPACE).append(AbstractTablePagerSchema.IMG_DOWNMENU);
+			sb.append(AbstractTablePagerSchema.IMG_DOWNMENU);
 			return sb.toString();
 		}
 

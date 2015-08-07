@@ -228,7 +228,7 @@ public class ActivityTbl extends GroupDbTablePagerHandler implements IWorkflowSe
 	protected String toOpeHTML(final ComponentParameter cp, final ActivityBean activity) {
 		final StringBuilder sb = new StringBuilder();
 		sb.append(createLogButton(cp, activity));
-		sb.append(SpanElement.SPACE).append(AbstractTablePagerSchema.IMG_DOWNMENU);
+		sb.append(AbstractTablePagerSchema.IMG_DOWNMENU);
 		return sb.toString();
 	}
 

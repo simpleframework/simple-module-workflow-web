@@ -192,7 +192,6 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 		final ProcessBean process = WorkflowUtils.getProcessBean(cp, workitem);
 		final String pno = process.getPno();
 		row.add("pno", new SpanElement(pno).setTitle(pno)).add("pstat", toPstatHTML(cp, workitem))
-				.add("status", WorkflowUtils.toStatusHTML(cp, status))
 				.put(TablePagerColumn.OPE, toOpeHTML(cp, workitem, receiving));
 
 		doRowData(cp, row, workitem);
@@ -202,7 +201,7 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 	protected void appendTaskname(final StringBuilder sb, final ComponentParameter cp,
 			final ActivityBean activity) {
 		if (!"taskname".equals(cp.getParameter(G))) {
-			sb.append("[").append(new SpanElement(activity).setClassName("tasknode_txt")).append("] ");
+			sb.append("[").append(SpanElement.color333(activity)).append("] ");
 		}
 	}
 
@@ -276,7 +275,7 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 			sb.append(new ButtonElement($m("MyRunningWorklistTbl.3")).setOnclick(JS.loc(uFactory
 					.getUrl(cp, WorkflowMonitorPage.class, workitem))));
 		}
-		sb.append(SpanElement.SPACE(2)).append(AbstractTablePagerSchema.IMG_DOWNMENU);
+		sb.append(AbstractTablePagerSchema.IMG_DOWNMENU);
 		return sb.toString();
 	}
 

@@ -46,6 +46,13 @@ public class MyRunningWorklistTPage extends AbstractItemsTPage {
 	protected void onForward(final PageParameter pp) throws Exception {
 		super.onForward(pp);
 		setGroupParam(pp);
+
+		// 添加表格
+		addTablePagerBean(pp);
+		// 标记置顶
+		addAjaxRequest(pp, "MyWorklistTPage_topMark").setHandlerMethod("doTopMark");
+
+		// 添加其他组件
 		addComponents(pp);
 	}
 
@@ -63,9 +70,6 @@ public class MyRunningWorklistTPage extends AbstractItemsTPage {
 	}
 
 	protected void addComponents(final PageParameter pp) {
-		// 添加表格
-		addTablePagerBean(pp);
-
 		// 回退
 		addAjaxRequest(pp, "MyWorklistTPage_fallback").setHandlerMethod("doFallback")
 				.setConfirmMessage($m("MyRunningWorklistTPage.3"));
@@ -95,12 +99,9 @@ public class MyRunningWorklistTPage extends AbstractItemsTPage {
 				.addItem(MyRunningWorklistTbl.MENU_MARK_UNTOP());
 		// 标记已读
 		addAjaxRequest(pp, "MyWorklistTPage_readMark").setHandlerMethod("doReadMark");
-		// 标记置顶
-		addAjaxRequest(pp, "MyWorklistTPage_topMark").setHandlerMethod("doTopMark");
 
 		// 查看菜单
 		mb = createViewMenuComponent(pp);
-
 		final String url = getWorklistPageUrl(pp);
 		mb.addItem(MyRunningWorklistTbl.MENU_VIEW_ALL().setOnclick(JS.loc(url)))
 				.addItem(
@@ -153,12 +154,7 @@ public class MyRunningWorklistTPage extends AbstractItemsTPage {
 		tablePager.addColumn(TC_ICON()).addColumn(TC_TITLE()).addColumn(TC_PNO().setWidth(150))
 				.addColumn(TC_USER("userFrom", $m("MyRunningWorklistTPage.0")))
 				.addColumn(TC_CREATEDATE().setColumnText($m("MyRunningWorklistTPage.1")).setWidth(60))
-				.addColumn(TC_PSTAT())
-				// .addColumn(
-				// TC_STATUS(EWorkitemStatus.class).setFilterOptions(
-				// Option.from(EWorkitemStatus.running, EWorkitemStatus.delegate,
-				// EWorkitemStatus.suspended)))
-				.addColumn(TablePagerColumn.OPE(68));
+				.addColumn(TC_PSTAT()).addColumn(TablePagerColumn.OPE(68));
 		return tablePager;
 	}
 
