@@ -127,7 +127,7 @@ public class DefaultWfCommentHandler extends ComponentHandlerEx implements IWfCo
 		return data;
 	}
 
-	private Map<String, List<WfComment>> comments_map(final ComponentParameter cp,
+	protected Map<String, List<WfComment>> comments_map(final ComponentParameter cp,
 			final IDataQuery<WfComment> dq, final WorkitemBean workitem, final EGroupBy groupBy) {
 		final Map<String, List<WfComment>> data = new LinkedHashMap<String, List<WfComment>>();
 		Map<String, String[]> tasknames = null;
