@@ -1,13 +1,9 @@
 package net.simpleframework.workflow.web.page.mgr2;
 
-import static net.simpleframework.common.I18n.$m;
 import net.simpleframework.ctx.IModuleRef;
-import net.simpleframework.ctx.permission.PermissionDept;
 import net.simpleframework.module.common.web.page.AbstractMgrTPage;
 import net.simpleframework.mvc.AbstractMVCPage;
 import net.simpleframework.mvc.PageParameter;
-import net.simpleframework.mvc.common.element.ElementList;
-import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.component.base.ajaxrequest.AjaxRequestBean;
 import net.simpleframework.mvc.component.ui.window.WindowBean;
 import net.simpleframework.workflow.engine.IWorkflowServiceAware;
@@ -67,28 +63,6 @@ public class AbstractWorkflowMgrTPage extends AbstractMgrTPage implements IWorkf
 	@Override
 	public String getRole(final PageParameter pp) {
 		return workflowContext.getModule().getManagerRole();
-	}
-
-	protected SpanElement createOrgElement(final PageParameter pp) {
-		SpanElement oele;
-		final PermissionDept org = getPermissionOrg(pp);
-		if (org != null) {
-			oele = new SpanElement(org.getText());
-		} else {
-			oele = new SpanElement($m("AbstractMgrTPage.0"));
-		}
-		return oele;
-	}
-
-	@Override
-	public ElementList getLeftElements(final PageParameter pp) {
-		final ElementList el = ElementList.of(createOrgElement(pp).setClassName("org_txt"));
-		// if (pp.getLogin().isManager()) {
-		// el.append(SpanElement.SPACE).append(
-		// new LinkElement($m("AbstractOrgMgrTPage.4"))
-		// .setOnclick("$Actions['AbstractMgrTPage_orgSelect']();"));
-		// }
-		return el;
 	}
 
 	protected static WorkflowUrlsFactory uFactory = ((IWorkflowWebContext) workflowContext)
