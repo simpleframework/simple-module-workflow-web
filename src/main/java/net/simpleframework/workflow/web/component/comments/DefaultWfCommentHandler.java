@@ -19,6 +19,7 @@ import net.simpleframework.common.web.html.HtmlUtils;
 import net.simpleframework.ctx.permission.IPermissionHandler;
 import net.simpleframework.ctx.permission.PermissionDept;
 import net.simpleframework.ctx.permission.PermissionUser;
+import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.Checkbox;
 import net.simpleframework.mvc.common.element.InputElement;
 import net.simpleframework.mvc.common.element.Radio;
@@ -26,7 +27,6 @@ import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.component.ComponentHandlerEx;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.workflow.engine.IActivityService;
-import net.simpleframework.workflow.engine.IWorkflowContextAware;
 import net.simpleframework.workflow.engine.bean.ProcessBean;
 import net.simpleframework.workflow.engine.bean.WorkitemBean;
 import net.simpleframework.workflow.engine.comment.IWfCommentLogService;
@@ -40,6 +40,8 @@ import net.simpleframework.workflow.schema.ProcessNode;
 import net.simpleframework.workflow.schema.UserNode;
 import net.simpleframework.workflow.web.WorkflowUtils;
 import net.simpleframework.workflow.web.component.comments.WfCommentBean.EGroupBy;
+import net.simpleframework.workflow.web.component.comments.mgr2.MyCommentsMgrTPage;
+import net.simpleframework.workflow.web.page.IWorkflowPageAware;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -48,7 +50,7 @@ import net.simpleframework.workflow.web.component.comments.WfCommentBean.EGroupB
  *         http://www.simpleframework.net
  */
 public class DefaultWfCommentHandler extends ComponentHandlerEx implements IWfCommentHandler,
-		IWorkflowContextAware {
+		IWorkflowPageAware {
 
 	protected ProcessBean getProcessBean(final ComponentParameter cp) {
 		return WorkflowUtils.getProcessBean(cp);
@@ -308,5 +310,10 @@ public class DefaultWfCommentHandler extends ComponentHandlerEx implements IWfCo
 		final Map<String, Object> data = super.getFormParameters(cp);
 		data.put(WfCommentUtils.BEAN_ID, cp.getParameter(WfCommentUtils.BEAN_ID));
 		return data;
+	}
+
+	@Override
+	public String getMycommentsUrl(final PageParameter pp) {
+		return uFactory.getUrl(pp, MyCommentsMgrTPage.class);
 	}
 }

@@ -1,6 +1,7 @@
 package net.simpleframework.workflow.web.component.comments;
 
 import net.simpleframework.ado.query.IDataQuery;
+import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.IComponentHandler;
 import net.simpleframework.workflow.engine.comment.WfComment;
@@ -29,4 +30,6 @@ public interface IWfCommentHandler extends IComponentHandler {
 	void onSave(ComponentParameter cp);
 
 	String toHTML(ComponentParameter cp);
+
+	String getMycommentsUrl(PageParameter pp);
 }

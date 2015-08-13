@@ -4,6 +4,7 @@ import net.simpleframework.mvc.AbstractMVCPage;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.UrlsCache;
 import net.simpleframework.workflow.engine.bean.WorkitemBean;
+import net.simpleframework.workflow.web.component.comments.mgr2.MyCommentsMgrTPage;
 import net.simpleframework.workflow.web.page.MyDelegateListTPage;
 import net.simpleframework.workflow.web.page.MyFinalWorklistTPage;
 import net.simpleframework.workflow.web.page.MyInitiateItemsTPage;
@@ -70,6 +71,8 @@ public class WorkflowUrlsFactory extends UrlsCache {
 		put(ProcessMgrTPage.class);
 		put(ActivityMgrTPage.class);
 		put(ActivityGraphMgrTPage.class);
+
+		put(MyCommentsMgrTPage.class);
 	}
 
 	public String getUrl(final PageParameter pp, final Class<? extends AbstractMVCPage> mClass,

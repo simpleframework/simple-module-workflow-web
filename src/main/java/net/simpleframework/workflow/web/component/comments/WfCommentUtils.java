@@ -79,9 +79,11 @@ public abstract class WfCommentUtils implements IWorkflowContextAware {
 
 	public static String toBtnsHTML(final ComponentParameter cp) {
 		final StringBuilder sb = new StringBuilder();
+		final IWfCommentHandler cHdl = (IWfCommentHandler) cp.getComponentHandler();
 		sb.append("<div class='cl_btns clearfix'>");
 		sb.append(" <div class='left'>");
-		sb.append(LinkElement.style2($m("WfCommentUtils.2")));
+		sb.append(LinkElement.style2($m("WfCommentUtils.2")).setTarget("_blank")
+				.setHref(cHdl.getMycommentsUrl(cp)));
 		sb.append(" </div>");
 		sb.append(" <div class='right'>");
 		sb.append(ButtonElement.okBtn().setOnclick("wf_comment_okclick();"));
