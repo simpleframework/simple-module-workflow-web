@@ -27,6 +27,6 @@ public class WfCommentLoaded extends DefaultPageHandler {
 						+ WfCommentUtils.BEAN_ID + "=" + nCP.hashId());
 		pp.addComponentBean(commentName + "_log_popup", WindowBean.class)
 				.setContentRef(commentName + "_logPage").setPopup(true)
-				.setTitle($m("WfCommentLoaded.0")).setHeight(420).setWidth(320);
+				.setTitle($m("WfCommentLoaded.0")).setHeight(450).setWidth(340);
 	}
 }

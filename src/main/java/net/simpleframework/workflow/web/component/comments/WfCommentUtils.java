@@ -10,7 +10,9 @@ import net.simpleframework.common.DateUtils;
 import net.simpleframework.common.web.JavascriptUtils;
 import net.simpleframework.common.web.html.HtmlUtils;
 import net.simpleframework.mvc.PageRequestResponse;
+import net.simpleframework.mvc.common.element.ButtonElement;
 import net.simpleframework.mvc.common.element.InputElement;
+import net.simpleframework.mvc.common.element.LinkElement;
 import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.workflow.engine.IWorkflowContextAware;
@@ -49,7 +51,7 @@ public abstract class WfCommentUtils implements IWorkflowContextAware {
 		final IDataQuery<WfCommentLog> dq = lService.queryLogs(cp.getLoginId(), logType);
 		WfCommentLog log;
 		while ((log = dq.next()) != null) {
-			sb.append("<div class='litem' ondblclick='wf_comment_itemclick(this);'>");
+			sb.append("<div class='litem' onclick='wf_comment_itemclick(this);' ondblclick='wf_comment_itemdblclick(this);'>");
 			final String ccomment = log.getCcomment();
 			sb.append(" <div class='l1'>").append(HtmlUtils.convertHtmlLines(ccomment));
 			sb.append(InputElement.textarea().setStyle("display:none;").setValue(ccomment));
@@ -72,6 +74,22 @@ public abstract class WfCommentUtils implements IWorkflowContextAware {
 			sb.append("</div>");
 		}
 		sb.append(JavascriptUtils.wrapScriptTag("wf_comment_init();"));
+		return sb.toString();
+	}
+
+	public static String toBtnsHTML(final ComponentParameter cp) {
+		final StringBuilder sb = new StringBuilder();
+		sb.append("<div class='cl_btns clearfix'>");
+		sb.append(" <div class='left'>");
+		sb.append(LinkElement.style2($m("WfCommentUtils.2")));
+		sb.append(" </div>");
+		sb.append(" <div class='right'>");
+		sb.append(ButtonElement.okBtn().setOnclick("wf_comment_okclick();"));
+		sb.append(SpanElement.SPACE).append(ButtonElement.closeBtn());
+		sb.append(" </div>");
+		sb.append("</div>");
+		sb.append("<style>");
+		sb.append("</style>");
 		return sb.toString();
 	}
 }

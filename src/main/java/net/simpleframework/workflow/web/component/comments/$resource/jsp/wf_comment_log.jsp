@@ -30,6 +30,20 @@
   }
   
   function wf_comment_itemclick(o) {
+    $$(".cl_list .litem").invoke("removeClassName", "selected");
+    $(o).addClassName("selected");
+  }
+  
+  function wf_comment_okclick() {
+    var o = $(".cl_list .litem.selected");
+    if (!o) {
+      alert('#(wf_comment_log.4)');
+    } else {
+      wf_comment_itemdblclick(o);
+    }
+  }
+  
+  function wf_comment_itemdblclick(o) {
     var act = $Actions['<%=commentName%>_log_popup'];
     var ta = $(act.trigger).up(".wf_comment").down("textarea");
     $Actions.setValue(ta, $(o).down(".l1 textarea").value);
@@ -68,6 +82,7 @@
   <div class="cl_list">
     <%=WfCommentUtils.toLogsHTML(cp)%>
   </div>
+  <%=WfCommentUtils.toBtnsHTML(cp)%>
 </div>
 <script type="text/javascript">
   $ready(function() {
@@ -78,7 +93,7 @@
     var t = c.down(".cl_list");
     var s = function() {
       var h = w.getSize(true).height;
-      t.setStyle('height: ' + (h - 28) + 'px;');
+      t.setStyle('height: ' + (h - 28 - 33) + 'px;');
     };
     s();
     w.observe("resize:ended", s);
