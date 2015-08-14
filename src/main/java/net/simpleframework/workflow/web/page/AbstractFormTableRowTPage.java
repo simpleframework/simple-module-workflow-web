@@ -4,7 +4,6 @@ import static net.simpleframework.common.I18n.$m;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.AbstractElement;
 import net.simpleframework.mvc.common.element.LinkButton;
-import net.simpleframework.mvc.template.lets.FormTableRowTemplatePage;
 import net.simpleframework.mvc.template.lets.FormTableRow_TabsTemplatePage;
 import net.simpleframework.workflow.engine.IWorkflowServiceAware;
 import net.simpleframework.workflow.engine.bean.AbstractWorkitemBean;
@@ -22,7 +21,7 @@ import net.simpleframework.workflow.web.component.workview.DoWorkviewBean;
  *         http://www.simpleframework.net
  */
 public abstract class AbstractFormTableRowTPage<T extends AbstractWorkitemBean> extends
-FormTableRow_TabsTemplatePage implements IWorkflowServiceAware {
+		FormTableRow_TabsTemplatePage implements IWorkflowServiceAware {
 
 	public String getForwardUrl(final PageParameter pp) {
 		return url(getClass());
