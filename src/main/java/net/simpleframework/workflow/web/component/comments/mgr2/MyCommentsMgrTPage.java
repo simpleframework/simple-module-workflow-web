@@ -110,8 +110,9 @@ public class MyCommentsMgrTPage extends AbstractMgrTPage implements IWorkflowSer
 		protected Map<String, Object> getRowData(final ComponentParameter cp, final Object dataObject) {
 			final WfCommentLog log = (WfCommentLog) dataObject;
 			final KVMap kv = new KVMap();
-			kv.add("comment", HtmlUtils.convertHtmlLines(log.getCcomment())).add("createDate",
-					log.getCreateDate());
+			kv.add("comment",
+					HtmlUtils.convertHtmlLines(StringUtils.replace(log.getCcomment(), " ", "&nbsp;")))
+					.add("createDate", log.getCreateDate());
 			kv.add(TablePagerColumn.OPE, toOpeHTML(cp, log));
 			return kv;
 		}
