@@ -19,6 +19,7 @@ import net.simpleframework.mvc.MVCUtils;
 import net.simpleframework.mvc.PageRequestResponse;
 import net.simpleframework.mvc.common.element.Checkbox;
 import net.simpleframework.mvc.common.element.Radio;
+import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.workflow.engine.ActivityComplete;
 import net.simpleframework.workflow.engine.IWorkflowServiceAware;
@@ -189,7 +190,8 @@ public abstract class WorkitemCompleteUtils implements IWorkflowServiceAware {
 					final String val = participant.toString();
 					Object user = cp.getUser(participant.userId);
 					if (ArrayUtils.contains(deptdispTasks, to.getName())) {
-						user = ((PermissionUser) user).getDept().getText();
+						user = ((PermissionUser) user).getDept().getText() + " ("
+								+ SpanElement.color777(user) + ")";
 					}
 					final String id = ObjectUtils.hashStr(participant);
 					Checkbox box;
