@@ -68,6 +68,7 @@ public class PRelativeRoleHandler extends AbstractParticipantHandler implements
 		// UserNode node = ((UserNode) ((TransitionNode)
 		// variables.get("transition")).to());
 		ActivityBean preActivity = activityComplete.getActivity();// 前一任务步骤实例
+		ID preActid = preActivity.getId();
 		final UserNode.RuleRole rRole = (UserNode.RuleRole) getParticipantType(variables);
 		final Map<String, String> params = getParams(rRole.getParams());
 		final String node = params.get(PARAMS_KEY_NODE);
@@ -85,7 +86,7 @@ public class PRelativeRoleHandler extends AbstractParticipantHandler implements
 		ID roleId = null;
 		ID deptId = null;
 		WorkitemBean workitem = null;
-		if (preActivity.getId().equals(activityComplete.getActivity().getId())) {
+		if (preActivity.getId().toString().equals(preActid.toString())) {
 			// 如果前一指定节点就是上一节点
 			workitem = activityComplete.getWorkitem();
 		} else {
