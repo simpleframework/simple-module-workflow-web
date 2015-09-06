@@ -10,7 +10,6 @@ import net.simpleframework.common.BeanUtils;
 import net.simpleframework.common.ID;
 import net.simpleframework.common.StringUtils;
 import net.simpleframework.organization.Department;
-import net.simpleframework.organization.IRoleService;
 import net.simpleframework.organization.Role;
 import net.simpleframework.organization.User;
 import net.simpleframework.organization.web.OrganizationPermissionHandler;
@@ -38,8 +37,8 @@ public class WorkflowPermissionHandler extends OrganizationPermissionHandler imp
 		final Role r = getRoleObject(BeanUtils.getProperty(workflowBean, "roleId"), variables);
 		if (r != null) {
 			// 获取相对角色，部门
-			final IRoleService service = orgContext.getRoleService();
-			final Role rr = service.getRoleByName(service.getRoleChart(r), rRole.getRelative());
+			final Role rr = _roleService.getRoleByName(_roleService.getRoleChart(r),
+					rRole.getRelative());
 			if (rr != null) {
 				final ID deptId = rRole.isIndept() ? (ID) BeanUtils.getProperty(workflowBean, "deptId")
 						: null;
@@ -60,8 +59,7 @@ public class WorkflowPermissionHandler extends OrganizationPermissionHandler imp
 		if (oRole != null) {
 			if (StringUtils.hasText(relativeRole)) {
 				// 获取相对角色，部门
-				final IRoleService service = orgContext.getRoleService();
-				oRole = service.getRoleByName(service.getRoleChart(oRole), relativeRole);
+				oRole = _roleService.getRoleByName(_roleService.getRoleChart(oRole), relativeRole);
 				if (oRole != null) {
 					final ID roleId = oRole.getId();
 					if (level.equals(Level.internal)) {// 本部门
