@@ -40,7 +40,7 @@ public class ModelerRemotePage extends AbstractWorkflowRemotePage {
 	}
 
 	@Override
-	public String getRole(final PageParameter pp) {
+	public String getPageRole(final PageParameter pp) {
 		return "login".equals(pp.getParameter("method")) ? PermissionConst.ROLE_ANONYMOUS
 				: PermissionConst.ROLE_ALL_ACCOUNT;
 	}

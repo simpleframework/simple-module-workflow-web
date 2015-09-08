@@ -29,7 +29,7 @@ import net.simpleframework.workflow.web.page.UserDelegateListTPage;
 public abstract class AbstractWorkPage extends T2TemplatePage {
 
 	@Override
-	public String getRole(final PageParameter pp) {
+	public String getPageRole(final PageParameter pp) {
 		return PermissionConst.ROLE_ALL_ACCOUNT;
 	}
 

@@ -61,7 +61,7 @@ public class AbstractWorkflowMgrTPage extends AbstractMgrTPage implements IWorkf
 	}
 
 	@Override
-	public String getRole(final PageParameter pp) {
+	public String getPageRole(final PageParameter pp) {
 		return workflowContext.getModule().getManagerRole();
 	}
 

@@ -45,7 +45,7 @@ public abstract class AbstractWorkflowMgrPage extends T1ResizedTemplatePage impl
 	}
 
 	@Override
-	public String getRole(final PageParameter pp) {
+	public String getPageRole(final PageParameter pp) {
 		return PermissionConst.ROLE_MANAGER;
 	}
 
