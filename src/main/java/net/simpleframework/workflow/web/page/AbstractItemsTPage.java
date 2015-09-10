@@ -60,7 +60,7 @@ public abstract class AbstractItemsTPage extends Category_ListPage implements IW
 	protected TablePagerBean addTablePagerBean(final PageParameter pp, final String name,
 			final Class<? extends ITablePagerHandler> handlerClass) {
 		return (TablePagerBean) addTablePagerBean(pp, name, handlerClass, false).setResize(false)
-				.setShowCheckbox(false).setShowFilterBar(true).setShowLineNo(false).setShowHead(true)
+				.setShowCheckbox(false).setFilter(true).setShowLineNo(false).setShowHead(true)
 				.setPageItems(30);
 	}
 

@@ -29,7 +29,7 @@ public class ActivityGraphMgrPage extends ActivityMgrPage {
 	@Override
 	protected TablePagerBean addTablePagerBean(final PageParameter pp) {
 		final TablePagerBean tablePager = (TablePagerBean) super.addTablePagerBean(pp)
-				.setShowFilterBar(false).setContainerId("idWorkflowGraphMonitorPage_tbl")
+				.setFilter(false).setContainerId("idWorkflowGraphMonitorPage_tbl")
 				.setName("WorkflowGraphMonitorPage_tbl").setHandlerClass(_ActivityGraphTbl.class);
 		return tablePager;
 	}

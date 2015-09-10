@@ -21,7 +21,7 @@ public class WorkflowGraphMonitorPage extends WorkflowMonitorPage {
 	protected TablePagerBean addTablePagerBean(final PageParameter pp) {
 		// pp.putParameter(G, "tasknode");
 		final TablePagerBean tablePager = (TablePagerBean) super.addTablePagerBean(pp)
-				.setShowFilterBar(false).setContainerId("idWorkflowGraphMonitorPage_tbl")
+				.setFilter(false).setContainerId("idWorkflowGraphMonitorPage_tbl")
 				.setName("WorkflowGraphMonitorPage_tbl").setHandlerClass(_ActivityGraphTbl2.class);
 		return tablePager;
 	}
