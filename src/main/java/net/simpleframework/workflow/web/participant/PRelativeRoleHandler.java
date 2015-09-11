@@ -43,7 +43,7 @@ public class PRelativeRoleHandler extends AbstractParticipantHandler implements
 		internal {// 本部门
 
 		},
-		Level {// 平级
+		level {// 平级
 
 		},
 		lower {// 下级
