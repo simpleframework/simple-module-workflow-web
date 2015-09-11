@@ -1,5 +1,6 @@
 package net.simpleframework.workflow.web.page;
 
+import net.simpleframework.module.log.ILogContextAware;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.ElementList;
 
@@ -9,7 +10,12 @@ import net.simpleframework.mvc.common.element.ElementList;
  * @author 陈侃(cknet@126.com, 13910090885) https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
-public class MyWorklogsTPage extends AbstractItemsTPage {
+public class MyWorklogsTPage extends AbstractItemsTPage implements ILogContextAware {
+
+	String get() {
+		// logContext.get
+		return null;
+	}
 
 	@Override
 	public ElementList getRightElements(final PageParameter pp) {
