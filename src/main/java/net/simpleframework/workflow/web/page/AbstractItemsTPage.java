@@ -67,7 +67,7 @@ public abstract class AbstractItemsTPage extends Category_ListPage implements IW
 	public CategoryItem createCategoryItem(final PageParameter pp, final String text,
 			final Class<? extends AbstractItemsTPage> mClass) {
 		return new CategoryItem(text).setHref(uFactory.getUrl(pp, mClass)).setSelected(
-				mClass.isAssignableFrom(getClass()));
+				mClass.isAssignableFrom(getOriginalClass()));
 	}
 
 	public CategoryItem createCategoryItem_mywork(final PageParameter pp) {
@@ -88,8 +88,11 @@ public abstract class AbstractItemsTPage extends Category_ListPage implements IW
 	public CategoryItem createCategoryItem_delegate(final PageParameter pp) {
 		final CategoryItem delegate = createCategoryItem(pp, $m("AbstractItemsTPage.3"),
 				MyDelegateListTPage.class).setIconClass("my_work_complete_icon");// .setIconClass("delegate_list_icon")
-		delegate.setSelected(delegate.isSelected()
-				|| UserDelegateListTPage.class == getOriginalClass());
+		// delegate.setSelected(delegate.isSelected()
+		// || UserDelegateListTPage.class == getOriginalClass());
+		// if (UserDelegateListTPage.class == getOriginalClass()) {
+		// delegate.setSelected(true);
+		// }
 		return delegate;
 	}
 
@@ -116,6 +119,9 @@ public abstract class AbstractItemsTPage extends Category_ListPage implements IW
 	public CategoryItem createCategoryItem_myWorkstat(final PageParameter pp) {
 		final CategoryItem item = createCategoryItem(pp, $m("AbstractItemsTPage.12"),
 				MyWorkstatTPage.class).setIconClass("my_work_complete_icon");
+		if (MyWorklogsTPage.class.isAssignableFrom(getOriginalClass())) {
+			item.setSelected(true);
+		}
 		return item;
 	}
 

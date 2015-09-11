@@ -193,6 +193,18 @@
   line-height: 1.5;
 }
 
+.MyWorklogsTPage .topbar {
+  background-color: #eee;
+  border: 1px solid #ccc;
+  padding: 10px;
+}
+
+.MyWorklogsTPage .logs {
+  border: 1px solid #ccc;
+  border-top: 0;
+  padding: 10px;
+}
+
 .ProcessDetailPage .ptitle {
   padding: 10px;
   background-color: #eee;

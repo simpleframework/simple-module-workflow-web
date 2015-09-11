@@ -10,6 +10,7 @@ import net.simpleframework.common.Convert;
 import net.simpleframework.common.NumberUtils;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.ElementList;
+import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.common.element.TabButton;
 import net.simpleframework.mvc.common.element.TabButtons;
 import net.simpleframework.mvc.component.ext.highchart.DataObj;
@@ -73,10 +74,15 @@ public class MyWorkstatTPage extends AbstractItemsTPage {
 		hc1.addSeries(h);
 	}
 
+	static SpanElement getStatTabs(final PageParameter pp) {
+		return createTabsElement(pp, TabButtons.of(
+				new TabButton($m("MyWorkstatTPage.7"), uFactory.getUrl(pp, MyWorkstatTPage.class)),
+				new TabButton($m("MyWorkstatTPage.11"), uFactory.getUrl(pp, MyWorklogsTPage.class))));
+	}
+
 	@Override
 	public ElementList getRightElements(final PageParameter pp) {
-		final TabButtons tabs = TabButtons.of(new TabButton($m("MyWorkstatTPage.7")));
-		return ElementList.of(createTabsElement(pp, tabs));
+		return ElementList.of(getStatTabs(pp));
 	}
 
 	protected String toStat1HTML(final PageParameter pp) {
