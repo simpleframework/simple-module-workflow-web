@@ -13,8 +13,9 @@ import net.simpleframework.mvc.common.element.ElementList;
 public class MyWorklogsTPage extends AbstractItemsTPage implements ILogContextAware {
 
 	String get() {
-		// logContext.get
-		return null;
+		final StringBuilder sb = new StringBuilder();
+		// _logInsertService.query(expr, params);
+		return sb.toString();
 	}
 
 	@Override
@@ -29,6 +30,7 @@ public class MyWorklogsTPage extends AbstractItemsTPage implements ILogContextAw
 		sb.append(" <div class='topbar clearfix'>");
 		sb.append(" </div>");
 		sb.append(" <div class='logs'>");
+		sb.append(get());
 		sb.append(" </div>");
 		sb.append("</div>");
 		return sb.toString();
