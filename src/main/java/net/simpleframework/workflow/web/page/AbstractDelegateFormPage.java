@@ -7,7 +7,7 @@ import java.util.Date;
 import net.simpleframework.common.StringUtils;
 import net.simpleframework.ctx.permission.PermissionUser;
 import net.simpleframework.ctx.trans.Transaction;
-import net.simpleframework.module.common.DescriptionLogUtils;
+import net.simpleframework.module.common.LogDesc;
 import net.simpleframework.mvc.IForward;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageParameter;
@@ -172,7 +172,7 @@ public abstract class AbstractDelegateFormPage extends FormTableRowTemplatePage 
 		@Override
 		public JavascriptForward onSave(final ComponentParameter cp) throws Exception {
 			final DelegationBean delegation = _getDelegation(cp);
-			DescriptionLogUtils.set(delegation, cp.getParameter("wd_description"));
+			LogDesc.set(delegation, cp.getParameter("wd_description"));
 			wfdService.doAccept(delegation);
 			return super.onSave(cp).append("$Actions['MyWorklistTPage_tbl']();");
 		}
@@ -180,7 +180,7 @@ public abstract class AbstractDelegateFormPage extends FormTableRowTemplatePage 
 		@Transaction(context = IWorkflowContext.class)
 		public IForward doRefuse(final ComponentParameter cp) throws Exception {
 			final DelegationBean delegation = _getDelegation(cp);
-			DescriptionLogUtils.set(delegation, cp.getParameter("wd_description"));
+			LogDesc.set(delegation, cp.getParameter("wd_description"));
 			wfdService.doAbort(delegation);
 			return super.onSave(cp).append("$Actions['MyWorklistTPage_tbl']();");
 		}
