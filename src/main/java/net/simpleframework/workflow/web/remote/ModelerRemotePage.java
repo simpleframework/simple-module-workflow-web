@@ -1,14 +1,22 @@
 package net.simpleframework.workflow.web.remote;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
 
 import net.simpleframework.ado.query.IDataQuery;
+import net.simpleframework.common.ClassUtils;
+import net.simpleframework.common.IoUtils;
+import net.simpleframework.common.JsonUtils;
+import net.simpleframework.common.StringUtils;
 import net.simpleframework.common.coll.KVMap;
 import net.simpleframework.ctx.permission.PermissionConst;
 import net.simpleframework.mvc.IForward;
 import net.simpleframework.mvc.IForwardCallback.IJsonForwardCallback;
 import net.simpleframework.mvc.JsonForward;
+import net.simpleframework.mvc.MVCUtils;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.workflow.engine.bean.ProcessModelBean;
 import net.simpleframework.workflow.schema.ProcessDocument;
@@ -114,6 +122,46 @@ public class ModelerRemotePage extends AbstractWorkflowRemotePage {
 				final String doc = pp.getLocaleParameter("doc");
 				wfpmService.doUpdateModel(bean, doc.toCharArray());
 				json.put("result", Boolean.TRUE);
+			}
+		});
+	}
+	
+	/**
+	 * 获取所有执行者插件
+	 * @param pp
+	 * @return
+	 */
+	public IForward participants(final PageParameter pp) {
+		return doJsonForward(new IJsonForwardCallback() {
+			@SuppressWarnings("unchecked")
+			@Override
+			public void doAction(final JsonForward json) {
+				final File settingsFile = new File(MVCUtils.getRealPath("/WEB-INF/participants.json"));
+//				File settingsFile = new File("participants.json");
+//				if (!settingsFile.exists()) {
+//					ClassUtils.getResourceAsStream("participants.json");
+//				} else {
+//					new FileInputStream(settingsFile);
+//				}
+				if (settingsFile.exists()) {
+					FileInputStream iStream = null;
+					try {
+						String jsons = IoUtils.getStringFromInputStream(iStream = new FileInputStream(
+								settingsFile));
+						if (StringUtils.hasText(jsons)) {
+							json.put((Map<String, Object>) JsonUtils.toMap(jsons));
+						}
+					} catch (final IOException e) {
+						e.printStackTrace();
+					} finally {
+						if (iStream != null) {
+							try {
+								iStream.close();
+							} catch (final IOException e) {
+							}
+						}
+					}
+				}
 			}
 		});
 	}
