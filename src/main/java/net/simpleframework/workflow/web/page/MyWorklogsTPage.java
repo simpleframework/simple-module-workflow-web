@@ -11,6 +11,7 @@ import net.simpleframework.ado.query.IDataQuery;
 import net.simpleframework.common.Convert;
 import net.simpleframework.common.DateUtils;
 import net.simpleframework.common.ID;
+import net.simpleframework.common.StringUtils;
 import net.simpleframework.common.TimePeriod;
 import net.simpleframework.module.log.AbstractEntityTblLogBean;
 import net.simpleframework.module.log.EntityDeleteLog;
@@ -85,19 +86,32 @@ public class MyWorklogsTPage extends AbstractItemsTPage implements ILogContextAw
 		sb.append("<div class='MyWorklogsTPage'>");
 		sb.append(" <div class='topbar clearfix'>");
 		final Calendar cal = Calendar.getInstance();
+		long t = pp.getLongParameter("t");
+		final ArrayList<LinkElement> al = new ArrayList<LinkElement>();
+		LinkElement sEle = null;
 		for (int i = 0; i < 7; i++) {
 			final Date nDate = cal.getTime();
-			final String lbl = i == 0 ? "今天" : (i == 1 ? "昨天" : Convert.toDateString(nDate, "MM-dd"));
-			if (i > 0) {
-				sb.append(SpanElement.SEP(10));
+			final String mmdd = Convert.toDateString(nDate, "MM-dd");
+			final String lbl = i == 0 ? "今天" : (i == 1 ? "昨天" : mmdd);
+			final LinkElement le = LinkElement.style2(lbl).setHref(
+					uFactory.getUrl(pp, MyWorklogsTPage.class, "t=" + nDate.getTime()));
+			if (t > 0 && mmdd.equals(Convert.toDateString(new Date(t), "MM-dd"))) {
+				le.addClassName("simple_btn2_selected");
+				sEle = le;
 			}
-			sb.append(LinkElement.style2(lbl).setHref(
-					uFactory.getUrl(pp, MyWorklogsTPage.class, "t=" + nDate.getTime())));
+			al.add(le);
 			cal.add(Calendar.DATE, -1);
 		}
+		if (sEle == null) {
+			sEle = al.get(0);
+			sEle.addClassName("simple_btn2_selected");
+			t = System.currentTimeMillis();
+		}
+
+		sb.append(StringUtils.join(al, SpanElement.SEP(10).toString()));
 		sb.append(" </div>");
 		sb.append(" <div class='logs'>");
-		final Calendar[] period = DateUtils.getTodayInterval();
+		final Calendar[] period = DateUtils.getDateInterval(t > 0 ? new Date(t) : null);
 		sb.append(getLogs(pp, new TimePeriod(period[0].getTime(), period[1].getTime())));
 		sb.append(" </div>");
 		sb.append("</div>");
