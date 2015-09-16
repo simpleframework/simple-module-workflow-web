@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 import net.simpleframework.ado.query.IDataQuery;
@@ -18,6 +19,8 @@ import net.simpleframework.module.log.EntityUpdateLog;
 import net.simpleframework.module.log.ILogContextAware;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.ElementList;
+import net.simpleframework.mvc.common.element.LinkElement;
+import net.simpleframework.mvc.common.element.SpanElement;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -81,10 +84,20 @@ public class MyWorklogsTPage extends AbstractItemsTPage implements ILogContextAw
 		final StringBuilder sb = new StringBuilder();
 		sb.append("<div class='MyWorklogsTPage'>");
 		sb.append(" <div class='topbar clearfix'>");
+		final Calendar cal = Calendar.getInstance();
+		for (int i = 0; i < 7; i++) {
+			final Date nDate = cal.getTime();
+			final String lbl = i == 0 ? "今天" : (i == 1 ? "昨天" : Convert.toDateString(nDate, "MM-dd"));
+			if (i > 0) {
+				sb.append(new SpanElement("|").setStyle("margin: 0px 10px;"));
+			}
+			sb.append(LinkElement.style2(lbl));
+			cal.add(Calendar.DATE, -1);
+		}
 		sb.append(" </div>");
 		sb.append(" <div class='logs'>");
-		final Calendar[] cal = DateUtils.getTodayInterval();
-		sb.append(getLogs(pp, new TimePeriod(cal[0].getTime(), cal[1].getTime())));
+		final Calendar[] period = DateUtils.getTodayInterval();
+		sb.append(getLogs(pp, new TimePeriod(period[0].getTime(), period[1].getTime())));
 		sb.append(" </div>");
 		sb.append("</div>");
 		return sb.toString();
