@@ -89,9 +89,10 @@ public class MyWorklogsTPage extends AbstractItemsTPage implements ILogContextAw
 			final Date nDate = cal.getTime();
 			final String lbl = i == 0 ? "今天" : (i == 1 ? "昨天" : Convert.toDateString(nDate, "MM-dd"));
 			if (i > 0) {
-				sb.append(new SpanElement("|").setStyle("margin: 0px 10px;"));
+				sb.append(SpanElement.SEP(10));
 			}
-			sb.append(LinkElement.style2(lbl));
+			sb.append(LinkElement.style2(lbl).setHref(
+					uFactory.getUrl(pp, MyWorklogsTPage.class, "t=" + nDate.getTime())));
 			cal.add(Calendar.DATE, -1);
 		}
 		sb.append(" </div>");
