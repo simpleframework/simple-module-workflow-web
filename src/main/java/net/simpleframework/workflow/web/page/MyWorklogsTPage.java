@@ -26,6 +26,7 @@ import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.LinkElement;
 import net.simpleframework.mvc.common.element.SpanElement;
+import net.simpleframework.workflow.engine.EActivityStatus;
 import net.simpleframework.workflow.engine.bean.ActivityBean;
 import net.simpleframework.workflow.engine.bean.WorkitemBean;
 import net.simpleframework.workflow.schema.AbstractTaskNode;
@@ -109,13 +110,13 @@ public class MyWorklogsTPage extends AbstractItemsTPage implements ILogContextAw
 
 		// ------------------------------------- 环节日志
 
-		dqu = _logUpdateService.queryLogs(loginId, wfaService.getTablename(), period);
+		dqu = _logUpdateService.queryLogs(loginId, wfaService.getTablename(), "status", period);
 		while ((log = dqu.next()) != null) {
-			final EntityUpdateLog ulog = (EntityUpdateLog) log;
-			// final String valName = ulog.getValName();
 			final ActivityBean activity = wfaService.getBean(log.getBeanId());
 			if (activity != null && activity.getTasknodeType() == AbstractTaskNode.TT_USER) {
-				if ("complete".equals(ulog.getToVal())) {
+				final EActivityStatus toVal = Convert.toEnum(EActivityStatus.class,
+						((EntityUpdateLog) log).getToVal());
+				if (toVal == EActivityStatus.complete || toVal == EActivityStatus.fallback) {
 					logs.add(log);
 				}
 			}
@@ -164,7 +165,6 @@ public class MyWorklogsTPage extends AbstractItemsTPage implements ILogContextAw
 				} else {
 					sb.append(desc);
 				}
-
 			} else {
 				if (log instanceof EntityUpdateLog) {
 					final EntityUpdateLog ulog = (EntityUpdateLog) log;
@@ -176,7 +176,19 @@ public class MyWorklogsTPage extends AbstractItemsTPage implements ILogContextAw
 						}
 					} else if (aTbl.equals(tblName)) {
 						if ("status".equals(valName)) {
-							sb.append(toTaskCompleteHTML(ulog));
+							final EActivityStatus toVal = Convert.toEnum(EActivityStatus.class,
+									ulog.getToVal());
+							if (toVal == EActivityStatus.complete) {
+								sb.append(toTaskCompleteHTML(ulog));
+							} else if (toVal == EActivityStatus.fallback) {
+								sb.append(SpanElement.colora00($m("MyWorklogsTPage.6")));
+								final ActivityBean activity = wfaService.getBean(log.getBeanId());
+								if (activity != null) {
+									sb.append(" [ ");
+									sb.append(wfpService.getBean(activity.getProcessId()));
+									sb.append(" ]");
+								}
+							}
 						}
 					} else if (wTbl.equals(tblName)) {
 						if ("topMark".equals(valName)) {
@@ -186,7 +198,7 @@ public class MyWorklogsTPage extends AbstractItemsTPage implements ILogContextAw
 								sb.append($m("MyWorklogsTPage.2"));
 							}
 						} else if ("retakeId".equals(valName)) {
-							sb.append(SpanElement.color("取回工作", "#a00"));
+							sb.append(SpanElement.colora00($m("MyWorklogsTPage.5")));
 						}
 						final WorkitemBean workitem = wfwService.getBean(log.getBeanId());
 						if (workitem != null) {
@@ -213,7 +225,7 @@ public class MyWorklogsTPage extends AbstractItemsTPage implements ILogContextAw
 			if (j++ > 0) {
 				sb.append("<br>");
 			}
-			sb.append(SpanElement.SPACE15).append(" -> ");
+			sb.append(SpanElement.SPACE(20)).append(" -> ");
 			sb.append(nActivity).append(" ( ");
 			int i = 0;
 			for (final WorkitemBean workitem : wfwService.getWorkitems(nActivity)) {
@@ -229,16 +241,13 @@ public class MyWorklogsTPage extends AbstractItemsTPage implements ILogContextAw
 
 	private String toValChangeHTML(final String title, final EntityUpdateLog log) {
 		final StringBuilder sb = new StringBuilder();
-		sb.append(title).append("<br>").append(SpanElement.SPACE15);
+		sb.append(title).append("<br>").append(SpanElement.SPACE(20));
 		sb.append(SpanElement.color777(toVal(log.getFromVal()))).append(" -> ")
 				.append(toVal(log.getToVal()));
 		return sb.toString();
 	}
 
 	private Object toVal(final Object val) {
-		if (val == null) {
-			return $m("MyWorklogsTPage.4");
-		}
-		return val;
+		return val != null ? val : $m("MyWorklogsTPage.4");
 	}
 }
