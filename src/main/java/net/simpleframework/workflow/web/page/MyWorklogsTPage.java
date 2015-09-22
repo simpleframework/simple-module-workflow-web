@@ -27,7 +27,10 @@ import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.LinkElement;
 import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.workflow.engine.EActivityStatus;
+import net.simpleframework.workflow.engine.EDelegationSource;
+import net.simpleframework.workflow.engine.EDelegationStatus;
 import net.simpleframework.workflow.engine.bean.ActivityBean;
+import net.simpleframework.workflow.engine.bean.DelegationBean;
 import net.simpleframework.workflow.engine.bean.WorkitemBean;
 import net.simpleframework.workflow.schema.AbstractTaskNode;
 
@@ -89,7 +92,7 @@ public class MyWorklogsTPage extends AbstractItemsTPage implements ILogContextAw
 		AbstractEntityTblLogBean log;
 		// ------------------------------------- 流程日志
 		// 插入日志
-		final IDataQuery<EntityInsertLog> dqi = _logInsertService.queryLogs(loginId,
+		IDataQuery<EntityInsertLog> dqi = _logInsertService.queryLogs(loginId,
 				wfpService.getTablename(), period);
 		final List<AbstractEntityTblLogBean> logs = new ArrayList<AbstractEntityTblLogBean>();
 		while ((log = dqi.next()) != null) {
@@ -131,6 +134,16 @@ public class MyWorklogsTPage extends AbstractItemsTPage implements ILogContextAw
 			}
 		}
 
+		// ------------------------------------- 委托日志
+		dqi = _logInsertService.queryLogs(loginId, wfdService.getTablename(), period);
+		while ((log = dqi.next()) != null) {
+			logs.add(log);
+		}
+		dqu = _logUpdateService.queryLogs(loginId, wfdService.getTablename(), period);
+		while ((log = dqu.next()) != null) {
+			logs.add(log);
+		}
+
 		// 更新日志
 		Collections.sort(logs, new Comparator<AbstractEntityTblLogBean>() {
 			@Override
@@ -148,6 +161,7 @@ public class MyWorklogsTPage extends AbstractItemsTPage implements ILogContextAw
 		final String pTbl = wfpService.getTablename();
 		final String aTbl = wfaService.getTablename();
 		final String wTbl = wfwService.getTablename();
+		final String dTbl = wfdService.getTablename();
 		for (final AbstractEntityTblLogBean log : logs) {
 			sb.append("<div class='clearfix'>");
 			sb.append(" <div class='timec left'>");
@@ -205,6 +219,28 @@ public class MyWorklogsTPage extends AbstractItemsTPage implements ILogContextAw
 							sb.append(" [ ");
 							sb.append(wfpService.getBean(workitem.getProcessId()));
 							sb.append(" ]");
+						}
+					} else if (dTbl.equals(tblName)) {
+						if ("status".equals(valName)) {
+							final EDelegationStatus toVal = Convert.toEnum(EDelegationStatus.class,
+									ulog.getToVal());
+							if (toVal == EDelegationStatus.running) {
+								sb.append("接受了委托");
+								final DelegationBean delegation = wfdService.getBean(log.getBeanId());
+								if (delegation != null) {
+									sb.append(" <- ").append(delegation.getUserText());
+									if (delegation.getDelegationSource() == EDelegationSource.workitem) {
+										final WorkitemBean workitem = wfwService.getBean(delegation
+												.getSourceId());
+										if (workitem != null) {
+											sb.append(" [ ")
+													.append(wfpService.getBean(workitem.getProcessId()))
+													.append(" ]");
+										}
+									}
+								}
+							} else if (toVal == EDelegationStatus.abort) {
+							}
 						}
 					}
 				}

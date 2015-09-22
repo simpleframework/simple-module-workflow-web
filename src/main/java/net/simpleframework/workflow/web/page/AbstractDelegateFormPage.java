@@ -7,7 +7,6 @@ import java.util.Date;
 import net.simpleframework.common.StringUtils;
 import net.simpleframework.ctx.permission.PermissionUser;
 import net.simpleframework.ctx.trans.Transaction;
-import net.simpleframework.module.common.LogDesc;
 import net.simpleframework.mvc.IForward;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageParameter;
@@ -25,6 +24,7 @@ import net.simpleframework.mvc.component.base.validation.EValidatorMethod;
 import net.simpleframework.mvc.component.base.validation.Validator;
 import net.simpleframework.mvc.component.ext.userselect.UserSelectBean;
 import net.simpleframework.mvc.template.lets.FormTableRowTemplatePage;
+import net.simpleframework.workflow.engine.EDelegationSource;
 import net.simpleframework.workflow.engine.IWorkflowContext;
 import net.simpleframework.workflow.engine.IWorkflowServiceAware;
 import net.simpleframework.workflow.engine.bean.DelegationBean;
@@ -46,7 +46,7 @@ public abstract class AbstractDelegateFormPage extends FormTableRowTemplatePage 
 	}
 
 	protected InputElement createDescElement() {
-		return InputElement.textarea("wd_description").setRows(5);
+		return InputElement.textarea("wd_description");
 	}
 
 	public static class WorkitemDelegateSetPage extends AbstractDelegateFormPage {
@@ -151,7 +151,16 @@ public abstract class AbstractDelegateFormPage extends FormTableRowTemplatePage 
 			final TableRow r3 = new TableRow(new RowField($m("WorkitemDelegateSetPage.3"),
 					InputElement.textarea().setText(delegation.getDescription()))).setReadonly(true);
 
-			return TableRows.of(r1, r2, r3);
+			final TableRows rows = TableRows.of(r1, r2, r3);
+			if (delegation.getDelegationSource() == EDelegationSource.workitem) {
+				rows.append(createRow4(delegation));
+			}
+			return rows;
+		}
+
+		protected TableRow createRow4(final DelegationBean delegation) {
+			return new TableRow(new RowField($m("WorkitemDelegateSetPage.4"), InputElement.textarea()
+					.setText(delegation.getDescription2()).setReadonly(true)));
 		}
 	}
 
@@ -172,16 +181,14 @@ public abstract class AbstractDelegateFormPage extends FormTableRowTemplatePage 
 		@Override
 		public JavascriptForward onSave(final ComponentParameter cp) throws Exception {
 			final DelegationBean delegation = _getDelegation(cp);
-			LogDesc.set(delegation, cp.getParameter("wd_description"));
-			wfdService.doAccept(delegation);
+			wfdService.doAccept(delegation, cp.getParameter("wd_description"));
 			return super.onSave(cp).append("$Actions['MyWorklistTPage_tbl']();");
 		}
 
 		@Transaction(context = IWorkflowContext.class)
 		public IForward doRefuse(final ComponentParameter cp) throws Exception {
 			final DelegationBean delegation = _getDelegation(cp);
-			LogDesc.set(delegation, cp.getParameter("wd_description"));
-			wfdService.doAbort(delegation);
+			wfdService.doRefuse(delegation, cp.getParameter("wd_description"));
 			return super.onSave(cp).append("$Actions['MyWorklistTPage_tbl']();");
 		}
 
@@ -208,15 +215,9 @@ public abstract class AbstractDelegateFormPage extends FormTableRowTemplatePage 
 		}
 
 		@Override
-		protected TableRows getTableRows(final PageParameter pp) {
-			return super.getTableRows(pp).append(
-					new TableRow(
-							new RowField($m("WorkitemDelegateReceivingPage.3"), createDescElement())));
-		}
-
-		@Override
-		public boolean isButtonsOnTop(final PageParameter pp) {
-			return true;
+		protected TableRow createRow4(final DelegationBean delegation) {
+			return new TableRow(new RowField($m("WorkitemDelegateReceivingPage.3"),
+					createDescElement()));
 		}
 	}
 }

@@ -173,12 +173,17 @@ public class MyFinalWorklistTPage extends MyRunningWorklistTPage {
 			return activity.getAttrCache("to_" + activityId, new CacheV<String>() {
 				@Override
 				public String get() {
+					boolean more = false;
 					final Set<String> list = new LinkedHashSet<String>();
 					lbl: {
 						for (final ActivityBean nextActivity : wfaService.getNextActivities(activity)) {
 							final AbstractTaskNode tasknode = wfaService.getTaskNode(nextActivity);
 							final EActivityStatus status = nextActivity.getStatus();
 							for (final WorkitemBean workitem : wfwService.getWorkitems(nextActivity)) {
+								if (list.size() > 1) {
+									more = true;
+									break lbl;
+								}
 								final StringBuilder sb = new StringBuilder();
 								final SpanElement ele = (wfaService.isFinalStatus(nextActivity) ? SpanElement
 										.color777(tasknode) : SpanElement.color333(tasknode)).setTitle(status
@@ -187,16 +192,15 @@ public class MyFinalWorklistTPage extends MyRunningWorklistTPage {
 								sb.append("[").append(ele).append("] ")
 										.append(SpanElement.color060(utxt).setTitle(utxt));
 								list.add(sb.toString());
-								if (list.size() > 1) {
-									list.add(LinkElement
-											.style2("...")
-											.setOnclick(
-													"$Actions['MyFinalWorklistTPage_userTo']('activityId="
-															+ activityId + "');").toString());
-									break lbl;
-								}
 							}
 						}
+					}
+					if (more) {
+						list.add(LinkElement
+								.style2("...")
+								.setOnclick(
+										"$Actions['MyFinalWorklistTPage_userTo']('activityId=" + activityId
+												+ "');").toString());
 					}
 					return list.size() > 0 ? StringUtils.join(list, "<br>") : null;
 				}
@@ -219,7 +223,6 @@ public class MyFinalWorklistTPage extends MyRunningWorklistTPage {
 							MENU_MARK_UNTOP().setOnclick_act("MyWorklistTPage_topMark", "workitemId",
 									"op=untop"));
 			items.append(mItems);
-			items.append(MenuItem.sep()).append(MENU_LOG());
 			return items;
 		}
 	}

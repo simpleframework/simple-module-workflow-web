@@ -68,16 +68,4 @@ public class WorkflowLogRef extends LogRef implements IWorkflowServiceAware {
 			return "workitemId";
 		}
 	}
-
-	public static class DelegateUpdateLogPage extends EntityUpdateLogPage {
-		@Override
-		protected IDbBeanService<?> getBeanService() {
-			return wfdService;
-		}
-
-		@Override
-		public String getBeanIdParameter(final PageParameter pp) {
-			return "delegationId";
-		}
-	}
 }

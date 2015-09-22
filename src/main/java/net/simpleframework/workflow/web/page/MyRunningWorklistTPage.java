@@ -7,7 +7,6 @@ import net.simpleframework.common.StringUtils;
 import net.simpleframework.common.web.HttpUtils;
 import net.simpleframework.common.web.JavascriptUtils;
 import net.simpleframework.ctx.trans.Transaction;
-import net.simpleframework.mvc.AbstractMVCPage;
 import net.simpleframework.mvc.IForward;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageParameter;
@@ -29,7 +28,6 @@ import net.simpleframework.workflow.engine.IWorkflowContext;
 import net.simpleframework.workflow.engine.bean.DelegationBean;
 import net.simpleframework.workflow.engine.bean.UserStatBean;
 import net.simpleframework.workflow.engine.bean.WorkitemBean;
-import net.simpleframework.workflow.web.WorkflowLogRef.WorkitemUpdateLogPage;
 import net.simpleframework.workflow.web.WorkflowUtils;
 import net.simpleframework.workflow.web.page.AbstractDelegateFormPage.WorkitemDelegateReceivingPage;
 import net.simpleframework.workflow.web.page.AbstractDelegateFormPage.WorkitemDelegateSetPage;
@@ -88,7 +86,7 @@ public class MyRunningWorklistTPage extends AbstractItemsTPage {
 				WorkitemDelegateReceivingPage.class);
 		addWindowBean(pp, "MyWorklistTPage_delegate_receiving")
 				.setContentRef("MyWorklistTPage_delegate_receiving_page")
-				.setTitle($m("MyRunningWorklistTPage.5")).setHeight(400).setWidth(500);
+				.setTitle($m("MyRunningWorklistTPage.5")).setHeight(360).setWidth(500);
 
 		// 标记菜单
 		MenuBean mb = createMarkMenuComponent(pp);
@@ -161,11 +159,6 @@ public class MyRunningWorklistTPage extends AbstractItemsTPage {
 	protected TablePagerColumn TC_PSTAT() {
 		return new TablePagerColumn("pstat", $m("MyRunningWorklistTPage.13"), 56).setTextAlign(
 				ETextAlign.right).setFilterSort(false);
-	}
-
-	@Override
-	protected Class<? extends AbstractMVCPage> getUpdateLogPage() {
-		return WorkitemUpdateLogPage.class;
 	}
 
 	protected MenuBean createMarkMenuComponent(final PageParameter pp) {

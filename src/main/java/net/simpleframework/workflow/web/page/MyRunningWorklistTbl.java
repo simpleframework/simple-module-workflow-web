@@ -317,7 +317,6 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 		items.append(MenuItem.sep());
 		items.append(MenuItem.of($m("MyRunningWorklistTbl.16")).setOnclick_act(
 				"MyWorklistTPage_delete", "workitemId"));
-		items.append(MenuItem.sep()).append(MENU_LOG());
 		return items;
 	}
 
@@ -325,11 +324,6 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 		return MenuItem.of($m("MyRunningWorklistTbl.7")).setOnclick(
 				"$Actions.loc('" + uFactory.getUrl(pp, WorkflowMonitorPage.class)
 						+ "?workitemId=' + $pager_action(item).rowId());");
-	}
-
-	static MenuItem MENU_LOG() {
-		return MenuItem.of($m("Button.Log")).setOnclick_act("AbstractItemsTPage_update_log",
-				"workitemId");
 	}
 
 	static MenuItem MENU_MARK_READ() {

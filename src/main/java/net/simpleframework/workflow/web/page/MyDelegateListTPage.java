@@ -8,7 +8,6 @@ import net.simpleframework.ado.query.IDataQuery;
 import net.simpleframework.common.StringUtils;
 import net.simpleframework.common.coll.KVMap;
 import net.simpleframework.ctx.trans.Transaction;
-import net.simpleframework.mvc.AbstractMVCPage;
 import net.simpleframework.mvc.IForward;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageParameter;
@@ -25,13 +24,13 @@ import net.simpleframework.mvc.component.ui.menu.MenuItems;
 import net.simpleframework.mvc.component.ui.pager.AbstractTablePagerSchema;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
 import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
+import net.simpleframework.mvc.component.ui.window.WindowBean;
 import net.simpleframework.workflow.engine.EDelegationSource;
 import net.simpleframework.workflow.engine.EDelegationStatus;
 import net.simpleframework.workflow.engine.IWorkflowContext;
 import net.simpleframework.workflow.engine.bean.ActivityBean;
 import net.simpleframework.workflow.engine.bean.DelegationBean;
 import net.simpleframework.workflow.engine.bean.WorkitemBean;
-import net.simpleframework.workflow.web.WorkflowLogRef.DelegateUpdateLogPage;
 import net.simpleframework.workflow.web.WorkflowUtils;
 import net.simpleframework.workflow.web.page.AbstractDelegateFormPage.WorkitemDelegateViewPage;
 
@@ -55,9 +54,14 @@ public class MyDelegateListTPage extends AbstractItemsTPage {
 		addAjaxRequest(pp, "DelegateListTPage_delete").setHandlerMethod("doDelete")
 				.setConfirmMessage($m("Confirm.Delete"));
 		// 查看
+		addDelegateView(pp);
+	}
+
+	protected WindowBean addDelegateView(final PageParameter pp) {
 		addAjaxRequest(pp, "DelegateListTPage_view_page", WorkitemDelegateViewPage.class);
-		addWindowBean(pp, "DelegateListTPage_view").setContentRef("DelegateListTPage_view_page")
-				.setTitle($m("MyDelegateListTPage.3")).setHeight(300).setWidth(500);
+		return addWindowBean(pp, "DelegateListTPage_view")
+				.setContentRef("DelegateListTPage_view_page").setTitle($m("MyDelegateListTPage.3"))
+				.setHeight(360).setWidth(500);
 	}
 
 	protected TablePagerBean addTablePagerBean(final PageParameter pp) {
@@ -100,11 +104,6 @@ public class MyDelegateListTPage extends AbstractItemsTPage {
 		return "MyDelegateListTPage";
 	}
 
-	@Override
-	protected Class<? extends AbstractMVCPage> getUpdateLogPage() {
-		return DelegateUpdateLogPage.class;
-	}
-
 	protected SpanElement getDelegateTabs(final PageParameter pp) {
 		return createTabsElement(pp, TabButtons.of(new TabButton($m("MyDelegateListTPage.4"),
 				uFactory.getUrl(pp, MyDelegateListTPage.class)), new TabButton(
@@ -138,11 +137,11 @@ public class MyDelegateListTPage extends AbstractItemsTPage {
 			final StringBuilder sb = new StringBuilder();
 			final Object id = delegation.getId();
 			if (wfdService.isFinalStatus(delegation)) {
-				sb.append(WorkflowUtils.createLogButton().setOnclick(
-						"$Actions['AbstractItemsTPage_update_log']('delegationId=" + id + "');"));
+				sb.append(ButtonElement.viewBtn().setOnclick(
+						"$Actions['DelegateListTPage_view']('delegationId=" + id + "');"));
 			} else {
-				sb.append(new ButtonElement($m("Button.Cancel"))
-						.setOnclick("$Actions['DelegateListTPage_abort']('delegationId=" + id + "');"));
+				sb.append(ButtonElement.cancelBtn().setOnclick(
+						"$Actions['DelegateListTPage_abort']('delegationId=" + id + "');"));
 			}
 
 			sb.append(AbstractTablePagerSchema.IMG_DOWNMENU);
@@ -172,8 +171,6 @@ public class MyDelegateListTPage extends AbstractItemsTPage {
 				final MenuItem menuItem) {
 			final MenuItems items = MenuItems.of();
 			items.add(MenuItem.itemDelete().setOnclick_act("DelegateListTPage_delete", "delegationId"));
-			items.append(MenuItem.sep()).append(
-					MENU_LOG().setOnclick_act("AbstractItemsTPage_update_log", "delegationId"));
 			return items;
 		}
 	}

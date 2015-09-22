@@ -13,6 +13,7 @@ import net.simpleframework.mvc.common.element.Option;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
 import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
+import net.simpleframework.mvc.component.ui.window.WindowBean;
 import net.simpleframework.workflow.engine.EDelegationSource;
 import net.simpleframework.workflow.engine.EDelegationStatus;
 import net.simpleframework.workflow.engine.bean.DelegationBean;
@@ -36,6 +37,11 @@ public class UserDelegateListTPage extends MyDelegateListTPage {
 		addWindowBean(pp, "UserDelegateListTPage_delegate")
 				.setContentRef("UserDelegateListTPage_delegate_page")
 				.setTitle($m("MyRunningWorklistTPage.4")).setHeight(300).setWidth(500);
+	}
+
+	@Override
+	protected WindowBean addDelegateView(final PageParameter pp) {
+		return super.addDelegateView(pp).setHeight(300);
 	}
 
 	@Override

@@ -6,8 +6,6 @@ import java.util.List;
 
 import net.simpleframework.common.StringUtils;
 import net.simpleframework.common.web.HttpUtils;
-import net.simpleframework.ctx.IModuleRef;
-import net.simpleframework.mvc.AbstractMVCPage;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.BlockElement;
 import net.simpleframework.mvc.common.element.ETextAlign;
@@ -18,14 +16,12 @@ import net.simpleframework.mvc.common.element.InputElement;
 import net.simpleframework.mvc.common.element.LinkElement;
 import net.simpleframework.mvc.common.element.SupElement;
 import net.simpleframework.mvc.component.ComponentParameter;
-import net.simpleframework.mvc.component.base.ajaxrequest.AjaxRequestBean;
 import net.simpleframework.mvc.component.ui.pager.ITablePagerHandler;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
 import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
 import net.simpleframework.mvc.template.lets.Category_ListPage;
 import net.simpleframework.mvc.template.struct.CategoryItem;
 import net.simpleframework.mvc.template.struct.CategoryItems;
-import net.simpleframework.workflow.web.IWorkflowWebContext;
 import net.simpleframework.workflow.web.WorkflowUtils;
 import net.simpleframework.workflow.web.page.t1.AbstractWorkflowMgrPage;
 
@@ -41,19 +37,6 @@ public abstract class AbstractItemsTPage extends Category_ListPage implements IW
 	protected void onForward(final PageParameter pp) throws Exception {
 		super.onForward(pp);
 		pp.addImportCSS(AbstractItemsTPage.class, "/my_work.css");
-
-		final IModuleRef ref = ((IWorkflowWebContext) workflowContext).getLogRef();
-		Class<? extends AbstractMVCPage> lPage;
-		if (ref != null && (lPage = getUpdateLogPage()) != null) {
-			final AjaxRequestBean ajaxRequest = addAjaxRequest(pp,
-					"AbstractItemsTPage_update_logPage", lPage);
-			addWindowBean(pp, "AbstractItemsTPage_update_log", ajaxRequest).setHeight(540).setWidth(
-					864);
-		}
-	}
-
-	protected Class<? extends AbstractMVCPage> getUpdateLogPage() {
-		return null;
 	}
 
 	@Override
