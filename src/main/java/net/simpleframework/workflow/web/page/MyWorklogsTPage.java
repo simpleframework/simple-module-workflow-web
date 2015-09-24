@@ -15,8 +15,6 @@ import net.simpleframework.common.DateUtils;
 import net.simpleframework.common.ID;
 import net.simpleframework.common.StringUtils;
 import net.simpleframework.common.TimePeriod;
-import net.simpleframework.common.web.html.HtmlConst;
-import net.simpleframework.common.web.html.HtmlUtils;
 import net.simpleframework.module.log.AbstractEntityTblLogBean;
 import net.simpleframework.module.log.EntityDeleteLog;
 import net.simpleframework.module.log.EntityInsertLog;
@@ -85,6 +83,11 @@ public class MyWorklogsTPage extends AbstractItemsTPage implements ILogContextAw
 		return sb.toString();
 	}
 
+	private final String TBL_PROCESS = wfpService.getTablename();
+	private final String TBL_ACTIVITY = wfaService.getTablename();
+	private final String TBL_WORKITEM = wfwService.getTablename();
+	private final String TBL_DELEGATION = wfdService.getTablename();
+
 	private String getLogs(final PageParameter pp, final TimePeriod period) {
 		final StringBuilder sb = new StringBuilder();
 		final ID loginId = pp.getLoginId();
@@ -92,28 +95,27 @@ public class MyWorklogsTPage extends AbstractItemsTPage implements ILogContextAw
 		AbstractEntityTblLogBean log;
 		// ------------------------------------- 流程日志
 		// 插入日志
-		IDataQuery<EntityInsertLog> dqi = _logInsertService.queryLogs(loginId,
-				wfpService.getTablename(), period);
+		IDataQuery<EntityInsertLog> dqi = _logInsertService.queryLogs(loginId, TBL_PROCESS, period);
 		final List<AbstractEntityTblLogBean> logs = new ArrayList<AbstractEntityTblLogBean>();
 		while ((log = dqi.next()) != null) {
 			logs.add(log);
 		}
 		// 删除日志
-		final IDataQuery<EntityDeleteLog> dqd = _logDeleteService.queryLogs(loginId,
-				wfpService.getTablename(), period);
+		final IDataQuery<EntityDeleteLog> dqd = _logDeleteService.queryLogs(loginId, TBL_PROCESS,
+				period);
 		while ((log = dqd.next()) != null) {
 			logs.add(log);
 		}
 		// 查找标题更新
-		IDataQuery<EntityUpdateLog> dqu = _logUpdateService.queryLogs(loginId,
-				wfpService.getTablename(), "title", period);
+		IDataQuery<EntityUpdateLog> dqu = _logUpdateService.queryLogs(loginId, TBL_PROCESS, "title",
+				period);
 		while ((log = dqu.next()) != null) {
 			logs.add(log);
 		}
 
 		// ------------------------------------- 环节日志
 
-		dqu = _logUpdateService.queryLogs(loginId, wfaService.getTablename(), "status", period);
+		dqu = _logUpdateService.queryLogs(loginId, TBL_ACTIVITY, "status", period);
 		while ((log = dqu.next()) != null) {
 			final ActivityBean activity = wfaService.getBean(log.getBeanId());
 			if (activity != null && activity.getTasknodeType() == AbstractTaskNode.TT_USER) {
@@ -126,7 +128,7 @@ public class MyWorklogsTPage extends AbstractItemsTPage implements ILogContextAw
 		}
 
 		// ------------------------------------- 工作项日志
-		dqu = _logUpdateService.queryLogs(loginId, wfwService.getTablename(), period);
+		dqu = _logUpdateService.queryLogs(loginId, TBL_WORKITEM, period);
 		while ((log = dqu.next()) != null) {
 			final String valName = ((EntityUpdateLog) log).getValName();
 			if ("topMark".equals(valName) || "retakeId".equals(valName)) {
@@ -135,11 +137,11 @@ public class MyWorklogsTPage extends AbstractItemsTPage implements ILogContextAw
 		}
 
 		// ------------------------------------- 委托日志
-		dqi = _logInsertService.queryLogs(loginId, wfdService.getTablename(), period);
+		dqi = _logInsertService.queryLogs(loginId, TBL_DELEGATION, period);
 		while ((log = dqi.next()) != null) {
 			logs.add(log);
 		}
-		dqu = _logUpdateService.queryLogs(loginId, wfdService.getTablename(), period);
+		dqu = _logUpdateService.queryLogs(loginId, TBL_DELEGATION, period);
 		while ((log = dqu.next()) != null) {
 			logs.add(log);
 		}
@@ -158,10 +160,6 @@ public class MyWorklogsTPage extends AbstractItemsTPage implements ILogContextAw
 
 	private String toLogsHTML(final List<AbstractEntityTblLogBean> logs) {
 		final StringBuilder sb = new StringBuilder();
-		final String pTbl = wfpService.getTablename();
-		final String aTbl = wfaService.getTablename();
-		final String wTbl = wfwService.getTablename();
-		final String dTbl = wfdService.getTablename();
 		for (final AbstractEntityTblLogBean log : logs) {
 			sb.append("<div class='clearfix'>");
 			sb.append(" <div class='timec left'>");
@@ -170,80 +168,26 @@ public class MyWorklogsTPage extends AbstractItemsTPage implements ILogContextAw
 			sb.append(Convert.toDateString(log.getCreateDate(), "HH:mm"));
 			sb.append(" </div>");
 			sb.append(" <div class='cc left'>");
-			String desc = log.getDescription();
-			if (StringUtils.hasText(desc)) {
-				desc = StringUtils.replace(desc, " ", HtmlConst.NBSP);
-				desc = HtmlUtils.convertHtmlLines(desc);
-				if (log instanceof EntityDeleteLog) {
-					sb.append(SpanElement.colorf00(desc));
-				} else {
-					sb.append(desc);
-				}
-			} else {
-				if (log instanceof EntityUpdateLog) {
-					final EntityUpdateLog ulog = (EntityUpdateLog) log;
-					final String tblName = ulog.getTblName();
-					final String valName = ulog.getValName();
-					if (pTbl.equals(tblName)) {
-						if ("title".equals(valName)) {
-							sb.append(toValChangeHTML($m("MyWorklogsTPage.0"), ulog));
-						}
-					} else if (aTbl.equals(tblName)) {
-						if ("status".equals(valName)) {
-							final EActivityStatus toVal = Convert.toEnum(EActivityStatus.class,
-									ulog.getToVal());
-							if (toVal == EActivityStatus.complete) {
-								sb.append(toTaskCompleteHTML(ulog));
-							} else if (toVal == EActivityStatus.fallback) {
-								sb.append(SpanElement.colora00($m("MyWorklogsTPage.6")));
-								final ActivityBean activity = wfaService.getBean(log.getBeanId());
-								if (activity != null) {
-									sb.append(" [ ");
-									sb.append(wfpService.getBean(activity.getProcessId()));
-									sb.append(" ]");
-								}
-							}
-						}
-					} else if (wTbl.equals(tblName)) {
-						if ("topMark".equals(valName)) {
-							if (Convert.toBool(ulog.getToVal())) {
-								sb.append($m("MyWorklogsTPage.1"));
-							} else {
-								sb.append($m("MyWorklogsTPage.2"));
-							}
-						} else if ("retakeId".equals(valName)) {
-							sb.append(SpanElement.colora00($m("MyWorklogsTPage.5")));
-						}
-						final WorkitemBean workitem = wfwService.getBean(log.getBeanId());
-						if (workitem != null) {
-							sb.append(" [ ");
-							sb.append(wfpService.getBean(workitem.getProcessId()));
-							sb.append(" ]");
-						}
-					} else if (dTbl.equals(tblName)) {
-						if ("status".equals(valName)) {
-							final EDelegationStatus toVal = Convert.toEnum(EDelegationStatus.class,
-									ulog.getToVal());
-							if (toVal == EDelegationStatus.running) {
-								sb.append("接受了委托");
-								final DelegationBean delegation = wfdService.getBean(log.getBeanId());
-								if (delegation != null) {
-									sb.append(" <- ").append(delegation.getUserText());
-									if (delegation.getDelegationSource() == EDelegationSource.workitem) {
-										final WorkitemBean workitem = wfwService.getBean(delegation
-												.getSourceId());
-										if (workitem != null) {
-											sb.append(" [ ")
-													.append(wfpService.getBean(workitem.getProcessId()))
-													.append(" ]");
-										}
-									}
-								}
-							} else if (toVal == EDelegationStatus.abort) {
-							}
-						}
-					}
-				}
+			// String desc = log.getDescription();
+			// if (StringUtils.hasText(desc)) {
+			// desc = StringUtils.replace(desc, " ", HtmlConst.NBSP);
+			// desc = HtmlUtils.convertHtmlLines(desc);
+			// if (log instanceof EntityDeleteLog) {
+			// sb.append(SpanElement.colorf00(desc));
+			// } else {
+			// sb.append(desc);
+			// }
+			// } else {
+			String logHTML = null;
+			if (log instanceof EntityInsertLog) {
+				logHTML = toInsertLogHTML((EntityInsertLog) log);
+			} else if (log instanceof EntityDeleteLog) {
+				logHTML = toDeleteLogHTML((EntityDeleteLog) log);
+			} else if (log instanceof EntityUpdateLog) {
+				logHTML = toUpdateLogHTML((EntityUpdateLog) log);
+			}
+			if (StringUtils.hasText(logHTML)) {
+				sb.append(logHTML);
 			}
 			sb.append(" </div>");
 			sb.append("</div>");
@@ -251,18 +195,111 @@ public class MyWorklogsTPage extends AbstractItemsTPage implements ILogContextAw
 		return sb.toString();
 	}
 
-	private String toTaskCompleteHTML(final EntityUpdateLog log) {
+	private String toInsertLogHTML(final EntityInsertLog log) {
 		final StringBuilder sb = new StringBuilder();
-		final ActivityBean activity = wfaService.getBean(log.getBeanId());
-		sb.append(SpanElement.color060($m("MyWorklogsTPage.3"))).append(" [ ").append(activity)
-				.append(" ]").append("<br>");
+		final String tblName = log.getTblName();
+		if (TBL_PROCESS.equals(tblName)) {
+			sb.append(act("启动新工作")).append(log.getDescription());
+		} else if (TBL_DELEGATION.equals(tblName)) {
+			sb.append(act("委托工作"));
+		}
+		return sb.toString();
+	}
+
+	private String toDeleteLogHTML(final EntityDeleteLog log) {
+		final StringBuilder sb = new StringBuilder();
+		final String tblName = log.getTblName();
+		if (TBL_PROCESS.equals(tblName)) {
+			sb.append(act("删除未发送工作", "#f00")).append(log.getDescription());
+		}
+		return sb.toString();
+	}
+
+	private String toUpdateLogHTML(final EntityUpdateLog log) {
+		final StringBuilder sb = new StringBuilder();
+		final String tblName = log.getTblName();
+		final String valName = log.getValName();
+		if (TBL_PROCESS.equals(tblName)) {
+			if ("title".equals(valName)) {
+				sb.append(toValChangeHTML($m("MyWorklogsTPage.0"), log));
+			}
+		} else if (TBL_ACTIVITY.equals(tblName)) {
+			if ("status".equals(valName)) {
+				final EActivityStatus toVal = Convert.toEnum(EActivityStatus.class, log.getToVal());
+				if (toVal == EActivityStatus.complete) {
+					sb.append(act($m("MyWorklogsTPage.3"), "#060"));
+					final ActivityBean activity = wfaService.getBean(log.getBeanId());
+					if (activity != null) {
+						sb.append(wfpService.getBean(activity.getProcessId()));
+						sb.append(toNextActivitiesHTML(activity, true));
+					} else {
+						sb.append(log.getDescription());
+					}
+				} else if (toVal == EActivityStatus.fallback) {
+					sb.append(act($m("MyWorklogsTPage.6"), "#a00"));
+					final ActivityBean activity = wfaService.getBean(log.getBeanId());
+					if (activity != null) {
+						sb.append(wfpService.getBean(activity.getProcessId())).append("<br>");
+						sb.append(SpanElement.SPACE(40));
+						sb.append(activity).append(" &rArr; ")
+								.append(wfaService.getBean(activity.getPreviousId()));
+					} else {
+						sb.append(log.getDescription());
+					}
+				}
+			}
+		} else if (TBL_WORKITEM.equals(tblName)) {
+			final WorkitemBean workitem = wfwService.getBean(log.getBeanId());
+			if ("topMark".equals(valName)) {
+				sb.append(act(Convert.toBool(log.getToVal()) ? $m("MyWorklogsTPage.1")
+						: $m("MyWorklogsTPage.2")));
+				if (workitem != null) {
+					sb.append(wfaService.getBean(workitem.getActivityId())).append(" / ")
+							.append(wfpService.getBean(workitem.getProcessId()));
+				}
+			} else if ("retakeId".equals(valName)) {
+				sb.append(act($m("MyWorklogsTPage.5"), "#c00"));
+				if (workitem != null) {
+					sb.append(wfpService.getBean(workitem.getProcessId()));
+					sb.append(toNextActivitiesHTML(wfaService.getBean(workitem.getActivityId()), false));
+				}
+			}
+			if (workitem == null) {
+				sb.append(log.getDescription());
+			}
+		} else if (TBL_DELEGATION.equals(tblName)) {
+			if ("status".equals(valName)) {
+				final EDelegationStatus toVal = Convert.toEnum(EDelegationStatus.class, log.getToVal());
+				if (toVal == EDelegationStatus.running) {
+					sb.append("接受了委托");
+					final DelegationBean delegation = wfdService.getBean(log.getBeanId());
+					if (delegation != null) {
+						sb.append(" <- ").append(delegation.getUserText());
+						if (delegation.getDelegationSource() == EDelegationSource.workitem) {
+							final WorkitemBean workitem = wfwService.getBean(delegation.getSourceId());
+							if (workitem != null) {
+								sb.append(" [ ").append(wfpService.getBean(workitem.getProcessId()))
+										.append(" ]");
+							}
+						}
+					}
+				} else if (toVal == EDelegationStatus.refuse) {
+				} else if (toVal == EDelegationStatus.abort) {
+				}
+			}
+		}
+		return sb.toString();
+	}
+
+	private String toNextActivitiesHTML(final ActivityBean activity, final boolean rarr) {
+		final StringBuilder sb = new StringBuilder("<br>");
 		int j = 0;
 		for (final ActivityBean nActivity : wfaService.getNextActivities(activity)) {
 			if (j++ > 0) {
 				sb.append("<br>");
 			}
-			sb.append(SpanElement.SPACE(20)).append(" -> ");
-			sb.append(nActivity).append(" ( ");
+			sb.append(SpanElement.SPACE(40));
+			sb.append(activity).append(rarr ? " &rArr; " : " &lArr; ").append(nActivity).append(" ( ");
 			int i = 0;
 			for (final WorkitemBean workitem : wfwService.getWorkitems(nActivity)) {
 				if (i++ > 0) {
@@ -277,13 +314,17 @@ public class MyWorklogsTPage extends AbstractItemsTPage implements ILogContextAw
 
 	private String toValChangeHTML(final String title, final EntityUpdateLog log) {
 		final StringBuilder sb = new StringBuilder();
-		sb.append(title).append("<br>").append(SpanElement.SPACE(20));
-		sb.append(SpanElement.color777(toVal(log.getFromVal()))).append(" -> ")
-				.append(toVal(log.getToVal()));
+		sb.append(act(title, "#06c"));
+		sb.append("<br>").append(SpanElement.SPACE(40));
+		sb.append(log.getFromVal()).append(" &rArr; ").append(log.getToVal());
 		return sb.toString();
 	}
 
-	private Object toVal(final Object val) {
-		return val != null ? val : $m("MyWorklogsTPage.4");
+	private SpanElement act(final String txt) {
+		return act(txt, "#333");
+	}
+
+	private SpanElement act(final String txt, final String color) {
+		return new SpanElement("[" + txt + "]").setStyle("margin-right: 8px;").setColor(color);
 	}
 }
