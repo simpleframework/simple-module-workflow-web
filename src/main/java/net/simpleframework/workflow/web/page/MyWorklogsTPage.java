@@ -150,11 +150,11 @@ public class MyWorklogsTPage extends AbstractItemsTPage implements ILogContextAw
 			}
 		});
 
-		sb.append(toLogsHTML(logs));
+		sb.append(toLogsHTML(pp, logs));
 		return sb.toString();
 	}
 
-	private String toLogsHTML(final List<AbstractEntityTblLogBean> logs) {
+	private String toLogsHTML(final PageParameter pp, final List<AbstractEntityTblLogBean> logs) {
 		final StringBuilder sb = new StringBuilder();
 		for (final AbstractEntityTblLogBean log : logs) {
 			sb.append("<div class='clearfix'>");
@@ -176,11 +176,11 @@ public class MyWorklogsTPage extends AbstractItemsTPage implements ILogContextAw
 			// } else {
 			String logHTML = null;
 			if (log instanceof EntityInsertLog) {
-				logHTML = toInsertLogHTML((EntityInsertLog) log);
+				logHTML = toInsertLogHTML(pp, (EntityInsertLog) log);
 			} else if (log instanceof EntityDeleteLog) {
-				logHTML = toDeleteLogHTML((EntityDeleteLog) log);
+				logHTML = toDeleteLogHTML(pp, (EntityDeleteLog) log);
 			} else if (log instanceof EntityUpdateLog) {
-				logHTML = toUpdateLogHTML((EntityUpdateLog) log);
+				logHTML = toUpdateLogHTML(pp, (EntityUpdateLog) log);
 			}
 			if (StringUtils.hasText(logHTML)) {
 				sb.append(logHTML);
@@ -191,29 +191,35 @@ public class MyWorklogsTPage extends AbstractItemsTPage implements ILogContextAw
 		return sb.toString();
 	}
 
-	private String toInsertLogHTML(final EntityInsertLog log) {
+	private String toInsertLogHTML(final PageParameter pp, final EntityInsertLog log) {
 		final StringBuilder sb = new StringBuilder();
 		final String tblName = log.getTblName();
 		if (TBL_PROCESS.equals(tblName)) {
 			sb.append(act("启动新工作")).append(log.getDescription());
 		} else if (TBL_DELEGATION.equals(tblName)) {
-			sb.append(act("设置委托")).append(log.getDescription());
+			sb.append(act("设置委托"));
+			final DelegationBean delegation = wfdService.getBean(log.getBeanId());
+			if (delegation != null) {
+				sb.append(toDelegationHTML(pp, delegation));
+			} else {
+				sb.append(log.getDescription());
+			}
 		}
 		return sb.toString();
 	}
 
-	private String toDeleteLogHTML(final EntityDeleteLog log) {
+	private String toDeleteLogHTML(final PageParameter pp, final EntityDeleteLog log) {
 		final StringBuilder sb = new StringBuilder();
 		final String tblName = log.getTblName();
 		if (TBL_PROCESS.equals(tblName)) {
-			sb.append(act("删除未发送工作", "#f00")).append(log.getDescription());
+			sb.append(tag("删除未发送工作", "#f00")).append(log.getDescription());
 		} else if (TBL_DELEGATION.equals(tblName)) {
 			sb.append(act("删除委托")).append(log.getDescription());
 		}
 		return sb.toString();
 	}
 
-	private String toUpdateLogHTML(final EntityUpdateLog log) {
+	private String toUpdateLogHTML(final PageParameter pp, final EntityUpdateLog log) {
 		final StringBuilder sb = new StringBuilder();
 		final String tblName = log.getTblName();
 		final String valName = log.getValName();
@@ -225,21 +231,21 @@ public class MyWorklogsTPage extends AbstractItemsTPage implements ILogContextAw
 			if ("status".equals(valName)) {
 				final EActivityStatus toVal = Convert.toEnum(EActivityStatus.class, log.getToVal());
 				if (toVal == EActivityStatus.complete) {
-					sb.append(act($m("MyWorklogsTPage.3"), "#060"));
+					sb.append(tag($m("MyWorklogsTPage.3"), "#060"));
 					final ActivityBean activity = wfaService.getBean(log.getBeanId());
 					if (activity != null) {
 						sb.append(wfpService.getBean(activity.getProcessId()));
-						sb.append(toNextActivitiesHTML(activity, true));
+						sb.append(toNextActivitiesHTML(pp, activity, true));
 					} else {
 						sb.append(log.getDescription());
 					}
 				} else if (toVal == EActivityStatus.fallback) {
-					sb.append(act($m("MyWorklogsTPage.6"), "#a00"));
+					sb.append(tag($m("MyWorklogsTPage.6"), "#a00"));
 					final ActivityBean activity = wfaService.getBean(log.getBeanId());
 					if (activity != null) {
 						sb.append(wfpService.getBean(activity.getProcessId())).append("<br>");
-						sb.append(SpanElement.SPACE(40));
-						sb.append(activity).append(" &rArr; ")
+						sb.append(SPACE);
+						sb.append(activity).append(rArr)
 								.append(wfaService.getBean(activity.getPreviousId()));
 					} else {
 						sb.append(log.getDescription());
@@ -256,10 +262,11 @@ public class MyWorklogsTPage extends AbstractItemsTPage implements ILogContextAw
 							.append(wfpService.getBean(workitem.getProcessId()));
 				}
 			} else if ("retakeId".equals(valName)) {
-				sb.append(act($m("MyWorklogsTPage.5"), "#c00"));
+				sb.append(tag($m("MyWorklogsTPage.5"), "#c00"));
 				if (workitem != null) {
 					sb.append(wfpService.getBean(workitem.getProcessId()));
-					sb.append(toNextActivitiesHTML(wfaService.getBean(workitem.getActivityId()), false));
+					sb.append(toNextActivitiesHTML(pp, wfaService.getBean(workitem.getActivityId()),
+							false));
 				}
 			}
 			if (workitem == null) {
@@ -267,38 +274,49 @@ public class MyWorklogsTPage extends AbstractItemsTPage implements ILogContextAw
 			}
 		} else if (TBL_DELEGATION.equals(tblName)) {
 			if ("status".equals(valName)) {
-				final EDelegationStatus toVal = Convert.toEnum(EDelegationStatus.class, log.getToVal());
-				if (toVal == EDelegationStatus.running) {
-					sb.append("接受了委托");
-					final DelegationBean delegation = wfdService.getBean(log.getBeanId());
-					if (delegation != null) {
-						sb.append(" <- ").append(delegation.getUserText());
-						if (delegation.getDelegationSource() == EDelegationSource.workitem) {
-							final WorkitemBean workitem = wfwService.getBean(delegation.getSourceId());
-							if (workitem != null) {
-								sb.append(" [ ").append(wfpService.getBean(workitem.getProcessId()))
-										.append(" ]");
-							}
-						}
+				final DelegationBean delegation = wfdService.getBean(log.getBeanId());
+				if (delegation != null) {
+					final EDelegationStatus toVal = Convert.toEnum(EDelegationStatus.class,
+							log.getToVal());
+					if (toVal == EDelegationStatus.running || toVal == EDelegationStatus.refuse) {
+						sb.append(toVal == EDelegationStatus.running ? act("接受委托") : act("拒绝委托"));
+						sb.append(wfwService.getBean(delegation.getSourceId())).append(rArr)
+								.append(delegation.getUserText());
+					} else if (toVal == EDelegationStatus.abort) {
+						sb.append(act("取消委托"));
+						sb.append(toDelegationHTML(pp, delegation));
 					}
-				} else if (toVal == EDelegationStatus.refuse) {
-				} else if (toVal == EDelegationStatus.abort) {
-					sb.append(act("取消委托")).append(log.getDescription());
+				} else {
+					sb.append(log.getDescription());
 				}
 			}
 		}
 		return sb.toString();
 	}
 
-	private String toNextActivitiesHTML(final ActivityBean activity, final boolean rarr) {
+	private String toDelegationHTML(final PageParameter pp, final DelegationBean delegation) {
+		final StringBuilder sb = new StringBuilder();
+		if (delegation.getDelegationSource() == EDelegationSource.workitem) {
+			sb.append("工作项委托").append("<br>").append(SPACE);
+			sb.append(wfwService.getBean(delegation.getSourceId()));
+		} else {
+			sb.append("用户委托").append("<br>").append(SPACE);
+			sb.append(pp.getUser(delegation.getSourceId()));
+		}
+		sb.append(rArr).append(delegation.getUserText());
+		return sb.toString();
+	}
+
+	private String toNextActivitiesHTML(final PageParameter pp, final ActivityBean activity,
+			final boolean rarr) {
 		final StringBuilder sb = new StringBuilder("<br>");
 		int j = 0;
 		for (final ActivityBean nActivity : wfaService.getNextActivities(activity)) {
 			if (j++ > 0) {
 				sb.append("<br>");
 			}
-			sb.append(SpanElement.SPACE(40));
-			sb.append(activity).append(rarr ? " &rArr; " : " &lArr; ").append(nActivity).append(" ( ");
+			sb.append(SPACE);
+			sb.append(activity).append(rarr ? rArr : lArr).append(nActivity).append(" ( ");
 			int i = 0;
 			for (final WorkitemBean workitem : wfwService.getWorkitems(nActivity)) {
 				if (i++ > 0) {
@@ -313,17 +331,21 @@ public class MyWorklogsTPage extends AbstractItemsTPage implements ILogContextAw
 
 	private String toValChangeHTML(final String title, final EntityUpdateLog log) {
 		final StringBuilder sb = new StringBuilder();
-		sb.append(act(title, "#06c"));
-		sb.append("<br>").append(SpanElement.SPACE(40));
-		sb.append(log.getFromVal()).append(" &rArr; ").append(log.getToVal());
+		sb.append(tag(title, "#06c"));
+		sb.append("<br>").append(SPACE);
+		sb.append(log.getFromVal()).append(rArr).append(log.getToVal());
 		return sb.toString();
 	}
 
 	private SpanElement act(final String txt) {
-		return act(txt, "#333");
+		return tag(txt, "#333");
 	}
 
-	private SpanElement act(final String txt, final String color) {
+	private SpanElement tag(final String txt, final String color) {
 		return new SpanElement("[" + txt + "]").setStyle("margin-right: 8px;").setColor(color);
 	}
+
+	private static String rArr = " &rArr; ";
+	private static String lArr = " &lArr; ";
+	private static SpanElement SPACE = SpanElement.SPACE(40);
 }
