@@ -9,6 +9,7 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
+import net.simpleframework.ado.ColumnData;
 import net.simpleframework.ado.query.IDataQuery;
 import net.simpleframework.common.Convert;
 import net.simpleframework.common.DateUtils;
@@ -92,30 +93,31 @@ public class MyWorklogsTPage extends AbstractItemsTPage implements ILogContextAw
 		final StringBuilder sb = new StringBuilder();
 		final ID loginId = pp.getLoginId();
 
-		AbstractEntityTblLogBean log;
-		// ------------------------------------- 流程日志
-		// 插入日志
-		IDataQuery<EntityInsertLog> dqi = _logInsertService.queryLogs(loginId, TBL_PROCESS, period);
 		final List<AbstractEntityTblLogBean> logs = new ArrayList<AbstractEntityTblLogBean>();
-		while ((log = dqi.next()) != null) {
-			logs.add(log);
-		}
+		AbstractEntityTblLogBean log;
 		// 删除日志
-		final IDataQuery<EntityDeleteLog> dqd = _logDeleteService.queryLogs(loginId, TBL_PROCESS,
-				period);
+		final IDataQuery<EntityDeleteLog> dqd = _logDeleteService.queryLogs(loginId, new String[] {
+				TBL_PROCESS, TBL_DELEGATION }, period, ColumnData.EMPTY);
 		while ((log = dqd.next()) != null) {
 			logs.add(log);
 		}
-		// 查找标题更新
-		IDataQuery<EntityUpdateLog> dqu = _logUpdateService.queryLogs(loginId, TBL_PROCESS, "title",
-				period);
-		while ((log = dqu.next()) != null) {
+
+		// 插入日志
+		final IDataQuery<EntityInsertLog> dqi = _logInsertService.queryLogs(loginId, new String[] {
+				TBL_PROCESS, TBL_DELEGATION }, period, ColumnData.EMPTY);
+		while ((log = dqi.next()) != null) {
 			logs.add(log);
 		}
 
+		// 更新日志
+		// ------------------------------------- 流程日志
+		IDataQuery<EntityUpdateLog> dqu = _logUpdateService.queryLogs(loginId, TBL_PROCESS, "title",
+				period, ColumnData.EMPTY);
+		while ((log = dqu.next()) != null) {
+			logs.add(log);
+		}
 		// ------------------------------------- 环节日志
-
-		dqu = _logUpdateService.queryLogs(loginId, TBL_ACTIVITY, "status", period);
+		dqu = _logUpdateService.queryLogs(loginId, TBL_ACTIVITY, "status", period, ColumnData.EMPTY);
 		while ((log = dqu.next()) != null) {
 			final ActivityBean activity = wfaService.getBean(log.getBeanId());
 			if (activity != null && activity.getTasknodeType() == AbstractTaskNode.TT_USER) {
@@ -126,22 +128,16 @@ public class MyWorklogsTPage extends AbstractItemsTPage implements ILogContextAw
 				}
 			}
 		}
-
 		// ------------------------------------- 工作项日志
-		dqu = _logUpdateService.queryLogs(loginId, TBL_WORKITEM, period);
+		dqu = _logUpdateService.queryLogs(loginId, TBL_WORKITEM, period, ColumnData.EMPTY);
 		while ((log = dqu.next()) != null) {
 			final String valName = ((EntityUpdateLog) log).getValName();
 			if ("topMark".equals(valName) || "retakeId".equals(valName)) {
 				logs.add(log);
 			}
 		}
-
 		// ------------------------------------- 委托日志
-		dqi = _logInsertService.queryLogs(loginId, TBL_DELEGATION, period);
-		while ((log = dqi.next()) != null) {
-			logs.add(log);
-		}
-		dqu = _logUpdateService.queryLogs(loginId, TBL_DELEGATION, period);
+		dqu = _logUpdateService.queryLogs(loginId, TBL_DELEGATION, period, ColumnData.EMPTY);
 		while ((log = dqu.next()) != null) {
 			logs.add(log);
 		}
@@ -201,7 +197,7 @@ public class MyWorklogsTPage extends AbstractItemsTPage implements ILogContextAw
 		if (TBL_PROCESS.equals(tblName)) {
 			sb.append(act("启动新工作")).append(log.getDescription());
 		} else if (TBL_DELEGATION.equals(tblName)) {
-			sb.append(act("委托工作"));
+			sb.append(act("设置委托")).append(log.getDescription());
 		}
 		return sb.toString();
 	}
@@ -211,6 +207,8 @@ public class MyWorklogsTPage extends AbstractItemsTPage implements ILogContextAw
 		final String tblName = log.getTblName();
 		if (TBL_PROCESS.equals(tblName)) {
 			sb.append(act("删除未发送工作", "#f00")).append(log.getDescription());
+		} else if (TBL_DELEGATION.equals(tblName)) {
+			sb.append(act("删除委托")).append(log.getDescription());
 		}
 		return sb.toString();
 	}
@@ -285,6 +283,7 @@ public class MyWorklogsTPage extends AbstractItemsTPage implements ILogContextAw
 					}
 				} else if (toVal == EDelegationStatus.refuse) {
 				} else if (toVal == EDelegationStatus.abort) {
+					sb.append(act("取消委托")).append(log.getDescription());
 				}
 			}
 		}
