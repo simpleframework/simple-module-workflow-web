@@ -201,7 +201,7 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 	protected void appendTaskname(final StringBuilder sb, final ComponentParameter cp,
 			final ActivityBean activity) {
 		if (!"taskname".equals(cp.getParameter(G))) {
-			sb.append("[").append(SpanElement.color333(activity)).append("] ");
+			sb.append("[").append(SpanElement.color333(activity.getTasknodeText())).append("] ");
 		}
 	}
 
