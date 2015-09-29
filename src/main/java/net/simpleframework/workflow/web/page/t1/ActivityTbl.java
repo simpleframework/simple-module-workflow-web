@@ -29,7 +29,7 @@ import net.simpleframework.mvc.component.ui.pager.AbstractTablePagerSchema;
 import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
 import net.simpleframework.mvc.component.ui.pager.db.GroupDbTablePagerHandler;
 import net.simpleframework.workflow.engine.EActivityStatus;
-import net.simpleframework.workflow.engine.IWorkflowServiceAware;
+import net.simpleframework.workflow.engine.IWorkflowContextAware;
 import net.simpleframework.workflow.engine.bean.ActivityBean;
 import net.simpleframework.workflow.engine.bean.ProcessBean;
 import net.simpleframework.workflow.schema.AbstractTaskNode;
@@ -42,7 +42,7 @@ import net.simpleframework.workflow.web.WorkflowUtils;
  * @author 陈侃(cknet@126.com, 13910090885) https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
-public class ActivityTbl extends GroupDbTablePagerHandler implements IWorkflowServiceAware {
+public class ActivityTbl extends GroupDbTablePagerHandler implements IWorkflowContextAware {
 	@Override
 	public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
 		final ProcessBean process = WorkflowUtils.getProcessBean(cp);

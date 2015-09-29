@@ -29,7 +29,7 @@ import net.simpleframework.mvc.component.ui.menu.EMenuEvent;
 import net.simpleframework.mvc.component.ui.menu.MenuBean;
 import net.simpleframework.mvc.component.ui.menu.MenuItem;
 import net.simpleframework.mvc.ctx.permission.IPagePermissionHandler;
-import net.simpleframework.workflow.engine.IWorkflowServiceAware;
+import net.simpleframework.workflow.engine.IWorkflowContextAware;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -37,7 +37,7 @@ import net.simpleframework.workflow.engine.IWorkflowServiceAware;
  * @author 陈侃(cknet@126.com, 13910090885) https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
-public class WorkviewSelectLoaded extends DefaultPageHandler implements IWorkflowServiceAware {
+public class WorkviewSelectLoaded extends DefaultPageHandler implements IWorkflowContextAware {
 
 	@Override
 	public void onBeforeComponentRender(final PageParameter pp) {

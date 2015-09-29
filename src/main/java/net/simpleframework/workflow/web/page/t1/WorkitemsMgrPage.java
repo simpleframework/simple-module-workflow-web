@@ -19,7 +19,7 @@ import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
 import net.simpleframework.mvc.component.ui.pager.db.AbstractDbTablePagerHandler;
 import net.simpleframework.mvc.template.lets.OneTableTemplatePage;
 import net.simpleframework.workflow.engine.EWorkitemStatus;
-import net.simpleframework.workflow.engine.IWorkflowServiceAware;
+import net.simpleframework.workflow.engine.IWorkflowContextAware;
 import net.simpleframework.workflow.engine.bean.ActivityBean;
 import net.simpleframework.workflow.engine.bean.WorkitemBean;
 import net.simpleframework.workflow.web.IWorkflowWebContext;
@@ -32,7 +32,7 @@ import net.simpleframework.workflow.web.WorkflowUtils;
  * @author 陈侃(cknet@126.com, 13910090885) https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
-public class WorkitemsMgrPage extends OneTableTemplatePage implements IWorkflowServiceAware {
+public class WorkitemsMgrPage extends OneTableTemplatePage implements IWorkflowContextAware {
 
 	@Override
 	protected void onForward(final PageParameter pp) throws Exception {

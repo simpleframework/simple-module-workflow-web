@@ -10,7 +10,7 @@ import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.base.ajaxrequest.AjaxRequestBean;
 import net.simpleframework.mvc.component.base.ajaxrequest.DefaultAjaxRequestHandler;
-import net.simpleframework.workflow.engine.IWorkflowServiceAware;
+import net.simpleframework.workflow.engine.IWorkflowContextAware;
 import net.simpleframework.workflow.engine.bean.ActivityBean;
 
 /**
@@ -19,7 +19,7 @@ import net.simpleframework.workflow.engine.bean.ActivityBean;
  * @author 陈侃(cknet@126.com, 13910090885) https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
-public class ActivitySelectLoaded extends DefaultPageHandler implements IWorkflowServiceAware {
+public class ActivitySelectLoaded extends DefaultPageHandler implements IWorkflowContextAware {
 
 	@Override
 	public void onBeforeComponentRender(final PageParameter pp) {

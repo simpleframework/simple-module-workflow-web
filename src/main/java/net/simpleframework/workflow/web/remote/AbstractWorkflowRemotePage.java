@@ -9,7 +9,7 @@ import net.simpleframework.mvc.JsonForward;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.template.AbstractTemplatePage;
 import net.simpleframework.workflow.engine.IWorkflowContext;
-import net.simpleframework.workflow.engine.IWorkflowServiceAware;
+import net.simpleframework.workflow.engine.IWorkflowContextAware;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -18,7 +18,7 @@ import net.simpleframework.workflow.engine.IWorkflowServiceAware;
  *         http://www.simpleframework.net
  */
 public abstract class AbstractWorkflowRemotePage extends AbstractTemplatePage implements
-		IWorkflowServiceAware {
+		IWorkflowContextAware {
 
 	@Override
 	protected void onForward(final PageParameter pp) throws Exception {

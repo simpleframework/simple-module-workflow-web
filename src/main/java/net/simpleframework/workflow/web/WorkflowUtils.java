@@ -13,7 +13,7 @@ import net.simpleframework.mvc.common.element.ButtonElement;
 import net.simpleframework.mvc.common.element.ImageElement;
 import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.workflow.engine.EWorkitemStatus;
-import net.simpleframework.workflow.engine.IWorkflowServiceAware;
+import net.simpleframework.workflow.engine.IWorkflowContextAware;
 import net.simpleframework.workflow.engine.bean.AbstractWorkitemBean;
 import net.simpleframework.workflow.engine.bean.ActivityBean;
 import net.simpleframework.workflow.engine.bean.ProcessBean;
@@ -31,7 +31,7 @@ import net.simpleframework.workflow.web.page.AbstractItemsTPage;
  * @author 陈侃(cknet@126.com, 13910090885) https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
-public abstract class WorkflowUtils implements IWorkflowServiceAware {
+public abstract class WorkflowUtils implements IWorkflowContextAware {
 
 	public static String getProcessTitle(final ProcessBean process) {
 		if (process == null) {

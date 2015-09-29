@@ -34,7 +34,7 @@ import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
 import net.simpleframework.mvc.component.ui.pager.db.AbstractDbTablePagerHandler;
 import net.simpleframework.mvc.template.AbstractTemplatePage;
 import net.simpleframework.workflow.engine.IWorkflowContext;
-import net.simpleframework.workflow.engine.IWorkflowServiceAware;
+import net.simpleframework.workflow.engine.IWorkflowContextAware;
 import net.simpleframework.workflow.engine.comment.WfCommentLog;
 import net.simpleframework.workflow.engine.comment.WfCommentLog.ELogType;
 import net.simpleframework.workflow.web.component.comments.IWfCommentHandler;
@@ -45,7 +45,7 @@ import net.simpleframework.workflow.web.component.comments.IWfCommentHandler;
  * @author 陈侃(cknet@126.com, 13910090885) https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
-public class MyCommentsMgrTPage extends AbstractMgrTPage implements IWorkflowServiceAware {
+public class MyCommentsMgrTPage extends AbstractMgrTPage implements IWorkflowContextAware {
 
 	@Override
 	protected void onForward(final PageParameter pp) throws Exception {

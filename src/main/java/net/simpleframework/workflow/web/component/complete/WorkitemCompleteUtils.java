@@ -22,7 +22,7 @@ import net.simpleframework.mvc.common.element.Radio;
 import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.workflow.engine.ActivityComplete;
-import net.simpleframework.workflow.engine.IWorkflowServiceAware;
+import net.simpleframework.workflow.engine.IWorkflowContextAware;
 import net.simpleframework.workflow.engine.TransitionUtils;
 import net.simpleframework.workflow.engine.WorkitemComplete;
 import net.simpleframework.workflow.engine.bean.WorkitemBean;
@@ -41,7 +41,7 @@ import net.simpleframework.workflow.web.component.WfComponentUtils.IJavascriptCa
  * @author 陈侃(cknet@126.com, 13910090885) https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
-public abstract class WorkitemCompleteUtils implements IWorkflowServiceAware {
+public abstract class WorkitemCompleteUtils implements IWorkflowContextAware {
 
 	public static final String BEAN_ID = "workitemcomplete_@bid";
 

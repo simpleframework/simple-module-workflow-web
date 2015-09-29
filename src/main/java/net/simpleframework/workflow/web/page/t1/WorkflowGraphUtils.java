@@ -10,7 +10,7 @@ import net.simpleframework.ctx.common.xml.XmlDocument;
 import net.simpleframework.ctx.script.MVEL2Template;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.AbstractElement;
-import net.simpleframework.workflow.engine.IWorkflowServiceAware;
+import net.simpleframework.workflow.engine.IWorkflowContextAware;
 import net.simpleframework.workflow.engine.bean.ActivityBean;
 import net.simpleframework.workflow.engine.bean.ProcessBean;
 import net.simpleframework.workflow.graph.GraphUtils;
@@ -34,7 +34,7 @@ import com.mxgraph.view.mxGraph;
  * @author 陈侃(cknet@126.com, 13910090885) https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
-public abstract class WorkflowGraphUtils implements IWorkflowServiceAware {
+public abstract class WorkflowGraphUtils implements IWorkflowContextAware {
 
 	public static String toGraphHTML(final PageParameter pp, final ProcessBean process) {
 		return toGraphHTML(pp, process, new KVMap().add("tbl", "WorkflowGraphMonitorPage_tbl"));
