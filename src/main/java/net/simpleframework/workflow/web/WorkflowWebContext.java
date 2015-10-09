@@ -36,9 +36,8 @@ public class WorkflowWebContext extends WorkflowContext implements IWorkflowWebC
 	}
 
 	@Override
-	public IWorkflowPermissionHandler getParticipantService() {
-		final IWorkflowPermissionHandler handler = super.getParticipantService();
-		return handler == null ? singleton(WorkflowPermissionHandler.class) : handler;
+	public IWorkflowPermissionHandler getPermissionHandler() {
+		return singleton(WorkflowPermissionHandler.class);
 	}
 
 	@Override

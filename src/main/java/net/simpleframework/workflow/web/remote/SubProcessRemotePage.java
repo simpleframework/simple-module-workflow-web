@@ -7,11 +7,12 @@ import net.simpleframework.common.coll.KVMap;
 import net.simpleframework.mvc.IForward;
 import net.simpleframework.mvc.IForwardCallback.IJsonForwardCallback;
 import net.simpleframework.mvc.JsonForward;
+import net.simpleframework.mvc.PageMapping;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.workflow.engine.IMappingVal;
 import net.simpleframework.workflow.engine.bean.ActivityBean;
 import net.simpleframework.workflow.engine.bean.ProcessBean;
-import net.simpleframework.workflow.engine.remote.IProcessRemote;
+import net.simpleframework.workflow.engine.remote.IProcessRemoteHandler;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -19,6 +20,7 @@ import net.simpleframework.workflow.engine.remote.IProcessRemote;
  * @author 陈侃(cknet@126.com, 13910090885) https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
+@PageMapping(url = "/wf-subtask-remote")
 public class SubProcessRemotePage extends AbstractWorkflowRemotePage {
 
 	public IForward startProcess(final PageParameter pp) {
@@ -27,20 +29,20 @@ public class SubProcessRemotePage extends AbstractWorkflowRemotePage {
 			@Override
 			public void doAction(final JsonForward json) {
 				final Properties properties = new Properties();
-				copyTo(pp, properties, IProcessRemote.SERVERURL, IProcessRemote.SUB_ACTIVITYID,
-						IProcessRemote.VAR_MAPPINGS);
+				copyTo(pp, properties, IProcessRemoteHandler.SERVERURL,
+						IProcessRemoteHandler.SUB_ACTIVITYID, IProcessRemoteHandler.VAR_MAPPINGS);
 
 				// 子流程变量
 				final KVMap variables = new KVMap();
 				for (final String mapping : StringUtils.split(properties
-						.getProperty(IProcessRemote.VAR_MAPPINGS))) {
+						.getProperty(IProcessRemoteHandler.VAR_MAPPINGS))) {
 					variables.add(mapping, pp.getLocaleParameter(mapping));
 				}
 
 				final ProcessBean process = wfpService.doStartProcess(
-						wfpmService.getProcessModel(pp.getLocaleParameter(IProcessRemote.MODEL)),
+						wfpmService.getProcessModel(pp.getLocaleParameter(IProcessRemoteHandler.MODEL)),
 						variables, properties, null);
-				json.put(IProcessRemote.SUB_PROCESSID, process.getId());
+				json.put(IProcessRemoteHandler.SUB_PROCESSID, process.getId());
 			}
 		});
 	}
@@ -50,7 +52,7 @@ public class SubProcessRemotePage extends AbstractWorkflowRemotePage {
 			@Override
 			public void doAction(final JsonForward json) {
 				final ProcessBean sProcess = wfpService.getBean(pp
-						.getLocaleParameter(IProcessRemote.SUB_PROCESSID));
+						.getLocaleParameter(IProcessRemoteHandler.SUB_PROCESSID));
 				if (sProcess != null && wfpService.isFinalStatus(sProcess)) {
 					wfpService.doBackToRemote(sProcess);
 				}
@@ -64,7 +66,7 @@ public class SubProcessRemotePage extends AbstractWorkflowRemotePage {
 			@Override
 			public void doAction(final JsonForward json) {
 				final ActivityBean nActivity = wfaService.getBean(pp
-						.getLocaleParameter(IProcessRemote.SUB_ACTIVITYID));
+						.getLocaleParameter(IProcessRemoteHandler.SUB_ACTIVITYID));
 				wfaService.doSubComplete(nActivity, new IMappingVal() {
 					@Override
 					public Object val(final String mapping) {
