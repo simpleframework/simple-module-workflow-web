@@ -68,7 +68,7 @@ public class PRelativeRoleHandler extends AbstractParticipantHandler implements
 		// UserNode node = ((UserNode) ((TransitionNode)
 		// variables.get("transition")).to());
 		ActivityBean preActivity = activityComplete.getActivity();// 前一任务步骤实例
-		ID preActid = preActivity.getId();
+		final ID preActid = preActivity.getId();
 		final UserNode.RuleRole rRole = (UserNode.RuleRole) getParticipantType(variables);
 		final Map<String, String> params = getParams(rRole.getParams());
 		final String node = params.get(PARAMS_KEY_NODE);

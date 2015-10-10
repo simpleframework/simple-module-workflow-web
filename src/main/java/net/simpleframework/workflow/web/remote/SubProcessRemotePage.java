@@ -20,7 +20,7 @@ import net.simpleframework.workflow.engine.remote.IProcessRemoteHandler;
  * @author 陈侃(cknet@126.com, 13910090885) https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
-@PageMapping(url = "/wf-subtask-remote")
+@PageMapping(url = "/wf-remote-subtask")
 public class SubProcessRemotePage extends AbstractWorkflowRemotePage {
 
 	public IForward startProcess(final PageParameter pp) {
