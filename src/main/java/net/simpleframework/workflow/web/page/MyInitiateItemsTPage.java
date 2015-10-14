@@ -11,9 +11,13 @@ import net.simpleframework.common.ID;
 import net.simpleframework.common.coll.KVMap;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageParameter;
+import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.JS;
 import net.simpleframework.mvc.common.element.LinkButton;
 import net.simpleframework.mvc.common.element.LinkElement;
+import net.simpleframework.mvc.common.element.SpanElement;
+import net.simpleframework.mvc.common.element.TabButton;
+import net.simpleframework.mvc.common.element.TabButtons;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
 import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
@@ -45,6 +49,17 @@ public class MyInitiateItemsTPage extends AbstractItemsTPage {
 		pp.addComponentBean("MyInitiateItemsTPage_startProcess", StartProcessBean.class)
 		// .setConfirmMessage($m("MyInitiateItemsTPage.0"))
 				.setHandlerClass(_StartProcessHandler.class);
+	}
+
+	@Override
+	public ElementList getRightElements(final PageParameter pp) {
+		return ElementList.of(getTabs(pp));
+	}
+
+	static SpanElement getTabs(final PageParameter pp) {
+		return createTabsElement(pp, TabButtons.of(new TabButton($m("MyInitiateItemsTPage.5"),
+				uFactory.getUrl(pp, MyInitiateItemsGroupTPage.class)), new TabButton(
+				$m("MyInitiateItemsTPage.6"), uFactory.getUrl(pp, MyInitiateItemsTPage.class))));
 	}
 
 	protected TablePagerBean addTablePagerBean(final PageParameter pp) {
