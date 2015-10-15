@@ -257,11 +257,20 @@
 
 .MyInitiateItemsGroupTPage .lblock .lt {
   padding: 0 8px 0 2px;
-  font-size: 9.5pt;
-  line-height: 1.8;
   display: inline-block;
   border-bottom: 3px solid transparent;
   margin-bottom: -3px;
+}
+
+.MyInitiateItemsGroupTPage .lblock .lt .lbl {
+  font-size: 9.5pt;
+  line-height: 1.8;
+}
+
+
+.MyInitiateItemsGroupTPage .lblock .lt .size {
+  color: #777;
+  font-size: 9px;
 }
 
 .MyInitiateItemsGroupTPage .lblock .lc {

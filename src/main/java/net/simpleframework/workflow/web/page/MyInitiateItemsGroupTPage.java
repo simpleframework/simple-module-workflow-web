@@ -10,6 +10,7 @@ import java.util.Map;
 import net.simpleframework.common.StringUtils;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.ElementList;
+import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.workflow.engine.InitiateItem;
 import net.simpleframework.workflow.engine.bean.ProcessModelBean;
 
@@ -57,20 +58,25 @@ public class MyInitiateItemsGroupTPage extends MyInitiateItemsTPage {
 		int i = 0;
 		sb.append("<div class='MyInitiateItemsGroupTPage clearfix'>");
 		for (final Map.Entry<String, List<InitiateItem>> e : items.entrySet()) {
+			final String key = e.getKey();
+			final List<InitiateItem> val = e.getValue();
 			sb.append("<div class='lblock'>");
 			sb.append(" <div class='lt' style='border-bottom-color:")
-					.append(COLORS[Math.min(i++, COLORS.length - 1)]).append("'>").append(e.getKey())
-					.append("</div>");
+					.append(COLORS[Math.min(i++, COLORS.length - 1)]).append("'>");
+			sb.append("  <span class='lbl'>").append(key).append("</span>");
+			sb.append("  <span class='size'>").append("(").append(val.size()).append(")")
+					.append("</span>");
+			sb.append("</div>");
 			sb.append(" <div class='lc'>");
-			for (final InitiateItem item : e.getValue()) {
+			for (final InitiateItem item : val) {
 				final Object modelId = item.getModelId();
 				final ProcessModelBean processModel = wfpmService.getBean(modelId);
 				final String mtxt = processModel.getModelText();
 				final int p = mtxt.indexOf('.');
-				sb.append(
-						"<div class='litem' onclick=\"$Actions['MyInitiateItemsTPage_startProcess']('modelId=")
-						.append(modelId).append("');\">");
-				sb.append(p > 0 ? mtxt.substring(p + 1) : mtxt);
+				sb.append("<div class='litem'>");
+				sb.append(new SpanElement(p > 0 ? mtxt.substring(p + 1) : mtxt)
+						.setOnclick("$Actions['MyInitiateItemsTPage_startProcess']('modelId=" + modelId
+								+ "');"));
 				sb.append("</div>");
 			}
 			sb.append(" </div>");
