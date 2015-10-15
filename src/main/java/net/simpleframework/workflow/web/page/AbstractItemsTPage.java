@@ -71,17 +71,16 @@ public abstract class AbstractItemsTPage extends Category_ListPage implements IW
 	public CategoryItem createCategoryItem_delegate(final PageParameter pp) {
 		final CategoryItem delegate = createCategoryItem(pp, $m("AbstractItemsTPage.3"),
 				MyDelegateListTPage.class).setIconClass("my_work_complete_icon");// .setIconClass("delegate_list_icon")
-		// delegate.setSelected(delegate.isSelected()
-		// || UserDelegateListTPage.class == getOriginalClass());
-		// if (UserDelegateListTPage.class == getOriginalClass()) {
-		// delegate.setSelected(true);
-		// }
 		return delegate;
 	}
 
 	public CategoryItem createCategoryItem_myinitiate(final PageParameter pp) {
-		return createCategoryItem(pp, $m("AbstractItemsTPage.2"), MyInitiateItemsTPage.class)
-				.setIconClass("my_work_complete_icon");// .setIconClass("my_initiate_icon")
+		final CategoryItem item = createCategoryItem(pp, $m("AbstractItemsTPage.2"),
+				MyInitiateItemsGroupTPage.class).setIconClass("my_work_complete_icon"); // .setIconClass("my_initiate_icon")
+		if (MyInitiateItemsTPage.class.isAssignableFrom(getOriginalClass())) {
+			item.setSelected(true);
+		}
+		return item;
 	}
 
 	public CategoryItem createCategoryItem_queryworks(final PageParameter pp) {

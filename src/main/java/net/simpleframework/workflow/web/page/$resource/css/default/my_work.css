@@ -243,6 +243,47 @@
   color: #666;
 }
 
+.MyInitiateItemsGroupTPage {
+  padding: 12px 12px 36px 12px;
+  background-color: #eee;
+  border: 1px solid #bbb;
+  border-top-width: 0;
+}
+
+.MyInitiateItemsGroupTPage .lblock {
+  float: left;
+  width: 33.3%;
+}
+
+.MyInitiateItemsGroupTPage .lblock .lt {
+  padding: 0 8px 0 2px;
+  font-size: 9.5pt;
+  line-height: 1.8;
+  display: inline-block;
+  border-bottom: 3px solid transparent;
+  margin-bottom: -3px;
+}
+
+.MyInitiateItemsGroupTPage .lblock .lc {
+  width: 95%;
+  border-top: 3px solid #bbb;
+}
+
+.MyInitiateItemsGroupTPage .lblock .litem {
+  border-bottom: 1px dashed #bbb;
+  padding: 9px 2px;
+  color: #676;
+  cursor: pointer;
+}
+
+.MyInitiateItemsGroupTPage .lblock .litem:hover {
+  background-color: #f5f5f5;
+}
+
+.MyInitiateItemsGroupTPage .lblock .litem:last-child {
+  border-bottom: 0;
+}
+
 .ProcessDetailPage .ptitle {
   padding: 10px;
   background-color: #eee;

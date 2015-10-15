@@ -43,10 +43,15 @@ public class MyInitiateItemsTPage extends AbstractItemsTPage {
 	@Override
 	protected void onForward(final PageParameter pp) throws Exception {
 		super.onForward(pp);
+		// 发起流程
+		addStartProcess(pp);
 
 		addTablePagerBean(pp);
-		// 发起流程
-		pp.addComponentBean("MyInitiateItemsTPage_startProcess", StartProcessBean.class)
+	}
+
+	protected StartProcessBean addStartProcess(final PageParameter pp) {
+		return (StartProcessBean) pp.addComponentBean("MyInitiateItemsTPage_startProcess",
+				StartProcessBean.class)
 		// .setConfirmMessage($m("MyInitiateItemsTPage.0"))
 				.setHandlerClass(_StartProcessHandler.class);
 	}
