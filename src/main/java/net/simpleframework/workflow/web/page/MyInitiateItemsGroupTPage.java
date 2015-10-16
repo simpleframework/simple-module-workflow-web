@@ -3,6 +3,8 @@ package net.simpleframework.workflow.web.page;
 import static net.simpleframework.common.I18n.$m;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,7 +14,9 @@ import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.workflow.engine.InitiateItem;
+import net.simpleframework.workflow.engine.InitiateItems;
 import net.simpleframework.workflow.engine.bean.ProcessModelBean;
+import net.simpleframework.workflow.schema.ProcessNode;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -37,19 +41,33 @@ public class MyInitiateItemsGroupTPage extends MyInitiateItemsTPage {
 	@Override
 	protected String toListHTML(final PageParameter pp) {
 		final StringBuilder sb = new StringBuilder();
-		final Map<String, List<InitiateItem>> items = new LinkedHashMap<String, List<InitiateItem>>();
-		for (final InitiateItem item : wfpmService.getInitiateItems(pp.getLoginId())) {
-			final ProcessModelBean processModel = wfpmService.getBean(item.getModelId());
-			final String[] arr = StringUtils.split(processModel.getModelText(), ".");
+		final InitiateItems items = wfpmService.getInitiateItems(pp.getLoginId());
+		Collections.sort(items, new Comparator<InitiateItem>() {
+			@Override
+			public int compare(final InitiateItem item1, final InitiateItem item2) {
+				final ProcessModelBean pm1 = wfpmService.getBean(item1.getModelId());
+				final ProcessModelBean pm2 = wfpmService.getBean(item2.getModelId());
+				if (pm1 != null && pm2 != null) {
+					final ProcessNode pn1 = wfpmService.getProcessDocument(pm1).getProcessNode();
+					final ProcessNode pn2 = wfpmService.getProcessDocument(pm2).getProcessNode();
+					return pn1.getOorder() > pn2.getOorder() ? 1 : -1;
+				}
+				return 0;
+			}
+		});
+		final Map<String, List<InitiateItem>> gmap = new LinkedHashMap<String, List<InitiateItem>>();
+		for (final InitiateItem item : items) {
+			final ProcessModelBean pm = wfpmService.getBean(item.getModelId());
+			final String[] arr = StringUtils.split(pm.getModelText(), ".");
 			String key;
 			if (arr.length > 1) {
 				key = arr[0];
 			} else {
 				key = $m("MyInitiateItemsGroupTPage.0");
 			}
-			List<InitiateItem> list = items.get(key);
+			List<InitiateItem> list = gmap.get(key);
 			if (list == null) {
-				items.put(key, list = new ArrayList<InitiateItem>());
+				gmap.put(key, list = new ArrayList<InitiateItem>());
 			}
 			list.add(item);
 		}
@@ -57,7 +75,7 @@ public class MyInitiateItemsGroupTPage extends MyInitiateItemsTPage {
 		final String[] COLORS = new String[] { "#166CA5", "#953735", "#01B0F1", "#767719", "#F99D52" };
 		int i = 0;
 		sb.append("<div class='MyInitiateItemsGroupTPage clearfix'>");
-		for (final Map.Entry<String, List<InitiateItem>> e : items.entrySet()) {
+		for (final Map.Entry<String, List<InitiateItem>> e : gmap.entrySet()) {
 			final String key = e.getKey();
 			final List<InitiateItem> val = e.getValue();
 			sb.append("<div class='lblock'>");
