@@ -8,7 +8,6 @@ import net.simpleframework.common.StringUtils;
 import net.simpleframework.common.web.HttpUtils;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.BlockElement;
-import net.simpleframework.mvc.common.element.ETextAlign;
 import net.simpleframework.mvc.common.element.EVerticalAlign;
 import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.ImageElement;
@@ -16,14 +15,9 @@ import net.simpleframework.mvc.common.element.InputElement;
 import net.simpleframework.mvc.common.element.LinkElement;
 import net.simpleframework.mvc.common.element.SupElement;
 import net.simpleframework.mvc.component.ComponentParameter;
-import net.simpleframework.mvc.component.ui.pager.ITablePagerHandler;
-import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
-import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
-import net.simpleframework.mvc.template.lets.Category_ListPage;
 import net.simpleframework.mvc.template.struct.CategoryItem;
 import net.simpleframework.mvc.template.struct.CategoryItems;
 import net.simpleframework.workflow.web.WorkflowUtils;
-import net.simpleframework.workflow.web.page.t1.AbstractWorkflowMgrPage;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -31,21 +25,7 @@ import net.simpleframework.workflow.web.page.t1.AbstractWorkflowMgrPage;
  * @author 陈侃(cknet@126.com, 13910090885) https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
-public abstract class AbstractItemsTPage extends Category_ListPage implements IWorkflowPageAware {
-
-	@Override
-	protected void onForward(final PageParameter pp) throws Exception {
-		super.onForward(pp);
-		pp.addImportCSS(AbstractItemsTPage.class, "/my_work.css");
-	}
-
-	@Override
-	protected TablePagerBean addTablePagerBean(final PageParameter pp, final String name,
-			final Class<? extends ITablePagerHandler> handlerClass) {
-		return (TablePagerBean) addTablePagerBean(pp, name, handlerClass, false).setResize(false)
-				.setShowCheckbox(false).setFilter(true).setShowLineNo(false).setShowHead(true)
-				.setPageItems(30);
-	}
+public abstract class AbstractItemsTPage extends AbstractWorksTPage {
 
 	public CategoryItem createCategoryItem(final PageParameter pp, final String text,
 			final Class<? extends AbstractItemsTPage> mClass) {
@@ -83,10 +63,13 @@ public abstract class AbstractItemsTPage extends Category_ListPage implements IW
 		return item;
 	}
 
-	public CategoryItem createCategoryItem_queryworks(final PageParameter pp) {
-		return createCategoryItem(pp, $m("AbstractItemsTPage.4"), MyQueryWorksTPage.class)
-				.setIconClass("my_work_complete_icon");// .setIconClass("my_initiate_icon")
-	}
+	// public CategoryItem createCategoryItem_queryworks(final PageParameter pp)
+	// {
+	// return createCategoryItem(pp, $m("AbstractItemsTPage.4"),
+	// MyQueryWorksTPage.class)
+	// .setIconClass("my_work_complete_icon");//
+	// .setIconClass("my_initiate_icon")
+	// }
 
 	public CategoryItem createCategoryItem_myWorkviews(final PageParameter pp) {
 		final CategoryItem item = createCategoryItem(pp, $m("AbstractItemsTPage.5"),
@@ -112,7 +95,7 @@ public abstract class AbstractItemsTPage extends Category_ListPage implements IW
 		final CategoryItem item0 = createCategoryItem_mywork(pp);
 		final List<CategoryItem> children = item0.getChildren();
 		children.add(createCategoryItem_mywork_complete(pp));
-		children.add(createCategoryItem_queryworks(pp));
+		// children.add(createCategoryItem_queryworks(pp));
 		children.add(createCategoryItem_myinitiate(pp));
 		children.add(createCategoryItem_delegate(pp));
 		children.add(createCategoryItem_myWorkstat(pp));
@@ -144,36 +127,6 @@ public abstract class AbstractItemsTPage extends Category_ListPage implements IW
 		js.append("$Actions.observeSubmit(s, Func);");
 		js.append("s.next().observe('click', Func);");
 		return js.toString();
-	}
-
-	protected TablePagerColumn TC_ICON() {
-		return TablePagerColumn.ICON().setWidth(16);
-	}
-
-	protected TablePagerColumn TC_TITLE() {
-		return new TablePagerColumn("title", $m("AbstractItemsTPage.6")).setSort(false);
-	}
-
-	protected TablePagerColumn TC_PNO() {
-		return new TablePagerColumn("pno", $m("MyRunningWorklistTPage.14"), 110).setSort(false);
-	}
-
-	protected TablePagerColumn TC_USER(final String columnName, final String columnText) {
-		return new TablePagerColumn(columnName, columnText, 55).setTextAlign(ETextAlign.center)
-				.setFilterSort(false).setNowrap(false);
-	}
-
-	protected <T extends Enum<T>> TablePagerColumn TC_STATUS(final Class<T> e) {
-		final TablePagerColumn col = new TablePagerColumn("status", $m("AbstractItemsTPage.9"), 42)
-				.setSort(false);
-		if (e != null) {
-			col.setPropertyClass(e);
-		}
-		return col;
-	}
-
-	protected TablePagerColumn TC_CREATEDATE() {
-		return AbstractWorkflowMgrPage.TC_CREATEDATE().setFilterSort(false);
 	}
 
 	protected static ImageElement _createImageMark(final ComponentParameter cp, final String img) {

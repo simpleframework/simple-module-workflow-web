@@ -8,6 +8,7 @@ import net.simpleframework.mvc.PageMapping;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.template.t2.T2TemplatePage;
 import net.simpleframework.workflow.web.page.AbstractItemsTPage;
+import net.simpleframework.workflow.web.page.AbstractWorksTPage;
 import net.simpleframework.workflow.web.page.MyDelegateListTPage;
 import net.simpleframework.workflow.web.page.MyFinalWorklistTPage;
 import net.simpleframework.workflow.web.page.MyInitiateItemsGroupTPage;
@@ -35,7 +36,7 @@ public abstract class AbstractWorkPage extends T2TemplatePage {
 		return PermissionConst.ROLE_ALL_ACCOUNT;
 	}
 
-	protected abstract Class<? extends AbstractItemsTPage> getWorkTPageClass();
+	protected abstract Class<? extends AbstractWorksTPage> getWorkTPageClass();
 
 	@Override
 	protected String toHtml(final PageParameter pp, final Map<String, Object> variables,
@@ -93,38 +94,6 @@ public abstract class AbstractWorkPage extends T2TemplatePage {
 		}
 	}
 
-	@PageMapping(url = "/workflow/my/query-works")
-	public static class MyQueryWorksPage extends AbstractWorkPage {
-		@Override
-		protected Class<? extends AbstractItemsTPage> getWorkTPageClass() {
-			return MyQueryWorksTPage.class;
-		}
-	}
-
-	@PageMapping(url = "/workflow/my/query-dept-works")
-	public static class MyQueryWorks_DeptPage extends AbstractWorkPage {
-		@Override
-		protected Class<? extends AbstractItemsTPage> getWorkTPageClass() {
-			return MyQueryWorks_DeptTPage.class;
-		}
-	}
-
-	@PageMapping(url = "/workflow/my/query-org-works")
-	public static class MyQueryWorks_OrgPage extends AbstractWorkPage {
-		@Override
-		protected Class<? extends AbstractItemsTPage> getWorkTPageClass() {
-			return MyQueryWorks_OrgTPage.class;
-		}
-	}
-
-	@PageMapping(url = "/workflow/my/query-role-works")
-	public static class MyQueryWorks_RolePage extends AbstractWorkPage {
-		@Override
-		protected Class<? extends AbstractItemsTPage> getWorkTPageClass() {
-			return MyQueryWorks_RoleTPage.class;
-		}
-	}
-
 	@PageMapping(url = "/workflow/my/views")
 	public static class MyWorkviewsPage extends AbstractWorkPage {
 		@Override
@@ -146,6 +115,40 @@ public abstract class AbstractWorkPage extends T2TemplatePage {
 		@Override
 		protected Class<? extends AbstractItemsTPage> getWorkTPageClass() {
 			return MyWorklogsTPage.class;
+		}
+	}
+
+	/*-------------------------------query--------------------------------*/
+
+	@PageMapping(url = "/workflow/query/my-works")
+	public static class MyQueryWorksPage extends AbstractWorkPage {
+		@Override
+		protected Class<? extends AbstractWorksTPage> getWorkTPageClass() {
+			return MyQueryWorksTPage.class;
+		}
+	}
+
+	@PageMapping(url = "/workflow/query/dept-works")
+	public static class MyQueryWorks_DeptPage extends AbstractWorkPage {
+		@Override
+		protected Class<? extends AbstractWorksTPage> getWorkTPageClass() {
+			return MyQueryWorks_DeptTPage.class;
+		}
+	}
+
+	@PageMapping(url = "/workflow/query/org-works")
+	public static class MyQueryWorks_OrgPage extends AbstractWorkPage {
+		@Override
+		protected Class<? extends AbstractWorksTPage> getWorkTPageClass() {
+			return MyQueryWorks_OrgTPage.class;
+		}
+	}
+
+	@PageMapping(url = "/workflow/query/role-works")
+	public static class MyQueryWorks_RolePage extends AbstractWorkPage {
+		@Override
+		protected Class<? extends AbstractWorksTPage> getWorkTPageClass() {
+			return MyQueryWorks_RoleTPage.class;
 		}
 	}
 }

@@ -7,11 +7,13 @@ import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import net.simpleframework.ado.query.IDataQuery;
 import net.simpleframework.common.ID;
 import net.simpleframework.common.StringUtils;
 import net.simpleframework.common.coll.KVMap;
+import net.simpleframework.common.web.JavascriptUtils;
 import net.simpleframework.ctx.permission.PermissionDept;
 import net.simpleframework.mvc.IForward;
 import net.simpleframework.mvc.JavascriptForward;
@@ -34,6 +36,8 @@ import net.simpleframework.mvc.component.ui.pager.db.AbstractDbTablePagerHandler
 import net.simpleframework.mvc.ctx.permission.IPagePermissionHandler;
 import net.simpleframework.mvc.template.AbstractTemplatePage;
 import net.simpleframework.mvc.template.lets.OneTableTemplatePage;
+import net.simpleframework.mvc.template.struct.CategoryItem;
+import net.simpleframework.mvc.template.struct.CategoryPopItems;
 import net.simpleframework.workflow.engine.EProcessModelStatus;
 import net.simpleframework.workflow.engine.EProcessStatus;
 import net.simpleframework.workflow.engine.bean.ActivityBean;
@@ -55,7 +59,7 @@ import net.simpleframework.workflow.web.page.t1.WorkflowMonitorPage;
  * @author 陈侃(cknet@126.com, 13910090885) https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
-public class MyQueryWorksTPage extends AbstractItemsTPage {
+public class MyQueryWorksTPage extends AbstractWorksTPage {
 
 	@Override
 	protected void onForward(final PageParameter pp) throws Exception {
@@ -122,6 +126,8 @@ public class MyQueryWorksTPage extends AbstractItemsTPage {
 		}
 		el.append(LinkElement.style2(pm != null ? pm.getModelText() : $m("MyQueryWorksTPage.8"))
 				.setOnclick("$Actions['MyQueryWorksTPage_pmselect']();"));
+
+		el.add(new SpanElement("Test").setId("idTest"));
 		return el;
 	}
 
@@ -140,6 +146,29 @@ public class MyQueryWorksTPage extends AbstractItemsTPage {
 		tabs.append(new TabButton($m("MyQueryWorksTPage.6"), uFactory.getUrl(pp,
 				MyQueryWorks_RoleTPage.class)));
 		return ElementList.of(createTabsElement(pp, tabs));
+	}
+
+	@Override
+	public String toCategoryHTML(final PageParameter pp) {
+		return JavascriptUtils.wrapScriptTag(test().bindElement("idTest"), true);
+	}
+
+	public static CategoryPopItems test() {
+		final CategoryPopItems items = CategoryPopItems.of();
+		final Random r = new Random();
+		for (int i = 0; i < 12; i++) {
+			final CategoryItem item = new CategoryItem("Test-" + i).setHref("#");
+			for (int j = 0; j < Math.max(r.nextInt(6), 2); j++) {
+				final CategoryItem item2 = new CategoryItem("Children-" + i + "-" + j).setHref("#");
+				item.getChildren().add(item2);
+				for (int k = 0; k < 15; k++) {
+					// item2.getChildren().add(new CategoryItem("Children-" + j + "-"
+					// + k).setHref("#"));
+				}
+			}
+			items.add(item);
+		}
+		return items;
 	}
 
 	public static class MyQueryWorksTbl extends AbstractDbTablePagerHandler {
