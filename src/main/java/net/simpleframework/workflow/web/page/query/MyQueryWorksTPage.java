@@ -17,24 +17,19 @@ import net.simpleframework.mvc.IForward;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.ButtonElement;
-import net.simpleframework.mvc.common.element.ETextAlign;
 import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.JS;
-import net.simpleframework.mvc.common.element.LinkButton;
 import net.simpleframework.mvc.common.element.LinkElement;
 import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.common.element.TabButton;
 import net.simpleframework.mvc.common.element.TabButtons;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.base.ajaxrequest.AjaxRequestBean;
-import net.simpleframework.mvc.component.ui.pager.EPagerBarLayout;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
 import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
 import net.simpleframework.mvc.component.ui.pager.db.AbstractDbTablePagerHandler;
 import net.simpleframework.mvc.ctx.permission.IPagePermissionHandler;
 import net.simpleframework.mvc.template.AbstractTemplatePage;
-import net.simpleframework.mvc.template.lets.OneTableTemplatePage;
-import net.simpleframework.workflow.engine.EProcessModelStatus;
 import net.simpleframework.workflow.engine.EProcessStatus;
 import net.simpleframework.workflow.engine.bean.ActivityBean;
 import net.simpleframework.workflow.engine.bean.ProcessBean;
@@ -47,6 +42,7 @@ import net.simpleframework.workflow.web.page.AbstractWorksTPage;
 import net.simpleframework.workflow.web.page.query.MyQueryWorksTPages.MyQueryWorks_DeptTPage;
 import net.simpleframework.workflow.web.page.query.MyQueryWorksTPages.MyQueryWorks_OrgTPage;
 import net.simpleframework.workflow.web.page.query.MyQueryWorksTPages.MyQueryWorks_RoleTPage;
+import net.simpleframework.workflow.web.page.query.MyQueryWorksTPages.ProcessModelSelectPage;
 import net.simpleframework.workflow.web.page.t1.WorkflowFormPage;
 import net.simpleframework.workflow.web.page.t1.WorkflowMonitorPage;
 
@@ -279,46 +275,6 @@ public class MyQueryWorksTPage extends AbstractWorksTPage {
 			sb.append("</table>");
 			sb.append("</div>");
 			return sb.toString();
-		}
-	}
-
-	public static class ProcessModelSelectPage extends OneTableTemplatePage {
-
-		@Override
-		protected void onForward(final PageParameter pp) throws Exception {
-			super.onForward(pp);
-			final TablePagerBean tablePager = (TablePagerBean) addTablePagerBean(pp,
-					"ProcessModelSelectPage_tbl", ProcessModelSelectTbl.class).setShowCheckbox(false)
-					.setShowLineNo(false).setPagerBarLayout(EPagerBarLayout.none);
-			tablePager
-					.addColumn(new TablePagerColumn("modelText", $m("MyQueryWorksTPage.10")))
-					.addColumn(
-							new TablePagerColumn("modelVer", $m("MyQueryWorksTPage.11"), 80)
-									.setFilterSort(false).setTextAlign(ETextAlign.center))
-					.addColumn(TablePagerColumn.OPE(80));
-		}
-	}
-
-	public static class ProcessModelSelectTbl extends AbstractDbTablePagerHandler {
-		@Override
-		public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
-			return wfpmService.getModelList(EProcessModelStatus.deploy);
-		}
-
-		@Override
-		protected Map<String, Object> getRowData(final ComponentParameter cp, final Object dataObject) {
-			final ProcessModelBean pm = (ProcessModelBean) dataObject;
-			final KVMap data = new KVMap();
-			data.add("modelText", pm.getModelText()).add("modelVer", pm.getModelVer())
-					.add(TablePagerColumn.OPE, toOpeHTML(cp, pm));
-			return data;
-		}
-
-		protected String toOpeHTML(final ComponentParameter cp, final ProcessModelBean pm) {
-			final StringBuilder ope = new StringBuilder();
-			ope.append(LinkButton.corner($m("MyQueryWorksTPage.12")).setOnclick(
-					"$Actions.reloc('modelId=" + pm.getId() + "');"));
-			return ope.toString();
 		}
 	}
 }
