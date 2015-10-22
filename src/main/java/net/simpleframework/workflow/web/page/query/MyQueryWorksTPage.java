@@ -146,6 +146,7 @@ public class MyQueryWorksTPage extends AbstractWorksTPage {
 	@Override
 	public String toCategoryHTML(final PageParameter pp) {
 		final StringBuilder sb = new StringBuilder();
+
 		return sb.toString();
 	}
 
