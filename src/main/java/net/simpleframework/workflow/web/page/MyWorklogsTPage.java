@@ -316,7 +316,8 @@ public class MyWorklogsTPage extends AbstractItemsTPage implements ILogContextAw
 				sb.append("<br>");
 			}
 			sb.append(SPACE);
-			sb.append(activity).append(rarr ? rArr : lArr).append(nActivity).append(" ( ");
+			sb.append(activity.getTasknodeText()).append(rarr ? rArr : lArr)
+					.append(nActivity.getTasknodeText()).append(" ( ");
 			int i = 0;
 			for (final WorkitemBean workitem : wfwService.getWorkitems(nActivity)) {
 				if (i++ > 0) {
@@ -345,7 +346,7 @@ public class MyWorklogsTPage extends AbstractItemsTPage implements ILogContextAw
 		return new SpanElement("[" + txt + "]").setStyle("margin-right: 8px;").setColor(color);
 	}
 
-	private static String rArr = " &rArr; ";
-	private static String lArr = " &lArr; ";
+	private static String rArr = " &raquo; ";
+	private static String lArr = " &laquo; ";
 	private static SpanElement SPACE = SpanElement.SPACE(40);
 }

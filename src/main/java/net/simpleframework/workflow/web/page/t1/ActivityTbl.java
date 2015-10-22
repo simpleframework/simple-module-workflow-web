@@ -146,16 +146,16 @@ public class ActivityTbl extends GroupDbTablePagerHandler implements IWorkflowCo
 		final AbstractTaskNode tasknode = wfaService.getTaskNode(activity);
 		if (tasknode instanceof UserNode) {
 			if (((UserNode) tasknode).isEmpty()) {
-				return new SpanElement(activity).setStyle("color: #999;");
+				return new SpanElement(activity.getTasknodeText()).setStyle("color: #999;");
 			} else {
 				return createUsernodeElement(activity);
 			}
 		}
-		return new SpanElement(activity).setStyle("color: #808;");
+		return new SpanElement(activity.getTasknodeText()).setStyle("color: #808;");
 	}
 
 	protected LinkElement createUsernodeElement(final ActivityBean activity) {
-		return new LinkElement(activity)
+		return new LinkElement(activity.getTasknodeText())
 				.setOnclick("$Actions['ActivityMgrPage_workitems']('activityId=" + activity.getId()
 						+ "');");
 	}

@@ -136,7 +136,7 @@ public class WorkflowMonitorPage extends AbstractWorkflowFormPage {
 	public static class _ActivityTbl extends ActivityTbl {
 		@Override
 		protected LinkElement createUsernodeElement(final ActivityBean activity) {
-			return new LinkElement(activity)
+			return new LinkElement(activity.getTasknodeText())
 					.setOnclick("$Actions['WorkflowMonitorPage_workitems']('activityId="
 							+ activity.getId() + "');");
 		}

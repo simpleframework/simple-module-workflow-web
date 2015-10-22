@@ -133,7 +133,7 @@ public class ActivityMgrTPage extends AbstractWorkflowMgrTPage {
 
 		@Override
 		protected LinkElement createUsernodeElement(final ActivityBean activity) {
-			return new LinkElement(activity)
+			return new LinkElement(activity.getTasknodeText())
 					.setOnclick("$Actions['ActivityMgrTPage_workitems']('activityId=" + activity.getId()
 							+ "');");
 		}

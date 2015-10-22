@@ -55,7 +55,7 @@ public class WorkflowCompleteInfoPage extends AbstractWorkflowFormPage {
 				if (next.getTasknodeType() == AbstractTaskNode.TT_MERGE) {
 				}
 				sb.append("<tr>");
-				sb.append("<td class='task'>").append(next).append("</td>");
+				sb.append("<td class='task'>").append(next.getTasknodeText()).append("</td>");
 				sb.append("<td>");
 				int i = 0;
 				for (final WorkitemBean workitem2 : wfwService.getWorkitems(next,
