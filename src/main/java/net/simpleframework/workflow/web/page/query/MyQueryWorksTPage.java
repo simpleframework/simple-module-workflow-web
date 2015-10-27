@@ -3,11 +3,13 @@ package net.simpleframework.workflow.web.page.query;
 import static net.simpleframework.common.I18n.$m;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 
+import net.simpleframework.ado.query.DataQueryUtils;
 import net.simpleframework.ado.query.IDataQuery;
 import net.simpleframework.common.ID;
 import net.simpleframework.common.StringUtils;
@@ -30,6 +32,7 @@ import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
 import net.simpleframework.mvc.component.ui.pager.db.AbstractDbTablePagerHandler;
 import net.simpleframework.mvc.ctx.permission.IPagePermissionHandler;
 import net.simpleframework.mvc.template.AbstractTemplatePage;
+import net.simpleframework.workflow.engine.EProcessModelStatus;
 import net.simpleframework.workflow.engine.EProcessStatus;
 import net.simpleframework.workflow.engine.bean.ActivityBean;
 import net.simpleframework.workflow.engine.bean.ProcessBean;
@@ -38,11 +41,11 @@ import net.simpleframework.workflow.engine.bean.WorkitemBean;
 import net.simpleframework.workflow.schema.AbstractTaskNode;
 import net.simpleframework.workflow.web.IWorkflowWebContext;
 import net.simpleframework.workflow.web.WorkflowUtils;
+import net.simpleframework.workflow.web.page.AbstractItemsTPage;
 import net.simpleframework.workflow.web.page.AbstractWorksTPage;
 import net.simpleframework.workflow.web.page.query.MyQueryWorksTPages.MyQueryWorks_DeptTPage;
 import net.simpleframework.workflow.web.page.query.MyQueryWorksTPages.MyQueryWorks_OrgTPage;
 import net.simpleframework.workflow.web.page.query.MyQueryWorksTPages.MyQueryWorks_RoleTPage;
-import net.simpleframework.workflow.web.page.query.MyQueryWorksTPages.ProcessModelSelectPage;
 import net.simpleframework.workflow.web.page.t1.WorkflowFormPage;
 import net.simpleframework.workflow.web.page.t1.WorkflowMonitorPage;
 
@@ -57,22 +60,18 @@ public class MyQueryWorksTPage extends AbstractWorksTPage {
 	@Override
 	protected void onForward(final PageParameter pp) throws Exception {
 		super.onForward(pp);
+		pp.addImportCSS(AbstractItemsTPage.class, "/query_work.css");
+		pp.addImportJavascript(AbstractItemsTPage.class, "/js/query_work.js");
 
 		addTablePagerBean(pp);
 
 		addAjaxRequest(pp, "MyQueryWorksTPage_workitem").setHandlerMethod("doWorkitem");
 
 		// 工作列表窗口
-		AjaxRequestBean ajaxRequest = addAjaxRequest(pp, "MyQueryWorksTPage_detail_page",
+		final AjaxRequestBean ajaxRequest = addAjaxRequest(pp, "MyQueryWorksTPage_detail_page",
 				ProcessDetailPage.class);
 		addWindowBean(pp, "MyQueryWorksTPage_detail", ajaxRequest).setWidth(400).setHeight(480)
 				.setTitle($m("MyQueryWorksTPage.1"));
-
-		// 流程选择
-		ajaxRequest = addAjaxRequest(pp, "MyQueryWorksTPage_pmselect_page",
-				ProcessModelSelectPage.class);
-		addWindowBean(pp, "MyQueryWorksTPage_pmselect", ajaxRequest).setPopup(true).setWidth(680)
-				.setHeight(450).setTitle($m("MyQueryWorksTPage.9"));
 	}
 
 	protected TablePagerBean addTablePagerBean(final PageParameter pp) {
@@ -113,12 +112,11 @@ public class MyQueryWorksTPage extends AbstractWorksTPage {
 		final ElementList el = ElementList.of();
 		final ProcessModelBean pm = WorkflowUtils.getProcessModel(pp);
 		if (pm != null) {
-			el.append(
-					LinkElement.style2($m("MyQueryWorksTPage.16")).setOnclick(
-							"$Actions.reloc('modelId=');")).append(SpanElement.SPACE);
+			el.add(new SpanElement(pm.getModelText()));
+			el.add(SpanElement.SPACE);
+			el.append(LinkElement.style2($m("MyQueryWorksTPage.9")).setOnclick(
+					"$Actions.reloc('modelId=');"));
 		}
-		el.append(LinkElement.style2(pm != null ? pm.getModelText() : $m("MyQueryWorksTPage.8"))
-				.setOnclick("$Actions['MyQueryWorksTPage_pmselect']();"));
 		return el;
 	}
 
@@ -142,7 +140,48 @@ public class MyQueryWorksTPage extends AbstractWorksTPage {
 	@Override
 	public String toCategoryHTML(final PageParameter pp) {
 		final StringBuilder sb = new StringBuilder();
+		final List<ProcessModelBean> models = DataQueryUtils.toList(wfpmService.getModelListByDomain(
+				pp.getLdept().getDomainId(), EProcessModelStatus.deploy));
+		wfpmService.sort(models);
 
+		final Map<String, List<ProcessModelBean>> gmap = new LinkedHashMap<String, List<ProcessModelBean>>();
+		for (final ProcessModelBean pm : models) {
+			final String[] arr = StringUtils.split(pm.getModelText(), ".");
+			String key;
+			if (arr.length > 1) {
+				key = arr[0];
+			} else {
+				key = $m("MyInitiateItemsGroupTPage.0");
+			}
+			List<ProcessModelBean> list = gmap.get(key);
+			if (list == null) {
+				gmap.put(key, list = new ArrayList<ProcessModelBean>());
+			}
+			list.add(pm);
+		}
+
+		for (final Map.Entry<String, List<ProcessModelBean>> e : gmap.entrySet()) {
+			final String key = e.getKey();
+			final List<ProcessModelBean> val = e.getValue();
+			sb.append("<div class='gitem'>");
+			sb.append(new SpanElement(key).setClassName("glbl"));
+			final int size = val.size();
+			if (size > 0) {
+				sb.append(new SpanElement("(" + size + ")").setClassName("gsize"));
+			}
+			sb.append(" <div class='psub' style='display: none'>");
+			sb.append(" <div class='psep'></div>");
+			for (final ProcessModelBean pm : val) {
+				sb.append("<div class='pitem'>");
+				final String mtxt = pm.getModelText();
+				final int p = mtxt.indexOf('.');
+				sb.append(new LinkElement(p > 0 ? mtxt.substring(p + 1) : mtxt)
+						.setOnclick("$Actions.reloc('modelId=" + pm.getId() + "');"));
+				sb.append("</div>");
+			}
+			sb.append(" </div>");
+			sb.append("</div>");
+		}
 		return sb.toString();
 	}
 

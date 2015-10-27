@@ -1,0 +1,55 @@
+.MyQueryWorksTPage .col1 {
+  position: static !important;
+}
+
+.MyQueryWorksTPage .col1 .gitem {
+  margin-right: 1px;
+  padding: 8px 15px;
+  border-top: 1px solid transparent;
+  border-bottom: 1px solid transparent;
+  cursor: pointer;
+}
+
+.MyQueryWorksTPage .col1 .glbl {
+  font-size: 10.5pt;
+}
+
+.MyQueryWorksTPage .col1 .gsize {
+  font-size: 8pt;
+  margin-left: 3px;
+  color: #777;
+}
+
+.MyQueryWorksTPage .col1 .gitem:HOVER {
+  background-color: #fafafa;
+  border-top: 1px solid #999;
+  border-bottom: 1px solid #999;
+}
+
+.MyQueryWorksTPage .col1 .gitem .psep {
+  position: absolute;
+  background-color: #fafafa;
+  height: 35px;
+  left: -2px;
+  top: 0;
+  width: 2px;
+}
+
+.MyQueryWorksTPage .col1 .gitem .psub {
+  position: absolute;
+  padding: 10px;
+  z-index: 20;
+  left: 293px;
+  background-color: #fafafa;
+  border: 1px solid #999;
+  width: 420px;
+  min-height: 120px;
+  -webkit-box-shadow: 3px 3px 3px #aaa;
+  box-shadow: 3px 3px 3px #aaa;
+  cursor: default;
+}
+
+.MyQueryWorksTPage .col1  .pitem {
+  display: inline-block;
+  padding: 10px;
+}

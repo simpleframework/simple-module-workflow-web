@@ -16,11 +16,6 @@ import net.simpleframework.workflow.web.page.t1.AbstractWorkflowMgrPage;
  *         http://www.simpleframework.net
  */
 public class AbstractWorksTPage extends Category_ListPage implements IWorkflowPageAware {
-	@Override
-	protected void onForward(final PageParameter pp) throws Exception {
-		super.onForward(pp);
-		pp.addImportCSS(AbstractItemsTPage.class, "/my_work.css");
-	}
 
 	@Override
 	protected TablePagerBean addTablePagerBean(final PageParameter pp, final String name,

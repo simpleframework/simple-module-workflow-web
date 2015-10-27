@@ -27,6 +27,12 @@ import net.simpleframework.workflow.web.WorkflowUtils;
  */
 public abstract class AbstractItemsTPage extends AbstractWorksTPage {
 
+	@Override
+	protected void onForward(final PageParameter pp) throws Exception {
+		super.onForward(pp);
+		pp.addImportCSS(AbstractItemsTPage.class, "/my_work.css");
+	}
+
 	public CategoryItem createCategoryItem(final PageParameter pp, final String text,
 			final Class<? extends AbstractItemsTPage> mClass) {
 		return new CategoryItem(text).setHref(uFactory.getUrl(pp, mClass)).setSelected(
