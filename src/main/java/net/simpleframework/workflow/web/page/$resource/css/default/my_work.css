@@ -293,23 +293,6 @@
   border-bottom: 0;
 }
 
-.ProcessDetailPage .ptitle {
-  padding: 10px;
-  background-color: #eee;
-  font-size: 10.5pt;
-  color: #900;
-}
-
-.ProcessDetailPage .ptag {
-  background-color: #ddd;
-  display: inline-block;
-  margin: 4px;
-  padding: 3px 9px;
-  -moz-border-radius: 9px;
-  -webkit-border-radius: 9px;
-  border-radius: 9px;
-}
-
 .Category_BlankPage .category .c_item {
   padding-left: 10px;
 }
