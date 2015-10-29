@@ -4,10 +4,10 @@ import static net.simpleframework.common.I18n.$m;
 
 import java.util.Map;
 
-import net.simpleframework.ado.query.DataQueryUtils;
 import net.simpleframework.ado.query.IDataQuery;
 import net.simpleframework.ado.query.ListDataQuery;
 import net.simpleframework.common.ID;
+import net.simpleframework.common.StringUtils;
 import net.simpleframework.common.coll.KVMap;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageParameter;
@@ -19,9 +19,11 @@ import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.common.element.TabButton;
 import net.simpleframework.mvc.common.element.TabButtons;
 import net.simpleframework.mvc.component.ComponentParameter;
+import net.simpleframework.mvc.component.ui.pager.AbstractTablePagerSchema;
+import net.simpleframework.mvc.component.ui.pager.EPagerBarLayout;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
 import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
-import net.simpleframework.mvc.component.ui.pager.db.AbstractDbTablePagerHandler;
+import net.simpleframework.mvc.component.ui.pager.db.GroupDbTablePagerHandler;
 import net.simpleframework.workflow.engine.InitiateItem;
 import net.simpleframework.workflow.engine.InitiateItems;
 import net.simpleframework.workflow.engine.bean.ProcessBean;
@@ -68,8 +70,9 @@ public class MyInitiateItemsTPage extends AbstractItemsTPage {
 	}
 
 	protected TablePagerBean addTablePagerBean(final PageParameter pp) {
-		final TablePagerBean tablePager = addTablePagerBean(pp, "MyInitiateItemsTPage_tbl",
-				MyInitiateItemsTbl.class);
+		final TablePagerBean tablePager = (TablePagerBean) addTablePagerBean(pp,
+				"MyInitiateItemsTPage_tbl", MyInitiateItemsTbl.class).setGroupColumn("gc")
+				.setPagerBarLayout(EPagerBarLayout.none);
 		tablePager
 				.addColumn(TC_ICON())
 				.addColumn(new TablePagerColumn("modelText", $m("MyInitiateItemsTPage.1")))
@@ -82,31 +85,45 @@ public class MyInitiateItemsTPage extends AbstractItemsTPage {
 		return tablePager;
 	}
 
-	public static class MyInitiateItemsTbl extends AbstractDbTablePagerHandler {
+	public static class MyInitiateItemsTbl extends GroupDbTablePagerHandler {
 
 		@Override
 		public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
 			final ID loginId = cp.getLoginId();
-			InitiateItems items;
-			if (loginId == null || (items = wfpmService.getInitiateItems(loginId)) == null) {
-				return DataQueryUtils.nullQuery();
-			}
+			final InitiateItems items = wfpmService.getInitiateItems(loginId).sort();
 			return new ListDataQuery<InitiateItem>(items);
 		}
 
 		@Override
-		protected Object getVal(final Object dataObject, final String key) {
-			final InitiateItem initiateItem = (InitiateItem) dataObject;
-			final ProcessModelBean processModel = wfpmService.getBean(initiateItem.getModelId());
-			if ("modelText".equals(key)) {
-				return processModel.toString();
-			} else if ("processCount".equals(key)) {
-				return processModel.getProcessCount();
-			} else if ("version".equals(key)) {
-				final ProcessDocument doc = wfpmService.getProcessDocument(processModel);
-				return doc.getProcessNode().getVersion();
-			}
-			return super.getVal(dataObject, key);
+		public AbstractTablePagerSchema createTablePagerSchema() {
+			return new DefaultTablePagerSchema() {
+				private ProcessModelBean getProcessModelBean(final InitiateItem initiateItem) {
+					return wfpmService.getBean(initiateItem.getModelId());
+				}
+
+				@Override
+				public Object getVal(final Object dataObject, final String key) {
+					final InitiateItem initiateItem = (InitiateItem) dataObject;
+					if ("gc".equals(key)) {
+						final ProcessModelBean processModel = getProcessModelBean(initiateItem);
+						final String[] arr = StringUtils.split(processModel.getModelText(), ".");
+						if (arr.length > 1) {
+							return arr[0];
+						} else {
+							return $m("MyInitiateItemsGroupTPage.0");
+						}
+					} else if ("modelText".equals(key)) {
+						return getProcessModelBean(initiateItem).getModelText();
+					} else if ("processCount".equals(key)) {
+						return getProcessModelBean(initiateItem).getProcessCount();
+					} else if ("version".equals(key)) {
+						final ProcessDocument doc = wfpmService
+								.getProcessDocument(getProcessModelBean(initiateItem));
+						return doc.getProcessNode().getVersion();
+					}
+					return super.getVal(dataObject, key);
+				}
+			};
 		}
 
 		@Override
@@ -115,7 +132,9 @@ public class MyInitiateItemsTPage extends AbstractItemsTPage {
 			final Object modelId = initiateItem.getModelId();
 			final ProcessModelBean processModel = wfpmService.getBean(modelId);
 			final KVMap row = new KVMap();
-			row.add("modelText", new LinkElement(initiateItem)
+			final String mtxt = processModel.getModelText();
+			final int p = mtxt.indexOf('.');
+			row.add("modelText", new LinkElement(p > 0 ? mtxt.substring(p + 1) : mtxt)
 					.setOnclick("$Actions['MyInitiateItemsTPage_startProcess']('modelId=" + modelId
 							+ "');"));
 			row.add("version", processModel.getModelVer());
