@@ -8,6 +8,7 @@
   border-top: 1px solid transparent;
   border-bottom: 1px solid transparent;
   cursor: pointer;
+  background: url("images/pop_arrow.png") no-repeat scroll 95% 50%;
 }
 
 .MyQueryWorksTPage .col1 .glbl {
@@ -15,7 +16,6 @@
 }
 
 .MyQueryWorksTPage .col1 .gsize {
-  font-size: 8pt;
   margin-left: 3px;
   color: #777;
 }
@@ -24,6 +24,7 @@
   background-color: #fafafa;
   border-top: 1px solid #999;
   border-bottom: 1px solid #999;
+  background-image: url("images/pop_arrow_hover.png");
 }
 
 .MyQueryWorksTPage .col1 .gitem .psep {

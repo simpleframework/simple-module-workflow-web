@@ -23,6 +23,7 @@ import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.JS;
 import net.simpleframework.mvc.common.element.LinkElement;
 import net.simpleframework.mvc.common.element.SpanElement;
+import net.simpleframework.mvc.common.element.SupElement;
 import net.simpleframework.mvc.common.element.TabButton;
 import net.simpleframework.mvc.common.element.TabButtons;
 import net.simpleframework.mvc.component.ComponentParameter;
@@ -167,7 +168,7 @@ public class MyQueryWorksTPage extends AbstractWorksTPage {
 			sb.append(new SpanElement(key).setClassName("glbl"));
 			final int size = val.size();
 			if (size > 0) {
-				sb.append(new SpanElement("(" + size + ")").setClassName("gsize"));
+				sb.append(new SupElement("(" + size + ")").addClassName("gsize"));
 			}
 			sb.append(" <div class='psub' style='display: none'>");
 			sb.append(" <div class='psep'></div>");
