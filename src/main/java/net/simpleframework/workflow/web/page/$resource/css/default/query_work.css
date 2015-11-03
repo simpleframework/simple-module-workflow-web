@@ -7,9 +7,11 @@
 }
 
 .MyQueryWorksTPage .gtitle {
+  border-bottom: 1px dashed #bbb;
   color: #833;
   font-size: 11px;
-  margin: 0px 0px 4px 6px;
+  margin-bottom: 4px;
+  padding: 0 0 4px 6px;
 }
 
 .MyQueryWorksTPage .col1 .gitem {
