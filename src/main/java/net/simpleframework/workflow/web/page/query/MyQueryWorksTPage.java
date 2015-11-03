@@ -11,7 +11,6 @@ import net.simpleframework.ado.query.DataQueryUtils;
 import net.simpleframework.ado.query.IDataQuery;
 import net.simpleframework.common.StringUtils;
 import net.simpleframework.common.coll.KVMap;
-import net.simpleframework.ctx.script.MVEL2Template;
 import net.simpleframework.mvc.IForward;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageParameter;
@@ -140,12 +139,10 @@ public class MyQueryWorksTPage extends AbstractWorksTPage {
 				gmap.put(key, list = new ArrayList<ProcessModelBean>());
 			}
 			list.add(pm);
-
-			gmap.put("ke", list);
 		}
 
+		sb.append("<div class='gtitle'>").append($m("MyQueryWorksTPage.16")).append("</div>");
 		final ProcessModelBean cur = WorkflowUtils.getProcessModel(pp);
-
 		for (final Map.Entry<String, List<ProcessModelBean>> e : gmap.entrySet()) {
 			final String key = e.getKey();
 			final List<ProcessModelBean> val = e.getValue();
@@ -172,7 +169,6 @@ public class MyQueryWorksTPage extends AbstractWorksTPage {
 			sb.append(" </div>");
 			sb.append("</div>");
 		}
-		sb.append(MVEL2Template.replace(new KVMap(), MyQueryWorksTPage.class, "1.html"));
 		return sb.toString();
 	}
 

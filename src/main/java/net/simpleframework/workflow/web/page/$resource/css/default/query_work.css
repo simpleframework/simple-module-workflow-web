@@ -1,5 +1,15 @@
+.MyQueryWorksTPage .category {
+  padding: 15px 0; 
+}
+
 .MyQueryWorksTPage .col1 {
   position: static !important;
+}
+
+.MyQueryWorksTPage .gtitle {
+  color: #833;
+  font-size: 11px;
+  margin: 0px 0px 4px 6px;
 }
 
 .MyQueryWorksTPage .col1 .gitem {
@@ -30,7 +40,6 @@
   background-color: #fafafa;
   border-top: 1px solid #999;
   border-bottom: 1px solid #999;
-  background-image: url("images/pop_arrow_hover.png");
 }
 
 .MyQueryWorksTPage .col1 .gitem .psep {
