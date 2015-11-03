@@ -139,6 +139,7 @@ public class MyCommentsMgrTPage extends AbstractMgrTPage implements IWorkflowCon
 
 	public static class CommentEditPage extends AbstractDescPage {
 
+		@Transaction(context = IWorkflowContext.class)
 		@Override
 		public JavascriptForward onSave(final ComponentParameter cp) throws Exception {
 			WfCommentLog log = getCommentLog(cp);

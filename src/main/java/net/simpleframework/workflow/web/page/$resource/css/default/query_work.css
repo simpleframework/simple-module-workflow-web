@@ -54,6 +54,23 @@
   padding: 10px;
 }
 
+.MyQueryWorksTPage .tool_bar .le {
+  line-height: 1.6;
+}
+
+.MyQueryWorksTPage .modeltxt {
+  background-color: #f9f9f9;
+  border-bottom: 1px solid #bbb;
+  margin: -8px -6px 6px -6px;
+  padding: 4px 10px;
+}
+
+.MyQueryWorksTPage .modeltxt .left {
+  line-height: 1.6;
+  font-style: italic;
+  color: #654;
+}
+
 .ProcessDetailPage .ptitle {
   padding: 10px;
   background-color: #eee;

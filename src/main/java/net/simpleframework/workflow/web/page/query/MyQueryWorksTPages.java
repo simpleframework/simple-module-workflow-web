@@ -65,8 +65,8 @@ public abstract class MyQueryWorksTPages implements IWorkflowPageAware {
 		}
 
 		@Override
-		public ElementList getRightElements(final PageParameter pp) {
-			final ElementList el = super.getRightElements(pp);
+		public ElementList getLeftElements(final PageParameter pp) {
+			final ElementList el = super.getLeftElements(pp);
 			if (pp.getLdept().hasChild()) {
 				el.add(new Checkbox("idMyQueryWorks_DeptTPage_children", $m("MyQueryWorksTPage.2"))
 						.setOnchange("$Actions['MyQueryWorksTPage_tbl']('child=' + this.checked);"));
