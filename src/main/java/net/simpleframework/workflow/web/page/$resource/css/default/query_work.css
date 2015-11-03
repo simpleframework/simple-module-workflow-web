@@ -9,6 +9,7 @@
   border-bottom: 1px solid transparent;
   cursor: pointer;
   background: url("images/pop_arrow.png") no-repeat scroll 95% 50%;
+  color: #666;
 }
 
 .MyQueryWorksTPage .col1 .glbl {
@@ -17,7 +18,12 @@
 
 .MyQueryWorksTPage .col1 .gsize {
   margin-left: 3px;
-  color: #777;
+  color: #555;
+}
+
+.MyQueryWorksTPage .col1 .gitem.cur {
+  color: #333;
+  background-image: url("images/pop_arrow_hover.png");
 }
 
 .MyQueryWorksTPage .col1 .gitem:HOVER {
@@ -30,7 +36,6 @@
 .MyQueryWorksTPage .col1 .gitem .psep {
   position: absolute;
   background-color: #fafafa;
-  height: 35px;
   left: -2px;
   top: 0;
   width: 2px;
@@ -54,20 +59,11 @@
   padding: 10px;
 }
 
-.MyQueryWorksTPage .tool_bar .le {
-  line-height: 1.6;
-}
-
 .MyQueryWorksTPage .modeltxt {
   background-color: #f9f9f9;
   border-bottom: 1px solid #bbb;
   margin: -8px -6px 6px -6px;
   padding: 4px 10px;
-}
-
-.MyQueryWorksTPage .modeltxt .left {
-  line-height: 1.6;
-  font-style: italic;
   color: #654;
 }
 
