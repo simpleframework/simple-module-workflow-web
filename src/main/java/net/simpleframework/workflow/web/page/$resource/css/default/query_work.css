@@ -71,11 +71,16 @@
 }
 
 .MyQueryWorksTPage .modeltxt {
-  background-color: #f9f9f9;
+  background-color: #eed;
   border-bottom: 1px solid #bbb;
   margin: -8px -6px 6px -6px;
   padding: 4px 10px;
   color: #654;
+}
+
+.MyQueryWorksTPage .modeltxt .pm {
+  font-size: 10.5pt; 
+  margin-right: 4px;
 }
 
 .ProcessDetailPage .ptitle {

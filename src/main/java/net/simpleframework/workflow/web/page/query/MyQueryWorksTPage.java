@@ -11,6 +11,7 @@ import net.simpleframework.ado.query.DataQueryUtils;
 import net.simpleframework.ado.query.IDataQuery;
 import net.simpleframework.common.StringUtils;
 import net.simpleframework.common.coll.KVMap;
+import net.simpleframework.mvc.AbstractMVCPage;
 import net.simpleframework.mvc.IForward;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageParameter;
@@ -177,16 +178,17 @@ public class MyQueryWorksTPage extends AbstractWorksTPage {
 		return sb.toString();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public String toToolbarHTML(final PageParameter pp) {
 		final StringBuilder sb = new StringBuilder();
 		final ProcessModelBean pm = WorkflowUtils.getProcessModel(pp);
 		if (pm != null) {
 			sb.append("<div class='modeltxt clearfix'>");
-			sb.append(pm.getModelText());
+			sb.append(new SpanElement(pm.getModelText()).setClassName("pm"));
 			sb.append(" (");
-			sb.append(LinkElement.style2($m("MyQueryWorksTPage.9")).setOnclick(
-					"$Actions.reloc('modelId=');"));
+			sb.append(LinkElement.style2($m("MyQueryWorksTPage.9")).setHref(
+					uFactory.getUrl(pp, (Class<? extends AbstractMVCPage>) getOriginalClass())));
 			sb.append(")");
 			sb.append("</div>");
 		}
