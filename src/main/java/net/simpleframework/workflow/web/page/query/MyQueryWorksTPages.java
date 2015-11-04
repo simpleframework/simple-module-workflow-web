@@ -51,8 +51,11 @@ public abstract class MyQueryWorksTPages implements IWorkflowPageAware {
 		public static class MyQueryWorks_OrgTbl extends MyQueryWorksTbl {
 			@Override
 			public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
-				return wfpService.getProcessWlistInDomain(cp.getLogin().getDomainId(),
-						WorkflowUtils.getProcessModel(cp));
+				final ProcessModelBean pm = WorkflowUtils.getProcessModel(cp);
+				if (pm != null) {
+					cp.addFormParameter("modelId", pm.getId());
+				}
+				return wfpService.getProcessWlistInDomain(cp.getLogin().getDomainId(), pm);
 			}
 		}
 	}
@@ -86,8 +89,11 @@ public abstract class MyQueryWorksTPages implements IWorkflowPageAware {
 						deptIds.add(_dept.getId());
 					}
 				}
-				return wfpService.getProcessWlistInDept(deptIds.toArray(new ID[deptIds.size()]),
-						WorkflowUtils.getProcessModel(cp));
+				final ProcessModelBean pm = WorkflowUtils.getProcessModel(cp);
+				if (pm != null) {
+					cp.addFormParameter("modelId", pm.getId());
+				}
+				return wfpService.getProcessWlistInDept(deptIds.toArray(new ID[deptIds.size()]), pm);
 			}
 		}
 	}
@@ -102,6 +108,10 @@ public abstract class MyQueryWorksTPages implements IWorkflowPageAware {
 		public static class MyQueryWorks_RoleTbl extends MyQueryWorksTbl {
 			@Override
 			public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
+				final ProcessModelBean pm = WorkflowUtils.getProcessModel(cp);
+				if (pm != null) {
+					cp.addFormParameter("modelId", pm.getId());
+				}
 				return null;
 			}
 		}

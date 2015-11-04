@@ -102,19 +102,24 @@ public class MyQueryWorksTPage extends AbstractWorksTPage {
 
 	@Override
 	public ElementList getRightElements(final PageParameter pp) {
-		// 采用ajax
+		final ProcessModelBean pm = WorkflowUtils.getProcessModel(pp);
+		String params = null;
+		if (pm != null) {
+			params = "modelId=" + pm.getId();
+		}
 		final TabButtons tabs = TabButtons.of(new TabButton($m("MyQueryWorksTPage.4"), uFactory
-				.getUrl(pp, MyQueryWorksTPage.class)));
+				.getUrl(pp, MyQueryWorksTPage.class, params)));
 		final IWorkflowWebContext ctx = (IWorkflowWebContext) workflowContext;
 		if (pp.isLmember(ctx.getQueryWorks_DeptRole(pp))) {
-			tabs.append(new TabButton(pp.getLdept(), uFactory.getUrl(pp, MyQueryWorks_DeptTPage.class)));
+			tabs.append(new TabButton(pp.getLdept(), uFactory.getUrl(pp, MyQueryWorks_DeptTPage.class,
+					params)));
 		}
 		if (pp.isLmember(ctx.getQueryWorks_OrgRole(pp))) {
 			tabs.append(new TabButton($m("MyQueryWorksTPage.5"), uFactory.getUrl(pp,
-					MyQueryWorks_OrgTPage.class)));
+					MyQueryWorks_OrgTPage.class, params)));
 		}
 		tabs.append(new TabButton($m("MyQueryWorksTPage.6"), uFactory.getUrl(pp,
-				MyQueryWorks_RoleTPage.class)));
+				MyQueryWorks_RoleTPage.class, params)));
 		return ElementList.of(createTabsElement(pp, tabs));
 	}
 

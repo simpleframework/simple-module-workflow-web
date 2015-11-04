@@ -195,6 +195,19 @@ public abstract class WorkflowUtils implements IWorkflowContextAware {
 	}
 
 	public static ProcessModelBean getProcessModel(final PageParameter pp) {
+		final String model = pp.getParameter("model");
+		if (StringUtils.hasText(model)) {
+			final ProcessModelBean pm = pp.getRequestCache("model_" + model,
+					new CacheV<ProcessModelBean>() {
+						@Override
+						public ProcessModelBean get() {
+							return wfpmService.getProcessModelByName(model);
+						}
+					});
+			if (pm != null) {
+				return pm;
+			}
+		}
 		final String modelId = pp.getParameter("modelId");
 		return pp.getRequestCache("model_" + StringUtils.blank(modelId),
 				new CacheV<ProcessModelBean>() {
