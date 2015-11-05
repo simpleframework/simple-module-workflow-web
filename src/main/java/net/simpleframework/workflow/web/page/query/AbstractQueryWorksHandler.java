@@ -1,5 +1,10 @@
 package net.simpleframework.workflow.web.page.query;
 
+import static net.simpleframework.common.I18n.$m;
+
+import java.util.HashMap;
+import java.util.Map;
+
 import net.simpleframework.ctx.IApplicationContext;
 
 /**
@@ -10,7 +15,14 @@ import net.simpleframework.ctx.IApplicationContext;
  */
 public abstract class AbstractQueryWorksHandler implements IQueryWorksHandler {
 
+	static Map<String, IQueryWorksHandler> regists = new HashMap<String, IQueryWorksHandler>();
+
 	@Override
 	public void onScan(final IApplicationContext application) throws Exception {
+	}
+
+	@Override
+	public String toString() {
+		return $m("AbstractQueryWorksHandler.0") + ": " + getClass().getName();
 	}
 }
