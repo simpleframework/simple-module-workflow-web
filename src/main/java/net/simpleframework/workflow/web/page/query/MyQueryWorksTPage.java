@@ -88,10 +88,9 @@ public class MyQueryWorksTPage extends AbstractWorksTPage {
 		final ProcessBean process = WorkflowUtils.getProcessBean(cp);
 		WorkitemBean workitem;
 		if (process != null && (workitem = getOpenWorkitem(cp, process)) != null) {
-			return new JavascriptForward(
-					JS.loc(uFactory.getUrl(cp,
-							(cp.getBoolParameter("monitor") ? WorkflowMonitorPage.class
-									: WorkflowFormPage.class), workitem)));
+			return new JavascriptForward(JS.loc(
+					uFactory.getUrl(cp, (cp.getBoolParameter("monitor") ? WorkflowMonitorPage.class
+							: WorkflowFormPage.class), workitem), true));
 		} else {
 			return new JavascriptForward("alert('").append($m("MyQueryWorksTPage.7")).append("');");
 		}

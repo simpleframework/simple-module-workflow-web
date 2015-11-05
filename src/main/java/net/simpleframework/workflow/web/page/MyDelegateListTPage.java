@@ -67,19 +67,18 @@ public class MyDelegateListTPage extends AbstractItemsTPage {
 	protected TablePagerBean addTablePagerBean(final PageParameter pp) {
 		final TablePagerBean tablePager = addTablePagerBean(pp, "MyWorklistTPage_tbl",
 				MyWorkDelegateTbl.class);
-		tablePager.addColumn(TC_ICON()).addColumn(TC_TITLE()).addColumn(TC_USERTEXT())
-				.addColumn(TC_CREATEDATE()).addColumn(TC_STATUS()).addColumn(TablePagerColumn.OPE(70));
+		tablePager
+				.addColumn(TC_ICON())
+				.addColumn(TC_TITLE())
+				.addColumn(TC_USERTEXT())
+				.addColumn(
+						TC_CREATEDATE().setColumnText($m("MyDelegateListTPage.1")).setColumnAlias(
+								"d.createdate")).addColumn(TC_STATUS()).addColumn(TablePagerColumn.OPE(70));
 		return tablePager;
 	}
 
 	protected TablePagerColumn TC_STATUS() {
 		return super.TC_STATUS(EDelegationStatus.class).setColumnAlias("d.status");
-	}
-
-	@Override
-	protected TablePagerColumn TC_CREATEDATE() {
-		return super.TC_CREATEDATE().setColumnText($m("MyDelegateListTPage.1"))
-				.setColumnAlias("d.createdate");
 	}
 
 	protected TablePagerColumn TC_USERTEXT() {
