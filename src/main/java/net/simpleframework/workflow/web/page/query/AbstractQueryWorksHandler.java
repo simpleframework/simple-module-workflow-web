@@ -7,7 +7,6 @@ import java.util.Map;
 
 import net.simpleframework.ctx.IApplicationContext;
 import net.simpleframework.ctx.hdl.AbstractScanHandler;
-import net.simpleframework.workflow.WorkflowException;
 import net.simpleframework.workflow.engine.bean.ProcessModelBean;
 
 /**
@@ -23,15 +22,21 @@ public abstract class AbstractQueryWorksHandler extends AbstractScanHandler impl
 
 	@Override
 	public void onScan(final IApplicationContext application) throws Exception {
-		// if (regists.containsKey(no)) {
-		// throw WorkflowException.of("[IWfNoticeTypeHandler, no: " + no + "] "
-		// + $m("AbstractWfNoticeTypeHandler.0"));
-		// }
-		// regists.put(no, this);
 		final ProcessModelBean pm = getProcessModel();
 		if (pm == null) {
-			throw WorkflowException.of("");
+			oprintln(new StringBuilder("[IQueryWorksHandler] ")
+					.append($m("AbstractQueryWorksHandler.1")).append(" - ")
+					.append(getClass().getName()));
+			return;
 		}
+		String modelname;
+		if (regists.containsKey(modelname = pm.getModelName())) {
+			oprintln(new StringBuilder("[IQueryWorksHandler, name: ").append(modelname).append("] ")
+					.append($m("AbstractQueryWorksHandler.2")).append(" - ")
+					.append(getClass().getName()));
+			return;
+		}
+		regists.put(pm.getModelName(), this);
 	}
 
 	@Override
