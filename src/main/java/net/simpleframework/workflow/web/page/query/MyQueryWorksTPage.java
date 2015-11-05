@@ -68,6 +68,11 @@ public class MyQueryWorksTPage extends AbstractWorksTPage {
 				.setTitle($m("MyQueryWorksTPage.1"));
 	}
 
+	@Override
+	protected String getPageCSS(final PageParameter pp) {
+		return "MyQueryWorksTPage";
+	}
+
 	protected TablePagerBean addTablePagerBean(final PageParameter pp) {
 		final TablePagerBean tablePager = addTablePagerBean(pp, "MyQueryWorksTPage_tbl",
 				MyQueryWorksTbl.class);
@@ -77,11 +82,6 @@ public class MyQueryWorksTPage extends AbstractWorksTPage {
 				.addColumn(TC_STATUS(EProcessStatus.class).setColumnAlias("p.status"))
 				.addColumn(TablePagerColumn.OPE(105));
 		return tablePager;
-	}
-
-	@Override
-	protected String getPageCSS(final PageParameter pp) {
-		return "MyQueryWorksTPage";
 	}
 
 	public IForward doWorkitem(final ComponentParameter cp) {
