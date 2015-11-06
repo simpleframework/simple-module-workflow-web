@@ -23,6 +23,7 @@ import net.simpleframework.mvc.common.element.TabButtons;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.base.ajaxrequest.AjaxRequestBean;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
+import net.simpleframework.mvc.component.ui.pager.db.AbstractDbTablePagerHandler;
 import net.simpleframework.workflow.engine.EProcessModelStatus;
 import net.simpleframework.workflow.engine.bean.ProcessBean;
 import net.simpleframework.workflow.engine.bean.ProcessModelBean;
@@ -31,9 +32,13 @@ import net.simpleframework.workflow.web.IWorkflowWebContext;
 import net.simpleframework.workflow.web.WorkflowUtils;
 import net.simpleframework.workflow.web.page.AbstractItemsTPage;
 import net.simpleframework.workflow.web.page.AbstractWorksTPage;
+import net.simpleframework.workflow.web.page.query.IQueryWorksHandler.EQueryWorks;
 import net.simpleframework.workflow.web.page.query.MyQueryWorksTPages.MyQueryWorks_DeptTPage;
 import net.simpleframework.workflow.web.page.query.MyQueryWorksTPages.MyQueryWorks_OrgTPage;
 import net.simpleframework.workflow.web.page.query.MyQueryWorksTPages.MyQueryWorks_RoleTPage;
+import net.simpleframework.workflow.web.page.query.MyQueryWorksTbl.MyQueryWorks_DeptTbl;
+import net.simpleframework.workflow.web.page.query.MyQueryWorksTbl.MyQueryWorks_OrgTbl;
+import net.simpleframework.workflow.web.page.query.MyQueryWorksTbl.MyQueryWorks_RoleTbl;
 import net.simpleframework.workflow.web.page.t1.WorkflowFormPage;
 import net.simpleframework.workflow.web.page.t1.WorkflowMonitorPage;
 
@@ -79,11 +84,33 @@ public class MyQueryWorksTPage extends AbstractWorksTPage {
 		return hdl;
 	}
 
+	protected EQueryWorks qw;
+	protected Class<? extends AbstractDbTablePagerHandler> tblClass;
+	{
+		if (MyQueryWorks_DeptTPage.class.isAssignableFrom(getClass())) {
+			qw = EQueryWorks.dept;
+			tblClass = MyQueryWorks_DeptTbl.class;
+		} else if (MyQueryWorks_OrgTPage.class.isAssignableFrom(getClass())) {
+			qw = EQueryWorks.org;
+			tblClass = MyQueryWorks_OrgTbl.class;
+		} else if (MyQueryWorks_RoleTPage.class.isAssignableFrom(getClass())) {
+			qw = EQueryWorks.role;
+			tblClass = MyQueryWorks_RoleTbl.class;
+		} else {
+			qw = EQueryWorks.my;
+			tblClass = MyQueryWorksTbl.class;
+		}
+	}
+
 	protected TablePagerBean addTablePagerBean(final PageParameter pp) {
-		final TablePagerBean tablePager = addTablePagerBean(pp, "MyQueryWorksTPage_tbl",
-				MyQueryWorksTbl.class);
-		getQueryWorksHandler(pp).doTablePagerInit(pp, tablePager);
+		final TablePagerBean tablePager = addTablePagerBean(pp, "MyQueryWorksTPage_tbl", tblClass);
+		getQueryWorksHandler(pp).doTablePagerInit(pp, tablePager, qw);
 		return tablePager;
+	}
+
+	@Override
+	public ElementList getLeftElements(final PageParameter pp) {
+		return getQueryWorksHandler(pp).getLeftElements(pp, qw);
 	}
 
 	public IForward doWorkitem(final ComponentParameter cp) {

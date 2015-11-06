@@ -2,11 +2,15 @@ package net.simpleframework.workflow.web.page.query;
 
 import static net.simpleframework.common.I18n.$m;
 
+import java.util.List;
 import java.util.Map;
 
 import net.simpleframework.ado.query.IDataQuery;
+import net.simpleframework.common.ID;
 import net.simpleframework.common.StringUtils;
+import net.simpleframework.common.coll.ArrayUtils;
 import net.simpleframework.common.coll.KVMap;
+import net.simpleframework.ctx.permission.PermissionDept;
 import net.simpleframework.mvc.common.element.ButtonElement;
 import net.simpleframework.mvc.common.element.LinkElement;
 import net.simpleframework.mvc.common.element.SpanElement;
@@ -72,5 +76,47 @@ public class MyQueryWorksTbl extends AbstractDbTablePagerHandler implements IWor
 						.setOnclick("$Actions['MyQueryWorksTPage_workitem']('processId="
 								+ process.getId() + "&monitor=true');"));
 		return ope.toString();
+	}
+
+	public static class MyQueryWorks_DeptTbl extends MyQueryWorksTbl {
+		@Override
+		public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
+			final boolean child = cp.getBoolParameter("child");
+			cp.addFormParameter("child", child);
+			final PermissionDept dept = cp.getLogin().getDept();
+			final List<Object> deptIds = ArrayUtils.toParams(dept.getId());
+			if (child) {
+				for (final PermissionDept _dept : dept.getChildren()) {
+					deptIds.add(_dept.getId());
+				}
+			}
+			final ProcessModelBean pm = WorkflowUtils.getProcessModel(cp);
+			if (pm != null) {
+				cp.addFormParameter("modelId", pm.getId());
+			}
+			return wfpService.getProcessWlistInDept(deptIds.toArray(new ID[deptIds.size()]), pm);
+		}
+	}
+
+	public static class MyQueryWorks_OrgTbl extends MyQueryWorksTbl {
+		@Override
+		public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
+			final ProcessModelBean pm = WorkflowUtils.getProcessModel(cp);
+			if (pm != null) {
+				cp.addFormParameter("modelId", pm.getId());
+			}
+			return wfpService.getProcessWlistInDomain(cp.getLogin().getDomainId(), pm);
+		}
+	}
+
+	public static class MyQueryWorks_RoleTbl extends MyQueryWorksTbl {
+		@Override
+		public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
+			final ProcessModelBean pm = WorkflowUtils.getProcessModel(cp);
+			if (pm != null) {
+				cp.addFormParameter("modelId", pm.getId());
+			}
+			return null;
+		}
 	}
 }

@@ -2,18 +2,12 @@ package net.simpleframework.workflow.web.page.query;
 
 import static net.simpleframework.common.I18n.$m;
 
-import java.util.List;
 import java.util.Map;
 
 import net.simpleframework.ado.query.IDataQuery;
-import net.simpleframework.common.ID;
-import net.simpleframework.common.coll.ArrayUtils;
 import net.simpleframework.common.coll.KVMap;
-import net.simpleframework.ctx.permission.PermissionDept;
 import net.simpleframework.mvc.PageParameter;
-import net.simpleframework.mvc.common.element.Checkbox;
 import net.simpleframework.mvc.common.element.ETextAlign;
-import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.LinkButton;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.ui.pager.EPagerBarLayout;
@@ -25,7 +19,6 @@ import net.simpleframework.workflow.engine.EProcessModelStatus;
 import net.simpleframework.workflow.engine.bean.ProcessBean;
 import net.simpleframework.workflow.engine.bean.ProcessModelBean;
 import net.simpleframework.workflow.engine.bean.WorkitemBean;
-import net.simpleframework.workflow.web.WorkflowUtils;
 import net.simpleframework.workflow.web.page.IWorkflowPageAware;
 
 /**
@@ -37,84 +30,17 @@ import net.simpleframework.workflow.web.page.IWorkflowPageAware;
 public abstract class MyQueryWorksTPages implements IWorkflowPageAware {
 
 	public static class MyQueryWorks_OrgTPage extends MyQueryWorksTPage {
-		@Override
-		protected TablePagerBean addTablePagerBean(final PageParameter pp) {
-			return (TablePagerBean) super.addTablePagerBean(pp).setHandlerClass(
-					MyQueryWorks_OrgTbl.class);
-		}
 
 		@Override
 		protected WorkitemBean getOpenWorkitem(final PageParameter pp, final ProcessBean process) {
 			return wfwService.getWorkitems(process, null).iterator().next();
 		}
-
-		public static class MyQueryWorks_OrgTbl extends MyQueryWorksTbl {
-			@Override
-			public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
-				final ProcessModelBean pm = WorkflowUtils.getProcessModel(cp);
-				if (pm != null) {
-					cp.addFormParameter("modelId", pm.getId());
-				}
-				return wfpService.getProcessWlistInDomain(cp.getLogin().getDomainId(), pm);
-			}
-		}
 	}
 
 	public static class MyQueryWorks_DeptTPage extends MyQueryWorks_OrgTPage {
-		@Override
-		protected TablePagerBean addTablePagerBean(final PageParameter pp) {
-			return (TablePagerBean) super.addTablePagerBean(pp).setHandlerClass(
-					MyQueryWorks_DeptTbl.class);
-		}
-
-		@Override
-		public ElementList getLeftElements(final PageParameter pp) {
-			final ElementList el = super.getLeftElements(pp);
-			if (pp.getLdept().hasChild()) {
-				el.add(new Checkbox("idMyQueryWorks_DeptTPage_children", $m("MyQueryWorksTPage.2"))
-						.setOnchange("$Actions['MyQueryWorksTPage_tbl']('child=' + this.checked);"));
-			}
-			return el;
-		}
-
-		public static class MyQueryWorks_DeptTbl extends MyQueryWorksTbl {
-			@Override
-			public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
-				final boolean child = cp.getBoolParameter("child");
-				cp.addFormParameter("child", child);
-				final PermissionDept dept = cp.getLogin().getDept();
-				final List<Object> deptIds = ArrayUtils.toParams(dept.getId());
-				if (child) {
-					for (final PermissionDept _dept : dept.getChildren()) {
-						deptIds.add(_dept.getId());
-					}
-				}
-				final ProcessModelBean pm = WorkflowUtils.getProcessModel(cp);
-				if (pm != null) {
-					cp.addFormParameter("modelId", pm.getId());
-				}
-				return wfpService.getProcessWlistInDept(deptIds.toArray(new ID[deptIds.size()]), pm);
-			}
-		}
 	}
 
 	public static class MyQueryWorks_RoleTPage extends MyQueryWorksTPage {
-		@Override
-		protected TablePagerBean addTablePagerBean(final PageParameter pp) {
-			return (TablePagerBean) super.addTablePagerBean(pp).setHandlerClass(
-					MyQueryWorks_RoleTbl.class);
-		}
-
-		public static class MyQueryWorks_RoleTbl extends MyQueryWorksTbl {
-			@Override
-			public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
-				final ProcessModelBean pm = WorkflowUtils.getProcessModel(cp);
-				if (pm != null) {
-					cp.addFormParameter("modelId", pm.getId());
-				}
-				return null;
-			}
-		}
 	}
 
 	public static class ProcessModelSelectPage extends OneTableTemplatePage {

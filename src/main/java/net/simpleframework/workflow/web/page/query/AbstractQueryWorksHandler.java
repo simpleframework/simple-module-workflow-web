@@ -8,6 +8,8 @@ import java.util.Map;
 import net.simpleframework.ctx.IApplicationContext;
 import net.simpleframework.ctx.hdl.AbstractScanHandler;
 import net.simpleframework.mvc.PageParameter;
+import net.simpleframework.mvc.common.element.Checkbox;
+import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
 import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
 import net.simpleframework.workflow.engine.EProcessStatus;
@@ -46,7 +48,8 @@ public abstract class AbstractQueryWorksHandler extends AbstractScanHandler impl
 	}
 
 	@Override
-	public void doTablePagerInit(final PageParameter pp, final TablePagerBean tablePager) {
+	public void doTablePagerInit(final PageParameter pp, final TablePagerBean tablePager,
+			final EQueryWorks qw) {
 		tablePager
 				.addColumn(AbstractWorksTPage.TC_TITLE())
 				.addColumn(AbstractWorksTPage.TC_PNO())
@@ -55,6 +58,18 @@ public abstract class AbstractQueryWorksHandler extends AbstractScanHandler impl
 				.addColumn(
 						AbstractWorksTPage.TC_STATUS(EProcessStatus.class).setColumnAlias("p.status"))
 				.addColumn(TablePagerColumn.OPE(105));
+	}
+
+	@Override
+	public ElementList getLeftElements(final PageParameter pp, final EQueryWorks qw) {
+		if (qw == EQueryWorks.dept) {
+			if (pp.getLdept().hasChild()) {
+				return ElementList.of(new Checkbox("idMyQueryWorks_DeptTPage_children",
+						$m("MyQueryWorksTPage.2"))
+						.setOnchange("$Actions['MyQueryWorksTPage_tbl']('child=' + this.checked);"));
+			}
+		}
+		return null;
 	}
 
 	@Override
