@@ -25,28 +25,28 @@ public class AbstractWorksTPage extends Category_ListPage implements IWorkflowPa
 				.setPageItems(30);
 	}
 
-	protected static TablePagerColumn TC_CREATEDATE() {
+	public static TablePagerColumn TC_CREATEDATE() {
 		return AbstractWorkflowMgrPage.TC_CREATEDATE().setFilterSort(false);
 	}
 
-	protected static TablePagerColumn TC_ICON() {
+	public static TablePagerColumn TC_ICON() {
 		return TablePagerColumn.ICON().setWidth(16);
 	}
 
-	protected static TablePagerColumn TC_TITLE() {
+	public static TablePagerColumn TC_TITLE() {
 		return new TablePagerColumn("title", $m("AbstractItemsTPage.6")).setSort(false);
 	}
 
-	protected static TablePagerColumn TC_PNO() {
+	public static TablePagerColumn TC_PNO() {
 		return new TablePagerColumn("pno", $m("MyRunningWorklistTPage.14"), 110).setSort(false);
 	}
 
-	protected static TablePagerColumn TC_USER(final String columnName, final String columnText) {
+	public static TablePagerColumn TC_USER(final String columnName, final String columnText) {
 		return new TablePagerColumn(columnName, columnText, 55).setTextAlign(ETextAlign.center)
 				.setFilterSort(false).setNowrap(false);
 	}
 
-	protected static <T extends Enum<T>> TablePagerColumn TC_STATUS(final Class<T> e) {
+	public static <T extends Enum<T>> TablePagerColumn TC_STATUS(final Class<T> e) {
 		final TablePagerColumn col = new TablePagerColumn("status", $m("AbstractItemsTPage.9"), 42)
 				.setSort(false);
 		if (e != null) {

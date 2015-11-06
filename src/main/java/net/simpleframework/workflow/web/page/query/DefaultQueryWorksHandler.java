@@ -1,7 +1,5 @@
 package net.simpleframework.workflow.web.page.query;
 
-import net.simpleframework.workflow.engine.bean.ProcessModelBean;
-
 /**
  * Licensed under the Apache License, Version 2.0
  * 
@@ -10,8 +8,10 @@ import net.simpleframework.workflow.engine.bean.ProcessModelBean;
  */
 public class DefaultQueryWorksHandler extends AbstractQueryWorksHandler {
 
+	static IQueryWorksHandler instance = new DefaultQueryWorksHandler();
+
 	@Override
-	public ProcessModelBean getProcessModel() {
+	public String getModelName() {
 		return null;
 	}
 }

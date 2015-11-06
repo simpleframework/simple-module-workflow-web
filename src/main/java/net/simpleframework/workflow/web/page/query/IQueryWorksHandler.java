@@ -1,7 +1,8 @@
 package net.simpleframework.workflow.web.page.query;
 
+import net.simpleframework.mvc.PageParameter;
+import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
 import net.simpleframework.workflow.engine.IWorkflowContextAware;
-import net.simpleframework.workflow.engine.bean.ProcessModelBean;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -16,5 +17,7 @@ public interface IQueryWorksHandler extends IWorkflowContextAware {
 	 * 
 	 * @return
 	 */
-	ProcessModelBean getProcessModel();
+	String getModelName();
+
+	void doTablePagerInit(PageParameter pp, TablePagerBean tablePager);
 }

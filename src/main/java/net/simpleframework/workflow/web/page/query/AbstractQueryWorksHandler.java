@@ -7,7 +7,12 @@ import java.util.Map;
 
 import net.simpleframework.ctx.IApplicationContext;
 import net.simpleframework.ctx.hdl.AbstractScanHandler;
+import net.simpleframework.mvc.PageParameter;
+import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
+import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
+import net.simpleframework.workflow.engine.EProcessStatus;
 import net.simpleframework.workflow.engine.bean.ProcessModelBean;
+import net.simpleframework.workflow.web.page.AbstractWorksTPage;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -22,21 +27,34 @@ public abstract class AbstractQueryWorksHandler extends AbstractScanHandler impl
 
 	@Override
 	public void onScan(final IApplicationContext application) throws Exception {
-		final ProcessModelBean pm = getProcessModel();
+		final String modelname = getModelName();
+		final ProcessModelBean pm = wfpmService.getProcessModelByName(modelname);
 		if (pm == null) {
 			oprintln(new StringBuilder("[IQueryWorksHandler] ")
 					.append($m("AbstractQueryWorksHandler.1")).append(" - ")
 					.append(getClass().getName()));
 			return;
 		}
-		String modelname;
-		if (regists.containsKey(modelname = pm.getModelName())) {
+
+		if (regists.containsKey(modelname)) {
 			oprintln(new StringBuilder("[IQueryWorksHandler, name: ").append(modelname).append("] ")
 					.append($m("AbstractQueryWorksHandler.2")).append(" - ")
 					.append(getClass().getName()));
 			return;
 		}
-		regists.put(pm.getModelName(), this);
+		regists.put(modelname, this);
+	}
+
+	@Override
+	public void doTablePagerInit(final PageParameter pp, final TablePagerBean tablePager) {
+		tablePager
+				.addColumn(AbstractWorksTPage.TC_TITLE())
+				.addColumn(AbstractWorksTPage.TC_PNO())
+				.addColumn(AbstractWorksTPage.TC_USER("userText", $m("ProcessMgrPage.0")))
+				.addColumn(AbstractWorksTPage.TC_CREATEDATE().setWidth(100).setFormat("yy-MM-dd HH:mm"))
+				.addColumn(
+						AbstractWorksTPage.TC_STATUS(EProcessStatus.class).setColumnAlias("p.status"))
+				.addColumn(TablePagerColumn.OPE(105));
 	}
 
 	@Override
