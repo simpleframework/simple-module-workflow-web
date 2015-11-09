@@ -12,6 +12,7 @@ import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.common.element.TabButtons;
 import net.simpleframework.workflow.engine.bean.ActivityBean;
+import net.simpleframework.workflow.engine.bean.ProcessBean;
 import net.simpleframework.workflow.engine.bean.WorkitemBean;
 import net.simpleframework.workflow.web.IWorkflowWebForm;
 import net.simpleframework.workflow.web.WorkflowUtils;
@@ -38,6 +39,12 @@ public class WorkflowFormPage extends AbstractWorkflowFormPage {
 		}
 		sb.append("</div>");
 		return sb.toString();
+	}
+
+	@Override
+	public String getTitle(final PageParameter pp) {
+		final ProcessBean process = WorkflowUtils.getProcessBean(pp);
+		return process != null ? WorkflowUtils.getProcessTitle(process) : super.getTitle(pp);
 	}
 
 	@Override
