@@ -3,9 +3,9 @@ package net.simpleframework.workflow.web.participant;
 import static net.simpleframework.common.I18n.$m;
 import static net.simpleframework.workflow.engine.impl.WorkflowContext.ROLE_WORKFLOW_MANAGER;
 import net.simpleframework.ctx.IModuleContext;
-import net.simpleframework.organization.ERoleType;
 import net.simpleframework.organization.OrganizationRef;
-import net.simpleframework.organization.RolenameW;
+import net.simpleframework.organization.Role.ERoleType;
+import net.simpleframework.organization.role.RolenameW;
 
 /**
  * Licensed under the Apache License, Version 2.0
