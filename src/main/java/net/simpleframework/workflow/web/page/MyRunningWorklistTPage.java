@@ -297,6 +297,7 @@ public class MyRunningWorklistTPage extends AbstractItemsTPage {
 		return new JavascriptForward("$Actions['MyWorklistTPage_tbl']();");
 	}
 
+	@Transaction(context = IWorkflowContext.class)
 	public IForward doTopMark(final ComponentParameter cp) {
 		for (final Object id : StringUtils.split(cp.getParameter("workitemId"))) {
 			final WorkitemBean workitem = wfwService.getBean(id);
