@@ -164,16 +164,6 @@ public class MyWorklogsTPage extends AbstractItemsTPage implements ILogContextAw
 			sb.append(Convert.toDateString(log.getCreateDate(), "HH:mm"));
 			sb.append(" </div>");
 			sb.append(" <div class='cc left'>");
-			// String desc = log.getDescription();
-			// if (StringUtils.hasText(desc)) {
-			// desc = StringUtils.replace(desc, " ", HtmlConst.NBSP);
-			// desc = HtmlUtils.convertHtmlLines(desc);
-			// if (log instanceof EntityDeleteLog) {
-			// sb.append(SpanElement.colorf00(desc));
-			// } else {
-			// sb.append(desc);
-			// }
-			// } else {
 			String logHTML = null;
 			if (log instanceof EntityInsertLog) {
 				logHTML = toInsertLogHTML(pp, (EntityInsertLog) log);
