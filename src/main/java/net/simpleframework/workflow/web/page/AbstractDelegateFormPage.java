@@ -136,6 +136,16 @@ public abstract class AbstractDelegateFormPage extends FormTableRowTemplatePage 
 		}
 
 		@Override
+		public ElementList getLeftElements(final PageParameter pp) {
+			final ElementList el = ElementList.of();
+			final DelegationBean delegation = _getDelegation(pp);
+			if (delegation.isTimeoutMark()) {
+				el.append(SpanElement.colora00($m("AbstractDelegateFormPage.0")));
+			}
+			return el;
+		}
+
+		@Override
 		protected TableRows getTableRows(final PageParameter pp) {
 			final DelegationBean delegation = _getDelegation(pp);
 

@@ -7,6 +7,7 @@ import java.util.Map;
 import net.simpleframework.ado.query.IDataQuery;
 import net.simpleframework.common.coll.KVMap;
 import net.simpleframework.mvc.PageParameter;
+import net.simpleframework.mvc.common.element.AbstractElement;
 import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.LinkButton;
 import net.simpleframework.mvc.common.element.Option;
@@ -84,6 +85,10 @@ public class UserDelegateListTPage extends MyDelegateListTPage {
 		protected Map<String, Object> getRowData(final ComponentParameter cp, final Object dataObject) {
 			final DelegationBean delegation = (DelegationBean) dataObject;
 			final KVMap row = new KVMap();
+			final AbstractElement<?> img = createImageMark(cp, delegation);
+			if (img != null) {
+				row.add(TablePagerColumn.ICON, img);
+			}
 			row.add("description", toTitle(delegation, delegation.getDescription()));
 			row.add("userText", delegation.getUserText());
 			row.add("createDate", delegation.getCreateDate());

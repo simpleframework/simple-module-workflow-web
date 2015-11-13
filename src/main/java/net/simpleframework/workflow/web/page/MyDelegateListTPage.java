@@ -11,6 +11,7 @@ import net.simpleframework.ctx.trans.Transaction;
 import net.simpleframework.mvc.IForward;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageParameter;
+import net.simpleframework.mvc.common.element.AbstractElement;
 import net.simpleframework.mvc.common.element.ButtonElement;
 import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.LinkElement;
@@ -147,16 +148,31 @@ public class MyDelegateListTPage extends AbstractItemsTPage {
 			return sb.toString();
 		}
 
+		protected AbstractElement<?> createImageMark(final ComponentParameter cp,
+				final DelegationBean delegation) {
+			AbstractElement<?> img = null;
+			if (delegation.isTimeoutMark()) {
+				img = AbstractItemsTPage._createImageMark(cp, "status_timeout.png").setTitle(
+						$m("MyDelegateListTPage.6"));
+			}
+			return img;
+		}
+
 		@Override
 		protected Map<String, Object> getRowData(final ComponentParameter cp, final Object dataObject) {
 			final DelegationBean delegation = (DelegationBean) dataObject;
 			final WorkitemBean workitem = getWorkitem(delegation);
 			final ActivityBean activity = wfwService.getActivity(workitem);
+			final KVMap row = new KVMap();
+			final AbstractElement<?> img = createImageMark(cp, delegation);
+			if (img != null) {
+				row.add(TablePagerColumn.ICON, img);
+			}
 			final StringBuilder title = new StringBuilder();
 			appendTaskname(title, cp, activity);
 			title.append(toTitle(delegation,
 					WorkflowUtils.getProcessTitle(wfaService.getProcessBean(activity))));
-			final KVMap row = new KVMap().add("title", title.toString());
+			row.add("title", title.toString());
 			row.add("userText", delegation.getUserText());
 			row.add("createDate", delegation.getCreateDate());
 			final EDelegationStatus status = delegation.getStatus();

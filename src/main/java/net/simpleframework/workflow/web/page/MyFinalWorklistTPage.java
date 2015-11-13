@@ -54,7 +54,6 @@ public class MyFinalWorklistTPage extends MyRunningWorklistTPage {
 
 	@Override
 	protected void addComponents(final PageParameter pp) {
-
 		// 取回
 		addAjaxRequest(pp, "MyWorklistTPage_retake").setHandlerMethod("doRetake").setConfirmMessage(
 				$m("MyFinalWorklistTPage.2"));
