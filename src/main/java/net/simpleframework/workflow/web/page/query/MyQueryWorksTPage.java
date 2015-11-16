@@ -156,7 +156,7 @@ public class MyQueryWorksTPage extends AbstractWorksTPage {
 	public String toCategoryHTML(final PageParameter pp) {
 		final StringBuilder sb = new StringBuilder();
 		final List<ProcessModelBean> models = DataQueryUtils.toList(wfpmService.getModelListByDomain(
-				pp.getLdept().getDomainId(), EProcessModelStatus.deploy));
+				pp.getLDomainId(), EProcessModelStatus.deploy));
 		wfpmService.sort(models);
 
 		final Map<String, List<ProcessModelBean>> gmap = new LinkedHashMap<String, List<ProcessModelBean>>();

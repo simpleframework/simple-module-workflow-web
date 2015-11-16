@@ -105,7 +105,7 @@ public class MyQueryWorksTbl extends AbstractDbTablePagerHandler implements IWor
 			if (pm != null) {
 				cp.addFormParameter("modelId", pm.getId());
 			}
-			return wfpService.getProcessWlistInDomain(cp.getLogin().getDomainId(), pm);
+			return wfpService.getProcessWlistInDomain(cp.getLDomainId(), pm);
 		}
 	}
 
