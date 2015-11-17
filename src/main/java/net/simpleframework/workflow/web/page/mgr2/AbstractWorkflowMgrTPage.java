@@ -4,6 +4,7 @@ import net.simpleframework.ctx.IModuleRef;
 import net.simpleframework.module.common.web.page.AbstractMgrTPage;
 import net.simpleframework.mvc.AbstractMVCPage;
 import net.simpleframework.mvc.PageParameter;
+import net.simpleframework.mvc.common.element.LinkButton;
 import net.simpleframework.mvc.component.base.ajaxrequest.AjaxRequestBean;
 import net.simpleframework.mvc.component.ui.window.WindowBean;
 import net.simpleframework.workflow.engine.IWorkflowContextAware;
@@ -27,6 +28,11 @@ public class AbstractWorkflowMgrTPage extends AbstractMgrTPage implements IWorkf
 		addLogWindowBean(pp);
 		// status
 		addStatusWindowBean(pp);
+	}
+
+	@Override
+	protected LinkButton createOrgCancelBtn(final PageParameter pp) {
+		return null;
 	}
 
 	protected WindowBean addLogWindowBean(final PageParameter pp) {
