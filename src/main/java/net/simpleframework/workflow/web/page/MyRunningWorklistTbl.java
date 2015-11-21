@@ -198,19 +198,19 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 		return row;
 	}
 
-	protected void appendTaskname(final StringBuilder sb, final ComponentParameter cp,
+	protected void appendTaskname(final StringBuilder sb, final PageParameter pp,
 			final ActivityBean activity) {
-		if (!"taskname".equals(cp.getParameter(G))) {
+		if (!"taskname".equals(pp.getParameter(G))) {
 			sb.append("[").append(SpanElement.color333(activity.getTasknodeText())).append("] ");
 		}
 	}
 
-	protected String toTitleHTML(final ComponentParameter cp, final WorkitemBean workitem,
+	public String toTitleHTML(final PageParameter pp, final WorkitemBean workitem,
 			final boolean receiving) {
 		final StringBuilder sb = new StringBuilder();
-		final ActivityBean activity = WorkflowUtils.getActivityBean(cp, workitem);
+		final ActivityBean activity = WorkflowUtils.getActivityBean(pp, workitem);
 
-		appendTaskname(sb, cp, activity);
+		appendTaskname(sb, pp, activity);
 
 		final Date timeoutDate = activity.getTimeoutDate();
 		if (timeoutDate != null && !wfaService.isFinalStatus(activity)) {
@@ -235,13 +235,13 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 		}
 
 		AbstractElement<?> tEle;
-		final ProcessBean process = WorkflowUtils.getProcessBean(cp, workitem);
+		final ProcessBean process = WorkflowUtils.getProcessBean(pp, workitem);
 		if (receiving) {
 			tEle = new SpanElement(WorkflowUtils.getProcessTitle(process));
 		} else {
 			tEle = new LinkElement(WorkflowUtils.getProcessTitle(process)).setStrong(
 					!workitem.isReadMark()).setOnclick(
-					JS.loc(uFactory.getUrl(cp, WorkflowFormPage.class, workitem)));
+					JS.loc(uFactory.getUrl(pp, WorkflowFormPage.class, workitem)));
 		}
 		sb.append(tEle.setColor_gray(!StringUtils.hasText(process.getTitle())));
 		return sb.toString();
