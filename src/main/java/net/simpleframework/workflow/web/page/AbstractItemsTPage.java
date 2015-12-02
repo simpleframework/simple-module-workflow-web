@@ -136,8 +136,9 @@ public abstract class AbstractItemsTPage extends AbstractWorksTPage {
 	}
 
 	protected static ImageElement _createImageMark(final ComponentParameter cp, final String img) {
-		return new ImageElement(cp.getCssResourceHomePath(AbstractItemsTPage.class) + "/images/"
-				+ img).setVerticalAlign(EVerticalAlign.middle);
+		return ImageElement.img16(
+				cp.getCssResourceHomePath(AbstractItemsTPage.class) + "/images/" + img)
+				.setVerticalAlign(EVerticalAlign.middle);
 	}
 
 	protected static ImageElement MARK_TOP(final ComponentParameter cp) {
