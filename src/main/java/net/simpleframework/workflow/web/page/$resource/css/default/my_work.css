@@ -14,8 +14,12 @@
   background-image: url("images/my_initiate.png");
 }
 
-.delegate_list_icon {
-  background-image: url("images/delegate_list.png");
+.my_delegate_list_icon {
+  background-image: url("images/my_delegate_list.png");
+}
+
+.my_stat_icon {
+  background-image: url("images/my_stat.png");
 }
 
 .menu_unread {
