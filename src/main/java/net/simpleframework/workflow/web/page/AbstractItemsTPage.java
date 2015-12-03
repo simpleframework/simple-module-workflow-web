@@ -69,17 +69,9 @@ public abstract class AbstractItemsTPage extends AbstractWorksTPage {
 		return item;
 	}
 
-	// public CategoryItem createCategoryItem_queryworks(final PageParameter pp)
-	// {
-	// return createCategoryItem(pp, $m("AbstractItemsTPage.4"),
-	// MyQueryWorksTPage.class)
-	// .setIconClass("my_work_complete_icon");//
-	// .setIconClass("my_initiate_icon")
-	// }
-
 	public CategoryItem createCategoryItem_myWorkviews(final PageParameter pp) {
 		final CategoryItem item = createCategoryItem(pp, $m("AbstractItemsTPage.5"),
-				MyWorkviewsTPage.class).setIconClass("my_work_icon");
+				MyWorkviewsTPage.class).setIconClass("my_workviews_icon");
 		final int count = WorkflowUtils.getUserStat(pp).getWorkview_unread();
 		if (count > 0) {
 			item.setNum(new SupElement(count).setHighlight(true));

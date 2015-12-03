@@ -2,6 +2,10 @@
   background-image: url("images/my_work.png");
 }
 
+.my_workviews_icon {
+  background-image: url("images/my_workviews.png");
+}
+
 .my_work_complete_icon {
   background-image: url("images/my_work_complete.png");
 }
