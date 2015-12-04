@@ -140,6 +140,17 @@
   width: 240px;
 }
 
+#idWorklistProgressBar .progressbar {
+  background-image: none;
+  background-color: #4ad;
+  border-color: #28b;
+}
+
+#idWorklistProgressBar .progressbar .bg {
+  background-image: none;
+  background-color: #fff;
+}
+
 #idWorklistProgressBar .pinfo {
   margin-top: 3px;
   text-align: right;
