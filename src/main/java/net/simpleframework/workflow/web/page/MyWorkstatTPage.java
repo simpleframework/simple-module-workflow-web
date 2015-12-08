@@ -36,8 +36,12 @@ public class MyWorkstatTPage extends AbstractItemsTPage {
 	protected void onForward(final PageParameter pp) throws Exception {
 		super.onForward(pp);
 
-		final HighchartBean hc1 = (HighchartBean) addComponentBean(pp, "MyWorkstatTPage_chart",
-				HighchartBean.class)
+		addStatChart(pp);
+	}
+
+	public static void addStatChart(final PageParameter pp) {
+		final HighchartBean hc1 = (HighchartBean) pp
+				.addComponentBean("MyWorkstatTPage_chart", HighchartBean.class)
 				.setChart(
 						new HcChart().setHeight(300).setBackgroundColor("#FFF").setMarginTop(20)
 								.setMarginRight(30)).setTitle("")
