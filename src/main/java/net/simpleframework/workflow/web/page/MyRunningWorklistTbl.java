@@ -137,34 +137,39 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 		return super.getGroupWrapper(cp, groupVal);
 	}
 
-	protected ImageElement MARK_RETAKE(final ComponentParameter cp) {
-		return AbstractItemsTPage._createImageMark(cp, "status_retake.png").setTitle(
+	protected static ImageElement MARK_RETAKE(final PageParameter pp) {
+		return AbstractItemsTPage._createImageMark(pp, "status_retake.png").setTitle(
 				$m("MyRunningWorklistTbl.13"));
 	}
 
-	protected ImageElement MARK_DELEGATE(final ComponentParameter cp, final WorkitemBean workitem) {
-		return PhotoImage.icon12(cp.getPhotoUrl(workitem.getUserId())).setTitle(
-				$m("MyRunningWorklistTbl.0", cp.getUser(workitem.getUserId())));
+	protected static ImageElement MARK_DELEGATE(final PageParameter pp, final WorkitemBean workitem) {
+		return PhotoImage.icon12(pp.getPhotoUrl(workitem.getUserId())).setTitle(
+				$m("MyRunningWorklistTbl.0", pp.getUser(workitem.getUserId())));
 	}
 
-	protected AbstractElement<?> createImageMark(final ComponentParameter cp,
+	public static AbstractElement<?> createWorkitemImageMark(final PageParameter pp,
 			final WorkitemBean workitem) {
 		AbstractElement<?> img = null;
 		final EWorkitemStatus status = workitem.getStatus();
 		ActivityBean fallback;
 		if ((fallback = wfaService.getBean(workitem.getFallbackId())) != null) {
-			img = AbstractItemsTPage._createImageMark(cp, "status_fallback.png").setTitle(
+			img = AbstractItemsTPage._createImageMark(pp, "status_fallback.png").setTitle(
 					$m("MyRunningWorklistTbl.23", wfaService.getTaskNode(fallback)));
 		} else if (workitem.getRetakeRef() != null) {
-			img = MARK_RETAKE(cp);
+			img = MARK_RETAKE(pp);
 		} else if (status == EWorkitemStatus.delegate) {
-			img = MARK_DELEGATE(cp, workitem);
+			img = MARK_DELEGATE(pp, workitem);
 		} else if (workitem.isTopMark()) {
-			img = AbstractItemsTPage.MARK_TOP(cp);
+			img = AbstractItemsTPage.MARK_TOP(pp);
 		} else if (!workitem.isReadMark()) {
-			img = AbstractItemsTPage.MARK_UNREAD(cp);
+			img = AbstractItemsTPage.MARK_UNREAD(pp);
 		}
 		return img;
+	}
+
+	protected AbstractElement<?> createImageMark(final ComponentParameter cp,
+			final WorkitemBean workitem) {
+		return createWorkitemImageMark(cp, workitem);
 	}
 
 	protected WorkitemBean getWorkitem(final Object dataObject) {

@@ -14,7 +14,6 @@ import net.simpleframework.mvc.common.element.ImageElement;
 import net.simpleframework.mvc.common.element.InputElement;
 import net.simpleframework.mvc.common.element.LinkElement;
 import net.simpleframework.mvc.common.element.SupElement;
-import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.template.struct.CategoryItem;
 import net.simpleframework.mvc.template.struct.CategoryItems;
 import net.simpleframework.workflow.web.WorkflowUtils;
@@ -127,17 +126,17 @@ public abstract class AbstractItemsTPage extends AbstractWorksTPage {
 		return js.toString();
 	}
 
-	protected static ImageElement _createImageMark(final ComponentParameter cp, final String img) {
+	protected static ImageElement _createImageMark(final PageParameter pp, final String img) {
 		return ImageElement.img16(
-				cp.getCssResourceHomePath(AbstractItemsTPage.class) + "/images/" + img)
+				pp.getCssResourceHomePath(AbstractItemsTPage.class) + "/images/" + img)
 				.setVerticalAlign(EVerticalAlign.middle);
 	}
 
-	protected static ImageElement MARK_TOP(final ComponentParameter cp) {
-		return _createImageMark(cp, "mark_top.png").setTitle($m("MyRunningWorklistTbl.1"));
+	protected static ImageElement MARK_TOP(final PageParameter pp) {
+		return _createImageMark(pp, "mark_top.png").setTitle($m("MyRunningWorklistTbl.1"));
 	}
 
-	protected static ImageElement MARK_UNREAD(final ComponentParameter cp) {
-		return _createImageMark(cp, "mark_unread.png").setTitle($m("MyRunningWorklistTbl.2"));
+	protected static ImageElement MARK_UNREAD(final PageParameter pp) {
+		return _createImageMark(pp, "mark_unread.png").setTitle($m("MyRunningWorklistTbl.2"));
 	}
 }
