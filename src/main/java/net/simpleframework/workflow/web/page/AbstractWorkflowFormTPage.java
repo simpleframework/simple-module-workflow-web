@@ -70,6 +70,7 @@ public abstract class AbstractWorkflowFormTPage extends AbstractFormTableRowTPag
 		// 验证
 		addFormValidationBean(pp);
 
+		// 更新工作项
 		final WorkitemBean workitem = getWorkitemBean(pp);
 		if (workitem != null) {
 			final ID processId = workitem.getProcessId();
