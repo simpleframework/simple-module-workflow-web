@@ -1,9 +1,19 @@
-
-.Tabs_BlankPage .Tabs_tb ul.simple_tabs a.active {
-  background-color: #fff;
-  border-bottom-color: #fff;
-}
-
 .MyCommentsMgrTPage {
   padding: 8px;
+}
+
+.MyCommentsMgrTPage .Tabs_BlankPage .Tabs_tb {
+  border: 0;
+  background-color: #f9f9f9;
+}
+
+.MyCommentsMgrTPage .Tabs_BlankPage .Tabs_cc {
+  border-left: 0;
+  border-right: 0;
+  border-bottom: 0;
+}
+
+.MyCommentsMgrTPage .Tabs_BlankPage .Tabs_tb ul.simple_tabs a.active {
+  background-color: #fff;
+  border-bottom-color: #fff;
 }
