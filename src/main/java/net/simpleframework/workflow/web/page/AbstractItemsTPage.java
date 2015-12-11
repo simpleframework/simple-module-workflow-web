@@ -38,9 +38,13 @@ public abstract class AbstractItemsTPage extends AbstractWorksTPage {
 				mClass.isAssignableFrom(getOriginalClass()));
 	}
 
+	private String getIcon(final PageParameter pp, final String icon) {
+		return pp.getCssResourceHomePath(AbstractItemsTPage.class) + "/images/" + icon;
+	}
+
 	public CategoryItem createCategoryItem_myWorkviews(final PageParameter pp) {
 		final CategoryItem item = createCategoryItem(pp, $m("AbstractItemsTPage.5"),
-				MyWorkviewsTPage.class).setIconClass("my_workviews_icon");
+				MyWorkviewsTPage.class).setIconClass(getIcon(pp, "my_workviews.png"));
 		final int count = WorkflowUtils.getUserStat(pp).getWorkview_unread();
 		if (count > 0) {
 			item.setNum(new SupElement(count).setHighlight(true));
@@ -50,7 +54,7 @@ public abstract class AbstractItemsTPage extends AbstractWorksTPage {
 
 	public CategoryItem createCategoryItem_mywork(final PageParameter pp) {
 		final CategoryItem item = createCategoryItem(pp, $m("AbstractItemsTPage.0"),
-				MyRunningWorklistTPage.class).setIconClass("my_work_icon");// .setIconClass("my_work_icon")
+				MyRunningWorklistTPage.class).setIconClass(getIcon(pp, "my_work.png"));
 		final int count = WorkflowUtils.getUserStat(pp).getWorkitem_unread();
 		if (count > 0) {
 			item.setNum(new SupElement(count).setHighlight(true));
@@ -60,18 +64,18 @@ public abstract class AbstractItemsTPage extends AbstractWorksTPage {
 
 	public CategoryItem createCategoryItem_mywork_complete(final PageParameter pp) {
 		return createCategoryItem(pp, $m("AbstractItemsTPage.1"), MyFinalWorklistTPage.class)
-				.setIconClass("my_work_complete_icon");
+				.setIconClass(getIcon(pp, "my_work_complete.png"));
 	}
 
 	public CategoryItem createCategoryItem_delegate(final PageParameter pp) {
 		final CategoryItem delegate = createCategoryItem(pp, $m("AbstractItemsTPage.3"),
-				MyDelegateListTPage.class).setIconClass("my_delegate_list_icon");
+				MyDelegateListTPage.class).setIconClass(getIcon(pp, "my_delegate_list.png"));
 		return delegate;
 	}
 
 	public CategoryItem createCategoryItem_myinitiate(final PageParameter pp) {
 		final CategoryItem item = createCategoryItem(pp, $m("AbstractItemsTPage.2"),
-				MyInitiateItemsGroupTPage.class).setIconClass("my_initiate_icon");
+				MyInitiateItemsGroupTPage.class).setIconClass(getIcon(pp, "my_initiate.png"));
 		if (MyInitiateItemsTPage.class.isAssignableFrom(getOriginalClass())) {
 			item.setSelected(true);
 		}
@@ -80,7 +84,7 @@ public abstract class AbstractItemsTPage extends AbstractWorksTPage {
 
 	public CategoryItem createCategoryItem_myWorkstat(final PageParameter pp) {
 		final CategoryItem item = createCategoryItem(pp, $m("AbstractItemsTPage.12"),
-				MyWorkstatTPage.class).setIconClass("my_stat_icon");
+				MyWorkstatTPage.class).setIconClass(getIcon(pp, "my_stat.png"));
 		if (MyWorklogsTPage.class.isAssignableFrom(getOriginalClass())) {
 			item.setSelected(true);
 		}

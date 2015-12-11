@@ -1,27 +1,3 @@
-.my_work_icon {
-  background-image: url("images/my_work.png");
-}
-
-.my_workviews_icon {
-  background-image: url("images/my_workviews.png");
-}
-
-.my_work_complete_icon {
-  background-image: url("images/my_work_complete.png");
-}
-
-.my_initiate_icon {
-  background-image: url("images/my_initiate.png");
-}
-
-.my_delegate_list_icon {
-  background-image: url("images/my_delegate_list.png");
-}
-
-.my_stat_icon {
-  background-image: url("images/my_stat.png");
-}
-
 .menu_unread {
   background-image: url("images/mark_unread.png");
 }
