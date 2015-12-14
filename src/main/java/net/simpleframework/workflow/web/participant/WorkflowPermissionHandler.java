@@ -12,6 +12,7 @@ import net.simpleframework.common.StringUtils;
 import net.simpleframework.organization.Department;
 import net.simpleframework.organization.Role;
 import net.simpleframework.organization.User;
+import net.simpleframework.organization.role.RolenameW;
 import net.simpleframework.organization.web.OrganizationPermissionHandler;
 import net.simpleframework.workflow.engine.EDelegationSource;
 import net.simpleframework.workflow.engine.bean.AbstractWorkflowBean;
@@ -53,13 +54,22 @@ public class WorkflowPermissionHandler extends OrganizationPermissionHandler imp
 
 	public Collection<Participant> getRelativeParticipantsOfLevel(final Object user,
 			final Object role, final ID deptId, final Map<String, Object> variables,
-			final String relativeRole, final Level level) {
+			String relativeRole, final Level level) {
 		final ArrayList<Participant> participants = new ArrayList<Participant>();
 		Role oRole = getRoleObject(role, variables);
 		if (oRole != null) {
 			if (StringUtils.hasText(relativeRole)) {
 				// 获取相对角色，部门
-				oRole = _roleService.getRoleByName(_roleService.getRoleChart(oRole), relativeRole);
+				final String[] arr = RolenameW.split(relativeRole);
+				if (arr.length > 1) {
+					if (arr.length == 2) {
+						relativeRole = _deptService.getBean(oRole.getOrgId()).getName() + ":"
+								+ relativeRole;
+					}
+					oRole = _roleService.getRoleByName(relativeRole);
+				} else if (arr.length == 1) {
+					oRole = _roleService.getRoleByName(_roleService.getRoleChart(oRole), relativeRole);
+				}
 				if (oRole != null) {
 					final ID roleId = oRole.getId();
 					if (level.equals(Level.internal)) {// 本部门
