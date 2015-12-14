@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
 
+import net.simpleframework.ado.bean.IDomainBeanAware;
 import net.simpleframework.ado.query.IDataQuery;
 import net.simpleframework.common.BeanUtils;
 import net.simpleframework.common.ID;
@@ -15,7 +16,6 @@ import net.simpleframework.organization.User;
 import net.simpleframework.organization.role.RolenameW;
 import net.simpleframework.organization.web.OrganizationPermissionHandler;
 import net.simpleframework.workflow.engine.EDelegationSource;
-import net.simpleframework.workflow.engine.bean.AbstractWorkflowBean;
 import net.simpleframework.workflow.engine.bean.ProcessModelBean;
 import net.simpleframework.workflow.engine.participant.IWorkflowPermissionHandler;
 import net.simpleframework.workflow.engine.participant.Participant;
@@ -32,16 +32,23 @@ public class WorkflowPermissionHandler extends OrganizationPermissionHandler imp
 		IWorkflowPermissionHandler {
 
 	@Override
-	public Collection<Participant> getRelativeParticipants(final AbstractWorkflowBean workflowBean,
+	public Collection<Participant> getRelativeParticipants(final IDomainBeanAware domain,
 			final UserNode.RelativeRole rRole, final Map<String, Object> variables) {
 		final ArrayList<Participant> participants = new ArrayList<Participant>();
-		final Role r = getRoleObject(BeanUtils.getProperty(workflowBean, "roleId"), variables);
+		final Role r = getRoleObject(BeanUtils.getProperty(domain, "roleId"), variables);
 		if (r != null) {
 			// 获取相对角色，部门
-			final Role rr = _roleService.getRoleByName(_roleService.getRoleChart(r),
-					rRole.getRelative());
+			Role rr = null;
+			final String relative = rRole.getRelative();
+			final String[] arr = StringUtils.split(relative, ":");
+			if (arr.length == 2) {
+				rr = _roleService.getRoleByName(_rolecService.getRoleChartByName(
+						_deptService.getBean(domain.getDomainId()), arr[0]), arr[1]);
+			} else {
+				rr = _roleService.getRoleByName(_roleService.getRoleChart(r), relative);
+			}
 			if (rr != null) {
-				final ID deptId = rRole.isIndept() ? (ID) BeanUtils.getProperty(workflowBean, "deptId")
+				final ID deptId = rRole.isIndept() ? (ID) BeanUtils.getProperty(domain, "deptId")
 						: null;
 				final Iterator<ID> users = users(rr.getId(), deptId, variables);
 				while (users.hasNext()) {
