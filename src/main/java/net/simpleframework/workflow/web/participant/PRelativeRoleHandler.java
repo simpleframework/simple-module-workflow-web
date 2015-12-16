@@ -129,19 +129,33 @@ public class PRelativeRoleHandler extends AbstractParticipantHandler implements
 		}
 
 		final WorkflowPermissionHandler wph = (WorkflowPermissionHandler) permission;
-		Collection<Participant> _participants = wph.getRelativeParticipantsOfLevel(userId, roleId,
-				deptId, variables, role, level);
-		if ((_participants == null || _participants.size() == 0) && level.equals(Level.internal)
-				&& null != autoparent && autoparent.equals("true")) {
-			// 本部门,自动查找上一部门角色
-			final Department dept = _deptService.getBean(deptId);
-			_participants = wph.getRelativeParticipantsOfLevel(userId, roleId, dept.getParentId(),
-					variables, role, level);
+		if (StringUtils.hasText(role)) {
+			String[] _r = role.split(",");// 多个角色采用豆号分隔
+			for (String r : _r) {
+				Collection<Participant> _participants = wph.getRelativeParticipantsOfLevel(userId,
+						roleId, deptId, variables, r, level);
+
+				if ((_participants == null || _participants.size() == 0)
+						&& level.equals(Level.internal) && null != autoparent
+						&& autoparent.equals("true")) {
+					// 本部门,自动查找上一部门角色
+					final Department dept = _deptService.getBean(deptId);
+					_participants = wph.getRelativeParticipantsOfLevel(userId, roleId,
+							dept.getParentId(), variables, r, level);
+				}
+				if (_participants != null && _participants.size() > 0) {
+					participants.addAll(_participants);
+				}
+			}
+		} else {
+			Collection<Participant> _participants = wph.getRelativeParticipantsOfLevel(userId, roleId,
+					deptId, variables, null, level);
+			if (_participants != null && _participants.size() > 0) {
+				participants.addAll(_participants);
+			}
 		}
 
-		if (_participants != null && _participants.size() > 0) {
-			participants.addAll(_participants);
-
+		if (participants != null && participants.size() > 0) {
 			final String send = params.get(PARAMS_KEY_send);
 			if (StringUtils.hasText(send) && ("1".equals(send) || "2".equals(send))) {
 				// send=1时,过虑已经过送过的并还在处理中的用户
