@@ -21,13 +21,13 @@ import net.simpleframework.mvc.common.element.ButtonElement;
 import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.LinkButton;
 import net.simpleframework.mvc.common.element.SpanElement;
+import net.simpleframework.mvc.component.AbstractComponentRender;
+import net.simpleframework.mvc.component.AbstractComponentRender.IJavascriptCallback;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.ctx.permission.IPagePermissionHandler;
 import net.simpleframework.workflow.engine.IWorkflowContextAware;
 import net.simpleframework.workflow.engine.bean.AbstractWorkitemBean;
 import net.simpleframework.workflow.web.WorkflowUtils;
-import net.simpleframework.workflow.web.component.WfComponentUtils;
-import net.simpleframework.workflow.web.component.WfComponentUtils.IJavascriptCallback;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -76,7 +76,7 @@ public abstract class DoWorkviewUtils implements IWorkflowContextAware {
 	}
 
 	public static void doForword(final ComponentParameter cp) throws Exception {
-		WfComponentUtils.doForword(cp, new IJavascriptCallback() {
+		AbstractComponentRender.doJavascriptForward(cp, new IJavascriptCallback() {
 			@Override
 			public void doJavascript(final JavascriptForward js) {
 				js.append(jsActions(cp, "_win"));

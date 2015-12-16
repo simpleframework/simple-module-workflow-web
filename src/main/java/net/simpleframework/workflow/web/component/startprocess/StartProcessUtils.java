@@ -19,13 +19,13 @@ import net.simpleframework.mvc.MVCUtils;
 import net.simpleframework.mvc.PageRequestResponse;
 import net.simpleframework.mvc.common.element.BlockElement;
 import net.simpleframework.mvc.common.element.LinkButton;
+import net.simpleframework.mvc.component.AbstractComponentRender;
+import net.simpleframework.mvc.component.AbstractComponentRender.IJavascriptCallback;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.workflow.engine.IWorkflowContextAware;
 import net.simpleframework.workflow.engine.InitiateItem;
 import net.simpleframework.workflow.engine.bean.ProcessBean;
 import net.simpleframework.workflow.engine.bean.ProcessModelBean;
-import net.simpleframework.workflow.web.component.WfComponentUtils;
-import net.simpleframework.workflow.web.component.WfComponentUtils.IJavascriptCallback;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -69,7 +69,7 @@ public abstract class StartProcessUtils implements IWorkflowContextAware {
 	}
 
 	public static void doForword(final ComponentParameter cp) throws Exception {
-		WfComponentUtils.doForword(cp, new IJavascriptCallback() {
+		AbstractComponentRender.doJavascriptForward(cp, new IJavascriptCallback() {
 			@Override
 			public void doJavascript(final JavascriptForward js) {
 				final InitiateItem initiateItem = getInitiateItem(cp);
