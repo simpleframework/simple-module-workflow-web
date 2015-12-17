@@ -22,23 +22,3 @@
 .WorkflowGraphMonitorPage .graph {
   border-width: 1px 0 1px 0 !important;
 }
-
-/**-------------------Tabs_BlankPage-----------------**/
-.AbstractWorkflowMgrPage .Tabs_BlankPage .Tabs_tb {
-  border: 0;
-  background-color: #f9f9f9;
-}
-
-.AbstractWorkflowMgrPage .Tabs_BlankPage .Tabs_cc {
-  border-left: 0;
-  border-right: 0;
-  border-bottom: 0;
-}
-.AbstractWorkflowMgrPage .Tabs_BlankPage .Tabs_tb .le * {
-  vertical-align: middle;
-}
-
-.AbstractWorkflowMgrPage .Tabs_BlankPage .Tabs_tb .le .org_txt {
-  color: #654;
-  font-size: 11.5pt;
-}
