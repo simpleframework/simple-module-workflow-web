@@ -67,7 +67,7 @@ public class DefaultWfCommentHandler extends ComponentHandlerEx implements IWfCo
 	}
 
 	protected AbstractWorkitemBean getWorkitemBean(final PageParameter pp) {
-		return getWorkitemBean(pp);
+		return WorkflowUtils.getWorkitemBean(pp);
 	}
 
 	@Override
