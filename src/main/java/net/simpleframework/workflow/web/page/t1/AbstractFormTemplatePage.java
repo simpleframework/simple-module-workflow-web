@@ -25,18 +25,12 @@ public class AbstractFormTemplatePage extends T1FormTemplatePage implements IWor
 
 	public LinkButton getBackBtn(final PageParameter pp) {
 		final LinkButton backBtn = LinkButton.backBtn();
-		String referer = pp.getRequestHeader("Referer");
+		final String referer = pp.getRequestHeader("Referer");
 		if (StringUtils.hasText(referer)
-				&& (referer.contains("/workflow/my/") || referer.contains("/workflow/query/"))) {
+				&& (referer.contains("/workflow/") && !referer.contains("/workflow/form/"))) {
 			backBtn.setHref(referer);
-			pp.setSessionAttr("_Referer", referer);
 		} else {
-			referer = (String) pp.getSessionAttr("_Referer");
-			if (referer != null) {
-				backBtn.setHref(referer);
-			} else {
-				backBtn.setHref(uFactory.getUrl(pp, MyRunningWorklistTPage.class));
-			}
+			backBtn.setHref(uFactory.getUrl(pp, MyRunningWorklistTPage.class));
 		}
 		return backBtn;
 	}

@@ -14,7 +14,7 @@ import net.simpleframework.workflow.web.WorkflowUtils;
  * @author 陈侃(cknet@126.com, 13910090885) https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
-@PageMapping(url = "/workflow/monitor/graph")
+@PageMapping(url = "/workflow/form/monitor/graph")
 public class WorkflowGraphMonitorPage extends WorkflowMonitorPage {
 
 	@Override
