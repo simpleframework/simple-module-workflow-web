@@ -3,6 +3,7 @@ package net.simpleframework.workflow.web.page.t1;
 import net.simpleframework.common.StringUtils;
 import net.simpleframework.ctx.permission.PermissionConst;
 import net.simpleframework.mvc.PageParameter;
+import net.simpleframework.mvc.SessionCache;
 import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.LinkButton;
 import net.simpleframework.mvc.template.t1.T1FormTemplatePage;
@@ -25,12 +26,18 @@ public class AbstractFormTemplatePage extends T1FormTemplatePage implements IWor
 
 	public LinkButton getBackBtn(final PageParameter pp) {
 		final LinkButton backBtn = LinkButton.backBtn();
-		final String referer = pp.getRequestHeader("Referer");
+		String referer = pp.getRequestHeader("Referer");
 		if (StringUtils.hasText(referer)
-				&& (referer.contains("/workflow/") && !referer.contains("/workflow/form/"))) {
+				&& (referer.contains("/workflow/") && !referer.contains("/workflow/form"))) {
 			backBtn.setHref(referer);
+			SessionCache.lput("_Referer", referer);
 		} else {
-			backBtn.setHref(uFactory.getUrl(pp, MyRunningWorklistTPage.class));
+			referer = (String) SessionCache.lget("_Referer");
+			if (referer != null) {
+				backBtn.setHref(referer);
+			} else {
+				backBtn.setHref(uFactory.getUrl(pp, MyRunningWorklistTPage.class));
+			}
 		}
 		return backBtn;
 	}
