@@ -27,6 +27,7 @@ import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.component.ComponentHandlerEx;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.workflow.engine.IActivityService;
+import net.simpleframework.workflow.engine.bean.AbstractWorkitemBean;
 import net.simpleframework.workflow.engine.bean.ProcessBean;
 import net.simpleframework.workflow.engine.bean.WorkitemBean;
 import net.simpleframework.workflow.engine.comment.IWfCommentLogService;
@@ -65,9 +66,14 @@ public class DefaultWfCommentHandler extends ComponentHandlerEx implements IWfCo
 		return workflowContext.getCommentService().queryComments(processBean.getId());
 	}
 
+	protected AbstractWorkitemBean getWorkitemBean(final PageParameter pp) {
+		return getWorkitemBean(pp);
+	}
+
 	@Override
 	public void onSave(final ComponentParameter cp) {
-		final WorkitemBean workitem = WorkflowUtils.getWorkitemBean(cp);
+
+		final AbstractWorkitemBean workitem = getWorkitemBean(cp);
 		final String ccomment = cp.getParameter("ta_wfcomment");
 		if (!StringUtils.hasText(ccomment)) {
 			return;
@@ -78,12 +84,16 @@ public class DefaultWfCommentHandler extends ComponentHandlerEx implements IWfCo
 		if (comment == null) {
 			comment = cService.createBean();
 			comment.setCreateDate(new Date());
-			comment.setUserId(workitem.getUserId2());
 			comment.setContentId(workitem.getProcessId());
 			comment.setWorkitemId(workitem.getId());
 			comment.setDeptId(workitem.getDeptId());
-			comment.setTaskname(workflowContext.getWorkitemService().getActivity(workitem)
-					.getTasknodeText());
+			if (workitem instanceof WorkitemBean) {
+				comment.setUserId(((WorkitemBean) workitem).getUserId2());
+				comment.setTaskname(workflowContext.getWorkitemService()
+						.getActivity((WorkitemBean) workitem).getTasknodeText());
+			} else {
+				comment.setUserId(workitem.getUserId());
+			}
 			comment.setCcomment(ccomment);
 			cService.insert(comment);
 		} else {
@@ -101,7 +111,8 @@ public class DefaultWfCommentHandler extends ComponentHandlerEx implements IWfCo
 		}
 	}
 
-	protected InputElement createCommentTa(final ComponentParameter cp, final WorkitemBean workitem) {
+	protected InputElement createCommentTa(final ComponentParameter cp,
+			final AbstractWorkitemBean workitem) {
 		final InputElement ele = InputElement.textarea().setRows(4).setAutoRows(true)
 				.setName("ta_wfcomment").setId("ta_wfcomment")
 				.addAttribute("maxlength", cp.getBeanProperty("maxlength"));
@@ -130,7 +141,7 @@ public class DefaultWfCommentHandler extends ComponentHandlerEx implements IWfCo
 	}
 
 	protected Map<String, List<WfComment>> comments_map(final ComponentParameter cp,
-			final IDataQuery<WfComment> dq, final WorkitemBean workitem, final EGroupBy groupBy) {
+			final IDataQuery<WfComment> dq, final AbstractWorkitemBean workitem, final EGroupBy groupBy) {
 		final Map<String, List<WfComment>> data = new LinkedHashMap<String, List<WfComment>>();
 		Map<String, String[]> tasknames = null;
 		final IPermissionHandler phdl = cp.getPermission();
@@ -143,9 +154,9 @@ public class DefaultWfCommentHandler extends ComponentHandlerEx implements IWfCo
 					continue;
 				}
 				key = dept.getText();
-			} else if (groupBy == EGroupBy.taskname) {
+			} else if (groupBy == EGroupBy.taskname && workitem instanceof WorkitemBean) {
 				if (tasknames == null) {
-					tasknames = getTasknames(cp, workitem);
+					tasknames = getTasknames(cp, (WorkitemBean) workitem);
 				}
 				if (tasknames != null) {
 					for (final Map.Entry<String, String[]> e : tasknames.entrySet()) {
@@ -180,7 +191,7 @@ public class DefaultWfCommentHandler extends ComponentHandlerEx implements IWfCo
 			groupBy = (EGroupBy) cp.getBeanProperty("groupBy");
 		}
 
-		final WorkitemBean workitem = WorkflowUtils.getWorkitemBean(cp);
+		final AbstractWorkitemBean workitem = getWorkitemBean(cp);
 		final IDataQuery<WfComment> dq = comments(cp);
 		final String commentName = cp.getComponentName();
 		final StringBuilder sb = new StringBuilder();
