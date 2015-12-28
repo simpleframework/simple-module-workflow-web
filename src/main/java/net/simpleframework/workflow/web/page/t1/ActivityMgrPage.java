@@ -183,10 +183,10 @@ public class ActivityMgrPage extends AbstractWorkflowMgrPage {
 
 	public static TablePagerColumn TC_TIMEOUT() {
 		return new TablePagerColumn("timeoutDate", $m("ActivityMgrPage.5"), 105).setPropertyClass(
-				Date.class).setFilter(false);
+				Date.class).setFilterSort(false);
 	}
 
 	public static TablePagerColumn TC_RELATIVEDATE() {
-		return new TablePagerColumn("relativeDate", $m("ActivityMgrPage.6"), 70).setFilter(false);
+		return new TablePagerColumn("relativeDate", $m("ActivityMgrPage.6"), 70).setFilterSort(false);
 	}
 }
