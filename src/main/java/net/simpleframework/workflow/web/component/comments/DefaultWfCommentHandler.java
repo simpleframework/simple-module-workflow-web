@@ -73,7 +73,6 @@ public class DefaultWfCommentHandler extends ComponentHandlerEx implements IWfCo
 
 	@Override
 	public void onSave(final ComponentParameter cp) {
-
 		final AbstractWorkitemBean workitem = getWorkitemBean(cp);
 		final String ccomment = cp.getParameter("ta_wfcomment");
 		if (!StringUtils.hasText(ccomment)) {
@@ -237,8 +236,12 @@ public class DefaultWfCommentHandler extends ComponentHandlerEx implements IWfCo
 		sb.append("  if (ta) ta.setValue(val);");
 		sb.append("  document.setCookie('").append(COOKIE_GROUPBY).append("', groupBy, 24 * 365);");
 		sb.append(" };");
-		sb.append(" act('workitemId=").append((null == workitem ? "" : workitem.getId()))
-				.append("&groupBy=' + groupBy);");
+		sb.append(" act('");
+		if (workitem != null) {
+			sb.append(workitem instanceof WorkitemBean ? "workitemId" : "workviewId").append("=");
+			sb.append(workitem.getId()).append("&");
+		}
+		sb.append("groupBy=' + groupBy);");
 		sb.append("}");
 		sb.append(HtmlConst.TAG_SCRIPT_END);
 

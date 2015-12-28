@@ -19,7 +19,7 @@ import net.simpleframework.mvc.component.ui.menu.MenuItem;
 import net.simpleframework.mvc.component.ui.menu.MenuItems;
 import net.simpleframework.mvc.component.ui.pager.EPagerBarLayout;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
-import net.simpleframework.workflow.engine.EActivityStatus;
+import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
 import net.simpleframework.workflow.engine.bean.ActivityBean;
 import net.simpleframework.workflow.engine.bean.ProcessBean;
 import net.simpleframework.workflow.engine.bean.WorkitemBean;
@@ -55,10 +55,12 @@ public class WorkflowMonitorPage extends AbstractWorkflowFormPage {
 
 	protected TablePagerBean addTablePagerBean(final PageParameter pp) {
 		final TablePagerBean tablePager = (TablePagerBean) addTablePagerBean(pp,
-				"WorkflowMonitorPage_tbl").setPagerBarLayout(EPagerBarLayout.none)
+				"WorkflowMonitorPage_tbl").setResize(false).setPagerBarLayout(EPagerBarLayout.none)
 				.setContainerId("idWorkflowMonitorPage_tbl").setHandlerClass(_ActivityTbl.class);
-		tablePager.addColumn(ActivityMgrPage.TC_TASKNODE())
-				.addColumn(AbstractWorkflowMgrPage.TC_STATUS(EActivityStatus.class))
+		tablePager
+				.addColumn(TablePagerColumn.ICON())
+				.addColumn(ActivityMgrPage.TC_TASKNODE())
+				// .addColumn(AbstractWorkflowMgrPage.TC_STATUS(EActivityStatus.class))
 				.addColumn(ActivityMgrPage.TC_PARTICIPANTS())
 				.addColumn(ActivityMgrPage.TC_PARTICIPANTS2())
 				.addColumn(AbstractWorkflowMgrPage.TC_CREATEDATE())
