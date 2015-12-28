@@ -55,8 +55,9 @@ public class WorkflowMonitorPage extends AbstractWorkflowFormPage {
 
 	protected TablePagerBean addTablePagerBean(final PageParameter pp) {
 		final TablePagerBean tablePager = (TablePagerBean) addTablePagerBean(pp,
-				"WorkflowMonitorPage_tbl").setResize(false).setPagerBarLayout(EPagerBarLayout.none)
-				.setContainerId("idWorkflowMonitorPage_tbl").setHandlerClass(_ActivityTbl.class);
+				"WorkflowMonitorPage_tbl").setShowCheckbox(false).setResize(false)
+				.setPagerBarLayout(EPagerBarLayout.none).setContainerId("idWorkflowMonitorPage_tbl")
+				.setHandlerClass(_ActivityTbl.class);
 		tablePager
 				.addColumn(TablePagerColumn.ICON())
 				.addColumn(ActivityMgrPage.TC_TASKNODE())

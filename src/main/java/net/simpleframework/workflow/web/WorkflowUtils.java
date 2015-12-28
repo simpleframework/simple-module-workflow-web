@@ -9,6 +9,7 @@ import net.simpleframework.common.ID;
 import net.simpleframework.common.StringUtils;
 import net.simpleframework.common.object.ObjectEx.CacheV;
 import net.simpleframework.mvc.PageParameter;
+import net.simpleframework.mvc.common.element.AbstractElement;
 import net.simpleframework.mvc.common.element.ButtonElement;
 import net.simpleframework.mvc.common.element.ImageElement;
 import net.simpleframework.mvc.common.element.SpanElement;
@@ -57,6 +58,12 @@ public abstract class WorkflowUtils implements IWorkflowContextAware {
 
 	public static String toStatusHTML(final PageParameter pp, final Enum<?> status) {
 		return toStatusHTML(pp, status, null);
+	}
+
+	public static AbstractElement<?> getStatusIcon(final PageParameter pp, final Enum<?> status) {
+		return new ImageElement(pp.getCssResourceHomePath(AbstractItemsTPage.class)
+				+ "/images/status_" + status.name() + ".png").setClassName("icon16").setTitle(
+				status.toString());
 	}
 
 	public static String getParticipants(final PageParameter pp, final ActivityBean activity,

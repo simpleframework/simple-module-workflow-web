@@ -171,6 +171,7 @@ public class ActivityTbl extends GroupDbTablePagerHandler implements IWorkflowCo
 		}
 
 		final KVMap row = new KVMap();
+		row.add(TablePagerColumn.ICON, WorkflowUtils.getStatusIcon(cp, activity.getStatus()));
 
 		final StringBuilder tn = new StringBuilder();
 		if (isTreeview_opt(cp)) {
@@ -214,8 +215,8 @@ public class ActivityTbl extends GroupDbTablePagerHandler implements IWorkflowCo
 					.setColor(d > 0 ? "green" : "red"));
 		}
 
-		row.add("status", WorkflowUtils.toStatusHTML(cp, activity.getStatus())).add(
-				TablePagerColumn.OPE, toOpeHTML(cp, activity));
+		row.add("status", WorkflowUtils.toStatusHTML(cp, activity.getStatus()));
+		row.add(TablePagerColumn.OPE, toOpeHTML(cp, activity));
 		return row;
 	}
 
