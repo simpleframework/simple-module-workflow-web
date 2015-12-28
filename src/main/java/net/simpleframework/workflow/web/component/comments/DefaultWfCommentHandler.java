@@ -30,6 +30,7 @@ import net.simpleframework.workflow.engine.IActivityService;
 import net.simpleframework.workflow.engine.bean.AbstractWorkitemBean;
 import net.simpleframework.workflow.engine.bean.ProcessBean;
 import net.simpleframework.workflow.engine.bean.WorkitemBean;
+import net.simpleframework.workflow.engine.bean.WorkviewBean;
 import net.simpleframework.workflow.engine.comment.IWfCommentLogService;
 import net.simpleframework.workflow.engine.comment.IWfCommentService;
 import net.simpleframework.workflow.engine.comment.WfComment;
@@ -213,10 +214,12 @@ public class DefaultWfCommentHandler extends ComponentHandlerEx implements IWfCo
 		int i = 0;
 		for (final EGroupBy g : EGroupBy.values()) {
 			final String rn = "comments_groupby";
-			sb.append(
-					new Radio(rn + i++, g).setName(rn).setChecked(groupBy == g)
-							.setOnclick("_wf_comment_radio_click('" + g.name() + "');")).append(
-					SpanElement.SPACE);
+			if (workitem instanceof WorkviewBean && g == EGroupBy.taskname) {
+				continue;
+			}
+			sb.append(new Radio(rn + i++, g).setName(rn).setChecked(groupBy == g)
+					.setOnclick("_wf_comment_radio_click('" + g.name() + "');"));
+			sb.append(SpanElement.SPACE);
 		}
 		sb.append(SpanElement.SPACE(20));
 		if (editable) {
