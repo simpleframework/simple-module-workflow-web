@@ -37,7 +37,7 @@ public class ProcessModelMgrTPage extends AbstractWorkflowMgrTPage {
 		super.onForward(pp);
 
 		final TablePagerBean tablePager = (TablePagerBean) addTablePagerBean(pp,
-				"ProcessModelMgrTPage_tbl").setSort(false).setResize(false)
+				"ProcessModelMgrTPage_tbl").setSort(false).setShowCheckbox(false).setResize(false)
 				.setPagerBarLayout(EPagerBarLayout.bottom).setPageItems(30)
 				.setContainerId("idProcessModelMgrTPage_tbl").setHandlerClass(ProcessModelTbl.class);
 		tablePager
@@ -53,7 +53,6 @@ public class ProcessModelMgrTPage extends AbstractWorkflowMgrTPage {
 						new TablePagerColumn("version", $m("MyInitiateItemsTPage.4"), 80).setTextAlign(
 								ETextAlign.center).setFilter(false))
 				.addColumn(AbstractWorkflowMgrPage.TC_CREATEDATE().setFilter(false))
-				// .addColumn(AbstractWorkflowMgrPage.TC_STATUS(EProcessModelStatus.class))
 				.addColumn(TablePagerColumn.OPE(80));
 	}
 
