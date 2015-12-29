@@ -1,4 +1,4 @@
-package net.simpleframework.workflow.web.page.t1;
+package net.simpleframework.workflow.web.page.t1.form;
 
 import net.simpleframework.common.StringUtils;
 import net.simpleframework.ctx.permission.PermissionConst;

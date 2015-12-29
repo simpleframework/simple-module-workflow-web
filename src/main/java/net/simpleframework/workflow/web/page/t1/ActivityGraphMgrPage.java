@@ -23,7 +23,7 @@ public class ActivityGraphMgrPage extends ActivityMgrPage {
 	protected void onForward(final PageParameter pp) throws Exception {
 		super.onForward(pp);
 
-		pp.addImportCSS(ActivityGraphMgrPage.class, "/monitor.css");
+		pp.addImportCSS(WorkflowGraphUtils.class, "/monitor.css");
 	}
 
 	@Override

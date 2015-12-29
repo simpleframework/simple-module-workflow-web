@@ -42,8 +42,8 @@ import net.simpleframework.workflow.web.component.comments.IWfCommentHandler;
 import net.simpleframework.workflow.web.component.comments.WfCommentBean;
 import net.simpleframework.workflow.web.component.comments.WfCommentUtils;
 import net.simpleframework.workflow.web.component.complete.WorkitemCompleteBean;
-import net.simpleframework.workflow.web.page.t1.WorkflowCompleteInfoPage;
-import net.simpleframework.workflow.web.page.t1.WorkflowFormPage;
+import net.simpleframework.workflow.web.page.t1.form.WorkflowCompleteInfoPage;
+import net.simpleframework.workflow.web.page.t1.form.WorkflowFormPage;
 
 /**
  * Licensed under the Apache License, Version 2.0

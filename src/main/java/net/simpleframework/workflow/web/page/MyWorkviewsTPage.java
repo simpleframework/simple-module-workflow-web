@@ -24,7 +24,7 @@ import net.simpleframework.workflow.engine.bean.ProcessBean;
 import net.simpleframework.workflow.engine.bean.WorkitemBean;
 import net.simpleframework.workflow.engine.bean.WorkviewBean;
 import net.simpleframework.workflow.web.WorkflowUtils;
-import net.simpleframework.workflow.web.page.t1.WorkflowViewPage;
+import net.simpleframework.workflow.web.page.t1.form.WorkflowViewPage;
 
 /**
  * Licensed under the Apache License, Version 2.0

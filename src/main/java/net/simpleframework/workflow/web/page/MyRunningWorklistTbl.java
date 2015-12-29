@@ -45,8 +45,8 @@ import net.simpleframework.workflow.engine.bean.WorkitemBean;
 import net.simpleframework.workflow.engine.comment.WfCommentUser;
 import net.simpleframework.workflow.schema.AbstractTaskNode;
 import net.simpleframework.workflow.web.WorkflowUtils;
-import net.simpleframework.workflow.web.page.t1.WorkflowFormPage;
-import net.simpleframework.workflow.web.page.t1.WorkflowMonitorPage;
+import net.simpleframework.workflow.web.page.t1.form.WorkflowFormPage;
+import net.simpleframework.workflow.web.page.t1.form.WorkflowMonitorPage;
 
 /**
  * Licensed under the Apache License, Version 2.0

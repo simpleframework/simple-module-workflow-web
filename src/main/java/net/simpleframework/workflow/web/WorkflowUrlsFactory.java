@@ -23,11 +23,11 @@ import net.simpleframework.workflow.web.page.query.MyQueryWorksTPages.MyQueryWor
 import net.simpleframework.workflow.web.page.query.MyQueryWorksTPages.MyQueryWorks_OrgTPage;
 import net.simpleframework.workflow.web.page.query.MyQueryWorksTPages.MyQueryWorks_RoleTPage;
 import net.simpleframework.workflow.web.page.t1.ProcessModelMgrPage;
-import net.simpleframework.workflow.web.page.t1.WorkflowCompleteInfoPage;
-import net.simpleframework.workflow.web.page.t1.WorkflowFormPage;
-import net.simpleframework.workflow.web.page.t1.WorkflowGraphMonitorPage;
-import net.simpleframework.workflow.web.page.t1.WorkflowMonitorPage;
-import net.simpleframework.workflow.web.page.t1.WorkflowViewPage;
+import net.simpleframework.workflow.web.page.t1.form.WorkflowCompleteInfoPage;
+import net.simpleframework.workflow.web.page.t1.form.WorkflowFormPage;
+import net.simpleframework.workflow.web.page.t1.form.WorkflowGraphMonitorPage;
+import net.simpleframework.workflow.web.page.t1.form.WorkflowMonitorPage;
+import net.simpleframework.workflow.web.page.t1.form.WorkflowViewPage;
 import net.simpleframework.workflow.web.page.t2.AbstractWorkPage.MyDelegateListPage;
 import net.simpleframework.workflow.web.page.t2.AbstractWorkPage.MyFinalWorklistPage;
 import net.simpleframework.workflow.web.page.t2.AbstractWorkPage.MyInitiateItemsGroupPage;

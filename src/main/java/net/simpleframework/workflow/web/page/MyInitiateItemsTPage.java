@@ -32,7 +32,7 @@ import net.simpleframework.workflow.engine.bean.WorkitemBean;
 import net.simpleframework.workflow.schema.ProcessDocument;
 import net.simpleframework.workflow.web.component.startprocess.DefaultStartProcessHandler;
 import net.simpleframework.workflow.web.component.startprocess.StartProcessBean;
-import net.simpleframework.workflow.web.page.t1.WorkflowFormPage;
+import net.simpleframework.workflow.web.page.t1.form.WorkflowFormPage;
 
 /**
  * Licensed under the Apache License, Version 2.0

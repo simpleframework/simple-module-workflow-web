@@ -39,8 +39,8 @@ import net.simpleframework.workflow.web.page.query.MyQueryWorksTPages.MyQueryWor
 import net.simpleframework.workflow.web.page.query.MyQueryWorksTbl.MyQueryWorks_DeptTbl;
 import net.simpleframework.workflow.web.page.query.MyQueryWorksTbl.MyQueryWorks_OrgTbl;
 import net.simpleframework.workflow.web.page.query.MyQueryWorksTbl.MyQueryWorks_RoleTbl;
-import net.simpleframework.workflow.web.page.t1.WorkflowFormPage;
-import net.simpleframework.workflow.web.page.t1.WorkflowMonitorPage;
+import net.simpleframework.workflow.web.page.t1.form.WorkflowFormPage;
+import net.simpleframework.workflow.web.page.t1.form.WorkflowMonitorPage;
 
 /**
  * Licensed under the Apache License, Version 2.0

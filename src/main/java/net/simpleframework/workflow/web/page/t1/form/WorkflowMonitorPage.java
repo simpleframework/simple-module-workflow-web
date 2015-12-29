@@ -1,4 +1,4 @@
-package net.simpleframework.workflow.web.page.t1;
+package net.simpleframework.workflow.web.page.t1.form;
 
 import static net.simpleframework.common.I18n.$m;
 
@@ -24,6 +24,11 @@ import net.simpleframework.workflow.engine.bean.ActivityBean;
 import net.simpleframework.workflow.engine.bean.ProcessBean;
 import net.simpleframework.workflow.engine.bean.WorkitemBean;
 import net.simpleframework.workflow.web.WorkflowUtils;
+import net.simpleframework.workflow.web.page.t1.AbstractWorkflowMgrPage;
+import net.simpleframework.workflow.web.page.t1.ActivityMgrPage;
+import net.simpleframework.workflow.web.page.t1.ActivityTbl;
+import net.simpleframework.workflow.web.page.t1.WorkflowGraphUtils;
+import net.simpleframework.workflow.web.page.t1.WorkitemsMgrPage;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -37,7 +42,7 @@ public class WorkflowMonitorPage extends AbstractWorkflowFormPage {
 	@Override
 	protected void onForward(final PageParameter pp) throws Exception {
 		super.onForward(pp);
-		pp.addImportCSS(WorkflowMonitorPage.class, "/monitor.css");
+		pp.addImportCSS(WorkflowGraphUtils.class, "/monitor.css");
 
 		addTablePagerBean(pp);
 
@@ -58,11 +63,8 @@ public class WorkflowMonitorPage extends AbstractWorkflowFormPage {
 				"WorkflowMonitorPage_tbl").setShowCheckbox(false).setResize(false)
 				.setPagerBarLayout(EPagerBarLayout.none).setContainerId("idWorkflowMonitorPage_tbl")
 				.setHandlerClass(_ActivityTbl.class);
-		tablePager
-				.addColumn(TablePagerColumn.ICON())
-				.addColumn(ActivityMgrPage.TC_TASKNODE())
-				// .addColumn(AbstractWorkflowMgrPage.TC_STATUS(EActivityStatus.class))
-				.addColumn(ActivityMgrPage.TC_PARTICIPANTS())
+		tablePager.addColumn(TablePagerColumn.ICON()).addColumn(ActivityMgrPage.TC_TASKNODE())
+				.addColumn(ActivityMgrPage.TC_PREVIOUS()).addColumn(ActivityMgrPage.TC_PARTICIPANTS())
 				.addColumn(ActivityMgrPage.TC_PARTICIPANTS2())
 				.addColumn(AbstractWorkflowMgrPage.TC_CREATEDATE())
 				.addColumn(AbstractWorkflowMgrPage.TC_COMPLETEDATE())

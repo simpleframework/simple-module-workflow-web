@@ -7,7 +7,6 @@ import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
 import net.simpleframework.workflow.engine.bean.ProcessBean;
 import net.simpleframework.workflow.web.WorkflowUtils;
-import net.simpleframework.workflow.web.page.t1.WorkflowGraphMonitorPage;
 import net.simpleframework.workflow.web.page.t1.WorkflowGraphUtils;
 
 /**
@@ -21,7 +20,7 @@ public class ActivityGraphMgrTPage extends ActivityMgrTPage {
 	@Override
 	protected void onForward(final PageParameter pp) throws Exception {
 		super.onForward(pp);
-		pp.addImportCSS(WorkflowGraphMonitorPage.class, "/monitor.css");
+		pp.addImportCSS(WorkflowGraphUtils.class, "/monitor.css");
 	}
 
 	@Override

@@ -17,6 +17,7 @@ import net.simpleframework.common.NumberUtils;
 import net.simpleframework.common.StringUtils;
 import net.simpleframework.common.coll.KVMap;
 import net.simpleframework.mvc.PageParameter;
+import net.simpleframework.mvc.common.element.AbstractElement;
 import net.simpleframework.mvc.common.element.ButtonElement;
 import net.simpleframework.mvc.common.element.LinkElement;
 import net.simpleframework.mvc.common.element.ProgressElement;
@@ -76,10 +77,10 @@ public class ActivityTbl extends GroupDbTablePagerHandler implements IWorkflowCo
 		return null;
 	}
 
-	final static String COOKIE_TREEVIEW = "wf_monitor_treeview";
-	final static String COOKIE_HIDE_NULLTASK = "wf_monitor_hide_nulltask";
+	public final static String COOKIE_TREEVIEW = "wf_monitor_treeview";
+	public final static String COOKIE_HIDE_NULLTASK = "wf_monitor_hide_nulltask";
 
-	protected boolean isTreeview_opt(final PageParameter pp) {
+	public boolean isTreeview_opt(final PageParameter pp) {
 		String treeview = pp.getParameter("treeview");
 		if (!StringUtils.hasText(treeview)) {
 			treeview = pp.getCookie(COOKIE_TREEVIEW);
@@ -87,7 +88,7 @@ public class ActivityTbl extends GroupDbTablePagerHandler implements IWorkflowCo
 		return Convert.toBool(treeview);
 	}
 
-	protected boolean isNulltask_opt(final PageParameter pp) {
+	public boolean isNulltask_opt(final PageParameter pp) {
 		String nulltask = pp.getParameter("nulltask");
 		if (!StringUtils.hasText(nulltask)) {
 			nulltask = pp.getCookie(COOKIE_HIDE_NULLTASK);
@@ -142,24 +143,6 @@ public class ActivityTbl extends GroupDbTablePagerHandler implements IWorkflowCo
 		cp.setRequestAttr("relative_date", max);
 	}
 
-	protected Object toTasknode(final ActivityBean activity) {
-		final AbstractTaskNode tasknode = wfaService.getTaskNode(activity);
-		if (tasknode instanceof UserNode) {
-			if (((UserNode) tasknode).isEmpty()) {
-				return new SpanElement(activity.getTasknodeText()).setStyle("color: #999;");
-			} else {
-				return createUsernodeElement(activity);
-			}
-		}
-		return new SpanElement(activity.getTasknodeText()).setStyle("color: #808;");
-	}
-
-	protected LinkElement createUsernodeElement(final ActivityBean activity) {
-		return new LinkElement(activity.getTasknodeText())
-				.setOnclick("$Actions['ActivityMgrPage_workitems']('activityId=" + activity.getId()
-						+ "');");
-	}
-
 	@Override
 	protected Map<String, Object> getRowData(final ComponentParameter cp, final Object dataObject) {
 		final ActivityBean activity = (ActivityBean) dataObject;
@@ -171,17 +154,8 @@ public class ActivityTbl extends GroupDbTablePagerHandler implements IWorkflowCo
 		}
 
 		final KVMap row = new KVMap();
-		row.add(TablePagerColumn.ICON, WorkflowUtils.getStatusIcon(cp, activity.getStatus()));
-
-		final StringBuilder tn = new StringBuilder();
-		if (isTreeview_opt(cp)) {
-			String space = "";
-			for (int i = 0; i < Convert.toInt(activity.getAttr("_margin")); i++) {
-				space += i == 0 ? "| -- " : " -- ";
-			}
-			tn.append(space);
-		}
-		row.add("tasknode", tn.append(toTasknode(activity)));
+		row.add(TablePagerColumn.ICON, WorkflowUtils.getStatusIcon(cp, activity.getStatus())).add(
+				"tasknode", toTasknodeHTML(cp, activity));
 
 		final ActivityBean pre = wfaService.getPreActivity(activity);
 		if (pre != null) {
@@ -219,10 +193,29 @@ public class ActivityTbl extends GroupDbTablePagerHandler implements IWorkflowCo
 		return row;
 	}
 
-	protected ButtonElement createLogButton(final ComponentParameter cp, final ActivityBean activity) {
-		return WorkflowUtils.createLogButton().setOnclick(
-				"$Actions['AbstractWorkflowMgrPage_update_log']('activityId=" + activity.getId()
-						+ "');");
+	protected String toTasknodeHTML(final ComponentParameter cp, final ActivityBean activity) {
+		final StringBuilder tn = new StringBuilder();
+		if (isTreeview_opt(cp)) {
+			String space = "";
+			for (int i = 0; i < Convert.toInt(activity.getAttr("_margin")); i++) {
+				space += i == 0 ? "| -- " : " -- ";
+			}
+			tn.append(space);
+		}
+		tn.append(toTasknode(activity));
+		return tn.toString();
+	}
+
+	protected AbstractElement<?> toTasknode(final ActivityBean activity) {
+		final AbstractTaskNode tasknode = wfaService.getTaskNode(activity);
+		if (tasknode instanceof UserNode) {
+			if (((UserNode) tasknode).isEmpty()) {
+				return new SpanElement(activity.getTasknodeText()).setStyle("color: #999;");
+			} else {
+				return createUsernodeElement(activity);
+			}
+		}
+		return new SpanElement(activity.getTasknodeText()).setStyle("color: #808;");
 	}
 
 	protected String toOpeHTML(final ComponentParameter cp, final ActivityBean activity) {
@@ -230,6 +223,18 @@ public class ActivityTbl extends GroupDbTablePagerHandler implements IWorkflowCo
 		sb.append(createLogButton(cp, activity));
 		sb.append(AbstractTablePagerSchema.IMG_DOWNMENU);
 		return sb.toString();
+	}
+
+	protected LinkElement createUsernodeElement(final ActivityBean activity) {
+		return new LinkElement(activity.getTasknodeText())
+				.setOnclick("$Actions['ActivityMgrPage_workitems']('activityId=" + activity.getId()
+						+ "');");
+	}
+
+	protected ButtonElement createLogButton(final ComponentParameter cp, final ActivityBean activity) {
+		return WorkflowUtils.createLogButton().setOnclick(
+				"$Actions['AbstractWorkflowMgrPage_update_log']('activityId=" + activity.getId()
+						+ "');");
 	}
 
 	protected MenuItem MI_STATUS_RUNNING() {

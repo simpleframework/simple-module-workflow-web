@@ -1,4 +1,4 @@
-package net.simpleframework.workflow.web.page.t1;
+package net.simpleframework.workflow.web.page.t1.form;
 
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.workflow.engine.bean.WorkviewBean;
