@@ -27,7 +27,6 @@ import net.simpleframework.workflow.engine.bean.ProcessBean;
 import net.simpleframework.workflow.web.WorkflowLogRef.ActivityUpdateLogPage;
 import net.simpleframework.workflow.web.WorkflowUtils;
 import net.simpleframework.workflow.web.page.t1.AbstractWorkflowMgrPage;
-import net.simpleframework.workflow.web.page.t1.ActivityMgrPage;
 import net.simpleframework.workflow.web.page.t1.ActivityMgrPage.ActivityStatusDescPage;
 import net.simpleframework.workflow.web.page.t1.ActivityTbl;
 import net.simpleframework.workflow.web.page.t1.WorkitemsMgrPage;
@@ -56,12 +55,10 @@ public class ActivityMgrTPage extends AbstractWorkflowMgrTPage {
 		final TablePagerBean tablePager = (TablePagerBean) addTablePagerBean(pp,
 				"ActivityMgrTPage_tbl").setPagerBarLayout(EPagerBarLayout.none)
 				.setContainerId("idActivityMgrTPage_tbl").setHandlerClass(_ActivityTbl.class);
-		tablePager.addColumn(ActivityMgrPage.TC_TASKNODE())
+		tablePager.addColumn(ActivityTbl.TC_TASKNODE())
 				.addColumn(AbstractWorkflowMgrPage.TC_STATUS(EActivityStatus.class))
-				.addColumn(ActivityMgrPage.TC_PARTICIPANTS())
-				.addColumn(ActivityMgrPage.TC_PARTICIPANTS2())
-				.addColumn(AbstractWorkflowMgrPage.TC_CREATEDATE())
-				.addColumn(ActivityMgrPage.TC_TIMEOUT())
+				.addColumn(ActivityTbl.TC_PARTICIPANTS()).addColumn(ActivityTbl.TC_PARTICIPANTS2())
+				.addColumn(AbstractWorkflowMgrPage.TC_CREATEDATE()).addColumn(ActivityTbl.TC_TIMEOUT())
 				.addColumn(AbstractWorkflowMgrPage.TC_COMPLETEDATE())
 				// .addColumn(ActivityMgrPage.TC_PREVIOUS())
 				.addColumn(TablePagerColumn.OPE(70));
@@ -113,9 +110,9 @@ public class ActivityMgrTPage extends AbstractWorkflowMgrTPage {
 		final ProcessBean process = WorkflowUtils.getProcessBean(pp);
 		final String params = "processId=" + (process != null ? process.getId() : "");
 		return TabButtons.of(
-				new TabButton($m("ActivityMgrPage.7"), uFactory.getUrl(pp, ActivityMgrTPage.class,
+				new TabButton($m("ActivityMgrPage.1"), uFactory.getUrl(pp, ActivityMgrTPage.class,
 						params)),
-				new TabButton($m("ActivityMgrPage.8"), uFactory.getUrl(pp, ActivityGraphMgrTPage.class,
+				new TabButton($m("ActivityMgrPage.2"), uFactory.getUrl(pp, ActivityGraphMgrTPage.class,
 						params)));
 	}
 

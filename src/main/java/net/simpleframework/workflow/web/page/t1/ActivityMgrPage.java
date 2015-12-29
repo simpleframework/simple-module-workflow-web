@@ -3,7 +3,6 @@ package net.simpleframework.workflow.web.page.t1;
 import static net.simpleframework.common.I18n.$m;
 
 import java.io.IOException;
-import java.util.Date;
 import java.util.Map;
 
 import net.simpleframework.common.Convert;
@@ -69,9 +68,10 @@ public class ActivityMgrPage extends AbstractWorkflowMgrPage {
 		final TablePagerBean tablePager = (TablePagerBean) addTablePagerBean(pp,
 				"ActivityMgrPage_tbl").setResize(false).setPagerBarLayout(EPagerBarLayout.none)
 				.setContainerId("idActivityMgrPage_tbl").setHandlerClass(ActivityTbl.class);
-		tablePager.addColumn(TC_TASKNODE()).addColumn(TC_STATUS(EActivityStatus.class))
-				.addColumn(TC_PARTICIPANTS()).addColumn(TC_PARTICIPANTS2()).addColumn(TC_CREATEDATE())
-				.addColumn(TC_TIMEOUT()).addColumn(TC_COMPLETEDATE()).addColumn(TC_PREVIOUS())
+		tablePager.addColumn(ActivityTbl.TC_TASKNODE()).addColumn(TC_STATUS(EActivityStatus.class))
+				.addColumn(ActivityTbl.TC_PARTICIPANTS()).addColumn(ActivityTbl.TC_PARTICIPANTS2())
+				.addColumn(TC_CREATEDATE()).addColumn(ActivityTbl.TC_TIMEOUT())
+				.addColumn(TC_COMPLETEDATE()).addColumn(ActivityTbl.TC_PREVIOUS())
 				.addColumn(TablePagerColumn.OPE(70));
 		return tablePager;
 	}
@@ -83,7 +83,7 @@ public class ActivityMgrPage extends AbstractWorkflowMgrPage {
 				createBackButton()
 						.setHref(url(ProcessMgrPage.class, "modelId=" + process.getModelId())),
 				SpanElement.SPACE,
-				LinkButton.of($m("ActivityMgrPage.9")).setOnclick(
+				LinkButton.of($m("ActivityMgrPage.3")).setOnclick(
 						"$Actions['ActivityMgrPage_abort2']('processId=" + process.getId() + "');"),
 				SpanElement.SPACE15, SpanElement.strongText(WorkflowUtils.getProcessTitle(process)));
 	}
@@ -93,8 +93,8 @@ public class ActivityMgrPage extends AbstractWorkflowMgrPage {
 		final ProcessBean process = WorkflowUtils.getProcessBean(pp);
 		final Object id = process.getId();
 		return ElementList.of(createTabsElement(pp, TabButtons.of(new TabButton(
-				$m("ActivityMgrPage.7"), url(ActivityMgrPage.class, "processId=" + id)), new TabButton(
-				$m("ActivityMgrPage.8"), url(ActivityGraphMgrPage.class, "processId=" + id)))));
+				$m("ActivityMgrPage.1"), url(ActivityMgrPage.class, "processId=" + id)), new TabButton(
+				$m("ActivityMgrPage.2"), url(ActivityGraphMgrPage.class, "processId=" + id)))));
 	}
 
 	@Override
@@ -161,32 +161,5 @@ public class ActivityMgrPage extends AbstractWorkflowMgrPage {
 		protected InputElement getIdInput(final PageParameter pp) {
 			return InputElement.hidden("activityId").setValue(pp);
 		}
-	}
-
-	public static TablePagerColumn TC_TASKNODE() {
-		return new TablePagerColumn("tasknode", $m("ActivityMgrPage.1")).setFilterSort(false);
-	}
-
-	public static TablePagerColumn TC_PREVIOUS() {
-		return new TablePagerColumn("previous", $m("ActivityMgrPage.2"), 115).setFilterSort(false);
-	}
-
-	public static TablePagerColumn TC_PARTICIPANTS() {
-		return new TablePagerColumn("participants", $m("ActivityMgrPage.3"), 115).setNowrap(false)
-				.setFilterSort(false);
-	}
-
-	public static TablePagerColumn TC_PARTICIPANTS2() {
-		return new TablePagerColumn("participants2", $m("ActivityMgrPage.4"), 115).setNowrap(false)
-				.setFilterSort(false);
-	}
-
-	public static TablePagerColumn TC_TIMEOUT() {
-		return new TablePagerColumn("timeoutDate", $m("ActivityMgrPage.5"), 105).setPropertyClass(
-				Date.class).setFilterSort(false);
-	}
-
-	public static TablePagerColumn TC_RELATIVEDATE() {
-		return new TablePagerColumn("relativeDate", $m("ActivityMgrPage.6"), 70).setFilterSort(false);
 	}
 }

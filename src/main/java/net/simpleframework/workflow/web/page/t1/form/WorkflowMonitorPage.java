@@ -20,12 +20,12 @@ import net.simpleframework.mvc.component.ui.menu.MenuItems;
 import net.simpleframework.mvc.component.ui.pager.EPagerBarLayout;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
 import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
+import net.simpleframework.workflow.engine.EActivityStatus;
 import net.simpleframework.workflow.engine.bean.ActivityBean;
 import net.simpleframework.workflow.engine.bean.ProcessBean;
 import net.simpleframework.workflow.engine.bean.WorkitemBean;
 import net.simpleframework.workflow.web.WorkflowUtils;
 import net.simpleframework.workflow.web.page.t1.AbstractWorkflowMgrPage;
-import net.simpleframework.workflow.web.page.t1.ActivityMgrPage;
 import net.simpleframework.workflow.web.page.t1.ActivityTbl;
 import net.simpleframework.workflow.web.page.t1.WorkflowGraphUtils;
 import net.simpleframework.workflow.web.page.t1.WorkitemsMgrPage;
@@ -63,12 +63,12 @@ public class WorkflowMonitorPage extends AbstractWorkflowFormPage {
 				"WorkflowMonitorPage_tbl").setShowCheckbox(false).setResize(false)
 				.setPagerBarLayout(EPagerBarLayout.none).setContainerId("idWorkflowMonitorPage_tbl")
 				.setHandlerClass(_ActivityTbl.class);
-		tablePager.addColumn(TablePagerColumn.ICON()).addColumn(ActivityMgrPage.TC_TASKNODE())
-				.addColumn(ActivityMgrPage.TC_PREVIOUS()).addColumn(ActivityMgrPage.TC_PARTICIPANTS())
-				.addColumn(ActivityMgrPage.TC_PARTICIPANTS2())
+		tablePager.addColumn(TablePagerColumn.ICON()).addColumn(ActivityTbl.TC_TASKNODE())
+				.addColumn(ActivityTbl.TC_PRE_PARTICIPANTS()).addColumn(ActivityTbl.TC_PARTICIPANTS())
+				.addColumn(ActivityTbl.TC_PARTICIPANTS2())
 				.addColumn(AbstractWorkflowMgrPage.TC_CREATEDATE())
 				.addColumn(AbstractWorkflowMgrPage.TC_COMPLETEDATE())
-				.addColumn(ActivityMgrPage.TC_RELATIVEDATE()).addColumn(ActivityMgrPage.TC_TIMEOUT());
+				.addColumn(ActivityTbl.TC_RELATIVEDATE()).addColumn(ActivityTbl.TC_TIMEOUT());
 		return tablePager;
 	}
 
@@ -109,15 +109,20 @@ public class WorkflowMonitorPage extends AbstractWorkflowFormPage {
 
 	protected String toMonitorHTML(final PageParameter pp) {
 		final StringBuilder sb = new StringBuilder();
-		sb.append("<div class='tb'>");
-		final _ActivityTbl tbl = singleton(_ActivityTbl.class);
-		sb.append(new Checkbox("idWorkflowMonitorPage_treeview", $m("WorkflowMonitorPage.2"))
-				.setChecked(tbl.isTreeview_opt(pp)).setOnclick(
-						checkClick("treeview", ActivityTbl.COOKIE_TREEVIEW)));
-		sb.append(SpanElement.SPACE15);
-		sb.append(new Checkbox("idWorkflowMonitorPage_hideNulltask", $m("WorkflowMonitorPage.3"))
-				.setChecked(tbl.isNulltask_opt(pp)).setOnclick(
+		sb.append("<div class='tb clearfix'>");
+		sb.append(" <div class='left'>");
+		sb.append(new Checkbox("idWorkflowMonitorPage_hideNulltask", $m("WorkflowMonitorPage.2"))
+				.setChecked(ActivityTbl.isNulltask_opt(pp)).setOnclick(
 						checkClick("nulltask", ActivityTbl.COOKIE_HIDE_NULLTASK)));
+		sb.append(" </div>");
+		sb.append(" <div class='right'>");
+		for (final EActivityStatus status : EActivityStatus.values()) {
+			sb.append("<span class='icon'>");
+			sb.append(WorkflowUtils.getStatusIcon(pp, status));
+			sb.append(status);
+			sb.append("</span>");
+		}
+		sb.append(" </div>");
 		sb.append("</div>");
 		sb.append("<div id='idWorkflowMonitorPage_tbl'></div>");
 		return sb.toString();

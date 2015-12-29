@@ -1,8 +1,30 @@
 .WorkflowFormPage,
 .WorkflowViewPage {
-  width: 80%;
+  width: 82%;
 }
 
+/*-------------------------form_tb_bar--------------------*/
+.form_tb_bar .taskinfo {
+  display: inline-block;
+  margin-left: 15px;
+  vertical-align: top;
+  line-height: 1.2;
+}
+
+.form_tb_bar .taskinfo .l1 {
+  color: #555; 
+  font-weight: bold;
+}
+
+.form_tb_bar .taskinfo .l2 {
+  color: #777;
+  font-size: 9px;
+  -webkit-text-size-adjust: none;
+  -webkit-transform: scale(0.75);
+  -webkit-transform-origin-x: 0;
+}
+
+/*-------------------------WorkflowCompleteInfoPage--------------------*/
 .WorkflowCompleteInfoPage {
   width: 50%;
   text-align: left;
@@ -41,6 +63,7 @@
   margin: 12px;
 }
 
+/*-------------------------WorkflowMonitorPage--------------------*/
 .WorkflowMonitorPage {
   width: 80%;
   -webkit-box-shadow: 5px 5px 5px #aaa;
@@ -65,24 +88,14 @@
   border-right-color: #fff;
 }
 
-.form_tb_bar .taskinfo {
+.WorkflowMonitorPage .tb .icon {
   display: inline-block;
-  margin-left: 15px;
-  vertical-align: top;
-  line-height: 1.2;
+  vertical-align: middle;
+  line-height: 1.6;
 }
 
-.form_tb_bar .taskinfo .l1 {
-  color: #555; 
-  font-weight: bold;
-}
-
-.form_tb_bar .taskinfo .l2 {
-  color: #777;
-  font-size: 9px;
-  -webkit-text-size-adjust: none;
-  -webkit-transform: scale(0.75);
-  -webkit-transform-origin-x: 0;
+.WorkflowMonitorPage .tb .icon img {
+  margin: 0 4px 0 12px;  
 }
 
 .tablepager .simple_progress {
