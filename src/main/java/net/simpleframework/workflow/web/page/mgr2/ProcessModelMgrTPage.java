@@ -37,25 +37,24 @@ public class ProcessModelMgrTPage extends AbstractWorkflowMgrTPage {
 		super.onForward(pp);
 
 		final TablePagerBean tablePager = (TablePagerBean) addTablePagerBean(pp,
-				"ProcessModelMgrTPage_tbl").setSort(false).setPagerBarLayout(EPagerBarLayout.bottom)
-				.setPageItems(30).setContainerId("idProcessModelMgrTPage_tbl")
-				.setHandlerClass(ProcessModelTbl.class);
+				"ProcessModelMgrTPage_tbl").setSort(false).setResize(false)
+				.setPagerBarLayout(EPagerBarLayout.bottom).setPageItems(30)
+				.setContainerId("idProcessModelMgrTPage_tbl").setHandlerClass(ProcessModelTbl.class);
 		tablePager
+				.addColumn(TablePagerColumn.ICON())
 				.addColumn(new TablePagerColumn("modelText", $m("ProcessModelMgrPage.0")))
 				.addColumn(
 						new TablePagerColumn("processCount", $m("ProcessModelMgrPage.1"), 60)
 								.setFilter(false))
 				.addColumn(
-						new TablePagerColumn("userText", $m("ProcessModelMgrPage.2"), 80)
-								.setFilter(false))
+						new TablePagerColumn("userText", $m("ProcessModelMgrPage.2"), 80).setTextAlign(
+								ETextAlign.center).setFilter(false))
 				.addColumn(
 						new TablePagerColumn("version", $m("MyInitiateItemsTPage.4"), 80).setTextAlign(
 								ETextAlign.center).setFilter(false))
 				.addColumn(AbstractWorkflowMgrPage.TC_CREATEDATE().setFilter(false))
-				.addColumn(AbstractWorkflowMgrPage.TC_STATUS(EProcessModelStatus.class))
-				.addColumn(TablePagerColumn.OPE(90));
-		// if (pp.getLogin().isManager())
-		// tablePager);
+				// .addColumn(AbstractWorkflowMgrPage.TC_STATUS(EProcessModelStatus.class))
+				.addColumn(TablePagerColumn.OPE(80));
 	}
 
 	@Override
@@ -94,14 +93,13 @@ public class ProcessModelMgrTPage extends AbstractWorkflowMgrTPage {
 				le.setColor("#777");
 			}
 
-			row.add("modelText", le)
+			row.add(TablePagerColumn.ICON, WorkflowUtils.getStatusIcon(cp, status))
+					.add("modelText", le)
 					.add("createDate", pm.getCreateDate())
 					.add("processCount",
 							wfpmdService.getProcessModelDomainR(getPermissionOrg(cp).getId(), pm)
 									.getProcessCount()).add("userText", pm.getUserText())
-					.add("version", pm.getModelVer())
-					.add("status", WorkflowUtils.toStatusHTML(cp, status))
-					.add(TablePagerColumn.OPE, toOpeHTML(cp, pm));
+					.add("version", pm.getModelVer()).add(TablePagerColumn.OPE, toOpeHTML(cp, pm));
 			return row;
 		}
 
@@ -109,7 +107,6 @@ public class ProcessModelMgrTPage extends AbstractWorkflowMgrTPage {
 			final StringBuilder sb = new StringBuilder();
 			sb.append(new ButtonElement($m("ProcessModelMgrTPage.0")).setOnclick(JS.loc(uFactory
 					.getUrl(cp, ProcessMgrTPage.class, "modelId=" + pm.getId()))));
-			// sb.append(SpanElement.SPACE).append(AbstractTablePagerSchema.IMG_DOWNMENU);
 			return sb.toString();
 		}
 	}

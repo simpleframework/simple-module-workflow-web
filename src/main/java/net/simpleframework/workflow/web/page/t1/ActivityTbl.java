@@ -181,8 +181,7 @@ public class ActivityTbl extends GroupDbTablePagerHandler implements IWorkflowCo
 			}
 			tn.append(space);
 		}
-		tn.append(toTasknode(activity));
-		row.add("tasknode", tn.toString());
+		row.add("tasknode", tn.append(toTasknode(activity)));
 
 		final ActivityBean pre = wfaService.getPreActivity(activity);
 		if (pre != null) {

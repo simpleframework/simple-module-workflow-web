@@ -67,7 +67,7 @@ public class ActivityMgrPage extends AbstractWorkflowMgrPage {
 
 	protected TablePagerBean addTablePagerBean(final PageParameter pp) {
 		final TablePagerBean tablePager = (TablePagerBean) addTablePagerBean(pp,
-				"ActivityMgrPage_tbl").setPagerBarLayout(EPagerBarLayout.none)
+				"ActivityMgrPage_tbl").setResize(false).setPagerBarLayout(EPagerBarLayout.none)
 				.setContainerId("idActivityMgrPage_tbl").setHandlerClass(ActivityTbl.class);
 		tablePager.addColumn(TC_TASKNODE()).addColumn(TC_STATUS(EActivityStatus.class))
 				.addColumn(TC_PARTICIPANTS()).addColumn(TC_PARTICIPANTS2()).addColumn(TC_CREATEDATE())

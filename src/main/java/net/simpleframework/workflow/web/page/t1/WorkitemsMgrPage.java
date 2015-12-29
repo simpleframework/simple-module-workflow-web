@@ -10,6 +10,7 @@ import net.simpleframework.common.coll.KVMap;
 import net.simpleframework.ctx.IModuleRef;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.ButtonElement;
+import net.simpleframework.mvc.common.element.ETextAlign;
 import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.LinkButton;
 import net.simpleframework.mvc.component.ComponentParameter;
@@ -18,7 +19,6 @@ import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
 import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
 import net.simpleframework.mvc.component.ui.pager.db.AbstractDbTablePagerHandler;
 import net.simpleframework.mvc.template.lets.OneTableTemplatePage;
-import net.simpleframework.workflow.engine.EWorkitemStatus;
 import net.simpleframework.workflow.engine.IWorkflowContextAware;
 import net.simpleframework.workflow.engine.bean.ActivityBean;
 import net.simpleframework.workflow.engine.bean.WorkitemBean;
@@ -40,13 +40,22 @@ public class WorkitemsMgrPage extends OneTableTemplatePage implements IWorkflowC
 
 		// workitems
 		final TablePagerBean tablePager = addTablePagerBean(pp, "WorkitemsPage_tbl",
-				WorkitemsTbl.class).setShowLineNo(false);
-		tablePager.addColumn(new TablePagerColumn("userText", $m("WorkitemsMgrPage.0")))
-				.addColumn(new TablePagerColumn("userText2", $m("WorkitemsMgrPage.1")))
-				.addColumn(TablePagerColumn.DATE("createDate", $m("WorkitemsMgrPage.2")))
-				.addColumn(TablePagerColumn.DATE("completeDate", $m("WorkitemsMgrPage.3")))
-				.addColumn(AbstractWorkflowMgrPage.TC_STATUS(EWorkitemStatus.class))
-				.addColumn(TablePagerColumn.OPE(70));
+				WorkitemsTbl.class).setShowCheckbox(false).setFilter(false).setResize(false)
+				.setShowLineNo(false);
+		tablePager
+				.addColumn(TablePagerColumn.ICON())
+				.addColumn(
+						new TablePagerColumn("userText", $m("WorkitemsMgrPage.0"))
+								.setTextAlign(ETextAlign.center))
+				.addColumn(
+						new TablePagerColumn("userText2", $m("WorkitemsMgrPage.1"))
+								.setTextAlign(ETextAlign.center))
+				.addColumn(TablePagerColumn.DATE("createDate", $m("WorkitemsMgrPage.2")).setWidth(150))
+				.addColumn(
+						TablePagerColumn.DATE("completeDate", $m("WorkitemsMgrPage.3")).setWidth(150));
+		if (pp.isLmember(workflowContext.getModule().getManagerRole())) {
+			tablePager.addColumn(TablePagerColumn.OPE(70));
+		}
 
 		// log
 		final IModuleRef ref = ((IWorkflowWebContext) workflowContext).getLogRef();
@@ -76,16 +85,7 @@ public class WorkitemsMgrPage extends OneTableTemplatePage implements IWorkflowC
 			return new ListDataQuery<WorkitemBean>(wfwService.getWorkitems(activity));
 		}
 
-		@Override
-		protected Map<String, Object> getRowData(final ComponentParameter cp, final Object dataObject) {
-			final WorkitemBean workitem = (WorkitemBean) dataObject;
-			final KVMap row = new KVMap();
-			row.add("userText", workitem.getUserText()).add("userText2", workitem.getUserText2())
-					.add("createDate", workitem.getCreateDate())
-					.add("completeDate", workitem.getCompleteDate());
-			final EWorkitemStatus status = workitem.getStatus();
-			row.add("status", WorkflowUtils.toStatusHTML(cp, status));
-
+		protected String toOpeHTML(final ComponentParameter cp, final WorkitemBean workitem) {
 			final StringBuilder sb = new StringBuilder();
 			sb.append(ButtonElement
 					.logBtn()
@@ -93,7 +93,18 @@ public class WorkitemsMgrPage extends OneTableTemplatePage implements IWorkflowC
 					.setOnclick(
 							"$Actions['WorkitemsMgrPage_update_log']('workitemId=" + workitem.getId()
 									+ "');"));
-			row.add(TablePagerColumn.OPE, sb.toString());
+			return sb.toString();
+		}
+
+		@Override
+		protected Map<String, Object> getRowData(final ComponentParameter cp, final Object dataObject) {
+			final WorkitemBean workitem = (WorkitemBean) dataObject;
+			final KVMap row = new KVMap();
+			row.add(TablePagerColumn.ICON, WorkflowUtils.getStatusIcon(cp, workitem.getStatus()))
+					.add("userText", workitem.getUserText()).add("userText2", workitem.getUserText2())
+					.add("createDate", workitem.getCreateDate())
+					.add("completeDate", workitem.getCompleteDate());
+			row.add(TablePagerColumn.OPE, toOpeHTML(cp, workitem));
 			return row;
 		}
 	}
