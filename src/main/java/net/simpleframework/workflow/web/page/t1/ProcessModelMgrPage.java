@@ -207,7 +207,7 @@ public class ProcessModelMgrPage extends AbstractWorkflowMgrPage {
 			final Map<String, AttachmentFile> attachments = getUploadCache(cp);
 			for (final AttachmentFile aFile : attachments.values()) {
 				wfpmService.doAddModel(cp.getLoginId(),
-						new ProcessDocument(new FileInputStream(aFile.getAttachment())));
+						new ProcessDocument(new FileInputStream(aFile.getAttachment())).clone());
 			}
 			// 清除
 			clearCache(cp);
