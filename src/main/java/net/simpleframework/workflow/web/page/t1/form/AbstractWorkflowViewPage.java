@@ -1,9 +1,11 @@
 package net.simpleframework.workflow.web.page.t1.form;
 
 import net.simpleframework.mvc.PageParameter;
+import net.simpleframework.mvc.common.element.LinkButton;
 import net.simpleframework.workflow.engine.bean.WorkviewBean;
 import net.simpleframework.workflow.web.IWorkflowWebView;
 import net.simpleframework.workflow.web.WorkflowUtils;
+import net.simpleframework.workflow.web.page.MyWorkviewsTPage;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -17,6 +19,11 @@ public class AbstractWorkflowViewPage extends AbstractFormTemplatePage {
 		final WorkviewBean workview = WorkflowUtils.getWorkviewBean(pp);
 		return (IWorkflowWebView) wfpService.getWorkflowView(wfpService.getBean(workview
 				.getProcessId()));
+	}
+
+	@Override
+	public LinkButton getBackBtn(PageParameter pp) {
+		return super.getBackBtn(pp).setHref(uFactory.getUrl(pp, MyWorkviewsTPage.class));
 	}
 
 	@Override
