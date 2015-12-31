@@ -18,13 +18,13 @@ import net.simpleframework.mvc.component.ui.window.WindowBean;
  * @author 陈侃(cknet@126.com, 13910090885) https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
-@ComponentName(ActivityAbortRegistry.ACTIVITYABORT)
+@ComponentName(ActivityAbortRegistry.ACTIVITY_ABORT)
 @ComponentBean(ActivityAbortBean.class)
 @ComponentRender(ActivityAbortRender.class)
 @ComponentResourceProvider(ActivityAbortResourceProvider.class)
 public class ActivityAbortRegistry extends AbstractComponentRegistry {
 
-	public static final String ACTIVITYABORT = "wf_activity_abort";
+	public static final String ACTIVITY_ABORT = "wf_activity_abort";
 
 	@Override
 	public AbstractComponentBean createComponentBean(final PageParameter pp, final Object attriData) {
