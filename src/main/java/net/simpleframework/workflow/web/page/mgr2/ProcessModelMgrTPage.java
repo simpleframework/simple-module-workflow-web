@@ -37,9 +37,9 @@ public class ProcessModelMgrTPage extends AbstractWorkflowMgrTPage {
 		super.onForward(pp);
 
 		final TablePagerBean tablePager = (TablePagerBean) addTablePagerBean(pp,
-				"ProcessModelMgrTPage_tbl").setSort(false).setShowCheckbox(false).setResize(false)
-				.setPagerBarLayout(EPagerBarLayout.bottom).setPageItems(30)
-				.setContainerId("idProcessModelMgrTPage_tbl").setHandlerClass(ProcessModelTbl.class);
+				"ProcessModelMgrTPage_tbl", ProcessModelTbl.class).setSort(false)
+				.setShowCheckbox(false).setPagerBarLayout(EPagerBarLayout.bottom)
+				.setContainerId("idProcessModelMgrTPage_tbl");
 		tablePager
 				.addColumn(TablePagerColumn.ICON())
 				.addColumn(new TablePagerColumn("modelText", $m("ProcessModelMgrPage.0")))

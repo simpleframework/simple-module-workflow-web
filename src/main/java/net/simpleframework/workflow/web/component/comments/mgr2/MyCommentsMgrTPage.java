@@ -54,9 +54,8 @@ public class MyCommentsMgrTPage extends AbstractMgrTPage implements IWorkflowCon
 		pp.addImportCSS(IWfCommentHandler.class, "/my_comment.css");
 
 		final TablePagerBean tablePager = (TablePagerBean) addTablePagerBean(pp,
-				"MyCommentsMgrTPage_tbl").setFilter(false).setSort(false)
-				.setPagerBarLayout(EPagerBarLayout.none).setContainerId("idMyCommentsMgrTPage_tbl")
-				.setHandlerClass(MyCommentsTbl.class);
+				"MyCommentsMgrTPage_tbl", MyCommentsTbl.class).setFilter(false).setSort(false)
+				.setPagerBarLayout(EPagerBarLayout.none).setContainerId("idMyCommentsMgrTPage_tbl");
 		tablePager.addColumn(new TablePagerColumn("comment", $m("MyCommentsMgrTPage.1")))
 				.addColumn(TablePagerColumn.DATE("createDate", $m("MyCommentsMgrTPage.2")))
 				.addColumn(TablePagerColumn.OPE(105));
