@@ -1,5 +1,6 @@
 package net.simpleframework.workflow.web.component.fallback;
 
+import net.simpleframework.common.StringUtils;
 import net.simpleframework.workflow.web.component.AbstractWfActionBean;
 
 /**
@@ -9,9 +10,15 @@ import net.simpleframework.workflow.web.component.AbstractWfActionBean;
  *         http://www.simpleframework.net
  */
 public class ActivityFallbackBean extends AbstractWfActionBean {
+
 	@Override
 	public boolean isRunImmediately() {
 		return false;
 	}
 
+	@Override
+	public String getHandlerClass() {
+		final String sClass = super.getHandlerClass();
+		return StringUtils.hasText(sClass) ? sClass : DefaultActivityFallbackHandler.class.getName();
+	}
 }
