@@ -35,8 +35,10 @@ public class ActivityAbortRegistry extends AbstractComponentRegistry {
 		final String componentName = nCP.getComponentName();
 
 		final AjaxRequestBean ajaxRequest = pp.addComponentBean(componentName + "_win_page",
-				AjaxRequestBean.class).setUrlForward(
-				getComponentResourceProvider().getResourceHomePath() + "/jsp/activity_select.jsp");
+				AjaxRequestBean.class)
+				.setUrlForward(
+						getComponentResourceProvider().getResourceHomePath()
+								+ "/jsp/activity_abort_select.jsp");
 		pp.addComponentBean(componentName + "_win", WindowBean.class)
 				.setContentRef(ajaxRequest.getName()).setWidth(300).setHeight(400)
 				.setTitle($m("ActivityAbortRegistry.0"));

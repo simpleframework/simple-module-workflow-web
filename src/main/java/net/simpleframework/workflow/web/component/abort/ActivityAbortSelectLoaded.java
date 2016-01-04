@@ -19,7 +19,7 @@ import net.simpleframework.workflow.engine.bean.ActivityBean;
  * @author 陈侃(cknet@126.com, 13910090885) https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
-public class ActivitySelectLoaded extends DefaultPageHandler implements IWorkflowContextAware {
+public class ActivityAbortSelectLoaded extends DefaultPageHandler implements IWorkflowContextAware {
 
 	@Override
 	public void onBeforeComponentRender(final PageParameter pp) {
