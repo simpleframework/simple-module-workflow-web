@@ -1,5 +1,6 @@
 package net.simpleframework.workflow.web.component.fallback;
 
+import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.component.IComponentResourceProvider.AbstractComponentResourceProvider;
 
 /**
@@ -10,4 +11,8 @@ import net.simpleframework.mvc.component.IComponentResourceProvider.AbstractComp
  */
 public class ActivityFallbackResourceProvider extends AbstractComponentResourceProvider {
 
+	@Override
+	public String[] getCssPath(final PageParameter pp) {
+		return new String[] { getCssResourceHomePath(pp) + "/activity_fallback.css" };
+	}
 }

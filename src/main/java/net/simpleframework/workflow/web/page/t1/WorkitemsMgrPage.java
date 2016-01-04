@@ -13,6 +13,7 @@ import net.simpleframework.mvc.common.element.ButtonElement;
 import net.simpleframework.mvc.common.element.ETextAlign;
 import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.LinkButton;
+import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.base.ajaxrequest.AjaxRequestBean;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
@@ -25,6 +26,7 @@ import net.simpleframework.workflow.engine.bean.WorkitemBean;
 import net.simpleframework.workflow.web.IWorkflowWebContext;
 import net.simpleframework.workflow.web.WorkflowLogRef.WorkitemUpdateLogPage;
 import net.simpleframework.workflow.web.WorkflowUtils;
+import net.simpleframework.workflow.web.component.fallback.ActivityFallbackBean;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -73,7 +75,15 @@ public class WorkitemsMgrPage extends OneTableTemplatePage implements IWorkflowC
 
 	@Override
 	public ElementList getLeftElements(final PageParameter pp) {
-		return ElementList.of(LinkButton.closeBtn());
+		final ElementList el = ElementList.of(LinkButton.closeBtn());
+		if (pp.isLmember(workflowContext.getModule().getManagerRole())) {
+			addComponentBean(pp, "WorkitemsMgrPage_fallback", ActivityFallbackBean.class);
+
+			el.append(SpanElement.SPACE);
+			el.append(new LinkButton($m("WorkitemsMgrPage.6"))
+					.setOnclick("$Actions['WorkitemsMgrPage_fallback']();"));
+		}
+		return el;
 	}
 
 	public static class WorkitemsTbl extends AbstractDbTablePagerHandler {

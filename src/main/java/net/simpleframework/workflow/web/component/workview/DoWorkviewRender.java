@@ -1,8 +1,8 @@
 package net.simpleframework.workflow.web.component.workview;
 
+import net.simpleframework.mvc.component.AbstractComponentRender.ComponentBaseActionJavascriptRender;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.ComponentUtils;
-import net.simpleframework.workflow.web.component.complete.WorkitemCompleteRender;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -10,7 +10,7 @@ import net.simpleframework.workflow.web.component.complete.WorkitemCompleteRende
  * @author 陈侃(cknet@126.com, 13910090885) https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
-public class DoWorkviewRender extends WorkitemCompleteRender {
+public class DoWorkviewRender extends ComponentBaseActionJavascriptRender {
 
 	@Override
 	protected String getParams(final ComponentParameter cp) {
