@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageRequestResponse;
 import net.simpleframework.mvc.common.element.Checkbox;
+import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.component.AbstractComponentRender;
 import net.simpleframework.mvc.component.AbstractComponentRender.IJavascriptCallback;
 import net.simpleframework.mvc.component.ComponentParameter;
@@ -18,6 +19,7 @@ import net.simpleframework.workflow.engine.IActivityService;
 import net.simpleframework.workflow.engine.IWorkflowContextAware;
 import net.simpleframework.workflow.engine.bean.ActivityBean;
 import net.simpleframework.workflow.engine.bean.WorkitemBean;
+import net.simpleframework.workflow.engine.participant.Participant;
 import net.simpleframework.workflow.schema.AbstractTaskNode;
 import net.simpleframework.workflow.schema.UserNode;
 import net.simpleframework.workflow.web.WorkflowUtils;
@@ -89,8 +91,17 @@ public abstract class ActivityAbortUtils implements IWorkflowContextAware {
 				final List<ActivityBean> v = e.getValue();
 				for (final ActivityBean activity : v) {
 					sb.append("<div class='aitem2'>");
-					sb.append(new Checkbox("aitem" + i++, WorkflowUtils.getParticipants(cp, activity,
-							false)).setValue(activity.getId().toString()));
+					final StringBuilder sb2 = new StringBuilder();
+					int j = 0;
+					for (final Participant p : wfaService.getParticipants(activity, true)) {
+						if (j++ > 0) {
+							sb2.append(", ");
+						}
+						sb2.append(cp.getUser(p.userId)).append(
+								new SpanElement("(" + cp.getPermission().getDept(p.deptId) + ")")
+										.setClassName("dept"));
+					}
+					sb.append(new Checkbox("aitem" + i++, sb2).setVal(activity.getId()));
 					sb.append("</div>");
 				}
 				sb.append("</div>");

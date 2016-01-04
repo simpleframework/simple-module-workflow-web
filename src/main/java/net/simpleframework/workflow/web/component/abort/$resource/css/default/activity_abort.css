@@ -23,6 +23,12 @@
   font-size: 9.5pt;
 }
 
+.activity_select .aitem2 .dept {
+  color: #999;
+  margin-left: 6px;
+  font-size: 9pt;
+}
+
 .activity_select .msg span {
   color: red;
   font-size: 9.5pt;
