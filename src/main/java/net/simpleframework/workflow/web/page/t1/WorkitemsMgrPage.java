@@ -70,7 +70,7 @@ public class WorkitemsMgrPage extends OneTableTemplatePage implements IWorkflowC
 
 	@Override
 	public String getTitle(final PageParameter pp) {
-		return $m("WorkitemsMgrPage.5") + " - " + WorkflowUtils.getActivityBean(pp);
+		return $m("WorkitemsMgrPage.5") + " - " + WorkflowUtils.getActivityBean(pp).getTasknodeText();
 	}
 
 	@Override
