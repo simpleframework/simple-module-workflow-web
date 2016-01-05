@@ -9,6 +9,7 @@ import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
 import net.simpleframework.workflow.web.WorkflowUtils;
+import net.simpleframework.workflow.web.page.ActivityTbl;
 
 /**
  * Licensed under the Apache License, Version 2.0

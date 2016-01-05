@@ -26,10 +26,10 @@ import net.simpleframework.workflow.engine.bean.ActivityBean;
 import net.simpleframework.workflow.engine.bean.ProcessBean;
 import net.simpleframework.workflow.web.WorkflowLogRef.ActivityUpdateLogPage;
 import net.simpleframework.workflow.web.WorkflowUtils;
+import net.simpleframework.workflow.web.page.ActivityTbl;
+import net.simpleframework.workflow.web.page.WorkitemsPage;
 import net.simpleframework.workflow.web.page.t1.AbstractWorkflowMgrPage;
 import net.simpleframework.workflow.web.page.t1.ActivityMgrPage.ActivityStatusDescPage;
-import net.simpleframework.workflow.web.page.t1.ActivityTbl;
-import net.simpleframework.workflow.web.page.t1.WorkitemsMgrPage;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -47,7 +47,7 @@ public class ActivityMgrTPage extends AbstractWorkflowMgrTPage {
 
 		// workitems
 		final AjaxRequestBean ajaxRequest = addAjaxRequest(pp, "ActivityMgrTPage_workitems_page",
-				WorkitemsMgrPage.class);
+				WorkitemsPage.class);
 		addWindowBean(pp, "ActivityMgrTPage_workitems", ajaxRequest).setWidth(800).setHeight(480);
 	}
 

@@ -1,4 +1,4 @@
-package net.simpleframework.workflow.web.page.t1;
+package net.simpleframework.workflow.web.page;
 
 import static net.simpleframework.common.I18n.$m;
 
@@ -34,7 +34,7 @@ import net.simpleframework.workflow.web.component.fallback.ActivityFallbackBean;
  * @author 陈侃(cknet@126.com, 13910090885) https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
-public class WorkitemsMgrPage extends OneTableTemplatePage implements IWorkflowContextAware {
+public class WorkitemsPage extends OneTableTemplatePage implements IWorkflowContextAware {
 
 	@Override
 	protected void onForward(final PageParameter pp) throws Exception {
@@ -47,14 +47,13 @@ public class WorkitemsMgrPage extends OneTableTemplatePage implements IWorkflowC
 		tablePager
 				.addColumn(TablePagerColumn.ICON())
 				.addColumn(
-						new TablePagerColumn("userText", $m("WorkitemsMgrPage.0"))
+						new TablePagerColumn("userText", $m("WorkitemsPage.0"))
 								.setTextAlign(ETextAlign.center))
 				.addColumn(
-						new TablePagerColumn("userText2", $m("WorkitemsMgrPage.1"))
+						new TablePagerColumn("userText2", $m("WorkitemsPage.1"))
 								.setTextAlign(ETextAlign.center))
-				.addColumn(TablePagerColumn.DATE("createDate", $m("WorkitemsMgrPage.2")).setWidth(150))
-				.addColumn(
-						TablePagerColumn.DATE("completeDate", $m("WorkitemsMgrPage.3")).setWidth(150));
+				.addColumn(TablePagerColumn.DATE("createDate", $m("WorkitemsPage.2")).setWidth(150))
+				.addColumn(TablePagerColumn.DATE("completeDate", $m("WorkitemsPage.3")).setWidth(150));
 		if (pp.isLmember(workflowContext.getModule().getManagerRole())) {
 			tablePager.addColumn(TablePagerColumn.OPE(70));
 		}
@@ -70,7 +69,7 @@ public class WorkitemsMgrPage extends OneTableTemplatePage implements IWorkflowC
 
 	@Override
 	public String getTitle(final PageParameter pp) {
-		return $m("WorkitemsMgrPage.5") + " - " + WorkflowUtils.getActivityBean(pp).getTasknodeText();
+		return $m("WorkitemsPage.5") + " - " + WorkflowUtils.getActivityBean(pp).getTasknodeText();
 	}
 
 	@Override
@@ -78,10 +77,11 @@ public class WorkitemsMgrPage extends OneTableTemplatePage implements IWorkflowC
 		final ElementList el = ElementList.of(LinkButton.closeBtn());
 		if (pp.isLmember(workflowContext.getModule().getManagerRole())) {
 			addComponentBean(pp, "WorkitemsMgrPage_fallback", ActivityFallbackBean.class);
-
 			el.append(SpanElement.SPACE);
-			el.append(new LinkButton($m("WorkitemsMgrPage.6"))
-					.setOnclick("$Actions['WorkitemsMgrPage_fallback']();"));
+			final ActivityBean activity = WorkflowUtils.getActivityBean(pp);
+			el.append(new LinkButton($m("WorkitemsPage.6"))
+					.setOnclick("$Actions['WorkitemsMgrPage_fallback']('activityId=" + activity.getId()
+							+ "');"));
 		}
 		return el;
 	}

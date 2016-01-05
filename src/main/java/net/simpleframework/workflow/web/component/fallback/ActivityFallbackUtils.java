@@ -1,14 +1,22 @@
 package net.simpleframework.workflow.web.component.fallback;
 
+import static net.simpleframework.common.I18n.$m;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import net.simpleframework.ctx.script.MVEL2Template;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageRequestResponse;
+import net.simpleframework.mvc.common.element.ButtonElement;
+import net.simpleframework.mvc.common.element.Checkbox;
+import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.component.AbstractComponentRender;
 import net.simpleframework.mvc.component.AbstractComponentRender.IJavascriptCallback;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.workflow.engine.IWorkflowContextAware;
+import net.simpleframework.workflow.engine.bean.ActivityBean;
+import net.simpleframework.workflow.web.WorkflowUtils;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -30,10 +38,10 @@ public abstract class ActivityFallbackUtils implements IWorkflowContextAware {
 
 	public static String toParams(final ComponentParameter cp) {
 		final StringBuilder sb = new StringBuilder();
-		// WorkitemBean workitem;
-		// if ((workitem = WorkflowUtils.getWorkitemBean(cp)) != null) {
-		// sb.append("workitemId=").append(workitem.getId()).append("&");
-		// }
+		ActivityBean activity;
+		if ((activity = WorkflowUtils.getActivityBean(cp)) != null) {
+			sb.append("activityId=").append(activity.getId()).append("&");
+		}
 		sb.append(BEAN_ID).append("=").append(cp.hashId());
 		return sb.toString();
 	}
@@ -46,5 +54,28 @@ public abstract class ActivityFallbackUtils implements IWorkflowContextAware {
 						.append(toParams(cp)).append("');");
 			}
 		});
+	}
+
+	public static String toListHTML(final ComponentParameter cp) {
+		final StringBuilder sb = new StringBuilder();
+		sb.append("<div class='items'>");
+		System.out.println(WorkflowUtils.getActivityBean(cp));
+		sb.append("</div>");
+		return sb.toString();
+	}
+
+	public static String toBottomHTML(final ComponentParameter cp) {
+		final StringBuilder sb = new StringBuilder();
+		sb.append("<div class='left'>");
+		sb.append(new Checkbox("idActivityFallback_opt1", $m("ActivityFallbackUtils.0"))
+				.setChecked(true));
+		sb.append("</div>");
+		sb.append("<div class='right'>");
+		sb.append(ButtonElement.okBtn()).append(SpanElement.SPACE);
+		sb.append(ButtonElement.closeBtn());
+		sb.append("</div>");
+		sb.append(MVEL2Template.replace(null, ActivityFallbackUtils.class,
+				"ActivityFallbackUtils.html"));
+		return sb.toString();
 	}
 }

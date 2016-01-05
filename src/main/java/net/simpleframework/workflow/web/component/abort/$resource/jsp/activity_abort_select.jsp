@@ -8,7 +8,7 @@
 	final String componentName = nCP.getComponentName();
 	final String params = ActivityAbortUtils.toParams(nCP);
 %>
-<div class="simple_window_tcb activity_select">
+<div class="simple_window_tcb activity_abort_select">
   <%=ActivityAbortUtils.toListHTML(nCP)%>
   <div class="msg"></div>
   <div class="b">
@@ -18,7 +18,7 @@
 </div>
 <script type="text/javascript">
   $ready(function() {
-    var ts = $(".activity_select");
+    var ts = $(".activity_abort_select");
     
     ts.down(".button2").observe("click", function(evn) {
       var id = "";
@@ -32,7 +32,7 @@
         $Actions['<%=componentName%>_ActivitySelect_OK'](
             '<%=params%>&activityIds=' + id.substring(1));
       } else {
-        $UI.shakeMsg(ts.down(".msg"), "<span>#(activity_select.0)</span>");
+        $UI.shakeMsg(ts.down(".msg"), "<span>#(activity_abort_select.0)</span>");
       }
     });
     

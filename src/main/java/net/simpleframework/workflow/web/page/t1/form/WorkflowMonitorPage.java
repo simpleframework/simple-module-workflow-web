@@ -25,10 +25,10 @@ import net.simpleframework.workflow.engine.bean.ActivityBean;
 import net.simpleframework.workflow.engine.bean.ProcessBean;
 import net.simpleframework.workflow.engine.bean.WorkitemBean;
 import net.simpleframework.workflow.web.WorkflowUtils;
+import net.simpleframework.workflow.web.page.ActivityTbl;
+import net.simpleframework.workflow.web.page.WorkitemsPage;
 import net.simpleframework.workflow.web.page.t1.AbstractWorkflowMgrPage;
-import net.simpleframework.workflow.web.page.t1.ActivityTbl;
 import net.simpleframework.workflow.web.page.t1.WorkflowGraphUtils;
-import net.simpleframework.workflow.web.page.t1.WorkitemsMgrPage;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -47,7 +47,7 @@ public class WorkflowMonitorPage extends AbstractWorkflowFormPage {
 		addTablePagerBean(pp);
 
 		// workitems
-		addAjaxRequest(pp, "WorkflowMonitorPage_workitems_page", WorkitemsMgrPage.class);
+		addAjaxRequest(pp, "WorkflowMonitorPage_workitems_page", WorkitemsPage.class);
 		addWindowBean(pp, "WorkflowMonitorPage_workitems")
 				.setContentRef("WorkflowMonitorPage_workitems_page").setWidth(800).setHeight(480);
 

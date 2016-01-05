@@ -1,4 +1,4 @@
-package net.simpleframework.workflow.web.page.t1;
+package net.simpleframework.workflow.web.page;
 
 import static net.simpleframework.common.I18n.$m;
 

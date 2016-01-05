@@ -34,6 +34,8 @@ import net.simpleframework.workflow.engine.bean.ProcessBean;
 import net.simpleframework.workflow.web.WorkflowLogRef.ActivityUpdateLogPage;
 import net.simpleframework.workflow.web.WorkflowUtils;
 import net.simpleframework.workflow.web.component.abort.ActivityAbortBean;
+import net.simpleframework.workflow.web.page.ActivityTbl;
+import net.simpleframework.workflow.web.page.WorkitemsPage;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -58,7 +60,7 @@ public class ActivityMgrPage extends AbstractWorkflowMgrPage {
 				.setTitle(EProcessStatus.abort.toString()).setWidth(420).setHeight(240);
 
 		// workitems
-		ajaxRequest = addAjaxRequest(pp, "ActivityMgrPage_workitems_page", WorkitemsMgrPage.class);
+		ajaxRequest = addAjaxRequest(pp, "ActivityMgrPage_workitems_page", WorkitemsPage.class);
 		addWindowBean(pp, "ActivityMgrPage_workitems", ajaxRequest).setWidth(800).setHeight(480);
 
 		addComponentBean(pp, "ActivityMgrPage_abort2", ActivityAbortBean.class);

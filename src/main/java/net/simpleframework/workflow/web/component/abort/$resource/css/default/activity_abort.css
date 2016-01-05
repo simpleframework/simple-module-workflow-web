@@ -1,16 +1,16 @@
-.activity_select {
+.activity_abort_select {
   overflow-y: auto;
 }
 
-.activity_select .aitem {
+.activity_abort_select .aitem {
   border-bottom: 1px solid #ccc;
 }
 
-.activity_select .aitem:hover {
+.activity_abort_select .aitem:hover {
   background-color: #f7f7f7;
 }
 
-.activity_select .aitem1 {
+.activity_abort_select .aitem1 {
   border-bottom: 1px solid #ccc;
   background-color: #eee;
   padding: 6px 8px;
@@ -18,18 +18,18 @@
   color: #a00;
 }
 
-.activity_select .aitem2 {
+.activity_abort_select .aitem2 {
   padding: 0 0 8px 12px;
   font-size: 9.5pt;
 }
 
-.activity_select .aitem2 .dept {
+.activity_abort_select .aitem2 .dept {
   color: #999;
   margin-left: 6px;
   font-size: 9pt;
 }
 
-.activity_select .msg span {
+.activity_abort_select .msg span {
   color: red;
   font-size: 9.5pt;
   padding: 8px;
