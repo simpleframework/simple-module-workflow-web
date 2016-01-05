@@ -20,6 +20,7 @@ import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
 import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
 import net.simpleframework.mvc.component.ui.pager.db.AbstractDbTablePagerHandler;
 import net.simpleframework.mvc.template.lets.OneTableTemplatePage;
+import net.simpleframework.workflow.engine.EActivityStatus;
 import net.simpleframework.workflow.engine.IWorkflowContextAware;
 import net.simpleframework.workflow.engine.bean.ActivityBean;
 import net.simpleframework.workflow.engine.bean.WorkitemBean;
@@ -75,11 +76,13 @@ public class WorkitemsPage extends OneTableTemplatePage implements IWorkflowCont
 	@Override
 	public ElementList getLeftElements(final PageParameter pp) {
 		final ElementList el = ElementList.of(LinkButton.closeBtn());
-		if (pp.isLmember(workflowContext.getModule().getManagerRole())) {
+		ActivityBean activity;
+		if (pp.isLmember(workflowContext.getModule().getManagerRole())
+				&& (activity = WorkflowUtils.getActivityBean(pp)).getStatus() == EActivityStatus.running) {
 			addComponentBean(pp, "WorkitemsMgrPage_fallback", ActivityFallbackBean.class);
 			el.append(SpanElement.SPACE);
-			final ActivityBean activity = WorkflowUtils.getActivityBean(pp);
-			el.append(new LinkButton($m("WorkitemsPage.6"))
+
+			el.append(new LinkButton($m("WorkitemsPage.4"))
 					.setOnclick("$Actions['WorkitemsMgrPage_fallback']('activityId=" + activity.getId()
 							+ "');"));
 		}
