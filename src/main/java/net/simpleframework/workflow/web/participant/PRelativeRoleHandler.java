@@ -130,8 +130,8 @@ public class PRelativeRoleHandler extends AbstractParticipantHandler implements
 
 		final WorkflowPermissionHandler wph = (WorkflowPermissionHandler) permission;
 		if (StringUtils.hasText(role)) {
-			String[] _r = role.split(",");// 多个角色采用豆号分隔
-			for (String r : _r) {
+			final String[] _r = role.split(",");// 多个角色采用豆号分隔
+			for (final String r : _r) {
 				Collection<Participant> _participants = wph.getRelativeParticipantsOfLevel(userId,
 						roleId, deptId, variables, r, level);
 
@@ -148,8 +148,8 @@ public class PRelativeRoleHandler extends AbstractParticipantHandler implements
 				}
 			}
 		} else {
-			Collection<Participant> _participants = wph.getRelativeParticipantsOfLevel(userId, roleId,
-					deptId, variables, null, level);
+			final Collection<Participant> _participants = wph.getRelativeParticipantsOfLevel(userId,
+					roleId, deptId, variables, null, level);
 			if (_participants != null && _participants.size() > 0) {
 				participants.addAll(_participants);
 			}

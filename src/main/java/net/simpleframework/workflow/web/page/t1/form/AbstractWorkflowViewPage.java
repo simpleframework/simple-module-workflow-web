@@ -22,7 +22,7 @@ public class AbstractWorkflowViewPage extends AbstractFormTemplatePage {
 	}
 
 	@Override
-	public LinkButton getBackBtn(PageParameter pp) {
+	public LinkButton getBackBtn(final PageParameter pp) {
 		return super.getBackBtn(pp).setHref(uFactory.getUrl(pp, MyWorkviewsTPage.class));
 	}
 
