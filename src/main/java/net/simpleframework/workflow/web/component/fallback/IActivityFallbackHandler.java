@@ -17,5 +17,5 @@ public interface IActivityFallbackHandler extends IComponentHandler {
 
 	Collection<UserNode> getUserNodes(ComponentParameter cp);
 
-	JavascriptForward doFallback(ComponentParameter cp, String usernode);
+	JavascriptForward doFallback(ComponentParameter cp, String usernode, boolean isNextActivity);
 }

@@ -1,11 +1,13 @@
 package net.simpleframework.workflow.web.component.fallback;
 
+import net.simpleframework.ctx.trans.Transaction;
 import net.simpleframework.mvc.DefaultPageHandler;
 import net.simpleframework.mvc.IForward;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.base.ajaxrequest.AjaxRequestBean;
 import net.simpleframework.mvc.component.base.ajaxrequest.DefaultAjaxRequestHandler;
+import net.simpleframework.workflow.engine.IWorkflowContext;
 import net.simpleframework.workflow.engine.IWorkflowContextAware;
 
 /**
@@ -27,12 +29,12 @@ public class ActivityFallbackSelectLoaded extends DefaultPageHandler implements
 	}
 
 	public static class UsernodeSelectAction extends DefaultAjaxRequestHandler {
+		@Transaction(context = IWorkflowContext.class)
 		@Override
 		public IForward ajaxProcess(final ComponentParameter cp) throws Exception {
 			final ComponentParameter nCP = ActivityFallbackUtils.get(cp);
-			System.out.println(cp.getBoolParameter("opt1"));
 			return ((IActivityFallbackHandler) nCP.getComponentHandler()).doFallback(nCP,
-					cp.getParameter("usernodeId"));
+					cp.getParameter("usernodeId"), cp.getBoolParameter("opt1"));
 		}
 	}
 }

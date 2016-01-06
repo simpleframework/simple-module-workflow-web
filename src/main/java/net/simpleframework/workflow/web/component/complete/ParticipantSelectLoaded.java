@@ -5,6 +5,7 @@ import java.util.Map;
 
 import net.simpleframework.common.JsonUtils;
 import net.simpleframework.common.StringUtils;
+import net.simpleframework.ctx.trans.Transaction;
 import net.simpleframework.mvc.DefaultPageHandler;
 import net.simpleframework.mvc.IForward;
 import net.simpleframework.mvc.JavascriptForward;
@@ -13,6 +14,7 @@ import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.base.ajaxrequest.AjaxRequestBean;
 import net.simpleframework.mvc.component.base.ajaxrequest.DefaultAjaxRequestHandler;
 import net.simpleframework.workflow.engine.ActivityComplete;
+import net.simpleframework.workflow.engine.IWorkflowContext;
 import net.simpleframework.workflow.web.WorkflowUtils;
 
 /**
@@ -43,6 +45,7 @@ public class ParticipantSelectLoaded extends DefaultPageHandler {
 			return super.getBeanProperty(cp, beanProperty);
 		}
 
+		@Transaction(context = IWorkflowContext.class)
 		@Override
 		public IForward ajaxProcess(final ComponentParameter cp) throws Exception {
 			final ComponentParameter nCP = WorkitemCompleteUtils.get(cp);

@@ -4,12 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.simpleframework.common.StringUtils;
+import net.simpleframework.ctx.trans.Transaction;
 import net.simpleframework.mvc.DefaultPageHandler;
 import net.simpleframework.mvc.IForward;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.base.ajaxrequest.AjaxRequestBean;
 import net.simpleframework.mvc.component.base.ajaxrequest.DefaultAjaxRequestHandler;
+import net.simpleframework.workflow.engine.IWorkflowContext;
 import net.simpleframework.workflow.engine.IWorkflowContextAware;
 import net.simpleframework.workflow.engine.bean.ActivityBean;
 
@@ -32,6 +34,7 @@ public class ActivityAbortSelectLoaded extends DefaultPageHandler implements IWo
 
 	public static class ActivitySelectAction extends DefaultAjaxRequestHandler {
 
+		@Transaction(context = IWorkflowContext.class)
 		@Override
 		public IForward ajaxProcess(final ComponentParameter cp) throws Exception {
 			final ComponentParameter nCP = ActivityAbortUtils.get(cp);
