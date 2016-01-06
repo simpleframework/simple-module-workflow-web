@@ -25,8 +25,12 @@
 	    alert('#(activity_fallback_select.0)');
 	    return;
 	  }
+	  if (!confirm('#(activity_fallback_select.1)')) {
+	    return;
+	  }
 	  $Actions['<%=componentName%>_Usernode_Select_OK'](
-	      'activityId=<%=activity.getId()%>&usernodeId=' + obj.getAttribute('_usernode'));
+	      'activityId=<%=activity.getId()%>&usernodeId=' + obj.getAttribute('_usernode') + 
+	      '&opt1=' + $F('idActivityFallback_opt1'));
 	}
 	
   $ready(function() {
