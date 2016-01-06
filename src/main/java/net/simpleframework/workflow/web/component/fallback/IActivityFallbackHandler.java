@@ -1,6 +1,10 @@
 package net.simpleframework.workflow.web.component.fallback;
 
+import java.util.Collection;
+
+import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.IComponentHandler;
+import net.simpleframework.workflow.schema.UserNode;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -9,4 +13,6 @@ import net.simpleframework.mvc.component.IComponentHandler;
  *         http://www.simpleframework.net
  */
 public interface IActivityFallbackHandler extends IComponentHandler {
+
+	Collection<UserNode> getUserNodes(ComponentParameter cp);
 }

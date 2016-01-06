@@ -17,6 +17,15 @@
   $ready(function() {
     var ts = $(".activity_fallback_select");
     
+    ts.select(".nitem").invoke("observe", "click", function(e) {
+      var sel = ts.down(".select");
+      if(sel)
+        sel.removeClassName("select");	 
+     	this.addClassName("select");	
+    }).invoke("observe", "dblclick", function(e) {
+      
+    });
+    
     var w = $Actions['<%=componentName%>_win'].window;
     w.content.setStyle("overflow:hidden;");
     var s = function() {

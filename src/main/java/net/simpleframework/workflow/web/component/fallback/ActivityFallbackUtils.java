@@ -2,8 +2,7 @@ package net.simpleframework.workflow.web.component.fallback;
 
 import static net.simpleframework.common.I18n.$m;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.Collection;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -18,7 +17,6 @@ import net.simpleframework.mvc.component.AbstractComponentRender.IJavascriptCall
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.workflow.engine.IWorkflowContextAware;
 import net.simpleframework.workflow.engine.bean.ActivityBean;
-import net.simpleframework.workflow.schema.AbstractTaskNode;
 import net.simpleframework.workflow.schema.UserNode;
 import net.simpleframework.workflow.web.WorkflowUtils;
 
@@ -63,25 +61,14 @@ public abstract class ActivityFallbackUtils implements IWorkflowContextAware {
 	public static String toListHTML(final ComponentParameter cp) {
 		final StringBuilder sb = new StringBuilder();
 		sb.append("<div class='items'>");
-		final ActivityBean activity = WorkflowUtils.getActivityBean(cp);
-		final Map<String, UserNode> cache = new LinkedHashMap<String, UserNode>();
-		ActivityBean pre = activity;
-		while ((pre = wfaService.getPreActivity(pre)) != null) {
-			final AbstractTaskNode tasknode = wfaService.getTaskNode(pre);
-			if (tasknode instanceof UserNode) {
-				cache.put(tasknode.getName(), (UserNode) tasknode);
+		final Collection<UserNode> nodes = ((IActivityFallbackHandler) cp.getComponentHandler())
+				.getUserNodes(cp);
+		if (nodes != null) {
+			for (final UserNode usernode : nodes) {
+				sb.append("<div class='nitem'>");
+				sb.append(usernode);
+				sb.append("</div>");
 			}
-		}
-		for (final UserNode usernode : cache.values()) {
-			sb.append("<div class='nitem'>");
-			sb.append(usernode);
-			sb.append("</div>");
-			sb.append("<div class='nitem'>");
-			sb.append(usernode);
-			sb.append("</div>");
-			sb.append("<div class='nitem'>");
-			sb.append(usernode);
-			sb.append("</div>");
 		}
 		sb.append("</div>");
 		return sb.toString();
