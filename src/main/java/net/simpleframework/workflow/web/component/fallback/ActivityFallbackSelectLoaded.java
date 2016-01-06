@@ -29,6 +29,7 @@ public class ActivityFallbackSelectLoaded extends DefaultPageHandler implements
 	}
 
 	public static class UsernodeSelectAction extends DefaultAjaxRequestHandler {
+
 		@Transaction(context = IWorkflowContext.class)
 		@Override
 		public IForward ajaxProcess(final ComponentParameter cp) throws Exception {

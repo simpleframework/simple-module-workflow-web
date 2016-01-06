@@ -1,7 +1,6 @@
 package net.simpleframework.workflow.web.component.complete;
 
 import net.simpleframework.common.StringUtils;
-import net.simpleframework.ctx.trans.Transaction;
 import net.simpleframework.mvc.DefaultPageHandler;
 import net.simpleframework.mvc.IForward;
 import net.simpleframework.mvc.JavascriptForward;
@@ -9,7 +8,6 @@ import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.base.ajaxrequest.AjaxRequestBean;
 import net.simpleframework.workflow.engine.ActivityComplete;
-import net.simpleframework.workflow.engine.IWorkflowContext;
 import net.simpleframework.workflow.web.WorkflowUtils;
 import net.simpleframework.workflow.web.component.complete.ParticipantSelectLoaded.ParticipantSelectAction;
 
@@ -32,7 +30,6 @@ public class TransitionSelectLoaded extends DefaultPageHandler {
 
 	public static class TransitionSelectAction extends ParticipantSelectAction {
 
-		@Transaction(context = IWorkflowContext.class)
 		@Override
 		public IForward ajaxProcess(final ComponentParameter cp) throws Exception {
 			final ComponentParameter nCP = WorkitemCompleteUtils.get(cp);
