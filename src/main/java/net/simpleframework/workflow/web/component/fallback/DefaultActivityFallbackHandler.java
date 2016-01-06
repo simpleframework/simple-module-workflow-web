@@ -4,9 +4,11 @@ import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import net.simpleframework.ctx.trans.Transaction;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.component.AbstractComponentHandler;
 import net.simpleframework.mvc.component.ComponentParameter;
+import net.simpleframework.workflow.engine.IWorkflowContext;
 import net.simpleframework.workflow.engine.IWorkflowContextAware;
 import net.simpleframework.workflow.engine.bean.ActivityBean;
 import net.simpleframework.workflow.schema.AbstractTaskNode;
@@ -40,6 +42,7 @@ public class DefaultActivityFallbackHandler extends AbstractComponentHandler imp
 		return cache.values();
 	}
 
+	@Transaction(context = IWorkflowContext.class)
 	@Override
 	public JavascriptForward doFallback(final ComponentParameter cp, final String usernode) {
 		wfaService.doFallback(WorkflowUtils.getActivityBean(cp), usernode);

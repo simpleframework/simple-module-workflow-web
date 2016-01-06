@@ -34,6 +34,8 @@
 	}
 	
   $ready(function() {
+    var w = $Actions['<%=componentName%>_win'].window;
+    
     var ts = $(".activity_fallback_select");
     
     ts.select(".nitem").invoke("observe", "click", function(e) {
@@ -41,11 +43,11 @@
       if(sel)
         sel.removeClassName("select");	 
      	this.addClassName("select");	
+     	w.setHeader("#(ActivityFallbackRegistry.0)" + " (" + this.innerHTML + ")");
     }).invoke("observe", "dblclick", function(e) {
-      
+      _activity_fallback_select_click(this);
     });
     
-    var w = $Actions['<%=componentName%>_win'].window;
     w.content.setStyle("overflow:hidden;");
     var s = function() {
       var h = w.getSize(true).height;

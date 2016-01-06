@@ -65,8 +65,7 @@ public abstract class ActivityFallbackUtils implements IWorkflowContextAware {
 				.getUserNodes(cp);
 		if (nodes != null) {
 			for (final UserNode usernode : nodes) {
-				sb.append("<div class='nitem' _usernode='").append(usernode.getId())
-						.append("' ondblclick='_activity_fallback_select_click(this);'>");
+				sb.append("<div class='nitem' _usernode='").append(usernode.getId()).append("'>");
 				sb.append(usernode);
 				sb.append("</div>");
 			}
