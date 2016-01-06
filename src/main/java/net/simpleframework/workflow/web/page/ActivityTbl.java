@@ -100,7 +100,12 @@ public class ActivityTbl extends GroupDbTablePagerHandler implements IWorkflowCo
 			// final EActivityStatus pstatus = pre.getStatus();
 			// row.add("previous", WorkflowUtils.toStatusHTML(cp, pstatus,
 			// toTasknodeElement(cp, pre)));
-			row.add("pre_participants", WorkflowUtils.getParticipants(cp, pre, true));
+			String pre_participants = WorkflowUtils.getParticipants(cp, pre, true);
+			if (!StringUtils.hasText(pre_participants)) {
+				// 由于直退，前一任务并没有参与者，取定义参与者
+				pre_participants = WorkflowUtils.getParticipants(cp, pre, false);
+			}
+			row.add("pre_participants", pre_participants);
 		}
 
 		row.add("participants", WorkflowUtils.getParticipants(cp, activity, false)).add(
