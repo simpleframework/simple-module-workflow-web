@@ -2,6 +2,7 @@ package net.simpleframework.workflow.web.component.fallback;
 
 import java.util.Collection;
 
+import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.IComponentHandler;
 import net.simpleframework.workflow.schema.UserNode;
@@ -15,4 +16,6 @@ import net.simpleframework.workflow.schema.UserNode;
 public interface IActivityFallbackHandler extends IComponentHandler {
 
 	Collection<UserNode> getUserNodes(ComponentParameter cp);
+
+	JavascriptForward doFallback(ComponentParameter cp, String usernode);
 }

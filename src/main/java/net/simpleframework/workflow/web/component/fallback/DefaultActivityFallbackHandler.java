@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.component.AbstractComponentHandler;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.workflow.engine.IWorkflowContextAware;
@@ -28,11 +29,20 @@ public class DefaultActivityFallbackHandler extends AbstractComponentHandler imp
 		ActivityBean pre = activity;
 		while ((pre = wfaService.getPreActivity(pre)) != null) {
 			final AbstractTaskNode tasknode = wfaService.getTaskNode(pre);
+			if (tasknode.getId().equals(activity.getTasknodeId())) {
+				continue;
+			}
 			UserNode usernode;
 			if (tasknode instanceof UserNode && !(usernode = (UserNode) tasknode).isFallback()) {
 				cache.put(tasknode.getName(), usernode);
 			}
 		}
 		return cache.values();
+	}
+
+	@Override
+	public JavascriptForward doFallback(final ComponentParameter cp, final String usernode) {
+		wfaService.doFallback(WorkflowUtils.getActivityBean(cp), usernode);
+		return new JavascriptForward("$Actions['" + cp.getComponentName() + "_win'].close();");
 	}
 }
