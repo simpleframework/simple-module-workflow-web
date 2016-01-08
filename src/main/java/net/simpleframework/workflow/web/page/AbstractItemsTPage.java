@@ -52,6 +52,12 @@ public abstract class AbstractItemsTPage extends AbstractWorksTPage {
 		return item;
 	}
 
+	public CategoryItem createCategoryItem_mySentWorkviews(final PageParameter pp) {
+		final CategoryItem item = createCategoryItem(pp, $m("AbstractItemsTPage.13"),
+				MyWorkviewsSentTPage.class).setIconClass(getIcon(pp, "my_workviews.png"));
+		return item;
+	}
+
 	public CategoryItem createCategoryItem_mywork(final PageParameter pp) {
 		final CategoryItem item = createCategoryItem(pp, $m("AbstractItemsTPage.0"),
 				MyRunningWorklistTPage.class).setIconClass(getIcon(pp, "my_work.png"));
@@ -93,14 +99,16 @@ public abstract class AbstractItemsTPage extends AbstractWorksTPage {
 
 	@Override
 	protected CategoryItems getCategoryList(final PageParameter pp) {
-		final CategoryItem item0 = createCategoryItem_mywork(pp);
-		final List<CategoryItem> children = item0.getChildren();
-		children.add(createCategoryItem_mywork_complete(pp));
-		// children.add(createCategoryItem_queryworks(pp));
-		children.add(createCategoryItem_myinitiate(pp));
-		children.add(createCategoryItem_delegate(pp));
-		children.add(createCategoryItem_myWorkstat(pp));
-		return CategoryItems.of(createCategoryItem_myWorkviews(pp), item0);
+		final CategoryItem item1 = createCategoryItem_myWorkviews(pp);
+		final List<CategoryItem> children1 = item1.getChildren();
+		children1.add(createCategoryItem_mySentWorkviews(pp));
+		final CategoryItem item2 = createCategoryItem_mywork(pp);
+		final List<CategoryItem> children2 = item2.getChildren();
+		children2.add(createCategoryItem_mywork_complete(pp));
+		children2.add(createCategoryItem_myinitiate(pp));
+		children2.add(createCategoryItem_delegate(pp));
+		children2.add(createCategoryItem_myWorkstat(pp));
+		return CategoryItems.of(item1, item2);
 	}
 
 	protected ElementList getIndexSearchElements(final PageParameter pp) {

@@ -63,7 +63,7 @@ public abstract class AbstractQueryWorksHandler extends AbstractScanHandler impl
 	@Override
 	public ElementList getLeftElements(final PageParameter pp, final EQueryWorks qw) {
 		if (qw == EQueryWorks.dept) {
-			if (pp.getLdept().hasChild()) {
+			if (pp.getLdept().getChildren().size() > 0) {
 				return ElementList.of(new Checkbox("idMyQueryWorks_DeptTPage_children",
 						$m("MyQueryWorksTPage.2"))
 						.setOnchange("$Actions['MyQueryWorksTPage_tbl']('child=' + this.checked);"));

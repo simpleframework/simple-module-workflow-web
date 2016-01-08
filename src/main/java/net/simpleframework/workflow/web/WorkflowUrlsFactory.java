@@ -12,6 +12,7 @@ import net.simpleframework.workflow.web.page.MyInitiateItemsTPage;
 import net.simpleframework.workflow.web.page.MyRunningWorklistTPage;
 import net.simpleframework.workflow.web.page.MyWorklogsTPage;
 import net.simpleframework.workflow.web.page.MyWorkstatTPage;
+import net.simpleframework.workflow.web.page.MyWorkviewsSentTPage;
 import net.simpleframework.workflow.web.page.MyWorkviewsTPage;
 import net.simpleframework.workflow.web.page.UserDelegateListTPage;
 import net.simpleframework.workflow.web.page.mgr2.ActivityGraphMgrTPage;
@@ -40,6 +41,7 @@ import net.simpleframework.workflow.web.page.t2.AbstractWorkPage.MyRunningWorkli
 import net.simpleframework.workflow.web.page.t2.AbstractWorkPage.MyWorklogsPage;
 import net.simpleframework.workflow.web.page.t2.AbstractWorkPage.MyWorkstatPage;
 import net.simpleframework.workflow.web.page.t2.AbstractWorkPage.MyWorkviewsPage;
+import net.simpleframework.workflow.web.page.t2.AbstractWorkPage.MyWorkviewsSentPage;
 import net.simpleframework.workflow.web.page.t2.AbstractWorkPage.UserDelegateListPage;
 
 /**
@@ -53,15 +55,21 @@ public class WorkflowUrlsFactory extends UrlsCache {
 	public WorkflowUrlsFactory() {
 		put(MyRunningWorklistTPage.class, MyRunningWorklistPage.class);
 		put(MyFinalWorklistTPage.class, MyFinalWorklistPage.class);
+
 		put(MyInitiateItemsTPage.class, MyInitiateItemsPage.class);
 		put(MyInitiateItemsGroupTPage.class, MyInitiateItemsGroupPage.class);
+
 		put(MyDelegateListTPage.class, MyDelegateListPage.class);
 		put(UserDelegateListTPage.class, UserDelegateListPage.class);
+
 		put(MyQueryWorksTPage.class, MyQueryWorksPage.class);
 		put(MyQueryWorks_DeptTPage.class, MyQueryWorks_DeptPage.class);
 		put(MyQueryWorks_OrgTPage.class, MyQueryWorks_OrgPage.class);
 		put(MyQueryWorks_RoleTPage.class, MyQueryWorks_RolePage.class);
+
 		put(MyWorkviewsTPage.class, MyWorkviewsPage.class);
+		put(MyWorkviewsSentTPage.class, MyWorkviewsSentPage.class);
+
 		put(MyWorkstatTPage.class, MyWorkstatPage.class);
 		put(MyWorklogsTPage.class, MyWorklogsPage.class);
 

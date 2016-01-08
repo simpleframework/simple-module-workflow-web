@@ -16,6 +16,7 @@ import net.simpleframework.workflow.web.page.MyInitiateItemsTPage;
 import net.simpleframework.workflow.web.page.MyRunningWorklistTPage;
 import net.simpleframework.workflow.web.page.MyWorklogsTPage;
 import net.simpleframework.workflow.web.page.MyWorkstatTPage;
+import net.simpleframework.workflow.web.page.MyWorkviewsSentTPage;
 import net.simpleframework.workflow.web.page.MyWorkviewsTPage;
 import net.simpleframework.workflow.web.page.UserDelegateListTPage;
 import net.simpleframework.workflow.web.page.query.MyQueryWorksTPage;
@@ -99,6 +100,14 @@ public abstract class AbstractWorkPage extends T2TemplatePage {
 		@Override
 		protected Class<? extends AbstractItemsTPage> getWorkTPageClass() {
 			return MyWorkviewsTPage.class;
+		}
+	}
+
+	@PageMapping(url = "/workflow/my/views-sent")
+	public static class MyWorkviewsSentPage extends AbstractWorkPage {
+		@Override
+		protected Class<? extends AbstractItemsTPage> getWorkTPageClass() {
+			return MyWorkviewsSentTPage.class;
 		}
 	}
 
