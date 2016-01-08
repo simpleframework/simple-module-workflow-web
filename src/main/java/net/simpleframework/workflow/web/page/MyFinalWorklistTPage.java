@@ -133,8 +133,8 @@ public class MyFinalWorklistTPage extends MyRunningWorklistTPage {
 			if (cp.getBoolParameter("delegation")) {
 				items = FilterItems.of(new FilterItem("userId", EFilterRelation.not_equal, "@userId2"));
 			}
-			return wfwService.getWorklist(cp.getLoginId(), items, EWorkitemStatus.complete,
-					EWorkitemStatus.abort);
+			return wfwService.getWorklist(cp.getLoginId(), items, EWorkitemStatus.complete);
+			// EWorkitemStatus.abort
 		}
 
 		@Override

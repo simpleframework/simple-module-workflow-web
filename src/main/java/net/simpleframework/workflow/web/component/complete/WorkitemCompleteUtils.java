@@ -13,6 +13,7 @@ import net.simpleframework.common.logger.Log;
 import net.simpleframework.common.logger.LogFactory;
 import net.simpleframework.common.object.ObjectUtils;
 import net.simpleframework.common.web.JavascriptUtils;
+import net.simpleframework.ctx.permission.PermissionDept;
 import net.simpleframework.ctx.permission.PermissionUser;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.MVCUtils;
@@ -190,8 +191,9 @@ public abstract class WorkitemCompleteUtils implements IWorkflowContextAware {
 					final String val = participant.toString();
 					Object user = cp.getUser(participant.userId);
 					if (ArrayUtils.contains(deptdispTasks, to.getName())) {
-						user = ((PermissionUser) user).getDept().getText() + " ("
-								+ SpanElement.color777(user) + ")";
+						final PermissionDept dept = participant.deptId != null ? cp
+								.getDept(participant.deptId) : ((PermissionUser) user).getDept();
+						user = dept.getText() + " (" + SpanElement.color777(user) + ")";
 					}
 					final String id = ObjectUtils.hashStr(participant);
 					Checkbox box;
