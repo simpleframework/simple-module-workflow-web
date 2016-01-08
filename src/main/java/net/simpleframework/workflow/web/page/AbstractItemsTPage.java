@@ -100,8 +100,8 @@ public abstract class AbstractItemsTPage extends AbstractWorksTPage {
 	@Override
 	protected CategoryItems getCategoryList(final PageParameter pp) {
 		final CategoryItem item1 = createCategoryItem_myWorkviews(pp);
-		final List<CategoryItem> children1 = item1.getChildren();
-		children1.add(createCategoryItem_mySentWorkviews(pp));
+		// final List<CategoryItem> children1 = item1.getChildren();
+		// children1.add(createCategoryItem_mySentWorkviews(pp));
 		final CategoryItem item2 = createCategoryItem_mywork(pp);
 		final List<CategoryItem> children2 = item2.getChildren();
 		children2.add(createCategoryItem_mywork_complete(pp));
