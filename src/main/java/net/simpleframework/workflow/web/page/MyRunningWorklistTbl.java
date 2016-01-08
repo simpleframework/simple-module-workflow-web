@@ -153,8 +153,9 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 		final EWorkitemStatus status = workitem.getStatus();
 		ActivityBean fallback;
 		if ((fallback = wfaService.getBean(workitem.getFallbackId())) != null) {
-			img = AbstractItemsTPage._createImageMark(pp, "status_fallback.png").setTitle(
-					$m("MyRunningWorklistTbl.23", wfaService.getTaskNode(fallback)));
+			final EActivityStatus status2 = fallback.getStatus();
+			img = AbstractItemsTPage._createImageMark(pp, "status_" + status2.name() + ".png")
+					.setTitle($m("MyRunningWorklistTbl.23", wfaService.getTaskNode(fallback), status2));
 		} else if (workitem.getRetakeRef() != null) {
 			img = MARK_RETAKE(pp);
 		} else if (status == EWorkitemStatus.delegate) {
