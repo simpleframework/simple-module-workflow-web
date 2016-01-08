@@ -33,7 +33,7 @@ public class DefaultActivityFallbackHandler extends AbstractComponentHandler imp
 				continue;
 			}
 			UserNode usernode;
-			if (tasknode instanceof UserNode && !(usernode = (UserNode) tasknode).isFallback()) {
+			if (tasknode instanceof UserNode && (usernode = (UserNode) tasknode).isFallback()) {
 				cache.put(tasknode.getName(), usernode);
 			}
 		}
