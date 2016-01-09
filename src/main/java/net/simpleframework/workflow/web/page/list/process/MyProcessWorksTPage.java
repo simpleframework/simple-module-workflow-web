@@ -32,13 +32,13 @@ import net.simpleframework.workflow.web.IWorkflowWebContext;
 import net.simpleframework.workflow.web.WorkflowUtils;
 import net.simpleframework.workflow.web.page.AbstractWorksTPage;
 import net.simpleframework.workflow.web.page.list.AbstractItemsTPage;
-import net.simpleframework.workflow.web.page.list.process.IQueryWorksHandler.EQueryWorks;
-import net.simpleframework.workflow.web.page.list.process.MyQueryWorksTPages.MyQueryWorks_DeptTPage;
-import net.simpleframework.workflow.web.page.list.process.MyQueryWorksTPages.MyQueryWorks_OrgTPage;
-import net.simpleframework.workflow.web.page.list.process.MyQueryWorksTPages.MyQueryWorks_RoleTPage;
-import net.simpleframework.workflow.web.page.list.process.MyQueryWorksTbl.MyQueryWorks_DeptTbl;
-import net.simpleframework.workflow.web.page.list.process.MyQueryWorksTbl.MyQueryWorks_OrgTbl;
-import net.simpleframework.workflow.web.page.list.process.MyQueryWorksTbl.MyQueryWorks_RoleTbl;
+import net.simpleframework.workflow.web.page.list.process.IProcessWorksHandler.EProcessWorks;
+import net.simpleframework.workflow.web.page.list.process.MyProcessWorksTPages.MyProcessWorks_DeptTPage;
+import net.simpleframework.workflow.web.page.list.process.MyProcessWorksTPages.MyProcessWorks_OrgTPage;
+import net.simpleframework.workflow.web.page.list.process.MyProcessWorksTPages.MyProcessWorks_RoleTPage;
+import net.simpleframework.workflow.web.page.list.process.MyProcessWorksTbl.MyProcessWorks_DeptTbl;
+import net.simpleframework.workflow.web.page.list.process.MyProcessWorksTbl.MyProcessWorks_OrgTbl;
+import net.simpleframework.workflow.web.page.list.process.MyProcessWorksTbl.MyProcessWorks_RoleTbl;
 import net.simpleframework.workflow.web.page.t1.form.WorkflowFormPage;
 import net.simpleframework.workflow.web.page.t1.form.WorkflowMonitorPage;
 
@@ -48,69 +48,69 @@ import net.simpleframework.workflow.web.page.t1.form.WorkflowMonitorPage;
  * @author 陈侃(cknet@126.com, 13910090885) https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
-public class MyQueryWorksTPage extends AbstractWorksTPage {
+public class MyProcessWorksTPage extends AbstractWorksTPage {
 
 	@Override
 	protected void onForward(final PageParameter pp) throws Exception {
 		super.onForward(pp);
-		pp.addImportCSS(AbstractItemsTPage.class, "/query_work.css");
-		pp.addImportJavascript(AbstractItemsTPage.class, "/js/query_work.js");
+		pp.addImportCSS(AbstractItemsTPage.class, "/process_work.css");
+		pp.addImportJavascript(AbstractItemsTPage.class, "/js/process_work.js");
 
 		addTablePagerBean(pp);
 
-		addAjaxRequest(pp, "MyQueryWorksTPage_workitem").setHandlerMethod("doWorkitem");
+		addAjaxRequest(pp, "MyProcessWorksTPage_workitem").setHandlerMethod("doWorkitem");
 
 		// 工作列表窗口
-		final AjaxRequestBean ajaxRequest = addAjaxRequest(pp, "MyQueryWorksTPage_detail_page",
+		final AjaxRequestBean ajaxRequest = addAjaxRequest(pp, "MyProcessWorksTPage_detail_page",
 				ProcessDetailPage.class);
-		addWindowBean(pp, "MyQueryWorksTPage_detail", ajaxRequest).setWidth(400).setHeight(480)
-				.setTitle($m("MyQueryWorksTPage.1"));
+		addWindowBean(pp, "MyProcessWorksTPage_detail", ajaxRequest).setWidth(400).setHeight(480)
+				.setTitle($m("MyProcessWorksTPage.1"));
 	}
 
 	@Override
 	protected String getPageCSS(final PageParameter pp) {
-		return "MyQueryWorksTPage";
+		return "MyProcessWorksTPage";
 	}
 
-	protected IQueryWorksHandler getQueryWorksHandler(final PageParameter pp) {
+	protected IProcessWorksHandler getProcessWorksHandler(final PageParameter pp) {
 		final ProcessModelBean pm = WorkflowUtils.getProcessModel(pp);
-		IQueryWorksHandler hdl = null;
+		IProcessWorksHandler hdl = null;
 		if (pm != null) {
-			hdl = AbstractQueryWorksHandler.regists.get(pm.getModelName());
+			hdl = AbstractProcessWorksHandler.regists.get(pm.getModelName());
 		}
 		if (hdl == null) {
-			hdl = DefaultQueryWorksHandler.instance;
+			hdl = DefaultProcessWorksHandler.instance;
 		}
 		return hdl;
 	}
 
-	protected EQueryWorks qw;
+	protected EProcessWorks qw;
 	protected Class<? extends AbstractDbTablePagerHandler> tblClass;
 	{
-		if (MyQueryWorks_DeptTPage.class.isAssignableFrom(getClass())) {
-			qw = EQueryWorks.dept;
-			tblClass = MyQueryWorks_DeptTbl.class;
-		} else if (MyQueryWorks_OrgTPage.class.isAssignableFrom(getClass())) {
-			qw = EQueryWorks.org;
-			tblClass = MyQueryWorks_OrgTbl.class;
-		} else if (MyQueryWorks_RoleTPage.class.isAssignableFrom(getClass())) {
-			qw = EQueryWorks.role;
-			tblClass = MyQueryWorks_RoleTbl.class;
+		if (MyProcessWorks_DeptTPage.class.isAssignableFrom(getClass())) {
+			qw = EProcessWorks.dept;
+			tblClass = MyProcessWorks_DeptTbl.class;
+		} else if (MyProcessWorks_OrgTPage.class.isAssignableFrom(getClass())) {
+			qw = EProcessWorks.org;
+			tblClass = MyProcessWorks_OrgTbl.class;
+		} else if (MyProcessWorks_RoleTPage.class.isAssignableFrom(getClass())) {
+			qw = EProcessWorks.role;
+			tblClass = MyProcessWorks_RoleTbl.class;
 		} else {
-			qw = EQueryWorks.my;
-			tblClass = MyQueryWorksTbl.class;
+			qw = EProcessWorks.my;
+			tblClass = MyProcessWorksTbl.class;
 		}
 	}
 
 	protected TablePagerBean addTablePagerBean(final PageParameter pp) {
-		final TablePagerBean tablePager = addTablePagerBean(pp, "MyQueryWorksTPage_tbl", tblClass);
-		getQueryWorksHandler(pp).doTablePagerInit(pp, tablePager, qw);
+		final TablePagerBean tablePager = addTablePagerBean(pp, "MyProcessWorksTPage_tbl", tblClass);
+		getProcessWorksHandler(pp).doTablePagerInit(pp, tablePager, qw);
 		return tablePager;
 	}
 
 	@Override
 	public ElementList getLeftElements(final PageParameter pp) {
-		return getQueryWorksHandler(pp).getLeftElements(pp, qw);
+		return getProcessWorksHandler(pp).getLeftElements(pp, qw);
 	}
 
 	public IForward doWorkitem(final ComponentParameter cp) {
@@ -121,7 +121,7 @@ public class MyQueryWorksTPage extends AbstractWorksTPage {
 					uFactory.getUrl(cp, (cp.getBoolParameter("monitor") ? WorkflowMonitorPage.class
 							: WorkflowFormPage.class), workitem), true));
 		} else {
-			return new JavascriptForward("alert('").append($m("MyQueryWorksTPage.7")).append("');");
+			return new JavascriptForward("alert('").append($m("MyProcessWorksTPage.7")).append("');");
 		}
 	}
 
@@ -136,19 +136,19 @@ public class MyQueryWorksTPage extends AbstractWorksTPage {
 		if (pm != null) {
 			params = "modelId=" + pm.getId();
 		}
-		final TabButtons tabs = TabButtons.of(new TabButton($m("MyQueryWorksTPage.4"), uFactory
-				.getUrl(pp, MyQueryWorksTPage.class, params)));
+		final TabButtons tabs = TabButtons.of(new TabButton($m("MyProcessWorksTPage.4"), uFactory
+				.getUrl(pp, MyProcessWorksTPage.class, params)));
 		final IWorkflowWebContext ctx = (IWorkflowWebContext) workflowContext;
-		if (pp.isLmember(ctx.getQueryWorks_DeptRole(pp))) {
-			tabs.append(new TabButton(pp.getLdept(), uFactory.getUrl(pp, MyQueryWorks_DeptTPage.class,
-					params)));
+		if (pp.isLmember(ctx.getProcessWorks_DeptRole(pp))) {
+			tabs.append(new TabButton(pp.getLdept(), uFactory.getUrl(pp,
+					MyProcessWorks_DeptTPage.class, params)));
 		}
-		if (pp.isLmember(ctx.getQueryWorks_OrgRole(pp))) {
-			tabs.append(new TabButton($m("MyQueryWorksTPage.5"), uFactory.getUrl(pp,
-					MyQueryWorks_OrgTPage.class, params)));
+		if (pp.isLmember(ctx.getProcessWorks_OrgRole(pp))) {
+			tabs.append(new TabButton($m("MyProcessWorksTPage.5"), uFactory.getUrl(pp,
+					MyProcessWorks_OrgTPage.class, params)));
 		}
-		tabs.append(new TabButton($m("MyQueryWorksTPage.6"), uFactory.getUrl(pp,
-				MyQueryWorks_RoleTPage.class, params)));
+		tabs.append(new TabButton($m("MyProcessWorksTPage.6"), uFactory.getUrl(pp,
+				MyProcessWorks_RoleTPage.class, params)));
 		return ElementList.of(createTabsElement(pp, tabs));
 	}
 
@@ -175,7 +175,7 @@ public class MyQueryWorksTPage extends AbstractWorksTPage {
 			list.add(pm);
 		}
 
-		sb.append("<div class='gtitle'>").append($m("MyQueryWorksTPage.16")).append("</div>");
+		sb.append("<div class='gtitle'>").append($m("MyProcessWorksTPage.16")).append("</div>");
 		final ProcessModelBean cur = WorkflowUtils.getProcessModel(pp);
 		for (final Map.Entry<String, List<ProcessModelBean>> e : gmap.entrySet()) {
 			final String key = e.getKey();
@@ -215,7 +215,7 @@ public class MyQueryWorksTPage extends AbstractWorksTPage {
 			sb.append("<div class='modeltxt clearfix'>");
 			sb.append(new SpanElement(pm.getModelText()).setClassName("pm"));
 			sb.append(" (");
-			sb.append(LinkElement.style2($m("MyQueryWorksTPage.9")).setHref(
+			sb.append(LinkElement.style2($m("MyProcessWorksTPage.9")).setHref(
 					uFactory.getUrl(pp, (Class<? extends AbstractMVCPage>) getOriginalClass())));
 			sb.append(")");
 			sb.append("</div>");

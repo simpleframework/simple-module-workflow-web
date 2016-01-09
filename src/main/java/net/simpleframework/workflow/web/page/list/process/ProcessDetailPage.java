@@ -36,7 +36,7 @@ public class ProcessDetailPage extends AbstractTemplatePage implements IWorkflow
 		sb.append("<div class='ptitle'>").append(process).append("</div>");
 		sb.append("<table class='form_tbl' cellspacing='1'>");
 		sb.append("  <tr>");
-		sb.append("    <td class='l'>#(MyQueryWorksTPage.13)</td>");
+		sb.append("    <td class='l'>#(MyProcessWorksTPage.13)</td>");
 		sb.append("    <td class='v'>");
 		final LinkedHashSet<String> dtags = new LinkedHashSet<String>();
 		final LinkedHashMap<ID, Integer> utags = new LinkedHashMap<ID, Integer>();
@@ -66,7 +66,7 @@ public class ProcessDetailPage extends AbstractTemplatePage implements IWorkflow
 		sb.append("    </td>");
 		sb.append("  </tr>");
 		sb.append("  <tr>");
-		sb.append("    <td class='l'>#(MyQueryWorksTPage.14)</td>");
+		sb.append("    <td class='l'>#(MyProcessWorksTPage.14)</td>");
 		sb.append("    <td class='v'>");
 		final LinkedHashMap<AbstractTaskNode, Integer> wtags = new LinkedHashMap<AbstractTaskNode, Integer>();
 		list = wfwService.getWorkitems(process, loginId);
@@ -88,7 +88,7 @@ public class ProcessDetailPage extends AbstractTemplatePage implements IWorkflow
 		sb.append("    </td>");
 		sb.append("  </tr>");
 		sb.append("  <tr>");
-		sb.append("    <td class='l'>#(MyQueryWorksTPage.15)</td>");
+		sb.append("    <td class='l'>#(MyProcessWorksTPage.15)</td>");
 		sb.append("    <td class='v'>");
 		for (final Map.Entry<ID, Integer> e : utags.entrySet()) {
 			sb.append("<span class='ptag'>");

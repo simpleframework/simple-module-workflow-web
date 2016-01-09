@@ -34,7 +34,7 @@ import net.simpleframework.workflow.web.page.list.delegate.UserDelegateListTPage
 import net.simpleframework.workflow.web.page.list.delegate.AbstractDelegateFormPage.WorkitemDelegateReceivingPage;
 import net.simpleframework.workflow.web.page.list.delegate.AbstractDelegateFormPage.WorkitemDelegateSetPage;
 import net.simpleframework.workflow.web.page.list.initiate.MyInitiateItemsGroupTPage;
-import net.simpleframework.workflow.web.page.list.process.MyQueryWorksTPage;
+import net.simpleframework.workflow.web.page.list.process.MyProcessWorksTPage;
 import net.simpleframework.workflow.web.page.list.stat.MyWorkstatTPage;
 
 /**
@@ -113,7 +113,7 @@ public class MyRunningWorklistTPage extends AbstractItemsTPage {
 		addGroupMenuItems(pp, mb, url);
 		mb.addItem(MenuItem.sep()).addItem(
 				MenuItem.of($m("AbstractItemsTPage.4")).setOnclick(
-						JS.loc(uFactory.getUrl(pp, MyQueryWorksTPage.class))));
+						JS.loc(uFactory.getUrl(pp, MyProcessWorksTPage.class))));
 
 		// 委托菜单
 		mb = createDelegateMenuComponent(pp);

@@ -28,7 +28,7 @@ import net.simpleframework.workflow.web.page.IWorkflowPageAware;
  * @author 陈侃(cknet@126.com, 13910090885) https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
-public class MyQueryWorksTbl extends AbstractDbTablePagerHandler implements IWorkflowPageAware {
+public class MyProcessWorksTbl extends AbstractDbTablePagerHandler implements IWorkflowPageAware {
 	@Override
 	public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
 		final ProcessModelBean pm = WorkflowUtils.getProcessModel(cp);
@@ -61,24 +61,24 @@ public class MyQueryWorksTbl extends AbstractDbTablePagerHandler implements IWor
 		final String deptTxt = cp.getPermission().getDept(process.getDeptId()).toString();
 		t.append("[").append(SpanElement.color777(deptTxt).setTitle(deptTxt)).append("] ");
 		t.append(new LinkElement(WorkflowUtils.getProcessTitle(process)).setOnclick(
-				"$Actions['MyQueryWorksTPage_workitem']('processId=" + process.getId() + "');")
+				"$Actions['MyProcessWorksTPage_workitem']('processId=" + process.getId() + "');")
 				.setColor_gray(!StringUtils.hasText(process.getTitle())));
 		return t.toString();
 	}
 
 	protected String toOpeHTML(final ComponentParameter cp, final ProcessBean process) {
 		final StringBuilder ope = new StringBuilder();
-		ope.append(new ButtonElement($m("MyQueryWorksTPage.1"))
-				.setOnclick("$Actions['MyQueryWorksTPage_detail']('processId=" + process.getId()
+		ope.append(new ButtonElement($m("MyProcessWorksTPage.1"))
+				.setOnclick("$Actions['MyProcessWorksTPage_detail']('processId=" + process.getId()
 						+ "');"));
 		ope.append(SpanElement.SPACE).append(
 				new ButtonElement($m("MyRunningWorklistTbl.3"))
-						.setOnclick("$Actions['MyQueryWorksTPage_workitem']('processId="
+						.setOnclick("$Actions['MyProcessWorksTPage_workitem']('processId="
 								+ process.getId() + "&monitor=true');"));
 		return ope.toString();
 	}
 
-	public static class MyQueryWorks_DeptTbl extends MyQueryWorksTbl {
+	public static class MyProcessWorks_DeptTbl extends MyProcessWorksTbl {
 		@Override
 		public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
 			final boolean child = cp.getBoolParameter("child");
@@ -98,7 +98,7 @@ public class MyQueryWorksTbl extends AbstractDbTablePagerHandler implements IWor
 		}
 	}
 
-	public static class MyQueryWorks_OrgTbl extends MyQueryWorksTbl {
+	public static class MyProcessWorks_OrgTbl extends MyProcessWorksTbl {
 		@Override
 		public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
 			final ProcessModelBean pm = WorkflowUtils.getProcessModel(cp);
@@ -109,7 +109,7 @@ public class MyQueryWorksTbl extends AbstractDbTablePagerHandler implements IWor
 		}
 	}
 
-	public static class MyQueryWorks_RoleTbl extends MyQueryWorksTbl {
+	public static class MyProcessWorks_RoleTbl extends MyProcessWorksTbl {
 		@Override
 		public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
 			final ProcessModelBean pm = WorkflowUtils.getProcessModel(cp);

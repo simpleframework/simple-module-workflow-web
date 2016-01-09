@@ -6,9 +6,9 @@ package net.simpleframework.workflow.web.page.list.process;
  * @author 陈侃(cknet@126.com, 13910090885) https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
-public class DefaultQueryWorksHandler extends AbstractQueryWorksHandler {
+public class DefaultProcessWorksHandler extends AbstractProcessWorksHandler {
 
-	static IQueryWorksHandler instance = new DefaultQueryWorksHandler();
+	static IProcessWorksHandler instance = new DefaultProcessWorksHandler();
 
 	@Override
 	public String getModelName() {

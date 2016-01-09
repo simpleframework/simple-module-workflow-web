@@ -1,5 +1,5 @@
 $ready(function() {
-  $Elements(".MyQueryWorksTPage .col1 .gitem").each(
+  $Elements(".MyProcessWorksTPage .col1 .gitem").each(
       function(item) {
         var psub = item.down(".psub");
         var psep = item.down(".psep");

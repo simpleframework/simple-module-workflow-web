@@ -9,10 +9,10 @@ import net.simpleframework.workflow.web.page.list.delegate.MyDelegateListTPage;
 import net.simpleframework.workflow.web.page.list.delegate.UserDelegateListTPage;
 import net.simpleframework.workflow.web.page.list.initiate.MyInitiateItemsGroupTPage;
 import net.simpleframework.workflow.web.page.list.initiate.MyInitiateItemsTPage;
-import net.simpleframework.workflow.web.page.list.process.MyQueryWorksTPage;
-import net.simpleframework.workflow.web.page.list.process.MyQueryWorksTPages.MyQueryWorks_DeptTPage;
-import net.simpleframework.workflow.web.page.list.process.MyQueryWorksTPages.MyQueryWorks_OrgTPage;
-import net.simpleframework.workflow.web.page.list.process.MyQueryWorksTPages.MyQueryWorks_RoleTPage;
+import net.simpleframework.workflow.web.page.list.process.MyProcessWorksTPage;
+import net.simpleframework.workflow.web.page.list.process.MyProcessWorksTPages.MyProcessWorks_DeptTPage;
+import net.simpleframework.workflow.web.page.list.process.MyProcessWorksTPages.MyProcessWorks_OrgTPage;
+import net.simpleframework.workflow.web.page.list.process.MyProcessWorksTPages.MyProcessWorks_RoleTPage;
 import net.simpleframework.workflow.web.page.list.stat.MyWorklogsTPage;
 import net.simpleframework.workflow.web.page.list.stat.MyWorkstatTPage;
 import net.simpleframework.workflow.web.page.list.worklist.MyFinalWorklistTPage;
@@ -33,10 +33,10 @@ import net.simpleframework.workflow.web.page.t2.AbstractWorkPage.MyDelegateListP
 import net.simpleframework.workflow.web.page.t2.AbstractWorkPage.MyFinalWorklistPage;
 import net.simpleframework.workflow.web.page.t2.AbstractWorkPage.MyInitiateItemsGroupPage;
 import net.simpleframework.workflow.web.page.t2.AbstractWorkPage.MyInitiateItemsPage;
-import net.simpleframework.workflow.web.page.t2.AbstractWorkPage.MyQueryWorksPage;
-import net.simpleframework.workflow.web.page.t2.AbstractWorkPage.MyQueryWorks_DeptPage;
-import net.simpleframework.workflow.web.page.t2.AbstractWorkPage.MyQueryWorks_OrgPage;
-import net.simpleframework.workflow.web.page.t2.AbstractWorkPage.MyQueryWorks_RolePage;
+import net.simpleframework.workflow.web.page.t2.AbstractWorkPage.MyProcessWorksPage;
+import net.simpleframework.workflow.web.page.t2.AbstractWorkPage.MyProcessWorks_DeptPage;
+import net.simpleframework.workflow.web.page.t2.AbstractWorkPage.MyProcessWorks_OrgPage;
+import net.simpleframework.workflow.web.page.t2.AbstractWorkPage.MyProcessWorks_RolePage;
 import net.simpleframework.workflow.web.page.t2.AbstractWorkPage.MyRunningWorklistPage;
 import net.simpleframework.workflow.web.page.t2.AbstractWorkPage.MyWorklogsPage;
 import net.simpleframework.workflow.web.page.t2.AbstractWorkPage.MyWorkstatPage;
@@ -62,10 +62,10 @@ public class WorkflowUrlsFactory extends UrlsCache {
 		put(MyDelegateListTPage.class, MyDelegateListPage.class);
 		put(UserDelegateListTPage.class, UserDelegateListPage.class);
 
-		put(MyQueryWorksTPage.class, MyQueryWorksPage.class);
-		put(MyQueryWorks_DeptTPage.class, MyQueryWorks_DeptPage.class);
-		put(MyQueryWorks_OrgTPage.class, MyQueryWorks_OrgPage.class);
-		put(MyQueryWorks_RoleTPage.class, MyQueryWorks_RolePage.class);
+		put(MyProcessWorksTPage.class, MyProcessWorksPage.class);
+		put(MyProcessWorks_DeptTPage.class, MyProcessWorks_DeptPage.class);
+		put(MyProcessWorks_OrgTPage.class, MyProcessWorks_OrgPage.class);
+		put(MyProcessWorks_RoleTPage.class, MyProcessWorks_RolePage.class);
 
 		put(MyWorkviewsTPage.class, MyWorkviewsPage.class);
 		put(MyWorkviewsSentTPage.class, MyWorkviewsSentPage.class);

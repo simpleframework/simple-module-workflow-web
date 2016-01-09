@@ -27,9 +27,9 @@ import net.simpleframework.workflow.web.page.IWorkflowPageAware;
  * @author 陈侃(cknet@126.com, 13910090885) https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
-public abstract class MyQueryWorksTPages implements IWorkflowPageAware {
+public abstract class MyProcessWorksTPages implements IWorkflowPageAware {
 
-	public static class MyQueryWorks_OrgTPage extends MyQueryWorksTPage {
+	public static class MyProcessWorks_OrgTPage extends MyProcessWorksTPage {
 
 		@Override
 		protected WorkitemBean getOpenWorkitem(final PageParameter pp, final ProcessBean process) {
@@ -37,10 +37,10 @@ public abstract class MyQueryWorksTPages implements IWorkflowPageAware {
 		}
 	}
 
-	public static class MyQueryWorks_DeptTPage extends MyQueryWorks_OrgTPage {
+	public static class MyProcessWorks_DeptTPage extends MyProcessWorks_OrgTPage {
 	}
 
-	public static class MyQueryWorks_RoleTPage extends MyQueryWorksTPage {
+	public static class MyProcessWorks_RoleTPage extends MyProcessWorksTPage {
 	}
 
 	public static class ProcessModelSelectPage extends OneTableTemplatePage {
@@ -52,9 +52,9 @@ public abstract class MyQueryWorksTPages implements IWorkflowPageAware {
 					"ProcessModelSelectPage_tbl", ProcessModelSelectTbl.class).setShowCheckbox(false)
 					.setShowLineNo(false).setPagerBarLayout(EPagerBarLayout.none);
 			tablePager
-					.addColumn(new TablePagerColumn("modelText", $m("MyQueryWorksTPage.10")))
+					.addColumn(new TablePagerColumn("modelText", $m("MyProcessWorksTPage.10")))
 					.addColumn(
-							new TablePagerColumn("modelVer", $m("MyQueryWorksTPage.11"), 80)
+							new TablePagerColumn("modelVer", $m("MyProcessWorksTPage.11"), 80)
 									.setFilterSort(false).setTextAlign(ETextAlign.center))
 					.addColumn(TablePagerColumn.OPE(80));
 		}
@@ -77,7 +77,7 @@ public abstract class MyQueryWorksTPages implements IWorkflowPageAware {
 
 			protected String toOpeHTML(final ComponentParameter cp, final ProcessModelBean pm) {
 				final StringBuilder ope = new StringBuilder();
-				ope.append(LinkButton.corner($m("MyQueryWorksTPage.12")).setOnclick(
+				ope.append(LinkButton.corner($m("MyProcessWorksTPage.12")).setOnclick(
 						"$Actions.reloc('modelId=" + pm.getId() + "');"));
 				return ope.toString();
 			}

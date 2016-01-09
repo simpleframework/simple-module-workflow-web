@@ -1,12 +1,12 @@
-.MyQueryWorksTPage .category {
+.MyProcessWorksTPage .category {
   padding: 15px 0; 
 }
 
-.MyQueryWorksTPage .col1 {
+.MyProcessWorksTPage .col1 {
   position: static !important;
 }
 
-.MyQueryWorksTPage .gtitle {
+.MyProcessWorksTPage .gtitle {
   border-bottom: 1px dashed #bbb;
   color: #833;
   font-size: 11px;
@@ -14,7 +14,7 @@
   padding: 2px 0 6px 10px;
 }
 
-.MyQueryWorksTPage .col1 .gitem {
+.MyProcessWorksTPage .col1 .gitem {
   margin-right: 1px;
   padding: 8px 15px;
   border-top: 1px solid transparent;
@@ -25,26 +25,26 @@
   color: #666;
 }
 
-.MyQueryWorksTPage .col1 .gitem:HOVER {
+.MyProcessWorksTPage .col1 .gitem:HOVER {
   background-color: #fafafa;
   border-color: #999;
 }
 
-.MyQueryWorksTPage .col1 .glbl {
+.MyProcessWorksTPage .col1 .glbl {
   font-size: 10.5pt;
 }
 
-.MyQueryWorksTPage .col1 .gsize {
+.MyProcessWorksTPage .col1 .gsize {
   margin-left: 3px;
   color: #555;
 }
 
-.MyQueryWorksTPage .col1 .gitem.cur {
+.MyProcessWorksTPage .col1 .gitem.cur {
   color: #333;
   background-image: url("images/pop_arrow_hover.png");
 }
 
-.MyQueryWorksTPage .col1 .gitem .psep {
+.MyProcessWorksTPage .col1 .gitem .psep {
   position: absolute;
   background-color: #fafafa;
   left: -2px;
@@ -52,7 +52,7 @@
   width: 2px;
 }
 
-.MyQueryWorksTPage .col1 .gitem .psub {
+.MyProcessWorksTPage .col1 .gitem .psub {
   position: absolute;
   padding: 10px;
   z-index: 20;
@@ -65,19 +65,19 @@
   cursor: default;
 }
 
-.MyQueryWorksTPage .col1  .pitem {
+.MyProcessWorksTPage .col1  .pitem {
   display: inline-block;
   padding: 10px;
 }
 
-.MyQueryWorksTPage .modeltxt {
+.MyProcessWorksTPage .modeltxt {
   background-color: #eed;
   color: #654;
   margin-bottom: 8px;
   padding: 4px 10px;
 }
 
-.MyQueryWorksTPage .modeltxt .pm {
+.MyProcessWorksTPage .modeltxt .pm {
   font-size: 10.5pt; 
   margin-right: 4px;
 }

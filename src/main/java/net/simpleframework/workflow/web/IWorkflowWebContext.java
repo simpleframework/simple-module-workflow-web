@@ -30,7 +30,7 @@ public interface IWorkflowWebContext extends IWorkflowContext, IMVCContextVar {
 	 * @param pp
 	 * @return
 	 */
-	String getQueryWorks_DeptRole(PageParameter pp);
+	String getProcessWorks_DeptRole(PageParameter pp);
 
 	/**
 	 * 获取机构级别的流程查询角色
@@ -38,5 +38,5 @@ public interface IWorkflowWebContext extends IWorkflowContext, IMVCContextVar {
 	 * @param pp
 	 * @return
 	 */
-	String getQueryWorks_OrgRole(PageParameter pp);
+	String getProcessWorks_OrgRole(PageParameter pp);
 }

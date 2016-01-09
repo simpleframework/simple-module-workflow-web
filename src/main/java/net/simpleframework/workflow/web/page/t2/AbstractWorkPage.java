@@ -13,10 +13,10 @@ import net.simpleframework.workflow.web.page.list.delegate.MyDelegateListTPage;
 import net.simpleframework.workflow.web.page.list.delegate.UserDelegateListTPage;
 import net.simpleframework.workflow.web.page.list.initiate.MyInitiateItemsGroupTPage;
 import net.simpleframework.workflow.web.page.list.initiate.MyInitiateItemsTPage;
-import net.simpleframework.workflow.web.page.list.process.MyQueryWorksTPage;
-import net.simpleframework.workflow.web.page.list.process.MyQueryWorksTPages.MyQueryWorks_DeptTPage;
-import net.simpleframework.workflow.web.page.list.process.MyQueryWorksTPages.MyQueryWorks_OrgTPage;
-import net.simpleframework.workflow.web.page.list.process.MyQueryWorksTPages.MyQueryWorks_RoleTPage;
+import net.simpleframework.workflow.web.page.list.process.MyProcessWorksTPage;
+import net.simpleframework.workflow.web.page.list.process.MyProcessWorksTPages.MyProcessWorks_DeptTPage;
+import net.simpleframework.workflow.web.page.list.process.MyProcessWorksTPages.MyProcessWorks_OrgTPage;
+import net.simpleframework.workflow.web.page.list.process.MyProcessWorksTPages.MyProcessWorks_RoleTPage;
 import net.simpleframework.workflow.web.page.list.stat.MyWorklogsTPage;
 import net.simpleframework.workflow.web.page.list.stat.MyWorkstatTPage;
 import net.simpleframework.workflow.web.page.list.worklist.MyFinalWorklistTPage;
@@ -129,35 +129,35 @@ public abstract class AbstractWorkPage extends T2TemplatePage {
 
 	/*-------------------------------query--------------------------------*/
 
-	@PageMapping(url = "/workflow/query/my-works")
-	public static class MyQueryWorksPage extends AbstractWorkPage {
+	@PageMapping(url = "/workflow/process-works/my")
+	public static class MyProcessWorksPage extends AbstractWorkPage {
 		@Override
 		protected Class<? extends AbstractWorksTPage> getWorkTPageClass() {
-			return MyQueryWorksTPage.class;
+			return MyProcessWorksTPage.class;
 		}
 	}
 
-	@PageMapping(url = "/workflow/query/dept-works")
-	public static class MyQueryWorks_DeptPage extends AbstractWorkPage {
+	@PageMapping(url = "/workflow/process-works/dept")
+	public static class MyProcessWorks_DeptPage extends AbstractWorkPage {
 		@Override
 		protected Class<? extends AbstractWorksTPage> getWorkTPageClass() {
-			return MyQueryWorks_DeptTPage.class;
+			return MyProcessWorks_DeptTPage.class;
 		}
 	}
 
-	@PageMapping(url = "/workflow/query/org-works")
-	public static class MyQueryWorks_OrgPage extends AbstractWorkPage {
+	@PageMapping(url = "/workflow/process-works/org")
+	public static class MyProcessWorks_OrgPage extends AbstractWorkPage {
 		@Override
 		protected Class<? extends AbstractWorksTPage> getWorkTPageClass() {
-			return MyQueryWorks_OrgTPage.class;
+			return MyProcessWorks_OrgTPage.class;
 		}
 	}
 
-	@PageMapping(url = "/workflow/query/role-works")
-	public static class MyQueryWorks_RolePage extends AbstractWorkPage {
+	@PageMapping(url = "/workflow/process-works/role")
+	public static class MyProcessWorks_RolePage extends AbstractWorkPage {
 		@Override
 		protected Class<? extends AbstractWorksTPage> getWorkTPageClass() {
-			return MyQueryWorks_RoleTPage.class;
+			return MyProcessWorks_RoleTPage.class;
 		}
 	}
 }
