@@ -24,7 +24,7 @@ import net.simpleframework.workflow.engine.bean.WorkitemBean;
 import net.simpleframework.workflow.engine.bean.WorkviewBean;
 import net.simpleframework.workflow.engine.participant.Participant;
 import net.simpleframework.workflow.schema.AbstractTaskNode;
-import net.simpleframework.workflow.web.page.AbstractItemsTPage;
+import net.simpleframework.workflow.web.page.list.AbstractItemsTPage;
 
 /**
  * Licensed under the Apache License, Version 2.0
