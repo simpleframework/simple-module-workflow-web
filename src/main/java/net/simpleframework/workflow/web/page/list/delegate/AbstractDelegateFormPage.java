@@ -1,4 +1,4 @@
-package net.simpleframework.workflow.web.page;
+package net.simpleframework.workflow.web.page.list.delegate;
 
 import static net.simpleframework.common.I18n.$m;
 

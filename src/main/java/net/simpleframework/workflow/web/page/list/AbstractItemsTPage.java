@@ -1,4 +1,4 @@
-package net.simpleframework.workflow.web.page;
+package net.simpleframework.workflow.web.page.list;
 
 import static net.simpleframework.common.I18n.$m;
 
@@ -17,6 +17,16 @@ import net.simpleframework.mvc.common.element.SupElement;
 import net.simpleframework.mvc.template.struct.CategoryItem;
 import net.simpleframework.mvc.template.struct.CategoryItems;
 import net.simpleframework.workflow.web.WorkflowUtils;
+import net.simpleframework.workflow.web.page.AbstractWorksTPage;
+import net.simpleframework.workflow.web.page.list.delegate.MyDelegateListTPage;
+import net.simpleframework.workflow.web.page.list.initiate.MyInitiateItemsGroupTPage;
+import net.simpleframework.workflow.web.page.list.initiate.MyInitiateItemsTPage;
+import net.simpleframework.workflow.web.page.list.stat.MyWorklogsTPage;
+import net.simpleframework.workflow.web.page.list.stat.MyWorkstatTPage;
+import net.simpleframework.workflow.web.page.list.worklist.MyFinalWorklistTPage;
+import net.simpleframework.workflow.web.page.list.worklist.MyRunningWorklistTPage;
+import net.simpleframework.workflow.web.page.list.workviews.MyWorkviewsSentTPage;
+import net.simpleframework.workflow.web.page.list.workviews.MyWorkviewsTPage;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -138,17 +148,17 @@ public abstract class AbstractItemsTPage extends AbstractWorksTPage {
 		return js.toString();
 	}
 
-	protected static ImageElement _createImageMark(final PageParameter pp, final String img) {
+	public static ImageElement _createImageMark(final PageParameter pp, final String img) {
 		return ImageElement.img16(
 				pp.getCssResourceHomePath(AbstractItemsTPage.class) + "/images/" + img)
 				.setVerticalAlign(EVerticalAlign.middle);
 	}
 
-	protected static ImageElement MARK_TOP(final PageParameter pp) {
+	public static ImageElement MARK_TOP(final PageParameter pp) {
 		return _createImageMark(pp, "mark_top.png").setTitle($m("MyRunningWorklistTbl.1"));
 	}
 
-	protected static ImageElement MARK_UNREAD(final PageParameter pp) {
+	public static ImageElement MARK_UNREAD(final PageParameter pp) {
 		return _createImageMark(pp, "mark_unread.png").setTitle($m("MyRunningWorklistTbl.2"));
 	}
 }

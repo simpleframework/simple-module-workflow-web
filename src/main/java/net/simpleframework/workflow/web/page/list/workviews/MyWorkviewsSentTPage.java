@@ -1,4 +1,4 @@
-package net.simpleframework.workflow.web.page;
+package net.simpleframework.workflow.web.page.list.workviews;
 
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;

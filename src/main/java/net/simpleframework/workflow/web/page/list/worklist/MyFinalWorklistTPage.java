@@ -1,4 +1,4 @@
-package net.simpleframework.workflow.web.page;
+package net.simpleframework.workflow.web.page.list.worklist;
 
 import static net.simpleframework.common.I18n.$m;
 
@@ -43,6 +43,7 @@ import net.simpleframework.workflow.engine.bean.ActivityBean;
 import net.simpleframework.workflow.engine.bean.WorkitemBean;
 import net.simpleframework.workflow.schema.AbstractTaskNode;
 import net.simpleframework.workflow.web.WorkflowUtils;
+import net.simpleframework.workflow.web.page.list.AbstractItemsTPage;
 
 /**
  * Licensed under the Apache License, Version 2.0

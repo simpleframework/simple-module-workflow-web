@@ -1,4 +1,4 @@
-package net.simpleframework.workflow.web.page;
+package net.simpleframework.workflow.web.page.list.delegate;
 
 import static net.simpleframework.common.I18n.$m;
 
@@ -19,7 +19,7 @@ import net.simpleframework.workflow.engine.EDelegationSource;
 import net.simpleframework.workflow.engine.EDelegationStatus;
 import net.simpleframework.workflow.engine.bean.DelegationBean;
 import net.simpleframework.workflow.web.WorkflowUtils;
-import net.simpleframework.workflow.web.page.AbstractDelegateFormPage.WorkitemDelegateSetPage;
+import net.simpleframework.workflow.web.page.list.delegate.AbstractDelegateFormPage.WorkitemDelegateSetPage;
 
 /**
  * Licensed under the Apache License, Version 2.0

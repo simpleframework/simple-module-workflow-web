@@ -1,4 +1,4 @@
-package net.simpleframework.workflow.web.page;
+package net.simpleframework.workflow.web.page.list.delegate;
 
 import static net.simpleframework.common.I18n.$m;
 
@@ -33,7 +33,9 @@ import net.simpleframework.workflow.engine.bean.ActivityBean;
 import net.simpleframework.workflow.engine.bean.DelegationBean;
 import net.simpleframework.workflow.engine.bean.WorkitemBean;
 import net.simpleframework.workflow.web.WorkflowUtils;
-import net.simpleframework.workflow.web.page.AbstractDelegateFormPage.WorkitemDelegateViewPage;
+import net.simpleframework.workflow.web.page.list.AbstractItemsTPage;
+import net.simpleframework.workflow.web.page.list.delegate.AbstractDelegateFormPage.WorkitemDelegateViewPage;
+import net.simpleframework.workflow.web.page.list.worklist.MyRunningWorklistTbl;
 
 /**
  * Licensed under the Apache License, Version 2.0

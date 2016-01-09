@@ -1,4 +1,4 @@
-package net.simpleframework.workflow.web.page;
+package net.simpleframework.workflow.web.page.list.stat;
 
 import static net.simpleframework.common.I18n.$m;
 
@@ -23,6 +23,7 @@ import net.simpleframework.mvc.component.ext.highchart.HcYAxis;
 import net.simpleframework.mvc.component.ext.highchart.HighchartBean;
 import net.simpleframework.workflow.engine.EWorkitemStatus;
 import net.simpleframework.workflow.engine.bean.UserStatBean;
+import net.simpleframework.workflow.web.page.list.AbstractItemsTPage;
 
 /**
  * Licensed under the Apache License, Version 2.0

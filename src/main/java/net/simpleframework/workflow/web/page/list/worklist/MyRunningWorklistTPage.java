@@ -1,4 +1,4 @@
-package net.simpleframework.workflow.web.page;
+package net.simpleframework.workflow.web.page.list.worklist;
 
 import static net.simpleframework.common.I18n.$m;
 import net.simpleframework.ado.query.IDataQuery;
@@ -29,9 +29,13 @@ import net.simpleframework.workflow.engine.bean.DelegationBean;
 import net.simpleframework.workflow.engine.bean.UserStatBean;
 import net.simpleframework.workflow.engine.bean.WorkitemBean;
 import net.simpleframework.workflow.web.WorkflowUtils;
-import net.simpleframework.workflow.web.page.AbstractDelegateFormPage.WorkitemDelegateReceivingPage;
-import net.simpleframework.workflow.web.page.AbstractDelegateFormPage.WorkitemDelegateSetPage;
-import net.simpleframework.workflow.web.page.query.MyQueryWorksTPage;
+import net.simpleframework.workflow.web.page.list.AbstractItemsTPage;
+import net.simpleframework.workflow.web.page.list.delegate.UserDelegateListTPage;
+import net.simpleframework.workflow.web.page.list.delegate.AbstractDelegateFormPage.WorkitemDelegateReceivingPage;
+import net.simpleframework.workflow.web.page.list.delegate.AbstractDelegateFormPage.WorkitemDelegateSetPage;
+import net.simpleframework.workflow.web.page.list.initiate.MyInitiateItemsGroupTPage;
+import net.simpleframework.workflow.web.page.list.process.MyQueryWorksTPage;
+import net.simpleframework.workflow.web.page.list.stat.MyWorkstatTPage;
 
 /**
  * Licensed under the Apache License, Version 2.0
