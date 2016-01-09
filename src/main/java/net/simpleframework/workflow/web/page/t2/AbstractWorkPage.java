@@ -7,22 +7,22 @@ import net.simpleframework.ctx.permission.PermissionConst;
 import net.simpleframework.mvc.PageMapping;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.template.t2.T2TemplatePage;
-import net.simpleframework.workflow.web.page.AbstractItemsTPage;
 import net.simpleframework.workflow.web.page.AbstractWorksTPage;
-import net.simpleframework.workflow.web.page.MyDelegateListTPage;
-import net.simpleframework.workflow.web.page.MyFinalWorklistTPage;
-import net.simpleframework.workflow.web.page.MyInitiateItemsGroupTPage;
-import net.simpleframework.workflow.web.page.MyInitiateItemsTPage;
-import net.simpleframework.workflow.web.page.MyRunningWorklistTPage;
-import net.simpleframework.workflow.web.page.MyWorklogsTPage;
-import net.simpleframework.workflow.web.page.MyWorkstatTPage;
-import net.simpleframework.workflow.web.page.MyWorkviewsSentTPage;
-import net.simpleframework.workflow.web.page.MyWorkviewsTPage;
-import net.simpleframework.workflow.web.page.UserDelegateListTPage;
-import net.simpleframework.workflow.web.page.query.MyQueryWorksTPage;
-import net.simpleframework.workflow.web.page.query.MyQueryWorksTPages.MyQueryWorks_DeptTPage;
-import net.simpleframework.workflow.web.page.query.MyQueryWorksTPages.MyQueryWorks_OrgTPage;
-import net.simpleframework.workflow.web.page.query.MyQueryWorksTPages.MyQueryWorks_RoleTPage;
+import net.simpleframework.workflow.web.page.list.AbstractItemsTPage;
+import net.simpleframework.workflow.web.page.list.delegate.MyDelegateListTPage;
+import net.simpleframework.workflow.web.page.list.delegate.UserDelegateListTPage;
+import net.simpleframework.workflow.web.page.list.initiate.MyInitiateItemsGroupTPage;
+import net.simpleframework.workflow.web.page.list.initiate.MyInitiateItemsTPage;
+import net.simpleframework.workflow.web.page.list.process.MyQueryWorksTPage;
+import net.simpleframework.workflow.web.page.list.process.MyQueryWorksTPages.MyQueryWorks_DeptTPage;
+import net.simpleframework.workflow.web.page.list.process.MyQueryWorksTPages.MyQueryWorks_OrgTPage;
+import net.simpleframework.workflow.web.page.list.process.MyQueryWorksTPages.MyQueryWorks_RoleTPage;
+import net.simpleframework.workflow.web.page.list.stat.MyWorklogsTPage;
+import net.simpleframework.workflow.web.page.list.stat.MyWorkstatTPage;
+import net.simpleframework.workflow.web.page.list.worklist.MyFinalWorklistTPage;
+import net.simpleframework.workflow.web.page.list.worklist.MyRunningWorklistTPage;
+import net.simpleframework.workflow.web.page.list.workviews.MyWorkviewsSentTPage;
+import net.simpleframework.workflow.web.page.list.workviews.MyWorkviewsTPage;
 
 /**
  * Licensed under the Apache License, Version 2.0

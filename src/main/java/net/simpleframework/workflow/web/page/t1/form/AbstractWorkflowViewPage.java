@@ -5,7 +5,7 @@ import net.simpleframework.mvc.common.element.LinkButton;
 import net.simpleframework.workflow.engine.bean.WorkviewBean;
 import net.simpleframework.workflow.web.IWorkflowWebView;
 import net.simpleframework.workflow.web.WorkflowUtils;
-import net.simpleframework.workflow.web.page.MyWorkviewsTPage;
+import net.simpleframework.workflow.web.page.list.workviews.MyWorkviewsTPage;
 
 /**
  * Licensed under the Apache License, Version 2.0

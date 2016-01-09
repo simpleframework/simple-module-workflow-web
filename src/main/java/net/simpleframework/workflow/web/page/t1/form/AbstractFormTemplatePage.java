@@ -8,7 +8,7 @@ import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.LinkButton;
 import net.simpleframework.mvc.template.t1.T1FormTemplatePage;
 import net.simpleframework.workflow.web.page.IWorkflowPageAware;
-import net.simpleframework.workflow.web.page.MyRunningWorklistTPage;
+import net.simpleframework.workflow.web.page.list.worklist.MyRunningWorklistTPage;
 
 /**
  * Licensed under the Apache License, Version 2.0
