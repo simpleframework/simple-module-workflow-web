@@ -15,4 +15,7 @@ public class MyWorkviewsSentTPage extends MyWorkviewsTPage {
 	protected TablePagerBean addTablePagerBean(final PageParameter pp) {
 		return super.addTablePagerBean(pp);
 	}
+
+	public static class _MyWorkviewsTbl extends MyWorkviewsTbl {
+	}
 }
