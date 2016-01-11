@@ -13,6 +13,7 @@ import net.simpleframework.ado.query.IDataQuery;
 import net.simpleframework.common.coll.KVMap;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.ButtonElement;
+import net.simpleframework.mvc.common.element.ETextAlign;
 import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.ImageElement;
 import net.simpleframework.mvc.common.element.JS;
@@ -53,8 +54,8 @@ public class MyWorkviewsTPage extends AbstractItemsTPage {
 				.addColumn(TC_ICON())
 				.addColumn(TC_TITLE())
 				.addColumn(
-						new TablePagerColumn("sent", $m("MyRunningWorklistTPage.0"), 120)
-								.setFilterSort(false))
+						new TablePagerColumn("sent", $m("MyRunningWorklistTPage.0"), 120).setTextAlign(
+								ETextAlign.center).setFilterSort(false))
 				.addColumn(TC_CREATEDATE().setColumnText($m("MyRunningWorklistTPage.1")))
 				.addColumn(TablePagerColumn.OPE(70));
 		return tablePager;
@@ -62,7 +63,7 @@ public class MyWorkviewsTPage extends AbstractItemsTPage {
 
 	static SpanElement getStatTabs(final PageParameter pp) {
 		return createTabsElement(pp, TabButtons.of(
-				new TabButton($m("AbstractItemsTPage.0"), uFactory.getUrl(pp, MyWorkviewsTPage.class)),
+				new TabButton($m("AbstractItemsTPage.5"), uFactory.getUrl(pp, MyWorkviewsTPage.class)),
 				new TabButton($m("AbstractItemsTPage.13"), uFactory.getUrl(pp,
 						MyWorkviewsSentTPage.class))));
 	}
@@ -72,7 +73,11 @@ public class MyWorkviewsTPage extends AbstractItemsTPage {
 		return ElementList.of(getStatTabs(pp));
 	}
 
-	public static class MyWorkviewsTbl extends AbstractDbTablePagerHandler {
+	protected static class AMyWorkviewsTbl extends AbstractDbTablePagerHandler {
+
+	}
+
+	public static class MyWorkviewsTbl extends AMyWorkviewsTbl {
 		@Override
 		public IDataQuery<WorkviewBean> createDataObjectQuery(final ComponentParameter cp) {
 			return wfvService.getWorkviewsList(cp.getLoginId());
@@ -102,7 +107,7 @@ public class MyWorkviewsTPage extends AbstractItemsTPage {
 			ImageElement img = null;
 			if (workview.getParentId() != null) {
 				final WorkitemBean workitem = wfwService.getBean(workview.getWorkitemId());
-				img = AbstractItemsTPage.MARK_TOP(cp);
+				// img = AbstractItemsTPage.MARK_TOP(cp);
 				System.out.println(workitem);
 			} else if (workview.isTopMark()) {
 				img = AbstractItemsTPage.MARK_TOP(cp);
@@ -129,18 +134,18 @@ public class MyWorkviewsTPage extends AbstractItemsTPage {
 		protected String toTopicHTML(final ComponentParameter cp, final WorkviewBean workview) {
 			final ProcessBean process = wfpService.getBean(workview.getProcessId());
 			return new LinkElement(WorkflowUtils.getProcessTitle(process))
-					.setStrong(!workview.isReadMark())
-					.setHref(
-							uFactory.getUrl(cp, WorkflowViewPage.class, "workviewId=" + workview.getId()))
-					.toString();
+					.setStrong(!workview.isReadMark()).setHref(getWorkviewUrl(cp, workview)).toString();
 		}
 
 		protected String toOpeHTML(final ComponentParameter cp, final WorkviewBean workview) {
 			final StringBuilder ope = new StringBuilder();
-			final String url = uFactory.getUrl(cp, WorkflowViewPage.class,
-					"workviewId=" + workview.getId());
-			ope.append(new ButtonElement($m("MyWorkviewsTPage。0")).setOnclick(JS.loc(url)));
+			ope.append(new ButtonElement($m("MyWorkviewsTPage。0")).setOnclick(JS.loc(getWorkviewUrl(
+					cp, workview))));
 			return ope.toString();
+		}
+
+		private String getWorkviewUrl(final ComponentParameter cp, final WorkviewBean workview) {
+			return uFactory.getUrl(cp, WorkflowViewPage.class, "workviewId=" + workview.getId());
 		}
 	}
 }

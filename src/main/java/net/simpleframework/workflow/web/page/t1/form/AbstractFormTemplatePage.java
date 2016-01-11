@@ -36,10 +36,14 @@ public class AbstractFormTemplatePage extends T1FormTemplatePage implements IWor
 			if (referer != null) {
 				backBtn.setHref(referer);
 			} else {
-				backBtn.setHref(uFactory.getUrl(pp, MyRunningWorklistTPage.class));
+				backBtn.setHref(getDefaultBackUrl(pp));
 			}
 		}
 		return backBtn;
+	}
+
+	protected String getDefaultBackUrl(final PageParameter pp) {
+		return uFactory.getUrl(pp, MyRunningWorklistTPage.class);
 	}
 
 	@Override

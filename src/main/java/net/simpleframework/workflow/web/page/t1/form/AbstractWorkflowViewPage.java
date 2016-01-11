@@ -1,7 +1,6 @@
 package net.simpleframework.workflow.web.page.t1.form;
 
 import net.simpleframework.mvc.PageParameter;
-import net.simpleframework.mvc.common.element.LinkButton;
 import net.simpleframework.workflow.engine.bean.WorkviewBean;
 import net.simpleframework.workflow.web.IWorkflowWebView;
 import net.simpleframework.workflow.web.WorkflowUtils;
@@ -22,8 +21,8 @@ public class AbstractWorkflowViewPage extends AbstractFormTemplatePage {
 	}
 
 	@Override
-	public LinkButton getBackBtn(final PageParameter pp) {
-		return super.getBackBtn(pp).setHref(uFactory.getUrl(pp, MyWorkviewsTPage.class));
+	protected String getDefaultBackUrl(final PageParameter pp) {
+		return uFactory.getUrl(pp, MyWorkviewsTPage.class);
 	}
 
 	@Override
