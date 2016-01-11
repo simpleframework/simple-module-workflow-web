@@ -12,9 +12,9 @@ import net.simpleframework.ado.db.common.SQLValue;
 import net.simpleframework.ado.query.IDataQuery;
 import net.simpleframework.common.coll.KVMap;
 import net.simpleframework.mvc.PageParameter;
-import net.simpleframework.mvc.common.element.AbstractElement;
 import net.simpleframework.mvc.common.element.ButtonElement;
 import net.simpleframework.mvc.common.element.ElementList;
+import net.simpleframework.mvc.common.element.ImageElement;
 import net.simpleframework.mvc.common.element.JS;
 import net.simpleframework.mvc.common.element.LinkElement;
 import net.simpleframework.mvc.common.element.SpanElement;
@@ -56,7 +56,7 @@ public class MyWorkviewsTPage extends AbstractItemsTPage {
 						new TablePagerColumn("sent", $m("MyRunningWorklistTPage.0"), 120)
 								.setFilterSort(false))
 				.addColumn(TC_CREATEDATE().setColumnText($m("MyRunningWorklistTPage.1")))
-				.addColumn(TablePagerColumn.OPE(90));
+				.addColumn(TablePagerColumn.OPE(70));
 		return tablePager;
 	}
 
@@ -97,10 +97,14 @@ public class MyWorkviewsTPage extends AbstractItemsTPage {
 			return super.createFilterExpressionValue(qs, oCol, it);
 		}
 
-		protected AbstractElement<?> createImageMark(final ComponentParameter cp,
+		protected ImageElement createImageMark(final ComponentParameter cp,
 				final WorkviewBean workview) {
-			AbstractElement<?> img = null;
-			if (workview.isTopMark()) {
+			ImageElement img = null;
+			if (workview.getParentId() != null) {
+				final WorkitemBean workitem = wfwService.getBean(workview.getWorkitemId());
+				img = AbstractItemsTPage.MARK_TOP(cp);
+				System.out.println(workitem);
+			} else if (workview.isTopMark()) {
 				img = AbstractItemsTPage.MARK_TOP(cp);
 			} else if (!workview.isReadMark()) {
 				img = AbstractItemsTPage.MARK_UNREAD(cp);
@@ -111,34 +115,30 @@ public class MyWorkviewsTPage extends AbstractItemsTPage {
 		@Override
 		protected Map<String, Object> getRowData(final ComponentParameter cp, final Object dataObject) {
 			final WorkviewBean workview = (WorkviewBean) dataObject;
-			final ProcessBean process = wfpService.getBean(workview.getProcessId());
 			final KVMap row = new KVMap();
-			final AbstractElement<?> img = createImageMark(cp, workview);
+			final ImageElement img = createImageMark(cp, workview);
 			if (img != null) {
 				row.add(TablePagerColumn.ICON, img);
 			}
-
-			final LinkElement le = new LinkElement(WorkflowUtils.getProcessTitle(process)).setStrong(
-					!workview.isReadMark()).setHref(
-					uFactory.getUrl(cp, WorkflowViewPage.class,
-							workview != null ? ("workviewId=" + workview.getId()) : null));
-			row.add("title", le).add("createDate", workview.getCreateDate());
-
-			// sent
-			final WorkviewBean workview2 = wfvService.getBean(workview.getParentId());
-			final WorkitemBean workitem = wfwService.getBean(workview2 != null ? workview2
-					.getWorkitemId() : workview.getWorkitemId());
-			if (workitem != null) {
-				row.add("sent", workitem.getUserText2());
-			}
-			row.put(TablePagerColumn.OPE, toOpeHTML(cp, workview));
+			row.add("title", toTopicHTML(cp, workview)).add("createDate", workview.getCreateDate())
+					.add("sent", cp.getUser(workview.getUserId()))
+					.add(TablePagerColumn.OPE, toOpeHTML(cp, workview));
 			return row;
+		}
+
+		protected String toTopicHTML(final ComponentParameter cp, final WorkviewBean workview) {
+			final ProcessBean process = wfpService.getBean(workview.getProcessId());
+			return new LinkElement(WorkflowUtils.getProcessTitle(process))
+					.setStrong(!workview.isReadMark())
+					.setHref(
+							uFactory.getUrl(cp, WorkflowViewPage.class, "workviewId=" + workview.getId()))
+					.toString();
 		}
 
 		protected String toOpeHTML(final ComponentParameter cp, final WorkviewBean workview) {
 			final StringBuilder ope = new StringBuilder();
 			final String url = uFactory.getUrl(cp, WorkflowViewPage.class,
-					workview != null ? ("workviewId=" + workview.getId()) : null);
+					"workviewId=" + workview.getId());
 			ope.append(new ButtonElement($m("MyWorkviewsTPage。0")).setOnclick(JS.loc(url)));
 			return ope.toString();
 		}

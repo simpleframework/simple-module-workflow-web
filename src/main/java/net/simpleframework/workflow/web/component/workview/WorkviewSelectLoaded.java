@@ -12,6 +12,7 @@ import net.simpleframework.common.ID;
 import net.simpleframework.common.StringUtils;
 import net.simpleframework.common.coll.KVMap;
 import net.simpleframework.ctx.permission.PermissionRole;
+import net.simpleframework.ctx.trans.Transaction;
 import net.simpleframework.mvc.DefaultPageHandler;
 import net.simpleframework.mvc.IForward;
 import net.simpleframework.mvc.JavascriptForward;
@@ -30,6 +31,7 @@ import net.simpleframework.mvc.component.ui.menu.EMenuEvent;
 import net.simpleframework.mvc.component.ui.menu.MenuBean;
 import net.simpleframework.mvc.component.ui.menu.MenuItem;
 import net.simpleframework.mvc.ctx.permission.IPagePermissionHandler;
+import net.simpleframework.workflow.engine.IWorkflowContext;
 import net.simpleframework.workflow.engine.IWorkflowContextAware;
 
 /**
@@ -117,6 +119,7 @@ public class WorkviewSelectLoaded extends DefaultPageHandler implements IWorkflo
 			return new TextForward(DoWorkviewUtils.toUserList(nCP));
 		}
 
+		@Transaction(context = IWorkflowContext.class)
 		public IForward doDelete(final ComponentParameter cp) throws Exception {
 			final ComponentParameter nCP = DoWorkviewUtils.get(cp);
 			final Set<String> ulist = DoWorkviewUtils.getSessionUlist(nCP);
@@ -130,6 +133,7 @@ public class WorkviewSelectLoaded extends DefaultPageHandler implements IWorkflo
 			return new JavascriptForward("DoWorkview_user_selected();");
 		}
 
+		@Transaction(context = IWorkflowContext.class)
 		public IForward doSave(final ComponentParameter cp) throws Exception {
 			final ComponentParameter nCP = DoWorkviewUtils.get(cp);
 			final IDoWorkviewHandler hdl = (IDoWorkviewHandler) nCP.getComponentHandler();

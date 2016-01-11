@@ -149,9 +149,9 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 				$m("MyRunningWorklistTbl.0", pp.getUser(workitem.getUserId())));
 	}
 
-	public static AbstractElement<?> createWorkitemImageMark(final PageParameter pp,
+	public static ImageElement createWorkitemImageMark(final PageParameter pp,
 			final WorkitemBean workitem) {
-		AbstractElement<?> img = null;
+		ImageElement img = null;
 		final EWorkitemStatus status = workitem.getStatus();
 		ActivityBean fallback;
 		if ((fallback = wfaService.getBean(workitem.getFallbackId())) != null) {
@@ -170,8 +170,7 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 		return img;
 	}
 
-	protected AbstractElement<?> createImageMark(final ComponentParameter cp,
-			final WorkitemBean workitem) {
+	protected ImageElement createImageMark(final ComponentParameter cp, final WorkitemBean workitem) {
 		return createWorkitemImageMark(cp, workitem);
 	}
 
@@ -184,7 +183,7 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 		final WorkitemBean workitem = (WorkitemBean) dataObject;
 		final KVMap row = new KVMap();
 
-		final AbstractElement<?> img = createImageMark(cp, workitem);
+		final ImageElement img = createImageMark(cp, workitem);
 		if (img != null) {
 			row.add(TablePagerColumn.ICON, img);
 		}

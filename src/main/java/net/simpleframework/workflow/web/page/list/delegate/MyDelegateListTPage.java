@@ -11,9 +11,9 @@ import net.simpleframework.ctx.trans.Transaction;
 import net.simpleframework.mvc.IForward;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageParameter;
-import net.simpleframework.mvc.common.element.AbstractElement;
 import net.simpleframework.mvc.common.element.ButtonElement;
 import net.simpleframework.mvc.common.element.ElementList;
+import net.simpleframework.mvc.common.element.ImageElement;
 import net.simpleframework.mvc.common.element.LinkElement;
 import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.common.element.TabButton;
@@ -150,9 +150,9 @@ public class MyDelegateListTPage extends AbstractItemsTPage {
 			return sb.toString();
 		}
 
-		protected AbstractElement<?> createImageMark(final ComponentParameter cp,
+		protected ImageElement createImageMark(final ComponentParameter cp,
 				final DelegationBean delegation) {
-			AbstractElement<?> img = null;
+			ImageElement img = null;
 			if (delegation.isTimeoutMark()) {
 				img = AbstractItemsTPage._createImageMark(cp, "status_timeout.png").setTitle(
 						$m("MyDelegateListTPage.6"));
@@ -166,7 +166,7 @@ public class MyDelegateListTPage extends AbstractItemsTPage {
 			final WorkitemBean workitem = getWorkitem(delegation);
 			final ActivityBean activity = wfwService.getActivity(workitem);
 			final KVMap row = new KVMap();
-			final AbstractElement<?> img = createImageMark(cp, delegation);
+			final ImageElement img = createImageMark(cp, delegation);
 			if (img != null) {
 				row.add(TablePagerColumn.ICON, img);
 			}
