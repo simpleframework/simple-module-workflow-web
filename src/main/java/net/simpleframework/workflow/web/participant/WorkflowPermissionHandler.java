@@ -10,6 +10,7 @@ import net.simpleframework.ado.query.IDataQuery;
 import net.simpleframework.common.BeanUtils;
 import net.simpleframework.common.ID;
 import net.simpleframework.common.StringUtils;
+import net.simpleframework.ctx.permission.PermissionUser;
 import net.simpleframework.organization.Department;
 import net.simpleframework.organization.Role;
 import net.simpleframework.organization.User;
@@ -50,7 +51,7 @@ public class WorkflowPermissionHandler extends OrganizationPermissionHandler imp
 			if (rr != null) {
 				final ID deptId = rRole.isIndept() ? (ID) BeanUtils.getProperty(domain, "deptId")
 						: null;
-				final Iterator<ID> users = users(rr.getId(), deptId, variables);
+				final Iterator<PermissionUser> users = users(rr.getId(), deptId, variables);
 				while (users.hasNext()) {
 					participants.add(new Participant(users.next(), rr.getId(), deptId));
 				}
@@ -80,12 +81,12 @@ public class WorkflowPermissionHandler extends OrganizationPermissionHandler imp
 				if (oRole != null) {
 					final ID roleId = oRole.getId();
 					if (level.equals(Level.internal)) {// 本部门
-						final Iterator<ID> users = users(roleId, deptId, variables);
+						final Iterator<PermissionUser> users = users(roleId, deptId, variables);
 						while (users.hasNext()) {
 							participants.add(new Participant(users.next(), roleId, deptId));
 						}
 					} else if (level.equals(Level.all)) {// 指定角色
-						final Iterator<ID> users = users(roleId, null, variables);
+						final Iterator<PermissionUser> users = users(roleId, null, variables);
 						while (users.hasNext()) {
 							participants.add(new Participant(users.next(), roleId, null));
 						}
@@ -96,7 +97,8 @@ public class WorkflowPermissionHandler extends OrganizationPermissionHandler imp
 							final IDataQuery<Department> depts = _deptService.queryChildren(dept);
 							if (null != depts) {
 								while ((dept = depts.next()) != null) {
-									final Iterator<ID> users = users(roleId, dept.getId(), variables);
+									final Iterator<PermissionUser> users = users(roleId, dept.getId(),
+											variables);
 									while (users.hasNext()) {
 										participants.add(new Participant(users.next(), roleId, dept.getId()));
 									}
@@ -106,14 +108,16 @@ public class WorkflowPermissionHandler extends OrganizationPermissionHandler imp
 							final IDataQuery<Department> depts = _deptService.queryChildren(dept);
 							if (null != depts) {
 								while ((dept = depts.next()) != null) {
-									final Iterator<ID> users = users(roleId, dept.getId(), variables);
+									final Iterator<PermissionUser> users = users(roleId, dept.getId(),
+											variables);
 									while (users.hasNext()) {
 										participants.add(new Participant(users.next(), roleId, dept.getId()));
 									}
 								}
 							}
 						} else if (level.equals(Level.higher)) {// 上级
-							final Iterator<ID> users = users(roleId, dept.getParentId(), variables);
+							final Iterator<PermissionUser> users = users(roleId, dept.getParentId(),
+									variables);
 							while (users.hasNext()) {
 								participants.add(new Participant(users.next(), roleId, dept.getParentId()));
 							}
@@ -160,7 +164,7 @@ public class WorkflowPermissionHandler extends OrganizationPermissionHandler imp
 		User user = null;
 		if (null != users) {
 			while ((user = users.next()) != null) {
-				participants.add(new Participant(user.getId()));
+				participants.add(new Participant(getUser(user)));
 			}
 		}
 		return participants;

@@ -12,6 +12,7 @@ import net.simpleframework.common.ID;
 import net.simpleframework.common.StringUtils;
 import net.simpleframework.common.coll.KVMap;
 import net.simpleframework.ctx.permission.PermissionRole;
+import net.simpleframework.ctx.permission.PermissionUser;
 import net.simpleframework.ctx.trans.Transaction;
 import net.simpleframework.mvc.DefaultPageHandler;
 import net.simpleframework.mvc.IForward;
@@ -170,10 +171,10 @@ public class WorkviewSelectLoaded extends DefaultPageHandler implements IWorkflo
 		public IForward doRoleDictSelect(final ComponentParameter cp) throws Exception {
 			final ComponentParameter nCP = DoWorkviewUtils.get(cp);
 			final PermissionRole role = nCP.getRole(nCP.toID("roleId"));
-			final Iterator<ID> it = nCP.getPermission().users(role.getId(), new KVMap());
+			final Iterator<PermissionUser> it = nCP.getPermission().users(role.getId(), new KVMap());
 			final Set<String> ulist = DoWorkviewUtils.getSessionUlist(nCP);
 			while (it.hasNext()) {
-				ulist.add(it.next().toString());
+				ulist.add(it.next().getId().toString());
 			}
 			return new JavascriptForward("DoWorkview_user_selected();");
 		}

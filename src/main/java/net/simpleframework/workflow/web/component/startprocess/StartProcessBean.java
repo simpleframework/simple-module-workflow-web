@@ -1,6 +1,5 @@
 package net.simpleframework.workflow.web.component.startprocess;
 
-import net.simpleframework.ctx.common.bean.BeanDefaults;
 import net.simpleframework.workflow.web.component.AbstractWfActionBean;
 
 /**
@@ -11,24 +10,23 @@ import net.simpleframework.workflow.web.component.AbstractWfActionBean;
  */
 public class StartProcessBean extends AbstractWfActionBean {
 
-	/* modelId的参数名 */
-	private String modelIdParameterName = BeanDefaults.getString(getClass(), "modelIdParameterName",
-			"modelId");
-
 	/* 确认消息 */
 	private String confirmMessage;
+
+	/* 当启动者是用户类型, 是否让流程发起者选择角色. 如果角色类型, 则必须选取 */
+	private boolean roleSelected;
 
 	@Override
 	public boolean isRunImmediately() {
 		return false;
 	}
 
-	public String getModelIdParameterName() {
-		return modelIdParameterName;
+	public boolean isRoleSelected() {
+		return roleSelected;
 	}
 
-	public StartProcessBean setModelIdParameterName(final String modelIdParameterName) {
-		this.modelIdParameterName = modelIdParameterName;
+	public StartProcessBean setRoleSelected(final boolean roleSelected) {
+		this.roleSelected = roleSelected;
 		return this;
 	}
 

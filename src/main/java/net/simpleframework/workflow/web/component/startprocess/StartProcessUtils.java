@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import net.simpleframework.common.ID;
 import net.simpleframework.common.JsonUtils;
 import net.simpleframework.common.StringUtils;
+import net.simpleframework.common.coll.KVMap;
 import net.simpleframework.common.logger.Log;
 import net.simpleframework.common.logger.LogFactory;
 import net.simpleframework.common.web.JavascriptUtils;
@@ -48,7 +49,7 @@ public abstract class StartProcessUtils implements IWorkflowContextAware {
 
 	public static InitiateItem getInitiateItem(final ComponentParameter cp) {
 		ProcessModelBean processModel = null;
-		final String modelId = cp.getParameter((String) cp.getBeanProperty("modelIdParameterName"));
+		final String modelId = cp.getParameter("modelId");
 		if (StringUtils.hasText(modelId)) {
 			processModel = wfpmService.getBean(modelId);
 		}
@@ -61,8 +62,7 @@ public abstract class StartProcessUtils implements IWorkflowContextAware {
 	public static String toParams(final ComponentParameter cp, final InitiateItem initiateItem) {
 		final StringBuilder sb = new StringBuilder();
 		if (initiateItem != null) {
-			final String modelIdParameterName = (String) cp.getBeanProperty("modelIdParameterName");
-			sb.append(modelIdParameterName).append("=").append(initiateItem.getModelId()).append("&");
+			sb.append("modelId=").append(initiateItem.getModelId()).append("&");
 		}
 		sb.append(BEAN_ID).append("=").append(cp.hashId());
 		return sb.toString();
@@ -76,6 +76,15 @@ public abstract class StartProcessUtils implements IWorkflowContextAware {
 				if (initiateItem == null) {
 					js.append("alert('").append($m("StartProcessUtils.0")).append("');");
 				} else {
+					final ID roleId = initiateItem.getRoleId();
+					if (roleId == null) {
+					} else {
+						cp.getRole(roleId).users(new KVMap());
+					}
+
+					//
+					// cp.getRole(initiateItem.getRoleId()).users();
+					// initiateItem.getRoleId();
 					try {
 						final String confirmMessage = (String) cp.getBeanProperty("confirmMessage");
 						if (StringUtils.hasText(confirmMessage)) {
@@ -100,7 +109,7 @@ public abstract class StartProcessUtils implements IWorkflowContextAware {
 		// 设置选择的其他角色
 		final PermissionRole role = nCP.getRole(nCP.toID("initiator"));
 		if (role != null) {
-			initiateItem.setSelectedRoleId(role.getId());
+			// initiateItem.setSelectedRoleId(role.getId());
 		}
 
 		// 发起流程实例
@@ -112,15 +121,15 @@ public abstract class StartProcessUtils implements IWorkflowContextAware {
 	public static String toInitiatorHTML(final ComponentParameter cp) {
 		final InitiateItem initiateItem = StartProcessUtils.getInitiateItem(cp);
 		final StringBuilder sb = new StringBuilder();
-		final Collection<ID> coll = initiateItem.roles();
+		final Collection<PermissionRole> coll = initiateItem.roles();
 		if (coll == null || coll.size() == 0) {
 			sb.append(new BlockElement().setClassName("msg").setText($m("StartProcessUtils.1")));
 		} else {
-			for (final ID id : coll) {
+			for (final PermissionRole role : coll) {
 				sb.append("<div class='ritem'>");
-				sb.append(LinkButton.corner(cp.getRole(id)).setOnclick(
+				sb.append(LinkButton.corner(role).setOnclick(
 						"$Actions['InitiatorSelect_ok']('" + toParams(cp, initiateItem) + "&initiator="
-								+ id + "');"));
+								+ role.getId() + "');"));
 				sb.append("</div>");
 			}
 		}
