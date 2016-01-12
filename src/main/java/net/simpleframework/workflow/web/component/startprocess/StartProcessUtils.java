@@ -3,6 +3,7 @@ package net.simpleframework.workflow.web.component.startprocess;
 import static net.simpleframework.common.I18n.$m;
 
 import java.util.Collection;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -10,7 +11,6 @@ import javax.servlet.http.HttpServletResponse;
 import net.simpleframework.common.ID;
 import net.simpleframework.common.JsonUtils;
 import net.simpleframework.common.StringUtils;
-import net.simpleframework.common.coll.KVMap;
 import net.simpleframework.common.logger.Log;
 import net.simpleframework.common.logger.LogFactory;
 import net.simpleframework.common.web.JavascriptUtils;
@@ -79,12 +79,11 @@ public abstract class StartProcessUtils implements IWorkflowContextAware {
 					final ID roleId = initiateItem.getRoleId();
 					if (roleId == null) {
 					} else {
-						cp.getRole(roleId).users(new KVMap());
+						final List<PermissionRole> roles = initiateItem.roles();
+						if (roles.size() > 1) {
+						}
 					}
 
-					//
-					// cp.getRole(initiateItem.getRoleId()).users();
-					// initiateItem.getRoleId();
 					try {
 						final String confirmMessage = (String) cp.getBeanProperty("confirmMessage");
 						if (StringUtils.hasText(confirmMessage)) {

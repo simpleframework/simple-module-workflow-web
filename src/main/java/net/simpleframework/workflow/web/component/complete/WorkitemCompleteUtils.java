@@ -14,7 +14,6 @@ import net.simpleframework.common.logger.LogFactory;
 import net.simpleframework.common.object.ObjectUtils;
 import net.simpleframework.common.web.JavascriptUtils;
 import net.simpleframework.ctx.permission.PermissionDept;
-import net.simpleframework.ctx.permission.PermissionUser;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.MVCUtils;
 import net.simpleframework.mvc.PageRequestResponse;
@@ -189,10 +188,9 @@ public abstract class WorkitemCompleteUtils implements IWorkflowContextAware {
 				for (final Participant participant : coll) {
 					sb.append("<div class='ritem'>");
 					final String val = participant.toString();
-					Object user = cp.getUser(participant.userId);
+					Object user = participant.getUser();
 					if (ArrayUtils.contains(deptdispTasks, to.getName())) {
-						final PermissionDept dept = participant.deptId != null ? cp
-								.getDept(participant.deptId) : ((PermissionUser) user).getDept();
+						final PermissionDept dept = cp.getDept(participant.getDeptId());
 						user = dept.getText() + " (" + SpanElement.color777(user) + ")";
 					}
 					final String id = ObjectUtils.hashStr(participant);

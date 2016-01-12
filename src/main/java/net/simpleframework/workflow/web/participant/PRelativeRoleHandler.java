@@ -107,9 +107,9 @@ public class PRelativeRoleHandler extends AbstractParticipantHandler implements
 				final List<Participant> mps = wfaService.getEmptyParticipants(preActivity);
 				if (null != mps && mps.size() > 0) {
 					final Participant mp = mps.get(0);
-					userId = mp.userId;
-					roleId = mp.roleId;
-					deptId = mp.deptId;
+					userId = mp.getUserId();
+					roleId = mp.getRoleId();
+					deptId = mp.getDeptId();
 				}
 			}
 		}
@@ -175,8 +175,8 @@ public class PRelativeRoleHandler extends AbstractParticipantHandler implements
 							if (null != items) {
 								for (final WorkitemBean item : items) {
 									for (final Participant p : participants) {
-										if (p.userId.toString().equals(item.getUserId().toString())
-												&& p.deptId.toString().equals(item.getDeptId().toString())) {
+										if (p.getUserId().equals(item.getUserId())
+												&& p.getDeptId().equals(item.getDeptId())) {
 											participants.remove(p);
 											break;
 										}

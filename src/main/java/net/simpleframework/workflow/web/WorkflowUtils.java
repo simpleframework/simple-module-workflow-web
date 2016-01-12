@@ -75,7 +75,7 @@ public abstract class WorkflowUtils implements IWorkflowContextAware {
 			if (i++ > 0) {
 				sb.append(", ");
 			}
-			sb.append(pp.getUser(p.userId).getText());
+			sb.append(p.getUser().getText());
 		}
 		return sb.toString();
 	}
