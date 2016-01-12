@@ -26,7 +26,6 @@ import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
 import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
 import net.simpleframework.mvc.component.ui.pager.db.AbstractDbTablePagerHandler;
 import net.simpleframework.workflow.engine.bean.ProcessBean;
-import net.simpleframework.workflow.engine.bean.WorkitemBean;
 import net.simpleframework.workflow.engine.bean.WorkviewBean;
 import net.simpleframework.workflow.web.WorkflowUtils;
 import net.simpleframework.workflow.web.page.list.AbstractItemsTPage;
@@ -74,13 +73,9 @@ public class MyWorkviewsTPage extends AbstractItemsTPage {
 	}
 
 	protected static class AMyWorkviewsTbl extends AbstractDbTablePagerHandler {
-
-	}
-
-	public static class MyWorkviewsTbl extends AMyWorkviewsTbl {
-		@Override
-		public IDataQuery<WorkviewBean> createDataObjectQuery(final ComponentParameter cp) {
-			return wfvService.getWorkviewsList(cp.getLoginId());
+		protected ImageElement MARK_FORWARD(final PageParameter pp) {
+			return AbstractItemsTPage._createImageMark(pp, "wv_forward.png").setTitle(
+					$m("MyWorkviewsTPage。1"));
 		}
 
 		@Override
@@ -90,9 +85,10 @@ public class MyWorkviewsTPage extends AbstractItemsTPage {
 				final TablePagerColumn oCol2 = (TablePagerColumn) oCol.clone();
 				oCol2.setColumnAlias("p.title");
 				final ExpressionValue ev = super.createFilterExpressionValue(qs, oCol2, it);
+				// 重新qs中的SqlValue
 				final SQLValue sv = qs.getSqlValue();
 				final StringBuilder sb = new StringBuilder();
-				sb.append("select * from (").append(sv.getSql()).append(") t left join ")
+				sb.append("select t.* from (").append(sv.getSql()).append(") t left join ")
 						.append(wfpService.getTablename(ProcessBean.class))
 						.append(" p on t.processid=p.id where " + ev.getExpression());
 				sv.setSql(sb.toString());
@@ -101,14 +97,19 @@ public class MyWorkviewsTPage extends AbstractItemsTPage {
 			}
 			return super.createFilterExpressionValue(qs, oCol, it);
 		}
+	}
+
+	public static class MyWorkviewsTbl extends AMyWorkviewsTbl {
+		@Override
+		public IDataQuery<WorkviewBean> createDataObjectQuery(final ComponentParameter cp) {
+			return wfvService.getWorkviewsList(cp.getLoginId());
+		}
 
 		protected ImageElement createImageMark(final ComponentParameter cp,
 				final WorkviewBean workview) {
 			ImageElement img = null;
 			if (workview.getParentId() != null) {
-				final WorkitemBean workitem = wfwService.getBean(workview.getWorkitemId());
-				// img = AbstractItemsTPage.MARK_TOP(cp);
-				System.out.println(workitem);
+				img = MARK_FORWARD(cp);
 			} else if (workview.isTopMark()) {
 				img = AbstractItemsTPage.MARK_TOP(cp);
 			} else if (!workview.isReadMark()) {

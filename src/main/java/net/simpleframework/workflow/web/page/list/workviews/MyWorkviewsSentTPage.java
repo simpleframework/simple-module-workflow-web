@@ -55,7 +55,11 @@ public class MyWorkviewsSentTPage extends MyWorkviewsTPage {
 
 		protected ImageElement createImageMark(final ComponentParameter cp,
 				final WorkviewSentBean sent) {
-			return null;
+			ImageElement img = null;
+			if (sent.getWorkviewId() != null) {
+				img = MARK_FORWARD(cp);
+			}
+			return img;
 		}
 
 		@Override
