@@ -143,7 +143,7 @@ public abstract class DoWorkviewUtils implements IWorkflowContextAware {
 				if (wfvService.getWorkviewBean(processId, id) != null) {
 					slist.add(user);
 				} else {
-					if (user.getId() != null) {
+					if (user.exists()) {
 						sb.append(toItemHTML(cp, user, false));
 					}
 				}
@@ -162,7 +162,7 @@ public abstract class DoWorkviewUtils implements IWorkflowContextAware {
 						.append($m("DoWorkviewUtils.2")).append("</a>");
 				sb.append("</div>");
 				for (final PermissionUser user : slist) {
-					if (user.getId() != null) {
+					if (user.exists()) {
 						sb.append(toItemHTML(cp, user, true));
 					}
 				}

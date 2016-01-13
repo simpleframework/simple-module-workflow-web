@@ -65,7 +65,7 @@ public class WorkflowCompleteInfoPage extends AbstractWorkflowFormPage {
 					}
 					sb.append(workitem2.getUserText());
 					final PermissionUser oUser = pp.getUser(workitem2.getUserId());
-					if (oUser.getId() != null) {
+					if (oUser.exists()) {
 						sb.append(" (").append(oUser.getName()).append(")");
 					}
 				}

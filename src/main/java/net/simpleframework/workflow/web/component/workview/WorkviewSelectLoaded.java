@@ -209,7 +209,7 @@ public class WorkviewSelectLoaded extends DefaultPageHandler implements IWorkflo
 				final ListboxBean listbox = (ListboxBean) cp.componentBean;
 				for (final String r : roles) {
 					final PermissionRole role = cp.getRole(r);
-					if (role.getId() != null) {
+					if (role.exists()) {
 						items.append(new ListItem(listbox, role));
 					}
 				}

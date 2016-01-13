@@ -8,18 +8,19 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import net.simpleframework.common.ID;
 import net.simpleframework.common.JsonUtils;
 import net.simpleframework.common.StringUtils;
 import net.simpleframework.common.logger.Log;
 import net.simpleframework.common.logger.LogFactory;
 import net.simpleframework.common.web.JavascriptUtils;
+import net.simpleframework.ctx.permission.PermissionDept;
 import net.simpleframework.ctx.permission.PermissionRole;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.MVCUtils;
 import net.simpleframework.mvc.PageRequestResponse;
 import net.simpleframework.mvc.common.element.BlockElement;
 import net.simpleframework.mvc.common.element.LinkButton;
+import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.component.AbstractComponentRender;
 import net.simpleframework.mvc.component.AbstractComponentRender.IJavascriptCallback;
 import net.simpleframework.mvc.component.ComponentParameter;
@@ -76,27 +77,20 @@ public abstract class StartProcessUtils implements IWorkflowContextAware {
 				if (initiateItem == null) {
 					js.append("alert('").append($m("StartProcessUtils.0")).append("');");
 				} else {
-					final ID roleId = initiateItem.getRoleId();
-					if (roleId == null) {
+					final String componentName = cp.getComponentName();
+					final List<PermissionRole> roles = initiateItem.roles();
+					if (roles.size() > 1) {
+						// 选择角色
+						js.append("$Actions['").append(componentName).append("_initiatorSelect']('")
+								.append(toParams(cp, initiateItem)).append("');");
 					} else {
-						final List<PermissionRole> roles = initiateItem.roles();
-						if (roles.size() > 1) {
-						}
-					}
-
-					try {
 						final String confirmMessage = (String) cp.getBeanProperty("confirmMessage");
-						if (StringUtils.hasText(confirmMessage)) {
+						if (StringUtils.hasText(confirmMessage) && !initiateItem.isTransitionManual()) {
 							js.append("if (!confirm('").append(JavascriptUtils.escape(confirmMessage))
 									.append("')) return;");
 						}
-						final String componentName = cp.getComponentName();
 						js.append("$Actions['").append(componentName).append("_startProcess']('")
 								.append(toParams(cp, initiateItem)).append("');");
-					} catch (final Throwable th) {
-						log.error(th);
-						js.append("$error(").append(JsonUtils.toJSON(MVCUtils.createException(cp, th)))
-								.append(");");
 					}
 				}
 			}
@@ -105,16 +99,26 @@ public abstract class StartProcessUtils implements IWorkflowContextAware {
 
 	static JavascriptForward doStartProcess(final ComponentParameter nCP,
 			final InitiateItem initiateItem) {
-		// 设置选择的其他角色
-		final PermissionRole role = nCP.getRole(nCP.toID("initiator"));
-		if (role != null) {
-			// initiateItem.setSelectedRoleId(role.getId());
-		}
+		try {
+			// 设置选择的其他角色
+			final PermissionRole role = nCP.getRole(nCP.toID("roleId"));
+			if (role.exists()) {
+				initiateItem.getParticipant().setRoleId(role.getId());
+			}
+			final PermissionDept dept = nCP.getDept(nCP.toID("deptId"));
+			if (dept.exists()) {
+				initiateItem.getParticipant().setDeptId(dept.getId());
+			}
 
-		// 发起流程实例
-		final ProcessBean process = wfpService.doStartProcess(initiateItem);
-		// 触发onStartProcess回调
-		return ((IStartProcessHandler) nCP.getComponentHandler()).onStartProcess(nCP, process);
+			// 发起流程实例
+			final ProcessBean process = wfpService.doStartProcess(initiateItem);
+			// 触发onStartProcess回调
+			return ((IStartProcessHandler) nCP.getComponentHandler()).onStartProcess(nCP, process);
+		} catch (final Throwable th) {
+			log.error(th);
+			return new JavascriptForward("$error(").append(
+					JsonUtils.toJSON(MVCUtils.createException(nCP, th))).append(");");
+		}
 	}
 
 	public static String toInitiatorHTML(final ComponentParameter cp) {
@@ -125,10 +129,16 @@ public abstract class StartProcessUtils implements IWorkflowContextAware {
 			sb.append(new BlockElement().setClassName("msg").setText($m("StartProcessUtils.1")));
 		} else {
 			for (final PermissionRole role : coll) {
-				sb.append("<div class='ritem'>");
-				sb.append(LinkButton.corner(role).setOnclick(
-						"$Actions['InitiatorSelect_ok']('" + toParams(cp, initiateItem) + "&initiator="
-								+ role.getId() + "');"));
+				sb.append("<div class='ritem clearfix'>");
+				sb.append(" <div class='left'>");
+				sb.append(role).append("<br>");
+				sb.append(SpanElement.color777("(" + role.getDept() + ")"));
+				sb.append(" </div>");
+				sb.append(" <div class='right'>");
+				sb.append(LinkButton.corner($m("StartProcessUtils.2")).setOnclick(
+						"$Actions['InitiatorSelect_ok']('" + toParams(cp, initiateItem) + "&roleId="
+								+ role.getId() + "&deptId=" + role.getDept().getId() + "');"));
+				sb.append(" </div>");
 				sb.append("</div>");
 			}
 		}
