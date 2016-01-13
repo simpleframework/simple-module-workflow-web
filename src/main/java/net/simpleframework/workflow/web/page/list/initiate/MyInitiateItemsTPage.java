@@ -76,13 +76,16 @@ public class MyInitiateItemsTPage extends AbstractItemsTPage {
 				.setPagerBarLayout(EPagerBarLayout.none);
 		tablePager
 				.addColumn(TC_ICON())
-				.addColumn(new TablePagerColumn("modelText", $m("MyInitiateItemsTPage.1")))
+				.addColumn(
+						new TablePagerColumn("modelText", $m("MyInitiateItemsTPage.1")).setSort(false))
 				.addColumn(
 						new TablePagerColumn("processCount", $m("MyInitiateItemsTPage.3"), 80).setFilter(
 								false).setPropertyClass(Integer.class))
 				.addColumn(
 						new TablePagerColumn("version", $m("MyInitiateItemsTPage.4"), 80).setTextAlign(
-								ETextAlign.center).setFilter(false));
+								ETextAlign.center).setFilter(false))
+				.addColumn(
+						TablePagerColumn.DATE("lastUpdate", $m("MyInitiateItemsTPage.7")).setWidth(130));
 		// .addColumn(TablePagerColumn.OPE(70))
 		return tablePager;
 	}
@@ -139,8 +142,9 @@ public class MyInitiateItemsTPage extends AbstractItemsTPage {
 			row.add("modelText", new LinkElement(p > 0 ? mtxt.substring(p + 1) : mtxt)
 					.setOnclick("$Actions['MyInitiateItemsTPage_startProcess']('modelId=" + modelId
 							+ "');"));
-			row.add("version", processModel.getModelVer());
-			row.add("processCount", processModel.getProcessCount());
+			row.add("version", processModel.getModelVer())
+					.add("processCount", processModel.getProcessCount())
+					.add("lastUpdate", processModel.getLastUpdate());
 			// row.put(TablePagerColumn.OPE, "");
 			return row;
 		}

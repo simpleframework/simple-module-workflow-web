@@ -238,11 +238,16 @@
   color: #666;
 }
 
-.MyInitiateItemsGroupTPage {
+.MyInitiateItemsGroupTPage .gpane {
   padding: 12px 12px 36px 12px;
-  background-color: #eee;
-  border: 1px solid #bbb;
+  background-color: #fff;
+  border: 1px solid #ccc;
   border-top-width: 0;
+}
+
+.MyInitiateItemsGroupTPage .Category_ListPage ul.simple_tabs a.active {
+  background-color: #fff;
+  border-bottom-color: #fff;
 }
 
 .MyInitiateItemsGroupTPage .lblock {
@@ -261,7 +266,6 @@
   font-size: 9.5pt;
   line-height: 1.8;
 }
-
 
 .MyInitiateItemsGroupTPage .lblock .lt .size {
   color: #777;
@@ -297,12 +301,6 @@
   bottom: 0;
   right: 150px;
   z-index: 11;
-}
-
-.Category_ListPage ul.simple_tabs a.active {
-  background-image: none !important;
-  background-color: #efefef !important;
-  border-bottom-color: #efefef !important;
 }
 
 .Category_ListPage .tablepager .thead {

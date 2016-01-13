@@ -31,6 +31,11 @@ public class MyInitiateItemsGroupTPage extends MyInitiateItemsTPage {
 	}
 
 	@Override
+	protected String getPageCSS(final PageParameter pp) {
+		return "MyInitiateItemsGroupTPage";
+	}
+
+	@Override
 	public ElementList getRightElements(final PageParameter pp) {
 		return ElementList.of(MyInitiateItemsTPage.getTabs(pp));
 	}
@@ -58,7 +63,7 @@ public class MyInitiateItemsGroupTPage extends MyInitiateItemsTPage {
 
 		final String[] COLORS = new String[] { "#166CA5", "#953735", "#01B0F1", "#767719", "#F99D52" };
 		int i = 0;
-		sb.append("<div class='MyInitiateItemsGroupTPage clearfix'>");
+		sb.append("<div class='gpane clearfix'>");
 		for (final Map.Entry<String, List<InitiateItem>> e : gmap.entrySet()) {
 			final String key = e.getKey();
 			final List<InitiateItem> val = e.getValue();
