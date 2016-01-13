@@ -13,7 +13,6 @@ import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.JS;
-import net.simpleframework.mvc.common.element.LinkButton;
 import net.simpleframework.mvc.common.element.LinkElement;
 import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.common.element.TabButton;
@@ -82,7 +81,8 @@ public class MyInitiateItemsTPage extends AbstractItemsTPage {
 								false).setPropertyClass(Integer.class))
 				.addColumn(
 						new TablePagerColumn("version", $m("MyInitiateItemsTPage.4"), 80)
-								.setFilter(false)).addColumn(TablePagerColumn.OPE(70));
+								.setFilter(false));
+		// .addColumn(TablePagerColumn.OPE(70))
 		return tablePager;
 	}
 
@@ -140,11 +140,7 @@ public class MyInitiateItemsTPage extends AbstractItemsTPage {
 							+ "');"));
 			row.add("version", processModel.getModelVer());
 			row.add("processCount", processModel.getProcessCount());
-			final StringBuilder sb = new StringBuilder();
-			sb.append(LinkButton.corner($m("MyInitiateItemsTPage.2")).setOnclick(
-					"$Actions['MyInitiateItemsTPage_startProcess'].initiator_select('modelId=" + modelId
-							+ "');"));
-			row.put(TablePagerColumn.OPE, sb.toString());
+			// row.put(TablePagerColumn.OPE, "");
 			return row;
 		}
 	}
