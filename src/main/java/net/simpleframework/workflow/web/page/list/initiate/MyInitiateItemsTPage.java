@@ -11,6 +11,7 @@ import net.simpleframework.common.StringUtils;
 import net.simpleframework.common.coll.KVMap;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageParameter;
+import net.simpleframework.mvc.common.element.ETextAlign;
 import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.JS;
 import net.simpleframework.mvc.common.element.LinkElement;
@@ -80,8 +81,8 @@ public class MyInitiateItemsTPage extends AbstractItemsTPage {
 						new TablePagerColumn("processCount", $m("MyInitiateItemsTPage.3"), 80).setFilter(
 								false).setPropertyClass(Integer.class))
 				.addColumn(
-						new TablePagerColumn("version", $m("MyInitiateItemsTPage.4"), 80)
-								.setFilter(false));
+						new TablePagerColumn("version", $m("MyInitiateItemsTPage.4"), 80).setTextAlign(
+								ETextAlign.center).setFilter(false));
 		// .addColumn(TablePagerColumn.OPE(70))
 		return tablePager;
 	}

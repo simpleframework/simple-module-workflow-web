@@ -122,7 +122,7 @@ public class ModelerRemotePage extends AbstractWorkflowRemotePage {
 				final ProcessModelBean bean = wfpmService.getBean(pp.getParameter("id"));
 				final String doc = pp.getLocaleParameter("doc");
 				wfpmService.doUpdateModel(bean, doc.toCharArray());
-				json.put("result", Boolean.TRUE);
+				json.put("result", Boolean.TRUE).put("ver", bean.getModelVer());
 			}
 		});
 	}
