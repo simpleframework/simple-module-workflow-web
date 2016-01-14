@@ -41,8 +41,8 @@ public abstract class AbstractDelegateFormPage extends FormTableRowTemplatePage 
 		IWorkflowContextAware {
 
 	@Override
-	public int getLabelWidth(final PageParameter pp) {
-		return 75;
+	public String getLabelWidth(final PageParameter pp) {
+		return "75px";
 	}
 
 	protected InputElement createDescElement() {
