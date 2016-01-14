@@ -5,7 +5,6 @@ import java.util.List;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.component.AbstractComponentHandler;
 import net.simpleframework.mvc.component.ComponentParameter;
-import net.simpleframework.workflow.engine.IWorkflowContextAware;
 import net.simpleframework.workflow.engine.bean.ActivityBean;
 import net.simpleframework.workflow.engine.bean.ProcessBean;
 import net.simpleframework.workflow.web.WorkflowUtils;
@@ -17,7 +16,7 @@ import net.simpleframework.workflow.web.WorkflowUtils;
  *         http://www.simpleframework.net
  */
 public class DefaultActivityAbortHandler extends AbstractComponentHandler implements
-		IActivityAbortHandler, IWorkflowContextAware {
+		IActivityAbortHandler {
 
 	@Override
 	public List<ActivityBean> getActivities(final ComponentParameter cp) {

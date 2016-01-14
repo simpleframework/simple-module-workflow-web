@@ -5,6 +5,7 @@ import java.util.Collection;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.IComponentHandler;
+import net.simpleframework.workflow.engine.IWorkflowContextAware;
 import net.simpleframework.workflow.schema.UserNode;
 
 /**
@@ -13,7 +14,7 @@ import net.simpleframework.workflow.schema.UserNode;
  * @author 陈侃(cknet@126.com, 13910090885) https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
-public interface IActivityFallbackHandler extends IComponentHandler {
+public interface IActivityFallbackHandler extends IComponentHandler, IWorkflowContextAware {
 
 	Collection<UserNode> getUserNodes(ComponentParameter cp);
 

@@ -10,7 +10,6 @@ import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.component.AbstractComponentHandler;
 import net.simpleframework.mvc.component.ComponentParameter;
-import net.simpleframework.workflow.engine.IWorkflowContextAware;
 import net.simpleframework.workflow.engine.bean.WorkitemBean;
 import net.simpleframework.workflow.engine.bean.WorkviewBean;
 import net.simpleframework.workflow.web.WorkflowUtils;
@@ -22,7 +21,7 @@ import net.simpleframework.workflow.web.WorkflowUtils;
  *         http://www.simpleframework.net
  */
 public class DefaultDoWorkviewHandler extends AbstractComponentHandler implements
-		IDoWorkviewHandler, IWorkflowContextAware {
+		IDoWorkviewHandler {
 
 	@Override
 	public JavascriptForward doSent(final ComponentParameter cp, final List<ID> ids) {

@@ -43,7 +43,6 @@ import net.simpleframework.workflow.schema.UserNode;
 import net.simpleframework.workflow.web.WorkflowUtils;
 import net.simpleframework.workflow.web.component.comments.WfCommentBean.EGroupBy;
 import net.simpleframework.workflow.web.component.comments.mgr2.MyCommentsMgrTPage;
-import net.simpleframework.workflow.web.page.IWorkflowPageAware;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -51,8 +50,7 @@ import net.simpleframework.workflow.web.page.IWorkflowPageAware;
  * @author 陈侃(cknet@126.com, 13910090885) https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
-public class DefaultWfCommentHandler extends ComponentHandlerEx implements IWfCommentHandler,
-		IWorkflowPageAware {
+public class DefaultWfCommentHandler extends ComponentHandlerEx implements IWfCommentHandler {
 
 	protected ProcessBean getProcessBean(final ComponentParameter cp) {
 		return WorkflowUtils.getProcessBean(cp);

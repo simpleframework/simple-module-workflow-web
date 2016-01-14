@@ -7,7 +7,6 @@ import java.util.Map;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.component.AbstractComponentHandler;
 import net.simpleframework.mvc.component.ComponentParameter;
-import net.simpleframework.workflow.engine.IWorkflowContextAware;
 import net.simpleframework.workflow.engine.bean.ActivityBean;
 import net.simpleframework.workflow.schema.AbstractTaskNode;
 import net.simpleframework.workflow.schema.UserNode;
@@ -20,7 +19,7 @@ import net.simpleframework.workflow.web.WorkflowUtils;
  *         http://www.simpleframework.net
  */
 public class DefaultActivityFallbackHandler extends AbstractComponentHandler implements
-		IActivityFallbackHandler, IWorkflowContextAware {
+		IActivityFallbackHandler {
 
 	@Override
 	public Collection<UserNode> getUserNodes(final ComponentParameter cp) {

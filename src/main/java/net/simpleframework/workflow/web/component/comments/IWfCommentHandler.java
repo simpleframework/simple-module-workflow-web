@@ -5,6 +5,7 @@ import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.IComponentHandler;
 import net.simpleframework.workflow.engine.comment.WfComment;
+import net.simpleframework.workflow.web.page.IWorkflowPageAware;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -12,7 +13,7 @@ import net.simpleframework.workflow.engine.comment.WfComment;
  * @author 陈侃(cknet@126.com, 13910090885) https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
-public interface IWfCommentHandler extends IComponentHandler {
+public interface IWfCommentHandler extends IComponentHandler, IWorkflowPageAware {
 
 	/**
 	 * 查询意见列表
