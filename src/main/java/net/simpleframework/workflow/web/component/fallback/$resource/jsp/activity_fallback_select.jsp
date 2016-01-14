@@ -30,7 +30,7 @@
 	  }
 	  $Actions['<%=componentName%>_Usernode_Select_OK'](
 	      'activityId=<%=activity.getId()%>&usernodeId=' + obj.getAttribute('_usernode') + 
-	      '&opt1=' + $F('idActivityFallback_opt1'));
+	      '&opt1=' + ($('idActivityFallback_opt1').checked ? 'true' : 'false'));
 	}
 	
   $ready(function() {
