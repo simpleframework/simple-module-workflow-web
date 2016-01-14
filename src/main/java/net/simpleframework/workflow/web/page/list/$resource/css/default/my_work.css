@@ -241,8 +241,6 @@
 .MyInitiateItemsGroupTPage .gpane {
   padding: 12px 12px 36px 12px;
   background-color: #fff;
-  border: 1px solid #ccc;
-  border-top-width: 0;
 }
 
 .MyInitiateItemsGroupTPage .Category_ListPage ul.simple_tabs a.active {
