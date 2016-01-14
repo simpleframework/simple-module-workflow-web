@@ -2,6 +2,7 @@ package net.simpleframework.workflow.web.participant;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -160,10 +161,12 @@ public class WorkflowPermissionHandler extends OrganizationPermissionHandler imp
 		if (dept == null) {
 			return participants;
 		}
-		final IDataQuery<User> users = _userService.queryUsers(dept);
+		Iterator<User> users = _roleService.users(dept, true, new HashMap<String, Object>());
+		// final IDataQuery<User> users = _userService.queryUsers(dept);
 		User user = null;
 		if (null != users) {
-			while ((user = users.next()) != null) {
+			while (users.hasNext()) {
+				user = users.next();
 				participants.add(new Participant(getUser(user)));
 			}
 		}
