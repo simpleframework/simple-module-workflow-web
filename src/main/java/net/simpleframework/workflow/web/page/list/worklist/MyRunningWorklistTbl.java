@@ -188,18 +188,11 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 			row.add(TablePagerColumn.ICON, img);
 		}
 
-		final EWorkitemStatus status = workitem.getStatus();
-		final DelegationBean delegation = (status == EWorkitemStatus.delegate) ? wfdService
-				.queryRunningDelegation(workitem) : null;
-		final boolean receiving = delegation != null
-				&& delegation.getStatus() == EDelegationStatus.receiving;
-
-		row.add("title", toTitleHTML(cp, workitem, receiving));
-
 		final ProcessBean process = WorkflowUtils.getProcessBean(cp, workitem);
 		final String pno = process.getPno();
-		row.add("pno", new SpanElement(pno).setTitle(pno)).add("pstat", toPstatHTML(cp, workitem))
-				.put(TablePagerColumn.OPE, toOpeHTML(cp, workitem, receiving));
+		row.add("title", toTitleHTML(cp, workitem, false))
+				.add("pno", new SpanElement(pno).setTitle(pno)).add("pstat", toPstatHTML(cp, workitem))
+				.put(TablePagerColumn.OPE, toOpeHTML(cp, workitem));
 
 		doRowData(cp, row, workitem);
 		return row;
@@ -212,8 +205,20 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 		}
 	}
 
+	private boolean isRev(final PageParameter pp, final WorkitemBean workitem) {
+		return pp.getRequestCache("rev_" + workitem.getId(), new CacheV<Boolean>() {
+			@Override
+			public Boolean get() {
+				final EWorkitemStatus status = workitem.getStatus();
+				final DelegationBean delegation = (status == EWorkitemStatus.delegate) ? wfdService
+						.queryRunningDelegation(workitem) : null;
+				return delegation != null && delegation.getStatus() == EDelegationStatus.receiving;
+			}
+		});
+	}
+
 	public String toTitleHTML(final PageParameter pp, final WorkitemBean workitem,
-			final boolean receiving) {
+			final boolean linklist) {
 		final StringBuilder sb = new StringBuilder();
 		final ActivityBean activity = WorkflowUtils.getActivityBean(pp, workitem);
 
@@ -243,8 +248,14 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 
 		AbstractElement<?> tEle;
 		final ProcessBean process = WorkflowUtils.getProcessBean(pp, workitem);
-		if (receiving) {
-			tEle = new SpanElement(WorkflowUtils.getProcessTitle(process));
+		if (isRev(pp, workitem)) {
+			final String txt = WorkflowUtils.getProcessTitle(process) + " ("
+					+ $m("MyRunningWorklistTbl.25") + ")";
+			if (linklist) {
+				tEle = new LinkElement(txt).setHref(uFactory.getUrl(pp, MyRunningWorklistTPage.class));
+			} else {
+				tEle = new SpanElement(txt);
+			}
 		} else {
 			tEle = new LinkElement(WorkflowUtils.getProcessTitle(process)).setStrong(
 					!workitem.isReadMark()).setOnclick(
@@ -271,10 +282,9 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 		return sb.toString();
 	}
 
-	protected String toOpeHTML(final ComponentParameter cp, final WorkitemBean workitem,
-			final boolean receiving) {
+	protected String toOpeHTML(final ComponentParameter cp, final WorkitemBean workitem) {
 		final StringBuilder sb = new StringBuilder();
-		if (receiving) {
+		if (isRev(cp, workitem)) {
 			sb.append(new ButtonElement(EDelegationStatus.receiving).setHighlight(true).setOnclick(
 					"$Actions['MyWorklistTPage_delegate_receiving']('workitemId=" + workitem.getId()
 							+ "');"));
