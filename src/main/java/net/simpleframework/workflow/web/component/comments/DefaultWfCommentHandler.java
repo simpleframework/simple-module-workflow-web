@@ -305,7 +305,11 @@ public class DefaultWfCommentHandler extends ComponentHandlerEx implements IWfCo
 		final PermissionUser ouser = cp.getUser(comment.getUserId());
 		sb2.append("  <div class='left'>").append(ouser);
 		if (groupBy != EGroupBy.dept) {
-			sb2.append("@").append(ouser.getDept().getText());
+			sb2.append("@");
+			if (null != comment.getDeptId())
+				sb2.append(cp.getDept(comment.getDeptId()).getText());
+			else
+				sb2.append(ouser.getDept().getText());
 		}
 
 		final int nYear = Calendar.getInstance().get(Calendar.YEAR);
