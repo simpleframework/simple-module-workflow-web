@@ -51,8 +51,12 @@ public class WorkflowFormPage extends AbstractWorkflowFormPage {
 	public ElementList getLeftElements(final PageParameter pp) {
 		final ElementList el = super.getLeftElements(pp);
 		final StringBuilder sb = new StringBuilder();
+		final WorkitemBean workitem = WorkflowUtils.getWorkitemBean(pp);
 		final ActivityBean activity = WorkflowUtils.getActivityBean(pp);
-		sb.append("<span class='l1'>").append(activity.getTasknodeText());
+		sb.append("<span class='l1'>");
+		if (null != workitem && null != workitem.getDeptId())
+			sb.append(pp.getDept(workitem.getDeptId()).getText() + " ");
+		sb.append(activity.getTasknodeText());
 		final String userFrom = WorkflowUtils.getUserFrom(activity, ", ");
 		if (userFrom != null) {
 			sb.append(" (").append($m("WorkflowFormPage.3")).append(userFrom).append(")");
