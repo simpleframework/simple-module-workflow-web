@@ -6,6 +6,7 @@ import net.simpleframework.ctx.permission.PermissionConst;
 import net.simpleframework.ctx.trans.Transaction;
 import net.simpleframework.mvc.IForwardCallback.IJsonForwardCallback;
 import net.simpleframework.mvc.JsonForward;
+import net.simpleframework.mvc.MVCContext;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.template.AbstractTemplatePage;
 import net.simpleframework.workflow.engine.IWorkflowContext;
@@ -45,7 +46,7 @@ public abstract class AbstractWorkflowRemotePage extends AbstractTemplatePage im
 		try {
 			callback.doAction(json);
 		} catch (final Throwable e) {
-			json.put("error", mvcContext.getThrowableMessage(e));
+			json.put("error", MVCContext.get().getThrowableMessage(e));
 		}
 		return json;
 	}
