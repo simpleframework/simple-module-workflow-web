@@ -63,7 +63,7 @@ public abstract class AbstractProcessWorksHandler extends AbstractScanHandler im
 	@Override
 	public ElementList getLeftElements(final PageParameter pp, final EProcessWorks qw) {
 		if (qw == EProcessWorks.dept) {
-			if (pp.getLdept().getChildren().size() > 0) {
+			if (pp.getLdept().getDeptChildren().size() > 0) {
 				return ElementList.of(new Checkbox("idMyProcessWorks_DeptTPage_children",
 						$m("MyProcessWorksTPage.2"))
 						.setOnchange("$Actions['MyProcessWorksTPage_tbl']('child=' + this.checked);"));

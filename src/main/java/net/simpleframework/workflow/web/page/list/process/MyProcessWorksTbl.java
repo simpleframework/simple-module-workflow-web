@@ -86,7 +86,7 @@ public class MyProcessWorksTbl extends AbstractDbTablePagerHandler implements IW
 			final PermissionDept dept = cp.getLogin().getDept();
 			final List<Object> deptIds = ArrayUtils.toParams(dept.getId());
 			if (child) {
-				for (final PermissionDept _dept : dept.getChildren()) {
+				for (final PermissionDept _dept : dept.getDeptChildren()) {
 					deptIds.add(_dept.getId());
 				}
 			}
