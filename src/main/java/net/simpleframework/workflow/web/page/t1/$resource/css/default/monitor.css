@@ -1,0 +1,38 @@
+v\:shape,v\:image,v\:stroke,v\:fill {
+  behavior: url(#default#VML);
+}
+
+.WorkflowMonitorPage .tb,
+.WorkflowGraphMonitorPage .tb {
+  background-color: #f9f9f9;
+  padding: 10px;
+  border: 1px solid #ccc;
+  margin-bottom: -1px;
+  text-align: left;
+}
+
+.WorkflowGraphMonitorPage .tb .re {
+  float: right;
+}
+
+.WorkflowGraphMonitorPage .tb .le {
+  float: left;
+}
+
+.WorkflowGraphMonitorPage .graph {
+  padding: 12px 8px;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  overflow-x: auto;
+  margin-bottom: -1px;
+  min-height: 400px;
+}
+
+.WorkflowGraphMonitorPage .graph->div {
+  display: table;
+}
+
+.WorkflowGraphMonitorPage .graph .tasknode,
+.WorkflowGraphMonitorPage .graph .tasktext {
+  cursor: pointer;
+}

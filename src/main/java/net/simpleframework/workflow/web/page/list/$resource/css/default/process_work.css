@@ -1,0 +1,100 @@
+.MyProcessWorksTPage .category {
+  padding: 15px 0; 
+}
+
+.MyProcessWorksTPage .col1 {
+  position: static !important;
+}
+
+.MyProcessWorksTPage .gtitle {
+  border-bottom: 1px dashed #bbb;
+  color: #833;
+  font-size: 11px;
+  margin-bottom: 4px;
+  padding: 2px 0 6px 10px;
+}
+
+.MyProcessWorksTPage .col1 .gitem {
+  margin-right: 1px;
+  padding: 8px 15px;
+  border-top: 1px solid transparent;
+  border-bottom: 1px solid transparent;
+  border-left: 1px solid transparent;
+  cursor: pointer;
+  background: url("images/pop_arrow.png") no-repeat scroll 95% 50%;
+  color: #666;
+}
+
+.MyProcessWorksTPage .col1 .gitem:HOVER {
+  background-color: #fafafa;
+  border-color: #999;
+}
+
+.MyProcessWorksTPage .col1 .glbl {
+  font-size: 10.5pt;
+}
+
+.MyProcessWorksTPage .col1 .gsize {
+  margin-left: 3px;
+  color: #555;
+}
+
+.MyProcessWorksTPage .col1 .gitem.cur {
+  color: #333;
+  background-image: url("images/pop_arrow_hover.png");
+}
+
+.MyProcessWorksTPage .col1 .gitem .psep {
+  position: absolute;
+  background-color: #fafafa;
+  left: -2px;
+  top: 0;
+  width: 2px;
+}
+
+.MyProcessWorksTPage .col1 .gitem .psub {
+  position: absolute;
+  padding: 10px;
+  z-index: 20;
+  background-color: #fafafa;
+  border: 1px solid #999;
+  width: 420px;
+  min-height: 120px;
+  -webkit-box-shadow: 3px 3px 3px #aaa;
+  box-shadow: 3px 3px 3px #aaa;
+  cursor: default;
+}
+
+.MyProcessWorksTPage .col1  .pitem {
+  display: inline-block;
+  padding: 10px;
+}
+
+.MyProcessWorksTPage .modeltxt {
+  background-color: #eed;
+  color: #654;
+  margin-bottom: 8px;
+  padding: 4px 10px;
+}
+
+.MyProcessWorksTPage .modeltxt .pm {
+  font-size: 10.5pt; 
+  margin-right: 4px;
+}
+
+.ProcessDetailPage .ptitle {
+  padding: 10px;
+  background-color: #eee;
+  font-size: 10.5pt;
+  color: #900;
+}
+
+.ProcessDetailPage .ptag {
+  background-color: #ddd;
+  display: inline-block;
+  margin: 4px;
+  padding: 3px 9px;
+  -moz-border-radius: 9px;
+  -webkit-border-radius: 9px;
+  border-radius: 9px;
+}

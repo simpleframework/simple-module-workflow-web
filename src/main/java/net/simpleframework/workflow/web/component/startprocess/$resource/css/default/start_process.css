@@ -1,0 +1,17 @@
+.initiator_select .ritem,
+.transition_select .ritem {
+  border-bottom: 1px solid #bbb;
+  padding: 8px 6px;
+}
+
+.initiator_select .ritem:hover,
+.transition_select .ritem:hover {
+  background-color: #f7f7f7;
+}
+
+.initiator_select .msg,
+.transition_select .msg {
+  color: red;
+  font-size: 9.5pt;
+  margin: 6px;
+}

@@ -1,0 +1,20 @@
+.ProcessModelMgrPage>div,
+.ProcessMgrPage>div,
+.ActivityMgrPage>div {
+  margin: 10px 0;
+	-webkit-box-shadow: 5px 5px 5px #aaa;
+	-moz-box-shadow: 5px 5px 5px #aaa;
+	box-shadow: 5px 5px 5px #aaa;
+	-moz-border-radius: 0 0 4px 4px;
+  -webkit-border-radius: 0 0 4px 4px;
+	border-radius: 0 0 4px 4px;
+	width: 90%;
+}
+
+.AbstractAbortPage .c {
+  line-height: 2.4;
+}
+
+.tablepager .simple_progress {
+  width: 95%;
+}

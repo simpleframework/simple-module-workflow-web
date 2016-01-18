@@ -1,0 +1,103 @@
+.WorkflowFormPage,
+.WorkflowViewPage {
+  width: 82%;
+}
+
+/*-------------------------form_tb_bar--------------------*/
+.form_tb_bar .taskinfo {
+  display: inline-block;
+  margin-left: 15px;
+  vertical-align: top;
+  line-height: 1.2;
+}
+
+.form_tb_bar .taskinfo .l1 {
+  color: #555; 
+  font-weight: bold;
+}
+
+.form_tb_bar .taskinfo .l2 {
+  color: #777;
+  font-size: 9px;
+  -webkit-text-size-adjust: none;
+  -webkit-transform: scale(0.75);
+  -webkit-transform-origin-x: 0;
+}
+
+/*-------------------------WorkflowCompleteInfoPage--------------------*/
+.WorkflowCompleteInfoPage {
+  width: 50%;
+  text-align: left;
+  border: 1px solid #aaa;
+  border-bottom: 0;
+  background-color: #fff;
+  margin-top: 15px;
+}
+
+.WorkflowCompleteInfoPage .l1,
+.WorkflowCompleteInfoPage .l2 {
+  border-bottom: 1px solid #aaa;
+}
+
+.WorkflowCompleteInfoPage .l1,
+.WorkflowCompleteInfoPage .l2 .task {
+  padding: 12px 20px;
+}
+
+.WorkflowCompleteInfoPage .l1 {
+  background-color: #f9f9f9;
+  font-size: 16pt;
+  font-weight: bold;
+}
+
+.WorkflowCompleteInfoPage .l2 {
+  color: #a00;
+  font-size: 11.5pt;
+}
+
+.WorkflowCompleteInfoPage .l2 .task {
+  color: #888;
+}
+
+.WorkflowCompleteInfoPage .winfo {
+  margin: 12px;
+}
+
+/*-------------------------WorkflowMonitorPage--------------------*/
+.WorkflowMonitorPage {
+  width: 80%;
+  -webkit-box-shadow: 5px 5px 5px #aaa;
+  -moz-box-shadow: 5px 5px 5px #aaa;
+  box-shadow: 5px 5px 5px #aaa;
+  position: relative;
+}
+
+.WorkflowMonitorPage .ltabs {
+  left: -29px;
+  width: 29px;
+  text-align: right;
+  position: absolute;
+}
+
+.WorkflowMonitorPage .ltabs .simple_tabs.vertical {
+  margin-top: 10px;
+}
+
+.WorkflowMonitorPage .ltabs .simple_tabs a.active {
+  background-color: #fff;
+  border-right-color: #fff;
+}
+
+.WorkflowMonitorPage .tb .icon {
+  display: inline-block;
+  vertical-align: middle;
+  line-height: 1.6;
+}
+
+.WorkflowMonitorPage .tb .icon img {
+  margin: 0 4px 0 12px;  
+}
+
+.tablepager .simple_progress {
+  width: 95%;
+}
