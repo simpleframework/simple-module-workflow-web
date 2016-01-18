@@ -307,9 +307,9 @@ public class DefaultWfCommentHandler extends ComponentHandlerEx implements IWfCo
 		if (groupBy != EGroupBy.dept) {
 			sb2.append("@");
 			if (null != comment.getDeptId()) {
-				sb2.append(cp.getDept(comment.getDeptId()).getText());
+				sb2.append(cp.getDept(comment.getDeptId()));
 			} else {
-				sb2.append(ouser.getDept().getText());
+				sb2.append(ouser.getDept());
 			}
 		}
 
