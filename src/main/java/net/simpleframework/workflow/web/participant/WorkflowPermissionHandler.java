@@ -2,7 +2,6 @@ package net.simpleframework.workflow.web.participant;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -11,6 +10,7 @@ import net.simpleframework.ado.query.IDataQuery;
 import net.simpleframework.common.BeanUtils;
 import net.simpleframework.common.ID;
 import net.simpleframework.common.StringUtils;
+import net.simpleframework.common.coll.KVMap;
 import net.simpleframework.ctx.permission.PermissionUser;
 import net.simpleframework.organization.Department;
 import net.simpleframework.organization.Role;
@@ -161,7 +161,7 @@ public class WorkflowPermissionHandler extends OrganizationPermissionHandler imp
 		if (dept == null) {
 			return participants;
 		}
-		Iterator<User> users = _roleService.users(dept, true, new HashMap<String, Object>());
+		final Iterator<User> users = _roleService.users(dept, new KVMap().add("role-member", true));
 		// final IDataQuery<User> users = _userService.queryUsers(dept);
 		User user = null;
 		if (null != users) {
