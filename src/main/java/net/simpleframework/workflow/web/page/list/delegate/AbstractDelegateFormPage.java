@@ -24,6 +24,7 @@ import net.simpleframework.mvc.component.base.validation.EValidatorMethod;
 import net.simpleframework.mvc.component.base.validation.Validator;
 import net.simpleframework.mvc.component.ext.userselect.UserSelectBean;
 import net.simpleframework.mvc.template.lets.FormTableRowTemplatePage;
+import net.simpleframework.workflow.WorkflowException;
 import net.simpleframework.workflow.engine.EDelegationSource;
 import net.simpleframework.workflow.engine.IWorkflowContext;
 import net.simpleframework.workflow.engine.IWorkflowContextAware;
@@ -78,8 +79,25 @@ public abstract class AbstractDelegateFormPage extends FormTableRowTemplatePage 
 		@Override
 		public JavascriptForward onSave(final ComponentParameter cp) throws Exception {
 			final String wd_userId = cp.getParameter("wd_userId");
-			final PermissionUser user = StringUtils.hasText(wd_userId) ? cp.getUser(wd_userId) : cp
-					.getUser(cp.getParameter("wd_userTxt"));
+			PermissionUser user = null;
+			if (StringUtils.hasText(wd_userId)) {
+				user = cp.getUser(wd_userId);
+			} else {
+				String txt = cp.getParameter("wd_userTxt");
+				if (StringUtils.hasText(txt)) {
+					txt = txt.trim();
+					final int ps = txt.indexOf("(");
+					final int pe = txt.indexOf(")");
+					if (ps > -1 && pe > ps) {
+						txt = txt.substring(ps + 1, pe);
+					}
+					user = cp.getUser(txt);
+				}
+				if (user == null) {
+					throw WorkflowException.of($m("AbstractDelegateFormPage.3", txt));
+				}
+			}
+
 			final Date wd_startDate = cp.getDateParameter("wd_startDate");
 			final Date wd_endDate = cp.getDateParameter("wd_endDate");
 			final String wd_description = cp.getParameter("wd_description");
