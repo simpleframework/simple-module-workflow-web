@@ -27,10 +27,11 @@ import net.simpleframework.mvc.template.lets.FormTableRowTemplatePage;
 import net.simpleframework.workflow.WorkflowException;
 import net.simpleframework.workflow.engine.EDelegationSource;
 import net.simpleframework.workflow.engine.IWorkflowContext;
-import net.simpleframework.workflow.engine.IWorkflowContextAware;
 import net.simpleframework.workflow.engine.bean.DelegationBean;
 import net.simpleframework.workflow.engine.bean.WorkitemBean;
 import net.simpleframework.workflow.web.WorkflowUtils;
+import net.simpleframework.workflow.web.page.IWorkflowPageAware;
+import net.simpleframework.workflow.web.page.t1.form.WorkflowFormPage;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -39,7 +40,7 @@ import net.simpleframework.workflow.web.WorkflowUtils;
  *         http://www.simpleframework.net
  */
 public abstract class AbstractDelegateFormPage extends FormTableRowTemplatePage implements
-		IWorkflowContextAware {
+		IWorkflowPageAware {
 
 	@Override
 	public String getLabelWidth(final PageParameter pp) {
@@ -218,7 +219,12 @@ public abstract class AbstractDelegateFormPage extends FormTableRowTemplatePage 
 		public JavascriptForward onSave(final ComponentParameter cp) throws Exception {
 			final DelegationBean delegation = _getDelegation(cp);
 			wfdService.doAccept(delegation, cp.getParameter("wd_description"));
-			return super.onSave(cp).append("$Actions['MyWorklistTPage_tbl']();");
+			return super
+					.onSave(cp)
+					.append("$Actions.loc('")
+					.append(
+							uFactory.getUrl(cp, WorkflowFormPage.class,
+									wfwService.getBean(delegation.getSourceId()))).append("');");
 		}
 
 		@Transaction(context = IWorkflowContext.class)
