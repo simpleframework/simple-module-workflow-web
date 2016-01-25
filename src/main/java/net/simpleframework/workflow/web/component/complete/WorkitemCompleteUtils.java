@@ -1,5 +1,7 @@
 package net.simpleframework.workflow.web.component.complete;
 
+import static net.simpleframework.common.I18n.$m;
+
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -27,6 +29,7 @@ import net.simpleframework.workflow.engine.ActivityComplete;
 import net.simpleframework.workflow.engine.IWorkflowContextAware;
 import net.simpleframework.workflow.engine.TransitionUtils;
 import net.simpleframework.workflow.engine.WorkitemComplete;
+import net.simpleframework.workflow.engine.bean.DelegationBean;
 import net.simpleframework.workflow.engine.bean.WorkitemBean;
 import net.simpleframework.workflow.engine.participant.Participant;
 import net.simpleframework.workflow.schema.AbstractTaskNode;
@@ -189,9 +192,15 @@ public abstract class WorkitemCompleteUtils implements IWorkflowContextAware {
 					sb.append("<div class='ritem'>");
 					final String val = participant.toString();
 					Object user = participant.getUser();
+					final DelegationBean delegation = wfdService.queryRunningDelegation(participant
+							.getUserId());
+					if (delegation != null) {
+						user = user + $m("WorkflowUtils.1", delegation.getUserText());
+					}
 					if (ArrayUtils.contains(deptdispTasks, to.getName())) {
 						final PermissionDept dept = cp.getDept(participant.getDeptId());
-						user = dept.getText() + " (" + SpanElement.color777(user) + ")";
+						user = dept.getText() + "<br>"
+								+ SpanElement.color999(user).addStyle("font-size: 10.5px");
 					}
 					final String id = ObjectUtils.hashStr(participant);
 					Checkbox box;
