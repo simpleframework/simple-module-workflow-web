@@ -17,6 +17,7 @@ import net.simpleframework.workflow.engine.EWorkitemStatus;
 import net.simpleframework.workflow.engine.IWorkflowContextAware;
 import net.simpleframework.workflow.engine.bean.AbstractWorkitemBean;
 import net.simpleframework.workflow.engine.bean.ActivityBean;
+import net.simpleframework.workflow.engine.bean.DelegationBean;
 import net.simpleframework.workflow.engine.bean.ProcessBean;
 import net.simpleframework.workflow.engine.bean.ProcessModelBean;
 import net.simpleframework.workflow.engine.bean.UserStatBean;
@@ -76,6 +77,12 @@ public abstract class WorkflowUtils implements IWorkflowContextAware {
 				sb.append(", ");
 			}
 			sb.append(p.getUser().getText());
+			if (!r) {
+				final DelegationBean delegation = wfdService.queryRunningDelegation(p.getWorkitem());
+				if (delegation != null) {
+					sb.append(SpanElement.colora00($m("WorkflowUtils.1", delegation.getUserText())));
+				}
+			}
 		}
 		return sb.toString();
 	}
