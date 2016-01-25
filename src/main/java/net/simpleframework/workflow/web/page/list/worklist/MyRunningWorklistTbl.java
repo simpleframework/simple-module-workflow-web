@@ -149,8 +149,7 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 				$m("MyRunningWorklistTbl.0", pp.getUser(workitem.getUserId())));
 	}
 
-	public static ImageElement createWorkitemImageMark(final PageParameter pp,
-			final WorkitemBean workitem) {
+	public ImageElement createWorkitemImageMark(final PageParameter pp, final WorkitemBean workitem) {
 		ImageElement img = null;
 		final EWorkitemStatus status = workitem.getStatus();
 		ActivityBean fallback;

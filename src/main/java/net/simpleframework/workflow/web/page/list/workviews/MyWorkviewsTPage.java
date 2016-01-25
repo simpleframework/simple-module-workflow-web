@@ -105,17 +105,22 @@ public class MyWorkviewsTPage extends AbstractItemsTPage {
 			return wfvService.getWorkviewsList(cp.getLoginId());
 		}
 
-		protected ImageElement createImageMark(final ComponentParameter cp,
-				final WorkviewBean workview) {
+		public ImageElement createImageMark(final PageParameter pp, final WorkviewBean workview) {
 			ImageElement img = null;
 			if (workview.getParentId() != null) {
-				img = MARK_FORWARD(cp);
+				img = MARK_FORWARD(pp);
 			} else if (workview.isTopMark()) {
-				img = AbstractItemsTPage.MARK_TOP(cp);
+				img = AbstractItemsTPage.MARK_TOP(pp);
 			} else if (!workview.isReadMark()) {
-				img = AbstractItemsTPage.MARK_UNREAD(cp);
+				img = AbstractItemsTPage.MARK_UNREAD(pp);
 			}
 			return img;
+		}
+
+		public String toTopicHTML(final PageParameter pp, final WorkviewBean workview) {
+			final ProcessBean process = wfpService.getBean(workview.getProcessId());
+			return new LinkElement(WorkflowUtils.getProcessTitle(process))
+					.setStrong(!workview.isReadMark()).setHref(getWorkviewUrl(pp, workview)).toString();
 		}
 
 		@Override
@@ -132,21 +137,15 @@ public class MyWorkviewsTPage extends AbstractItemsTPage {
 			return row;
 		}
 
-		protected String toTopicHTML(final ComponentParameter cp, final WorkviewBean workview) {
-			final ProcessBean process = wfpService.getBean(workview.getProcessId());
-			return new LinkElement(WorkflowUtils.getProcessTitle(process))
-					.setStrong(!workview.isReadMark()).setHref(getWorkviewUrl(cp, workview)).toString();
-		}
-
-		protected String toOpeHTML(final ComponentParameter cp, final WorkviewBean workview) {
+		protected String toOpeHTML(final PageParameter pp, final WorkviewBean workview) {
 			final StringBuilder ope = new StringBuilder();
 			ope.append(new ButtonElement($m("MyWorkviewsTPage。0")).setOnclick(JS.loc(getWorkviewUrl(
-					cp, workview))));
+					pp, workview))));
 			return ope.toString();
 		}
 
-		private String getWorkviewUrl(final ComponentParameter cp, final WorkviewBean workview) {
-			return uFactory.getUrl(cp, WorkflowViewPage.class, "workviewId=" + workview.getId());
+		private String getWorkviewUrl(final PageParameter pp, final WorkviewBean workview) {
+			return uFactory.getUrl(pp, WorkflowViewPage.class, "workviewId=" + workview.getId());
 		}
 	}
 }
