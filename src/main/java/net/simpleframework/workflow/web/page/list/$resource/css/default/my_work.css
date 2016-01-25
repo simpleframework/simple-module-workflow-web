@@ -148,6 +148,8 @@
   font-style: italic;
 }
 
+/*---------------------------MyWorkstatTPage-----------------------*/
+
 .MyWorkstatTPage {
   background-color: #eee;
   border: 1px solid #bbb;
@@ -187,6 +189,8 @@
   font-family: Verdana, "Microsoft YaHei", sans-serif, Tahoma, Arial !important;
   line-height: 1.5;
 }
+
+/*---------------------------MyWorklogsTPage-----------------------*/
 
 .MyWorklogsTPage .topbar {
   background-color: #eee;
@@ -237,6 +241,8 @@
   padding: 15px 20px;
   color: #666;
 }
+
+/*---------------------------MyInitiateItemsGroupTPage-----------------------*/
 
 .MyInitiateItemsGroupTPage .gpane {
   padding: 12px 12px 36px 12px;
@@ -289,6 +295,16 @@
 .MyInitiateItemsGroupTPage .lblock .litem:last-child {
   border-bottom: 0;
 }
+
+/*---------------------------AbstractDelegateFormPage-----------------------*/
+
+.AbstractDelegateFormPage .status {
+  color: #c33;
+  font-size: 10.5pt;
+  line-height: 1.6;
+}
+
+/*---------------------------Category_BlankPage-----------------------*/
 
 .Category_BlankPage .category .c_item {
   padding-left: 10px;

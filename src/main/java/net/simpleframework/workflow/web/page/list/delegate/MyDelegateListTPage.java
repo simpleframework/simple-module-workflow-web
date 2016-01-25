@@ -2,9 +2,11 @@ package net.simpleframework.workflow.web.page.list.delegate;
 
 import static net.simpleframework.common.I18n.$m;
 
+import java.util.Date;
 import java.util.Map;
 
 import net.simpleframework.ado.query.IDataQuery;
+import net.simpleframework.common.Convert;
 import net.simpleframework.common.StringUtils;
 import net.simpleframework.common.coll.KVMap;
 import net.simpleframework.ctx.trans.Transaction;
@@ -12,6 +14,7 @@ import net.simpleframework.mvc.IForward;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.ButtonElement;
+import net.simpleframework.mvc.common.element.ETextAlign;
 import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.ImageElement;
 import net.simpleframework.mvc.common.element.LinkElement;
@@ -76,16 +79,18 @@ public class MyDelegateListTPage extends AbstractItemsTPage {
 				.addColumn(TC_USERTEXT())
 				.addColumn(
 						TC_CREATEDATE().setColumnText($m("MyDelegateListTPage.1")).setColumnAlias(
-								"d.createdate")).addColumn(TC_STATUS()).addColumn(TablePagerColumn.OPE(70));
+								"d.createdate")).addColumn(TC_DDATE()).addColumn(TablePagerColumn.OPE(70));
 		return tablePager;
 	}
 
-	protected TablePagerColumn TC_STATUS() {
-		return super.TC_STATUS(EDelegationStatus.class).setColumnAlias("d.status");
+	protected TablePagerColumn TC_DDATE() {
+		return TablePagerColumn.DATE("dseDate", $m("AbstractDelegateFormPage.2")).setWidth(140)
+				.setFilterSort(false);
 	}
 
 	protected TablePagerColumn TC_USERTEXT() {
-		return new TablePagerColumn("userText", $m("MyDelegateListTPage.0"), 70).setFilterSort(false);
+		return new TablePagerColumn("userText", $m("MyDelegateListTPage.0"), 70).setTextAlign(
+				ETextAlign.center).setFilterSort(false);
 	}
 
 	@Transaction(context = IWorkflowContext.class)
@@ -156,6 +161,10 @@ public class MyDelegateListTPage extends AbstractItemsTPage {
 			if (delegation.isTimeoutMark()) {
 				img = AbstractItemsTPage._createImageMark(cp, "status_timeout.png").setTitle(
 						$m("MyDelegateListTPage.6"));
+			} else {
+				final EDelegationStatus status = delegation.getStatus();
+				img = AbstractItemsTPage._createImageMark(cp, "status_" + status.name() + ".png")
+						.setTitle(status.toString());
 			}
 			return img;
 		}
@@ -177,10 +186,27 @@ public class MyDelegateListTPage extends AbstractItemsTPage {
 			row.add("title", title.toString());
 			row.add("userText", delegation.getUserText());
 			row.add("createDate", delegation.getCreateDate());
-			final EDelegationStatus status = delegation.getStatus();
-			row.add("status", WorkflowUtils.toStatusHTML(cp, status));
+			row.add("dseDate", toDseDateHTML(cp, delegation));
 			row.add(TablePagerColumn.OPE, toOpeHTML(cp, delegation));
 			return row;
+		}
+
+		protected String toDseDateHTML(final ComponentParameter cp, final DelegationBean delegation) {
+			final StringBuilder sb = new StringBuilder();
+			final Date dstartDate = delegation.getDstartDate();
+			final Date dcompleteDate = delegation.getDcompleteDate();
+			if (dstartDate != null) {
+				sb.append(Convert.toDateString(dstartDate));
+			} else {
+				sb.append("-");
+			}
+			sb.append("<br>");
+			if (dcompleteDate != null) {
+				sb.append(Convert.toDateString(dcompleteDate));
+			} else {
+				sb.append("-");
+			}
+			return sb.toString();
 		}
 
 		@Override

@@ -10,15 +10,12 @@ import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.AbstractElement;
 import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.LinkButton;
-import net.simpleframework.mvc.common.element.Option;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
 import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
 import net.simpleframework.mvc.component.ui.window.WindowBean;
 import net.simpleframework.workflow.engine.EDelegationSource;
-import net.simpleframework.workflow.engine.EDelegationStatus;
 import net.simpleframework.workflow.engine.bean.DelegationBean;
-import net.simpleframework.workflow.web.WorkflowUtils;
 import net.simpleframework.workflow.web.page.list.delegate.AbstractDelegateFormPage.WorkitemDelegateSetPage;
 
 /**
@@ -49,18 +46,13 @@ public class UserDelegateListTPage extends MyDelegateListTPage {
 	protected TablePagerBean addTablePagerBean(final PageParameter pp) {
 		final TablePagerBean tablePager = addTablePagerBean(pp, "MyWorklistTPage_tbl",
 				UserDelegateTbl.class);
-		tablePager.addColumn(TablePagerColumn.ICON().setWidth(16));
 		tablePager
+				.addColumn(TablePagerColumn.ICON())
 				.addColumn(
 						new TablePagerColumn("description", $m("WorkitemDelegateSetPage.3"))
-								.setSort(false))
-				.addColumn(TC_USERTEXT())
-				.addColumn(TC_CREATEDATE())
-				.addColumn(
-						TC_STATUS().setFilterOptions(
-								Option.from(EDelegationStatus.ready, EDelegationStatus.running,
-										EDelegationStatus.complete, EDelegationStatus.abort)))
-				.addColumn(TablePagerColumn.OPE(70));
+								.setSort(false)).addColumn(TC_USERTEXT())
+				.addColumn(TC_CREATEDATE().setColumnText($m("MyDelegateListTPage.1")))
+				.addColumn(TC_DDATE()).addColumn(TablePagerColumn.OPE(70));
 		return tablePager;
 	}
 
@@ -92,8 +84,7 @@ public class UserDelegateListTPage extends MyDelegateListTPage {
 			row.add("description", toTitle(delegation, delegation.getDescription()));
 			row.add("userText", delegation.getUserText());
 			row.add("createDate", delegation.getCreateDate());
-			final EDelegationStatus status = delegation.getStatus();
-			row.add("status", WorkflowUtils.toStatusHTML(cp, status));
+			row.add("dseDate", toDseDateHTML(cp, delegation));
 			row.add(TablePagerColumn.OPE, toOpeHTML(cp, delegation));
 			return row;
 		}

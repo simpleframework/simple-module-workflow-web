@@ -45,6 +45,11 @@ public abstract class AbstractDelegateFormPage extends FormTableRowTemplatePage 
 		return "75px";
 	}
 
+	@Override
+	protected String getPageCSS(final PageParameter pp) {
+		return "AbstractDelegateFormPage";
+	}
+
 	protected InputElement createDescElement() {
 		return InputElement.textarea("wd_description");
 	}
@@ -140,7 +145,10 @@ public abstract class AbstractDelegateFormPage extends FormTableRowTemplatePage 
 			final ElementList el = ElementList.of();
 			final DelegationBean delegation = _getDelegation(pp);
 			if (delegation.isTimeoutMark()) {
-				el.append(SpanElement.colora00($m("AbstractDelegateFormPage.0")));
+				el.append(new SpanElement($m("AbstractDelegateFormPage.0")).setClassName("status"));
+			} else {
+				el.append(new SpanElement($m("AbstractDelegateFormPage.1", delegation.getStatus()))
+						.setClassName("status"));
 			}
 			return el;
 		}
