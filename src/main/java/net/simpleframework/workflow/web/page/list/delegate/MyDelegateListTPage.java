@@ -89,7 +89,7 @@ public class MyDelegateListTPage extends AbstractItemsTPage {
 	}
 
 	protected TablePagerColumn TC_USERTEXT() {
-		return new TablePagerColumn("userText", $m("MyDelegateListTPage.0"), 70).setTextAlign(
+		return new TablePagerColumn("userText", $m("MyDelegateListTPage.0"), 120).setTextAlign(
 				ETextAlign.center).setFilterSort(false);
 	}
 
@@ -183,8 +183,13 @@ public class MyDelegateListTPage extends AbstractItemsTPage {
 			appendTaskname(title, cp, activity);
 			title.append(toTitle(delegation,
 					WorkflowUtils.getProcessTitle(wfaService.getProcessBean(activity))));
-			row.add("title", title.toString());
-			row.add("userText", delegation.getUserText());
+			row.add("title", title);
+			String userText = delegation.getUserText();
+			if (!workitem.getUserId().equals(delegation.getOuserId())) {
+				userText += "<br>"
+						+ SpanElement.color777($m("MyDelegateListTPage.7", delegation.getOuserText()));
+			}
+			row.add("userText", userText);
 			row.add("createDate", delegation.getCreateDate());
 			row.add("dseDate", toDseDateHTML(cp, delegation));
 			row.add(TablePagerColumn.OPE, toOpeHTML(cp, delegation));

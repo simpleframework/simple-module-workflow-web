@@ -109,8 +109,8 @@ public abstract class AbstractDelegateFormPage extends FormTableRowTemplatePage 
 				return JavascriptForward.RELOC;
 			} else {
 				for (final String workitemId : StringUtils.split(cp.getParameter("workitemId"))) {
-					wfwService.doWorkitemDelegation(wfwService.getBean(workitemId), user.getId(),
-							wd_startDate, wd_endDate, wd_description);
+					wfwService.doWorkitemDelegation(wfwService.getBean(workitemId), cp.getLoginId(),
+							user.getId(), wd_startDate, wd_endDate, wd_description);
 				}
 				return super.onSave(cp).append("$Actions['MyWorklistTPage_tbl']();");
 			}
