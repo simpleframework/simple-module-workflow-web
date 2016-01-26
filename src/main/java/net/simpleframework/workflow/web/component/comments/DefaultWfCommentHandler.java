@@ -4,6 +4,8 @@ import static net.simpleframework.common.I18n.$m;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -138,41 +140,74 @@ public class DefaultWfCommentHandler extends ComponentHandlerEx implements IWfCo
 		return data;
 	}
 
-	protected Map<String, List<WfComment>> comments_map(final ComponentParameter cp,
+	protected Map<Object, List<WfComment>> comments_map(final ComponentParameter cp,
 			final IDataQuery<WfComment> dq, final AbstractWorkitemBean workitem, final EGroupBy groupBy) {
-		final Map<String, List<WfComment>> data = new LinkedHashMap<String, List<WfComment>>();
+		final Map<Object, List<WfComment>> data = new LinkedHashMap<Object, List<WfComment>>();
 		Map<String, String[]> tasknames = null;
+		if (groupBy == EGroupBy.taskname && workitem instanceof WorkitemBean) {
+			// 数据按tasknames的顺序
+			tasknames = getTasknames(cp, (WorkitemBean) workitem);
+			for (final String key : tasknames.keySet()) {
+				data.put(key, new ArrayList<WfComment>());
+			}
+		}
+
 		final IPermissionHandler phdl = cp.getPermission();
 		WfComment comment;
 		while ((comment = dq.next()) != null) {
-			String key = null;
+			Object key = null;
 			if (groupBy == EGroupBy.dept) {
 				final PermissionDept dept = phdl.getDept(comment.getDeptId());
 				if (dept == null) {
 					continue;
 				}
-				key = dept.getText();
-			} else if (groupBy == EGroupBy.taskname && workitem instanceof WorkitemBean) {
-				if (tasknames == null) {
-					tasknames = getTasknames(cp, (WorkitemBean) workitem);
-				}
-				if (tasknames != null) {
-					for (final Map.Entry<String, String[]> e : tasknames.entrySet()) {
-						if (ArrayUtils.contains(e.getValue(), comment.getTaskname())) {
-							key = e.getKey();
-							break;
-						}
+				key = dept;
+			} else if (tasknames != null) { // 按任务
+				for (final Map.Entry<String, String[]> e : tasknames.entrySet()) {
+					if (ArrayUtils.contains(e.getValue(), comment.getTaskname())) {
+						key = e.getKey();
+						break;
 					}
 				}
 			}
 
 			if (key != null) {
-				List<WfComment> comments = data.get(key);
-				if (comments == null) {
-					data.put(key, comments = new ArrayList<WfComment>());
+				List<WfComment> list = data.get(key);
+				if (list == null) {
+					data.put(key, list = new ArrayList<WfComment>());
 				}
-				comments.add(comment);
+				list.add(comment);
 			}
+		}
+
+		// 默认排序
+		if (groupBy == EGroupBy.dept) {
+			final List<Object> keys = new ArrayList<Object>(data.keySet());
+			Collections.sort(keys, new Comparator<Object>() {
+				@Override
+				public int compare(final Object o1, final Object o2) {
+					final PermissionDept d1 = (PermissionDept) o1;
+					final PermissionDept d2 = (PermissionDept) o2;
+					final int l1 = d1.getLevel();
+					final int l2 = d2.getLevel();
+					if (l1 == l2) {
+						final int order1 = d1.getOorder();
+						final int order2 = d2.getOorder();
+						if (order1 == order2) {
+							return 0;
+						} else {
+							return order1 > order2 ? 1 : -1;
+						}
+					} else {
+						return l1 > l2 ? 1 : -1;
+					}
+				}
+			});
+			final Map<Object, List<WfComment>> _data = new LinkedHashMap<Object, List<WfComment>>();
+			for (final Object key : keys) {
+				_data.put(key, data.get(key));
+			}
+			return _data;
 		}
 		return data;
 	}
@@ -190,6 +225,11 @@ public class DefaultWfCommentHandler extends ComponentHandlerEx implements IWfCo
 		}
 
 		final AbstractWorkitemBean workitem = getWorkitemBean(cp);
+		if (workitem instanceof WorkviewBean && groupBy == EGroupBy.taskname) {
+			// Workview不支持EGroupBy.taskname
+			groupBy = EGroupBy.none;
+		}
+
 		final IDataQuery<WfComment> dq = comments(cp);
 		final String commentName = cp.getComponentName();
 		final StringBuilder sb = new StringBuilder();
@@ -259,7 +299,7 @@ public class DefaultWfCommentHandler extends ComponentHandlerEx implements IWfCo
 				sb2.append(toCommentItemHTML(cp, comment, i++ == 0, groupBy));
 			}
 		} else {
-			for (final Map.Entry<String, List<WfComment>> e : comments_map(cp, dq, workitem, groupBy)
+			for (final Map.Entry<Object, List<WfComment>> e : comments_map(cp, dq, workitem, groupBy)
 					.entrySet()) {
 				final List<WfComment> list = new ArrayList<WfComment>();
 				for (final WfComment comment : e.getValue()) {
