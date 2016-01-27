@@ -36,6 +36,7 @@ import net.simpleframework.workflow.engine.bean.ActivityBean;
 import net.simpleframework.workflow.engine.bean.DelegationBean;
 import net.simpleframework.workflow.engine.bean.WorkitemBean;
 import net.simpleframework.workflow.web.WorkflowUtils;
+import net.simpleframework.workflow.web.page.AbstractWorksTPage;
 import net.simpleframework.workflow.web.page.list.AbstractItemsTPage;
 import net.simpleframework.workflow.web.page.list.delegate.AbstractDelegateFormPage.WorkitemDelegateViewPage;
 import net.simpleframework.workflow.web.page.list.worklist.MyRunningWorklistTbl;
@@ -84,14 +85,14 @@ public class MyDelegateListTPage extends AbstractItemsTPage {
 	protected TablePagerBean addTablePagerBean(final PageParameter pp) {
 		final TablePagerBean tablePager = addTablePagerBean(pp, "MyWorklistTPage_tbl",
 				MyWorkDelegateTbl.class);
-		tablePager
-				.addColumn(TC_ICON())
-				.addColumn(TC_TITLE())
-				.addColumn(TC_USERTEXT())
-				.addColumn(
-						TC_CREATEDATE().setColumnText($m("MyDelegateListTPage.1")).setColumnAlias(
-								"d.createdate")).addColumn(TC_DDATE()).addColumn(TablePagerColumn.OPE(70));
+		tablePager.addColumn(TC_ICON()).addColumn(TC_TITLE()).addColumn(TC_USERTEXT())
+				.addColumn(TC_CREATEDATE2()).addColumn(TC_DDATE()).addColumn(TablePagerColumn.OPE(70));
 		return tablePager;
+	}
+
+	protected TablePagerColumn TC_CREATEDATE2() {
+		return AbstractWorksTPage.TC_CREATEDATE().setColumnText($m("MyDelegateListTPage.1"))
+				.setColumnAlias("d.createdate");
 	}
 
 	protected TablePagerColumn TC_DDATE() {

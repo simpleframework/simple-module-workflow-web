@@ -36,6 +36,11 @@ public class MyDelegateRevListTPage extends MyDelegateListTPage {
 		return super.TC_USERTEXT().setColumnText($m("MyDelegateListTPage.9"));
 	}
 
+	@Override
+	protected TablePagerColumn TC_CREATEDATE2() {
+		return super.TC_CREATEDATE2().setColumnText($m("MyDelegateListTPage.10"));
+	}
+
 	public static class MyWorkDelegateRevTbl extends MyWorkDelegateTbl {
 		@Override
 		public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
