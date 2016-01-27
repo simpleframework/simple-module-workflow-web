@@ -27,8 +27,8 @@ import net.simpleframework.workflow.web.page.list.delegate.AbstractDelegateFormP
 public class UserDelegateListTPage extends MyDelegateListTPage {
 
 	@Override
-	protected void onForward(final PageParameter pp) throws Exception {
-		super.onForward(pp);
+	protected void addComponents(final PageParameter pp) {
+		super.addComponents(pp);
 
 		// 委托设置
 		addAjaxRequest(pp, "UserDelegateListTPage_delegate_page", WorkitemDelegateSetPage.class);

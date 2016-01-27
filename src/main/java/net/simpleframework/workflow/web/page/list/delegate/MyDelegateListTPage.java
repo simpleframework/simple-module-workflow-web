@@ -54,14 +54,20 @@ public class MyDelegateListTPage extends AbstractItemsTPage {
 		super.onForward(pp);
 		// 列表
 		addTablePagerBean(pp);
+		// 查看
+		addDelegateView(pp);
+
+		// 加入其它组件
+		addComponents(pp);
+	}
+
+	protected void addComponents(final PageParameter pp) {
 		// 取消
 		addAjaxRequest(pp, "DelegateListTPage_abort").setHandlerMethod("doAbort").setConfirmMessage(
 				$m("MyDelegateListTPage.2"));
 		// 删除
 		addAjaxRequest(pp, "DelegateListTPage_delete").setHandlerMethod("doDelete")
 				.setConfirmMessage($m("Confirm.Delete"));
-		// 查看
-		addDelegateView(pp);
 	}
 
 	protected WindowBean addDelegateView(final PageParameter pp) {
