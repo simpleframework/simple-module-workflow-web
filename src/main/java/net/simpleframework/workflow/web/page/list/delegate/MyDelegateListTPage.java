@@ -63,11 +63,15 @@ public class MyDelegateListTPage extends AbstractItemsTPage {
 
 	protected void addComponents(final PageParameter pp) {
 		// 取消
-		addAjaxRequest(pp, "DelegateListTPage_abort").setHandlerMethod("doAbort").setConfirmMessage(
-				$m("MyDelegateListTPage.2"));
+		addAbortComponent(pp);
 		// 删除
 		addAjaxRequest(pp, "DelegateListTPage_delete").setHandlerMethod("doDelete")
 				.setConfirmMessage($m("Confirm.Delete"));
+	}
+
+	protected void addAbortComponent(final PageParameter pp) {
+		addAjaxRequest(pp, "DelegateListTPage_abort").setHandlerMethod("doAbort").setConfirmMessage(
+				$m("MyDelegateListTPage.2"));
 	}
 
 	protected WindowBean addDelegateView(final PageParameter pp) {
@@ -162,8 +166,13 @@ public class MyDelegateListTPage extends AbstractItemsTPage {
 						"$Actions['DelegateListTPage_abort']('delegationId=" + id + "');"));
 			}
 
-			sb.append(AbstractTablePagerSchema.IMG_DOWNMENU);
+			if (isShowDownmenu(cp))
+				sb.append(AbstractTablePagerSchema.IMG_DOWNMENU);
 			return sb.toString();
+		}
+
+		protected boolean isShowDownmenu(final ComponentParameter cp) {
+			return true;
 		}
 
 		protected ImageElement createImageMark(final ComponentParameter cp,
@@ -195,16 +204,21 @@ public class MyDelegateListTPage extends AbstractItemsTPage {
 			title.append(toTitle(delegation,
 					WorkflowUtils.getProcessTitle(wfaService.getProcessBean(activity))));
 			row.add("title", title);
+			row.add("userText", toUsertextHTML(cp, delegation, workitem));
+			row.add("createDate", delegation.getCreateDate());
+			row.add("dseDate", toDseDateHTML(cp, delegation));
+			row.add(TablePagerColumn.OPE, toOpeHTML(cp, delegation));
+			return row;
+		}
+
+		protected String toUsertextHTML(final ComponentParameter cp, final DelegationBean delegation,
+				final WorkitemBean workitem) {
 			String userText = delegation.getUserText();
 			if (!workitem.getUserId().equals(delegation.getOuserId())) {
 				userText += "<br>"
 						+ SpanElement.color777($m("MyDelegateListTPage.7", delegation.getOuserText()));
 			}
-			row.add("userText", userText);
-			row.add("createDate", delegation.getCreateDate());
-			row.add("dseDate", toDseDateHTML(cp, delegation));
-			row.add(TablePagerColumn.OPE, toOpeHTML(cp, delegation));
-			return row;
+			return userText;
 		}
 
 		protected String toDseDateHTML(final ComponentParameter cp, final DelegationBean delegation) {
