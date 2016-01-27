@@ -10,6 +10,7 @@ import net.simpleframework.mvc.template.t2.T2TemplatePage;
 import net.simpleframework.workflow.web.page.AbstractWorksTPage;
 import net.simpleframework.workflow.web.page.list.AbstractItemsTPage;
 import net.simpleframework.workflow.web.page.list.delegate.MyDelegateListTPage;
+import net.simpleframework.workflow.web.page.list.delegate.MyDelegateRevListTPage;
 import net.simpleframework.workflow.web.page.list.delegate.UserDelegateListTPage;
 import net.simpleframework.workflow.web.page.list.initiate.MyInitiateItemsGroupTPage;
 import net.simpleframework.workflow.web.page.list.initiate.MyInitiateItemsTPage;
@@ -84,6 +85,14 @@ public abstract class AbstractWorkPage extends T2TemplatePage {
 		@Override
 		protected Class<? extends AbstractItemsTPage> getWorkTPageClass() {
 			return MyDelegateListTPage.class;
+		}
+	}
+
+	@PageMapping(url = "/workflow/my/delegate-rev")
+	public static class MyDelegateRevListPage extends AbstractWorkPage {
+		@Override
+		protected Class<? extends AbstractItemsTPage> getWorkTPageClass() {
+			return MyDelegateRevListTPage.class;
 		}
 	}
 

@@ -6,6 +6,7 @@ import net.simpleframework.mvc.common.UrlsCache;
 import net.simpleframework.workflow.engine.bean.WorkitemBean;
 import net.simpleframework.workflow.web.component.comments.mgr2.MyCommentsMgrTPage;
 import net.simpleframework.workflow.web.page.list.delegate.MyDelegateListTPage;
+import net.simpleframework.workflow.web.page.list.delegate.MyDelegateRevListTPage;
 import net.simpleframework.workflow.web.page.list.delegate.UserDelegateListTPage;
 import net.simpleframework.workflow.web.page.list.initiate.MyInitiateItemsGroupTPage;
 import net.simpleframework.workflow.web.page.list.initiate.MyInitiateItemsTPage;
@@ -30,6 +31,7 @@ import net.simpleframework.workflow.web.page.t1.form.WorkflowGraphMonitorPage;
 import net.simpleframework.workflow.web.page.t1.form.WorkflowMonitorPage;
 import net.simpleframework.workflow.web.page.t1.form.WorkflowViewPage;
 import net.simpleframework.workflow.web.page.t2.AbstractWorkPage.MyDelegateListPage;
+import net.simpleframework.workflow.web.page.t2.AbstractWorkPage.MyDelegateRevListPage;
 import net.simpleframework.workflow.web.page.t2.AbstractWorkPage.MyFinalWorklistPage;
 import net.simpleframework.workflow.web.page.t2.AbstractWorkPage.MyInitiateItemsGroupPage;
 import net.simpleframework.workflow.web.page.t2.AbstractWorkPage.MyInitiateItemsPage;
@@ -60,6 +62,7 @@ public class WorkflowUrlsFactory extends UrlsCache {
 		put(MyInitiateItemsGroupTPage.class, MyInitiateItemsGroupPage.class);
 
 		put(MyDelegateListTPage.class, MyDelegateListPage.class);
+		put(MyDelegateRevListTPage.class, MyDelegateRevListPage.class);
 		put(UserDelegateListTPage.class, UserDelegateListPage.class);
 
 		put(MyProcessWorksTPage.class, MyProcessWorksPage.class);

@@ -43,7 +43,8 @@ import net.simpleframework.workflow.web.page.list.worklist.MyRunningWorklistTbl;
 /**
  * Licensed under the Apache License, Version 2.0
  * 
- * @author 陈侃(cknet@126.com, 13910090885) https://github.com/simpleframework
+ * @author 陈侃(cknet@126.com, 13910090885)
+ *         https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
 public class MyDelegateListTPage extends AbstractItemsTPage {
@@ -112,9 +113,13 @@ public class MyDelegateListTPage extends AbstractItemsTPage {
 	}
 
 	protected SpanElement getDelegateTabs(final PageParameter pp) {
-		return createTabsElement(pp, TabButtons.of(new TabButton($m("MyDelegateListTPage.4"),
-				uFactory.getUrl(pp, MyDelegateListTPage.class)), new TabButton(
-				$m("MyDelegateListTPage.5"), uFactory.getUrl(pp, UserDelegateListTPage.class))));
+		return createTabsElement(pp, TabButtons.of(
+				new TabButton($m("MyDelegateListTPage.4"), uFactory.getUrl(pp,
+						MyDelegateListTPage.class)),
+				new TabButton($m("MyDelegateListTPage.8"), uFactory.getUrl(pp,
+						MyDelegateRevListTPage.class)),
+				new TabButton($m("MyDelegateListTPage.5"), uFactory.getUrl(pp,
+						UserDelegateListTPage.class))));
 	}
 
 	@Override

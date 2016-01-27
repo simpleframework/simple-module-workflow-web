@@ -62,11 +62,6 @@ public class UserDelegateListTPage extends MyDelegateListTPage {
 				"$Actions['UserDelegateListTPage_delegate']('delegationSource=user');"));
 	}
 
-	@Override
-	public ElementList getRightElements(final PageParameter pp) {
-		return ElementList.of(getDelegateTabs(pp));
-	}
-
 	public static class UserDelegateTbl extends MyWorkDelegateTbl {
 		@Override
 		public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
