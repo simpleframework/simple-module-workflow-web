@@ -148,6 +148,27 @@
   font-style: italic;
 }
 
+/*---------------------------WorkviewTracing-----------------------*/
+.WorkviewTracing .tb {
+  background-color: #f4f4f4;
+  border-bottom: 1px solid #ccc;
+  padding: 8px;
+}
+
+.WorkviewTracing .vitem {
+  padding: 10px 0 0 10px;
+}
+
+.WorkviewTracing .vitem.r1:HOVER {
+  background-color: #f9f9f9;
+}
+
+.WorkviewTracing .vitem.r1 {
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 10px;
+  padding-right: 10px;
+}
+
 /*---------------------------MyWorkstatTPage-----------------------*/
 
 .MyWorkstatTPage {

@@ -75,7 +75,7 @@ public class MyWorkviewsTPage extends AbstractItemsTPage {
 	protected static class AMyWorkviewsTbl extends AbstractDbTablePagerHandler {
 		protected ImageElement MARK_FORWARD(final PageParameter pp) {
 			return AbstractItemsTPage._createImageMark(pp, "wv_forward.png").setTitle(
-					$m("MyWorkviewsTPage。1"));
+					$m("MyWorkviewsTPage.1"));
 		}
 
 		@Override
@@ -139,7 +139,7 @@ public class MyWorkviewsTPage extends AbstractItemsTPage {
 
 		protected String toOpeHTML(final PageParameter pp, final WorkviewBean workview) {
 			final StringBuilder ope = new StringBuilder();
-			ope.append(new ButtonElement($m("MyWorkviewsTPage。0")).setOnclick(JS.loc(getWorkviewUrl(
+			ope.append(new ButtonElement($m("MyWorkviewsTPage.0")).setOnclick(JS.loc(getWorkviewUrl(
 					pp, workview))));
 			return ope.toString();
 		}
