@@ -3,7 +3,10 @@ package net.simpleframework.workflow.web.page.list.delegate;
 import static net.simpleframework.common.I18n.$m;
 
 import java.util.Date;
+import java.util.Iterator;
 
+import net.simpleframework.ado.query.IDataQuery;
+import net.simpleframework.ado.query.IteratorDataQuery;
 import net.simpleframework.common.StringUtils;
 import net.simpleframework.ctx.permission.PermissionUser;
 import net.simpleframework.ctx.trans.Transaction;
@@ -22,7 +25,10 @@ import net.simpleframework.mvc.common.element.TextButton;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.base.validation.EValidatorMethod;
 import net.simpleframework.mvc.component.base.validation.Validator;
+import net.simpleframework.mvc.component.ext.userselect.DefaultUserSelectHandler;
 import net.simpleframework.mvc.component.ext.userselect.UserSelectBean;
+import net.simpleframework.mvc.component.ui.autocomplete.AbstractAutocompleteHandler;
+import net.simpleframework.mvc.component.ui.autocomplete.AutocompleteData;
 import net.simpleframework.mvc.template.lets.FormTableRowTemplatePage;
 import net.simpleframework.workflow.WorkflowException;
 import net.simpleframework.workflow.engine.EDelegationSource;
@@ -70,10 +76,11 @@ public abstract class AbstractDelegateFormPage extends FormTableRowTemplatePage 
 
 			// 用户选取
 			addComponentBean(pp, "WorkitemDelegatePage_userSelect", UserSelectBean.class)
-					.setBindingId("wd_userId").setBindingText("wd_userTxt");
+					.setShowGroupOpt(false).setShowTreeOpt(false).setBindingId("wd_userId")
+					.setBindingText("wd_userTxt").setHandlerClass(Delegate_UserSelectHandler.class);
 			// 自动完成
-			addUserAutocompleteBean(pp, "WorkitemDelegatePage_autocomplete").setInputField(
-					"wd_userTxt");
+			addUserAutocompleteBean(pp, "WorkitemDelegatePage_autocomplete").setSepChar(null)
+					.setInputField("wd_userTxt").setHandlerClass(Delegate_AutocompleteHandler.class);
 		}
 
 		@Transaction(context = IWorkflowContext.class)
@@ -260,6 +267,22 @@ public abstract class AbstractDelegateFormPage extends FormTableRowTemplatePage 
 		protected TableRow createRow4(final DelegationBean delegation) {
 			return new TableRow(new RowField($m("WorkitemDelegateReceivingPage.3"),
 					createDescElement()));
+		}
+	}
+
+	public static class Delegate_AutocompleteHandler extends AbstractAutocompleteHandler {
+
+		@Override
+		public Iterator<AutocompleteData> getData(final ComponentParameter cp, final String val,
+				final String val2) {
+			return newMIterator(cp, cp.getLdept().users(), val, val2);
+		}
+	}
+
+	public static class Delegate_UserSelectHandler extends DefaultUserSelectHandler {
+		@Override
+		public IDataQuery<PermissionUser> getUsers(final ComponentParameter cp) {
+			return new IteratorDataQuery<PermissionUser>(cp.getLdept().users());
 		}
 	}
 }

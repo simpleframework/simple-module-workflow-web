@@ -9,7 +9,6 @@ import net.simpleframework.ado.query.IDataQuery;
 import net.simpleframework.common.Convert;
 import net.simpleframework.common.ID;
 import net.simpleframework.common.coll.KVMap;
-import net.simpleframework.ctx.script.MVEL2Template;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.ButtonElement;
 import net.simpleframework.mvc.common.element.ETextAlign;
@@ -150,7 +149,6 @@ public class MyWorkviewsSentTPage extends MyWorkviewsTPage {
 			sb.append(" <div class='tb'>").append(workitem).append("</div>");
 			appendWorkviewsHTML(pp, sb, wfvService.getChildren(workitem, null), 0);
 			sb.append("</div>");
-			sb.append(MVEL2Template.replace(MyWorkviewsSentTPage.class, "1.html"));
 			return sb.toString();
 		}
 
