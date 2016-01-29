@@ -167,8 +167,9 @@ public class MyDelegateListTPage extends AbstractItemsTPage {
 						"$Actions['DelegateListTPage_abort']('delegationId=" + id + "');"));
 			}
 
-			if (isShowDownmenu(cp))
+			if (isShowDownmenu(cp)) {
 				sb.append(AbstractTablePagerSchema.IMG_DOWNMENU);
+			}
 			return sb.toString();
 		}
 
