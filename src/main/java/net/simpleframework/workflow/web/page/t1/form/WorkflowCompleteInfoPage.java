@@ -59,7 +59,7 @@ public class WorkflowCompleteInfoPage extends AbstractWorkflowFormPage {
 				sb.append("<td>");
 				int i = 0;
 				for (final WorkitemBean workitem2 : wfwService.getWorkitems(next,
-						EWorkitemStatus.running)) {
+						EWorkitemStatus.running, EWorkitemStatus.delegate)) {
 					if (i++ > 0) {
 						sb.append(", ");
 					}
