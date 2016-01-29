@@ -118,7 +118,8 @@ public class MyFinalWorklistTPage extends MyRunningWorklistTPage {
 	@Transaction(context = IWorkflowContext.class)
 	public IForward doRetake(final ComponentParameter cp) {
 		wfwService.doRetake(WorkflowUtils.getWorkitemBean(cp));
-		return new JavascriptForward("$Actions['MyWorklistTPage_tbl']();");
+		return new JavascriptForward("$Actions.loc('").append(
+				uFactory.getUrl(cp, MyRunningWorklistTPage.class)).append("');");
 	}
 
 	@Override
