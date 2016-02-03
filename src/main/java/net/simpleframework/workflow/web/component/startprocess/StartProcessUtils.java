@@ -116,8 +116,9 @@ public abstract class StartProcessUtils implements IWorkflowContextAware {
 			return ((IStartProcessHandler) nCP.getComponentHandler()).onStartProcess(nCP, process);
 		} catch (final Throwable th) {
 			log.error(th);
-			return new JavascriptForward("$error(").append(
-					JsonUtils.toJSON(MVCUtils.createException(nCP, th))).append(");");
+			return (JavascriptForward) new JavascriptForward("$error(")
+					.append(JsonUtils.toJSON(MVCUtils.createException(nCP, th))).append(");")
+					.setAttr("_throwable", th);
 		}
 	}
 

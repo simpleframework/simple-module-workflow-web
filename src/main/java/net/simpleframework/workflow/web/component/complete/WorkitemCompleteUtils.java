@@ -120,10 +120,10 @@ public abstract class WorkitemCompleteUtils implements IWorkflowContextAware {
 	static JavascriptForward createErrorForward(final PageRequestResponse rRequest,
 			final Throwable ex) {
 		log.error(ex);
-		final JavascriptForward js = new JavascriptForward();
-		js.append("$error(");
-		js.append(JsonUtils.toJSON(MVCUtils.createException(rRequest, ex))).append(");");
-		return js;
+		return (JavascriptForward) new JavascriptForward("$error(")
+				.append(JsonUtils.toJSON(MVCUtils.createException(rRequest, ex))).append(");")
+				.setAttr("_throwable", ex);
+
 	}
 
 	private static Collection<TransitionNode> getTransitions(final ComponentParameter cp) {
