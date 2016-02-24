@@ -128,6 +128,8 @@ public abstract class AbstractWorkflowFormTPage extends AbstractFormTableRowTPag
 	@Transaction(context = IWorkflowContext.class)
 	@Override
 	public JavascriptForward onSave(final ComponentParameter cp) throws Exception {
+		doUpdateProcessKV(cp);
+
 		final WorkitemBean workitem = getWorkitemBean(cp);
 		onSaveForm(cp, workitem);
 		cp.setSessionAttr("time_" + workitem.getId(), new Date());
@@ -136,8 +138,11 @@ public abstract class AbstractWorkflowFormTPage extends AbstractFormTableRowTPag
 
 	@Override
 	public void bindVariables(final PageParameter pp, final Map<String, Object> variables) {
-		final ProcessBean process = getProcessBean(pp);
+		doUpdateProcessKV(pp);
+	}
 
+	protected void doUpdateProcessKV(final PageParameter pp) {
+		final ProcessBean process = getProcessBean(pp);
 		wfpService.doUpdateKV(process, new KVMap().add("title", pp.getParameter(getParamKey_title()))
 				.add("pno", pp.getParameter(getParamKey_pno())));
 	}
