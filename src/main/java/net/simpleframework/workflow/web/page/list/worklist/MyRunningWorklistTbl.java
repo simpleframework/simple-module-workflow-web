@@ -98,7 +98,7 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 			final ProcessModelBean processModel = wfpService.getProcessModel(wfaService
 					.getProcessBean(activity));
 			if (bModelname) {
-				return processModel;
+				return StringUtils.replace(processModel.toString(), ".", "&raquo;");
 			} else {
 				return new TaskWrapper(wfaService.getTaskNode(activity), processModel);
 			}
