@@ -31,6 +31,8 @@ public interface IWorkflowWebForm extends IWorkflowForm {
 	 */
 	JavascriptForward onComplete(PageParameter pp, WorkitemComplete workitemComplete);
 
+	void doUpdateProcessKV(PageParameter pp);
+
 	/**
 	 * 给流程变量赋值
 	 * 

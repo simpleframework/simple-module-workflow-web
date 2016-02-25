@@ -23,8 +23,9 @@ public class DefaultWorkitemCompleteHandler extends AbstractComponentHandler imp
 	public JavascriptForward onComplete(final ComponentParameter cp, final WorkitemBean workitem)
 			throws Exception {
 		final WorkitemComplete workitemComplete = WorkitemComplete.get(workitem);
+		final IWorkflowWebForm form = (IWorkflowWebForm) workitemComplete.getWorkflowForm();
+		form.doUpdateProcessKV(cp);
 		workitemComplete.complete(cp.map());
-		return ((IWorkflowWebForm) workitemComplete.getWorkflowForm()).onComplete(cp,
-				workitemComplete);
+		return form.onComplete(cp, workitemComplete);
 	}
 }
