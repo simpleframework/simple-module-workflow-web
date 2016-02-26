@@ -2,7 +2,7 @@ package net.simpleframework.workflow.web.page.list.workviews;
 
 import static net.simpleframework.common.I18n.$m;
 
-import java.util.Iterator;
+import java.util.Collection;
 import java.util.Map;
 
 import net.simpleframework.ado.FilterItem;
@@ -80,11 +80,11 @@ public class MyWorkviewsTPage extends AbstractItemsTPage {
 
 		@Override
 		protected ExpressionValue createFilterExpressionValue(final DbDataQuery<?> qs,
-				final TablePagerColumn oCol, final Iterator<FilterItem> it) {
+				final TablePagerColumn oCol, final Collection<FilterItem> coll) {
 			if ("title".equals(oCol.getColumnName())) {
 				final TablePagerColumn oCol2 = (TablePagerColumn) oCol.clone();
 				oCol2.setColumnAlias("p.title");
-				final ExpressionValue ev = super.createFilterExpressionValue(qs, oCol2, it);
+				final ExpressionValue ev = super.createFilterExpressionValue(qs, oCol2, coll);
 				// 重新qs中的SqlValue
 				final SQLValue sv = qs.getSqlValue();
 				final StringBuilder sb = new StringBuilder();
@@ -95,7 +95,7 @@ public class MyWorkviewsTPage extends AbstractItemsTPage {
 				sv.addValues(ev.getValues());
 				return null;
 			}
-			return super.createFilterExpressionValue(qs, oCol, it);
+			return super.createFilterExpressionValue(qs, oCol, coll);
 		}
 	}
 
