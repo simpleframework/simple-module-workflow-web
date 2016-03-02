@@ -71,16 +71,20 @@ public class DefaultWfCommentHandler extends ComponentHandlerEx implements IWfCo
 		return WorkflowUtils.getWorkitemBean(pp);
 	}
 
+	protected WfComment getCurComment(final PageParameter pp) {
+		return workflowContext.getCommentService().getCurComment(getWorkitemBean(pp));
+	}
+
 	@Override
 	public void onSave(final ComponentParameter cp) {
-		final AbstractWorkitemBean workitem = getWorkitemBean(cp);
 		final String ccomment = cp.getParameter("ta_wfcomment");
 		if (!StringUtils.hasText(ccomment)) {
 			return;
 		}
 
+		final AbstractWorkitemBean workitem = getWorkitemBean(cp);
 		final IWfCommentService cService = workflowContext.getCommentService();
-		WfComment comment = cService.getCurComment(workitem);
+		WfComment comment = getCurComment(cp);
 		if (comment == null) {
 			comment = cService.createBean();
 			comment.setCreateDate(new Date());
@@ -111,12 +115,11 @@ public class DefaultWfCommentHandler extends ComponentHandlerEx implements IWfCo
 		}
 	}
 
-	protected InputElement createCommentTa(final ComponentParameter cp,
-			final AbstractWorkitemBean workitem) {
+	protected InputElement createCommentTa(final ComponentParameter cp) {
 		final InputElement ele = InputElement.textarea().setRows(4).setAutoRows(true)
 				.setName("ta_wfcomment").setId("ta_wfcomment")
 				.addAttribute("maxlength", cp.getBeanProperty("maxlength"));
-		final WfComment bean = workflowContext.getCommentService().getCurComment(workitem);
+		final WfComment bean = getCurComment(cp);
 		if (bean != null) {
 			ele.setValue(bean.getCcomment());
 		}
@@ -236,7 +239,7 @@ public class DefaultWfCommentHandler extends ComponentHandlerEx implements IWfCo
 		final boolean editable = (Boolean) cp.getBeanProperty("editable");
 		if (editable) {
 			sb.append("<div class='ta'>");
-			sb.append(createCommentTa(cp, workitem));
+			sb.append(createCommentTa(cp));
 			sb.append("</div>");
 		}
 		sb.append("<div class='btns clearfix'>");
@@ -283,11 +286,7 @@ public class DefaultWfCommentHandler extends ComponentHandlerEx implements IWfCo
 		sb.append("}");
 		sb.append(HtmlConst.TAG_SCRIPT_END);
 
-		WfComment comment2 = null;
-		if (null != workitem) {
-			comment2 = workflowContext.getCommentService().getCurComment(workitem);
-		}
-
+		final WfComment comment2 = getCurComment(cp);
 		final StringBuilder sb2 = new StringBuilder();
 		if (groupBy == EGroupBy.none) {
 			i = 0;
