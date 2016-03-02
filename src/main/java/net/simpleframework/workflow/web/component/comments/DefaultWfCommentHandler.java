@@ -54,8 +54,8 @@ import net.simpleframework.workflow.web.component.comments.mgr2.MyCommentsMgrTPa
  */
 public class DefaultWfCommentHandler extends ComponentHandlerEx implements IWfCommentHandler {
 
-	protected ProcessBean getProcessBean(final ComponentParameter cp) {
-		return WorkflowUtils.getProcessBean(cp);
+	protected ProcessBean getProcessBean(final PageParameter pp) {
+		return WorkflowUtils.getProcessBean(pp);
 	}
 
 	@Override
@@ -115,19 +115,18 @@ public class DefaultWfCommentHandler extends ComponentHandlerEx implements IWfCo
 		}
 	}
 
-	protected InputElement createCommentTa(final ComponentParameter cp) {
+	protected InputElement createCommentTa(final PageParameter pp) {
 		final InputElement ele = InputElement.textarea().setRows(4).setAutoRows(true)
 				.setName("ta_wfcomment").setId("ta_wfcomment")
-				.addAttribute("maxlength", cp.getBeanProperty("maxlength"));
-		final WfComment bean = getCurComment(cp);
+				.addAttribute("maxlength", pp.getBeanProperty("maxlength"));
+		final WfComment bean = getCurComment(pp);
 		if (bean != null) {
 			ele.setValue(bean.getCcomment());
 		}
 		return ele;
 	}
 
-	protected Map<String, String[]> getTasknames(final ComponentParameter cp,
-			final WorkitemBean workitem) {
+	protected Map<String, String[]> getTasknames(final PageParameter pp, final WorkitemBean workitem) {
 		final Map<String, String[]> data = new LinkedHashMap<String, String[]>();
 		final IActivityService aService = workflowContext.getActivityService();
 		final AbstractTaskNode tasknode = aService.getTaskNode(aService.getBean(workitem
@@ -143,19 +142,19 @@ public class DefaultWfCommentHandler extends ComponentHandlerEx implements IWfCo
 		return data;
 	}
 
-	protected Map<Object, List<WfComment>> comments_map(final ComponentParameter cp,
+	protected Map<Object, List<WfComment>> comments_map(final PageParameter pp,
 			final IDataQuery<WfComment> dq, final AbstractWorkitemBean workitem, final EGroupBy groupBy) {
 		final Map<Object, List<WfComment>> data = new LinkedHashMap<Object, List<WfComment>>();
 		Map<String, String[]> tasknames = null;
 		if (groupBy == EGroupBy.taskname && workitem instanceof WorkitemBean) {
 			// 数据按tasknames的顺序
-			tasknames = getTasknames(cp, (WorkitemBean) workitem);
+			tasknames = getTasknames(pp, (WorkitemBean) workitem);
 			for (final String key : tasknames.keySet()) {
 				data.put(key, new ArrayList<WfComment>());
 			}
 		}
 
-		final IPermissionHandler phdl = cp.getPermission();
+		final IPermissionHandler phdl = pp.getPermission();
 		WfComment comment;
 		while ((comment = dq.next()) != null) {
 			Object key = null;
@@ -329,7 +328,7 @@ public class DefaultWfCommentHandler extends ComponentHandlerEx implements IWfCo
 		return sb.toString();
 	}
 
-	protected String toCommentItemHTML(final ComponentParameter cp, final WfComment comment,
+	protected String toCommentItemHTML(final PageParameter pp, final WfComment comment,
 			final boolean first, final EGroupBy groupBy) {
 		final StringBuilder sb2 = new StringBuilder();
 		sb2.append("<div class='comment-item");
@@ -337,16 +336,16 @@ public class DefaultWfCommentHandler extends ComponentHandlerEx implements IWfCo
 			sb2.append(" item-first");
 		}
 		sb2.append("'>");
-		sb2.append("<img src='").append(cp.getPhotoUrl(comment.getUserId())).append("' />");
+		sb2.append("<img src='").append(pp.getPhotoUrl(comment.getUserId())).append("' />");
 		sb2.append(" <div class='i1'>").append(HtmlUtils.convertHtmlLines(comment.getCcomment()))
 				.append("</div>");
 		sb2.append(" <div class='i2 clearfix'>");
-		final PermissionUser ouser = cp.getUser(comment.getUserId());
+		final PermissionUser ouser = pp.getUser(comment.getUserId());
 		sb2.append("  <div class='left'>").append(ouser);
 		if (groupBy != EGroupBy.dept) {
 			sb2.append("@");
 			if (null != comment.getDeptId()) {
-				sb2.append(cp.getDept(comment.getDeptId()));
+				sb2.append(pp.getDept(comment.getDeptId()));
 			} else {
 				sb2.append(ouser.getDept());
 			}
