@@ -25,6 +25,7 @@ import net.simpleframework.workflow.engine.bean.WorkitemBean;
 import net.simpleframework.workflow.engine.bean.WorkviewBean;
 import net.simpleframework.workflow.engine.participant.Participant;
 import net.simpleframework.workflow.schema.AbstractTaskNode;
+import net.simpleframework.workflow.schema.UserNode;
 import net.simpleframework.workflow.web.page.list.AbstractItemsTPage;
 
 /**
@@ -88,13 +89,20 @@ public abstract class WorkflowUtils implements IWorkflowContextAware {
 	}
 
 	public static String getUserFrom(final ActivityBean activity, final String sep) {
-		final ActivityBean preActivity = wfaService.getPreActivity(activity);
-		if (preActivity == null) {
-			return null;
-		}
-		return activity.getAttrCache("from_" + preActivity.getId(), new CacheV<String>() {
+		return activity.getAttrCache("_UserFrom", new CacheV<String>() {
 			@Override
 			public String get() {
+				ActivityBean preActivity = activity;
+				while ((preActivity = wfaService.getPreActivity(preActivity)) != null) {
+					final AbstractTaskNode tasknode = wfaService.getTaskNode(preActivity);
+					if (tasknode instanceof UserNode && !((UserNode) tasknode).isEmpty()) {
+						break;
+					}
+				}
+				if (preActivity == null) {
+					return null;
+				}
+
 				final Set<String> list = new LinkedHashSet<String>();
 				for (final WorkitemBean workitem : wfwService.getWorkitems(preActivity,
 						EWorkitemStatus.complete)) {
