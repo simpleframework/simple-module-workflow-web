@@ -63,7 +63,8 @@ public class ProcessModelMgrPage extends AbstractWorkflowMgrPage {
 
 		// 上传模型文件
 		addComponentBean(pp, "ProcessModelMgrPage_upload_page", AttachmentBean.class)
-				.setShowSubmit(true).setShowEdit(false).setHandlerClass(ModelUploadAction.class);
+				.setShowMenu(false).setShowSubmit(true).setShowEdit(false)
+				.setHandlerClass(ModelUploadAction.class);
 		addComponentBean(pp, "ProcessModelMgrPage_upload", WindowBean.class)
 				.setContentRef("ProcessModelMgrPage_upload_page").setTitle($m("ProcessModelMgrPage.3"))
 				.setHeight(480).setWidth(400);
