@@ -151,14 +151,17 @@ public abstract class WorkitemCompleteUtils implements IWorkflowContextAware {
 		for (final TransitionNode transition : getTransitions(cp)) {
 			final String val = transition.getId();
 			sb.append("<div class='ritem'>");
+			String labelTxt = transition.getText();
+			if (!StringUtils.hasText(labelTxt)) {
+				labelTxt = transition.to().toString();
+			}
 			if (!TransitionUtils.isTransitionManual(transition)) {
-				sb.append(new Checkbox(val, transition.to()).setDisabled(true).setChecked(true)
-						.setValue(val));
+				sb.append(new Checkbox(val, labelTxt).setDisabled(true).setChecked(true).setValue(val));
 			} else {
 				if (node.isMultiTransitionSelected()) {
-					sb.append(new Checkbox(val, transition.to()).setValue(val));
+					sb.append(new Checkbox(val, labelTxt).setValue(val));
 				} else {
-					sb.append(new Radio(val, transition.to()).setName("transitions_radio").setValue(val)
+					sb.append(new Radio(val, labelTxt).setName("transitions_radio").setValue(val)
 							.setChecked(i++ == 0));
 				}
 			}
