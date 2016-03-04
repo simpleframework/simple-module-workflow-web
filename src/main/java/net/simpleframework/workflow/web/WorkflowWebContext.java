@@ -3,6 +3,7 @@ package net.simpleframework.workflow.web;
 import static net.simpleframework.common.I18n.$m;
 import net.simpleframework.ctx.IModuleRef;
 import net.simpleframework.ctx.ModuleFunctions;
+import net.simpleframework.ctx.ModuleRefUtils;
 import net.simpleframework.ctx.permission.PermissionConst;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.ctx.WebModuleFunction;
@@ -42,12 +43,13 @@ public class WorkflowWebContext extends WorkflowContext implements IWorkflowWebC
 
 	@Override
 	public IModuleRef getLogRef() {
-		return getRef("net.simpleframework.workflow.web.WorkflowLogRef");
+		return ModuleRefUtils.getRef("net.simpleframework.workflow.web.WorkflowLogRef");
 	}
 
 	@Override
 	public IModuleRef getOrganizationRef() {
-		return getRef("net.simpleframework.workflow.web.participant.WfOrganizationRef");
+		return ModuleRefUtils
+				.getRef("net.simpleframework.workflow.web.participant.WfOrganizationRef");
 	}
 
 	@Override
