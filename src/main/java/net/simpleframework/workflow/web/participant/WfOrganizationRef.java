@@ -4,7 +4,7 @@ import static net.simpleframework.common.I18n.$m;
 import static net.simpleframework.workflow.engine.impl.WorkflowContext.ROLE_WORKFLOW_MANAGER;
 import net.simpleframework.ctx.IContextBase;
 import net.simpleframework.organization.OrganizationRef;
-import net.simpleframework.organization.Role.ERoleType;
+import net.simpleframework.organization.bean.Role.ERoleType;
 import net.simpleframework.organization.role.RolenameW;
 
 /**
