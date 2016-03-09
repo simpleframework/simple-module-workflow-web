@@ -176,6 +176,7 @@ public class MyProcessWorksTPage extends AbstractWorksTPage {
 		}
 
 		sb.append("<div class='gtitle'>").append($m("MyProcessWorksTPage.16")).append("</div>");
+		sb.append("<div class='gtree'>");
 		final ProcessModelBean cur = WorkflowUtils.getProcessModel(pp);
 		for (final Map.Entry<String, List<ProcessModelBean>> e : gmap.entrySet()) {
 			final String key = e.getKey();
@@ -190,8 +191,7 @@ public class MyProcessWorksTPage extends AbstractWorksTPage {
 			if (size > 0) {
 				sb.append(new SupElement("(" + size + ")").addClassName("gsize"));
 			}
-			sb.append(" <div class='psub' style='display: none'>");
-			sb.append(" <div class='psep'></div>");
+			sb.append(" <div class='psub'>");
 			for (final ProcessModelBean pm : val) {
 				sb.append("<div class='pitem'>");
 				final String mtxt = pm.getModelText();
@@ -203,6 +203,7 @@ public class MyProcessWorksTPage extends AbstractWorksTPage {
 			sb.append(" </div>");
 			sb.append("</div>");
 		}
+		sb.append("</div>");
 		return sb.toString();
 	}
 
