@@ -31,7 +31,6 @@ import net.simpleframework.workflow.engine.bean.WorkitemBean;
 import net.simpleframework.workflow.web.IWorkflowWebContext;
 import net.simpleframework.workflow.web.WorkflowUtils;
 import net.simpleframework.workflow.web.page.AbstractWorksTPage;
-import net.simpleframework.workflow.web.page.list.AbstractItemsTPage;
 import net.simpleframework.workflow.web.page.list.process.IProcessWorksHandler.EProcessWorks;
 import net.simpleframework.workflow.web.page.list.process.MyProcessWorksTPages.MyProcessWorks_DeptTPage;
 import net.simpleframework.workflow.web.page.list.process.MyProcessWorksTPages.MyProcessWorks_OrgTPage;
@@ -45,7 +44,8 @@ import net.simpleframework.workflow.web.page.t1.form.WorkflowMonitorPage;
 /**
  * Licensed under the Apache License, Version 2.0
  * 
- * @author 陈侃(cknet@126.com, 13910090885) https://github.com/simpleframework
+ * @author 陈侃(cknet@126.com, 13910090885)
+ *         https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
 public class MyProcessWorksTPage extends AbstractWorksTPage {
@@ -53,8 +53,8 @@ public class MyProcessWorksTPage extends AbstractWorksTPage {
 	@Override
 	protected void onForward(final PageParameter pp) throws Exception {
 		super.onForward(pp);
-		pp.addImportCSS(AbstractItemsTPage.class, "/process_work.css");
-		pp.addImportJavascript(AbstractItemsTPage.class, "/js/process_work.js");
+		pp.addImportCSS(MyProcessWorksTPage.class, "/process_work.css");
+		pp.addImportJavascript(MyProcessWorksTPage.class, "/js/process_work.js");
 
 		addTablePagerBean(pp);
 
