@@ -1,20 +1,50 @@
 $ready(function() {
-  $Elements(".MyProcessWorksTPage .col1 .gitem").each(
-      function(item) {
-        var psub = item.down(".psub");
-        var psep = item.down(".psep");
-        item.observe("mouseover", function(ev) {
-          var p = item.cumulativeOffset();
-          psub.setStyle("top: " + p.top + "px; left: "
-              + (p.left + item.getWidth() - 1) + "px;");
-          psep.setStyle("height: " + (item.getHeight() - 2)  + "px");
-          psub.show();
+  var _init_process_category_tree = function(cc) {
+    cc = $(cc);
+    var gtree = cc.down(".gtree");
+    var w = gtree.getWidth();
+    var h = gtree.getHeight();
+
+    var hideLast = function() {
+      var last = gtree._last;
+      if (last) {
+        last.removeClassName("active");
+        last.down(".psub").removeClassName("show");
+      }
+    };
+
+    gtree.observe("mouseleave", function(ev) {
+      hideLast();
+    });
+
+    var _item = cc.down(".gitem");
+    var p = _item.cumulativeOffset();
+    cc.select(".gitem").each(
+        function(item) {
+          var psub = item.down(".psub").setStyle(
+              "top: " + p.top + "px; left: " + (p.left + _item.getWidth()) + "px;");
+          item.observe("mouseenter", function(ev) {
+            item._enter = true;
+            (function() {
+              if (!item._enter)
+                return;
+              hideLast();
+              item.addClassName("active");
+              psub.addClassName("show");
+              gtree._last = item;
+            }).delay(0.1);
+          }).observe("mouseleave", function(ev) {
+            item._enter = false;
+          });
+          psub.observe("mouseleave", function(ev) {
+            var last = gtree._last;
+            if (last == item)
+              return;
+            item.removeClassName("active");
+            psub.removeClassName("show");
+          });
         });
-        psub.observe("mouseleave", function(ev) {
-          psub.hide();
-        });
-        item.observe("mouseleave", function(ev) {
-          psub.hide();
-        });
-      });
+  };
+
+  _init_process_category_tree(".MyProcessWorksTPage .col1");
 });
