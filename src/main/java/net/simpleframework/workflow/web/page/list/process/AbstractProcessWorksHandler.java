@@ -58,7 +58,8 @@ public abstract class AbstractProcessWorksHandler extends AbstractScanHandler im
 				.addColumn(AbstractWorksTPage.TC_CREATEDATE().setWidth(100).setFormat("yy-MM-dd HH:mm"))
 				.addColumn(
 						AbstractWorksTPage.TC_STATUS(EProcessStatus.class).setColumnAlias("p.status"))
-				.addColumn(TablePagerColumn.OPE(105));
+				.addColumn(TablePagerColumn.OPE(105)).setShowLineNo(true);
+		;
 	}
 
 	@Override
