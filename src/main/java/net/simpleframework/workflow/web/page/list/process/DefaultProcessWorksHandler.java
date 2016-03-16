@@ -12,7 +12,7 @@ public class DefaultProcessWorksHandler extends AbstractProcessWorksHandler {
 	static IProcessWorksHandler instance = new DefaultProcessWorksHandler();
 
 	@Override
-	public String getModelName() {
+	public String[] getModelNames() {
 		return null;
 	}
 }

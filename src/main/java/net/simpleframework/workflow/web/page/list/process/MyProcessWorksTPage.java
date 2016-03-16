@@ -72,18 +72,6 @@ public class MyProcessWorksTPage extends AbstractWorksTPage {
 		return "MyProcessWorksTPage";
 	}
 
-	protected IProcessWorksHandler getProcessWorksHandler(final PageParameter pp) {
-		final ProcessModelBean pm = WorkflowUtils.getProcessModel(pp);
-		IProcessWorksHandler hdl = null;
-		if (pm != null) {
-			hdl = AbstractProcessWorksHandler.regists.get(pm.getModelName());
-		}
-		if (hdl == null) {
-			hdl = DefaultProcessWorksHandler.instance;
-		}
-		return hdl;
-	}
-
 	protected EProcessWorks qw;
 	protected Class<? extends AbstractDbTablePagerHandler> tblClass;
 	{
@@ -104,13 +92,13 @@ public class MyProcessWorksTPage extends AbstractWorksTPage {
 
 	protected TablePagerBean addTablePagerBean(final PageParameter pp) {
 		final TablePagerBean tablePager = addTablePagerBean(pp, "MyProcessWorksTPage_tbl", tblClass);
-		getProcessWorksHandler(pp).doTablePagerInit(pp, tablePager, qw);
+		AbstractProcessWorksHandler.getProcessWorksHandler(pp).doTablePagerInit(pp, tablePager, qw);
 		return tablePager;
 	}
 
 	@Override
 	public ElementList getLeftElements(final PageParameter pp) {
-		return getProcessWorksHandler(pp).getLeftElements(pp, qw);
+		return AbstractProcessWorksHandler.getProcessWorksHandler(pp).getLeftElements(pp, qw);
 	}
 
 	public IForward doWorkitem(final ComponentParameter cp) {
