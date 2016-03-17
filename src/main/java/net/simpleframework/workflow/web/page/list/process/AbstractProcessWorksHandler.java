@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import net.simpleframework.ado.query.IDataQuery;
-import net.simpleframework.common.Convert;
 import net.simpleframework.common.StringUtils;
 import net.simpleframework.common.coll.KVMap;
 import net.simpleframework.ctx.IApplicationContext;
@@ -82,8 +81,8 @@ public abstract class AbstractProcessWorksHandler extends AbstractScanHandler im
 		tablePager
 				.addColumn(AbstractWorksTPage.TC_TITLE())
 				.addColumn(AbstractWorksTPage.TC_PNO())
-				.addColumn(AbstractWorksTPage.TC_USER("userText", $m("ProcessMgrPage.0")))
-				.addColumn(AbstractWorksTPage.TC_CREATEDATE().setWidth(100).setFormat("yy-MM-dd HH:mm"))
+				.addColumn(AbstractWorksTPage.TC_USER("userText", $m("ProcessMgrPage.0")).setWidth(120))
+				.addColumn(AbstractWorksTPage.TC_CREATEDATE().setWidth(100).setFormat("yy-MM-dd"))
 				.addColumn(
 						AbstractWorksTPage.TC_STATUS(EProcessStatus.class).setColumnAlias("p.status"))
 				.addColumn(TablePagerColumn.OPE(105)).setShowLineNo(true);
@@ -102,7 +101,7 @@ public abstract class AbstractProcessWorksHandler extends AbstractScanHandler im
 		final KVMap row = new KVMap();
 
 		row.add("title", toTitleHTML(cp, process)).add("userText", toUserText(cp, process))
-				.add("createDate", Convert.toDateString(process.getCreateDate(), "yyyy-MM-dd"))
+				.add("createDate", process.getCreateDate())
 				.add("status", WorkflowUtils.toStatusHTML(cp, process.getStatus()));
 		row.add(TablePagerColumn.OPE, toOpeHTML(cp, process));
 		return row;
