@@ -86,7 +86,7 @@ public abstract class AbstractProcessWorksHandler extends AbstractScanHandler im
 				.addColumn(
 						AbstractWorksTPage.TC_STATUS(EProcessStatus.class).setColumnAlias("p.status"))
 				.addColumn(TablePagerColumn.OPE(105)).setShowLineNo(true);
-		;
+
 	}
 
 	@Override
