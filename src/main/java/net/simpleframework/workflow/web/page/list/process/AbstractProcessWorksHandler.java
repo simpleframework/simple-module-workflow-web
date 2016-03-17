@@ -100,12 +100,19 @@ public abstract class AbstractProcessWorksHandler extends AbstractScanHandler im
 		final ProcessBean process = (ProcessBean) dataObject;
 		final KVMap row = new KVMap();
 
-		row.add("title", toTitleHTML(cp, process))
-				.add("userText", SpanElement.color060(process.getUserText()))
+		row.add("title", toTitleHTML(cp, process)).add("userText", toUserText(cp, process))
 				.add("createDate", process.getCreateDate())
 				.add("status", WorkflowUtils.toStatusHTML(cp, process.getStatus()));
 		row.add(TablePagerColumn.OPE, toOpeHTML(cp, process));
 		return row;
+	}
+
+	protected String toUserText(final ComponentParameter cp, final ProcessBean process) {
+		final StringBuilder t = new StringBuilder();
+		final String deptTxt = cp.getPermission().getDept(process.getDeptId()).toString();
+		t.append("[").append(SpanElement.color777(deptTxt).setTitle(deptTxt)).append("] ");
+		t.append(SpanElement.color060(process.getUserText()));
+		return t.toString();
 	}
 
 	protected String toTitleHTML(final ComponentParameter cp, final ProcessBean process) {
@@ -115,8 +122,6 @@ public abstract class AbstractProcessWorksHandler extends AbstractScanHandler im
 		// t.append("[").append(c).append("] ");
 		// }
 
-		final String deptTxt = cp.getPermission().getDept(process.getDeptId()).toString();
-		t.append("[").append(SpanElement.color777(deptTxt).setTitle(deptTxt)).append("] ");
 		t.append(new LinkElement(WorkflowUtils.getProcessTitle(process)).setOnclick(
 				"$Actions['MyProcessWorksTPage_workitem']('processId=" + process.getId() + "');")
 				.setColor_gray(!StringUtils.hasText(process.getTitle())));
