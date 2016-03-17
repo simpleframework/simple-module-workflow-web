@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import net.simpleframework.ado.query.IDataQuery;
+import net.simpleframework.common.Convert;
 import net.simpleframework.common.StringUtils;
 import net.simpleframework.common.coll.KVMap;
 import net.simpleframework.ctx.IApplicationContext;
@@ -101,7 +102,7 @@ public abstract class AbstractProcessWorksHandler extends AbstractScanHandler im
 		final KVMap row = new KVMap();
 
 		row.add("title", toTitleHTML(cp, process)).add("userText", toUserText(cp, process))
-				.add("createDate", process.getCreateDate())
+				.add("createDate", Convert.toDateString(process.getCreateDate(), "yyyy-MM-dd"))
 				.add("status", WorkflowUtils.toStatusHTML(cp, process.getStatus()));
 		row.add(TablePagerColumn.OPE, toOpeHTML(cp, process));
 		return row;
