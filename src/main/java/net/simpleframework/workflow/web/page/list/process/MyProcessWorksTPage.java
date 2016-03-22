@@ -163,30 +163,52 @@ public class MyProcessWorksTPage extends AbstractWorksTPage {
 			list.add(pm);
 		}
 
+		final Map<String, Map<String, List<ProcessModelBean>>> gmap2 = new LinkedHashMap<String, Map<String, List<ProcessModelBean>>>();
+		for (final Map.Entry<String, List<ProcessModelBean>> e : gmap.entrySet()) {
+			final String key = e.getKey();
+			final Map<String, List<ProcessModelBean>> m = new LinkedHashMap<String, List<ProcessModelBean>>();
+			for (final ProcessModelBean pm : e.getValue()) {
+				String pgroup = wfpmService.getProcessDocument(pm).getProcessNode().getPgroup();
+				if (!StringUtils.hasText(pgroup)) {
+					pgroup = $m("MyProcessWorksTPage.17");
+				}
+				List<ProcessModelBean> list = m.get(pgroup);
+				if (list == null) {
+					m.put(pgroup, list = new ArrayList<ProcessModelBean>());
+				}
+				list.add(pm);
+			}
+			gmap2.put(key, m);
+		}
+
 		sb.append("<div class='gtitle'>").append($m("MyProcessWorksTPage.16")).append("</div>");
 		sb.append("<div class='gtree'>");
 		final ProcessModelBean cur = WorkflowUtils.getProcessModel(pp);
-		for (final Map.Entry<String, List<ProcessModelBean>> e : gmap.entrySet()) {
+		for (final Map.Entry<String, Map<String, List<ProcessModelBean>>> e : gmap2.entrySet()) {
 			final String key = e.getKey();
-			final List<ProcessModelBean> val = e.getValue();
 			sb.append("<div class='gitem");
 			if (cur != null && cur.getModelText().startsWith(key)) {
 				sb.append(" cur");
 			}
 			sb.append("'>");
 			sb.append(new SpanElement(key).setClassName("glbl"));
-			final int size = val.size();
+			final int size = gmap.get(key).size();
 			if (size > 0) {
 				sb.append(new SupElement("(" + size + ")").addClassName("gsize"));
 			}
 			sb.append(" <div class='psub'>");
-			for (final ProcessModelBean pm : val) {
-				sb.append("<div class='pitem'>");
-				final String mtxt = pm.getModelText();
-				final int p = mtxt.indexOf('.');
-				sb.append(new LinkElement(p > 0 ? mtxt.substring(p + 1) : mtxt)
-						.setOnclick("$Actions.reloc('modelId=" + pm.getId() + "');"));
+			for (final Map.Entry<String, List<ProcessModelBean>> e2 : e.getValue().entrySet()) {
+				sb.append("<div class='pgroup'>");
+				sb.append(e2.getKey());
 				sb.append("</div>");
+				for (final ProcessModelBean pm : e2.getValue()) {
+					sb.append("<div class='pitem'>");
+					final String mtxt = pm.getModelText();
+					final int p = mtxt.indexOf('.');
+					sb.append(new LinkElement(p > 0 ? mtxt.substring(p + 1) : mtxt)
+							.setOnclick("$Actions.reloc('modelId=" + pm.getId() + "');"));
+					sb.append("</div>");
+				}
 			}
 			sb.append(" </div>");
 			sb.append("</div>");
