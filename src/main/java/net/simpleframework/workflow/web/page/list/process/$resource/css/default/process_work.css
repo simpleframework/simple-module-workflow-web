@@ -72,7 +72,7 @@
   background-color: #777;
   color: #fff;
   font-size: 9.5pt;
-  width: 540px;
+  width: 600px;
   min-height: 200px;
   top: 0;
   visibility: hidden;
@@ -87,16 +87,18 @@
 
 .MyProcessWorksTPage .col1 .pitem {
   display: inline-block;
-  margin: 6px 6px 4px 4px;
-  width: 165px;
+  margin: 2px 24px 6px 0;
+  width: 170px;
+  height: 21px;
+  overflow: hidden;
+  vertical-align: top;
 }
 
 .MyProcessWorksTPage .col1 .pgroup {
   border-bottom: 1px dashed #999;
-  margin-bottom: 6px;
-  padding: 15px 0 6px 4px;
-  color: #ddd;
-  font-size: 10.5pt;
+  margin-bottom: 4px;
+  padding: 18px 0 4px;
+  color: #cca;
 }
 
 .MyProcessWorksTPage .col1 .pitem a {
@@ -104,7 +106,7 @@
 }
 
 .MyProcessWorksTPage .col1 .pitem a:HOVER {
-  color: #ea6;
+  color: #ccc;
 }
 
 .MyProcessWorksTPage .col2 .modeltxt {

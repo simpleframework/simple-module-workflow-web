@@ -167,16 +167,24 @@ public class MyProcessWorksTPage extends AbstractWorksTPage {
 		for (final Map.Entry<String, List<ProcessModelBean>> e : gmap.entrySet()) {
 			final String key = e.getKey();
 			final Map<String, List<ProcessModelBean>> m = new LinkedHashMap<String, List<ProcessModelBean>>();
+			List<ProcessModelBean> glist = null;
 			for (final ProcessModelBean pm : e.getValue()) {
-				String pgroup = wfpmService.getProcessDocument(pm).getProcessNode().getPgroup();
-				if (!StringUtils.hasText(pgroup)) {
-					pgroup = $m("MyProcessWorksTPage.17");
+				final String pgroup = wfpmService.getProcessDocument(pm).getProcessNode().getPgroup();
+				if (StringUtils.hasText(pgroup)) {
+					List<ProcessModelBean> list = m.get(pgroup);
+					if (list == null) {
+						m.put(pgroup, list = new ArrayList<ProcessModelBean>());
+					}
+					list.add(pm);
+				} else {
+					if (glist == null) {
+						glist = new ArrayList<ProcessModelBean>();
+					}
+					glist.add(pm);
 				}
-				List<ProcessModelBean> list = m.get(pgroup);
-				if (list == null) {
-					m.put(pgroup, list = new ArrayList<ProcessModelBean>());
-				}
-				list.add(pm);
+			}
+			if (glist != null) {
+				m.put($m("MyProcessWorksTPage.17"), glist);
 			}
 			gmap2.put(key, m);
 		}
