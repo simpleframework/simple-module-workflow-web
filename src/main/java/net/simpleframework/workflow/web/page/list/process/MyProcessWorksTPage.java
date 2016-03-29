@@ -230,15 +230,24 @@ public class MyProcessWorksTPage extends AbstractWorksTPage {
 	public String toToolbarHTML(final PageParameter pp) {
 		final StringBuilder sb = new StringBuilder();
 		final ProcessModelBean pm = WorkflowUtils.getProcessModel(pp);
+		sb.append("<div class='model-nav'>");
 		if (pm != null) {
-			sb.append("<div class='modeltxt clearfix'>");
-			sb.append(new SpanElement(pm.getModelText()).setClassName("pm"));
-			sb.append(" (");
-			sb.append(LinkElement.style2($m("MyProcessWorksTPage.9")).setHref(
-					uFactory.getUrl(pp, (Class<? extends AbstractMVCPage>) getOriginalClass())));
-			sb.append(")");
-			sb.append("</div>");
+			sb.append(new LinkElement($m("MyProcessWorksTPage.9")).setHref(uFactory.getUrl(pp,
+					(Class<? extends AbstractMVCPage>) getOriginalClass())));
+			sb.append(SpanElement.NAV(3));
+			final String txt = pm.getModelText();
+			final int p = txt.indexOf('.');
+			if (p > 0) {
+				sb.append(new SpanElement(txt.substring(0, p)));
+				sb.append(SpanElement.NAV(3));
+				sb.append(new SpanElement(txt.substring(p + 1)));
+			} else {
+				sb.append(new SpanElement(txt));
+			}
+		} else {
+			sb.append(new SpanElement($m("MyProcessWorksTPage.9")));
 		}
+		sb.append("</div>");
 		sb.append(super.toToolbarHTML(pp));
 		return sb.toString();
 	}

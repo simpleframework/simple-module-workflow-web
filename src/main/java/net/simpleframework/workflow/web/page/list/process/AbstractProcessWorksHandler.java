@@ -13,13 +13,14 @@ import net.simpleframework.ctx.hdl.AbstractScanHandler;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.ButtonElement;
 import net.simpleframework.mvc.common.element.Checkbox;
+import net.simpleframework.mvc.common.element.ETextAlign;
 import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.LinkElement;
 import net.simpleframework.mvc.common.element.SpanElement;
+import net.simpleframework.mvc.common.element.TagElement;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
 import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
-import net.simpleframework.workflow.engine.EProcessStatus;
 import net.simpleframework.workflow.engine.bean.ProcessBean;
 import net.simpleframework.workflow.engine.bean.ProcessModelBean;
 import net.simpleframework.workflow.web.WorkflowUtils;
@@ -79,14 +80,14 @@ public abstract class AbstractProcessWorksHandler extends AbstractScanHandler im
 	public void doTablePagerInit(final PageParameter pp, final TablePagerBean tablePager,
 			final EProcessWorks qw) {
 		tablePager
+				.addColumn(TablePagerColumn.ICON())
 				.addColumn(AbstractWorksTPage.TC_TITLE())
 				.addColumn(AbstractWorksTPage.TC_PNO())
-				.addColumn(AbstractWorksTPage.TC_USER("userText", $m("ProcessMgrPage.0")).setWidth(120))
-				.addColumn(AbstractWorksTPage.TC_CREATEDATE().setWidth(100).setFormat("yy-MM-dd"))
 				.addColumn(
-						AbstractWorksTPage.TC_STATUS(EProcessStatus.class).setColumnAlias("p.status"))
-				.addColumn(TablePagerColumn.OPE(105)).setShowLineNo(true);
-
+						AbstractWorksTPage.TC_USER("userText", $m("ProcessMgrPage.0"))
+								.setTextAlign(ETextAlign.left).setWidth(100))
+				.addColumn(AbstractWorksTPage.TC_CREATEDATE().setWidth(100).setFormat("yy-MM-dd HH:mm"))
+				.addColumn(TablePagerColumn.OPE(105));
 	}
 
 	@Override
@@ -99,33 +100,35 @@ public abstract class AbstractProcessWorksHandler extends AbstractScanHandler im
 			final EProcessWorks qw) {
 		final ProcessBean process = (ProcessBean) dataObject;
 		final KVMap row = new KVMap();
-
-		row.add("title", toTitleHTML(cp, process)).add("userText", toUserText(cp, process))
-				.add("createDate", process.getCreateDate())
-				.add("status", WorkflowUtils.toStatusHTML(cp, process.getStatus()));
+		row.add(TablePagerColumn.ICON, WorkflowUtils.getStatusIcon(cp, process.getStatus()))
+				.add("title", toTitleHTML(cp, process)).add("userText", toUserHTML(cp, process))
+				.add("createDate", process.getCreateDate());
 		row.add(TablePagerColumn.OPE, toOpeHTML(cp, process));
 		return row;
 	}
 
-	protected String toUserText(final ComponentParameter cp, final ProcessBean process) {
-		final StringBuilder t = new StringBuilder();
-		final String deptTxt = cp.getPermission().getDept(process.getDeptId()).toString();
-		t.append("[").append(SpanElement.color777(deptTxt).setTitle(deptTxt)).append("] ");
-		t.append(SpanElement.color060(process.getUserText()));
-		return t.toString();
+	protected String toUserHTML(final ComponentParameter cp, final ProcessBean process) {
+		final StringBuilder sb = new StringBuilder();
+		sb.append(SpanElement.color060(process.getUserText()));
+		sb.append(TagElement.br());
+		sb.append(SpanElement.color777(cp.getPermission().getDept(process.getDeptId())));
+		return sb.toString();
 	}
 
 	protected String toTitleHTML(final ComponentParameter cp, final ProcessBean process) {
-		final StringBuilder t = new StringBuilder();
+		final StringBuilder sb = new StringBuilder();
 		// final int c = Convert.toInt(process.getAttr("c"));
 		// if (c > 0) {
 		// t.append("[").append(c).append("] ");
 		// }
 
-		t.append(new LinkElement(WorkflowUtils.getProcessTitle(process)).setOnclick(
+		// final String deptTxt =
+		// cp.getPermission().getDept(process.getDeptId()).toString();
+		// sb.append("[").append(SpanElement.color777(deptTxt).setTitle(deptTxt)).append("] ");
+		sb.append(new LinkElement(WorkflowUtils.getProcessTitle(process)).setOnclick(
 				"$Actions['MyProcessWorksTPage_workitem']('processId=" + process.getId() + "');")
 				.setColor_gray(!StringUtils.hasText(process.getTitle())));
-		return t.toString();
+		return sb.toString();
 	}
 
 	protected String toOpeHTML(final ComponentParameter cp, final ProcessBean process) {

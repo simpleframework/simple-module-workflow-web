@@ -109,14 +109,16 @@
   color: #ccc;
 }
 
-.MyProcessWorksTPage .col2 .modeltxt {
-  background-color: #eed;
-  color: #654;
+.MyProcessWorksTPage .col2 .model-nav {
+  font-size: 9.5pt;
   margin-bottom: 8px;
-  padding: 4px 10px;
+  color: #777;
 }
 
-.MyProcessWorksTPage .col2 .modeltxt .pm {
-  font-size: 10.5pt;
-  margin-right: 4px;
+.MyProcessWorksTPage .col2 .model-nav a {
+  color: #555;
+}
+
+.MyProcessWorksTPage .col2 .model-nav a:HOVER {
+  color: #276;
 }
