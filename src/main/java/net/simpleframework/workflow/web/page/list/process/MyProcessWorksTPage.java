@@ -130,13 +130,19 @@ public class MyProcessWorksTPage extends AbstractWorksTPage {
 		if (pp.isLmember(ctx.getProcessWorks_DeptRole(pp))) {
 			tabs.append(new TabButton(pp.getLdept(), uFactory.getUrl(pp,
 					MyProcessWorks_DeptTPage.class, params)));
+			// for (final PermissionDept dept : pp.getLogin().depts()) {
+			// tabs.append(new TabButton(dept, uFactory.getUrl(pp,
+			// MyProcessWorks_DeptTPage.class,
+			// params)));
+			// }
 		}
 		if (pp.isLmember(ctx.getProcessWorks_OrgRole(pp))) {
 			tabs.append(new TabButton($m("MyProcessWorksTPage.5"), uFactory.getUrl(pp,
 					MyProcessWorks_OrgTPage.class, params)));
 		}
-		tabs.append(new TabButton($m("MyProcessWorksTPage.6"), uFactory.getUrl(pp,
-				MyProcessWorks_RoleTPage.class, params)));
+		// tabs.append(new TabButton($m("MyProcessWorksTPage.6"),
+		// uFactory.getUrl(pp,
+		// MyProcessWorks_RoleTPage.class, params)));
 		return ElementList.of(createTabsElement(pp, tabs));
 	}
 
