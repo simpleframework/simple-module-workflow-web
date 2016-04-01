@@ -6,10 +6,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 import net.simpleframework.ado.query.IDataQuery;
+import net.simpleframework.common.ID;
 import net.simpleframework.common.StringUtils;
 import net.simpleframework.common.coll.KVMap;
 import net.simpleframework.ctx.IApplicationContext;
 import net.simpleframework.ctx.hdl.AbstractScanHandler;
+import net.simpleframework.ctx.permission.PermissionDept;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.ButtonElement;
 import net.simpleframework.mvc.common.element.Checkbox;
@@ -67,7 +69,11 @@ public abstract class AbstractProcessWorksHandler extends AbstractScanHandler im
 	@Override
 	public ElementList getLeftElements(final PageParameter pp, final EProcessWorks qw) {
 		if (qw == EProcessWorks.dept) {
-			if (pp.getLdept().getDeptChildren().size() > 0) {
+			PermissionDept dept = pp.getDept(ID.of(pp.getParameter("deptId")));
+			if (!dept.exists()) {
+				dept = pp.getLdept();
+			}
+			if (dept.getParentId() != null && dept.getDeptChildren().size() > 0) {
 				return ElementList.of(new Checkbox("idMyProcessWorks_DeptTPage_children",
 						$m("MyProcessWorksTPage.2"))
 						.setOnchange("$Actions['MyProcessWorksTPage_tbl']('child=' + this.checked);"));

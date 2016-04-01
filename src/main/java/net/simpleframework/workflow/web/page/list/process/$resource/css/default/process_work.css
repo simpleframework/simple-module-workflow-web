@@ -62,7 +62,7 @@
   color: #fff;
 }
 
-.MyProcessWorksTPage .col1 .gitem.active .glbl,
+.MyProcessWorksTPage .col1 .gitem.active .glbl, 
 .MyProcessWorksTPage .col1 .gitem.active .gsize {
   color: #fff;
 }
@@ -72,8 +72,8 @@
   background-color: #777;
   color: #fff;
   font-size: 9.5pt;
-  width: 600px;
-  min-height: 200px;
+  width: 700px;
+  min-height: 240px;
   top: 0;
   visibility: hidden;
   padding-bottom: 15px;
@@ -88,16 +88,17 @@
 .MyProcessWorksTPage .col1 .pitem {
   display: inline-block;
   margin: 2px 24px 6px 0;
-  width: 170px;
+  width: 150px;
   height: 21px;
-  overflow: hidden;
+  line-height: 1.5; overflow : hidden;
   vertical-align: top;
+  overflow: hidden;
 }
 
 .MyProcessWorksTPage .col1 .pgroup {
   border-bottom: 1px dashed #999;
   margin-bottom: 4px;
-  padding: 18px 0 4px;
+  padding: 12px 0 4px;
   color: #cca;
 }
 
@@ -121,4 +122,15 @@
 
 .MyProcessWorksTPage .col2 .model-nav a:HOVER {
   color: #276;
+}
+
+.MyProcessWorksTPage .col2 .tool_bar .le {
+  line-height: 1.8;
+}
+
+.MyProcessWorksTPage .col2 .tool_bar .re img.depts-menu {
+  margin-bottom: 4px;
+  margin-left: 4px;
+  vertical-align: middle;
+  cursor: pointer;
 }

@@ -52,19 +52,27 @@ public class MyProcessWorksTbl extends AbstractDbTablePagerHandler implements IW
 				return dq;
 			}
 
+			final ProcessModelBean pm = WorkflowUtils.getProcessModel(cp);
+			if (pm != null) {
+				cp.addFormParameter("modelId", pm.getId());
+			}
+
+			PermissionDept dept = cp.getDept(ID.of(cp.getParameter("deptId")));
+			if (!dept.exists()) {
+				dept = cp.getLdept();
+			} else {
+				cp.addFormParameter("deptId", dept.getId());
+			}
+
+			final List<Object> deptIds = ArrayUtils.toParams(dept.getId());
 			final boolean child = cp.getBoolParameter("child");
 			cp.addFormParameter("child", child);
-			final PermissionDept dept = cp.getLogin().getDept();
-			final List<Object> deptIds = ArrayUtils.toParams(dept.getId());
 			if (child) {
 				for (final PermissionDept _dept : dept.getDeptChildren()) {
 					deptIds.add(_dept.getId());
 				}
 			}
-			final ProcessModelBean pm = WorkflowUtils.getProcessModel(cp);
-			if (pm != null) {
-				cp.addFormParameter("modelId", pm.getId());
-			}
+
 			return wfpService.getProcessWlistInDept(deptIds.toArray(new ID[deptIds.size()]), pm);
 		}
 

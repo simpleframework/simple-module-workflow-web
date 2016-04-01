@@ -8,12 +8,16 @@ import java.util.List;
 import java.util.Map;
 
 import net.simpleframework.ado.query.DataQueryUtils;
+import net.simpleframework.common.ID;
 import net.simpleframework.common.StringUtils;
+import net.simpleframework.common.web.HttpUtils;
+import net.simpleframework.ctx.permission.PermissionDept;
 import net.simpleframework.mvc.AbstractMVCPage;
 import net.simpleframework.mvc.IForward;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.ElementList;
+import net.simpleframework.mvc.common.element.ImageElement;
 import net.simpleframework.mvc.common.element.JS;
 import net.simpleframework.mvc.common.element.LinkElement;
 import net.simpleframework.mvc.common.element.SpanElement;
@@ -22,6 +26,10 @@ import net.simpleframework.mvc.common.element.TabButton;
 import net.simpleframework.mvc.common.element.TabButtons;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.base.ajaxrequest.AjaxRequestBean;
+import net.simpleframework.mvc.component.ui.menu.EMenuEvent;
+import net.simpleframework.mvc.component.ui.menu.MenuBean;
+import net.simpleframework.mvc.component.ui.menu.MenuItem;
+import net.simpleframework.mvc.component.ui.menu.MenuItems;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
 import net.simpleframework.mvc.component.ui.pager.db.AbstractDbTablePagerHandler;
 import net.simpleframework.workflow.engine.EProcessModelStatus;
@@ -128,21 +136,37 @@ public class MyProcessWorksTPage extends AbstractWorksTPage {
 				.getUrl(pp, MyProcessWorksTPage.class, params)));
 		final IWorkflowWebContext ctx = (IWorkflowWebContext) workflowContext;
 		if (pp.isLmember(ctx.getProcessWorks_DeptRole(pp))) {
-			tabs.append(new TabButton(pp.getLdept(), uFactory.getUrl(pp,
-					MyProcessWorks_DeptTPage.class, params)));
-			// for (final PermissionDept dept : pp.getLogin().depts()) {
-			// tabs.append(new TabButton(dept, uFactory.getUrl(pp,
-			// MyProcessWorks_DeptTPage.class,
-			// params)));
-			// }
+			final String url = uFactory.getUrl(pp, MyProcessWorks_DeptTPage.class, params);
+			final StringBuilder txt = new StringBuilder();
+			PermissionDept dept = pp.getDept(ID.of(pp.getParameter("deptId")));
+			if (!dept.exists()) {
+				dept = pp.getLdept();
+			}
+			txt.append(dept);
+			final List<PermissionDept> depts = pp.getLogin().depts();
+			if (depts.size() > 1) {
+				final MenuBean menu = (MenuBean) pp
+						.addComponentBean("MyProcessWorksTPage_depts_menu", MenuBean.class)
+						.setMenuEvent(EMenuEvent.mouseenter)
+						.setSelector(".MyProcessWorksTPage .tool_bar img.depts-menu");
+				final MenuItems items = menu.getMenuItems();
+				for (final PermissionDept _dept : depts) {
+					if (_dept.equals(dept)) {
+						continue;
+					}
+					items.add(MenuItem.of(_dept.getText()).setOnclick(
+							"$Actions.loc('" + HttpUtils.addParameters(url, "deptId=" + _dept.getId())
+									+ "');"));
+				}
+				txt.append(new ImageElement(pp.getCssResourceHomePath(MyProcessWorksTPage.class)
+						+ "/images/down.png").setClassName("depts-menu"));
+			}
+			tabs.append(new TabButton(txt, url));
 		}
 		if (pp.isLmember(ctx.getProcessWorks_OrgRole(pp))) {
 			tabs.append(new TabButton($m("MyProcessWorksTPage.5"), uFactory.getUrl(pp,
 					MyProcessWorks_OrgTPage.class, params)));
 		}
-		// tabs.append(new TabButton($m("MyProcessWorksTPage.6"),
-		// uFactory.getUrl(pp,
-		// MyProcessWorks_RoleTPage.class, params)));
 		return ElementList.of(createTabsElement(pp, tabs));
 	}
 

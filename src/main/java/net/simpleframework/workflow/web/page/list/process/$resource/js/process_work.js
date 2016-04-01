@@ -17,12 +17,12 @@ $ready(function() {
       hideLast();
     });
 
-    var _item = cc.down(".gitem");
+    var _item = cc;
     var p = _item.cumulativeOffset();
     cc.select(".gitem").each(
         function(item) {
           var psub = item.down(".psub").setStyle(
-              "top: " + p.top + "px; left: " + (p.left + _item.getWidth()) + "px;");
+              "top: " + (p.top - 15) + "px; left: " + (p.left + _item.getWidth() - 1) + "px;");
           item.observe("mouseenter", function(ev) {
             item._enter = true;
             (function() {
