@@ -3,10 +3,14 @@ package net.simpleframework.workflow.web.page.mgr2;
 import static net.simpleframework.common.I18n.$m;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
+import net.simpleframework.ado.query.DataQueryUtils;
 import net.simpleframework.ado.query.IDataQuery;
+import net.simpleframework.ado.query.ListDataQuery;
 import net.simpleframework.common.ID;
+import net.simpleframework.common.StringUtils;
 import net.simpleframework.common.coll.KVMap;
 import net.simpleframework.ctx.permission.PermissionDept;
 import net.simpleframework.mvc.PageParameter;
@@ -15,10 +19,11 @@ import net.simpleframework.mvc.common.element.ETextAlign;
 import net.simpleframework.mvc.common.element.JS;
 import net.simpleframework.mvc.common.element.LinkElement;
 import net.simpleframework.mvc.component.ComponentParameter;
+import net.simpleframework.mvc.component.ui.pager.AbstractTablePagerSchema;
 import net.simpleframework.mvc.component.ui.pager.EPagerBarLayout;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
 import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
-import net.simpleframework.mvc.component.ui.pager.db.AbstractDbTablePagerHandler;
+import net.simpleframework.mvc.component.ui.pager.db.GroupDbTablePagerHandler;
 import net.simpleframework.workflow.engine.EProcessModelStatus;
 import net.simpleframework.workflow.engine.bean.ProcessModelBean;
 import net.simpleframework.workflow.web.WorkflowUtils;
@@ -37,8 +42,8 @@ public class ProcessModelMgrTPage extends AbstractWorkflowMgrTPage {
 		super.onForward(pp);
 
 		final TablePagerBean tablePager = (TablePagerBean) addTablePagerBean(pp,
-				"ProcessModelMgrTPage_tbl", ProcessModelTbl.class).setSort(false)
-				.setShowCheckbox(false).setPagerBarLayout(EPagerBarLayout.bottom)
+				"ProcessModelMgrTPage_tbl", ProcessModelTbl.class).setGroupColumn("gc").setSort(false)
+				.setShowCheckbox(false).setPagerBarLayout(EPagerBarLayout.none)
 				.setContainerId("idProcessModelMgrTPage_tbl");
 		tablePager
 				.addColumn(TablePagerColumn.ICON())
@@ -68,17 +73,39 @@ public class ProcessModelMgrTPage extends AbstractWorkflowMgrTPage {
 		return sb.toString();
 	}
 
-	public static class ProcessModelTbl extends AbstractDbTablePagerHandler {
+	public static class ProcessModelTbl extends GroupDbTablePagerHandler {
 		@Override
 		public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
 			final PermissionDept org = getPermissionOrg(cp);
 			if (org != null) {
 				final ID orgId = org.getId();
 				cp.addFormParameter("orgId", orgId);
-				return wfpmService.getModelListByDomain(orgId);
+				final List<ProcessModelBean> list = DataQueryUtils.toList(wfpmService
+						.getModelListByDomain(orgId));
+				wfpmService.sort(list);
+				return new ListDataQuery<ProcessModelBean>(list);
 			}
 			return null;
 		}
+
+		@Override
+		public AbstractTablePagerSchema createTablePagerSchema() {
+			return new DefaultTablePagerSchema() {
+				@Override
+				public Object getVal(final Object dataObject, final String key) {
+					final ProcessModelBean pm = (ProcessModelBean) dataObject;
+					if ("gc".equals(key)) {
+						final String[] arr = StringUtils.split(pm.getModelText(), ".");
+						if (arr.length > 1) {
+							return arr[0];
+						} else {
+							return $m("MyInitiateItemsGroupTPage.0");
+						}
+					}
+					return super.getVal(dataObject, key);
+				}
+			};
+		};
 
 		@Override
 		protected Map<String, Object> getRowData(final ComponentParameter cp, final Object dataObject) {
@@ -86,19 +113,21 @@ public class ProcessModelMgrTPage extends AbstractWorkflowMgrTPage {
 			final EProcessModelStatus status = pm.getStatus();
 			final KVMap row = new KVMap();
 
-			final LinkElement le = new LinkElement(pm).setHref(uFactory.getUrl(cp,
-					ProcessMgrTPage.class, "modelId=" + pm.getId()));
+			final String mtxt = pm.getModelText();
+			final int p = mtxt.indexOf('.');
+			final LinkElement le = new LinkElement(p > 0 ? mtxt.substring(p + 1) : mtxt)
+					.setHref(uFactory.getUrl(cp, ProcessMgrTPage.class, "modelId=" + pm.getId()));
 			if (status != EProcessModelStatus.deploy) {
 				le.setColor("#777");
 			}
 
 			row.add(TablePagerColumn.ICON, WorkflowUtils.getStatusIcon(cp, status))
-					.add("modelText", le)
-					.add("createDate", pm.getCreateDate())
-					.add("processCount",
-							wfpmdService.getProcessModelDomainR(getPermissionOrg(cp).getId(), pm)
-									.getProcessCount()).add("userText", pm.getUserText())
-					.add("version", pm.getModelVer()).add(TablePagerColumn.OPE, toOpeHTML(cp, pm));
+					.add("modelText", le).add("createDate", pm.getCreateDate())
+					.add("userText", pm.getUserText()).add("version", pm.getModelVer());
+			row.add("processCount",
+					wfpmdService.getProcessModelDomainR(getPermissionOrg(cp).getId(), pm)
+							.getProcessCount());
+			row.add(TablePagerColumn.OPE, toOpeHTML(cp, pm));
 			return row;
 		}
 
