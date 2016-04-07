@@ -4,9 +4,12 @@ import static net.simpleframework.common.I18n.$m;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
+import net.simpleframework.ado.query.DataQueryUtils;
 import net.simpleframework.ado.query.IDataQuery;
+import net.simpleframework.ado.query.ListDataQuery;
 import net.simpleframework.common.StringUtils;
 import net.simpleframework.common.coll.KVMap;
 import net.simpleframework.ctx.common.bean.AttachmentFile;
@@ -33,7 +36,7 @@ import net.simpleframework.mvc.component.ui.pager.AbstractTablePagerSchema;
 import net.simpleframework.mvc.component.ui.pager.EPagerBarLayout;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
 import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
-import net.simpleframework.mvc.component.ui.pager.db.AbstractDbTablePagerHandler;
+import net.simpleframework.mvc.component.ui.pager.db.GroupDbTablePagerHandler;
 import net.simpleframework.mvc.component.ui.swfupload.SwfUploadBean;
 import net.simpleframework.mvc.component.ui.window.WindowBean;
 import net.simpleframework.mvc.template.struct.NavigationButtons;
@@ -72,10 +75,11 @@ public class ProcessModelMgrPage extends AbstractWorkflowMgrPage {
 
 	protected TablePagerBean addTablePagerBean(final PageParameter pp) {
 		final TablePagerBean tablePager = (TablePagerBean) addComponentBean(pp,
-				"ProcessModelMgrPage_tbl", TablePagerBean.class).setSort(false)
-				.setPagerBarLayout(EPagerBarLayout.bottom).setContainerId("idProcessModelMgrPage_tbl")
+				"ProcessModelMgrPage_tbl", TablePagerBean.class).setGroupColumn("gc").setSort(false)
+				.setPagerBarLayout(EPagerBarLayout.none).setContainerId("idProcessModelMgrPage_tbl")
 				.setHandlerClass(ProcessModelTbl.class);
 		tablePager
+				.addColumn(TablePagerColumn.ICON())
 				.addColumn(new TablePagerColumn("modelText", $m("ProcessModelMgrPage.0")))
 				.addColumn(
 						new TablePagerColumn("processCount", $m("ProcessModelMgrPage.1"), 60)
@@ -86,8 +90,7 @@ public class ProcessModelMgrPage extends AbstractWorkflowMgrPage {
 				.addColumn(
 						new TablePagerColumn("version", $m("MyInitiateItemsTPage.4"), 80)
 								.setFilter(false).setTextAlign(ETextAlign.center))
-				.addColumn(TC_CREATEDATE().setFilter(false))
-				.addColumn(TC_STATUS(EProcessModelStatus.class)).addColumn(TablePagerColumn.OPE(90));
+				.addColumn(TC_CREATEDATE().setFilter(false)).addColumn(TablePagerColumn.OPE(90));
 		return tablePager;
 	}
 
@@ -124,10 +127,73 @@ public class ProcessModelMgrPage extends AbstractWorkflowMgrPage {
 		return ProcessModelUpdateLogPage.class;
 	}
 
-	public static class ProcessModelTbl extends AbstractDbTablePagerHandler {
+	public static abstract class AbstractProcessModelTbl extends GroupDbTablePagerHandler {
+		@Override
+		public AbstractTablePagerSchema createTablePagerSchema() {
+			return new DefaultTablePagerSchema() {
+				@Override
+				public Object getVal(final Object dataObject, final String key) {
+					final ProcessModelBean pm = (ProcessModelBean) dataObject;
+					if ("gc".equals(key)) {
+						final String[] arr = StringUtils.split(pm.getModelText(), ".");
+						if (arr.length > 1) {
+							return arr[0];
+						} else {
+							return $m("MyInitiateItemsGroupTPage.0");
+						}
+					}
+					return super.getVal(dataObject, key);
+				}
+			};
+		};
+
+		@Override
+		protected Map<String, Object> getRowData(final ComponentParameter cp, final Object dataObject) {
+			final ProcessModelBean processModel = (ProcessModelBean) dataObject;
+			final EProcessModelStatus status = processModel.getStatus();
+			final Object id = processModel.getId();
+			final LinkElement le = new LinkElement(processModel).setHref(url(ProcessMgrPage.class,
+					"modelId=" + id));
+			if (status != EProcessModelStatus.deploy) {
+				le.setColor("#777");
+			}
+			final KVMap row = new KVMap()
+					.add(TablePagerColumn.ICON, WorkflowUtils.getStatusIcon(cp, status))
+					.add("modelText", toModelTextHTML(cp, processModel))
+					.add("processCount", toProcessCountHTML(cp, processModel))
+					.add("userText", processModel.getUserText())
+					.add("version", processModel.getModelVer())
+					.add("createDate", processModel.getCreateDate())
+					.add(TablePagerColumn.OPE, toOpeHTML(cp, processModel));
+			return row;
+		}
+
+		protected LinkElement toModelTextHTML(final ComponentParameter cp,
+				final ProcessModelBean processModel) {
+			final String mtxt = processModel.getModelText();
+			final int p = mtxt.indexOf('.');
+			final LinkElement le = new LinkElement(p > 0 ? mtxt.substring(p + 1) : mtxt).setHref(url(
+					ProcessMgrPage.class, "modelId=" + processModel.getId()));
+			if (processModel.getStatus() != EProcessModelStatus.deploy) {
+				le.setColor("#777");
+			}
+			return le;
+		}
+
+		protected Object toProcessCountHTML(final ComponentParameter cp,
+				final ProcessModelBean processModel) {
+			return processModel.getProcessCount();
+		}
+
+		protected abstract String toOpeHTML(ComponentParameter cp, ProcessModelBean processModel);
+	}
+
+	public static class ProcessModelTbl extends AbstractProcessModelTbl {
 		@Override
 		public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
-			return wfpmService.getModelList();
+			final List<ProcessModelBean> list = DataQueryUtils.toList(wfpmService.getModelList());
+			wfpmService.sort(list);
+			return new ListDataQuery<ProcessModelBean>(list);
 		}
 
 		@Override
@@ -141,25 +207,6 @@ public class ProcessModelMgrPage extends AbstractWorkflowMgrPage {
 		}
 
 		@Override
-		protected Map<String, Object> getRowData(final ComponentParameter cp, final Object dataObject) {
-			final ProcessModelBean processModel = (ProcessModelBean) dataObject;
-			final EProcessModelStatus status = processModel.getStatus();
-			final Object id = processModel.getId();
-			final LinkElement le = new LinkElement(processModel).setHref(url(ProcessMgrPage.class,
-					"modelId=" + id));
-			if (status != EProcessModelStatus.deploy) {
-				le.setColor("#777");
-			}
-			final KVMap row = new KVMap().add("modelText", le)
-					.add("processCount", processModel.getProcessCount())
-					.add("userText", processModel.getUserText())
-					.add("version", processModel.getModelVer())
-					.add("createDate", processModel.getCreateDate())
-					.add("status", WorkflowUtils.toStatusHTML(cp, status))
-					.add(TablePagerColumn.OPE, toOpeHTML(cp, processModel));
-			return row;
-		}
-
 		protected String toOpeHTML(final ComponentParameter cp, final ProcessModelBean processModel) {
 			final Object id = processModel.getId();
 			final StringBuilder sb = new StringBuilder();

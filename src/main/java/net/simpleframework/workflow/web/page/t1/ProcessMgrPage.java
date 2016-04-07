@@ -56,10 +56,10 @@ public class ProcessMgrPage extends AbstractWorkflowMgrPage {
 		final TablePagerBean tablePager = (TablePagerBean) addComponentBean(pp, "ProcessMgrPage_tbl",
 				TablePagerBean.class).setPagerBarLayout(EPagerBarLayout.bottom)
 				.setContainerId("idProcessMgrPage_tbl").setHandlerClass(ProcessTbl.class);
-		tablePager.addColumn(TC_TITLE())
+		tablePager.addColumn(TablePagerColumn.ICON()).addColumn(TC_TITLE())
 				.addColumn(new TablePagerColumn("userText", $m("ProcessMgrPage.0"), 100))
 				.addColumn(TC_CREATEDATE()).addColumn(TC_COMPLETEDATE())
-				.addColumn(TC_STATUS(EProcessStatus.class)).addColumn(TablePagerColumn.OPE(90));
+				.addColumn(TablePagerColumn.OPE(90));
 
 		// 删除
 		addDeleteAjaxRequest(pp).setRole(PermissionConst.ROLE_MANAGER);
@@ -120,10 +120,11 @@ public class ProcessMgrPage extends AbstractWorkflowMgrPage {
 		protected Map<String, Object> getRowData(final ComponentParameter cp, final Object dataObject) {
 			final ProcessBean process = (ProcessBean) dataObject;
 			final EProcessStatus status = process.getStatus();
-			final KVMap row = new KVMap().add("title", createTitleElement(cp, process))
+			final KVMap row = new KVMap()
+					.add(TablePagerColumn.ICON, WorkflowUtils.getStatusIcon(cp, status))
+					.add("title", createTitleElement(cp, process))
 					.add("userText", process.getUserText()).add("createDate", process.getCreateDate())
-					.add("completeDate", process.getCompleteDate())
-					.add("status", WorkflowUtils.toStatusHTML(cp, status));
+					.add("completeDate", process.getCompleteDate());
 			row.add(TablePagerColumn.OPE, toOpeHTML(cp, process));
 			return row;
 		}

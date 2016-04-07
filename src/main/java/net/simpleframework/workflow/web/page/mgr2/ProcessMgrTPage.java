@@ -52,11 +52,10 @@ public class ProcessMgrTPage extends AbstractWorkflowMgrTPage {
 		final TablePagerBean tablePager = (TablePagerBean) addTablePagerBean(pp,
 				"ProcessMgrTPage_tbl", _ProcessTbl.class).setPagerBarLayout(EPagerBarLayout.bottom)
 				.setContainerId("idProcessMgrTPage_tbl");
-		tablePager.addColumn(AbstractWorkflowMgrPage.TC_TITLE())
+		tablePager.addColumn(TablePagerColumn.ICON()).addColumn(AbstractWorkflowMgrPage.TC_TITLE())
 				.addColumn(new TablePagerColumn("userText", $m("ProcessMgrPage.0"), 100))
 				.addColumn(AbstractWorkflowMgrPage.TC_CREATEDATE())
 				.addColumn(AbstractWorkflowMgrPage.TC_COMPLETEDATE())
-				.addColumn(AbstractWorkflowMgrPage.TC_STATUS(EProcessStatus.class))
 				.addColumn(TablePagerColumn.OPE(90));
 		return tablePager;
 	}

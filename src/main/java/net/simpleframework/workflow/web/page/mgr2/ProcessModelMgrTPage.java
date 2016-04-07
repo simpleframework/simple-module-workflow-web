@@ -10,8 +10,6 @@ import net.simpleframework.ado.query.DataQueryUtils;
 import net.simpleframework.ado.query.IDataQuery;
 import net.simpleframework.ado.query.ListDataQuery;
 import net.simpleframework.common.ID;
-import net.simpleframework.common.StringUtils;
-import net.simpleframework.common.coll.KVMap;
 import net.simpleframework.ctx.permission.PermissionDept;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.ButtonElement;
@@ -19,15 +17,12 @@ import net.simpleframework.mvc.common.element.ETextAlign;
 import net.simpleframework.mvc.common.element.JS;
 import net.simpleframework.mvc.common.element.LinkElement;
 import net.simpleframework.mvc.component.ComponentParameter;
-import net.simpleframework.mvc.component.ui.pager.AbstractTablePagerSchema;
 import net.simpleframework.mvc.component.ui.pager.EPagerBarLayout;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
 import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
-import net.simpleframework.mvc.component.ui.pager.db.GroupDbTablePagerHandler;
-import net.simpleframework.workflow.engine.EProcessModelStatus;
 import net.simpleframework.workflow.engine.bean.ProcessModelBean;
-import net.simpleframework.workflow.web.WorkflowUtils;
 import net.simpleframework.workflow.web.page.t1.AbstractWorkflowMgrPage;
+import net.simpleframework.workflow.web.page.t1.ProcessModelMgrPage.AbstractProcessModelTbl;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -73,7 +68,7 @@ public class ProcessModelMgrTPage extends AbstractWorkflowMgrTPage {
 		return sb.toString();
 	}
 
-	public static class ProcessModelTbl extends GroupDbTablePagerHandler {
+	public static class ProcessModelTbl extends AbstractProcessModelTbl {
 		@Override
 		public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
 			final PermissionDept org = getPermissionOrg(cp);
@@ -89,48 +84,20 @@ public class ProcessModelMgrTPage extends AbstractWorkflowMgrTPage {
 		}
 
 		@Override
-		public AbstractTablePagerSchema createTablePagerSchema() {
-			return new DefaultTablePagerSchema() {
-				@Override
-				public Object getVal(final Object dataObject, final String key) {
-					final ProcessModelBean pm = (ProcessModelBean) dataObject;
-					if ("gc".equals(key)) {
-						final String[] arr = StringUtils.split(pm.getModelText(), ".");
-						if (arr.length > 1) {
-							return arr[0];
-						} else {
-							return $m("MyInitiateItemsGroupTPage.0");
-						}
-					}
-					return super.getVal(dataObject, key);
-				}
-			};
-		};
-
-		@Override
-		protected Map<String, Object> getRowData(final ComponentParameter cp, final Object dataObject) {
-			final ProcessModelBean pm = (ProcessModelBean) dataObject;
-			final EProcessModelStatus status = pm.getStatus();
-			final KVMap row = new KVMap();
-
-			final String mtxt = pm.getModelText();
-			final int p = mtxt.indexOf('.');
-			final LinkElement le = new LinkElement(p > 0 ? mtxt.substring(p + 1) : mtxt)
-					.setHref(uFactory.getUrl(cp, ProcessMgrTPage.class, "modelId=" + pm.getId()));
-			if (status != EProcessModelStatus.deploy) {
-				le.setColor("#777");
-			}
-
-			row.add(TablePagerColumn.ICON, WorkflowUtils.getStatusIcon(cp, status))
-					.add("modelText", le).add("createDate", pm.getCreateDate())
-					.add("userText", pm.getUserText()).add("version", pm.getModelVer());
-			row.add("processCount",
-					wfpmdService.getProcessModelDomainR(getPermissionOrg(cp).getId(), pm)
-							.getProcessCount());
-			row.add(TablePagerColumn.OPE, toOpeHTML(cp, pm));
-			return row;
+		protected LinkElement toModelTextHTML(final ComponentParameter cp,
+				final ProcessModelBean processModel) {
+			return super.toModelTextHTML(cp, processModel).setHref(
+					uFactory.getUrl(cp, ProcessMgrTPage.class, "modelId=" + processModel.getId()));
 		}
 
+		@Override
+		protected Object toProcessCountHTML(final ComponentParameter cp,
+				final ProcessModelBean processModel) {
+			return wfpmdService.getProcessModelDomainR(getPermissionOrg(cp).getId(), processModel)
+					.getProcessCount();
+		}
+
+		@Override
 		protected String toOpeHTML(final ComponentParameter cp, final ProcessModelBean pm) {
 			final StringBuilder sb = new StringBuilder();
 			sb.append(new ButtonElement($m("ProcessModelMgrTPage.0")).setOnclick(JS.loc(uFactory

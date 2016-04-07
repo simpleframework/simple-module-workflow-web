@@ -115,9 +115,9 @@ public abstract class AbstractProcessWorksHandler extends AbstractScanHandler im
 
 	protected String toUserHTML(final ComponentParameter cp, final ProcessBean process) {
 		final StringBuilder sb = new StringBuilder();
-		sb.append(SpanElement.color060(process.getUserText()));
+		sb.append(SpanElement.color555(process.getUserText()));
 		sb.append(TagElement.br());
-		sb.append(SpanElement.color777(cp.getPermission().getDept(process.getDeptId())));
+		sb.append(SpanElement.color999(cp.getPermission().getDept(process.getDeptId())));
 		return sb.toString();
 	}
 
