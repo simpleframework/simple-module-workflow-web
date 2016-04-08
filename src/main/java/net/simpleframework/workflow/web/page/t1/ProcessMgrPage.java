@@ -10,7 +10,6 @@ import net.simpleframework.ado.query.IDataQuery;
 import net.simpleframework.common.Convert;
 import net.simpleframework.common.StringUtils;
 import net.simpleframework.common.coll.KVMap;
-import net.simpleframework.ctx.permission.PermissionConst;
 import net.simpleframework.ctx.trans.Transaction;
 import net.simpleframework.mvc.AbstractMVCPage;
 import net.simpleframework.mvc.IForward;
@@ -23,6 +22,7 @@ import net.simpleframework.mvc.common.element.InputElement;
 import net.simpleframework.mvc.common.element.LinkElement;
 import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.component.ComponentParameter;
+import net.simpleframework.mvc.component.base.ajaxrequest.AjaxRequestBean;
 import net.simpleframework.mvc.component.ui.menu.MenuBean;
 import net.simpleframework.mvc.component.ui.menu.MenuItem;
 import net.simpleframework.mvc.component.ui.menu.MenuItems;
@@ -62,13 +62,13 @@ public class ProcessMgrPage extends AbstractWorkflowMgrPage {
 				.addColumn(TablePagerColumn.OPE(90));
 
 		// 删除
-		addDeleteAjaxRequest(pp).setRole(PermissionConst.ROLE_MANAGER);
+		addDeleteAjaxRequest(pp);
 
 		// 放弃
-		addAjaxRequest(pp, "ProcessMgrPage_abort_page", ProcessAbortPage.class);
-		addWindowBean(pp, "ProcessMgrPage_abort").setResizable(false)
-				.setContentRef("ProcessMgrPage_abort_page").setTitle(EProcessStatus.abort.toString())
-				.setWidth(420).setHeight(240);
+		final AjaxRequestBean ajaxRequest = addAjaxRequest(pp, "ProcessMgrPage_abortPage",
+				ProcessAbortPage.class);
+		addWindowBean(pp, "ProcessMgrPage_abort", ajaxRequest).setResizable(false)
+				.setTitle(EProcessStatus.abort.toString()).setWidth(420).setHeight(240);
 	}
 
 	@Transaction(context = IWorkflowContext.class)
@@ -152,16 +152,18 @@ public class ProcessMgrPage extends AbstractWorkflowMgrPage {
 		@Override
 		public MenuItems getContextMenu(final ComponentParameter cp, final MenuBean menuBean,
 				final MenuItem menuItem) {
-			return menuItem == null ? MenuItems.of(
-					MenuItem.of($m("AbstractWorkflowMgrPage.1")).setOnclick_act(
-							"AbstractWorkflowMgrPage_status", "processId", "op=running"),
-					MenuItem.sep(),
-					MenuItem.of($m("AbstractWorkflowMgrPage.0")).setOnclick_act(
-							"AbstractWorkflowMgrPage_status", "processId", "op=suspended"),
-					MenuItem.of(EProcessStatus.abort.toString()).setOnclick_act("ProcessMgrPage_abort",
-							"processId"), MenuItem.sep(),
-					MenuItem.itemDelete().setOnclick_act("AbstractWorkflowMgrPage_del", "processId"))
-					: null;
+			if (menuItem == null) {
+				return MenuItems.of(
+						MenuItem.of($m("AbstractWorkflowMgrPage.1")).setOnclick_act(
+								"AbstractWorkflowMgrPage_status", "processId", "op=running"),
+						MenuItem.sep(),
+						MenuItem.of($m("AbstractWorkflowMgrPage.0")).setOnclick_act(
+								"AbstractWorkflowMgrPage_status", "processId", "op=suspended"),
+						MenuItem.of(EProcessStatus.abort.toString()).setOnclick_act(
+								"ProcessMgrPage_abort", "processId"), MenuItem.sep(), MenuItem.itemDelete()
+								.setOnclick_act("AbstractWorkflowMgrPage_del", "processId"));
+			}
+			return null;
 		}
 
 		@Override
@@ -221,6 +223,10 @@ public class ProcessMgrPage extends AbstractWorkflowMgrPage {
 			final ProcessBean process = WorkflowUtils.getProcessBean(cp);
 			wfpService.doAbort(process,
 					Convert.toEnum(EProcessAbortPolicy.class, cp.getParameter("abort_policy")));
+			return doJavascriptForward(cp);
+		}
+
+		protected IForward doJavascriptForward(final ComponentParameter cp) {
 			return new JavascriptForward(
 					"$Actions['ProcessMgrPage_abort'].close(); $Actions['ProcessMgrPage_tbl']();");
 		}

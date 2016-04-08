@@ -11,10 +11,15 @@
 	width: 90%;
 }
 
-.AbstractAbortPage .c {
+.tablepager .simple_progress {
+  width: 95%;
+}
+
+.AbstractAbortPage .AbstractAbortPage .c {
   line-height: 2.4;
 }
 
-.tablepager .simple_progress {
-  width: 95%;
+.AbstractAbortPage .simple_window_tcb .b {
+  background-color: #f9f9f9;
+  padding-top: 10px;
 }

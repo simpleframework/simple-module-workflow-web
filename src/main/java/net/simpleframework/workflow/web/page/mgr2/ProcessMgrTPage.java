@@ -7,8 +7,11 @@ import java.util.Map;
 
 import net.simpleframework.ado.query.IDataQuery;
 import net.simpleframework.common.ID;
+import net.simpleframework.common.StringUtils;
 import net.simpleframework.ctx.permission.PermissionDept;
+import net.simpleframework.ctx.trans.Transaction;
 import net.simpleframework.mvc.AbstractMVCPage;
+import net.simpleframework.mvc.IForward;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.ButtonElement;
@@ -18,6 +21,7 @@ import net.simpleframework.mvc.common.element.LinkButton;
 import net.simpleframework.mvc.common.element.LinkElement;
 import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.component.ComponentParameter;
+import net.simpleframework.mvc.component.base.ajaxrequest.AjaxRequestBean;
 import net.simpleframework.mvc.component.ui.menu.MenuBean;
 import net.simpleframework.mvc.component.ui.menu.MenuItem;
 import net.simpleframework.mvc.component.ui.menu.MenuItems;
@@ -25,11 +29,13 @@ import net.simpleframework.mvc.component.ui.pager.EPagerBarLayout;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
 import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
 import net.simpleframework.workflow.engine.EProcessStatus;
+import net.simpleframework.workflow.engine.IWorkflowContext;
 import net.simpleframework.workflow.engine.bean.ProcessBean;
 import net.simpleframework.workflow.engine.bean.ProcessModelBean;
 import net.simpleframework.workflow.web.WorkflowLogRef.ProcessUpdateLogPage;
 import net.simpleframework.workflow.web.WorkflowUtils;
 import net.simpleframework.workflow.web.page.t1.AbstractWorkflowMgrPage;
+import net.simpleframework.workflow.web.page.t1.ProcessMgrPage.ProcessAbortPage;
 import net.simpleframework.workflow.web.page.t1.ProcessMgrPage.ProcessStatusDescPage;
 import net.simpleframework.workflow.web.page.t1.ProcessMgrPage.ProcessTbl;
 
@@ -46,6 +52,16 @@ public class ProcessMgrTPage extends AbstractWorkflowMgrTPage {
 		super.onForward(pp);
 
 		addTablePagerBean(pp);
+
+		// 删除
+		addAjaxRequest(pp, "ProcessMgrTPage_del").setHandlerMethod("doDelete").setConfirmMessage(
+				$m("Confirm.Delete"));
+
+		// 放弃
+		final AjaxRequestBean ajaxRequest = addAjaxRequest(pp, "ProcessMgrTPage_abortPage",
+				_ProcessAbortPage.class);
+		addWindowBean(pp, "ProcessMgrTPage_abort", ajaxRequest).setResizable(false)
+				.setTitle(EProcessStatus.abort.toString()).setWidth(420).setHeight(240);
 	}
 
 	protected TablePagerBean addTablePagerBean(final PageParameter pp) {
@@ -56,8 +72,15 @@ public class ProcessMgrTPage extends AbstractWorkflowMgrTPage {
 				.addColumn(new TablePagerColumn("userText", $m("ProcessMgrPage.0"), 100))
 				.addColumn(AbstractWorkflowMgrPage.TC_CREATEDATE())
 				.addColumn(AbstractWorkflowMgrPage.TC_COMPLETEDATE())
-				.addColumn(TablePagerColumn.OPE(90));
+				.addColumn(TablePagerColumn.OPE(70));
 		return tablePager;
+	}
+
+	@Transaction(context = IWorkflowContext.class)
+	public IForward doDelete(final ComponentParameter cp) {
+		final Object[] ids = StringUtils.split(cp.getParameter("processId"));
+		wfpService.delete(ids);
+		return new JavascriptForward("$Actions['ProcessMgrTPage_tbl']();");
 	}
 
 	@Override
@@ -88,8 +111,7 @@ public class ProcessMgrTPage extends AbstractWorkflowMgrTPage {
 		sb.append(ElementList.of(LinkButton.backBtn().setOnclick(
 				JS.loc(uFactory.getUrl(pp, ProcessModelMgrTPage.class)))));
 		sb.append("</div>");
-		sb.append("<div id='idProcessMgrTPage_tbl'>");
-		sb.append("</div>");
+		sb.append("<div id='idProcessMgrTPage_tbl'></div>");
 		return sb.toString();
 	}
 
@@ -123,14 +145,26 @@ public class ProcessMgrTPage extends AbstractWorkflowMgrTPage {
 		@Override
 		public MenuItems getContextMenu(final ComponentParameter cp, final MenuBean menuBean,
 				final MenuItem menuItem) {
-			return menuItem == null ? MenuItems.of(
-					MenuItem.of($m("AbstractWorkflowMgrPage.1")).setOnclick_act(
-							"AbstractWorkflowMgrTPage_status", "processId", "op=running"),
-					MenuItem.sep(),
-					MenuItem.of($m("AbstractWorkflowMgrPage.0")).setOnclick_act(
-							"AbstractWorkflowMgrTPage_status", "processId", "op=suspended"),
-					MenuItem.of(EProcessStatus.abort.toString()).setOnclick_act("ProcessMgrPage_abort",
-							"processId")) : null;
+			if (menuItem == null) {
+				return MenuItems.of(
+						MenuItem.of($m("AbstractWorkflowMgrPage.1")).setOnclick_act(
+								"AbstractWorkflowMgrTPage_status", "processId", "op=running"),
+						MenuItem.sep(),
+						MenuItem.of($m("AbstractWorkflowMgrPage.0")).setOnclick_act(
+								"AbstractWorkflowMgrTPage_status", "processId", "op=suspended"),
+						MenuItem.of(EProcessStatus.abort.toString()).setOnclick_act(
+								"ProcessMgrTPage_abort", "processId"), MenuItem.sep(), MenuItem
+								.itemDelete().setOnclick_act("ProcessMgrTPage_del", "processId"));
+			}
+			return null;
+		}
+	}
+
+	public static class _ProcessAbortPage extends ProcessAbortPage {
+		@Override
+		protected IForward doJavascriptForward(final ComponentParameter cp) {
+			return new JavascriptForward(
+					"$Actions['ProcessMgrTPage_abort'].close(); $Actions['ProcessMgrTPage_tbl']();");
 		}
 	}
 
