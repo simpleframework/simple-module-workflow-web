@@ -1,12 +1,15 @@
 package net.simpleframework.workflow.web.page.list.process;
 
+import java.io.IOException;
 import java.util.Map;
 
 import net.simpleframework.ado.query.IDataQuery;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.component.ComponentParameter;
+import net.simpleframework.mvc.component.ui.pager.AbstractTablePagerSchema;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
+import net.simpleframework.mvc.component.ui.pager.TablePagerColumns;
 import net.simpleframework.workflow.engine.IWorkflowContextAware;
 
 /**
@@ -61,6 +64,18 @@ public interface IProcessWorksHandler extends IWorkflowContextAware {
 	 * @return
 	 */
 	ElementList getLeftElements(PageParameter pp, EProcessWorks qw);
+
+	/**
+	 * 导出excel文件
+	 * 
+	 * @param cp
+	 * @param dQuery
+	 * @param tablePagerData
+	 * @param columns
+	 * @throws IOException
+	 */
+	void doExcelExport(ComponentParameter cp, IDataQuery<?> dQuery,
+			AbstractTablePagerSchema tablePagerData, TablePagerColumns columns) throws IOException;
 
 	public static enum EProcessWorks {
 		my,

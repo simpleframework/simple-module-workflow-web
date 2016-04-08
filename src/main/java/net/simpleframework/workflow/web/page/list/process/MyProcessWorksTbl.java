@@ -1,5 +1,6 @@
 package net.simpleframework.workflow.web.page.list.process;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -8,6 +9,8 @@ import net.simpleframework.common.ID;
 import net.simpleframework.common.coll.ArrayUtils;
 import net.simpleframework.ctx.permission.PermissionDept;
 import net.simpleframework.mvc.component.ComponentParameter;
+import net.simpleframework.mvc.component.ui.pager.AbstractTablePagerSchema;
+import net.simpleframework.mvc.component.ui.pager.TablePagerColumns;
 import net.simpleframework.mvc.component.ui.pager.db.AbstractDbTablePagerHandler;
 import net.simpleframework.workflow.engine.bean.ProcessModelBean;
 import net.simpleframework.workflow.web.WorkflowUtils;
@@ -35,6 +38,13 @@ public class MyProcessWorksTbl extends AbstractDbTablePagerHandler implements IW
 			cp.addFormParameter("modelId", pm.getId());
 		}
 		return wfpService.getProcessWlist(cp.getLoginId(), pm);
+	}
+
+	@Override
+	protected void doExcelExport(ComponentParameter cp, IDataQuery<?> dQuery,
+			AbstractTablePagerSchema tablePagerData, TablePagerColumns columns) throws IOException {
+		AbstractProcessWorksHandler.getProcessWorksHandler(cp).doExcelExport(cp, dQuery,
+				tablePagerData, columns);
 	}
 
 	@Override
