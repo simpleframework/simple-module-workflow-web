@@ -76,6 +76,16 @@ public class ActivityMgrTPage extends AbstractWorkflowMgrTPage {
 	}
 
 	@Override
+	public ElementList getLeftElements(final PageParameter pp) {
+		final ProcessBean process = WorkflowUtils.getProcessBean(pp);
+		final ElementList el = ElementList.of(
+				LinkButton.backBtn().setOnclick(
+						JS.loc(uFactory.getUrl(pp, ProcessMgrTPage.class, "modelId="
+								+ (process != null ? process.getModelId() : "")))), SpanElement.SPACE15);
+		return el.appendAll(super.getLeftElements(pp));
+	}
+
+	@Override
 	protected SpanElement createOrgElement(final PageParameter pp) {
 		final SpanElement oele = super.createOrgElement(pp);
 		final ProcessBean process = WorkflowUtils.getProcessBean(pp);
@@ -89,12 +99,6 @@ public class ActivityMgrTPage extends AbstractWorkflowMgrTPage {
 	protected String toHtml(final PageParameter pp, final Map<String, Object> variables,
 			final String currentVariable) throws IOException {
 		final StringBuilder sb = new StringBuilder();
-		sb.append("<div class='tbar'>");
-		final ProcessBean process = WorkflowUtils.getProcessBean(pp);
-		sb.append(ElementList.of(LinkButton.backBtn().setOnclick(
-				JS.loc(uFactory.getUrl(pp, ProcessMgrTPage.class, "modelId="
-						+ (process != null ? process.getModelId() : ""))))));
-		sb.append("</div>");
 		sb.append(toMonitorHTML(pp));
 		return sb.toString();
 	}

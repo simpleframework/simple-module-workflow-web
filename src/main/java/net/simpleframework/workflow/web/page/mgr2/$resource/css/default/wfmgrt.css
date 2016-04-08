@@ -31,3 +31,12 @@
   background-color: #f9f9f9;
   padding-top: 10px;
 }
+
+.ProcessModelMgrTPage .Tabs_tb {
+  line-height: 24px;
+}
+
+.ActivityMgrTPage .Tabs_BlankPage .Tabs_tb ul.simple_tabs a.active {
+  background-color: #fff;
+  border-bottom-color: #fff;
+}

@@ -104,13 +104,18 @@ public class ProcessMgrTPage extends AbstractWorkflowMgrTPage {
 	}
 
 	@Override
+	public ElementList getLeftElements(final PageParameter pp) {
+		final ElementList el = ElementList.of(
+				LinkButton.backBtn()
+						.setOnclick(JS.loc(uFactory.getUrl(pp, ProcessModelMgrTPage.class))),
+				SpanElement.SPACE15);
+		return el.appendAll(super.getLeftElements(pp));
+	}
+
+	@Override
 	protected String toHtml(final PageParameter pp, final Map<String, Object> variables,
 			final String currentVariable) throws IOException {
 		final StringBuilder sb = new StringBuilder();
-		sb.append("<div class='tbar'>");
-		sb.append(ElementList.of(LinkButton.backBtn().setOnclick(
-				JS.loc(uFactory.getUrl(pp, ProcessModelMgrTPage.class)))));
-		sb.append("</div>");
 		sb.append("<div id='idProcessMgrTPage_tbl'></div>");
 		return sb.toString();
 	}

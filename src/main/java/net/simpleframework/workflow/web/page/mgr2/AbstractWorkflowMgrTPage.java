@@ -31,6 +31,11 @@ public class AbstractWorkflowMgrTPage extends AbstractMgrTPage implements IWorkf
 	}
 
 	@Override
+	protected String getPageCSS(final PageParameter pp) {
+		return getOriginalClass().getSimpleName();
+	}
+
+	@Override
 	protected LinkButton createOrgCancelBtn(final PageParameter pp) {
 		return null;
 	}
