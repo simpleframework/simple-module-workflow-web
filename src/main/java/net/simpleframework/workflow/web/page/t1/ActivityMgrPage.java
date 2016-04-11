@@ -27,7 +27,6 @@ import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
 import net.simpleframework.mvc.template.struct.NavigationButtons;
 import net.simpleframework.workflow.engine.EActivityAbortPolicy;
 import net.simpleframework.workflow.engine.EActivityStatus;
-import net.simpleframework.workflow.engine.EProcessStatus;
 import net.simpleframework.workflow.engine.IWorkflowContext;
 import net.simpleframework.workflow.engine.bean.ActivityBean;
 import net.simpleframework.workflow.engine.bean.ProcessBean;
@@ -54,10 +53,10 @@ public class ActivityMgrPage extends AbstractWorkflowMgrPage {
 		addTablePagerBean(pp);
 
 		// 放弃
-		AjaxRequestBean ajaxRequest = addAjaxRequest(pp, "ActivityMgrPage_abort_page",
+		AjaxRequestBean ajaxRequest = addAjaxRequest(pp, "ActivityMgrPage_abortPage",
 				ActivityAbortPage.class);
 		addWindowBean(pp, "ActivityMgrPage_abort", ajaxRequest).setResizable(false)
-				.setTitle(EProcessStatus.abort.toString()).setWidth(420).setHeight(240);
+				.setTitle(EActivityStatus.abort.toString()).setWidth(420).setHeight(240);
 
 		// workitems
 		ajaxRequest = addAjaxRequest(pp, "ActivityMgrPage_workitems_page", WorkitemsPage.class);
@@ -70,7 +69,7 @@ public class ActivityMgrPage extends AbstractWorkflowMgrPage {
 		final TablePagerBean tablePager = (TablePagerBean) addTablePagerBean(pp,
 				"ActivityMgrPage_tbl", ActivityTbl.class).setPagerBarLayout(EPagerBarLayout.none)
 				.setContainerId("idActivityMgrPage_tbl");
-		tablePager.addColumn(ActivityTbl.TC_TASKNODE()).addColumn(TC_STATUS(EActivityStatus.class))
+		tablePager.addColumn(TablePagerColumn.ICON()).addColumn(ActivityTbl.TC_TASKNODE())
 				.addColumn(ActivityTbl.TC_PARTICIPANTS()).addColumn(ActivityTbl.TC_PARTICIPANTS2())
 				.addColumn(TC_CREATEDATE()).addColumn(ActivityTbl.TC_TIMEOUT())
 				.addColumn(TC_COMPLETEDATE()).addColumn(ActivityTbl.TC_PREVIOUS())
@@ -85,7 +84,7 @@ public class ActivityMgrPage extends AbstractWorkflowMgrPage {
 				createBackButton()
 						.setHref(url(ProcessMgrPage.class, "modelId=" + process.getModelId())),
 				SpanElement.SPACE,
-				LinkButton.of($m("ActivityMgrPage.3")).setOnclick(
+				LinkButton.of(EActivityStatus.abort).setOnclick(
 						"$Actions['ActivityMgrPage_abort2']('processId=" + process.getId() + "');"),
 				SpanElement.SPACE15, SpanElement.strongText(WorkflowUtils.getProcessTitle(process)));
 	}

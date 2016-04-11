@@ -57,8 +57,10 @@ public abstract class ActivityAbortUtils implements IWorkflowContextAware {
 		AbstractComponentRender.doJavascriptForward(cp, new IJavascriptCallback() {
 			@Override
 			public void doJavascript(final JavascriptForward js) {
-				js.append("$Actions['").append(cp.getComponentName()).append("_win']('")
-						.append(toParams(cp)).append("');");
+				final String componentName = cp.getComponentName();
+				js.append("var params = $Actions['").append(componentName).append("'].params;");
+				js.append("$Actions['").append(componentName).append("_win']('").append(toParams(cp))
+						.append("'.addParameter(params));");
 			}
 		});
 	}

@@ -21,7 +21,6 @@ import net.simpleframework.mvc.component.ui.menu.MenuItem;
 import net.simpleframework.mvc.component.ui.pager.EPagerBarLayout;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
 import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
-import net.simpleframework.workflow.engine.EActivityStatus;
 import net.simpleframework.workflow.engine.bean.ActivityBean;
 import net.simpleframework.workflow.engine.bean.ProcessBean;
 import net.simpleframework.workflow.web.WorkflowLogRef.ActivityUpdateLogPage;
@@ -46,17 +45,24 @@ public class ActivityMgrTPage extends AbstractWorkflowMgrTPage {
 		addTablePagerBean(pp);
 
 		// workitems
-		final AjaxRequestBean ajaxRequest = addAjaxRequest(pp, "ActivityMgrTPage_workitems_page",
+		final AjaxRequestBean ajaxRequest = addAjaxRequest(pp, "ActivityMgrTPage_workitemsPage",
 				WorkitemsPage.class);
 		addWindowBean(pp, "ActivityMgrTPage_workitems", ajaxRequest).setWidth(800).setHeight(480);
+
+		// 放弃
+		// AjaxRequestBean ajaxRequest = addAjaxRequest(pp,
+		// "ActivityMgrTPage_abortPage",
+		// ActivityAbortPage.class);
+		// addWindowBean(pp, "ActivityMgrTPage_abort",
+		// ajaxRequest).setResizable(false)
+		// .setTitle(EActivityStatus.abort.toString()).setWidth(420).setHeight(240);
 	}
 
 	protected TablePagerBean addTablePagerBean(final PageParameter pp) {
 		final TablePagerBean tablePager = (TablePagerBean) addTablePagerBean(pp,
-				"ActivityMgrTPage_tbl", _ActivityTbl.class).setPagerBarLayout(EPagerBarLayout.none)
-				.setContainerId("idActivityMgrTPage_tbl");
-		tablePager.addColumn(ActivityTbl.TC_TASKNODE())
-				.addColumn(AbstractWorkflowMgrPage.TC_STATUS(EActivityStatus.class))
+				"ActivityMgrTPage_tbl", _ActivityTbl.class).setShowCheckbox(false)
+				.setPagerBarLayout(EPagerBarLayout.none).setContainerId("idActivityMgrTPage_tbl");
+		tablePager.addColumn(TablePagerColumn.ICON()).addColumn(ActivityTbl.TC_TASKNODE())
 				.addColumn(ActivityTbl.TC_PARTICIPANTS()).addColumn(ActivityTbl.TC_PARTICIPANTS2())
 				.addColumn(AbstractWorkflowMgrPage.TC_CREATEDATE()).addColumn(ActivityTbl.TC_TIMEOUT())
 				.addColumn(AbstractWorkflowMgrPage.TC_COMPLETEDATE())

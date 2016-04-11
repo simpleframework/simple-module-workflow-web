@@ -116,7 +116,6 @@ public class ActivityTbl extends GroupDbTablePagerHandler implements IWorkflowCo
 				.add("relativeDate", toRelativeDateHTML(cp, activity))
 				.add("timeoutDate", toTimeoutDateHTML(cp, activity));
 
-		row.add("status", WorkflowUtils.toStatusHTML(cp, activity.getStatus()));
 		row.add(TablePagerColumn.OPE, toOpeHTML(cp, activity));
 		return row;
 	}
@@ -226,12 +225,12 @@ public class ActivityTbl extends GroupDbTablePagerHandler implements IWorkflowCo
 	}
 
 	public static TablePagerColumn TC_PARTICIPANTS() {
-		return new TablePagerColumn("participants", $m("ActivityTbl.3"), 125)
+		return new TablePagerColumn("participants", $m("ActivityTbl.3"), 180)
 				.setTextAlign(ETextAlign.center).setNowrap(false).setFilterSort(false);
 	}
 
 	public static TablePagerColumn TC_PARTICIPANTS2() {
-		return new TablePagerColumn("participants2", $m("ActivityTbl.4"), 125)
+		return new TablePagerColumn("participants2", $m("ActivityTbl.4"), 180)
 				.setTextAlign(ETextAlign.center).setNowrap(false).setFilterSort(false);
 	}
 

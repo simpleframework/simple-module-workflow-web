@@ -32,8 +32,8 @@
   padding-top: 10px;
 }
 
-.ProcessModelMgrTPage .Tabs_tb {
-  line-height: 24px;
+.AbstractWorkflowMgrPage .Tabs_tb .le {
+  line-height: 25px;
 }
 
 .ActivityMgrTPage .Tabs_BlankPage .Tabs_tb ul.simple_tabs a.active {

@@ -49,19 +49,6 @@ public abstract class WorkflowUtils implements IWorkflowContextAware {
 				((IWorkflowWebContext) workflowContext).getLogRef() == null);
 	}
 
-	public static String toStatusHTML(final PageParameter pp, final Enum<?> status, final Object txt) {
-		final StringBuilder sb = new StringBuilder();
-		sb.append(new ImageElement(pp.getCssResourceHomePath(AbstractItemsTPage.class)
-				+ "/images/status_" + status.name() + ".png").setClassName("icon16").addStyle(
-				"margin-right: 3px;"));
-		sb.append(new SpanElement(txt != null ? txt : status.toString()).setClassName("icon_txt"));
-		return sb.toString();
-	}
-
-	public static String toStatusHTML(final PageParameter pp, final Enum<?> status) {
-		return toStatusHTML(pp, status, null);
-	}
-
 	public static AbstractElement<?> getStatusIcon(final PageParameter pp, final Enum<?> status) {
 		return new ImageElement(pp.getCssResourceHomePath(AbstractItemsTPage.class)
 				+ "/images/status_" + status.name() + ".png").setClassName("icon16").setTitle(
