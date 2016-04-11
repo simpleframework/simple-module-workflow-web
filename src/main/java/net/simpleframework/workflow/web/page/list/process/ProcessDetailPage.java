@@ -40,6 +40,7 @@ public class ProcessDetailPage extends AbstractTemplatePage implements IWorkflow
 		sb.append("    <td class='l'>#(MyProcessWorksTPage.13)</td>");
 		sb.append("    <td class='v'>");
 		final LinkedHashSet<String> dtags = new LinkedHashSet<String>();
+		final LinkedHashMap<ID, Integer> utags2 = new LinkedHashMap<ID, Integer>();
 		final LinkedHashMap<ID, Integer> utags = new LinkedHashMap<ID, Integer>();
 		List<WorkitemBean> list = wfwService.getWorkitems(process, null);
 		final IPagePermissionHandler hdl = pp.getPermission();
@@ -59,6 +60,10 @@ public class ProcessDetailPage extends AbstractTemplatePage implements IWorkflow
 				utags.put(userId, 1);
 			} else {
 				utags.put(userId, oj + 1);
+			}
+
+			if (!wfwService.isFinalStatus(workitem)) {
+				utags2.put(userId, utags.get(userId));
 			}
 		}
 		for (final String e : dtags) {
@@ -85,6 +90,20 @@ public class ProcessDetailPage extends AbstractTemplatePage implements IWorkflow
 			sb.append("<span class='ptag'>");
 			sb.append(e.getKey()).append(" (").append(e.getValue()).append(")");
 			sb.append("</span>");
+		}
+		sb.append("    </td>");
+		sb.append("  </tr>");
+		sb.append("  <tr>");
+		sb.append("    <td class='l'>#(MyProcessWorksTPage.18)</td>");
+		sb.append("    <td class='v'>");
+		if (utags2.size() == 0) {
+			sb.append("--");
+		} else {
+			for (final Map.Entry<ID, Integer> e : utags2.entrySet()) {
+				sb.append("<span class='ptag'>");
+				sb.append(hdl.getUser(e.getKey())).append(" (").append(e.getValue()).append(")");
+				sb.append("</span>");
+			}
 		}
 		sb.append("    </td>");
 		sb.append("  </tr>");
