@@ -21,14 +21,19 @@ $ready(function() {
     var p = _item.cumulativeOffset();
     cc.select(".gitem").each(
         function(item) {
+          var _top = p.top - 15;
           var psub = item.down(".psub").setStyle(
-              "top: " + (p.top - 15) + "px; left: " + (p.left + _item.getWidth() - 1) + "px;");
+              "top: " + _top + "px; left: " + (p.left + _item.getWidth() - 1) + "px;");
           item.observe("mouseenter", function(ev) {
             item._enter = true;
             (function() {
               if (!item._enter)
                 return;
               hideLast();
+              var l = item.cumulativeOffset().top + item.getHeight() - _top;
+              if (l > psub.getHeight()) {
+                psub.setStyle("height: " + (l -15) + "px");
+              }
               item.addClassName("active");
               psub.addClassName("show");
               gtree._last = item;
