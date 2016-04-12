@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.util.Map;
 
 import net.simpleframework.mvc.AbstractMVCPage;
+import net.simpleframework.mvc.IForward;
+import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.ButtonElement;
 import net.simpleframework.mvc.common.element.ElementList;
@@ -21,6 +23,7 @@ import net.simpleframework.mvc.component.ui.menu.MenuItem;
 import net.simpleframework.mvc.component.ui.pager.EPagerBarLayout;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
 import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
+import net.simpleframework.workflow.engine.EActivityStatus;
 import net.simpleframework.workflow.engine.bean.ActivityBean;
 import net.simpleframework.workflow.engine.bean.ProcessBean;
 import net.simpleframework.workflow.web.WorkflowLogRef.ActivityUpdateLogPage;
@@ -28,6 +31,7 @@ import net.simpleframework.workflow.web.WorkflowUtils;
 import net.simpleframework.workflow.web.page.ActivityTbl;
 import net.simpleframework.workflow.web.page.WorkitemsPage;
 import net.simpleframework.workflow.web.page.t1.AbstractWorkflowMgrPage;
+import net.simpleframework.workflow.web.page.t1.ActivityMgrPage.ActivityAbortPage;
 import net.simpleframework.workflow.web.page.t1.ActivityMgrPage.ActivityStatusDescPage;
 
 /**
@@ -45,17 +49,17 @@ public class ActivityMgrTPage extends AbstractWorkflowMgrTPage {
 		addTablePagerBean(pp);
 
 		// workitems
-		final AjaxRequestBean ajaxRequest = addAjaxRequest(pp, "ActivityMgrTPage_workitemsPage",
+		AjaxRequestBean ajaxRequest = addAjaxRequest(pp, "ActivityMgrTPage_workitemsPage",
 				WorkitemsPage.class);
 		addWindowBean(pp, "ActivityMgrTPage_workitems", ajaxRequest).setWidth(800).setHeight(480);
 
 		// 放弃
-		// AjaxRequestBean ajaxRequest = addAjaxRequest(pp,
-		// "ActivityMgrTPage_abortPage",
-		// ActivityAbortPage.class);
-		// addWindowBean(pp, "ActivityMgrTPage_abort",
-		// ajaxRequest).setResizable(false)
-		// .setTitle(EActivityStatus.abort.toString()).setWidth(420).setHeight(240);
+		ajaxRequest = addAjaxRequest(pp, "ActivityMgrTPage_abortPage", _ActivityAbortPage.class);
+		addWindowBean(pp, "ActivityMgrTPage_abort", ajaxRequest).setResizable(false)
+				.setTitle(EActivityStatus.abort.toString()).setWidth(420).setHeight(240);
+
+		// addComponentBean(pp, "ActivityMgrTPage_abort2",
+		// ActivityAbortBean.class);
 	}
 
 	protected TablePagerBean addTablePagerBean(final PageParameter pp) {
@@ -87,7 +91,12 @@ public class ActivityMgrTPage extends AbstractWorkflowMgrTPage {
 		final ElementList el = ElementList.of(
 				LinkButton.backBtn().setOnclick(
 						JS.loc(uFactory.getUrl(pp, ProcessMgrTPage.class, "modelId="
-								+ (process != null ? process.getModelId() : "")))), SpanElement.SPACE15);
+								+ (process != null ? process.getModelId() : "")))),
+				// SpanElement.SPACE,
+				// LinkButton.of(EActivityStatus.abort).setOnclick(
+				// "$Actions['ActivityMgrTPage_abort2']('processId=" +
+				// process.getId() + "');"),
+				SpanElement.SPACE15);
 		return el.appendAll(super.getLeftElements(pp));
 	}
 
@@ -126,6 +135,15 @@ public class ActivityMgrTPage extends AbstractWorkflowMgrTPage {
 						params)));
 	}
 
+	public static class _ActivityAbortPage extends ActivityAbortPage {
+
+		@Override
+		protected IForward doJavascriptForward(final ComponentParameter cp) {
+			return new JavascriptForward(
+					"$Actions['ActivityMgrTPage_abort'].close(); $Actions['ActivityMgrTPage_tbl']();");
+		}
+	}
+
 	public static class _ActivityStatusDescPage extends ActivityStatusDescPage {
 	}
 
@@ -155,6 +173,11 @@ public class ActivityMgrTPage extends AbstractWorkflowMgrTPage {
 		protected MenuItem MI_STATUS_SUSPENDED() {
 			return super.MI_STATUS_SUSPENDED().setOnclick_act("AbstractWorkflowMgrTPage_status",
 					"activityId", "op=suspended");
+		}
+
+		@Override
+		protected MenuItem MI_STATUS_DO_ABORT() {
+			return super.MI_STATUS_DO_ABORT().setOnclick_act("ActivityMgrTPage_abort", "activityId");
 		}
 	}
 }

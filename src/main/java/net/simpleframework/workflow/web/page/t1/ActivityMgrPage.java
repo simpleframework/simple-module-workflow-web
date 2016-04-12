@@ -149,6 +149,10 @@ public class ActivityMgrPage extends AbstractWorkflowMgrPage {
 			final ActivityBean activity = wfaService.getBean(cp.getParameter("activityId"));
 			wfaService.doAbort(activity,
 					Convert.toEnum(EActivityAbortPolicy.class, cp.getParameter("abort_policy")));
+			return doJavascriptForward(cp);
+		}
+
+		protected IForward doJavascriptForward(final ComponentParameter cp) {
 			return new JavascriptForward(
 					"$Actions['ActivityMgrPage_abort'].close(); $Actions['ActivityMgrPage_tbl']();");
 		}
