@@ -171,8 +171,9 @@ public abstract class AbstractProcessWorksHandler extends AbstractScanHandler im
 	}
 
 	@Override
-	public void doExcelExport(ComponentParameter cp, IDataQuery<?> dQuery,
-			AbstractTablePagerSchema tablePagerData, TablePagerColumns columns) throws IOException {
+	public void doExcelExport(final ComponentParameter cp, final IDataQuery<?> dQuery,
+			final AbstractTablePagerSchema tablePagerData, final TablePagerColumns columns)
+			throws IOException {
 		throw NotImplementedException.of(getClass(), "doExcelExport");
 	}
 }

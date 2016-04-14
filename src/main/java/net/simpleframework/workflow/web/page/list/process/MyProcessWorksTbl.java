@@ -41,8 +41,9 @@ public class MyProcessWorksTbl extends AbstractDbTablePagerHandler implements IW
 	}
 
 	@Override
-	protected void doExcelExport(ComponentParameter cp, IDataQuery<?> dQuery,
-			AbstractTablePagerSchema tablePagerData, TablePagerColumns columns) throws IOException {
+	protected void doExcelExport(final ComponentParameter cp, final IDataQuery<?> dQuery,
+			final AbstractTablePagerSchema tablePagerData, final TablePagerColumns columns)
+			throws IOException {
 		AbstractProcessWorksHandler.getProcessWorksHandler(cp).doExcelExport(cp, dQuery,
 				tablePagerData, columns);
 	}
