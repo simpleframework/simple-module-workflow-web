@@ -110,7 +110,9 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 		ProcessModelBean processModel;
 
 		TaskWrapper(final AbstractTaskNode task, final ProcessModelBean processModel) {
-			setName(task.toString());
+			if (task != null) {
+				setName(task.toString());
+			}
 			this.processModel = processModel;
 		}
 
