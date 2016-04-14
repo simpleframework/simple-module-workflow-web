@@ -311,6 +311,7 @@ public abstract class AbstractWorkflowFormTPage extends AbstractFormTableRowTPag
 			js.append(" var eles = _form.select('#ta_wfcomment');"); // _form.getElements()
 			js.append(" eles.invoke('observe', 'input', _func).invoke('observe', 'propertychange', _func);");
 			js.append("}");
+
 			// 添加确定退出
 			// js.append("window.onbeforeunload = function(event) {");
 			// js.append(" if (CHANGE_MARK) { return '确定退出吗'; }");
