@@ -27,15 +27,15 @@ import net.simpleframework.workflow.web.page.list.process.IProcessWorksHandler.E
 public class MyProcessWorksTbl extends AbstractDbTablePagerHandler implements IWorkflowPageAware {
 	@Override
 	public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
+		final ProcessModelBean pm = WorkflowUtils.getProcessModel(cp);
+		if (pm != null) {
+			cp.addFormParameter("modelId", pm.getId());
+		}
+
 		final IDataQuery<?> dq = AbstractProcessWorksHandler.getProcessWorksHandler(cp)
 				.createDataObjectQuery(cp, EProcessWorks.my);
 		if (dq != null) {
 			return dq;
-		}
-
-		final ProcessModelBean pm = WorkflowUtils.getProcessModel(cp);
-		if (pm != null) {
-			cp.addFormParameter("modelId", pm.getId());
 		}
 		return wfpService.getProcessWlist(cp.getLoginId(), pm);
 	}
@@ -57,12 +57,6 @@ public class MyProcessWorksTbl extends AbstractDbTablePagerHandler implements IW
 	public static class MyProcessWorks_DeptTbl extends MyProcessWorksTbl {
 		@Override
 		public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
-			final IDataQuery<?> dq = AbstractProcessWorksHandler.getProcessWorksHandler(cp)
-					.createDataObjectQuery(cp, EProcessWorks.dept);
-			if (dq != null) {
-				return dq;
-			}
-
 			final ProcessModelBean pm = WorkflowUtils.getProcessModel(cp);
 			if (pm != null) {
 				cp.addFormParameter("modelId", pm.getId());
@@ -74,6 +68,7 @@ public class MyProcessWorksTbl extends AbstractDbTablePagerHandler implements IW
 			} else {
 				cp.addFormParameter("deptId", dept.getId());
 			}
+			cp.setAttr("dept", dept);
 
 			final List<Object> deptIds = ArrayUtils.toParams(dept.getId());
 			final boolean child = cp.getBoolParameter("child");
@@ -82,6 +77,13 @@ public class MyProcessWorksTbl extends AbstractDbTablePagerHandler implements IW
 				for (final PermissionDept _dept : dept.getDeptChildren()) {
 					deptIds.add(_dept.getId());
 				}
+			}
+			cp.setAttr("deptIds", deptIds);
+
+			final IDataQuery<?> dq = AbstractProcessWorksHandler.getProcessWorksHandler(cp)
+					.createDataObjectQuery(cp, EProcessWorks.dept);
+			if (dq != null) {
+				return dq;
 			}
 
 			return wfpService.getProcessWlistInDept(deptIds.toArray(new ID[deptIds.size()]), pm);
@@ -97,16 +99,17 @@ public class MyProcessWorksTbl extends AbstractDbTablePagerHandler implements IW
 	public static class MyProcessWorks_OrgTbl extends MyProcessWorksTbl {
 		@Override
 		public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
+			final ProcessModelBean pm = WorkflowUtils.getProcessModel(cp);
+			if (pm != null) {
+				cp.addFormParameter("modelId", pm.getId());
+			}
+
 			final IDataQuery<?> dq = AbstractProcessWorksHandler.getProcessWorksHandler(cp)
 					.createDataObjectQuery(cp, EProcessWorks.org);
 			if (dq != null) {
 				return dq;
 			}
 
-			final ProcessModelBean pm = WorkflowUtils.getProcessModel(cp);
-			if (pm != null) {
-				cp.addFormParameter("modelId", pm.getId());
-			}
 			return wfpService.getProcessWlistInDomain(cp.getLDomainId(), pm);
 		}
 
