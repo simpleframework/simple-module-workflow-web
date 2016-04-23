@@ -305,7 +305,7 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 		final Date d = DateUtils.getZeroPoint().getTime();
 		final String dtxt = createDate.after(d) ? Convert.toDateString(createDate, "HH:mm") : Convert
 				.toDateString(createDate, "yy-MM-dd");
-		row.add("createDate", new SpanElement(dtxt).setTitle(Convert.toDateString(createDate)));
+		row.add("createDate", new SpanElement(dtxt).setTitle(Convert.toDateTimeString(createDate)));
 	}
 
 	@Override

@@ -165,7 +165,7 @@ public class MyFinalWorklistTPage extends MyRunningWorklistTPage {
 			final Date completeDate = workitem.getCompleteDate();
 			if (completeDate != null) {
 				row.add("completeDate", new SpanElement(Convert.toDateString(completeDate, "yy-MM-dd"))
-						.setTitle(Convert.toDateString(completeDate)));
+						.setTitle(Convert.toDateTimeString(completeDate)));
 			}
 		}
 

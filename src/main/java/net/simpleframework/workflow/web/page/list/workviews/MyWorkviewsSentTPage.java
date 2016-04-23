@@ -171,7 +171,7 @@ public class MyWorkviewsSentTPage extends MyWorkviewsTPage {
 				sb.append(SpanElement.colora00(workview.getUserText())).append(" (")
 						.append(pp.getDept(workview.getDeptId())).append(")");
 				sb.append("</td><td align='right'>");
-				sb.append(SpanElement.color777(Convert.toDateString(workview.getCreateDate())));
+				sb.append(SpanElement.color777(Convert.toDateTimeString(workview.getCreateDate())));
 				sb.append("</td></tr></table>");
 				appendWorkviewsHTML(pp, sb, wfvService.getChildren(workitem, workview.getId()), i);
 				sb.append("</div>");

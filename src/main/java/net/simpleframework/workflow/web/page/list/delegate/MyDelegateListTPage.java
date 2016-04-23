@@ -228,13 +228,13 @@ public class MyDelegateListTPage extends AbstractItemsTPage {
 			final Date dstartDate = delegation.getDstartDate();
 			final Date dcompleteDate = delegation.getDcompleteDate();
 			if (dstartDate != null) {
-				sb.append(Convert.toDateString(dstartDate));
+				sb.append(Convert.toDateTimeString(dstartDate));
 			} else {
 				sb.append("-");
 			}
 			sb.append("<br>");
 			if (dcompleteDate != null) {
-				sb.append(Convert.toDateString(dcompleteDate));
+				sb.append(Convert.toDateTimeString(dcompleteDate));
 			} else {
 				sb.append("-");
 			}
