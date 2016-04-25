@@ -141,9 +141,12 @@ public abstract class AbstractWorkflowFormTPage extends AbstractFormTableRowTPag
 
 	@Override
 	public void doUpdateProcessKV(final PageParameter pp) {
-		final ProcessBean process = getProcessBean(pp);
-		wfpService.doUpdateKV(process, new KVMap().add("title", pp.getParameter(getParamKey_title()))
-				.add("pno", pp.getParameter(getParamKey_pno())));
+		wfpService.doUpdateKV(getProcessBean(pp), getProcessKV(pp));
+	}
+
+	protected Map<String, Object> getProcessKV(final PageParameter pp) {
+		return new KVMap().add("title", pp.getParameter(getParamKey_title())).add("pno",
+				pp.getParameter(getParamKey_pno()));
 	}
 
 	public void onSaveForm(final PageParameter pp, final WorkitemBean workitem) {
