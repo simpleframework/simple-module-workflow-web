@@ -177,19 +177,29 @@ public abstract class WorkitemCompleteUtils implements IWorkflowContextAware {
 		final ActivityComplete activityComplete = getActivityComplete(cp);
 		for (final TransitionNode transition : getTransitions(cp)) {
 			final AbstractTaskNode to = transition.to();
+			final boolean manual = activityComplete.isParticipantManual(to);
+			final boolean multi = activityComplete.isParticipantMultiSelected(to);
+
+			final Object transitionId = transition.getId();
 			sb.append("<div class='transition' novalidation='")
 					.append(ArrayUtils.contains(novalidationTasks, to.getName()))
-					.append("' transition='").append(transition.getId()).append("'>");
-			sb.append(transition.to()).append("</div>");
-			sb.append(" <div class='participants'>");
+					.append("' transition='").append(transitionId).append("'>");
+			if (manual && multi) {
+				sb.append(new Checkbox("cbox_" + transitionId, transition.to())
+						.setOnclick("var p = this.up('.transition').next(); var b = this.checked;"
+								+ "p.select('input[type=checkbox]').each(function (box) { box.checked = b; });"));
+			} else {
+				sb.append(transition.to());
+			}
+
+			sb.append("</div>");
+			sb.append("<div class='participants'>");
 			final Collection<Participant> coll = activityComplete.getParticipants(transition);
 			if (coll == null || coll.size() == 0) {
 				sb.append("<div class='msg'>");
 				sb.append(" <span>#(participant_select.1)</span>");
 				sb.append("</div>");
 			} else {
-				final boolean manual = activityComplete.isParticipantManual(to);
-				final boolean multi = activityComplete.isParticipantMultiSelected(to);
 				int i = 0;
 				for (final Participant participant : coll) {
 					sb.append("<div class='ritem'>");
