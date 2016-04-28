@@ -80,10 +80,9 @@ public class MyInitiateItemsGroupTPage extends MyInitiateItemsTPage {
 				final ProcessModelBean processModel = wfpmService.getBean(modelId);
 				final String mtxt = processModel.getModelText();
 				final int p = mtxt.indexOf('.');
-				sb.append("<div class='litem'>");
-				sb.append(new SpanElement(p > 0 ? mtxt.substring(p + 1) : mtxt)
-						.setOnclick("$Actions['MyInitiateItemsTPage_startProcess']('modelId=" + modelId
-								+ "');"));
+				sb.append("<div class='litem' onclick=\"$Actions['MyInitiateItemsTPage_startProcess']")
+						.append("('modelId=").append(modelId).append("');\">");
+				sb.append(new SpanElement(p > 0 ? mtxt.substring(p + 1) : mtxt));
 				sb.append("</div>");
 			}
 			sb.append(" </div>");
