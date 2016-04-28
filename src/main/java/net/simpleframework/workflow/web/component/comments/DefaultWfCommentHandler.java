@@ -341,22 +341,24 @@ public class DefaultWfCommentHandler extends ComponentHandlerEx implements IWfCo
 				.append("</div>");
 		sb2.append(" <div class='i2 clearfix'>");
 		final PermissionUser ouser = pp.getUser(comment.getUserId());
-		sb2.append("  <div class='left'>").append(ouser);
+		sb2.append("  <div class='left'>");
 		if (groupBy != EGroupBy.dept) {
-			sb2.append("@");
 			if (null != comment.getDeptId()) {
 				sb2.append(pp.getDept(comment.getDeptId()));
 			} else {
 				sb2.append(ouser.getDept());
 			}
+			sb2.append(SpanElement.SPACE);
 		}
+		sb2.append(ouser);
 
 		final int nYear = Calendar.getInstance().get(Calendar.YEAR);
 		final Calendar cal = Calendar.getInstance();
 		final Date commentDate = comment.getCreateDate();
 		cal.setTime(commentDate);
 		final String format = nYear == cal.get(Calendar.YEAR) ? "MM-dd HH:mm" : "yy-MM-dd HH:mm";
-		sb2.append(", ").append(Convert.toDateString(commentDate, format)).append("</div>");
+		sb2.append(SpanElement.SPACE).append(Convert.toDateString(commentDate, format))
+				.append("</div>");
 		sb2.append("  <div class='right'>").append(comment.getTaskname()).append("</div>");
 		sb2.append(" </div>");
 		sb2.append("</div>");
