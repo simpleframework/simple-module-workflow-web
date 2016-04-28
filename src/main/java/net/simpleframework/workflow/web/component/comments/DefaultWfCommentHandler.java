@@ -49,7 +49,8 @@ import net.simpleframework.workflow.web.component.comments.mgr2.MyCommentsMgrTPa
 /**
  * Licensed under the Apache License, Version 2.0
  * 
- * @author 陈侃(cknet@126.com, 13910090885) https://github.com/simpleframework
+ * @author 陈侃(cknet@126.com, 13910090885)
+ *         https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
 public class DefaultWfCommentHandler extends ComponentHandlerEx implements IWfCommentHandler {
@@ -126,16 +127,19 @@ public class DefaultWfCommentHandler extends ComponentHandlerEx implements IWfCo
 		return ele;
 	}
 
-	protected Map<String, String[]> getTasknames(final PageParameter pp, final WorkitemBean workitem) {
+	protected Map<String, String[]> getTasknames(final PageParameter pp,
+			final AbstractWorkitemBean workitem) {
 		final Map<String, String[]> data = new LinkedHashMap<String, String[]>();
-		final IActivityService aService = workflowContext.getActivityService();
-		final AbstractTaskNode tasknode = aService.getTaskNode(aService.getBean(workitem
-				.getActivityId()));
-		for (final Node node : ((ProcessNode) tasknode.getParent()).nodes()) {
-			if (node instanceof UserNode) {
-				final String name = node.getName();
-				if (StringUtils.hasText(name)) {
-					data.put(node.getText(), new String[] { name });
+		if (workitem instanceof WorkitemBean) {
+			final IActivityService aService = workflowContext.getActivityService();
+			final AbstractTaskNode tasknode = aService.getTaskNode(aService
+					.getBean(((WorkitemBean) workitem).getActivityId()));
+			for (final Node node : ((ProcessNode) tasknode.getParent()).nodes()) {
+				if (node instanceof UserNode) {
+					final String name = node.getName();
+					if (StringUtils.hasText(name)) {
+						data.put(node.getText(), new String[] { name });
+					}
 				}
 			}
 		}
@@ -146,9 +150,9 @@ public class DefaultWfCommentHandler extends ComponentHandlerEx implements IWfCo
 			final IDataQuery<WfComment> dq, final AbstractWorkitemBean workitem, final EGroupBy groupBy) {
 		final Map<Object, List<WfComment>> data = new LinkedHashMap<Object, List<WfComment>>();
 		Map<String, String[]> tasknames = null;
-		if (groupBy == EGroupBy.taskname && workitem instanceof WorkitemBean) {
+		if (groupBy == EGroupBy.taskname) {
 			// 数据按tasknames的顺序
-			tasknames = getTasknames(pp, (WorkitemBean) workitem);
+			tasknames = getTasknames(pp, workitem);
 			for (final String key : tasknames.keySet()) {
 				data.put(key, new ArrayList<WfComment>());
 			}
