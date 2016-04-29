@@ -113,9 +113,10 @@ public class MyProcessWorksTPage extends AbstractWorksTPage {
 		final ProcessBean process = WorkflowUtils.getProcessBean(cp);
 		WorkitemBean workitem;
 		if (process != null && (workitem = getOpenWorkitem(cp, process)) != null) {
-			return new JavascriptForward(JS.loc(
-					uFactory.getUrl(cp, (cp.getBoolParameter("monitor") ? WorkflowMonitorPage.class
-							: WorkflowFormPage.class), workitem), true));
+			return new JavascriptForward(
+					JS.loc(uFactory.getUrl(cp,
+							(cp.getBoolParameter("monitor") ? WorkflowMonitorPage.class
+									: WorkflowFormPage.class), workitem)));
 		} else {
 			return new JavascriptForward("alert('").append($m("MyProcessWorksTPage.7")).append("');");
 		}
@@ -244,7 +245,7 @@ public class MyProcessWorksTPage extends AbstractWorksTPage {
 					final String mtxt = pm.getModelText();
 					final int p = mtxt.indexOf('.');
 					sb.append(new LinkElement(p > 0 ? mtxt.substring(p + 1) : mtxt)
-							.setOnclick("$Actions.reloc('modelId=" + pm.getId() + "');"));
+							.setOnclick("$Actions.reloc('model=__del&modelId=" + pm.getId() + "');"));
 					sb.append("</div>");
 				}
 			}
