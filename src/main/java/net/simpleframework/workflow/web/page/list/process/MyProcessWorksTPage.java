@@ -32,6 +32,7 @@ import net.simpleframework.mvc.component.ui.menu.MenuItem;
 import net.simpleframework.mvc.component.ui.menu.MenuItems;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
 import net.simpleframework.mvc.component.ui.pager.db.AbstractDbTablePagerHandler;
+import net.simpleframework.mvc.template.struct.FilterButtons;
 import net.simpleframework.workflow.engine.EProcessModelStatus;
 import net.simpleframework.workflow.engine.bean.ProcessBean;
 import net.simpleframework.workflow.engine.bean.ProcessModelBean;
@@ -102,6 +103,11 @@ public class MyProcessWorksTPage extends AbstractWorksTPage {
 		final TablePagerBean tablePager = addTablePagerBean(pp, "MyProcessWorksTPage_tbl", tblClass);
 		AbstractProcessWorksHandler.getProcessWorksHandler(pp).doTablePagerInit(pp, tablePager, qw);
 		return tablePager;
+	}
+
+	@Override
+	public FilterButtons getFilterButtons(final PageParameter pp) {
+		return AbstractProcessWorksHandler.getProcessWorksHandler(pp).getFilterButtons(pp, qw);
 	}
 
 	@Override
@@ -269,9 +275,7 @@ public class MyProcessWorksTPage extends AbstractWorksTPage {
 			final String txt = pm.getModelText();
 			final int p = txt.indexOf('.');
 			if (p > 0) {
-				sb.append(new SpanElement(txt.substring(0, p)));
-				sb.append(SpanElement.NAV(3));
-				sb.append(new SpanElement(txt.substring(p + 1)));
+				sb.append(new SpanElement(txt.substring(0, p)) + " / " + txt.substring(p + 1));
 			} else {
 				sb.append(new SpanElement(txt));
 			}
@@ -279,6 +283,10 @@ public class MyProcessWorksTPage extends AbstractWorksTPage {
 			sb.append(new SpanElement($m("MyProcessWorksTPage.9")));
 		}
 		sb.append("</div>");
+		final FilterButtons btns = getFilterButtons(pp);
+		if (btns != null && btns.size() > 0) {
+			sb.append("<div class='model-filter'>").append(btns).append("</div>");
+		}
 		sb.append(super.toToolbarHTML(pp));
 		return sb.toString();
 	}

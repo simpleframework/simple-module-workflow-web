@@ -10,6 +10,7 @@ import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.ui.pager.AbstractTablePagerSchema;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
 import net.simpleframework.mvc.component.ui.pager.TablePagerColumns;
+import net.simpleframework.mvc.template.struct.FilterButtons;
 import net.simpleframework.workflow.engine.IWorkflowContextAware;
 
 /**
@@ -64,6 +65,8 @@ public interface IProcessWorksHandler extends IWorkflowContextAware {
 	 * @return
 	 */
 	ElementList getLeftElements(PageParameter pp, EProcessWorks qw);
+
+	FilterButtons getFilterButtons(PageParameter pp, EProcessWorks qw);
 
 	/**
 	 * 导出excel文件

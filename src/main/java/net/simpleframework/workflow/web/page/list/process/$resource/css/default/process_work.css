@@ -124,6 +124,11 @@
   color: #276;
 }
 
+.MyProcessWorksTPage .col2 .model-filter {
+  border-top: 1px dashed #ccc;
+  padding: 4px 0;
+}
+
 .MyProcessWorksTPage .col2 .tool_bar .le {
   line-height: 1.8;
 }

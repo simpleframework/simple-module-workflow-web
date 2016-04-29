@@ -27,6 +27,7 @@ import net.simpleframework.mvc.component.ui.pager.AbstractTablePagerSchema;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
 import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
 import net.simpleframework.mvc.component.ui.pager.TablePagerColumns;
+import net.simpleframework.mvc.template.struct.FilterButtons;
 import net.simpleframework.workflow.engine.bean.ProcessBean;
 import net.simpleframework.workflow.engine.bean.ProcessModelBean;
 import net.simpleframework.workflow.web.WorkflowUtils;
@@ -83,6 +84,11 @@ public abstract class AbstractProcessWorksHandler extends AbstractScanHandler im
 						.setOnchange("$Actions['MyProcessWorksTPage_tbl']('child=' + this.checked);"));
 			}
 		}
+		return null;
+	}
+
+	@Override
+	public FilterButtons getFilterButtons(final PageParameter pp, final EProcessWorks qw) {
 		return null;
 	}
 
