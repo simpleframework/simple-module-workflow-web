@@ -52,10 +52,6 @@ import net.simpleframework.workflow.web.page.t1.form.WorkflowFormPage;
  */
 public abstract class AbstractWorkflowFormTPage extends AbstractFormTableRowTPage<WorkitemBean>
 		implements IWorkflowWebForm, IWorkflowPageAware {
-	@Override
-	protected boolean isPage404(final PageParameter pp) {
-		return getWorkitemBean(pp) == null;
-	}
 
 	@Override
 	protected void onForward(final PageParameter pp) throws Exception {
