@@ -341,3 +341,15 @@
 .Category_ListPage .tablepager .thead {
   box-shadow: none !important;
 }
+
+.tablepager .group_t .t {
+  color: #555;
+}
+
+.tablepager .group_t .t a {
+  color: #777;
+}
+
+.tablepager .group_t .t a:HOVER {
+  color: #555;
+}

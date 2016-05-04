@@ -98,12 +98,26 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 			final ProcessModelBean processModel = wfpService.getProcessModel(wfaService
 					.getProcessBean(activity));
 			if (bModelname) {
-				return StringUtils.replace(processModel.toString(), ".", "&raquo;");
+				return new ModelWrapper(processModel);
 			} else {
 				return new TaskWrapper(wfaService.getTaskNode(activity), processModel);
 			}
 		}
 		return groupColumn;
+	}
+
+	class ModelWrapper extends NamedObject<ModelWrapper> {
+		ProcessModelBean processModel;
+
+		ModelWrapper(final ProcessModelBean processModel) {
+			setName(processModel.getModelName());
+			this.processModel = processModel;
+		}
+
+		@Override
+		public String toString() {
+			return getName();
+		}
 	}
 
 	class TaskWrapper extends NamedObject<TaskWrapper> {
@@ -134,6 +148,23 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 					sb.append(new SpanElement("(" + wrapper.processModel + ")")
 							.setClassName("worklist_group_val"));
 					sb.append(toCountHTML());
+					return sb.toString();
+				}
+			};
+		} else if (groupVal instanceof ModelWrapper) {
+			return new GroupWrapper() {
+				@Override
+				public String toString() {
+					final StringBuilder sb = new StringBuilder();
+					final String mtxt = ((ModelWrapper) groupVal).processModel.toString();
+					final int p = mtxt.indexOf('.');
+					if (p > 0) {
+						sb.append(mtxt.substring(0, p)).append(" &raquo; ")
+								.append(new LinkElement(mtxt.substring(p + 1)));
+					} else {
+						sb.append(mtxt);
+					}
+					// return StringUtils.replace(, ".", );
 					return sb.toString();
 				}
 			};
