@@ -156,15 +156,19 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 				@Override
 				public String toString() {
 					final StringBuilder sb = new StringBuilder();
-					final String mtxt = ((ModelWrapper) groupVal).processModel.toString();
+					final ProcessModelBean processModel = ((ModelWrapper) groupVal).processModel;
+					final String mtxt = processModel.toString();
 					final int p = mtxt.indexOf('.');
 					if (p > 0) {
-						sb.append(mtxt.substring(0, p)).append(" &raquo; ")
-								.append(new LinkElement(mtxt.substring(p + 1)));
+						sb.append(mtxt.substring(0, p))
+								.append(" &raquo; ")
+								.append(
+										new LinkElement(mtxt.substring(p + 1))
+												.setOnclick("$Actions.reloc('modelId=" + processModel.getId()
+														+ "');"));
 					} else {
 						sb.append(mtxt);
 					}
-					// return StringUtils.replace(, ".", );
 					return sb.toString();
 				}
 			};

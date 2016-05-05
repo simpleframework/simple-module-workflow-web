@@ -178,7 +178,7 @@ public class MyProcessWorksTPage extends AbstractWorksTPage {
 	}
 
 	@Override
-	public String toCategoryHTML(final PageParameter pp) {
+	protected String toCategoryHTML(final PageParameter pp) {
 		final StringBuilder sb = new StringBuilder();
 		final List<ProcessModelBean> models = DataQueryUtils.toList(wfpmService.getModelListByDomain(
 				pp.getLDomainId(), EProcessModelStatus.deploy));
