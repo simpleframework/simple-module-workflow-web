@@ -5,6 +5,7 @@ import static net.simpleframework.common.I18n.$m;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Map;
+import java.util.Set;
 
 import net.simpleframework.ado.FilterItem;
 import net.simpleframework.ado.db.DbDataQuery;
@@ -15,6 +16,7 @@ import net.simpleframework.common.Convert;
 import net.simpleframework.common.DateUtils;
 import net.simpleframework.common.ID;
 import net.simpleframework.common.StringUtils;
+import net.simpleframework.common.coll.ArrayUtils;
 import net.simpleframework.common.coll.KVMap;
 import net.simpleframework.common.object.NamedObject;
 import net.simpleframework.mvc.PageParameter;
@@ -64,9 +66,9 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 		final String v = cp.getParameter("v");
 		cp.addFormParameter("v", v);
 		if ("unread".equals(v)) {
-			return wfwService.getUnreadWorklist(userId);
+			return wfwService.getRunningWorklist_Unread(userId, null);
 		}
-		return wfwService.getRunningWorklist(userId);
+		return wfwService.getRunningWorklist(userId, null);
 	}
 
 	@Override
@@ -152,20 +154,23 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 				}
 			};
 		} else if (groupVal instanceof ModelWrapper) {
+			final ProcessModelBean processModel = ((ModelWrapper) groupVal).processModel;
 			return new GroupWrapper() {
 				@Override
 				public String toString() {
 					final StringBuilder sb = new StringBuilder();
-					final ProcessModelBean processModel = ((ModelWrapper) groupVal).processModel;
 					final String mtxt = processModel.toString();
 					final int p = mtxt.indexOf('.');
 					if (p > 0) {
+						final Set<String> modelIds = ArrayUtils.asSet(StringUtils.split(
+								cp.getParameter("modelId"), ";"));
+						modelIds.add(processModel.getId().toString());
 						sb.append(mtxt.substring(0, p))
 								.append(" &raquo; ")
 								.append(
 										new LinkElement(mtxt.substring(p + 1))
-												.setOnclick("$Actions.reloc('modelId=" + processModel.getId()
-														+ "');"));
+												.setOnclick("$Actions.reloc('modelId="
+														+ StringUtils.join(modelIds, ";") + "');"));
 					} else {
 						sb.append(mtxt);
 					}

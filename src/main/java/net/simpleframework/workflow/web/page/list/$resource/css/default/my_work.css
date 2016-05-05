@@ -31,10 +31,17 @@
   background-color: #eed;
   border: 1px solid #aaa;
   padding: 2px 12px;
-  margin-bottom: 6px;
+  margin-bottom: 8px;
   -moz-border-radius: 6px;
   -webkit-border-radius: 6px;
   border-radius: 6px;
+}
+
+.filter_btns {
+  border: 1px solid #bbb;
+  background-color: #f9f9f9;
+  margin-bottom: 8px;
+  padding: 4px 10px;
 }
 
 .worklist_timeout, 

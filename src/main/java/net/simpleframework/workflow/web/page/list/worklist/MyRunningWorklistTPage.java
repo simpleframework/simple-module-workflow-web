@@ -1,9 +1,15 @@
 package net.simpleframework.workflow.web.page.list.worklist;
 
 import static net.simpleframework.common.I18n.$m;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
 import net.simpleframework.ado.query.IDataQuery;
 import net.simpleframework.common.NumberUtils;
 import net.simpleframework.common.StringUtils;
+import net.simpleframework.common.coll.ArrayUtils;
 import net.simpleframework.common.web.HttpUtils;
 import net.simpleframework.common.web.JavascriptUtils;
 import net.simpleframework.ctx.trans.Transaction;
@@ -24,8 +30,11 @@ import net.simpleframework.mvc.component.ui.menu.MenuItem;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
 import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
 import net.simpleframework.mvc.component.ui.progressbar.ProgressBarRegistry;
+import net.simpleframework.mvc.template.struct.FilterButton;
+import net.simpleframework.mvc.template.struct.FilterButtons;
 import net.simpleframework.workflow.engine.IWorkflowContext;
 import net.simpleframework.workflow.engine.bean.DelegationBean;
+import net.simpleframework.workflow.engine.bean.ProcessModelBean;
 import net.simpleframework.workflow.engine.bean.UserStatBean;
 import net.simpleframework.workflow.engine.bean.WorkitemBean;
 import net.simpleframework.workflow.web.WorkflowUtils;
@@ -206,6 +215,25 @@ public class MyRunningWorklistTPage extends AbstractItemsTPage {
 					.setOnclick("$Actions['MyRunningWorklistTPage_user_undelegate']();"));
 			sb.append(new BlockElement().setClassName("worklist_tip").setText(txt.toString()));
 		}
+		final Set<String> modelIds = ArrayUtils.asSet(StringUtils.split(pp.getParameter("modelId"),
+				";"));
+		if (modelIds.size() > 0) {
+			final FilterButtons btns = FilterButtons.of();
+			for (final String modelId : modelIds) {
+				final ProcessModelBean pm = wfpmService.getBean(modelId);
+				if (pm != null) {
+					final List<String> _modelIds = new ArrayList<String>(modelIds);
+					_modelIds.remove(modelId);
+					btns.add(new FilterButton(pm.getModelText()).setOndelete("$Actions.reloc('modelId="
+							+ StringUtils.join(_modelIds, ";") + "');"));
+				}
+			}
+			if (btns.size() > 0) {
+				sb.append("<div class='filter_btns'>");
+				sb.append(btns);
+				sb.append("</div>");
+			}
+		}
 		sb.append(super.toToolbarHTML(pp));
 		sb.append(JavascriptUtils.wrapScriptTag(getProgressBarJavascript(pp), true));
 		return sb.toString();
@@ -281,7 +309,7 @@ public class MyRunningWorklistTPage extends AbstractItemsTPage {
 	public IForward doReadMark(final ComponentParameter cp) {
 		final String op = cp.getParameter("op");
 		if ("allread".equals(op)) {
-			final IDataQuery<WorkitemBean> dq = wfwService.getRunningWorklist(cp.getLoginId());
+			final IDataQuery<WorkitemBean> dq = wfwService.getRunningWorklist(cp.getLoginId(), null);
 			WorkitemBean workitem;
 			while ((workitem = dq.next()) != null) {
 				if (!workitem.isReadMark()) {
