@@ -10,6 +10,21 @@ import net.simpleframework.workflow.web.component.AbstractWfActionBean;
  *         http://www.simpleframework.net
  */
 public class DoWorkviewBean extends AbstractWfActionBean {
+
+	private String[] sentMenu;
+
+	public String[] getSentMenu() {
+		if (sentMenu == null) {
+			return new String[] { "user-select", "role-select", "-", "last-select" };
+		}
+		return sentMenu;
+	}
+
+	public DoWorkviewBean setSentMenu(final String[] sentMenu) {
+		this.sentMenu = sentMenu;
+		return this;
+	}
+
 	@Override
 	public boolean isRunImmediately() {
 		return false;

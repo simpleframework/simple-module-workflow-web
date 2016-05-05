@@ -8,6 +8,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import net.simpleframework.ado.query.IDataQuery;
 import net.simpleframework.common.ID;
 import net.simpleframework.common.StringUtils;
 import net.simpleframework.common.coll.KVMap;
@@ -22,6 +23,7 @@ import net.simpleframework.mvc.TextForward;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.base.ajaxrequest.AjaxRequestBean;
 import net.simpleframework.mvc.component.base.ajaxrequest.DefaultAjaxRequestHandler;
+import net.simpleframework.mvc.component.ext.userselect.DefaultUserSelectHandler;
 import net.simpleframework.mvc.component.ext.userselect.UserSelectBean;
 import net.simpleframework.mvc.component.ui.dictionary.DictionaryBean;
 import net.simpleframework.mvc.component.ui.listbox.AbstractListboxHandler;
@@ -52,7 +54,8 @@ public class WorkviewSelectLoaded extends DefaultPageHandler implements IWorkflo
 
 		// 用户选取
 		pp.addComponentBean(componentName + "_userSelect", UserSelectBean.class).setMultiple(true)
-				.setJsSelectCallback("return DoWorkview_user_selected(selects);");
+				.setJsSelectCallback("return DoWorkview_user_selected(selects);")
+				.setHandlerClass(_UserSelectHandler.class);
 		// 预设列表字典
 		final ListboxBean listbox = (ListboxBean) pp.addComponentBean(componentName + "_roleList",
 				ListboxBean.class).setHandlerClass(SelectedRolesHandler.class);
@@ -92,16 +95,21 @@ public class WorkviewSelectLoaded extends DefaultPageHandler implements IWorkflo
 				.addComponentBean("WorkviewSelectLoaded_addMenu", MenuBean.class)
 				.setMenuEvent(EMenuEvent.click).setSelector("#idWorkviewSelectLoaded_addMenu");
 
-		mb.addItem(
-				MenuItem.of($m("DoWorkviewUtils.0")).setOnclick(
-						DoWorkviewUtils.jsActions(nCP, "_userSelect")))
-				.addItem(
-						MenuItem.of($m("DoWorkviewUtils.1")).setOnclick(
-								DoWorkviewUtils.jsActions(nCP, "_roleDictSelect")))
-				.addItem(MenuItem.sep())
-				.addItem(
-						MenuItem.of($m("DoWorkviewUtils.6")).setOnclick(
-								DoWorkviewUtils.jsActions(nCP, "_lastUlist")));
+		final String[] sentMenu = (String[]) nCP.getBeanProperty("sentMenu");
+		for (final String k : sentMenu) {
+			if ("user-select".equals(k)) {
+				mb.addItem(MenuItem.of($m("DoWorkviewUtils.0")).setOnclick(
+						DoWorkviewUtils.jsActions(nCP, "_userSelect")));
+			} else if ("role-select".equals(k)) {
+				mb.addItem(MenuItem.of($m("DoWorkviewUtils.1")).setOnclick(
+						DoWorkviewUtils.jsActions(nCP, "_roleDictSelect")));
+			} else if ("last-select".equals(k)) {
+				mb.addItem(MenuItem.of($m("DoWorkviewUtils.6")).setOnclick(
+						DoWorkviewUtils.jsActions(nCP, "_lastUlist")));
+			} else if ("-".equals(k)) {
+				mb.addItem(MenuItem.sep());
+			}
+		}
 	}
 
 	private final static String COOKIE_ULIST = "doworkview_ulist";
@@ -216,6 +224,19 @@ public class WorkviewSelectLoaded extends DefaultPageHandler implements IWorkflo
 				return items;
 			}
 			return null;
+		}
+	}
+
+	public static class _UserSelectHandler extends DefaultUserSelectHandler {
+		@Override
+		public IDataQuery<PermissionUser> getUsers(final ComponentParameter cp) {
+			final ComponentParameter nCP = DoWorkviewUtils.get(cp);
+			final IDoWorkviewHandler hdl = (IDoWorkviewHandler) nCP.getComponentHandler();
+			final IDataQuery<PermissionUser> dq = hdl.getUsers(nCP);
+			if (dq != null) {
+				return dq;
+			}
+			return super.getUsers(cp);
 		}
 	}
 }

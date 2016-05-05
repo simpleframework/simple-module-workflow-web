@@ -2,7 +2,9 @@ package net.simpleframework.workflow.web.component.workview;
 
 import java.util.List;
 
+import net.simpleframework.ado.query.IDataQuery;
 import net.simpleframework.common.ID;
+import net.simpleframework.ctx.permission.PermissionUser;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.IComponentHandler;
@@ -23,6 +25,8 @@ public interface IDoWorkviewHandler extends IComponentHandler, IWorkflowContextA
 	 * @param ids
 	 */
 	JavascriptForward doSent(ComponentParameter cp, List<ID> ids);
+
+	IDataQuery<PermissionUser> getUsers(ComponentParameter cp);
 
 	/**
 	 * 

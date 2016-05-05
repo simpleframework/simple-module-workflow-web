@@ -4,8 +4,10 @@ import static net.simpleframework.common.I18n.$m;
 
 import java.util.List;
 
+import net.simpleframework.ado.query.IDataQuery;
 import net.simpleframework.common.ID;
 import net.simpleframework.ctx.permission.PermissionConst;
+import net.simpleframework.ctx.permission.PermissionUser;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.component.AbstractComponentHandler;
@@ -48,6 +50,11 @@ public class DefaultDoWorkviewHandler extends AbstractComponentHandler implement
 						$m("DefaultDoWorkviewHandler.0", new SpanElement(list != null ? list.size() : 0)
 								.setClassName("workview_select_num"))).append("');");
 		return js;
+	}
+
+	@Override
+	public IDataQuery<PermissionUser> getUsers(final ComponentParameter cp) {
+		return null;
 	}
 
 	@Override
