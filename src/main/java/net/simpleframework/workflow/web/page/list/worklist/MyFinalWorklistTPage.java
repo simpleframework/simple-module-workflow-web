@@ -136,8 +136,7 @@ public class MyFinalWorklistTPage extends MyRunningWorklistTPage {
 				items = FilterItems.of(new FilterItem("userId", EFilterRelation.not_equal, "@userId2"));
 			}
 			return wfwService.getWorklist(cp.getLoginId(), getModels(cp), items,
-					EWorkitemStatus.complete);
-			// EWorkitemStatus.abort
+					EWorkitemStatus.complete, EWorkitemStatus.abort);
 		}
 
 		@Override
