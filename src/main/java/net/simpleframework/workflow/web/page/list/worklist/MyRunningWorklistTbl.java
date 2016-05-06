@@ -2,8 +2,10 @@ package net.simpleframework.workflow.web.page.list.worklist;
 
 import static net.simpleframework.common.I18n.$m;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -66,9 +68,20 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 		final String v = cp.getParameter("v");
 		cp.addFormParameter("v", v);
 		if ("unread".equals(v)) {
-			return wfwService.getRunningWorklist_Unread(userId, null);
+			return wfwService.getRunningWorklist_Unread(userId, getModels(cp));
 		}
-		return wfwService.getRunningWorklist(userId, null);
+		return wfwService.getRunningWorklist(userId, getModels(cp));
+	}
+
+	protected List<ProcessModelBean> getModels(final PageParameter pp) {
+		final List<ProcessModelBean> list = new ArrayList<ProcessModelBean>();
+		for (final String mId : StringUtils.split(pp.getParameter("modelId"), ";")) {
+			final ProcessModelBean pm = wfpmService.getBean(mId);
+			if (pm != null) {
+				list.add(pm);
+			}
+		}
+		return list;
 	}
 
 	@Override
