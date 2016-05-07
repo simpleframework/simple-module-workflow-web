@@ -20,6 +20,7 @@ import net.simpleframework.workflow.web.page.list.worklist.MyFinalWorklistTPage;
 import net.simpleframework.workflow.web.page.list.worklist.MyRunningWorklistTPage;
 import net.simpleframework.workflow.web.page.list.workviews.MyWorkviewsSentTPage;
 import net.simpleframework.workflow.web.page.list.workviews.MyWorkviewsTPage;
+import net.simpleframework.workflow.web.page.list.workviews.MyWorkviewsTPage.MyWorkviewsUnreadTPage;
 import net.simpleframework.workflow.web.page.mgr2.ActivityGraphMgrTPage;
 import net.simpleframework.workflow.web.page.mgr2.ActivityMgrTPage;
 import net.simpleframework.workflow.web.page.mgr2.ProcessMgrTPage;
@@ -44,6 +45,7 @@ import net.simpleframework.workflow.web.page.t2.AbstractWorkPage.MyWorklogsPage;
 import net.simpleframework.workflow.web.page.t2.AbstractWorkPage.MyWorkstatPage;
 import net.simpleframework.workflow.web.page.t2.AbstractWorkPage.MyWorkviewsPage;
 import net.simpleframework.workflow.web.page.t2.AbstractWorkPage.MyWorkviewsSentPage;
+import net.simpleframework.workflow.web.page.t2.AbstractWorkPage.MyWorkviewsUnreadPage;
 import net.simpleframework.workflow.web.page.t2.AbstractWorkPage.UserDelegateListPage;
 
 /**
@@ -72,6 +74,7 @@ public class WorkflowUrlsFactory extends UrlsCache {
 
 		put(MyWorkviewsTPage.class, MyWorkviewsPage.class);
 		put(MyWorkviewsSentTPage.class, MyWorkviewsSentPage.class);
+		put(MyWorkviewsUnreadTPage.class, MyWorkviewsUnreadPage.class);
 
 		put(MyWorkstatTPage.class, MyWorkstatPage.class);
 		put(MyWorklogsTPage.class, MyWorklogsPage.class);

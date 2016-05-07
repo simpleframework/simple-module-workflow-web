@@ -252,7 +252,7 @@ public class MyRunningWorklistTPage extends AbstractItemsTPage {
 
 		sb.append(super.toToolbarHTML(pp));
 		if (btns.size() > 0) {
-			sb.append("<div class='filter_btns'>");
+			sb.append("<div class='wl_filter_btns'>");
 			sb.append(btns);
 			sb.append("</div>");
 		}

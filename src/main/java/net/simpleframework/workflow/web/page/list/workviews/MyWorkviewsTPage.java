@@ -63,8 +63,9 @@ public class MyWorkviewsTPage extends AbstractItemsTPage {
 	static SpanElement getStatTabs(final PageParameter pp) {
 		return createTabsElement(pp, TabButtons.of(
 				new TabButton($m("AbstractItemsTPage.5"), uFactory.getUrl(pp, MyWorkviewsTPage.class)),
-				new TabButton($m("AbstractItemsTPage.13"), uFactory.getUrl(pp,
-						MyWorkviewsSentTPage.class))));
+				new TabButton($m("AbstractItemsTPage.14"), uFactory.getUrl(pp,
+						MyWorkviewsUnreadTPage.class)), new TabButton($m("AbstractItemsTPage.13"),
+						uFactory.getUrl(pp, MyWorkviewsSentTPage.class))));
 	}
 
 	@Override
@@ -146,6 +147,21 @@ public class MyWorkviewsTPage extends AbstractItemsTPage {
 
 		private String getWorkviewUrl(final PageParameter pp, final WorkviewBean workview) {
 			return uFactory.getUrl(pp, WorkflowViewPage.class, "workviewId=" + workview.getId());
+		}
+	}
+
+	public static class MyWorkviewsUnreadTPage extends MyWorkviewsTPage {
+		@Override
+		protected TablePagerBean addTablePagerBean(final PageParameter pp) {
+			return (TablePagerBean) super.addTablePagerBean(pp).setHandlerClass(
+					MyWorkviews_UnreadTbl.class);
+		}
+	}
+
+	public static class MyWorkviews_UnreadTbl extends MyWorkviewsTbl {
+		@Override
+		public IDataQuery<WorkviewBean> createDataObjectQuery(final ComponentParameter cp) {
+			return null;
 		}
 	}
 }

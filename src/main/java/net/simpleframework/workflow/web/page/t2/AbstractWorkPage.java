@@ -24,6 +24,7 @@ import net.simpleframework.workflow.web.page.list.worklist.MyFinalWorklistTPage;
 import net.simpleframework.workflow.web.page.list.worklist.MyRunningWorklistTPage;
 import net.simpleframework.workflow.web.page.list.workviews.MyWorkviewsSentTPage;
 import net.simpleframework.workflow.web.page.list.workviews.MyWorkviewsTPage;
+import net.simpleframework.workflow.web.page.list.workviews.MyWorkviewsTPage.MyWorkviewsUnreadTPage;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -109,6 +110,14 @@ public abstract class AbstractWorkPage extends T2TemplatePage {
 		@Override
 		protected Class<? extends AbstractItemsTPage> getWorkTPageClass() {
 			return MyWorkviewsTPage.class;
+		}
+	}
+
+	@PageMapping(url = "/workflow/my/views-unread")
+	public static class MyWorkviewsUnreadPage extends AbstractWorkPage {
+		@Override
+		protected Class<? extends AbstractItemsTPage> getWorkTPageClass() {
+			return MyWorkviewsUnreadTPage.class;
 		}
 	}
 
