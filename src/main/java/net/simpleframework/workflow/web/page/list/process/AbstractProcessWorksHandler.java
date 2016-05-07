@@ -119,6 +119,7 @@ public abstract class AbstractProcessWorksHandler extends AbstractScanHandler im
 		row.add(TablePagerColumn.ICON, WorkflowUtils.getStatusIcon(cp, process.getStatus()))
 				.add("title", toTitleHTML(cp, process)).add("userText", toUserHTML(cp, process))
 				.add("createDate", process.getCreateDate());
+		row.add("pno", process.getPno());
 		row.add(TablePagerColumn.OPE, toOpeHTML(cp, process));
 		return row;
 	}
