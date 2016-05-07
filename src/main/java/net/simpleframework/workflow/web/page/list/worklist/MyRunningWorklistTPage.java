@@ -212,11 +212,11 @@ public class MyRunningWorklistTPage extends AbstractItemsTPage {
 			if (pm != null) {
 				final List<String> _modelIds = new ArrayList<String>(modelIds);
 				_modelIds.remove(modelId);
-				btns.add(new FilterButton(pm.getModelText()).setLabel($m("MyRunningWorklistTPage.17"))
-						.setOndelete(
-								"$Actions.reloc('modelId="
-										+ (_modelIds.size() > 0 ? StringUtils.join(_modelIds, ";") : "__del")
-										+ "');"));
+				btns.add(new FilterButton(StringUtils.replace(pm.getModelText(), ".", " / ")).setLabel(
+						$m("MyRunningWorklistTPage.17")).setOndelete(
+						"$Actions.reloc('modelId="
+								+ (_modelIds.size() > 0 ? StringUtils.join(_modelIds, ";") : "__del")
+								+ "');"));
 			}
 		}
 		final String v = pp.getParameter("v");

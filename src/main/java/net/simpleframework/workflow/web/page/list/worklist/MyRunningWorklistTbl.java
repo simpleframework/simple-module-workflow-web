@@ -26,7 +26,6 @@ import net.simpleframework.mvc.common.element.AbstractElement;
 import net.simpleframework.mvc.common.element.ButtonElement;
 import net.simpleframework.mvc.common.element.ImageElement;
 import net.simpleframework.mvc.common.element.JS;
-import net.simpleframework.mvc.common.element.LabelElement;
 import net.simpleframework.mvc.common.element.LinkElement;
 import net.simpleframework.mvc.common.element.PhotoImage;
 import net.simpleframework.mvc.common.element.SpanElement;
@@ -157,11 +156,18 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 			return new GroupWrapper() {
 				@Override
 				public String toString() {
-					final TaskWrapper wrapper = (TaskWrapper) groupVal;
+					final ProcessModelBean processModel = ((TaskWrapper) groupVal).processModel;
+
+					final Set<String> modelIds = ArrayUtils.asSet(StringUtils.split(
+							cp.getParameter("modelId"), ";"));
+					modelIds.add(processModel.getId().toString());
+
 					final StringBuilder sb = new StringBuilder();
-					sb.append(new LabelElement(wrapper));
-					sb.append(new SpanElement("(" + wrapper.processModel + ")")
-							.setClassName("worklist_group_val"));
+					sb.append(SpanElement.color(groupVal, "#c66")).append("&nbsp;&nbsp;(");
+					sb.append(new LinkElement(StringUtils.replace(processModel.toString(), ".", " / "))
+							.setOnclick("$Actions.reloc('modelId=" + StringUtils.join(modelIds, ";")
+									+ "');"));
+					sb.append(")");
 					sb.append(toCountHTML());
 					return sb.toString();
 				}
@@ -173,20 +179,19 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 				public String toString() {
 					final StringBuilder sb = new StringBuilder();
 					final String mtxt = processModel.toString();
+					final Set<String> modelIds = ArrayUtils.asSet(StringUtils.split(
+							cp.getParameter("modelId"), ";"));
+					modelIds.add(processModel.getId().toString());
 					final int p = mtxt.indexOf('.');
+					LinkElement le;
 					if (p > 0) {
-						final Set<String> modelIds = ArrayUtils.asSet(StringUtils.split(
-								cp.getParameter("modelId"), ";"));
-						modelIds.add(processModel.getId().toString());
-						sb.append(mtxt.substring(0, p))
-								.append(" &raquo; ")
-								.append(
-										new LinkElement(mtxt.substring(p + 1))
-												.setOnclick("$Actions.reloc('modelId="
-														+ StringUtils.join(modelIds, ";") + "');"));
+						sb.append(SpanElement.color(mtxt.substring(0, p), "#c66")).append(" / ");
+						le = new LinkElement(mtxt.substring(p + 1));
 					} else {
-						sb.append(mtxt);
+						le = new LinkElement(mtxt);
 					}
+					sb.append(le.setOnclick("$Actions.reloc('modelId=" + StringUtils.join(modelIds, ";")
+							+ "');"));
 					return sb.toString();
 				}
 			};
