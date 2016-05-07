@@ -10,7 +10,6 @@ import net.simpleframework.ado.query.IDataQuery;
 import net.simpleframework.common.NumberUtils;
 import net.simpleframework.common.StringUtils;
 import net.simpleframework.common.coll.ArrayUtils;
-import net.simpleframework.common.web.HttpUtils;
 import net.simpleframework.common.web.JavascriptUtils;
 import net.simpleframework.ctx.trans.Transaction;
 import net.simpleframework.mvc.IForward;
@@ -19,7 +18,6 @@ import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.BlockElement;
 import net.simpleframework.mvc.common.element.ETextAlign;
 import net.simpleframework.mvc.common.element.ElementList;
-import net.simpleframework.mvc.common.element.JS;
 import net.simpleframework.mvc.common.element.LinkButton;
 import net.simpleframework.mvc.common.element.LinkElement;
 import net.simpleframework.mvc.common.element.SpanElement;
@@ -43,7 +41,6 @@ import net.simpleframework.workflow.web.page.list.delegate.AbstractDelegateFormP
 import net.simpleframework.workflow.web.page.list.delegate.AbstractDelegateFormPage.WorkitemDelegateSetPage;
 import net.simpleframework.workflow.web.page.list.delegate.UserDelegateListTPage;
 import net.simpleframework.workflow.web.page.list.initiate.MyInitiateItemsGroupTPage;
-import net.simpleframework.workflow.web.page.list.process.MyProcessWorksTPage;
 import net.simpleframework.workflow.web.page.list.stat.MyWorkstatTPage;
 
 /**
@@ -112,17 +109,9 @@ public class MyRunningWorklistTPage extends AbstractItemsTPage {
 		// 标记已读
 		addAjaxRequest(pp, "MyWorklistTPage_readMark").setHandlerMethod("doReadMark");
 
-		// 查看菜单
-		mb = createViewMenuComponent(pp);
-		final String url = getWorklistPageUrl(pp);
-		mb.addItem(MyRunningWorklistTbl.MENU_VIEW_ALL().setOnclick(JS.loc(url)))
-				.addItem(
-						MyRunningWorklistTbl.MENU_MARK_UNREAD().setOnclick(
-								JS.loc(HttpUtils.addParameters(url, "v=unread")))).addItem(MenuItem.sep());
-		addGroupMenuItems(pp, mb, url);
-		mb.addItem(MenuItem.sep()).addItem(
-				MenuItem.of($m("AbstractItemsTPage.4")).setOnclick(
-						JS.loc(uFactory.getUrl(pp, MyProcessWorksTPage.class))));
+		// 分组菜单
+		mb = createGroupMenuComponent(pp);
+		addGroupMenuItems(pp, mb, getWorklistPageUrl(pp));
 
 		// 委托菜单
 		mb = createDelegateMenuComponent(pp);
@@ -181,9 +170,9 @@ public class MyRunningWorklistTPage extends AbstractItemsTPage {
 				.setMenuEvent(EMenuEvent.click).setSelector("#idMyWorklistTPage_markMenu");
 	}
 
-	protected MenuBean createViewMenuComponent(final PageParameter pp) {
-		return (MenuBean) addComponentBean(pp, "MyWorklistTPage_viewMenu", MenuBean.class)
-				.setMenuEvent(EMenuEvent.click).setSelector("#idMyWorklistTPage_viewMenu");
+	protected MenuBean createGroupMenuComponent(final PageParameter pp) {
+		return (MenuBean) addComponentBean(pp, "MyWorklistTPage_groupMenu", MenuBean.class)
+				.setMenuEvent(EMenuEvent.click).setSelector("#idMyWorklistTPage_groupMenu");
 	}
 
 	protected MenuBean createDelegateMenuComponent(final PageParameter pp) {
@@ -217,24 +206,35 @@ public class MyRunningWorklistTPage extends AbstractItemsTPage {
 		}
 		final Set<String> modelIds = ArrayUtils.asSet(StringUtils.split(pp.getParameter("modelId"),
 				";"));
-		if (modelIds.size() > 0) {
-			final FilterButtons btns = FilterButtons.of();
-			for (final String modelId : modelIds) {
-				final ProcessModelBean pm = wfpmService.getBean(modelId);
-				if (pm != null) {
-					final List<String> _modelIds = new ArrayList<String>(modelIds);
-					_modelIds.remove(modelId);
-					btns.add(new FilterButton(pm.getModelText()).setOndelete("$Actions.reloc('modelId="
-							+ StringUtils.join(_modelIds, ";") + "');"));
-				}
-			}
-			if (btns.size() > 0) {
-				sb.append("<div class='filter_btns'>");
-				sb.append(btns);
-				sb.append("</div>");
+		final FilterButtons btns = FilterButtons.of();
+		for (final String modelId : modelIds) {
+			final ProcessModelBean pm = wfpmService.getBean(modelId);
+			if (pm != null) {
+				final List<String> _modelIds = new ArrayList<String>(modelIds);
+				_modelIds.remove(modelId);
+				btns.add(new FilterButton(pm.getModelText()).setLabel($m("MyRunningWorklistTPage.17"))
+						.setOndelete(
+								"$Actions.reloc('modelId="
+										+ (_modelIds.size() > 0 ? StringUtils.join(_modelIds, ";") : "__del")
+										+ "');"));
 			}
 		}
+		final String v = pp.getParameter("v");
+		if ("unread".equals(v)) {
+			btns.add(new FilterButton($m("MyRunningWorklistTbl.9"))
+					.setOndelete("$Actions.reloc('v=__del');"));
+		}
+		if (pp.getBoolParameter("delegation")) {
+			btns.add(new FilterButton($m("MyRunningWorklistTbl.22"))
+					.setOndelete("$Actions.reloc('delegation=__del');"));
+		}
+
 		sb.append(super.toToolbarHTML(pp));
+		if (btns.size() > 0) {
+			sb.append("<div class='filter_btns'>");
+			sb.append(btns);
+			sb.append("</div>");
+		}
 		sb.append(JavascriptUtils.wrapScriptTag(getProgressBarJavascript(pp), true));
 		return sb.toString();
 	}
@@ -285,8 +285,11 @@ public class MyRunningWorklistTPage extends AbstractItemsTPage {
 		return ElementList.of(
 				LinkButton.of($m("MyRunningWorklistTPage.12")).setHref(
 						uFactory.getUrl(pp, MyInitiateItemsGroupTPage.class)), SpanElement.SPACE,
+				LinkButton.menu($m("MyRunningWorklistTbl.14")).setId("idMyWorklistTPage_groupMenu"),
+				SpanElement.SPACE,
+				LinkButton.of($m("MyRunningWorklistTbl.9")).setOnclick("$Actions.reloc('v=unread');"),
+				SpanElement.SPACE,
 				LinkButton.menu($m("MyRunningWorklistTbl.6")).setId("idMyWorklistTPage_markMenu"),
-				LinkButton.menu($m("MyRunningWorklistTbl.14")).setId("idMyWorklistTPage_viewMenu"),
 				SpanElement.SPACE,
 				LinkButton.menu($m("MyRunningWorklistTbl.5")).setId("idMyWorklistTPage_delegateMenu"),
 				LinkButton.menu($m("MyRunningWorklistTbl.17")).setId("idMyWorklistTPage_opeMenu"));

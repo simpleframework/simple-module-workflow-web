@@ -38,10 +38,11 @@
 }
 
 .filter_btns {
-  border: 1px solid #bbb;
   background-color: #f9f9f9;
-  margin-bottom: 8px;
-  padding: 4px 10px;
+  border-left: 1px solid #bbb;
+  border-right: 1px solid #bbb;
+  border-top: 1px dashed #bbb;
+  padding: 3px 9px;
 }
 
 .worklist_timeout, 

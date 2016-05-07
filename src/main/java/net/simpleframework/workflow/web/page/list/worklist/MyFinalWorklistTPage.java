@@ -24,7 +24,6 @@ import net.simpleframework.mvc.common.element.ButtonElement;
 import net.simpleframework.mvc.common.element.ETextAlign;
 import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.ImageElement;
-import net.simpleframework.mvc.common.element.JS;
 import net.simpleframework.mvc.common.element.LinkButton;
 import net.simpleframework.mvc.common.element.LinkElement;
 import net.simpleframework.mvc.common.element.SpanElement;
@@ -65,17 +64,8 @@ public class MyFinalWorklistTPage extends MyRunningWorklistTPage {
 		addWindowBean(pp, "MyFinalWorklistTPage_userTo", ajaxRequest).setWidth(360).setHeight(450)
 				.setTitle($m("MyFinalWorklistTPage.5"));
 
-		final String url = getWorklistPageUrl(pp);
-		final MenuBean mb = createViewMenuComponent(pp);
-		mb.addItem(MyRunningWorklistTbl.MENU_VIEW_ALL().setOnclick(JS.loc(url))).addItem(
-				MenuItem.sep());
-		final MenuItem item = MyRunningWorklistTbl.MENU_VIEW_DELEGATION().setOnclick(
-				"$Actions.reloc('delegation=true');");
-		if (pp.getBoolParameter("delegation")) {
-			item.setIconClass(MenuItem.ICON_SELECTED);
-		}
-		mb.addItem(item).addItem(MenuItem.sep());
-		addGroupMenuItems(pp, mb, url);
+		final MenuBean mb = createGroupMenuComponent(pp);
+		addGroupMenuItems(pp, mb, getWorklistPageUrl(pp));
 	}
 
 	@Override
@@ -124,8 +114,12 @@ public class MyFinalWorklistTPage extends MyRunningWorklistTPage {
 
 	@Override
 	public ElementList getLeftElements(final PageParameter pp) {
-		return ElementList.of(LinkButton.menu($m("MyRunningWorklistTbl.14")).setId(
-				"idMyWorklistTPage_viewMenu"));
+		final ElementList el = ElementList.of(LinkButton.menu($m("MyRunningWorklistTbl.14")).setId(
+				"idMyWorklistTPage_groupMenu"));
+		el.add(SpanElement.SPACE);
+		el.add(LinkButton.of($m("MyRunningWorklistTbl.22")).setOnclick(
+				"$Actions.reloc('delegation=true');"));
+		return el;
 	}
 
 	public static class MyCompleteWorklistTbl extends MyRunningWorklistTbl {

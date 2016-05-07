@@ -73,13 +73,9 @@ public class WorkflowMonitorPage extends AbstractWorkflowFormPage {
 
 	@Override
 	public ElementList getLeftElements(final PageParameter pp) {
-		final ElementList el = super.getLeftElements(pp);
 		final ProcessBean process = WorkflowUtils.getProcessBean(pp);
-		el.append(
-				SpanElement.SPACE15,
-				SpanElement.strongText(WorkflowUtils.getProcessTitle(process) + " ["
-						+ process.getStatus() + "]"));
-		return el;
+		return ElementList.of(SpanElement.strongText(WorkflowUtils.getProcessTitle(process) + " ["
+				+ process.getStatus() + "]"));
 	}
 
 	@Override
@@ -138,8 +134,7 @@ public class WorkflowMonitorPage extends AbstractWorkflowFormPage {
 	@Override
 	public TabButtons getTabButtons(final PageParameter pp) {
 		final WorkitemBean workitem = WorkflowUtils.getWorkitemBean(pp);
-		return TabButtons.of(createFormTab(pp, workitem),
-				createMonitorTab(pp, workitem).setTabIndex(1));
+		return TabButtons.of(createMonitorTab(pp, workitem));
 	}
 
 	public static class _ActivityTbl extends ActivityTbl {

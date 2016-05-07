@@ -432,14 +432,6 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 						"$Actions['MyWorklistTPage_tbl'].doAct('MyWorklistTPage_topMark', 'workitemId', 'op=untop');");
 	}
 
-	static MenuItem MENU_VIEW_ALL() {
-		return MenuItem.of($m("MyRunningWorklistTbl.15"));
-	}
-
-	static MenuItem MENU_VIEW_DELEGATION() {
-		return MenuItem.of($m("MyRunningWorklistTbl.22"));
-	}
-
 	static MenuItem MENU_VIEW_GROUP0() {
 		return MenuItem.of($m("AbstractTemplatePage.0"));
 	}
