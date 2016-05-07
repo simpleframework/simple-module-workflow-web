@@ -325,6 +325,10 @@
   border-bottom: 0;
 }
 
+.MyInitiateItemsGroupTPage .Category_ListPage .tool_bar {
+  border-bottom: 1px solid #bbb;
+}
+
 /*---------------------------AbstractDelegateFormPage-----------------------*/
 
 .AbstractDelegateFormPage .status {
