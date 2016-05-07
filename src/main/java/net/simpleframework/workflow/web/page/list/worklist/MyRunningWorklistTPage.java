@@ -285,10 +285,12 @@ public class MyRunningWorklistTPage extends AbstractItemsTPage {
 				.append($m("MyRunningWorklistTPage.16")).append("</a></div>\");");
 		js.append("}");
 
-		final int interval = userStat.getWorklist_refresh_interval();
-		if (interval > 0) {
-			js.append("new PeriodicalExecuter(function() { $Actions['MyWorklistTPage_tbl'](); }, ")
-					.append(interval).append(");");
+		if (!MyFinalWorklistTPage.class.isAssignableFrom(getOriginalClass())) {
+			final int interval = userStat.getWorklist_refresh_interval();
+			if (interval > 0) {
+				js.append("new PeriodicalExecuter(function() { $Actions['MyWorklistTPage_tbl'](); }, ")
+						.append(interval).append(");");
+			}
 		}
 		return js.toString();
 	}
