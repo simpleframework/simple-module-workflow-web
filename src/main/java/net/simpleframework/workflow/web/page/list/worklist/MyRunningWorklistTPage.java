@@ -2,8 +2,10 @@ package net.simpleframework.workflow.web.page.list.worklist;
 
 import static net.simpleframework.common.I18n.$m;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import net.simpleframework.ado.query.IDataQuery;
@@ -16,18 +18,25 @@ import net.simpleframework.mvc.IForward;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.BlockElement;
+import net.simpleframework.mvc.common.element.ButtonElement;
 import net.simpleframework.mvc.common.element.ETextAlign;
 import net.simpleframework.mvc.common.element.ElementList;
+import net.simpleframework.mvc.common.element.InputElement;
 import net.simpleframework.mvc.common.element.LinkButton;
 import net.simpleframework.mvc.common.element.LinkElement;
 import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.component.ComponentParameter;
+import net.simpleframework.mvc.component.base.ajaxrequest.AjaxRequestBean;
+import net.simpleframework.mvc.component.base.validation.EValidatorMethod;
+import net.simpleframework.mvc.component.base.validation.EWarnType;
+import net.simpleframework.mvc.component.base.validation.Validator;
 import net.simpleframework.mvc.component.ui.menu.EMenuEvent;
 import net.simpleframework.mvc.component.ui.menu.MenuBean;
 import net.simpleframework.mvc.component.ui.menu.MenuItem;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
 import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
 import net.simpleframework.mvc.component.ui.progressbar.ProgressBarRegistry;
+import net.simpleframework.mvc.template.lets.FormTemplatePage;
 import net.simpleframework.mvc.template.struct.FilterButton;
 import net.simpleframework.mvc.template.struct.FilterButtons;
 import net.simpleframework.workflow.engine.IWorkflowContext;
@@ -88,15 +97,15 @@ public class MyRunningWorklistTPage extends AbstractItemsTPage {
 				$m("Confirm.Delete"));
 
 		// 委托设置
-		addAjaxRequest(pp, "MyWorklistTPage_delegate_page", WorkitemDelegateSetPage.class);
-		addWindowBean(pp, "MyWorklistTPage_delegate").setContentRef("MyWorklistTPage_delegate_page")
+		AjaxRequestBean ajaxRequest = addAjaxRequest(pp, "MyWorklistTPage_delegate_page",
+				WorkitemDelegateSetPage.class);
+		addWindowBean(pp, "MyWorklistTPage_delegate", ajaxRequest)
 				.setTitle($m("MyRunningWorklistTPage.4")).setHeight(300).setWidth(500);
 
 		// 委托确认
-		addAjaxRequest(pp, "MyWorklistTPage_delegate_receiving_page",
+		ajaxRequest = addAjaxRequest(pp, "MyWorklistTPage_delegate_receiving_page",
 				WorkitemDelegateReceivingPage.class);
-		addWindowBean(pp, "MyWorklistTPage_delegate_receiving")
-				.setContentRef("MyWorklistTPage_delegate_receiving_page")
+		addWindowBean(pp, "MyWorklistTPage_delegate_receiving", ajaxRequest)
 				.setTitle($m("MyRunningWorklistTPage.5")).setHeight(360).setWidth(500);
 
 		// 标记菜单
@@ -129,6 +138,14 @@ public class MyRunningWorklistTPage extends AbstractItemsTPage {
 		mb = createOpeMenuComponent(pp);
 		mb.addItem(MenuItem.of($m("MyRunningWorklistTbl.16")).setOnclick(
 				"$Actions['MyWorklistTPage_tbl'].doAct('MyWorklistTPage_delete', 'workitemId');"));
+		mb.addItem(MenuItem.sep());
+		mb.addItem(MenuItem.of($m("MyRunningWorklistTPage.18")).setOnclick(
+				"$Actions['MyWorklistTPage_mysettings']();"));
+
+		// 我的设置
+		ajaxRequest = addAjaxRequest(pp, "MyWorklistTPage_mysettings_page", MySettingsPage.class);
+		addWindowBean(pp, "MyWorklistTPage_mysettings", ajaxRequest)
+				.setTitle($m("MyRunningWorklistTPage.18")).setHeight(400).setWidth(320);
 	}
 
 	protected void addGroupMenuItems(final PageParameter pp, final MenuBean mb, final String url) {
@@ -239,11 +256,11 @@ public class MyRunningWorklistTPage extends AbstractItemsTPage {
 			sb.append(btns);
 			sb.append("</div>");
 		}
-		sb.append(JavascriptUtils.wrapScriptTag(getProgressBarJavascript(pp), true));
+		sb.append(JavascriptUtils.wrapScriptTag(toJavascript(pp), true));
 		return sb.toString();
 	}
 
-	protected String getProgressBarJavascript(final PageParameter pp) {
+	protected String toJavascript(final PageParameter pp) {
 		final UserStatBean userStat = wfusService.getUserStat(pp.getLoginId());
 		final StringBuilder js = new StringBuilder();
 		js.append("var container = $('idWorklistProgressBar');");
@@ -267,6 +284,12 @@ public class MyRunningWorklistTPage extends AbstractItemsTPage {
 				.append(pp.wrapContextPath(uFactory.getUrl(pp, MyWorkstatTPage.class))).append("'>")
 				.append($m("MyRunningWorklistTPage.16")).append("</a></div>\");");
 		js.append("}");
+
+		final int interval = userStat.getWorklist_refresh_interval();
+		if (interval > 0) {
+			js.append("new PeriodicalExecuter(function() { $Actions['MyWorklistTPage_tbl'](); }, ")
+					.append(interval).append(");");
+		}
 		return js.toString();
 	}
 
@@ -361,5 +384,48 @@ public class MyRunningWorklistTPage extends AbstractItemsTPage {
 			wfwService.doDeleteProcess(wfwService.getBean(workitemId));
 		}
 		return new JavascriptForward("$Actions['MyWorklistTPage_tbl']();");
+	}
+
+	public static class MySettingsPage extends FormTemplatePage {
+		@Override
+		protected void onForward(final PageParameter pp) throws Exception {
+			super.onForward(pp);
+
+			// 验证
+			addValidationBean(pp, "MySettingsPage_validation").setWarnType(EWarnType.insertAfter)
+					.setTriggerSelector(".MySettingsPage .button2")
+					.addValidators(new Validator(EValidatorMethod.digits, "#ms_interval"));
+			// 提交
+			addAjaxRequest(pp, "MySettingsPage_ok").setHandlerMethod("doOk").setSelector(
+					".MySettingsPage");
+		}
+
+		@Transaction(context = IWorkflowContext.class)
+		public IForward doOk(final ComponentParameter cp) {
+			final UserStatBean stat = wfusService.getUserStat(cp.getLoginId());
+			stat.setWorklist_refresh_interval(cp.getIntParameter("ms_interval"));
+			wfusService.update(new String[] { "worklist_refresh_interval" }, stat);
+			return new JavascriptForward("$Actions.reloc();");
+		}
+
+		@Override
+		protected String toHtml(final PageParameter pp, final Map<String, Object> variables,
+				final String currentVariable) throws IOException {
+			final StringBuilder sb = new StringBuilder();
+			final UserStatBean stat = wfusService.getUserStat(pp.getLoginId());
+			final InputElement interval = new InputElement("ms_interval").setWidth("100px").setVal(
+					stat.getWorklist_refresh_interval());
+			sb.append("<div class='simple_window_tcb MySettingsPage'>");
+			sb.append(" <div class='c'>");
+			sb.append("  <div class='lbl'>#(MySettingsPage.0)</div>");
+			sb.append("  <div>").append(interval).append(new SpanElement($m("MySettingsPage.1")))
+					.append("</div>");
+			sb.append(" </div>");
+			sb.append(" <div class='b'>")
+					.append(ButtonElement.okBtn().setOnclick("$Actions['MySettingsPage_ok']();"))
+					.append(SpanElement.SPACE).append(ButtonElement.closeBtn()).append("</div>");
+			sb.append("</div>");
+			return sb.toString();
+		}
 	}
 }

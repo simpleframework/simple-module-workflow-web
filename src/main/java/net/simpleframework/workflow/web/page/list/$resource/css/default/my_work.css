@@ -330,6 +330,21 @@
   line-height: 1.6;
 }
 
+/*---------------------------MySettingsPage-----------------------*/
+.MySettingsPage {
+  padding: 8px;
+  color: #666;
+}
+
+.MySettingsPage .lbl {
+  margin-bottom: 6px;  
+}
+
+.MySettingsPage input[type='text'] {
+  padding: 4px;
+  background: none;
+}
+
 /*---------------------------Category_BlankPage-----------------------*/
 
 .Category_BlankPage .category .c_item {
