@@ -343,8 +343,8 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 					"$Actions['MyWorklistTPage_delegate_receiving']('workitemId=" + workitem.getId()
 							+ "');"));
 		} else {
-			sb.append(new ButtonElement($m("MyRunningWorklistTbl.3")).setOnclick(JS.loc(uFactory
-					.getUrl(cp, WorkflowMonitorPage.class, workitem))));
+			sb.append(new ButtonElement($m("MyRunningWorklistTbl.3")).setOnclick(JS.loc(
+					uFactory.getUrl(cp, WorkflowMonitorPage.class, workitem), true)));
 		}
 		sb.append(AbstractTablePagerSchema.IMG_DOWNMENU);
 		return sb.toString();
@@ -394,7 +394,7 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 	static MenuItem MENU_MONITOR(final PageParameter pp) {
 		return MenuItem.of($m("MyRunningWorklistTbl.7")).setOnclick(
 				"$Actions.loc('" + uFactory.getUrl(pp, WorkflowMonitorPage.class)
-						+ "?workitemId=' + $pager_action(item).rowId());");
+						+ "?workitemId=' + $pager_action(item).rowId(), true);");
 	}
 
 	static MenuItem MENU_MARK_READ() {

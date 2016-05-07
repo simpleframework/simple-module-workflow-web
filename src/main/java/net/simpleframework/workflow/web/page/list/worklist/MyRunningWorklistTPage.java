@@ -228,6 +228,10 @@ public class MyRunningWorklistTPage extends AbstractItemsTPage {
 			btns.add(new FilterButton($m("MyRunningWorklistTbl.22"))
 					.setOndelete("$Actions.reloc('delegation=__del');"));
 		}
+		if (pp.getBoolParameter("retake")) {
+			btns.add(new FilterButton($m("MyRunningWorklistTbl.15"))
+					.setOndelete("$Actions.reloc('retake=__del');"));
+		}
 
 		sb.append(super.toToolbarHTML(pp));
 		if (btns.size() > 0) {

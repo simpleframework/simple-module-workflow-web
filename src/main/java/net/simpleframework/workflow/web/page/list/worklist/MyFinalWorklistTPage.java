@@ -117,6 +117,9 @@ public class MyFinalWorklistTPage extends MyRunningWorklistTPage {
 		final ElementList el = ElementList.of(LinkButton.menu($m("MyRunningWorklistTbl.14")).setId(
 				"idMyWorklistTPage_groupMenu"));
 		el.add(SpanElement.SPACE);
+		el.add(LinkButton.of($m("MyRunningWorklistTbl.15")).setOnclick(
+				"$Actions.reloc('retake=true');"));
+		el.add(SpanElement.SPACE);
 		el.add(LinkButton.of($m("MyRunningWorklistTbl.22")).setOnclick(
 				"$Actions.reloc('delegation=true');"));
 		return el;
@@ -129,8 +132,12 @@ public class MyFinalWorklistTPage extends MyRunningWorklistTPage {
 			if (cp.getBoolParameter("delegation")) {
 				items = FilterItems.of(new FilterItem("userId", EFilterRelation.not_equal, "@userId2"));
 			}
-			return wfwService.getWorklist(cp.getLoginId(), getModels(cp), items,
+			final IDataQuery<?> dq = wfwService.getWorklist(cp.getLoginId(), getModels(cp), items,
 					EWorkitemStatus.complete, EWorkitemStatus.abort);
+			if (cp.getBoolParameter("retake")) {
+				// return new Ne
+			}
+			return dq;
 		}
 
 		@Override
