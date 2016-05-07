@@ -161,7 +161,7 @@ public class MyWorkviewsTPage extends AbstractItemsTPage {
 	public static class MyWorkviews_UnreadTbl extends MyWorkviewsTbl {
 		@Override
 		public IDataQuery<WorkviewBean> createDataObjectQuery(final ComponentParameter cp) {
-			return null;
+			return wfvService.getUnreadWorkviewsList(cp.getLoginId());
 		}
 	}
 }
