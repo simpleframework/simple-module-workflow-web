@@ -192,6 +192,7 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 					}
 					sb.append(le.setOnclick("$Actions.reloc('modelId=" + StringUtils.join(modelIds, ";")
 							+ "');"));
+					sb.append(toCountHTML());
 					return sb.toString();
 				}
 			};

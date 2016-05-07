@@ -119,10 +119,13 @@ public class MyProcessWorksTPage extends AbstractWorksTPage {
 		final ProcessBean process = WorkflowUtils.getProcessBean(cp);
 		WorkitemBean workitem;
 		if (process != null && (workitem = getOpenWorkitem(cp, process)) != null) {
-			return new JavascriptForward(
-					JS.loc(uFactory.getUrl(cp,
-							(cp.getBoolParameter("monitor") ? WorkflowMonitorPage.class
-									: WorkflowFormPage.class), workitem)));
+			if (cp.getBoolParameter("monitor")) {
+				return new JavascriptForward(JS.loc(
+						uFactory.getUrl(cp, WorkflowMonitorPage.class, workitem), true));
+			} else {
+				return new JavascriptForward(JS.loc(uFactory.getUrl(cp, WorkflowFormPage.class,
+						workitem)));
+			}
 		} else {
 			return new JavascriptForward("alert('").append($m("MyProcessWorksTPage.7")).append("');");
 		}
