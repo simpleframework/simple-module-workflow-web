@@ -345,6 +345,12 @@
   background: none;
 }
 
+
+.MySettingsPage .b {
+  background-color: #f4f4f4;
+  padding-top: 8px;
+}
+
 /*---------------------------Category_BlankPage-----------------------*/
 
 .Category_BlankPage .category .c_item {

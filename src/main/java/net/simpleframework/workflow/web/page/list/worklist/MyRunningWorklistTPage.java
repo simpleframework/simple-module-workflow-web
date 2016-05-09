@@ -36,7 +36,7 @@ import net.simpleframework.mvc.component.ui.menu.MenuItem;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
 import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
 import net.simpleframework.mvc.component.ui.progressbar.ProgressBarRegistry;
-import net.simpleframework.mvc.template.lets.FormTemplatePage;
+import net.simpleframework.mvc.template.AbstractTemplatePage;
 import net.simpleframework.mvc.template.struct.FilterButton;
 import net.simpleframework.mvc.template.struct.FilterButtons;
 import net.simpleframework.workflow.engine.IWorkflowContext;
@@ -388,7 +388,7 @@ public class MyRunningWorklistTPage extends AbstractItemsTPage {
 		return new JavascriptForward("$Actions['MyWorklistTPage_tbl']();");
 	}
 
-	public static class MySettingsPage extends FormTemplatePage {
+	public static class MySettingsPage extends AbstractTemplatePage {
 		@Override
 		protected void onForward(final PageParameter pp) throws Exception {
 			super.onForward(pp);
