@@ -145,7 +145,7 @@ public class MyRunningWorklistTPage extends AbstractItemsTPage {
 		// 我的设置
 		ajaxRequest = addAjaxRequest(pp, "MyWorklistTPage_mysettings_page", MySettingsPage.class);
 		addWindowBean(pp, "MyWorklistTPage_mysettings", ajaxRequest)
-				.setTitle($m("MyRunningWorklistTPage.18")).setHeight(400).setWidth(320);
+				.setTitle($m("MyRunningWorklistTPage.18")).setHeight(400).setWidth(350);
 	}
 
 	protected void addGroupMenuItems(final PageParameter pp, final MenuBean mb, final String url) {

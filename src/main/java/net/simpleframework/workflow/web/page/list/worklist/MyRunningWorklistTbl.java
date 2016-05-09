@@ -360,11 +360,11 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 			final WorkitemBean workitem) {
 		final ActivityBean activity = WorkflowUtils.getActivityBean(cp, workitem);
 		row.add("userFrom", SpanElement.color060(WorkflowUtils.getUserFrom(activity, "<br>")));
-		final Date createDate = workitem.getCreateDate();
+		final Date lastUpdate = workitem.getLastUpdate();
 		final Date d = DateUtils.getZeroPoint().getTime();
-		final String dtxt = createDate.after(d) ? Convert.toDateString(createDate, "HH:mm") : Convert
-				.toDateString(createDate, "yy-MM-dd");
-		row.add("createDate", new SpanElement(dtxt).setTitle(Convert.toDateTimeString(createDate)));
+		final String dtxt = lastUpdate.after(d) ? Convert.toDateString(lastUpdate, "HH:mm") : Convert
+				.toDateString(lastUpdate, "yy-MM-dd");
+		row.add("createDate", new SpanElement(dtxt).setTitle(Convert.toDateTimeString(lastUpdate)));
 	}
 
 	@Override
