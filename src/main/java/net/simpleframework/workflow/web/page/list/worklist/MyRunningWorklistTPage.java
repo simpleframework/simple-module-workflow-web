@@ -289,7 +289,7 @@ public class MyRunningWorklistTPage extends AbstractItemsTPage {
 			final int interval = userStat.getWorklist_refresh_interval();
 			if (interval > 0) {
 				js.append("new PeriodicalExecuter(function() { $Actions['MyWorklistTPage_tbl'](); }, ")
-						.append(interval).append(");");
+						.append(interval * 60).append(");");
 			}
 		}
 		return js.toString();
