@@ -245,9 +245,12 @@ public abstract class AbstractWorkflowFormTPage extends AbstractFormTableRowTPag
 		if (null == workitem) {
 			return true;
 		}
-		// if(workitem.getUserId().equals(obj) ){
-		//
-		// }
+
+		final Object loginId = pp.getLoginId();
+		if (!loginId.equals(workitem.getUserId()) && !loginId.equals(workitem.getUserId2())) {
+			return true;
+		}
+
 		final EWorkitemStatus status = workitem.getStatus();
 		return status != EWorkitemStatus.running && status != EWorkitemStatus.suspended
 				&& status != EWorkitemStatus.delegate;
