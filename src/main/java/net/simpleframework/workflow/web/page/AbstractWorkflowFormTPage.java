@@ -100,7 +100,7 @@ public abstract class AbstractWorkflowFormTPage extends AbstractFormTableRowTPag
 
 	protected WfCommentBean addWfCommentBean(final PageParameter pp) {
 		return addComponentBean(pp, "AbstractWorkflowFormPage_wfComment", WfCommentBean.class)
-				.setEditable(!isReadonly(getWorkitemBean(pp)));
+				.setEditable(!isReadonly(pp, getWorkitemBean(pp)));
 	}
 
 	@Override
@@ -162,7 +162,7 @@ public abstract class AbstractWorkflowFormTPage extends AbstractFormTableRowTPag
 	public ElementList getLeftElements(final PageParameter pp) {
 		final WorkitemBean workitem = getWorkitemBean(pp);
 		final ElementList el = ElementList.of();
-		if (!isReadonly(workitem)) {
+		if (!isReadonly(pp, workitem)) {
 			final SpanElement sEle = new SpanElement().setId("idAbstractWorkflowFormTPage_saveInfo")
 					.setStyle("line-height: 2;color: green");
 			el.add(sEle);
@@ -191,7 +191,7 @@ public abstract class AbstractWorkflowFormTPage extends AbstractFormTableRowTPag
 	public ElementList getRightElements(final PageParameter pp) {
 		final WorkitemBean workitem = getWorkitemBean(pp);
 		final ElementList el = ElementList.of();
-		if (!isReadonly(workitem)) {
+		if (!isReadonly(pp, workitem)) {
 			el.append(createSaveBtn(pp), SpanElement.SPACE, createCompleteBtn(pp));
 		}
 		return el;
@@ -236,15 +236,18 @@ public abstract class AbstractWorkflowFormTPage extends AbstractFormTableRowTPag
 	public String toTableRowsString(final PageParameter pp) {
 		final TableRows tableRows = getTableRows(pp);
 		if (tableRows != null) {
-			return tableRows.setReadonly(isReadonly(getWorkitemBean(pp))).toString();
+			return tableRows.setReadonly(isReadonly(pp, getWorkitemBean(pp))).toString();
 		}
 		return null;
 	}
 
-	protected boolean isReadonly(final WorkitemBean workitem) {
+	protected boolean isReadonly(final PageParameter pp, final WorkitemBean workitem) {
 		if (null == workitem) {
 			return true;
 		}
+		// if(workitem.getUserId().equals(obj) ){
+		//
+		// }
 		final EWorkitemStatus status = workitem.getStatus();
 		return status != EWorkitemStatus.running && status != EWorkitemStatus.suspended
 				&& status != EWorkitemStatus.delegate;
