@@ -282,7 +282,7 @@ public class MyProcessWorksTPage extends AbstractWorksTPage {
 			final String txt = pm.getModelText();
 			final int p = txt.indexOf('.');
 			if (p > 0) {
-				sb.append(new SpanElement(txt.substring(0, p)) + " / " + txt.substring(p + 1));
+				sb.append(new SpanElement(txt.substring(0, p) + " / " + txt.substring(p + 1), "pm"));
 			} else {
 				sb.append(new SpanElement(txt));
 			}

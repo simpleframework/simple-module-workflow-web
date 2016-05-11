@@ -131,6 +131,11 @@
   color: #276;
 }
 
+.MyProcessWorksTPage .col2 .model-nav span.pm {
+  font-size: 11.5pt;
+  color: #c66;
+}
+
 .MyProcessWorksTPage .col2 .model-filter {
   border-top: 1px dashed #ccc;
   padding: 4px 0;
