@@ -87,19 +87,26 @@
 
 .MyProcessWorksTPage .col1 .pitem {
   display: inline-block;
-  margin: 2px 24px 6px 0;
-  width: 150px;
+  margin: 0 15px 6px 0;
+  width: 130px;
   height: 21px;
-  line-height: 1.5; overflow : hidden;
+  line-height: 1.5; 
   vertical-align: top;
   overflow: hidden;
 }
 
 .MyProcessWorksTPage .col1 .pgroup {
-  border-bottom: 1px dashed #999;
+  border-top: 1px dashed #999;
   margin-bottom: 4px;
-  padding: 12px 0 4px;
   color: #cca;
+  padding: 12px 0 4px 110px;
+  min-height: 40px;
+}
+
+.MyProcessWorksTPage .col1 .pgroup span {
+  float: left;
+  margin-left: -110px;
+  max-width: 90px;
 }
 
 .MyProcessWorksTPage .col1 .pitem a {

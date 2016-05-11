@@ -245,10 +245,13 @@ public class MyProcessWorksTPage extends AbstractWorksTPage {
 				sb.append(new SupElement("(" + size + ")").addClassName("gsize"));
 			}
 			sb.append(" <div class='psub'>");
+			int i = 0;
 			for (final Map.Entry<String, List<ProcessModelBean>> e2 : e.getValue().entrySet()) {
-				sb.append("<div class='pgroup'>");
-				sb.append(e2.getKey());
-				sb.append("</div>");
+				sb.append("<div class='pgroup'");
+				if (i++ == 0) {
+					sb.append(" style='border-top: 0'");
+				}
+				sb.append(">").append(new SpanElement(e2.getKey()));
 				for (final ProcessModelBean pm : e2.getValue()) {
 					sb.append("<div class='pitem'>");
 					final String mtxt = pm.getModelText();
@@ -257,6 +260,7 @@ public class MyProcessWorksTPage extends AbstractWorksTPage {
 							.setOnclick("$Actions.reloc('model=__del&modelId=" + pm.getId() + "');"));
 					sb.append("</div>");
 				}
+				sb.append("</div>");
 			}
 			sb.append(" </div>");
 			sb.append("</div>");
