@@ -21,16 +21,35 @@
   padding: 15px 0;
 }
 
+.MyProcessWorksTPage .category .c_item {
+  line-height: 1.5;
+  padding-bottom: 6px;
+  padding-top: 6px;
+  color: #666;
+}
+
+.MyProcessWorksTPage .category .selected {
+  background-image: none;
+}
+
 .MyProcessWorksTPage .category .col1 {
   position: static !important;
 }
 
 .MyProcessWorksTPage .col1 .gtitle {
   border-bottom: 1px dashed #bbb;
-  color: #833;
+  color: #666;
   font-size: 11px;
   margin-bottom: 4px;
-  padding: 2px 0 6px 10px;
+  padding: 2px 0 6px 6px;
+}
+
+.MyProcessWorksTPage .col1 .gtitle a {
+  color: #833;
+}
+
+.MyProcessWorksTPage .col1 .gtitle a:HOVER {
+  color: #a55;
 }
 
 .MyProcessWorksTPage .col1 .gitem {
@@ -117,28 +136,10 @@
   color: #ccc;
 }
 
-.MyProcessWorksTPage .col2 .model-nav {
-  font-size: 9.5pt;
-  margin-bottom: 8px;
-  color: #777;
-}
-
-.MyProcessWorksTPage .col2 .model-nav a {
-  color: #555;
-}
-
-.MyProcessWorksTPage .col2 .model-nav a:HOVER {
-  color: #276;
-}
-
-.MyProcessWorksTPage .col2 .model-nav span.pm {
-  font-size: 11.5pt;
-  color: #c66;
-}
-
 .MyProcessWorksTPage .col2 .model-filter {
-  border-top: 1px dashed #ccc;
-  padding: 4px 0;
+  border-bottom: 1px dashed #ccc;
+  margin-bottom: 10px;
+  padding-bottom: 6px;
 }
 
 .MyProcessWorksTPage .col2 .tool_bar .le {

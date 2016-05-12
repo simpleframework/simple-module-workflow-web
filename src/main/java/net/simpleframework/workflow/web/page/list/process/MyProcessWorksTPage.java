@@ -16,12 +16,12 @@ import net.simpleframework.mvc.AbstractMVCPage;
 import net.simpleframework.mvc.IForward;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageParameter;
+import net.simpleframework.mvc.common.element.AbstractElement;
 import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.ImageElement;
 import net.simpleframework.mvc.common.element.JS;
 import net.simpleframework.mvc.common.element.LinkElement;
 import net.simpleframework.mvc.common.element.SpanElement;
-import net.simpleframework.mvc.common.element.SupElement;
 import net.simpleframework.mvc.common.element.TabButton;
 import net.simpleframework.mvc.common.element.TabButtons;
 import net.simpleframework.mvc.component.ComponentParameter;
@@ -32,6 +32,8 @@ import net.simpleframework.mvc.component.ui.menu.MenuItem;
 import net.simpleframework.mvc.component.ui.menu.MenuItems;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
 import net.simpleframework.mvc.component.ui.pager.db.AbstractDbTablePagerHandler;
+import net.simpleframework.mvc.template.struct.CategoryItem;
+import net.simpleframework.mvc.template.struct.CategoryItems;
 import net.simpleframework.mvc.template.struct.FilterButtons;
 import net.simpleframework.workflow.engine.EProcessModelStatus;
 import net.simpleframework.workflow.engine.bean.ProcessBean;
@@ -180,6 +182,7 @@ public class MyProcessWorksTPage extends AbstractWorksTPage {
 		return ElementList.of(createTabsElement(pp, tabs));
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	protected String toCategoryHTML(final PageParameter pp) {
 		final StringBuilder sb = new StringBuilder();
@@ -187,15 +190,11 @@ public class MyProcessWorksTPage extends AbstractWorksTPage {
 				pp.getLDomainId(), EProcessModelStatus.deploy));
 		wfpmService.sort(models);
 
+		final String CONST_OTHER = $m("MyInitiateItemsGroupTPage.0");
 		final Map<String, List<ProcessModelBean>> gmap = new LinkedHashMap<String, List<ProcessModelBean>>();
 		for (final ProcessModelBean pm : models) {
 			final String[] arr = StringUtils.split(pm.getModelText(), ".");
-			String key;
-			if (arr.length > 1) {
-				key = arr[0];
-			} else {
-				key = $m("MyInitiateItemsGroupTPage.0");
-			}
+			final String key = arr.length > 1 ? arr[0] : CONST_OTHER;
 			List<ProcessModelBean> list = gmap.get(key);
 			if (list == null) {
 				gmap.put(key, list = new ArrayList<ProcessModelBean>());
@@ -224,14 +223,55 @@ public class MyProcessWorksTPage extends AbstractWorksTPage {
 				}
 			}
 			if (glist != null) {
-				m.put($m("MyProcessWorksTPage.17"), glist);
+				m.put(CONST_OTHER, glist);
 			}
 			gmap2.put(key, m);
 		}
 
+		List<ProcessModelBean> l = null;
+		String pgroup = null;
+		final ProcessModelBean cur = WorkflowUtils.getProcessModel(pp);
+		if (cur != null) {
+			final String[] arr = StringUtils.split(cur.getModelText(), ".");
+			final String key = arr.length > 1 ? arr[0] : CONST_OTHER;
+			final Map<String, List<ProcessModelBean>> m2 = gmap2.get(key);
+			if (m2 != null) {
+				pgroup = wfpmService.getProcessDocument(cur).getProcessNode().getPgroup();
+				if (!StringUtils.hasText(pgroup)) {
+					pgroup = CONST_OTHER;
+				}
+				l = m2.get(pgroup);
+			}
+		}
+
+		if (l != null) {
+			final CategoryItems items = CategoryItems.of();
+			for (final ProcessModelBean pm : l) {
+				final CategoryItem item = new CategoryItem(pm_txt(pm)) {
+					@Override
+					protected SpanElement toIconElement() {
+						return new SpanElement();
+					}
+
+					@Override
+					public AbstractElement<?> toItemElement(final String itemClass) {
+						return super.toItemElement(itemClass).setOnclick(pm_click(pm));
+					}
+				};
+				items.add(item.setSelected(cur.getId().equals(pm.getId())));
+			}
+
+			sb.append("<div class='gtitle'>");
+			sb.append(new LinkElement($m("MyProcessWorksTPage.9")).setHref(uFactory.getUrl(pp,
+					(Class<? extends AbstractMVCPage>) getOriginalClass())));
+			sb.append(SpanElement.NAV(3)).append(pgroup);
+			sb.append("</div>");
+			sb.append(items);
+			return sb.toString();
+		}
+
 		sb.append("<div class='gtitle'>").append($m("MyProcessWorksTPage.16")).append("</div>");
 		sb.append("<div class='gtree'>");
-		final ProcessModelBean cur = WorkflowUtils.getProcessModel(pp);
 		for (final Map.Entry<String, Map<String, List<ProcessModelBean>>> e : gmap2.entrySet()) {
 			final String key = e.getKey();
 			sb.append("<div class='gitem");
@@ -240,10 +280,10 @@ public class MyProcessWorksTPage extends AbstractWorksTPage {
 			}
 			sb.append("'>");
 			sb.append(new SpanElement(key).setClassName("glbl"));
-			final int size = gmap.get(key).size();
-			if (size > 0) {
-				sb.append(new SupElement("(" + size + ")").addClassName("gsize"));
-			}
+			// final int size = gmap.get(key).size();
+			// if (size > 0) {
+			// sb.append(new SupElement("(" + size + ")").addClassName("gsize"));
+			// }
 			sb.append(" <div class='psub'>");
 			int i = 0;
 			for (final Map.Entry<String, List<ProcessModelBean>> e2 : e.getValue().entrySet()) {
@@ -254,10 +294,7 @@ public class MyProcessWorksTPage extends AbstractWorksTPage {
 				sb.append(">").append(new SpanElement(e2.getKey()));
 				for (final ProcessModelBean pm : e2.getValue()) {
 					sb.append("<div class='pitem'>");
-					final String mtxt = pm.getModelText();
-					final int p = mtxt.indexOf('.');
-					sb.append(new LinkElement(p > 0 ? mtxt.substring(p + 1) : mtxt)
-							.setOnclick("$Actions.reloc('model=__del&modelId=" + pm.getId() + "');"));
+					sb.append(new LinkElement(pm_txt(pm)).setOnclick(pm_click(pm)));
 					sb.append("</div>");
 				}
 				sb.append("</div>");
@@ -269,27 +306,19 @@ public class MyProcessWorksTPage extends AbstractWorksTPage {
 		return sb.toString();
 	}
 
-	@SuppressWarnings("unchecked")
+	private String pm_click(final ProcessModelBean pm) {
+		return "$Actions.reloc('model=__del&modelId=" + pm.getId() + "');";
+	}
+
+	private String pm_txt(final ProcessModelBean pm) {
+		final String mtxt = pm.getModelText();
+		final int p = mtxt.indexOf('.');
+		return p > 0 ? mtxt.substring(p + 1) : mtxt;
+	}
+
 	@Override
 	public String toToolbarHTML(final PageParameter pp) {
 		final StringBuilder sb = new StringBuilder();
-		final ProcessModelBean pm = WorkflowUtils.getProcessModel(pp);
-		sb.append("<div class='model-nav'>");
-		if (pm != null) {
-			sb.append(new LinkElement($m("MyProcessWorksTPage.9")).setHref(uFactory.getUrl(pp,
-					(Class<? extends AbstractMVCPage>) getOriginalClass())));
-			sb.append(SpanElement.NAV(3));
-			final String txt = pm.getModelText();
-			final int p = txt.indexOf('.');
-			if (p > 0) {
-				sb.append(new SpanElement(txt.substring(0, p) + " / " + txt.substring(p + 1), "pm"));
-			} else {
-				sb.append(new SpanElement(txt));
-			}
-		} else {
-			sb.append(new SpanElement($m("MyProcessWorksTPage.9")));
-		}
-		sb.append("</div>");
 		final FilterButtons btns = getFilterButtons(pp);
 		if (btns != null && btns.size() > 0) {
 			sb.append("<div class='model-filter'>").append(btns).append("</div>");

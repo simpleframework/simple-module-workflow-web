@@ -94,7 +94,7 @@ public class ProcessDetailPage extends AbstractTemplatePage implements IWorkflow
 		sb.append("    </td>");
 		sb.append("  </tr>");
 		sb.append("  <tr>");
-		sb.append("    <td class='l'>#(MyProcessWorksTPage.18)</td>");
+		sb.append("    <td class='l'>#(MyProcessWorksTPage.17)</td>");
 		sb.append("    <td class='v'>");
 		if (utags2.size() == 0) {
 			sb.append("--");
