@@ -26,16 +26,17 @@ public class DefaultDoWorkviewHandler extends AbstractComponentHandler implement
 		IDoWorkviewHandler {
 
 	@Override
-	public JavascriptForward doSent(final ComponentParameter cp, final List<ID> ids) {
+	public JavascriptForward doSent(final ComponentParameter cp, final boolean allowSent,
+			final List<ID> ids) {
 		final WorkitemBean workitem = WorkflowUtils.getWorkitemBean(cp);
 		List<WorkviewBean> list = null;
 		if (workitem != null) {
-			list = wfvService.createWorkviews(WorkflowUtils.getWorkitemBean(cp),
+			list = wfvService.createWorkviews(WorkflowUtils.getWorkitemBean(cp), allowSent,
 					ids.toArray(new ID[ids.size()]));
 		} else {
 			final WorkviewBean workview = WorkflowUtils.getWorkviewBean(cp);
 			if (workview != null) {
-				list = wfvService.createForwardWorkviews(WorkflowUtils.getWorkviewBean(cp),
+				list = wfvService.createForwardWorkviews(WorkflowUtils.getWorkviewBean(cp), allowSent,
 						ids.toArray(new ID[ids.size()]));
 			}
 		}

@@ -18,6 +18,7 @@ import net.simpleframework.ctx.permission.PermissionUser;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageRequestResponse;
 import net.simpleframework.mvc.common.element.ButtonElement;
+import net.simpleframework.mvc.common.element.Checkbox;
 import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.LinkButton;
 import net.simpleframework.mvc.common.element.SpanElement;
@@ -113,13 +114,23 @@ public abstract class DoWorkviewUtils implements IWorkflowContextAware {
 		sb.append("<div class='wv_cc'>");
 		sb.append(toUserList(cp));
 		sb.append("</div>");
-		sb.append("<div class='wv_bb'>");
+		sb.append("<div class='wv_bb clearfix'>");
+		sb.append(" <div class='left'>");
+		sb.append(new Checkbox("idDoWorkviewUtils_opt1", $m("DoWorkviewUtils.7")).setChecked(true));
+		sb.append(" </div>");
+		sb.append(" <div class='right'>");
+
+		final StringBuilder js = new StringBuilder();
+		js.append("$Actions['").append(cp.getComponentName()).append("_save']('")
+				.append(toParams(cp)).append("&allowSent=' + $('idDoWorkviewUtils_opt1').checked);");
 		sb.append(
-				new ButtonElement($m("DoWorkviewUtils.5")).setHighlight(true).setOnclick(
-						jsActions(cp, "_save"))).append(SpanElement.SPACE);
+				new ButtonElement($m("DoWorkviewUtils.5")).setHighlight(true).setOnclick(js.toString()))
+				.append(SpanElement.SPACE);
 		sb.append(ButtonElement.closeBtn());
+		sb.append(" </div>");
 		sb.append("</div>");
 		return sb.toString();
+
 	}
 
 	static String toUserList(final ComponentParameter cp) {

@@ -24,7 +24,7 @@ public interface IDoWorkviewHandler extends IComponentHandler, IWorkflowContextA
 	 * @param cp
 	 * @param ids
 	 */
-	JavascriptForward doSent(ComponentParameter cp, List<ID> ids);
+	JavascriptForward doSent(ComponentParameter cp, boolean allowSent, List<ID> ids);
 
 	IDataQuery<PermissionUser> getUsers(ComponentParameter cp);
 

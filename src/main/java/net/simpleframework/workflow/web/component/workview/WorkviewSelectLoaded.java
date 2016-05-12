@@ -161,7 +161,7 @@ public class WorkviewSelectLoaded extends DefaultPageHandler implements IWorkflo
 						list.add(oid);
 					}
 				}
-				final JavascriptForward js2 = hdl.doSent(nCP, list);
+				final JavascriptForward js2 = hdl.doSent(nCP, cp.getBoolParameter("allowSent"), list);
 				if (js2 != null) {
 					js.append(js2);
 				}
