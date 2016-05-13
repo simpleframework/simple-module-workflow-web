@@ -3,8 +3,10 @@ package net.simpleframework.workflow.web.page.list.worklist;
 import static net.simpleframework.common.I18n.$m;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -12,9 +14,11 @@ import net.simpleframework.ado.EFilterRelation;
 import net.simpleframework.ado.FilterItem;
 import net.simpleframework.ado.FilterItems;
 import net.simpleframework.ado.query.IDataQuery;
+import net.simpleframework.ado.query.ListDataQuery;
 import net.simpleframework.common.Convert;
 import net.simpleframework.common.ID;
 import net.simpleframework.common.StringUtils;
+import net.simpleframework.common.TimePeriod;
 import net.simpleframework.common.coll.KVMap;
 import net.simpleframework.ctx.trans.Transaction;
 import net.simpleframework.mvc.IForward;
@@ -129,16 +133,35 @@ public class MyFinalWorklistTPage extends MyRunningWorklistTPage {
 	public static class MyCompleteWorklistTbl extends MyRunningWorklistTbl {
 		@Override
 		public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
-			FilterItems items = null;
 			if (cp.getBoolParameter("delegation")) {
-				items = FilterItems.of(new FilterItem("userId", EFilterRelation.not_equal, "@userId2"));
+				cp.addFormParameter("delegation", true);
+
+				return wfwService.getWorklist(cp.getLoginId(), getModels(cp),
+						FilterItems.of(new FilterItem("userId", EFilterRelation.not_equal, "@userId2")),
+						EWorkitemStatus.complete, EWorkitemStatus.abort);
 			}
-			final IDataQuery<?> dq = wfwService.getWorklist(cp.getLoginId(), getModels(cp), items,
-					EWorkitemStatus.complete, EWorkitemStatus.abort);
+
 			if (cp.getBoolParameter("retake")) {
-				// return new Ne
+				cp.addFormParameter("retake", true);
+
+				final IDataQuery<?> dq = wfwService.getWorklist(cp.getLoginId(), getModels(cp),
+						FilterItems.of().addEqual("createdate", TimePeriod.week),
+						EWorkitemStatus.complete);
+				final List<WorkitemBean> list = new ArrayList<WorkitemBean>();
+				WorkitemBean workitem;
+				l: while ((workitem = (WorkitemBean) dq.next()) != null) {
+					final ActivityBean activity = wfaService.getBean(workitem.getActivityId());
+					for (final WorkitemBean workitem2 : wfwService.getNextWorkitems(activity)) {
+						if (workitem2.isReadMark() || wfwService.isFinalStatus(workitem2)) {
+							continue l;
+						}
+					}
+					list.add(workitem);
+				}
+				return new ListDataQuery<WorkitemBean>(list);
 			}
-			return dq;
+			return wfwService.getWorklist(cp.getLoginId(), getModels(cp), EWorkitemStatus.complete,
+					EWorkitemStatus.abort);
 		}
 
 		@Override
