@@ -10,6 +10,7 @@
   font-size: 9.5pt;
   line-height: 2;
   margin-left: 15px;
+  color: #a44;
 }
 
 /*-------------------------WorkflowCompleteInfoPage--------------------*/
@@ -20,7 +21,6 @@
   border-bottom: 0;
   background-color: #fff;
   margin-top: 15px;
-  color: #a44;
 }
 
 .WorkflowCompleteInfoPage .l1,
