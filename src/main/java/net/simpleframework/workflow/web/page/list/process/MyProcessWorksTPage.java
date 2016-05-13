@@ -16,7 +16,6 @@ import net.simpleframework.mvc.AbstractMVCPage;
 import net.simpleframework.mvc.IForward;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageParameter;
-import net.simpleframework.mvc.common.element.AbstractElement;
 import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.ImageElement;
 import net.simpleframework.mvc.common.element.JS;
@@ -247,10 +246,14 @@ public class MyProcessWorksTPage extends AbstractWorksTPage {
 		if (l != null) {
 			final CategoryItems items = CategoryItems.of();
 			for (final ProcessModelBean pm : l) {
-				items.add(new _CategoryItem(pm).setSelected(cur.getId().equals(pm.getId())));
+				items.add(new _CategoryItem(pm).setHref(
+						uFactory.getUrl(pp, MyProcessWorksTPage.class, "modelId=" + pm.getId()))
+						.setSelected(cur.getId().equals(pm.getId())));
 			}
 			if (!l.contains(cur)) {
-				items.add(new _CategoryItem(cur).setSelected(true));
+				items.add(new _CategoryItem(cur).setHref(
+						uFactory.getUrl(pp, MyProcessWorksTPage.class, "modelId=" + cur.getId()))
+						.setSelected(true));
 			}
 
 			sb.append("<div class='gtitle'>");
@@ -286,7 +289,9 @@ public class MyProcessWorksTPage extends AbstractWorksTPage {
 				sb.append(">").append(new SpanElement(e2.getKey()));
 				for (final ProcessModelBean pm : e2.getValue()) {
 					sb.append("<div class='pitem'>");
-					sb.append(new LinkElement(WorkflowUtils.getShortMtext(pm)).setOnclick(pm_click(pm)));
+					sb.append(new LinkElement(WorkflowUtils.getShortMtext(pm)).setOnclick("$Actions.loc('"
+							+ uFactory.getUrl(pp, MyProcessWorksTPage.class, "modelId=" + pm.getId())
+							+ "');"));
 					sb.append("</div>");
 				}
 				sb.append("</div>");
@@ -299,26 +304,14 @@ public class MyProcessWorksTPage extends AbstractWorksTPage {
 	}
 
 	class _CategoryItem extends CategoryItem {
-		private final ProcessModelBean pm;
-
 		_CategoryItem(final ProcessModelBean pm) {
 			super(WorkflowUtils.getShortMtext(pm));
-			this.pm = pm;
 		}
 
 		@Override
 		protected SpanElement toIconElement() {
 			return new SpanElement();
 		}
-
-		@Override
-		public AbstractElement<?> toItemElement(final String itemClass) {
-			return super.toItemElement(itemClass).setOnclick(pm_click(pm));
-		}
-	}
-
-	private String pm_click(final ProcessModelBean pm) {
-		return "$Actions.reloc('model=__del&modelId=" + pm.getId() + "');";
 	}
 
 	@Override

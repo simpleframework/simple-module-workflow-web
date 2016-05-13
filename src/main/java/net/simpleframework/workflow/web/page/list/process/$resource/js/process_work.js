@@ -2,6 +2,9 @@ $ready(function() {
   var _init_process_category_tree = function(cc) {
     cc = $(cc);
     var gtree = cc.down(".gtree");
+    if (!gtree) {
+      return;
+    }
     var w = gtree.getWidth();
     var h = gtree.getHeight();
 
