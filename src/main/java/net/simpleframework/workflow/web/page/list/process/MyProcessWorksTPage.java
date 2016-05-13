@@ -310,7 +310,7 @@ public class MyProcessWorksTPage extends AbstractWorksTPage {
 
 		@Override
 		protected SpanElement toIconElement() {
-			return new SpanElement();
+			return new SpanElement().setClassName("pm-txt").setTitle(getTitle());
 		}
 	}
 

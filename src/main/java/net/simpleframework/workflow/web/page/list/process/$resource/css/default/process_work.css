@@ -28,6 +28,12 @@
   color: #666;
 }
 
+.MyProcessWorksTPage .category .c_item .pm-txt {
+  display: inline-block;
+  height: 21px;
+  overflow: hidden;
+}
+
 .MyProcessWorksTPage .category .selected {
   background-image: none;
 }
