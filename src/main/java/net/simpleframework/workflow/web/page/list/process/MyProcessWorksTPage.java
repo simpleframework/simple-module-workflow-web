@@ -247,18 +247,10 @@ public class MyProcessWorksTPage extends AbstractWorksTPage {
 		if (l != null) {
 			final CategoryItems items = CategoryItems.of();
 			for (final ProcessModelBean pm : l) {
-				final CategoryItem item = new CategoryItem(pm_txt(pm)) {
-					@Override
-					protected SpanElement toIconElement() {
-						return new SpanElement();
-					}
-
-					@Override
-					public AbstractElement<?> toItemElement(final String itemClass) {
-						return super.toItemElement(itemClass).setOnclick(pm_click(pm));
-					}
-				};
-				items.add(item.setSelected(cur.getId().equals(pm.getId())));
+				items.add(new _CategoryItem(pm).setSelected(cur.getId().equals(pm.getId())));
+			}
+			if (!l.contains(cur)) {
+				items.add(new _CategoryItem(cur).setSelected(true));
 			}
 
 			sb.append("<div class='gtitle'>");
@@ -304,6 +296,25 @@ public class MyProcessWorksTPage extends AbstractWorksTPage {
 		}
 		sb.append("</div>");
 		return sb.toString();
+	}
+
+	class _CategoryItem extends CategoryItem {
+		private final ProcessModelBean pm;
+
+		_CategoryItem(final ProcessModelBean pm) {
+			super(pm_txt(pm));
+			this.pm = pm;
+		}
+
+		@Override
+		protected SpanElement toIconElement() {
+			return new SpanElement();
+		}
+
+		@Override
+		public AbstractElement<?> toItemElement(final String itemClass) {
+			return super.toItemElement(itemClass).setOnclick(pm_click(pm));
+		}
 	}
 
 	private String pm_click(final ProcessModelBean pm) {
