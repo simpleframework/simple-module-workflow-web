@@ -242,4 +242,10 @@ public abstract class WorkflowUtils implements IWorkflowContextAware {
 			}
 		});
 	}
+
+	public static String getShortMtext(final ProcessModelBean pm) {
+		final String mtxt = pm.getModelText();
+		final int p = mtxt.indexOf('.');
+		return p > 0 ? mtxt.substring(p + 1) : mtxt;
+	}
 }

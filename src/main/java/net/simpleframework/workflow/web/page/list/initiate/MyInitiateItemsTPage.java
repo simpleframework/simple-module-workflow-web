@@ -30,6 +30,7 @@ import net.simpleframework.workflow.engine.bean.ProcessBean;
 import net.simpleframework.workflow.engine.bean.ProcessModelBean;
 import net.simpleframework.workflow.engine.bean.WorkitemBean;
 import net.simpleframework.workflow.schema.ProcessDocument;
+import net.simpleframework.workflow.web.WorkflowUtils;
 import net.simpleframework.workflow.web.component.startprocess.DefaultStartProcessHandler;
 import net.simpleframework.workflow.web.component.startprocess.StartProcessBean;
 import net.simpleframework.workflow.web.page.list.AbstractItemsTPage;
@@ -138,9 +139,7 @@ public class MyInitiateItemsTPage extends AbstractItemsTPage {
 			final Object modelId = initiateItem.getModelId();
 			final ProcessModelBean processModel = wfpmService.getBean(modelId);
 			final KVMap row = new KVMap();
-			final String mtxt = processModel.getModelText();
-			final int p = mtxt.indexOf('.');
-			row.add("modelText", new LinkElement(p > 0 ? mtxt.substring(p + 1) : mtxt)
+			row.add("modelText", new LinkElement(WorkflowUtils.getShortMtext(processModel))
 					.setOnclick("$Actions['MyInitiateItemsTPage_startProcess']('modelId=" + modelId
 							+ "');"));
 			row.add("version", processModel.getModelVer())

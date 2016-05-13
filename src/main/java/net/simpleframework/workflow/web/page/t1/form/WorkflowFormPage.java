@@ -5,14 +5,17 @@ import static net.simpleframework.common.I18n.$m;
 import java.io.IOException;
 import java.util.Map;
 
+import net.simpleframework.ctx.permission.PermissionUser;
 import net.simpleframework.mvc.PageMapping;
 import net.simpleframework.mvc.PageParameter;
+import net.simpleframework.mvc.common.element.AbstractElement;
 import net.simpleframework.mvc.common.element.BlockElement;
 import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.common.element.TabButtons;
 import net.simpleframework.workflow.engine.bean.ActivityBean;
 import net.simpleframework.workflow.engine.bean.ProcessBean;
+import net.simpleframework.workflow.engine.bean.ProcessModelBean;
 import net.simpleframework.workflow.engine.bean.WorkitemBean;
 import net.simpleframework.workflow.web.IWorkflowWebForm;
 import net.simpleframework.workflow.web.WorkflowUtils;
@@ -51,21 +54,34 @@ public class WorkflowFormPage extends AbstractWorkflowFormPage {
 	public ElementList getLeftElements(final PageParameter pp) {
 		final ElementList el = super.getLeftElements(pp);
 		final StringBuilder sb = new StringBuilder();
-		sb.append("<span class='l1'>");
-		final WorkitemBean workitem = WorkflowUtils.getWorkitemBean(pp);
-		if (null != workitem && null != workitem.getDeptId()) {
-			sb.append(pp.getDept(workitem.getDeptId()).getText() + " ");
-		}
+		final ProcessModelBean pm = WorkflowUtils.getProcessModel(pp);
+		sb.append(WorkflowUtils.getShortMtext(pm));
+		sb.append(" / ");
 		final ActivityBean activity = WorkflowUtils.getActivityBean(pp);
 		sb.append(activity.getTasknodeText());
 		final String userFrom = WorkflowUtils.getUserFrom(activity, ", ");
 		if (userFrom != null) {
 			sb.append(" (").append($m("WorkflowFormPage.3")).append(userFrom).append(")");
 		}
-		sb.append("</span><br>");
-		sb.append("<span class='l2'>").append(WorkflowUtils.getProcessModel(pp)).append("</span>");
 		el.append(new BlockElement().setClassName("taskinfo").addHtml(sb.toString()));
 		return el;
+	}
+
+	@Override
+	protected AbstractElement<?> getLoginElement(final PageParameter pp) {
+		final PermissionUser login = pp.getLogin();
+		if (login.exists()) {
+			final StringBuilder sb = new StringBuilder(login.toString()).append(" (");
+			final WorkitemBean workitem = WorkflowUtils.getWorkitemBean(pp);
+			if (null != workitem && null != workitem.getDeptId()) {
+				sb.append(pp.getDept(workitem.getDeptId()));
+			} else {
+				sb.append(pp.getLdept());
+			}
+			sb.append(")");
+			return new SpanElement(sb.toString(), "login");
+		}
+		return null;
 	}
 
 	@Override

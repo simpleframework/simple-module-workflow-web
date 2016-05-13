@@ -14,6 +14,7 @@ import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.workflow.engine.InitiateItem;
 import net.simpleframework.workflow.engine.InitiateItems;
 import net.simpleframework.workflow.engine.bean.ProcessModelBean;
+import net.simpleframework.workflow.web.WorkflowUtils;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -79,11 +80,9 @@ public class MyInitiateItemsGroupTPage extends MyInitiateItemsTPage {
 			for (final InitiateItem item : val) {
 				final Object modelId = item.getModelId();
 				final ProcessModelBean processModel = wfpmService.getBean(modelId);
-				final String mtxt = processModel.getModelText();
-				final int p = mtxt.indexOf('.');
 				sb.append("<div class='litem' onclick=\"$Actions['MyInitiateItemsTPage_startProcess']")
 						.append("('modelId=").append(modelId).append("');\">");
-				sb.append(new SpanElement(p > 0 ? mtxt.substring(p + 1) : mtxt));
+				sb.append(new SpanElement(WorkflowUtils.getShortMtext(processModel)));
 				sb.append("</div>");
 			}
 			sb.append(" </div>");

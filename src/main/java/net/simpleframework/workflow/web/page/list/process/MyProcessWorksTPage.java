@@ -286,7 +286,7 @@ public class MyProcessWorksTPage extends AbstractWorksTPage {
 				sb.append(">").append(new SpanElement(e2.getKey()));
 				for (final ProcessModelBean pm : e2.getValue()) {
 					sb.append("<div class='pitem'>");
-					sb.append(new LinkElement(pm_txt(pm)).setOnclick(pm_click(pm)));
+					sb.append(new LinkElement(WorkflowUtils.getShortMtext(pm)).setOnclick(pm_click(pm)));
 					sb.append("</div>");
 				}
 				sb.append("</div>");
@@ -302,7 +302,7 @@ public class MyProcessWorksTPage extends AbstractWorksTPage {
 		private final ProcessModelBean pm;
 
 		_CategoryItem(final ProcessModelBean pm) {
-			super(pm_txt(pm));
+			super(WorkflowUtils.getShortMtext(pm));
 			this.pm = pm;
 		}
 
@@ -319,12 +319,6 @@ public class MyProcessWorksTPage extends AbstractWorksTPage {
 
 	private String pm_click(final ProcessModelBean pm) {
 		return "$Actions.reloc('model=__del&modelId=" + pm.getId() + "');";
-	}
-
-	private String pm_txt(final ProcessModelBean pm) {
-		final String mtxt = pm.getModelText();
-		final int p = mtxt.indexOf('.');
-		return p > 0 ? mtxt.substring(p + 1) : mtxt;
 	}
 
 	@Override

@@ -170,10 +170,8 @@ public class ProcessModelMgrPage extends AbstractWorkflowMgrPage {
 
 		protected LinkElement toModelTextHTML(final ComponentParameter cp,
 				final ProcessModelBean processModel) {
-			final String mtxt = processModel.getModelText();
-			final int p = mtxt.indexOf('.');
-			final LinkElement le = new LinkElement(p > 0 ? mtxt.substring(p + 1) : mtxt).setHref(url(
-					ProcessMgrPage.class, "modelId=" + processModel.getId()));
+			final LinkElement le = new LinkElement(WorkflowUtils.getShortMtext(processModel))
+					.setHref(url(ProcessMgrPage.class, "modelId=" + processModel.getId()));
 			if (processModel.getStatus() != EProcessModelStatus.deploy) {
 				le.setColor("#777");
 			}

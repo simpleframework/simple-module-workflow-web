@@ -6,22 +6,10 @@
 /*-------------------------form_tb_bar--------------------*/
 .form_tb_bar .taskinfo {
   display: inline-block;
-  margin-left: 15px;
   vertical-align: top;
-  line-height: 1.2;
-}
-
-.form_tb_bar .taskinfo .l1 {
-  color: #555; 
-  font-weight: bold;
-}
-
-.form_tb_bar .taskinfo .l2 {
-  color: #777;
-  font-size: 9px;
-  -webkit-text-size-adjust: none;
-  -webkit-transform: scale(0.75);
-  -webkit-transform-origin-x: 0;
+  font-size: 9.5pt;
+  line-height: 2;
+  margin-left: 15px;
 }
 
 /*-------------------------WorkflowCompleteInfoPage--------------------*/
@@ -32,6 +20,7 @@
   border-bottom: 0;
   background-color: #fff;
   margin-top: 15px;
+  color: #a44;
 }
 
 .WorkflowCompleteInfoPage .l1,
