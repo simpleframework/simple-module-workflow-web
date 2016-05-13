@@ -16,6 +16,7 @@ import net.simpleframework.mvc.AbstractMVCPage;
 import net.simpleframework.mvc.IForward;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageParameter;
+import net.simpleframework.mvc.common.element.AbstractElement;
 import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.ImageElement;
 import net.simpleframework.mvc.common.element.JS;
@@ -310,7 +311,12 @@ public class MyProcessWorksTPage extends AbstractWorksTPage {
 
 		@Override
 		protected SpanElement toIconElement() {
-			return new SpanElement().setClassName("pm-txt").setTitle(getTitle());
+			return new SpanElement().setClassName("pm-txt");
+		}
+
+		@Override
+		public AbstractElement<?> toItemElement(final String itemClass) {
+			return super.toItemElement(itemClass).setTitle(getTitle());
 		}
 	}
 
