@@ -14,6 +14,18 @@ import net.simpleframework.workflow.web.page.list.workviews.MyWorkviewsTPage;
  */
 public class AbstractWorkflowViewPage extends AbstractFormTemplatePage {
 
+	@Override
+	protected void onForward(final PageParameter pp) throws Exception {
+		super.onForward(pp);
+
+		pp.addImportCSS(AbstractWorkflowViewPage.class, "/form.css");
+	}
+
+	@Override
+	protected boolean isPage404(final PageParameter pp) {
+		return WorkflowUtils.getWorkviewBean(pp) == null;
+	}
+
 	protected IWorkflowWebView getWorkflowView(final PageParameter pp) {
 		final WorkviewBean workview = WorkflowUtils.getWorkviewBean(pp);
 		return (IWorkflowWebView) wfpService.getWorkflowView(wfpService.getBean(workview
@@ -23,12 +35,5 @@ public class AbstractWorkflowViewPage extends AbstractFormTemplatePage {
 	@Override
 	protected String getDefaultBackUrl(final PageParameter pp) {
 		return uFactory.getUrl(pp, MyWorkviewsTPage.class);
-	}
-
-	@Override
-	protected void onForward(final PageParameter pp) throws Exception {
-		super.onForward(pp);
-
-		pp.addImportCSS(AbstractWorkflowViewPage.class, "/form.css");
 	}
 }

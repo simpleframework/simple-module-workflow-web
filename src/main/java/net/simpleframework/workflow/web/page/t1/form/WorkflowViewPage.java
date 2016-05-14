@@ -7,8 +7,12 @@ import java.util.Map;
 
 import net.simpleframework.mvc.PageMapping;
 import net.simpleframework.mvc.PageParameter;
+import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.SpanElement;
+import net.simpleframework.workflow.engine.bean.ProcessModelBean;
+import net.simpleframework.workflow.engine.bean.WorkviewBean;
 import net.simpleframework.workflow.web.IWorkflowWebView;
+import net.simpleframework.workflow.web.WorkflowUtils;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -32,5 +36,17 @@ public class WorkflowViewPage extends AbstractWorkflowViewPage {
 		}
 		sb.append("</div>");
 		return sb.toString();
+	}
+
+	@Override
+	public ElementList getLeftElements(final PageParameter pp) {
+		final ElementList el = super.getLeftElements(pp);
+		final StringBuilder sb = new StringBuilder();
+		final WorkviewBean workview = WorkflowUtils.getWorkviewBean(pp);
+		if (workview != null) {
+			final ProcessModelBean pm = wfpmService.getBean(workview.getModelId());
+			sb.append(WorkflowUtils.getShortMtext(pm));
+		}
+		return el.append(new SpanElement(sb.toString(), "taskinfo"));
 	}
 }
