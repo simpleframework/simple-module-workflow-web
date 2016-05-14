@@ -34,10 +34,6 @@
   overflow: hidden;
 }
 
-.MyProcessWorksTPage .category .selected {
-  background-image: none;
-}
-
 .MyProcessWorksTPage .category .col1 {
   position: static !important;
 }
