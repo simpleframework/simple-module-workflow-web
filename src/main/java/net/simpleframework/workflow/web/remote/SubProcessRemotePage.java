@@ -41,7 +41,7 @@ public class SubProcessRemotePage extends AbstractWorkflowRemotePage {
 
 				final ProcessBean process = wfpService.doStartProcess(
 						wfpmService.getProcessModel(pp.getLocaleParameter(IProcessRemoteHandler.MODEL)),
-						variables, properties, null);
+						null, variables, properties, null);
 				json.put(IProcessRemoteHandler.SUB_PROCESSID, process.getId());
 			}
 		});
