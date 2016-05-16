@@ -59,7 +59,8 @@ public class MyWorkstatTPage extends AbstractItemsTPage {
 				.setPointFormat(sb.toString()));
 
 		hc1.getxAxis().setCategories(
-				new String[] { $m("MyWorkstatTPage.5"), $m("MyWorkstatTPage.6") });
+				new String[] { null, null, null, null, null, $m("MyWorkstatTPage.6"),
+						$m("MyWorkstatTPage.5") });
 
 		final Calendar cal = Calendar.getInstance();
 		final HcSeries h = new HcSeries();
@@ -73,7 +74,7 @@ public class MyWorkstatTPage extends AbstractItemsTPage {
 			// if (arr[1] == 0) {
 			// data.setColor("#f00");
 			// }
-			h.addData(data);
+			h.getData().add(0, data.toVal());
 			cal.add(Calendar.DATE, -1);
 		}
 
