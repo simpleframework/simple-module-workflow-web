@@ -228,10 +228,11 @@ public class MyProcessWorksTPage extends AbstractWorksTPage {
 			gmap2.put(key, m);
 		}
 
-		List<ProcessModelBean> l = null;
-		String pgroup = null;
 		final ProcessModelBean cur = WorkflowUtils.getProcessModel(pp);
 		if (cur != null) {
+			List<ProcessModelBean> l = null;
+			String pgroup = null;
+
 			final String[] arr = StringUtils.split(cur.getModelText(), ".");
 			final String key = arr.length > 1 ? arr[0] : CONST_OTHER;
 			final Map<String, List<ProcessModelBean>> m2 = gmap2.get(key);
@@ -242,16 +243,17 @@ public class MyProcessWorksTPage extends AbstractWorksTPage {
 				}
 				l = m2.get(pgroup);
 			}
-		}
 
-		if (l != null) {
 			final CategoryItems items = CategoryItems.of();
-			for (final ProcessModelBean pm : l) {
-				items.add(new _CategoryItem(pm).setHref(
-						uFactory.getUrl(pp, MyProcessWorksTPage.class, "modelId=" + pm.getId()))
-						.setSelected(cur.getId().equals(pm.getId())));
+			if (l != null) {
+				for (final ProcessModelBean pm : l) {
+					items.add(new _CategoryItem(pm).setHref(
+							uFactory.getUrl(pp, MyProcessWorksTPage.class, "modelId=" + pm.getId()))
+							.setSelected(cur.getId().equals(pm.getId())));
+				}
 			}
-			if (!l.contains(cur)) {
+
+			if (l == null || !l.contains(cur)) {
 				items.add(new _CategoryItem(cur).setHref(
 						uFactory.getUrl(pp, MyProcessWorksTPage.class, "modelId=" + cur.getId()))
 						.setSelected(true));
