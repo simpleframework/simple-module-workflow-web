@@ -2,6 +2,7 @@ package net.simpleframework.workflow.web.participant;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -165,9 +166,13 @@ public class WorkflowPermissionHandler extends OrganizationPermissionHandler imp
 		// final IDataQuery<User> users = _userService.queryUsers(dept);
 		User user = null;
 		if (null != users) {
+			final Map<String, Object> tmp = new HashMap<String, Object>();
 			while (users.hasNext()) {
 				user = users.next();
+				if (null != tmp.get(user.getId().toString()))
+					continue;// 处理加过的用户就不在加了，因为会有一个用户在同一个部门会有不同角色
 				participants.add(new Participant(getUser(user)));
+				tmp.put(user.getId().toString(), "");
 			}
 		}
 		return participants;
