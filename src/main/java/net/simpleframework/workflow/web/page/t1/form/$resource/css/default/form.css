@@ -90,3 +90,18 @@
 .tablepager .simple_progress {
   width: 95%;
 }
+
+/**-------------form_content
+.form_content .tool_bar {
+  border-color: #d77;
+  background-color: #f9f9f9;
+}
+
+.form_content .form_tbl {
+  background-color: #d77;
+}
+
+.form_content .form_tbl .l {
+  color: #b55;
+}
+-----------------**/
