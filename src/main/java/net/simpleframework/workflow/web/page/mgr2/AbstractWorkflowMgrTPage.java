@@ -73,7 +73,7 @@ public class AbstractWorkflowMgrTPage extends AbstractMgrTPage implements IWorkf
 
 	@Override
 	public String getPageRole(final PageParameter pp) {
-		return workflowContext.getModule().getManagerRole();
+		return getPageManagerRole(pp);
 	}
 
 	protected static WorkflowUrlsFactory uFactory = ((IWorkflowWebContext) workflowContext)

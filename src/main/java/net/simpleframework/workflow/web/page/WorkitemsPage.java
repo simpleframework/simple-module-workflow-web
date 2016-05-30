@@ -55,7 +55,7 @@ public class WorkitemsPage extends OneTableTemplatePage implements IWorkflowCont
 								.setTextAlign(ETextAlign.center))
 				.addColumn(TablePagerColumn.DATE("createDate", $m("WorkitemsPage.2")).setWidth(150))
 				.addColumn(TablePagerColumn.DATE("completeDate", $m("WorkitemsPage.3")).setWidth(150));
-		if (pp.isLmember(workflowContext.getModule().getManagerRole())) {
+		if (pp.isLmember(getPageManagerRole(pp))) {
 			tablePager.addColumn(TablePagerColumn.OPE(70));
 		}
 
@@ -77,7 +77,7 @@ public class WorkitemsPage extends OneTableTemplatePage implements IWorkflowCont
 	public ElementList getLeftElements(final PageParameter pp) {
 		final ElementList el = ElementList.of(LinkButton.closeBtn());
 		ActivityBean activity;
-		if (pp.isLmember(workflowContext.getModule().getManagerRole())
+		if (pp.isLmember(getPageManagerRole(pp))
 				&& (activity = WorkflowUtils.getActivityBean(pp)).getStatus() == EActivityStatus.running) {
 			addComponentBean(pp, "WorkitemsMgrPage_fallback", ActivityFallbackBean.class);
 			el.append(SpanElement.SPACE);
