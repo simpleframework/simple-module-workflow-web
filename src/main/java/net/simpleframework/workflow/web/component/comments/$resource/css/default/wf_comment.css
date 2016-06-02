@@ -191,6 +191,7 @@
 
 .wf_comment_edit .ta textarea {
   background-image: none;
+  background-color: #fafafa;
   border: 0;
   width: 100%;
 }

@@ -107,7 +107,7 @@ public abstract class WfCommentUtils implements IWorkflowContextAware {
 		sb.append(InputElement.hidden("commentId").setVal(comment.getId()));
 		sb.append("<div class='c'>");
 		sb.append(" <div class='ta'>")
-				.append(InputElement.textarea().setRows(10).setText(comment.getCcomment()))
+				.append(InputElement.textarea("ce_ccomment").setRows(10).setText(comment.getCcomment()))
 				.append("</div>");
 		sb.append("</div>");
 		sb.append("<div class='b'>");

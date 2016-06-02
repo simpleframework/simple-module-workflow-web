@@ -373,12 +373,6 @@ public class DefaultWfCommentHandler extends ComponentHandlerEx implements IWfCo
 		cal.setTime(commentDate);
 		final String format = nYear == cal.get(Calendar.YEAR) ? "MM-dd HH:mm" : "yy-MM-dd HH:mm";
 		sb.append(SpanElement.SPACE).append(Convert.toDateString(commentDate, format));
-
-		if (cp.isLmember(cp.getBeanProperty("managerRole"))) {
-			sb.append(SpanElement.SPACE15).append(
-					new LinkElement($m("Edit")).setOnclick("$Actions['" + cp.getComponentName()
-							+ "_edit']('commentId=" + comment.getId() + "');"));
-		}
 		sb.append("</div>");
 		return sb.toString();
 	}
@@ -386,7 +380,16 @@ public class DefaultWfCommentHandler extends ComponentHandlerEx implements IWfCo
 	protected String toCommentInfo_RightHTML(final ComponentParameter cp, final WfComment comment,
 			final EGroupBy groupBy) {
 		final StringBuilder sb = new StringBuilder();
-		sb.append("<div class='right'>").append(comment.getTaskname()).append("</div>");
+		sb.append("<div class='right'>");
+		sb.append(comment.getTaskname());
+		if (cp.isLmember(cp.getBeanProperty("managerRole"))) {
+			sb.append(SpanElement.SPACE10)
+					.append("[")
+					.append(
+							new LinkElement($m("Edit")).setOnclick("$Actions['" + cp.getComponentName()
+									+ "_edit']('commentId=" + comment.getId() + "');")).append("]");
+		}
+		sb.append("</div>");
 		return sb.toString();
 	}
 
