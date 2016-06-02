@@ -259,13 +259,6 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 		return row;
 	}
 
-	protected void appendTaskname(final StringBuilder sb, final PageParameter pp,
-			final ActivityBean activity) {
-		if (!"taskname".equals(pp.getParameter(G))) {
-			sb.append("[").append(SpanElement.color333(activity.getTasknodeText())).append("] ");
-		}
-	}
-
 	private boolean isRev(final PageParameter pp, final WorkitemBean workitem) {
 		return pp.getRequestCache("rev_" + workitem.getId(), new CacheV<Boolean>() {
 			@Override
@@ -278,12 +271,19 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 		});
 	}
 
-	public String toTitleHTML(final PageParameter pp, final WorkitemBean workitem,
-			final boolean linklist) {
+	protected String toTitle_TasknameHTML(final PageParameter pp, final ActivityBean activity) {
+		final StringBuilder sb = new StringBuilder();
+		if (!"taskname".equals(pp.getParameter(G))) {
+			sb.append("[").append(SpanElement.color333(activity.getTasknodeText())).append("] ");
+		}
+		return sb.toString();
+	}
+
+	protected String toTitle_PerfixHTML(final PageParameter pp, final WorkitemBean workitem) {
 		final StringBuilder sb = new StringBuilder();
 		final ActivityBean activity = WorkflowUtils.getActivityBean(pp, workitem);
 
-		appendTaskname(sb, pp, activity);
+		sb.append(toTitle_TasknameHTML(pp, activity));
 
 		final Date timeoutDate = activity.getTimeoutDate();
 		if (timeoutDate != null && !wfaService.isFinalStatus(activity)) {
@@ -306,6 +306,14 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 				}
 			}
 		}
+
+		return sb.toString();
+	}
+
+	public String toTitleHTML(final PageParameter pp, final WorkitemBean workitem,
+			final boolean linklist) {
+		final StringBuilder sb = new StringBuilder();
+		sb.append(toTitle_PerfixHTML(pp, workitem));
 
 		AbstractElement<?> tEle;
 		final ProcessBean process = WorkflowUtils.getProcessBean(pp, workitem);

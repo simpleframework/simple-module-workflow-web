@@ -201,8 +201,7 @@ public class MyDelegateListTPage extends AbstractItemsTPage {
 			if (img != null) {
 				row.add(TablePagerColumn.ICON, img);
 			}
-			final StringBuilder title = new StringBuilder();
-			appendTaskname(title, cp, activity);
+			final StringBuilder title = new StringBuilder(toTitle_TasknameHTML(cp, activity));
 			title.append(toTitle(delegation,
 					WorkflowUtils.getProcessTitle(wfaService.getProcessBean(activity))));
 			row.add("title", title);
