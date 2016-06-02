@@ -75,14 +75,7 @@
   }
 </script>
 <div class="wf_comment_log">
-  <div class="cl_tabs">
-    <a class="active" onclick="wf_comment_logtab(this, 'lt=collection');">#(wf_comment_log.0)</a><a 
-      onclick="wf_comment_logtab(this, 'lt=history');">#(wf_comment_log.1)</a>
-  </div>
-  <div class="cl_list">
-    <%=WfCommentUtils.toLogsHTML(cp)%>
-  </div>
-  <%=WfCommentUtils.toBtnsHTML(cp)%>
+  <%=WfCommentUtils.toCommentLogsHTML(cp)%>  
 </div>
 <script type="text/javascript">
   $ready(function() {

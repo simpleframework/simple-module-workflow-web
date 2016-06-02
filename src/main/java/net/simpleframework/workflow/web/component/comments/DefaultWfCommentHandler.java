@@ -24,6 +24,7 @@ import net.simpleframework.ctx.permission.PermissionUser;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.Checkbox;
 import net.simpleframework.mvc.common.element.InputElement;
+import net.simpleframework.mvc.common.element.LinkElement;
 import net.simpleframework.mvc.common.element.Radio;
 import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.component.ComponentHandlerEx;
@@ -332,41 +333,61 @@ public class DefaultWfCommentHandler extends ComponentHandlerEx implements IWfCo
 		return sb.toString();
 	}
 
-	protected String toCommentItemHTML(final PageParameter pp, final WfComment comment,
+	protected String toCommentItemHTML(final ComponentParameter cp, final WfComment comment,
 			final boolean first, final EGroupBy groupBy) {
-		final StringBuilder sb2 = new StringBuilder();
-		sb2.append("<div class='comment-item");
+		final StringBuilder sb = new StringBuilder();
+		sb.append("<div class='comment-item");
 		if (first) {
-			sb2.append(" item-first");
+			sb.append(" item-first");
 		}
-		sb2.append("'>");
-		sb2.append("<img src='").append(pp.getPhotoUrl(comment.getUserId())).append("' />");
-		sb2.append(" <div class='i1'>").append(HtmlUtils.convertHtmlLines(comment.getCcomment()))
+		sb.append("'>");
+		sb.append("<img src='").append(cp.getPhotoUrl(comment.getUserId())).append("' />");
+		sb.append(" <div class='i1'>").append(HtmlUtils.convertHtmlLines(comment.getCcomment()))
 				.append("</div>");
-		sb2.append(" <div class='i2 clearfix'>");
-		final PermissionUser ouser = pp.getUser(comment.getUserId());
-		sb2.append("  <div class='left'>");
+		sb.append(" <div class='i2 clearfix'>");
+		sb.append(toCommentInfo_LeftHTML(cp, comment, groupBy));
+		sb.append(toCommentInfo_RightHTML(cp, comment, groupBy));
+		sb.append(" </div>");
+		sb.append("</div>");
+		return sb.toString();
+	}
+
+	protected String toCommentInfo_LeftHTML(final ComponentParameter cp, final WfComment comment,
+			final EGroupBy groupBy) {
+		final StringBuilder sb = new StringBuilder();
+		sb.append("<div class='left'>");
+		final PermissionUser ouser = cp.getUser(comment.getUserId());
 		if (groupBy != EGroupBy.dept) {
 			if (null != comment.getDeptId()) {
-				sb2.append(pp.getDept(comment.getDeptId()));
+				sb.append(cp.getDept(comment.getDeptId()));
 			} else {
-				sb2.append(ouser.getDept());
+				sb.append(ouser.getDept());
 			}
-			sb2.append(SpanElement.SPACE);
+			sb.append(SpanElement.SPACE);
 		}
-		sb2.append(ouser);
+		sb.append(ouser);
 
 		final int nYear = Calendar.getInstance().get(Calendar.YEAR);
 		final Calendar cal = Calendar.getInstance();
 		final Date commentDate = comment.getCreateDate();
 		cal.setTime(commentDate);
 		final String format = nYear == cal.get(Calendar.YEAR) ? "MM-dd HH:mm" : "yy-MM-dd HH:mm";
-		sb2.append(SpanElement.SPACE).append(Convert.toDateString(commentDate, format))
-				.append("</div>");
-		sb2.append("  <div class='right'>").append(comment.getTaskname()).append("</div>");
-		sb2.append(" </div>");
-		sb2.append("</div>");
-		return sb2.toString();
+		sb.append(SpanElement.SPACE).append(Convert.toDateString(commentDate, format));
+
+		if (cp.isLmember(cp.getBeanProperty("managerRole"))) {
+			sb.append(SpanElement.SPACE15).append(
+					new LinkElement($m("Edit")).setOnclick("$Actions['" + cp.getComponentName()
+							+ "_edit']('commentId=" + comment.getId() + "');"));
+		}
+		sb.append("</div>");
+		return sb.toString();
+	}
+
+	protected String toCommentInfo_RightHTML(final ComponentParameter cp, final WfComment comment,
+			final EGroupBy groupBy) {
+		final StringBuilder sb = new StringBuilder();
+		sb.append("<div class='right'>").append(comment.getTaskname()).append("</div>");
+		return sb.toString();
 	}
 
 	@Override

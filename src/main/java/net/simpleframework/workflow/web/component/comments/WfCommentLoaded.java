@@ -22,11 +22,19 @@ public class WfCommentLoaded extends DefaultPageHandler {
 		final ComponentParameter nCP = WfCommentUtils.get(pp);
 		final String commentName = nCP.getComponentName();
 
+		final String rpath = pp.getResourceHomePath(WfCommentLoaded.class);
 		pp.addComponentBean(commentName + "_logPage", AjaxRequestBean.class).setUrlForward(
-				pp.getResourceHomePath(WfCommentLoaded.class) + "/jsp/wf_comment_log.jsp?"
-						+ WfCommentUtils.BEAN_ID + "=" + nCP.hashId());
+				rpath + "/jsp/wf_comment_log.jsp?" + WfCommentUtils.BEAN_ID + "=" + nCP.hashId());
 		pp.addComponentBean(commentName + "_log_popup", WindowBean.class)
 				.setContentRef(commentName + "_logPage").setPopup(true)
 				.setTitle($m("WfCommentLoaded.0")).setHeight(450).setWidth(340);
+
+		if (pp.isLmember(nCP.getBeanProperty("managerRole"))) {
+			pp.addComponentBean(commentName + "_editPage", AjaxRequestBean.class).setUrlForward(
+					rpath + "/jsp/wf_comment_edit.jsp?" + WfCommentUtils.BEAN_ID + "=" + nCP.hashId());
+			pp.addComponentBean(commentName + "_edit", WindowBean.class)
+					.setContentRef(commentName + "_editPage").setTitle($m("wf_comment_edit.0"))
+					.setHeight(300).setWidth(450);
+		}
 	}
 }

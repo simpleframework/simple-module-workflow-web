@@ -19,7 +19,8 @@ import net.simpleframework.workflow.engine.comment.WfCommentLog.ELogType;
 /**
  * Licensed under the Apache License, Version 2.0
  * 
- * @author 陈侃(cknet@126.com, 13910090885) https://github.com/simpleframework
+ * @author 陈侃(cknet@126.com, 13910090885)
+ *         https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
 public class WfCommentLogLoaded extends DefaultPageHandler implements IWorkflowContextAware {
@@ -45,7 +46,7 @@ public class WfCommentLogLoaded extends DefaultPageHandler implements IWorkflowC
 
 		public IForward doTab(final ComponentParameter cp) throws Exception {
 			final ComponentParameter nCP = ComponentParameter.getByAttri(cp, "$wfcomment");
-			return new TextForward(WfCommentUtils.toLogsHTML(nCP));
+			return new TextForward(WfCommentUtils.toCommentLogs_ListHTML(nCP));
 		}
 
 		public IForward doDel(final ComponentParameter cp) throws Exception {

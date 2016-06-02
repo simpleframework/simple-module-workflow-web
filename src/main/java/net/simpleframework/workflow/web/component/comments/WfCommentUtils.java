@@ -40,7 +40,31 @@ public abstract class WfCommentUtils implements IWorkflowContextAware {
 		return ComponentParameter.get(rRequest, BEAN_ID);
 	}
 
-	public static String toLogsHTML(final ComponentParameter cp) {
+	public static String toCommentLogsHTML(final ComponentParameter cp) {
+		final StringBuilder sb = new StringBuilder();
+		sb.append("<div class='cl_tabs'>");
+		sb.append(new LinkElement($m("wf_comment_log.0"), "active")
+				.setOnclick("wf_comment_logtab(this, 'lt=collection');"));
+		sb.append(new LinkElement($m("wf_comment_log.1"))
+				.setOnclick("wf_comment_logtab(this, 'lt=history');"));
+		sb.append("</div>");
+		sb.append("<div class='cl_list'>").append(toCommentLogs_ListHTML(cp)).append("</div>");
+
+		final IWfCommentHandler cHdl = (IWfCommentHandler) cp.getComponentHandler();
+		sb.append("<div class='cl_btns clearfix'>");
+		sb.append(" <div class='left'>");
+		sb.append(LinkElement.style2($m("WfCommentUtils.2")).setTarget("_blank")
+				.setHref(cHdl.getMycommentsUrl(cp)));
+		sb.append(" </div>");
+		sb.append(" <div class='right'>");
+		sb.append(ButtonElement.okBtn().setOnclick("wf_comment_okclick();"));
+		sb.append(SpanElement.SPACE).append(ButtonElement.closeBtn());
+		sb.append(" </div>");
+		sb.append("</div>");
+		return sb.toString();
+	}
+
+	static String toCommentLogs_ListHTML(final ComponentParameter cp) {
 		ELogType logType = cp.getEnumParameter(ELogType.class, "lt");
 		if (logType == null) {
 			logType = ELogType.collection;
@@ -77,21 +101,20 @@ public abstract class WfCommentUtils implements IWorkflowContextAware {
 		return sb.toString();
 	}
 
-	public static String toBtnsHTML(final ComponentParameter cp) {
+	public static String toCommentEditHTML(final ComponentParameter cp) {
 		final StringBuilder sb = new StringBuilder();
-		final IWfCommentHandler cHdl = (IWfCommentHandler) cp.getComponentHandler();
-		sb.append("<div class='cl_btns clearfix'>");
-		sb.append(" <div class='left'>");
-		sb.append(LinkElement.style2($m("WfCommentUtils.2")).setTarget("_blank")
-				.setHref(cHdl.getMycommentsUrl(cp)));
-		sb.append(" </div>");
-		sb.append(" <div class='right'>");
-		sb.append(ButtonElement.okBtn().setOnclick("wf_comment_okclick();"));
-		sb.append(SpanElement.SPACE).append(ButtonElement.closeBtn());
-		sb.append(" </div>");
+		final WfComment comment = wfcService.getBean(cp.getParameter("commentId"));
+		sb.append(InputElement.hidden("commentId").setVal(comment.getId()));
+		sb.append("<div class='c'>");
+		sb.append(" <div class='ta'>")
+				.append(InputElement.textarea().setRows(10).setText(comment.getCcomment()))
+				.append("</div>");
 		sb.append("</div>");
-		sb.append("<style>");
-		sb.append("</style>");
+		sb.append("<div class='b'>");
+		sb.append(
+				ButtonElement.saveBtn().setOnclick("$Actions['" + cp.getComponentName() + "_save']();"))
+				.append(SpanElement.SPACE).append(ButtonElement.closeBtn());
+		sb.append("</div>");
 		return sb.toString();
 	}
 }

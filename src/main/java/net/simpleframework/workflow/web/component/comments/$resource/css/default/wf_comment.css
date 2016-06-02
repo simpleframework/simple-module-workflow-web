@@ -82,6 +82,7 @@
   padding-top: 8px;
 }
 
+/*--------------------------wf_comment_log-----------------------*/
 .wf_comment_log {
   -moz-user-select: none;
   -webkit-user-select: none;
@@ -178,4 +179,18 @@
   bottom: 0;
   left: 0;
   right: 0;
+}
+
+/*--------------------------wf_comment_edit-----------------------*/
+.wf_comment_edit .ta {
+  border: 1px solid #ccc;
+  margin-top: 4px;
+  padding: 4px;
+  background-color: #fafafa;
+}
+
+.wf_comment_edit .ta textarea {
+  background-image: none;
+  border: 0;
+  width: 100%;
 }
