@@ -75,10 +75,10 @@ public class ActivityTbl extends GroupDbTablePagerHandler implements IWorkflowCo
 			if (completeDate == null) {
 				completeDate = new Date();
 			}
-			max = Math.max(
-					max,
-					wfaService.getWorkCalendarListener(activity).getRelativeMilliseconds(activity,
-							activity.getCreateDate(), completeDate));
+			final long l = wfaService.getWorkCalendarListener(activity).getRelativeMilliseconds(
+					activity, activity.getCreateDate(), completeDate);
+			max = Math.max(max, l);
+			cp.setRequestAttr("l_" + activity.getId(), l);
 		}
 		cp.setRequestAttr("relative_date", max);
 		return list;
@@ -144,10 +144,11 @@ public class ActivityTbl extends GroupDbTablePagerHandler implements IWorkflowCo
 				completeDate = new Date();
 			}
 
-			final long l0 = wfaService.getWorkCalendarListener(activity).getRelativeMilliseconds(
-					activity, activity.getCreateDate(), completeDate);
-			return new ProgressElement((double) l0 / l).setColor("#3bf").setLinearStartColor(null)
-					.setText(DateUtils.toDifferenceDate(l0)).toString();
+			final Long l0 = (Long) cp.getRequestAttr("l_" + activity.getId());
+			if (l0 != null) {
+				return new ProgressElement((double) l0 / l).setColor("#3bf").setLinearStartColor(null)
+						.setText(DateUtils.toDifferenceDate(l0)).toString();
+			}
 		}
 		return null;
 	}
