@@ -4,6 +4,11 @@
 }
 
 /*-------------------------form_tb_bar--------------------*/
+.form_tb_bar {
+  background-image: none;
+  background-color: #f9f9f9; 
+}
+
 .form_tb_bar .taskinfo {
   display: inline-block;
   vertical-align: top;
@@ -11,6 +16,16 @@
   line-height: 2;
   margin-left: 15px;
   color: #a44;
+}
+
+body {
+  background: none;  
+}
+
+.form_tb_bar .simple_tabs a.active {
+  background-image: none;
+  background-color: #fff;  
+  border-bottom-color: #fff;
 }
 
 /*-------------------------WorkflowCompleteInfoPage--------------------*/
@@ -91,17 +106,26 @@
   width: 95%;
 }
 
-/**-------------form_content
-.form_content .tool_bar {
-  border-color: #d77;
-  background-color: #f9f9f9;
+.form_content .FormTableRowTemplatePage>.tool_bar {
+  border-color: #d44;
+  background-color: #fafafa;
+}
+
+.form_content .FormTableRowTemplatePage ul.simple_tabs a,
+.form_content .FormTableRowTemplatePage .simple_tabs_content,
+.form_content .FormTableRowTemplatePage .tabs,
+.form_content .FormTableRowTemplatePage .form_block {
+  border-color: #d44;
+}
+
+.form_content .FormTableRowTemplatePage ul.simple_tabs a.active {
+  border-bottom-color: #fff;
 }
 
 .form_content .form_tbl {
-  background-color: #d77;
+  background-color: #d44;
 }
 
 .form_content .form_tbl .l {
-  color: #b55;
+  color: #c33;
 }
------------------**/
