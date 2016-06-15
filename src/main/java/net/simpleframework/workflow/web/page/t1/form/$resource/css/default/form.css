@@ -4,11 +4,6 @@
 }
 
 /*-------------------------form_tb_bar--------------------*/
-.form_tb_bar {
-  background-image: none;
-  background-color: #f9f9f9; 
-}
-
 .form_tb_bar .taskinfo {
   display: inline-block;
   vertical-align: top;
@@ -16,6 +11,16 @@
   line-height: 2;
   margin-left: 15px;
   color: #a44;
+}
+
+.form_topic {
+  
+}
+
+/*
+.form_tb_bar {
+  background-image: none;
+  background-color: #f9f9f9; 
 }
 
 body {
@@ -26,7 +31,7 @@ body {
   background-image: none;
   background-color: #fff;  
   border-bottom-color: #fff;
-}
+} */
 
 /*-------------------------WorkflowCompleteInfoPage--------------------*/
 .WorkflowCompleteInfoPage {
