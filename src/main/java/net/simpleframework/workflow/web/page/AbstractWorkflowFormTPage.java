@@ -219,7 +219,7 @@ public abstract class AbstractWorkflowFormTPage extends AbstractFormTableRowTPag
 	}
 
 	protected String getFormTopic(final PageParameter pp) {
-		return "Test";
+		return null;
 	}
 
 	@Override
