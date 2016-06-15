@@ -14,7 +14,13 @@
 }
 
 .form_topic {
-  
+  background-color: #fff;
+  border-left: 1px solid #d44;
+  border-right: 1px solid #d44;
+  color: #555;
+  font-size: 17pt;
+  padding: 10px 0;
+  text-align: center;
 }
 
 /*
@@ -132,5 +138,5 @@ body {
 }
 
 .form_content .form_tbl .l {
-  color: #c33;
+  color: #833;
 }
