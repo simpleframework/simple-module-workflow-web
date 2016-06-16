@@ -10,14 +10,14 @@
   font-size: 9.5pt;
   line-height: 2;
   margin-left: 15px;
-  color: #a44;
+  color: #f00;
 }
 
 .form_topic {
   background-color: #fff;
-  border-left: 1px solid #722;
-  border-right: 1px solid #722;
-  color: #555;
+  border-left: 1px solid #f00;
+  border-right: 1px solid #f00;
+  color: #f00;
   font-size: 17pt;
   padding: 10px 0;
   text-align: center;
@@ -118,7 +118,7 @@ body {
 }
 
 .form_content .FormTableRowTemplatePage>.tool_bar {
-  border-color: #722;
+  border-color: #f00;
   background-color: #fafafa;
 }
 
@@ -126,7 +126,7 @@ body {
 .form_content .FormTableRowTemplatePage .simple_tabs_content,
 .form_content .FormTableRowTemplatePage .tabs,
 .form_content .FormTableRowTemplatePage .form_block {
-  border-color: #722;
+  border-color: #f00;
 }
 
 .form_content .FormTableRowTemplatePage ul.simple_tabs a.active {
@@ -134,10 +134,10 @@ body {
 }
 
 .form_content .form_tbl {
-  background-color: #722;
+  background-color: #f00;
 }
 
 .form_content .form_tbl .l {
-  color: #722;
+  color: #f00;
   background-color: #fff;
 }

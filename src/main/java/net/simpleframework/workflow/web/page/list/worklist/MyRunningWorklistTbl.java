@@ -164,7 +164,7 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 					modelIds.add(processModel.getId().toString());
 
 					final StringBuilder sb = new StringBuilder();
-					sb.append(SpanElement.color(groupVal, "#c66")).append("&nbsp;&nbsp;(");
+					sb.append(SpanElement.color(groupVal, "#c44")).append("&nbsp;&nbsp;(");
 					sb.append(new LinkElement(StringUtils.replace(processModel.toString(), ".", " / "))
 							.setOnclick("$Actions.reloc('modelId=" + StringUtils.join(modelIds, ";")
 									+ "');"));
@@ -186,7 +186,7 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 					final int p = mtxt.indexOf('.');
 					LinkElement le;
 					if (p > 0) {
-						sb.append(SpanElement.color(mtxt.substring(0, p), "#c66")).append(" / ");
+						sb.append(SpanElement.color(mtxt.substring(0, p), "#c44")).append(" / ");
 						le = new LinkElement(mtxt.substring(p + 1));
 					} else {
 						le = new LinkElement(mtxt);
