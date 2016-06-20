@@ -64,6 +64,15 @@ public abstract class WorkitemCompleteUtils implements IWorkflowContextAware {
 			sb.append("workitemId=").append(workitem.getId()).append("&");
 		}
 		sb.append(BEAN_ID).append("=").append(cp.hashId());
+		// 要选择的参与者
+		final String selected_userid = cp.getParameter("selected_userid");
+		if (StringUtils.hasText(selected_userid)) {
+			sb.append("&selected_userid=").append(selected_userid);
+		}
+		final String selected_deptid = cp.getParameter("selected_deptid");
+		if (StringUtils.hasText(selected_deptid)) {
+			sb.append("&selected_deptid=").append(selected_deptid);
+		}
 		return sb.toString();
 	}
 
@@ -200,6 +209,8 @@ public abstract class WorkitemCompleteUtils implements IWorkflowContextAware {
 				sb.append(" <span>#(participant_select.1)</span>");
 				sb.append("</div>");
 			} else {
+				final String[] userArr = StringUtils.split(cp.getParameter("selected_userid"));
+				final String[] deptArr = StringUtils.split(cp.getParameter("selected_deptid"));
 				int i = 0;
 				for (final Participant participant : coll) {
 					sb.append("<div class='ritem'>");
@@ -220,10 +231,14 @@ public abstract class WorkitemCompleteUtils implements IWorkflowContextAware {
 					if (!manual) {
 						box = new Checkbox(id, user).setDisabled(true).setChecked(true);
 					} else {
+						final boolean check = ArrayUtils.contains(userArr, participant.getUserId()
+								.toString())
+								|| ArrayUtils.contains(deptArr, participant.getDeptId().toString());
 						if (multi) {
-							box = new Checkbox(id, user);
+							box = new Checkbox(id, user).setChecked(check);
 						} else {
-							box = new Radio(id, user).setChecked(i++ == 0).setName(transition.getId());
+							box = new Radio(id, user).setChecked(i++ == 0 || check).setName(
+									transition.getId());
 						}
 					}
 					sb.append(box.setValue(val));
