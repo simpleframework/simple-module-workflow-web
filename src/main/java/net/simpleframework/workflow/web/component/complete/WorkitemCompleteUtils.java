@@ -231,9 +231,10 @@ public abstract class WorkitemCompleteUtils implements IWorkflowContextAware {
 					if (!manual) {
 						box = new Checkbox(id, user).setDisabled(true).setChecked(true);
 					} else {
-						final boolean check = ArrayUtils.contains(userArr, participant.getUserId()
-								.toString())
-								|| ArrayUtils.contains(deptArr, participant.getDeptId().toString());
+						final String userId = participant.getUserId().toString();
+						final String deptId = participant.getDeptId().toString();
+						final boolean check = ArrayUtils.contains(userArr, userId)
+								|| ArrayUtils.contains(deptArr, deptId);
 						if (multi) {
 							box = new Checkbox(id, user).setChecked(check);
 						} else {
