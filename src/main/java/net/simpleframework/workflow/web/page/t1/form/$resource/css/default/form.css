@@ -140,4 +140,5 @@ body {
 .form_content .form_tbl .l {
   color: #f00;
   background-color: #fff;
+  vertical-align: middle;
 }
