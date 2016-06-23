@@ -79,8 +79,7 @@ public abstract class ActivityFallbackUtils implements IWorkflowContextAware {
 	public static String toBottomHTML(final ComponentParameter cp) {
 		final StringBuilder sb = new StringBuilder();
 		sb.append("<div class='left'>");
-		sb.append(new Checkbox("idActivityFallback_opt1", $m("ActivityFallbackUtils.0"))
-				.setChecked(true));
+		sb.append(new Checkbox("idActivityFallback_opt1", $m("ActivityFallbackUtils.0")));
 		sb.append("</div>");
 		sb.append("<div class='right'>");
 		sb.append(ButtonElement.okBtn().setOnclick("_activity_fallback_select_click();")).append(
