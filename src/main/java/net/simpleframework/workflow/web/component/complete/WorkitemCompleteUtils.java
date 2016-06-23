@@ -8,6 +8,7 @@ import java.util.Collection;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import net.simpleframework.common.Convert;
 import net.simpleframework.common.JsonUtils;
 import net.simpleframework.common.StringUtils;
 import net.simpleframework.common.coll.ArrayUtils;
@@ -231,10 +232,8 @@ public abstract class WorkitemCompleteUtils implements IWorkflowContextAware {
 					if (!manual) {
 						box = new Checkbox(id, user).setDisabled(true).setChecked(true);
 					} else {
-						final String userId = participant.getUserId().toString();
-						final String deptId = participant.getDeptId().toString();
-						final boolean check = ArrayUtils.contains(userArr, userId)
-								|| ArrayUtils.contains(deptArr, deptId);
+						final boolean check = isCheck(userArr, transition, participant.getUserId())
+								|| isCheck(deptArr, transition, participant.getDeptId());
 						if (multi) {
 							box = new Checkbox(id, user).setChecked(check);
 						} else {
@@ -250,6 +249,25 @@ public abstract class WorkitemCompleteUtils implements IWorkflowContextAware {
 			sb.append("</div>");
 		}
 		return sb.toString();
+	}
+
+	private static boolean isCheck(final String[] arr, final TransitionNode transition,
+			final Object id) {
+		if (arr == null || arr.length == 0 || id == null) {
+			return false;
+		}
+		final String taskName = transition.to().getName();
+		final String tid = Convert.toString(id);
+		for (final String s : arr) {
+			final String[] arr2 = StringUtils.split(s, ":");
+			if (arr2.length == 1 && arr2[0].equals(tid)) {
+				return true;
+			}
+			if (arr2.length == 2 && arr2[0].equals(taskName) && arr2[1].equals(tid)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	static ActivityComplete getActivityComplete(final ComponentParameter cp) {
