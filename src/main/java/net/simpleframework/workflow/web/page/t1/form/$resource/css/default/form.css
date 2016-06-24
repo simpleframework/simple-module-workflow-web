@@ -1,6 +1,7 @@
-.WorkflowFormPage,
+.WorkflowFormPage, 
 .WorkflowViewPage {
-  width: 82%;
+  min-width: 1090px;
+  width: 1090px;
 }
 
 /*-------------------------form_tb_bar--------------------*/
@@ -15,11 +16,9 @@
 
 .form_topic {
   background-color: #fff;
-  border-left: 1px solid #f00;
-  border-right: 1px solid #f00;
   color: #f00;
   font-size: 17pt;
-  padding: 10px 0;
+  padding: 2px 0 10px 0;
   text-align: center;
 }
 
@@ -117,9 +116,20 @@ body {
   width: 95%;
 }
 
+.form_content .FormTableRowTemplatePage {
+  background-color: #fff;
+  padding-bottom: 15px;
+}
+
+.form_content .FormTableRowTemplatePage form {
+  margin: 0 15px;
+  border-top: 1px solid #f00;
+}
+
 .form_content .FormTableRowTemplatePage>.tool_bar {
-  border-color: #f00;
-  background-color: #fafafa;
+  border-color: #fff;
+  background-color: #fff;
+  padding: 10px 15px;
 }
 
 .form_content .FormTableRowTemplatePage ul.simple_tabs a,
@@ -127,6 +137,10 @@ body {
 .form_content .FormTableRowTemplatePage .tabs,
 .form_content .FormTableRowTemplatePage .form_block {
   border-color: #f00;
+}
+
+.form_content .FormTableRowTemplatePage .tabs {
+  margin: 0 15px;
 }
 
 .form_content .FormTableRowTemplatePage ul.simple_tabs a.active {
