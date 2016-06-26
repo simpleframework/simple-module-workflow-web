@@ -12,7 +12,6 @@ import net.simpleframework.common.ID;
 import net.simpleframework.common.StringUtils;
 import net.simpleframework.common.web.HttpUtils;
 import net.simpleframework.ctx.permission.PermissionDept;
-import net.simpleframework.mvc.AbstractMVCPage;
 import net.simpleframework.mvc.IForward;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageParameter;
@@ -182,7 +181,6 @@ public class MyProcessWorksTPage extends AbstractWorksTPage {
 		return ElementList.of(createTabsElement(pp, tabs));
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	protected String toCategoryHTML(final PageParameter pp) {
 		final StringBuilder sb = new StringBuilder();
@@ -261,7 +259,7 @@ public class MyProcessWorksTPage extends AbstractWorksTPage {
 
 			sb.append("<div class='gtitle'>");
 			sb.append(new LinkElement($m("MyProcessWorksTPage.9")).setHref(uFactory.getUrl(pp,
-					(Class<? extends AbstractMVCPage>) getOriginalClass())));
+					getOriginalClass())));
 			sb.append(SpanElement.NAV(3)).append(pgroup);
 			sb.append("</div>");
 			sb.append(items);
