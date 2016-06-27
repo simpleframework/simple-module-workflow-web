@@ -224,7 +224,10 @@ public class MyRunningWorklistTPage extends AbstractItemsTPage {
 		}
 		final Set<String> modelIds = ArrayUtils.asSet(StringUtils.split(pp.getParameter("modelId"),
 				";"));
-		final FilterButtons btns = FilterButtons.of();
+		FilterButtons btns = getFilterButtons(pp);
+		if (btns == null) {
+			btns = FilterButtons.of();
+		}
 		for (final String modelId : modelIds) {
 			final ProcessModelBean pm = wfpmService.getBean(modelId);
 			if (pm != null) {
