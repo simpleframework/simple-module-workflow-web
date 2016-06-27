@@ -156,3 +156,7 @@ body {
   background-color: #fff;
   vertical-align: middle;
 }
+
+.form_content .comment-group-item {
+  color: #f00;
+}
