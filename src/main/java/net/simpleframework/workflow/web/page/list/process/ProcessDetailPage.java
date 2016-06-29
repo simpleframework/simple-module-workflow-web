@@ -52,18 +52,19 @@ public class ProcessDetailPage extends AbstractTemplatePage implements IWorkflow
 
 			// 用户
 			final ID userId = workitem.getUserId2();
+			if (!wfwService.isFinalStatus(workitem)) {
+				utags2.put(userId, utags.get(userId));
+			}
+
 			if (userId.equals(loginId)) {
 				continue;
 			}
+
 			final Integer oj = utags.get(userId);
 			if (oj == null) {
 				utags.put(userId, 1);
 			} else {
 				utags.put(userId, oj + 1);
-			}
-
-			if (!wfwService.isFinalStatus(workitem)) {
-				utags2.put(userId, utags.get(userId));
 			}
 		}
 		for (final String e : dtags) {
@@ -88,7 +89,11 @@ public class ProcessDetailPage extends AbstractTemplatePage implements IWorkflow
 		}
 		for (final Map.Entry<AbstractTaskNode, Integer> e : wtags.entrySet()) {
 			sb.append("<span class='ptag'>");
-			sb.append(e.getKey()).append(" (").append(e.getValue()).append(")");
+			sb.append(e.getKey());
+			final Object v = e.getValue();
+			if (v != null) {
+				sb.append(" (").append(v).append(")");
+			}
 			sb.append("</span>");
 		}
 		sb.append("    </td>");
@@ -101,7 +106,11 @@ public class ProcessDetailPage extends AbstractTemplatePage implements IWorkflow
 		} else {
 			for (final Map.Entry<ID, Integer> e : utags2.entrySet()) {
 				sb.append("<span class='ptag'>");
-				sb.append(hdl.getUser(e.getKey())).append(" (").append(e.getValue()).append(")");
+				sb.append(hdl.getUser(e.getKey()));
+				final Object v = e.getValue();
+				if (v != null) {
+					sb.append(" (").append(v).append(")");
+				}
 				sb.append("</span>");
 			}
 		}
@@ -112,7 +121,11 @@ public class ProcessDetailPage extends AbstractTemplatePage implements IWorkflow
 		sb.append("    <td class='v'>");
 		for (final Map.Entry<ID, Integer> e : utags.entrySet()) {
 			sb.append("<span class='ptag'>");
-			sb.append(hdl.getUser(e.getKey())).append(" (").append(e.getValue()).append(")");
+			sb.append(hdl.getUser(e.getKey()));
+			final Object v = e.getValue();
+			if (v != null) {
+				sb.append(" (").append(v).append(")");
+			}
 			sb.append("</span>");
 		}
 		sb.append("    </td>");
