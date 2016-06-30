@@ -383,11 +383,14 @@ public class DefaultWfCommentHandler extends ComponentHandlerEx implements IWfCo
 		sb.append("<div class='right'>");
 		sb.append(comment.getTaskname());
 		if (cp.isLmember(cp.getBeanProperty("managerRole"))) {
-			sb.append(SpanElement.SPACE10)
-					.append("[")
-					.append(
-							new LinkElement($m("Edit")).setOnclick("$Actions['" + cp.getComponentName()
-									+ "_edit']('commentId=" + comment.getId() + "');")).append("]");
+			sb.append(SpanElement.SPACE10).append("[");
+			final String componentName = cp.getComponentName();
+			sb.append(new LinkElement($m("Edit")).setOnclick("$Actions['" + componentName
+					+ "_edit']('commentId=" + comment.getId() + "');"));
+			sb.append(SpanElement.SPACE);
+			sb.append(new LinkElement($m("Delete")).setOnclick("$Actions['" + componentName
+					+ "_del']('commentId=" + comment.getId() + "');"));
+			sb.append("]");
 		}
 		sb.append("</div>");
 		return sb.toString();
