@@ -53,7 +53,7 @@ public abstract class WfCommentUtils implements IWorkflowContextAware {
 		final IWfCommentHandler cHdl = (IWfCommentHandler) cp.getComponentHandler();
 		sb.append("<div class='cl_btns clearfix'>");
 		sb.append(" <div class='left'>");
-		sb.append(LinkElement.style2($m("WfCommentUtils.2")).setTarget("_blank")
+		sb.append(LinkElement.style2($m("WfCommentUtils.2")).blank()
 				.setHref(cHdl.getMycommentsUrl(cp)));
 		sb.append(" </div>");
 		sb.append(" <div class='right'>");

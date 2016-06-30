@@ -38,7 +38,7 @@ public abstract class AbstractWorkflowFormPage extends AbstractFormTemplatePage 
 	}
 
 	protected TabButton createMonitorTab(final PageParameter pp, final WorkitemBean workitem) {
-		return new TabButton($m("WorkflowFormPage.1")).setTarget("_blank").setHref(
+		return new TabButton($m("WorkflowFormPage.1")).blank().setHref(
 				uFactory.getUrl(pp, WorkflowMonitorPage.class, workitem));
 	}
 }
