@@ -67,6 +67,12 @@ body {
 .WorkflowCompleteInfoPage .l2 {
   color: #a00;
   font-size: 11.5pt;
+  padding: 8px 0;
+}
+
+.WorkflowCompleteInfoPage .l2 .desc {
+  color: #777;
+  font-size: 11px;
 }
 
 .WorkflowCompleteInfoPage .l2 .task {

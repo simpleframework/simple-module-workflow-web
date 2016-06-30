@@ -63,10 +63,16 @@ public class WorkflowCompleteInfoPage extends AbstractWorkflowFormPage {
 					if (i++ > 0) {
 						sb.append(", ");
 					}
-					sb.append(workitem2.getUserText());
-					final PermissionUser oUser = pp.getUser(workitem2.getUserId());
+					sb.append(workitem2.getUserText2());
+					final Object uId = workitem2.getUserId2();
+					final PermissionUser oUser = pp.getUser(uId);
 					if (oUser.exists()) {
 						sb.append(" (").append(oUser.getName()).append(")");
+					}
+					if (!uId.equals(workitem2.getUserId())) {
+						sb.append("<br><span class='desc'>")
+								.append($m("WorkflowCompleteInfoPage.2", workitem2.getUserText()))
+								.append("</span>");
 					}
 				}
 				sb.append("</td></tr>");
