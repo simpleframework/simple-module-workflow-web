@@ -13,7 +13,9 @@ import net.simpleframework.mvc.common.element.AbstractElement;
 import net.simpleframework.workflow.engine.IWorkflowContextAware;
 import net.simpleframework.workflow.engine.bean.ActivityBean;
 import net.simpleframework.workflow.engine.bean.ProcessBean;
+import net.simpleframework.workflow.engine.bean.ProcessModelBean;
 import net.simpleframework.workflow.graph.GraphUtils;
+import net.simpleframework.workflow.web.WorkflowUtils;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -45,6 +47,7 @@ public abstract class WorkflowGraphUtils implements IWorkflowContextAware {
 		if (process == null) {
 			return "";
 		}
+
 		final mxGraph graph = GraphUtils.createGraph(wfpService.getProcessDocument(process));
 		final List<ActivityBean> list = wfaService.getActivities(process);
 		final Map<String, Boolean> state = new HashMap<String, Boolean>();
@@ -136,8 +139,12 @@ public abstract class WorkflowGraphUtils implements IWorkflowContextAware {
 		if (variables != null) {
 			_variables.putAll(variables);
 		}
-		return MVEL2Template.replace(_variables.add("graph", gObj), WorkflowGraphUtils.class,
-				"WorkflowGraphMonitorPage_svg.html");
+
+		final ProcessModelBean pModel = wfpService.getProcessModel(process);
+		return MVEL2Template.replace(
+				_variables.add("graph", gObj).add("pm",
+						WorkflowUtils.getShortMtext(pModel) + " (" + pModel.getModelVer() + ")"),
+				WorkflowGraphUtils.class, "WorkflowGraphMonitorPage_svg.html");
 	}
 
 	public static boolean isVML(final PageParameter pp) {

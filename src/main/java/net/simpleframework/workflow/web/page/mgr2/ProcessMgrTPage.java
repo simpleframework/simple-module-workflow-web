@@ -98,7 +98,7 @@ public class ProcessMgrTPage extends AbstractWorkflowMgrTPage {
 		final SpanElement oele = super.createOrgElement(pp);
 		final ProcessModelBean pm = WorkflowUtils.getProcessModel(pp);
 		if (pm != null) {
-			oele.setText(oele.getText() + " - " + pm.getModelText());
+			oele.setText(oele.getText() + " - " + pm.getModelText() + " (" + pm.getModelVer() + ")");
 		}
 		return oele;
 	}
