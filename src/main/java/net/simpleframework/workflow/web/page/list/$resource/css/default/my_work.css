@@ -95,6 +95,10 @@
   transition: all 0.3s ease 0s;
 }
 
+#idPMSelectedPage_tree {
+  padding: 6px 10px;
+}
+
 .UserToPage .iitem {
   border-bottom: 1px solid #ccc;
   padding: 10px;

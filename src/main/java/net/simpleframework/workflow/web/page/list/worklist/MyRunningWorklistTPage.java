@@ -36,6 +36,10 @@ import net.simpleframework.mvc.component.ui.menu.MenuItem;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
 import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
 import net.simpleframework.mvc.component.ui.progressbar.ProgressBarRegistry;
+import net.simpleframework.mvc.component.ui.tree.AbstractTreeHandler;
+import net.simpleframework.mvc.component.ui.tree.TreeBean;
+import net.simpleframework.mvc.component.ui.tree.TreeNode;
+import net.simpleframework.mvc.component.ui.tree.TreeNodes;
 import net.simpleframework.mvc.template.AbstractTemplatePage;
 import net.simpleframework.mvc.template.struct.FilterButton;
 import net.simpleframework.mvc.template.struct.FilterButtons;
@@ -50,6 +54,7 @@ import net.simpleframework.workflow.web.page.list.delegate.AbstractDelegateFormP
 import net.simpleframework.workflow.web.page.list.delegate.AbstractDelegateFormPage.WorkitemDelegateSetPage;
 import net.simpleframework.workflow.web.page.list.delegate.UserDelegateListTPage;
 import net.simpleframework.workflow.web.page.list.initiate.MyInitiateItemsGroupTPage;
+import net.simpleframework.workflow.web.page.list.process.MyProcessWorksTPage;
 import net.simpleframework.workflow.web.page.list.stat.MyWorkstatTPage;
 
 /**
@@ -70,6 +75,13 @@ public class MyRunningWorklistTPage extends AbstractItemsTPage {
 		addTablePagerBean(pp);
 		// 标记置顶
 		addAjaxRequest(pp, "MyWorklistTPage_topMark").setHandlerMethod("doTopMark");
+
+		// 选择流程
+		final AjaxRequestBean ajaxRequest = addAjaxRequest(pp, "MyWorklistTPage_pmSelected_page",
+				PMSelectedPage.class);
+		addWindowBean(pp, "MyWorklistTPage_pmSelected", ajaxRequest).setPopup(true)
+				.setDestroyOnClose(true).setHeight(450).setWidth(350)
+				.setTitle($m("MyRunningWorklistTPage.19"));
 
 		// 添加其他组件
 		addComponents(pp);
@@ -116,6 +128,7 @@ public class MyRunningWorklistTPage extends AbstractItemsTPage {
 				.addItem(MyRunningWorklistTbl.MENU_MARK_ALLREAD());
 		mb.addItem(MenuItem.sep()).addItem(MyRunningWorklistTbl.MENU_MARK_TOP())
 				.addItem(MyRunningWorklistTbl.MENU_MARK_UNTOP());
+
 		// 标记已读
 		addAjaxRequest(pp, "MyWorklistTPage_readMark").setHandlerMethod("doReadMark");
 
@@ -317,9 +330,12 @@ public class MyRunningWorklistTPage extends AbstractItemsTPage {
 	public ElementList getLeftElements(final PageParameter pp) {
 		return ElementList.of(
 				LinkButton.of($m("MyRunningWorklistTPage.12")).setHref(
-						uFactory.getUrl(pp, MyInitiateItemsGroupTPage.class)), SpanElement.SPACE,
+						uFactory.getUrl(pp, MyInitiateItemsGroupTPage.class)),
+				SpanElement.SPACE,
 				LinkButton.menu($m("MyRunningWorklistTbl.14")).setId("idMyWorklistTPage_groupMenu"),
 				SpanElement.SPACE,
+				LinkButton.of($m("MyRunningWorklistTPage.17")).setOnclick(
+						"$Actions['MyWorklistTPage_pmSelected']();"), SpanElement.SPACE,
 				LinkButton.of($m("MyRunningWorklistTbl.9")).setOnclick("$Actions.reloc('v=unread');"),
 				SpanElement.SPACE,
 				LinkButton.menu($m("MyRunningWorklistTbl.6")).setId("idMyWorklistTPage_markMenu"),
@@ -432,6 +448,53 @@ public class MyRunningWorklistTPage extends AbstractItemsTPage {
 					.append(SpanElement.SPACE).append(ButtonElement.closeBtn()).append("</div>");
 			sb.append("</div>");
 			return sb.toString();
+		}
+	}
+
+	public static class PMSelectedPage extends AbstractTemplatePage {
+
+		@Override
+		protected void onForward(final PageParameter pp) throws Exception {
+			super.onForward(pp);
+
+			addTreeBean(pp, "PMSelectedPage_tree").setContainerId("idPMSelectedPage_tree")
+					.setHandlerClass(PMSelectedHandler.class);
+		}
+
+		@Override
+		protected String toHtml(final PageParameter pp, final Map<String, Object> variables,
+				final String currentVariable) throws IOException {
+			final StringBuilder sb = new StringBuilder();
+			sb.append("<div id='idPMSelectedPage_tree'></div>");
+			return sb.toString();
+		}
+	}
+
+	public static class PMSelectedHandler extends AbstractTreeHandler {
+		private Map<String, List<ProcessModelBean>> data;
+
+		@Override
+		public TreeNodes getTreenodes(final ComponentParameter cp, final TreeNode parent) {
+			final TreeNodes items = TreeNodes.of();
+			if (parent == null) {
+				data = MyProcessWorksTPage.getProcessModelMap(cp);
+				for (final String s : data.keySet()) {
+					final TreeNode tn = new TreeNode((TreeBean) cp.componentBean, null, s);
+					items.add(tn);
+				}
+			} else if (data != null) {
+				final Object dataObject = parent.getDataObject();
+				if (dataObject instanceof String) {
+					final List<ProcessModelBean> list = data.get(dataObject);
+					for (final ProcessModelBean pm : list) {
+						final TreeNode tn = new TreeNode((TreeBean) cp.componentBean, null, pm);
+						tn.setText(WorkflowUtils.getShortMtext(pm));
+						tn.setJsClickCallback("$Actions.reloc('modelId=" + pm.getId() + "');");
+						items.add(tn);
+					}
+				}
+			}
+			return items;
 		}
 	}
 }

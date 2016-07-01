@@ -181,14 +181,13 @@ public class MyProcessWorksTPage extends AbstractWorksTPage {
 		return ElementList.of(createTabsElement(pp, tabs));
 	}
 
-	@Override
-	protected String toCategoryHTML(final PageParameter pp) {
-		final StringBuilder sb = new StringBuilder();
+	static final String CONST_OTHER = $m("MyInitiateItemsGroupTPage.0");
+
+	public static Map<String, List<ProcessModelBean>> getProcessModelMap(final PageParameter pp) {
 		final List<ProcessModelBean> models = DataQueryUtils.toList(wfpmService.getModelListByDomain(
 				pp.getLDomainId(), EProcessModelStatus.deploy));
 		wfpmService.sort(models);
 
-		final String CONST_OTHER = $m("MyInitiateItemsGroupTPage.0");
 		final Map<String, List<ProcessModelBean>> gmap = new LinkedHashMap<String, List<ProcessModelBean>>();
 		for (final ProcessModelBean pm : models) {
 			final String[] arr = StringUtils.split(pm.getModelText(), ".");
@@ -199,7 +198,12 @@ public class MyProcessWorksTPage extends AbstractWorksTPage {
 			}
 			list.add(pm);
 		}
+		return gmap;
+	}
 
+	public static Map<String, Map<String, List<ProcessModelBean>>> getProcessModelMap2(
+			final PageParameter pp) {
+		final Map<String, List<ProcessModelBean>> gmap = getProcessModelMap(pp);
 		final Map<String, Map<String, List<ProcessModelBean>>> gmap2 = new LinkedHashMap<String, Map<String, List<ProcessModelBean>>>();
 		for (final Map.Entry<String, List<ProcessModelBean>> e : gmap.entrySet()) {
 			final String key = e.getKey();
@@ -225,7 +229,13 @@ public class MyProcessWorksTPage extends AbstractWorksTPage {
 			}
 			gmap2.put(key, m);
 		}
+		return gmap2;
+	}
 
+	@Override
+	protected String toCategoryHTML(final PageParameter pp) {
+		final StringBuilder sb = new StringBuilder();
+		final Map<String, Map<String, List<ProcessModelBean>>> gmap2 = getProcessModelMap2(pp);
 		final ProcessModelBean cur = WorkflowUtils.getProcessModel(pp);
 		if (cur != null) {
 			List<ProcessModelBean> l = null;
