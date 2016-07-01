@@ -112,6 +112,7 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 			final ActivityBean activity = wfwService.getActivity(getWorkitem(bean));
 			final ProcessModelBean processModel = wfpService.getProcessModel(wfaService
 					.getProcessBean(activity));
+			activity.setAttr("_PROCESSMODEL", processModel);
 			if (bModelname) {
 				return new ModelWrapper(processModel);
 			} else {
@@ -274,7 +275,14 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 	protected String toTitle_TasknameHTML(final PageParameter pp, final ActivityBean activity) {
 		final StringBuilder sb = new StringBuilder();
 		if (!"taskname".equals(pp.getParameter(G))) {
-			sb.append("[").append(SpanElement.color333(activity.getTasknodeText())).append("] ");
+			ProcessModelBean pm = (ProcessModelBean) activity.getAttr("_PROCESSMODEL");
+			if (pm == null) {
+				pm = wfpService.getProcessModel(wfaService.getProcessBean(activity));
+			}
+			sb.append("[")
+					.append(
+							SpanElement.color333(activity.getTasknodeText()).setTitle(
+									WorkflowUtils.getShortMtext(pm))).append("] ");
 		}
 		return sb.toString();
 	}
