@@ -8,6 +8,7 @@ import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.LinkButton;
 import net.simpleframework.mvc.template.t1.T1FormTemplatePage;
 import net.simpleframework.workflow.web.page.IWorkflowPageAware;
+import net.simpleframework.workflow.web.page.list.worklist.MyRunningWorklistTPage;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -44,7 +45,7 @@ public class AbstractFormTemplatePage extends T1FormTemplatePage implements IWor
 	}
 
 	protected String getDefaultBackUrl(final PageParameter pp) {
-		return "javascript:history.back();";
+		return uFactory.getUrl(pp, MyRunningWorklistTPage.class);
 	}
 
 	@Override

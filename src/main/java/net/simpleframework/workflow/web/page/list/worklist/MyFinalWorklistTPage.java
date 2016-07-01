@@ -217,12 +217,15 @@ public class MyFinalWorklistTPage extends MyRunningWorklistTPage {
 								final SpanElement ele = (wfaService.isFinalStatus(nextActivity) ? SpanElement
 										.color777(tasknode) : SpanElement.color333(tasknode)).setTitle(status
 										.toString());
+								final String utxt = workitem.getUserText2();
 								sb.append("[")
 										.append(ele)
 										.append("] ")
 										.append(
-												SpanElement.color060(workitem.getUserText2()).setTitle(
-														workitem.getUserText()));
+												SpanElement.color060(utxt).setTitle(
+														workitem.getUserId().equals(workitem.getUserId2()) ? utxt
+																: $m("WorkflowCompleteInfoPage.2",
+																		workitem.getUserText())));
 								list.add(sb.toString());
 							}
 						}
