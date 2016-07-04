@@ -148,8 +148,8 @@ public abstract class WorkflowGraphUtils implements IWorkflowContextAware {
 	}
 
 	public static boolean isVML(final PageParameter pp) {
-		Float ver;
-		return (ver = pp.getIEVersion()) != null && ver <= 8.0;
+		final Boolean ie = pp.isIE8("<=");
+		return ie != null && ie;
 	}
 
 	private static String _getImageForStyle(final PageParameter pp, final Map<String, Object> style) {
