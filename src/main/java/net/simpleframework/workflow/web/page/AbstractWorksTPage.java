@@ -39,7 +39,8 @@ public class AbstractWorksTPage extends Category_ListPage implements IWorkflowPa
 	}
 
 	public static TablePagerColumn TC_PNO() {
-		return new TablePagerColumn("pno", $m("MyRunningWorklistTPage.14"), 110).setSort(false);
+		return new TablePagerColumn("pno", $m("MyRunningWorklistTPage.14"), 120).setNowrap(false)
+				.setSort(false);
 	}
 
 	public static TablePagerColumn TC_USER(final String columnName, final String columnText) {

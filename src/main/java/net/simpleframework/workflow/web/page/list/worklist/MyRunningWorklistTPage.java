@@ -169,7 +169,7 @@ public class MyRunningWorklistTPage extends AbstractItemsTPage {
 				"$Actions.reloc('g=modelname');");
 		final MenuItem g2 = MyRunningWorklistTbl.MENU_VIEW_GROUP2().setOnclick(
 				"$Actions.reloc('g=taskname');");
-		final String g = pp.getParameter("g");
+		final String g = pp.getParameter(G);
 		if ("none".equals(g)) {
 			g0.setIconClass(MenuItem.ICON_SELECTED);
 		} else if ("modelname".equals(g)) {
@@ -183,11 +183,22 @@ public class MyRunningWorklistTPage extends AbstractItemsTPage {
 	protected TablePagerBean addTablePagerBean(final PageParameter pp) {
 		final TablePagerBean tablePager = addTablePagerBean(pp, "MyWorklistTPage_tbl",
 				MyRunningWorklistTbl.class).setShowCheckbox(true);
-		tablePager.addColumn(TC_ICON()).addColumn(TC_TITLE()).addColumn(TC_PNO().setWidth(150))
+		tablePager.addColumn(TC_ICON());
+		final String g = pp.getParameter(G);
+		if (!"taskname".equals(g)) {
+			tablePager.addColumn(TC_TASK());
+		}
+		tablePager.addColumn(TC_TITLE()).addColumn(TC_PNO())
 				.addColumn(TC_USER("userFrom", $m("MyRunningWorklistTPage.0")))
-				.addColumn(TC_CREATEDATE().setColumnText($m("MyRunningWorklistTPage.1")).setWidth(60))
-				.addColumn(TC_PSTAT()).addColumn(TablePagerColumn.OPE(68));
+				.addColumn(TC_CREATEDATE().setColumnText($m("MyRunningWorklistTPage.1")).setWidth(75));
+		// tablePager.addColumn(TC_PSTAT());
+		tablePager.addColumn(TablePagerColumn.OPE(68));
 		return tablePager;
+	}
+
+	protected TablePagerColumn TC_TASK() {
+		return new TablePagerColumn("taskname", $m("MyRunningWorklistTPage.20"), 120)
+				.setFilterSort(false);
 	}
 
 	protected TablePagerColumn TC_PSTAT() {

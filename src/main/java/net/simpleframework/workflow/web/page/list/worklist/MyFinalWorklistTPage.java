@@ -80,7 +80,7 @@ public class MyFinalWorklistTPage extends MyRunningWorklistTPage {
 
 	@Override
 	protected void setGroupParam(final PageParameter pp) {
-		String g = pp.getParameter("g");
+		String g = pp.getParameter(G);
 		if (g == null) {
 			g = pp.getCookie("group_worklist_final");
 		}
@@ -96,17 +96,22 @@ public class MyFinalWorklistTPage extends MyRunningWorklistTPage {
 	protected TablePagerBean addTablePagerBean(final PageParameter pp) {
 		final TablePagerBean tablePager = addTablePagerBean(pp, "MyWorklistTPage_tbl",
 				MyCompleteWorklistTbl.class);
+		tablePager.addColumn(TC_ICON());
+		final String g = pp.getParameter(G);
+		if (!"taskname".equals(g)) {
+			tablePager.addColumn(TC_TASK());
+		}
 		tablePager
-				.addColumn(TC_ICON())
 				.addColumn(TC_TITLE())
 				.addColumn(TC_PNO())
 				.addColumn(
 						TC_USER("userTo", $m("MyFinalWorklistTPage.0")).setTextAlign(ETextAlign.left)
 								.setWidth(130).setNowrap(true))
 				.addColumn(
-						TablePagerColumn.DATE("completeDate", $m("MyFinalWorklistTPage.1")).setWidth(60)
-								.setFilterSort(false)).addColumn(TC_PSTAT())
-				.addColumn(TablePagerColumn.OPE(70));
+						TablePagerColumn.DATE("completeDate", $m("MyFinalWorklistTPage.1")).setWidth(75)
+								.setFilterSort(false));
+		// tablePager.addColumn(TC_PSTAT());
+		tablePager.addColumn(TablePagerColumn.OPE(70));
 		return tablePager;
 	}
 

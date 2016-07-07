@@ -165,10 +165,20 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 					modelIds.add(processModel.getId().toString());
 
 					final StringBuilder sb = new StringBuilder();
-					sb.append(SpanElement.color(groupVal, "#c44")).append("&nbsp;&nbsp;(");
-					sb.append(new LinkElement(StringUtils.replace(processModel.toString(), ".", " / "))
-							.setOnclick("$Actions.reloc('modelId=" + StringUtils.join(modelIds, ";")
-									+ "');"));
+					sb.append(new SpanElement(groupVal)).append("&nbsp;&nbsp;(");
+
+					final String mtxt = processModel.toString();
+					final int p = mtxt.indexOf('.');
+					LinkElement le;
+					if (p > 0) {
+						// sb.append(SpanElement.color(mtxt.substring(0, p),
+						// "#c44")).append(" / ");
+						le = new LinkElement(mtxt.substring(p + 1));
+					} else {
+						le = new LinkElement(mtxt);
+					}
+					sb.append(le.setOnclick("$Actions.reloc('modelId=" + StringUtils.join(modelIds, ";")
+							+ "');"));
 					sb.append(")");
 					sb.append(toCountHTML());
 					return sb.toString();
@@ -187,7 +197,8 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 					final int p = mtxt.indexOf('.');
 					LinkElement le;
 					if (p > 0) {
-						sb.append(SpanElement.color(mtxt.substring(0, p), "#c44")).append(" / ");
+						// sb.append(SpanElement.color(mtxt.substring(0, p),
+						// "#c44")).append(" / ");
 						le = new LinkElement(mtxt.substring(p + 1));
 					} else {
 						le = new LinkElement(mtxt);
@@ -252,6 +263,11 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 
 		final ProcessBean process = WorkflowUtils.getProcessBean(cp, workitem);
 		final String pno = process.getPno();
+
+		final String taskname = toTitle_TasknameHTML(cp, workitem);
+		if (StringUtils.hasText(taskname)) {
+			row.add("taskname", taskname);
+		}
 		row.add("title", toTitleHTML(cp, workitem, false))
 				.add("pno", new SpanElement(pno).setTitle(pno)).add("pstat", toPstatHTML(cp, workitem))
 				.put(TablePagerColumn.OPE, toOpeHTML(cp, workitem));
@@ -272,17 +288,20 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 		});
 	}
 
-	protected String toTitle_TasknameHTML(final PageParameter pp, final ActivityBean activity) {
+	protected String toTitle_TasknameHTML(final PageParameter pp, final WorkitemBean workitem) {
 		final StringBuilder sb = new StringBuilder();
 		if (!"taskname".equals(pp.getParameter(G))) {
+			final ActivityBean activity = WorkflowUtils.getActivityBean(pp, workitem);
 			ProcessModelBean pm = (ProcessModelBean) activity.getAttr("_PROCESSMODEL");
 			if (pm == null) {
 				pm = wfpService.getProcessModel(wfaService.getProcessBean(activity));
 			}
-			sb.append("[")
-					.append(
-							SpanElement.color333(activity.getTasknodeText()).setTitle(
-									WorkflowUtils.getShortMtext(pm))).append("] ");
+			sb.append(new SpanElement(activity.getTasknodeText()).setTitle(WorkflowUtils
+					.getShortMtext(pm)));
+			// sb.append("[")
+			// .append(
+			// new SpanElement(activity.getTasknodeText()).setTitle(
+			// WorkflowUtils.getShortMtext(pm))).append("] ");
 		}
 		return sb.toString();
 	}
@@ -291,7 +310,7 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 		final StringBuilder sb = new StringBuilder();
 		final ActivityBean activity = WorkflowUtils.getActivityBean(pp, workitem);
 
-		sb.append(toTitle_TasknameHTML(pp, activity));
+		// sb.append(toTitle_TasknameHTML(pp, activity));
 
 		final Date timeoutDate = activity.getTimeoutDate();
 		if (timeoutDate != null && !wfaService.isFinalStatus(activity)) {

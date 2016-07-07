@@ -121,6 +121,11 @@ public abstract class AbstractItemsTPage extends AbstractWorksTPage {
 		return CategoryItems.of(item1, item2);
 	}
 
+	@Override
+	protected int getCategoryWidth(final PageParameter pp) {
+		return 150;
+	}
+
 	protected ElementList getIndexSearchElements(final PageParameter pp) {
 		final InputElement txt = new InputElement().setId("idAbstractItemsTPage_search");
 		final String t = pp.getLocaleParameter("t");

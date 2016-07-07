@@ -371,3 +371,9 @@
 .Category_ListPage .tablepager .thead {
   box-shadow: none !important;
 }
+
+/*---------------------------tablepager-----------------------*/
+.tablepager .group_t .t,
+.tablepager .titem {
+  font-size: 10.5pt;
+}

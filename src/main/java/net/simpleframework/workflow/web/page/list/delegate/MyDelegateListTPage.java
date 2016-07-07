@@ -32,8 +32,8 @@ import net.simpleframework.mvc.component.ui.window.WindowBean;
 import net.simpleframework.workflow.engine.EDelegationSource;
 import net.simpleframework.workflow.engine.EDelegationStatus;
 import net.simpleframework.workflow.engine.IWorkflowContext;
-import net.simpleframework.workflow.engine.bean.ActivityBean;
 import net.simpleframework.workflow.engine.bean.DelegationBean;
+import net.simpleframework.workflow.engine.bean.ProcessBean;
 import net.simpleframework.workflow.engine.bean.WorkitemBean;
 import net.simpleframework.workflow.web.WorkflowUtils;
 import net.simpleframework.workflow.web.page.AbstractWorksTPage;
@@ -195,15 +195,14 @@ public class MyDelegateListTPage extends AbstractItemsTPage {
 		protected Map<String, Object> getRowData(final ComponentParameter cp, final Object dataObject) {
 			final DelegationBean delegation = (DelegationBean) dataObject;
 			final WorkitemBean workitem = getWorkitem(delegation);
-			final ActivityBean activity = wfwService.getActivity(workitem);
 			final KVMap row = new KVMap();
 			final ImageElement img = createImageMark(cp, delegation);
 			if (img != null) {
 				row.add(TablePagerColumn.ICON, img);
 			}
-			final StringBuilder title = new StringBuilder(toTitle_TasknameHTML(cp, activity));
-			title.append(toTitle(delegation,
-					WorkflowUtils.getProcessTitle(wfaService.getProcessBean(activity))));
+			final StringBuilder title = new StringBuilder(toTitle_TasknameHTML(cp, workitem));
+			final ProcessBean process = WorkflowUtils.getProcessBean(cp, workitem);
+			title.append(toTitle(delegation, WorkflowUtils.getProcessTitle(process)));
 			row.add("title", title);
 			row.add("userText", toUsertextHTML(cp, delegation, workitem));
 			row.add("createDate", delegation.getCreateDate());
