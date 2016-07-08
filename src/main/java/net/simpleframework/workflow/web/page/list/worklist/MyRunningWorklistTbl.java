@@ -268,7 +268,7 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 		if (StringUtils.hasText(taskname)) {
 			row.add("taskname", taskname);
 		}
-		row.add("title", toTitleHTML(cp, workitem, false))
+		row.add("title", toTitleHTML(cp, workitem, false, false))
 				.add("pno", new SpanElement(pno).setTitle(pno)).add("pstat", toPstatHTML(cp, workitem))
 				.put(TablePagerColumn.OPE, toOpeHTML(cp, workitem));
 
@@ -309,9 +309,6 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 	protected String toTitle_PerfixHTML(final PageParameter pp, final WorkitemBean workitem) {
 		final StringBuilder sb = new StringBuilder();
 		final ActivityBean activity = WorkflowUtils.getActivityBean(pp, workitem);
-
-		// sb.append(toTitle_TasknameHTML(pp, activity));
-
 		final Date timeoutDate = activity.getTimeoutDate();
 		if (timeoutDate != null && !wfaService.isFinalStatus(activity)) {
 			if (activity.getStatus() == EActivityStatus.timeout) {
@@ -338,8 +335,12 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 	}
 
 	public String toTitleHTML(final PageParameter pp, final WorkitemBean workitem,
-			final boolean linklist) {
+			final boolean linklist, final boolean taskname) {
 		final StringBuilder sb = new StringBuilder();
+		if (taskname) {
+			sb.append(toTitle_TasknameHTML(pp, workitem));
+		}
+
 		sb.append(toTitle_PerfixHTML(pp, workitem));
 
 		AbstractElement<?> tEle;
