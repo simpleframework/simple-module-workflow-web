@@ -298,10 +298,6 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 			}
 			sb.append(new SpanElement(activity.getTasknodeText()).setTitle(WorkflowUtils
 					.getShortMtext(pm)));
-			// sb.append("[")
-			// .append(
-			// new SpanElement(activity.getTasknodeText()).setTitle(
-			// WorkflowUtils.getShortMtext(pm))).append("] ");
 		}
 		return sb.toString();
 	}
@@ -338,7 +334,9 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 			final boolean linklist, final boolean taskname) {
 		final StringBuilder sb = new StringBuilder();
 		if (taskname) {
+			sb.append("[");
 			sb.append(toTitle_TasknameHTML(pp, workitem));
+			sb.append("] ");
 		}
 
 		sb.append(toTitle_PerfixHTML(pp, workitem));
