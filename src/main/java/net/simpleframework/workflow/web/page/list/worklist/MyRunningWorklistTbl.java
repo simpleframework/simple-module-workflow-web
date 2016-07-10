@@ -336,7 +336,7 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 		if (taskname) {
 			sb.append("[");
 			sb.append(toTitle_TasknameHTML(pp, workitem));
-			sb.append("] ");
+			sb.append("]");
 		}
 
 		sb.append(toTitle_PerfixHTML(pp, workitem));
