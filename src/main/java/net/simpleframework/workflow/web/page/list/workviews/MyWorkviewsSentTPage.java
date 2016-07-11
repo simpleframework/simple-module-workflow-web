@@ -169,8 +169,9 @@ public class MyWorkviewsSentTPage extends MyWorkviewsTPage {
 				if (i > 1) {
 					sb.append("|-&nbsp;");
 				}
-				sb.append(SpanElement.colora00(workview.getUserText())).append(" (")
-						.append(pp.getDept(workview.getDeptId())).append(")");
+				sb.append(
+						SpanElement.colora00(workview.getUserText()).setStrong(!workview.isReadMark()))
+						.append(" (").append(pp.getDept(workview.getDeptId())).append(")");
 				sb.append("</td><td align='right'>");
 				sb.append(SpanElement.color777(Convert.toDateTimeString(workview.getCreateDate())));
 				sb.append("</td></tr></table>");
