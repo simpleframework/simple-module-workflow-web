@@ -92,18 +92,21 @@ public class MyWorkviewsSentTPage extends MyWorkviewsTPage {
 					.add("rev", sent.getAttrCache("_rev", new CacheV<String>() {
 						@Override
 						public String get() {
-							final StringBuilder rev = new StringBuilder();
 							final IDataQuery<WorkviewBean> dq = wfvService.getWorkviewsListBySent(sent
 									.getId());
-							WorkviewBean workview;
-							int i = 0;
-							while ((workview = dq.next()) != null) {
-								if (i++ > 0) {
-									rev.append(", ");
+							if (dq.getCount() > 0) {
+								WorkviewBean workview;
+								int i = 0;
+								final StringBuilder rev = new StringBuilder();
+								while ((workview = dq.next()) != null) {
+									if (i++ > 0) {
+										rev.append(", ");
+									}
+									rev.append(workview.getUserText());
 								}
-								rev.append(workview.getUserText());
+								return rev.toString();
 							}
-							return rev.toString();
+							return null;
 						}
 					})).add(TablePagerColumn.OPE, toOpeHTML(cp, sent));
 			return row;

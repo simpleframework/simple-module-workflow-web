@@ -27,6 +27,7 @@ import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
 import net.simpleframework.mvc.component.ui.pager.db.AbstractDbTablePagerHandler;
 import net.simpleframework.workflow.engine.bean.ProcessBean;
 import net.simpleframework.workflow.engine.bean.WorkviewBean;
+import net.simpleframework.workflow.engine.bean.WorkviewSentBean;
 import net.simpleframework.workflow.web.WorkflowUtils;
 import net.simpleframework.workflow.web.page.list.AbstractItemsTPage;
 import net.simpleframework.workflow.web.page.t1.form.WorkflowViewPage;
@@ -133,9 +134,13 @@ public class MyWorkviewsTPage extends AbstractItemsTPage {
 			if (img != null) {
 				row.add(TablePagerColumn.ICON, img);
 			}
-			row.add("title", toTopicHTML(cp, workview)).add("createDate", workview.getCreateDate())
-					.add("sent", cp.getUser(workview.getUserId()))
-					.add(TablePagerColumn.OPE, toOpeHTML(cp, workview));
+
+			row.add("title", toTopicHTML(cp, workview)).add("createDate", workview.getCreateDate());
+			final WorkviewSentBean sent = wfvsService.getBean(workview.getSentId());
+			if (sent != null) {
+				row.add("sent", cp.getUser(sent.getUserId()));
+			}
+			row.add(TablePagerColumn.OPE, toOpeHTML(cp, workview));
 			return row;
 		}
 
