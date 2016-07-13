@@ -16,6 +16,7 @@ import net.simpleframework.common.web.HttpUtils;
 import net.simpleframework.common.web.JavascriptUtils;
 import net.simpleframework.ctx.permission.PermissionUser;
 import net.simpleframework.mvc.JavascriptForward;
+import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.PageRequestResponse;
 import net.simpleframework.mvc.common.element.ButtonElement;
 import net.simpleframework.mvc.common.element.Checkbox;
@@ -88,16 +89,16 @@ public abstract class DoWorkviewUtils implements IWorkflowContextAware {
 	static final String SESSION_ULIST = "_ulist";
 
 	@SuppressWarnings("unchecked")
-	static Set<String> getSessionUlist(final ComponentParameter cp) {
-		Set<String> ulist = (Set<String>) cp.getSessionAttr(SESSION_ULIST);
+	static Set<String> getSessionUlist(final PageParameter pp) {
+		Set<String> ulist = (Set<String>) pp.getSessionAttr(SESSION_ULIST);
 		if (ulist == null) {
-			cp.setSessionAttr(SESSION_ULIST, ulist = new LinkedHashSet<String>());
+			pp.setSessionAttr(SESSION_ULIST, ulist = new LinkedHashSet<String>());
 		}
 		return ulist;
 	}
 
-	public static void removeSessionUlist(final ComponentParameter cp) {
-		cp.removeSessionAttr(SESSION_ULIST);
+	public static void removeSessionUlist(final PageParameter pp) {
+		pp.removeSessionAttr(SESSION_ULIST);
 	}
 
 	public static String toSelectHTML(final ComponentParameter cp) {
