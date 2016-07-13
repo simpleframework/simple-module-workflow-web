@@ -96,7 +96,7 @@ public abstract class DoWorkviewUtils implements IWorkflowContextAware {
 		return ulist;
 	}
 
-	static void removeSessionUlist(final ComponentParameter cp) {
+	public static void removeSessionUlist(final ComponentParameter cp) {
 		cp.removeSessionAttr(SESSION_ULIST);
 	}
 
