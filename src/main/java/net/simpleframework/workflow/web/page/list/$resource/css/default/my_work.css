@@ -374,7 +374,10 @@
 }
 
 /*---------------------------tablepager-----------------------*/
-.tablepager .group_t .t,
-.tablepager .titem {
+.tablepager .group_t .t {
   font-size: 10.5pt;
+}
+
+.tablepager .titem {
+  font-size: 9.5pt;
 }

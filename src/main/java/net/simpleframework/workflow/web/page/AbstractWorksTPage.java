@@ -34,8 +34,8 @@ public class AbstractWorksTPage extends Category_ListPage implements IWorkflowPa
 	}
 
 	public static TablePagerColumn TC_TITLE() {
-		return new TablePagerColumn("title", $m("AbstractItemsTPage.6")).setNowrap(false).setSort(
-				false);
+		return new TablePagerColumn("title", $m("AbstractItemsTPage.6"))
+				.setLblStyle("font-size: 10.5pt;").setNowrap(false).setSort(false);
 	}
 
 	public static TablePagerColumn TC_PNO() {
