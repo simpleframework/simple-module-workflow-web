@@ -1,6 +1,7 @@
 package net.simpleframework.workflow.web.page;
 
 import static net.simpleframework.common.I18n.$m;
+import net.simpleframework.common.web.JavascriptUtils;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.AbstractElement;
 import net.simpleframework.mvc.common.element.LinkButton;
@@ -71,5 +72,25 @@ public abstract class AbstractFormTableRowTPage<T extends AbstractWorkitemBean> 
 	protected String getProcessNodeProperty(final PageParameter pp, final String key) {
 		final ProcessNode node = getProcessNode(pp);
 		return node == null ? null : node.getProperty(key);
+	}
+
+	@Override
+	protected String toFormHTML(final PageParameter pp) {
+		final StringBuilder sb = new StringBuilder();
+		super.toFormHTML(pp);
+		final StringBuilder js = new StringBuilder();
+		js.append("var topb = $('.form_content .FormTableRowTemplatePage>.tool_bar');");
+		js.append("Event.observe(window, 'scroll', function() {");
+		js.append(" var scrollTop = document.documentElement.scrollTop || document.body.scrollTop || 0;");
+		js.append(" if (scrollTop > 0) {");
+		js.append("   topb.addClassName('scroll');");
+		js.append("   topb.style.top = (scrollTop - 11) + 'px';");
+		js.append(" } else {");
+		js.append("   topb.style.top = 0;");
+		js.append("   topb.removeClassName('scroll');");
+		js.append(" }");
+		js.append("});");
+		sb.append(JavascriptUtils.wrapScriptTag(js.toString(), true));
+		return sb.toString();
 	}
 }
