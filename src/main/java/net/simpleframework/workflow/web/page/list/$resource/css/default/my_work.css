@@ -315,7 +315,8 @@
 }
 
 .MyInitiateItemsGroupTPage .lblock .litem:hover {
-  background-color: #f5f5f5;
+  background-color: #c44;
+  color: #fff;
 }
 
 .MyInitiateItemsGroupTPage .lblock .litem:last-child {
