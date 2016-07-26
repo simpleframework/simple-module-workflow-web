@@ -8,7 +8,6 @@ import java.util.Map;
 
 import net.simpleframework.common.Convert;
 import net.simpleframework.common.ID;
-import net.simpleframework.common.StringUtils;
 import net.simpleframework.common.coll.KVMap;
 import net.simpleframework.common.web.JavascriptUtils;
 import net.simpleframework.ctx.trans.Transaction;
@@ -216,21 +215,6 @@ public abstract class AbstractWorkflowFormTPage extends AbstractFormTableRowTPag
 
 	protected InputElement getInput_description(final PageParameter pp) {
 		return InputElement.textarea(getParamKey_description()).setRows(5);
-	}
-
-	protected String getFormTopic(final PageParameter pp) {
-		return null;
-	}
-
-	@Override
-	public String toToolbarHTML(final PageParameter pp) {
-		final StringBuilder sb = new StringBuilder();
-		sb.append(super.toToolbarHTML(pp));
-		final String ftopic = getFormTopic(pp);
-		if (StringUtils.hasText(ftopic)) {
-			sb.append("<div class='form_topic'>").append(ftopic).append("</div>");
-		}
-		return sb.toString();
 	}
 
 	@Override

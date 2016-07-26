@@ -1,6 +1,7 @@
 package net.simpleframework.workflow.web.page;
 
 import static net.simpleframework.common.I18n.$m;
+import net.simpleframework.common.StringUtils;
 import net.simpleframework.common.web.JavascriptUtils;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.AbstractElement;
@@ -72,6 +73,21 @@ public abstract class AbstractFormTableRowTPage<T extends AbstractWorkitemBean> 
 	protected String getProcessNodeProperty(final PageParameter pp, final String key) {
 		final ProcessNode node = getProcessNode(pp);
 		return node == null ? null : node.getProperty(key);
+	}
+
+	protected String getFormTopic(final PageParameter pp) {
+		return null;
+	}
+
+	@Override
+	public String toToolbarHTML(final PageParameter pp) {
+		final StringBuilder sb = new StringBuilder();
+		sb.append(super.toToolbarHTML(pp));
+		final String ftopic = getFormTopic(pp);
+		if (StringUtils.hasText(ftopic)) {
+			sb.append("<div class='form_topic'>").append(ftopic).append("</div>");
+		}
+		return sb.toString();
 	}
 
 	@Override
