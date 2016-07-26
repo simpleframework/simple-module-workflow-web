@@ -95,8 +95,7 @@ public class DefaultWfCommentHandler extends ComponentHandlerEx implements IWfCo
 			comment.setDeptId(workitem.getDeptId());
 			if (workitem instanceof WorkitemBean) {
 				comment.setUserId(((WorkitemBean) workitem).getUserId2());
-				comment.setTaskname(workflowContext.getWorkitemService()
-						.getActivity((WorkitemBean) workitem).getTasknodeText());
+				comment.setTaskname(wfwService.getActivity((WorkitemBean) workitem).getTasknodeText());
 			} else {
 				comment.setUserId(workitem.getUserId());
 			}
@@ -171,7 +170,12 @@ public class DefaultWfCommentHandler extends ComponentHandlerEx implements IWfCo
 				key = dept;
 			} else if (tasknames != null) { // 按任务
 				for (final Map.Entry<String, String[]> e : tasknames.entrySet()) {
-					if (ArrayUtils.contains(e.getValue(), comment.getTaskname())) {
+					final WorkitemBean workitem2 = wfwService.getBean(comment.getWorkitemId());
+					if (workitem2 == null) {
+						continue;
+					}
+					if (ArrayUtils.contains(e.getValue(),
+							wfaService.getTaskNode(wfwService.getActivity(workitem2)).getName())) {
 						key = e.getKey();
 						break;
 					}
