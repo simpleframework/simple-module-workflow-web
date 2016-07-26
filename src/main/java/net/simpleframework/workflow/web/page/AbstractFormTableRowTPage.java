@@ -85,9 +85,12 @@ public abstract class AbstractFormTableRowTPage<T extends AbstractWorkitemBean> 
 		js.append(" var scrollTop = document.documentElement.scrollTop || document.body.scrollTop || 0;");
 		js.append(" if (scrollTop > 0) {");
 		js.append("   topb.addClassName('scroll');");
-		js.append("   topb.setStyle('width: ' + w + 'px;');");
+		js.append("   topb.up().addClassName('scroll');");
+		js.append("   if (!topb._scroll) { topb.setStyle('width: ' + w + 'px;'); topb._scroll = true; }");
 		js.append(" } else {");
 		js.append("   topb.removeClassName('scroll');");
+		js.append("   topb.up().removeClassName('scroll');");
+		js.append("   topb._scroll = null;");
 		js.append(" }");
 		js.append("});");
 		sb.append(JavascriptUtils.wrapScriptTag(js.toString(), true));

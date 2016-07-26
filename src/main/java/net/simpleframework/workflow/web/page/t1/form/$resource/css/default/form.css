@@ -149,6 +149,10 @@ body {
   z-index: 11;
 }
 
+.form_content .FormTableRowTemplatePage.scroll {
+  padding-top: 47px;
+}
+
 .form_content .FormTableRowTemplatePage>.tool_bar.scroll {
   background: #def url("images/tab_bg.png") repeat 0 0;
   border: 1px solid #def;
