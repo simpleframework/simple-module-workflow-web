@@ -11,6 +11,7 @@ import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.AbstractElement;
 import net.simpleframework.mvc.common.element.BlockElement;
 import net.simpleframework.mvc.common.element.ElementList;
+import net.simpleframework.mvc.common.element.LinkButton;
 import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.common.element.TabButtons;
 import net.simpleframework.workflow.engine.bean.ActivityBean;
@@ -48,6 +49,11 @@ public class WorkflowFormPage extends AbstractWorkflowFormPage {
 	public String getTitle(final PageParameter pp) {
 		final ProcessBean process = WorkflowUtils.getProcessBean(pp);
 		return process != null ? WorkflowUtils.getProcessTitle(process) : super.getTitle(pp);
+	}
+
+	@Override
+	public LinkButton getBackBtn(final PageParameter pp) {
+		return super.getBackBtn(pp).setStyle("display: none;");
 	}
 
 	@Override

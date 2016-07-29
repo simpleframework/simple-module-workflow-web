@@ -21,7 +21,7 @@ public class AbstractFormTemplatePage extends T1FormTemplatePage implements IWor
 
 	@Override
 	public ElementList getLeftElements(final PageParameter pp) {
-		final ElementList el = ElementList.of(getBackBtn(pp).setStyle("display: none;"));
+		final ElementList el = ElementList.of(getBackBtn(pp));
 		return el;
 	}
 
