@@ -111,6 +111,7 @@ public class WorkflowMonitorPage extends AbstractWorkflowFormPage {
 						checkClick("nulltask", ActivityTbl.COOKIE_HIDE_NULLTASK)));
 		sb.append(" </div>");
 		sb.append(" <div class='right'>");
+		sb.append(new SpanElement($m("WorkflowMonitorPage.3")));
 		for (final EActivityStatus status : EActivityStatus.values()) {
 			sb.append("<span class='icon'>");
 			sb.append(WorkflowUtils.getStatusIcon(pp, status));
