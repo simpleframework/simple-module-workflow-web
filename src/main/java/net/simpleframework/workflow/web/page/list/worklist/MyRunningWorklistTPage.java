@@ -438,7 +438,7 @@ public class MyRunningWorklistTPage extends AbstractItemsTPage {
 			final UserStatBean stat = wfusService.getUserStat(cp.getLoginId());
 			stat.setWorklist_refresh_interval(cp.getIntParameter("ms_interval"));
 			wfusService.update(new String[] { "worklist_refresh_interval" }, stat);
-			return new JavascriptForward("$Actions.reloc();");
+			return JavascriptForward.RELOC;
 		}
 
 		@Override

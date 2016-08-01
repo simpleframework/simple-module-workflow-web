@@ -37,7 +37,7 @@ public class WfCommentEditLoaded extends DefaultPageHandler implements IWorkflow
 			final WfComment comment = wfcService.getBean(cp.getParameter("commentId"));
 			comment.setCcomment(cp.getParameter("ce_ccomment"));
 			wfcService.update(new String[] { "ccomment" }, comment);
-			return new JavascriptForward("$Actions.reloc();");
+			return JavascriptForward.RELOC;
 		}
 	}
 }
