@@ -152,29 +152,6 @@
   font-style: italic;
 }
 
-.MyRunningWorklistTPage .Category_ListPage .tool_bar {
-  background-color: #fff;
-  border: 0;
-}
-
-.MyRunningWorklistTPage .Category_ListPage .tablepager .thead,
-.MyRunningWorklistTPage .Category_ListPage .tablepager .tfilter,
-.MyRunningWorklistTPage .Category_ListPage .tablepager .tbody,
-.MyRunningWorklistTPage .Category_ListPage .pager_block_bottom {
-  border-left: 0;
-  border-right: 0;
-}
-
-.MyRunningWorklistTPage .Category_ListPage .pager_block_bottom {
-  -moz-border-radius: 0;
-  -webkit-border-radius: 0;
-  border-radius: 0;
-}
-
-.MyRunningWorklistTPage .Category_ListPage .tablepager .thead {
-  border-bottom: 2px solid #99c8fd;
-}
-
 /*---------------------------WorkviewTracing-----------------------*/
 .WorkviewTracing .tb {
   background-color: #f4f4f4;
