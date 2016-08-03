@@ -87,6 +87,11 @@ public class MyRunningWorklistTPage extends AbstractItemsTPage {
 		addComponents(pp);
 	}
 
+	@Override
+	protected String getPageCSS(final PageParameter pp) {
+		return "MyRunningWorklistTPage";
+	}
+
 	protected void setGroupParam(final PageParameter pp) {
 		String g = pp.getParameter("g");
 		if (g == null) {
