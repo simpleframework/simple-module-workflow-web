@@ -31,11 +31,8 @@
 }
 
 .wl_filter_btns {
-  background-color: #f9f9f9;
-  padding: 3px 9px;
-  border-left: 1px solid #bbb;
-  border-right: 1px solid #bbb;
-  border-top: 1px dashed #bbb;
+  border-top: 1px dashed #bbbbbb;
+  padding: 6px 9px;
 }
 
 .worklist_timeout, 
