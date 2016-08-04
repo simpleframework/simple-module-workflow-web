@@ -14,6 +14,21 @@
   }
 }
 
+a.simple_btn {
+  background-color: #fff;  
+  background-image: url("images/btn_bg.png");
+  background-repeat: repeat-x;
+}
+
+a.simple_btn:HOVER {
+  background-image: none;
+}
+
+a.simple_btn.highlight {
+  background-color: #eaeaea; 
+  color: #444;
+}
+
 /*-------------------------form_tb_bar--------------------*/
 .form_tb_bar .taskinfo {
   display: inline-block;
