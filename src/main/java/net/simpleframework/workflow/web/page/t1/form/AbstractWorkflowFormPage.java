@@ -20,13 +20,6 @@ public abstract class AbstractWorkflowFormPage extends AbstractFormTemplatePage 
 		return WorkflowUtils.getWorkitemBean(pp) == null;
 	}
 
-	@Override
-	protected void onForward(final PageParameter pp) throws Exception {
-		super.onForward(pp);
-
-		pp.addImportCSS(AbstractWorkflowFormPage.class, "/form.css");
-	}
-
 	protected IWorkflowWebForm getWorkflowForm(final PageParameter pp) {
 		final WorkitemBean workitem = WorkflowUtils.getWorkitemBean(pp);
 		return (IWorkflowWebForm) wfaService.getWorkflowForm(wfwService.getActivity(workitem));

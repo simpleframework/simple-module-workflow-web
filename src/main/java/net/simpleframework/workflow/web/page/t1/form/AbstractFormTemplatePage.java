@@ -20,6 +20,14 @@ import net.simpleframework.workflow.web.page.list.worklist.MyRunningWorklistTPag
 public class AbstractFormTemplatePage extends T1FormTemplatePage implements IWorkflowPageAware {
 
 	@Override
+	protected void onForward(final PageParameter pp) throws Exception {
+		super.onForward(pp);
+
+		pp.addImportCSS(AbstractFormTemplatePage.class, "/form-base.css");
+		pp.addImportCSS(AbstractFormTemplatePage.class, "/form.css");
+	}
+
+	@Override
 	public ElementList getLeftElements(final PageParameter pp) {
 		final ElementList el = ElementList.of(getBackBtn(pp));
 		return el;

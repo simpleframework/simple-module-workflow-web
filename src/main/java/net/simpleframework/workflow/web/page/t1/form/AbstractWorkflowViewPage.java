@@ -15,13 +15,6 @@ import net.simpleframework.workflow.web.page.list.workviews.MyWorkviewsTPage;
 public class AbstractWorkflowViewPage extends AbstractFormTemplatePage {
 
 	@Override
-	protected void onForward(final PageParameter pp) throws Exception {
-		super.onForward(pp);
-
-		pp.addImportCSS(AbstractWorkflowViewPage.class, "/form.css");
-	}
-
-	@Override
 	protected boolean isPage404(final PageParameter pp) {
 		return WorkflowUtils.getWorkviewBean(pp) == null;
 	}

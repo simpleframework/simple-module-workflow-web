@@ -16,22 +16,6 @@
   }
 }
 
-a.simple_btn {
-  background-color: #fff;  
-  background-image: url("images/btn_bg.png");
-  background-repeat: repeat-x;
-}
-
-a.simple_btn.highlight {
-  background-color: #eaeaea; 
-  color: #444;
-}
-
-a.simple_btn:HOVER,
-a.simple_btn.highlight:HOVER {
-  background-image: none;
-}
-
 /*-------------------------form_tb_bar--------------------*/
 .form_tb_bar .taskinfo {
   display: inline-block;
@@ -147,60 +131,6 @@ body {
 
 .tablepager .simple_progress {
   width: 95%;
-}
-
-.form_content .FormTableRowTemplatePage {
-  background-color: #fff;
-  padding-bottom: 15px;
-}
-
-.form_content .FormTableRowTemplatePage form {
-  margin: 0 15px;
-  border-top: 1px solid #f00;
-}
-
-.form_content .FormTableRowTemplatePage>.tool_bar {
-  border-color: #fff;
-  background-color: #fff;
-  padding: 10px 15px;
-  z-index: 11;
-}
-
-.form_content .FormTableRowTemplatePage.scroll {
-  padding-top: 47px;
-}
-
-.form_content .FormTableRowTemplatePage>.tool_bar.scroll {
-  background: #def url("images/tab_bg.png") repeat 0 0;
-  border: 1px solid #def;
-  box-shadow: 0 0 6px #bbb;
-  position: fixed;
-  top: 36px;
-}
-
-.form_content .FormTableRowTemplatePage ul.simple_tabs a,
-.form_content .FormTableRowTemplatePage .simple_tabs_content,
-.form_content .FormTableRowTemplatePage .tabs,
-.form_content .FormTableRowTemplatePage .form_block {
-  border-color: #f00;
-}
-
-.form_content .FormTableRowTemplatePage .tabs {
-  margin: 0 15px;
-}
-
-.form_content .FormTableRowTemplatePage ul.simple_tabs a.active {
-  border-bottom-color: #fff;
-}
-
-.form_content .form_tbl {
-  background-color: #f00;
-}
-
-.form_content .form_tbl .l {
-  color: #f00;
-  background-color: #fff;
-  vertical-align: middle;
 }
 
 .form_content .comment-group-item {
