@@ -1,6 +1,7 @@
 @media (min-width: 1024px) { /*>=1024的设备*/
   .WorkflowFormPage, 
-  .WorkflowViewPage {
+  .WorkflowViewPage,
+  .WorkflowMonitorPage {
     min-width: 992px;
     width: 992px;
   }
@@ -8,7 +9,8 @@
 
 @media (min-width: 1200px) { /*>=1200的设备*/
   .WorkflowFormPage, 
-  .WorkflowViewPage {
+  .WorkflowViewPage,
+  .WorkflowMonitorPage {
     min-width: 1090px;
     width: 1090px;
   }
@@ -20,13 +22,14 @@ a.simple_btn {
   background-repeat: repeat-x;
 }
 
-a.simple_btn:HOVER {
-  background-image: none;
-}
-
 a.simple_btn.highlight {
   background-color: #eaeaea; 
   color: #444;
+}
+
+a.simple_btn:HOVER,
+a.simple_btn.highlight:HOVER {
+  background-image: none;
 }
 
 /*-------------------------form_tb_bar--------------------*/
@@ -110,7 +113,6 @@ body {
 
 /*-------------------------WorkflowMonitorPage--------------------*/
 .WorkflowMonitorPage {
-  width: 80%;
   -webkit-box-shadow: 5px 5px 5px #aaa;
   -moz-box-shadow: 5px 5px 5px #aaa;
   box-shadow: 5px 5px 5px #aaa;
