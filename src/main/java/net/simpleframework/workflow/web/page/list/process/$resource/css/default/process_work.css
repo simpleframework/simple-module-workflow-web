@@ -75,11 +75,11 @@
 }
 
 .MyProcessWorksTPage .col1 .gitem:HOVER {
-  background-color: #d9e9f9;
+  background-color: #eed;
 }
 
 .MyProcessWorksTPage .col1 .gitem.active {
-  background-color: #d9e9f9;
+  background-color: #eed;
 }
 
 .MyProcessWorksTPage .col1 .gitem.active .glbl, 
@@ -89,7 +89,7 @@
 
 .MyProcessWorksTPage .col1 .psub {
   position: absolute;
-  background-color: #d9e9f9;
+  background-color: #eed;
   color: #fff;
   font-size: 9.5pt;
   width: 700px;
