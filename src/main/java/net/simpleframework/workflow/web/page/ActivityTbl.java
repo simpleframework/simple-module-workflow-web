@@ -226,17 +226,17 @@ public class ActivityTbl extends GroupDbTablePagerHandler implements IWorkflowCo
 	}
 
 	public static TablePagerColumn TC_PRE_PARTICIPANTS() {
-		return new TablePagerColumn("pre_participants", $m("ActivityTbl.2"), 125)
+		return new TablePagerColumn("pre_participants", $m("ActivityTbl.2"), 100)
 				.setTextAlign(ETextAlign.center).setNowrap(false).setFilterSort(false);
 	}
 
 	public static TablePagerColumn TC_PARTICIPANTS() {
-		return new TablePagerColumn("participants", $m("ActivityTbl.3"), 180)
+		return new TablePagerColumn("participants", $m("ActivityTbl.3"), 160)
 				.setTextAlign(ETextAlign.center).setNowrap(false).setFilterSort(false);
 	}
 
 	public static TablePagerColumn TC_PARTICIPANTS2() {
-		return new TablePagerColumn("participants2", $m("ActivityTbl.4"), 180)
+		return new TablePagerColumn("participants2", $m("ActivityTbl.4"), 160)
 				.setTextAlign(ETextAlign.center).setNowrap(false).setFilterSort(false);
 	}
 

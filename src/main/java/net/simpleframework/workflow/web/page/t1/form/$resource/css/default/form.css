@@ -1,3 +1,10 @@
+.WorkflowFormPage, 
+.WorkflowViewPage, 
+.WorkflowMonitorPage {
+  min-width: 1090px;
+  width: 1090px;
+}
+
 @media (min-width: 1024px) { /*>=1024µÄÉè±¸*/
   .WorkflowFormPage, 
   .WorkflowViewPage,
