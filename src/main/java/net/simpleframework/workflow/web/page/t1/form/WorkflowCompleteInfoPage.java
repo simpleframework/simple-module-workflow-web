@@ -52,7 +52,7 @@ public class WorkflowCompleteInfoPage extends AbstractWorkflowFormPage {
 		final StringBuilder sb = new StringBuilder();
 		sb.append("<div class='WorkflowCompleteInfoPage'>");
 		sb.append(" <div class='l1'>");
-		sb.append($m("#(WorkflowCompleteInfoPage.0)"));
+		sb.append($m("WorkflowCompleteInfoPage.0"));
 		sb.append(getBackBtn(pp).setText($m("Button.Close")).corner().setClassName("right"));
 		sb.append(" </div>");
 		sb.append(" <div class='l2'>");
