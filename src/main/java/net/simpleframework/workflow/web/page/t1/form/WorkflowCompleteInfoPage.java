@@ -11,6 +11,7 @@ import net.simpleframework.ctx.permission.PermissionUser;
 import net.simpleframework.mvc.PageMapping;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.BlockElement;
+import net.simpleframework.mvc.common.element.LinkButton;
 import net.simpleframework.workflow.engine.EWorkitemStatus;
 import net.simpleframework.workflow.engine.bean.ActivityBean;
 import net.simpleframework.workflow.engine.bean.WorkitemBean;
@@ -41,11 +42,19 @@ public class WorkflowCompleteInfoPage extends AbstractWorkflowFormPage {
 	}
 
 	@Override
+	public LinkButton getBackBtn(final PageParameter pp) {
+		return super.getBackBtn(pp).setStyle("display: none;");
+	}
+
+	@Override
 	protected String toHtml(final PageParameter pp, final Map<String, Object> variables,
 			final String currentVariable) throws IOException {
 		final StringBuilder sb = new StringBuilder();
 		sb.append("<div class='WorkflowCompleteInfoPage'>");
-		sb.append(" <div class='l1'>#(WorkflowCompleteInfoPage.0)</div>");
+		sb.append(" <div class='l1'>");
+		sb.append($m("#(WorkflowCompleteInfoPage.0)"));
+		sb.append(getBackBtn(pp).setText($m("Button.Close")).corner().setClassName("right"));
+		sb.append(" </div>");
 		sb.append(" <div class='l2'>");
 		final List<ActivityBean> nextActivities = removeMergeNodes(wfaService
 				.getLastNextActivities(wfwService.getActivity(WorkflowUtils.getWorkitemBean(pp))));

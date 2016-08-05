@@ -8,6 +8,7 @@ import java.util.Map;
 import net.simpleframework.mvc.PageMapping;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.Checkbox;
+import net.simpleframework.mvc.common.element.ETextAlign;
 import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.LinkButton;
 import net.simpleframework.mvc.common.element.LinkElement;
@@ -20,6 +21,8 @@ import net.simpleframework.mvc.component.ui.menu.MenuItem;
 import net.simpleframework.mvc.component.ui.menu.MenuItems;
 import net.simpleframework.mvc.component.ui.pager.EPagerBarLayout;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
+import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
+import net.simpleframework.workflow.engine.EActivityStatus;
 import net.simpleframework.workflow.engine.bean.ActivityBean;
 import net.simpleframework.workflow.engine.bean.ProcessBean;
 import net.simpleframework.workflow.engine.bean.WorkitemBean;
@@ -63,11 +66,18 @@ public class WorkflowMonitorPage extends AbstractWorkflowFormPage {
 				.setFilter(false).setShowCheckbox(false).setPagerBarLayout(EPagerBarLayout.none)
 				.setContainerId("idWorkflowMonitorPage_tbl");
 		// .addColumn(TablePagerColumn.ICON())
-		tablePager.addColumn(ActivityTbl.TC_TASKNODE()).addColumn(ActivityTbl.TC_PRE_PARTICIPANTS())
-				.addColumn(ActivityTbl.TC_PARTICIPANTS()).addColumn(ActivityTbl.TC_PARTICIPANTS2())
+		tablePager
+				.addColumn(ActivityTbl.TC_TASKNODE())
+				.addColumn(ActivityTbl.TC_PRE_PARTICIPANTS())
+				.addColumn(ActivityTbl.TC_PARTICIPANTS())
+				.addColumn(ActivityTbl.TC_PARTICIPANTS2())
 				.addColumn(AbstractWorkflowMgrPage.TC_CREATEDATE())
 				.addColumn(AbstractWorkflowMgrPage.TC_COMPLETEDATE())
-				.addColumn(ActivityTbl.TC_RELATIVEDATE()).addColumn(ActivityTbl.TC_TIMEOUT());
+				.addColumn(ActivityTbl.TC_RELATIVEDATE())
+				.addColumn(
+						new TablePagerColumn("status", $m("WorkflowMonitorPage.4")).setWidth(60)
+								.setSort(false).setTextAlign(ETextAlign.center))
+				.addColumn(ActivityTbl.TC_TIMEOUT());
 		return tablePager;
 	}
 
@@ -145,6 +155,20 @@ public class WorkflowMonitorPage extends AbstractWorkflowFormPage {
 			return new LinkElement(activity.getTasknodeText())
 					.setOnclick("$Actions['WorkflowMonitorPage_workitems']('activityId="
 							+ activity.getId() + "');");
+		}
+
+		@Override
+		protected Map<String, Object> getRowData(final ComponentParameter cp, final Object dataObject) {
+			final Map<String, Object> row = super.getRowData(cp, dataObject);
+			if (row != null) {
+				final ActivityBean activity = (ActivityBean) dataObject;
+				final EActivityStatus status = activity.getStatus();
+				final StringBuilder sb = new StringBuilder();
+				sb.append(WorkflowUtils.getStatusIcon(cp, status));
+				sb.append(new SpanElement(status).setStyle("margin-left: 3px; vertical-align: middle;"));
+				row.put("status", sb);
+			}
+			return row;
 		}
 
 		@Override
