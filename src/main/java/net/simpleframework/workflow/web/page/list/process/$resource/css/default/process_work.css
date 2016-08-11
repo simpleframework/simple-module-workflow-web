@@ -79,7 +79,7 @@
 }
 
 .MyProcessWorksTPage .col1 .gitem.active {
-  background-color: #eed;
+  background-color: #cde;
 }
 
 .MyProcessWorksTPage .col1 .gitem.active .glbl, 
@@ -89,10 +89,10 @@
 
 .MyProcessWorksTPage .col1 .psub {
   position: absolute;
-  background-color: #eed;
+  background-color: #cde;
   color: #fff;
   font-size: 9.5pt;
-  width: 700px;
+  width: 740px;
   min-height: 240px;
   top: 0;
   visibility: hidden;
@@ -113,12 +113,22 @@
   line-height: 1.5; 
   vertical-align: top;
   overflow: hidden;
+  padding: 2px 5px;
+  cursor: pointer;
+}
+
+.MyProcessWorksTPage .col1 .pitem:HOVER {
+  background-color: #c44;
+}
+
+.MyProcessWorksTPage .col1 .pitem:HOVER a {
+  color: #fff;
 }
 
 .MyProcessWorksTPage .col1 .pgroup {
   border-top: 1px dashed #d2d2d2;
   margin-bottom: 4px;
-  color: #774;
+  color: #662;
   padding: 12px 0 4px 110px;
   min-height: 40px;
 }
@@ -131,10 +141,6 @@
 
 .MyProcessWorksTPage .col1 .pitem a {
   color: #444;
-}
-
-.MyProcessWorksTPage .col1 .pitem a:HOVER {
-  color: #666;
 }
 
 .MyProcessWorksTPage .col2 .model-filter {

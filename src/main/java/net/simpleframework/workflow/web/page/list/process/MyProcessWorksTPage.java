@@ -128,7 +128,7 @@ public class MyProcessWorksTPage extends AbstractWorksTPage {
 						workitem)));
 			}
 		} else {
-			return new JavascriptForward("alert('").append($m("MyProcessWorksTPage.7")).append("');");
+			return JavascriptForward.alert($m("MyProcessWorksTPage.7"));
 		}
 	}
 
