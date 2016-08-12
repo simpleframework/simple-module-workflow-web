@@ -2,7 +2,6 @@ package net.simpleframework.workflow.web.page;
 
 import static net.simpleframework.common.I18n.$m;
 import net.simpleframework.common.StringUtils;
-import net.simpleframework.common.web.JavascriptUtils;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.AbstractElement;
 import net.simpleframework.mvc.common.element.LinkButton;
@@ -87,29 +86,6 @@ public abstract class AbstractFormTableRowTPage<T extends AbstractWorkitemBean> 
 		if (StringUtils.hasText(ftopic)) {
 			sb.append("<div class='form_topic'>").append(ftopic).append("</div>");
 		}
-		return sb.toString();
-	}
-
-	@Override
-	protected String toFormHTML(final PageParameter pp) {
-		final StringBuilder sb = new StringBuilder();
-		super.toFormHTML(pp);
-		final StringBuilder js = new StringBuilder();
-		js.append("var topb = $('.form_content .FormTableRowTemplatePage>.tool_bar'); if (!topb) return;");
-		js.append("var w = parseInt(topb.getStyle('width'));");
-		js.append("Event.observe(window, 'scroll', function() {");
-		js.append(" var scrollTop = document.documentElement.scrollTop || document.body.scrollTop || 0;");
-		js.append(" if (scrollTop > 0) {");
-		js.append("   topb.addClassName('scroll');");
-		js.append("   topb.up().addClassName('scroll');");
-		js.append("   if (!topb._scroll) { topb.setStyle('width: ' + w + 'px;'); topb._scroll = true; }");
-		js.append(" } else {");
-		js.append("   topb.removeClassName('scroll');");
-		js.append("   topb.up().removeClassName('scroll');");
-		js.append("   topb._scroll = null;");
-		js.append(" }");
-		js.append("});");
-		sb.append(JavascriptUtils.wrapScriptTag(js.toString(), true));
 		return sb.toString();
 	}
 }

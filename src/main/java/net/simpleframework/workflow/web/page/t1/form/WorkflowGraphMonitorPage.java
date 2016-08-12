@@ -3,6 +3,8 @@ package net.simpleframework.workflow.web.page.t1.form;
 import net.simpleframework.ado.query.IDataQuery;
 import net.simpleframework.mvc.PageMapping;
 import net.simpleframework.mvc.PageParameter;
+import net.simpleframework.mvc.common.element.LinkButton;
+import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
 import net.simpleframework.workflow.engine.bean.ProcessBean;
@@ -39,7 +41,11 @@ public class WorkflowGraphMonitorPage extends WorkflowMonitorPage {
 	@Override
 	protected String toMonitorHTML(final PageParameter pp) {
 		final ProcessBean process = WorkflowUtils.getProcessBean(pp);
-		return WorkflowGraphUtils.toGraphHTML(pp, process);
+		final StringBuilder sb = new StringBuilder();
+		sb.append(WorkflowGraphUtils.toTrHTML(pp));
+		sb.append(SpanElement.SPACE15);
+		sb.append(LinkButton.closeBtn().corner().setOnclick("window.close();"));
+		return WorkflowGraphUtils.toGraphHTML(pp, process, sb.toString());
 	}
 
 	public static class _ActivityGraphTbl2 extends _ActivityTbl {

@@ -1,28 +1,3 @@
-.WorkflowFormPage, 
-.WorkflowViewPage, 
-.WorkflowMonitorPage {
-  min-width: 1090px;
-  width: 1090px;
-}
-
-@media (min-width: 1024px) { /*>=1024的设备*/
-  .WorkflowFormPage, 
-  .WorkflowViewPage,
-  .WorkflowMonitorPage {
-    min-width: 992px;
-    width: 992px;
-  }
-}
-
-@media (min-width: 1200px) { /*>=1200的设备*/
-  .WorkflowFormPage, 
-  .WorkflowViewPage,
-  .WorkflowMonitorPage {
-    min-width: 1090px;
-    width: 1090px;
-  }
-}
-
 /*-------------------------form_tb_bar--------------------*/
 .form_tb_bar .taskinfo {
   display: inline-block;

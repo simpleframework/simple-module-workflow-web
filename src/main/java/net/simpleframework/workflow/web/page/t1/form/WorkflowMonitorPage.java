@@ -165,7 +165,12 @@ public class WorkflowMonitorPage extends AbstractWorkflowFormPage {
 				final EActivityStatus status = activity.getStatus();
 				final StringBuilder sb = new StringBuilder();
 				sb.append(WorkflowUtils.getStatusIcon(cp, status));
-				sb.append(new SpanElement(status).setStyle("margin-left: 3px; vertical-align: middle;"));
+				final SpanElement ele = new SpanElement(status)
+						.setStyle("margin-left: 3px; vertical-align: middle;");
+				if (status == EActivityStatus.running) {
+					ele.setColor("#f00");
+				}
+				sb.append(ele);
 				row.put("status", sb);
 			}
 			return row;

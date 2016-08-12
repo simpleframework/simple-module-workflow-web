@@ -39,7 +39,8 @@ public class ActivityGraphMgrPage extends ActivityMgrPage {
 	protected String toHtml(final PageParameter pp, final Map<String, Object> variables,
 			final String variable) throws IOException {
 		final StringBuilder sb = new StringBuilder();
-		final String gHTML = WorkflowGraphUtils.toGraphHTML(pp, WorkflowUtils.getProcessBean(pp));
+		final String gHTML = WorkflowGraphUtils.toGraphHTML(pp, WorkflowUtils.getProcessBean(pp),
+				WorkflowGraphUtils.toTrHTML(pp));
 		sb.append("<div align='center' class='ActivityMgrPage'>");
 		sb.append(" <div class='tb'>").append(gHTML).append("</div>");
 		sb.append("</div>");

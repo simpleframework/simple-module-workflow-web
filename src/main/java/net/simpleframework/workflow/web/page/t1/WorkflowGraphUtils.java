@@ -1,5 +1,7 @@
 package net.simpleframework.workflow.web.page.t1;
 
+import static net.simpleframework.common.I18n.$m;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,6 +12,7 @@ import net.simpleframework.ctx.common.xml.XmlDocument;
 import net.simpleframework.ctx.script.MVEL2Template;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.AbstractElement;
+import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.workflow.engine.IWorkflowContextAware;
 import net.simpleframework.workflow.engine.bean.ActivityBean;
 import net.simpleframework.workflow.engine.bean.ProcessBean;
@@ -38,8 +41,19 @@ import com.mxgraph.view.mxGraph;
  */
 public abstract class WorkflowGraphUtils implements IWorkflowContextAware {
 
-	public static String toGraphHTML(final PageParameter pp, final ProcessBean process) {
-		return toGraphHTML(pp, process, new KVMap().add("tbl", "WorkflowGraphMonitorPage_tbl"));
+	public static String toGraphHTML(final PageParameter pp, final ProcessBean process,
+			final String trHTML) {
+		return toGraphHTML(pp, process,
+				new KVMap().add("tbl", "WorkflowGraphMonitorPage_tbl").add("trHTML", trHTML));
+	}
+
+	public static String toTrHTML(final PageParameter pp) {
+		final StringBuilder sb = new StringBuilder();
+		sb.append($m("WorkflowGraphMonitorPage.0"))
+				.append(SpanElement.color($m("WorkflowGraphMonitorPage.1"), "#c00")).append(", ")
+				.append(SpanElement.color($m("WorkflowGraphMonitorPage.2"), "green")).append(", ")
+				.append(SpanElement.color($m("WorkflowGraphMonitorPage.3"), "#777"));
+		return sb.toString();
 	}
 
 	public static String toGraphHTML(final PageParameter pp, final ProcessBean process,
