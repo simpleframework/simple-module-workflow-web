@@ -23,7 +23,6 @@ public class AbstractFormTemplatePage extends T1FormTemplatePage implements IWor
 	protected void onForward(final PageParameter pp) throws Exception {
 		super.onForward(pp);
 
-		pp.addImportCSS(AbstractFormTemplatePage.class, "/form-base.css");
 		pp.addImportCSS(AbstractFormTemplatePage.class, "/form.css");
 	}
 
