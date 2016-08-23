@@ -92,12 +92,15 @@ public class MyRunningWorklistTPage extends AbstractItemsTPage {
 		return "MyRunningWorklistTPage";
 	}
 
+	protected String[] GROUP_NAMES = new String[] { "none", "modelname", "taskname", "pgroup" };
+
 	protected void setGroupParam(final PageParameter pp) {
 		String g = pp.getParameter("g");
 		if (g == null) {
 			g = pp.getCookie("group_worklist_running");
 		}
-		if ("modelname".equals(g) || "taskname".equals(g) || "none".equals(g)) {
+
+		if (ArrayUtils.contains(GROUP_NAMES, g, false)) {
 			pp.putParameter("g", g);
 			pp.addCookie("group_worklist_running", g, 365 * 60 * 60 * 24);
 		} else {
@@ -174,6 +177,8 @@ public class MyRunningWorklistTPage extends AbstractItemsTPage {
 				"$Actions.reloc('g=modelname');");
 		final MenuItem g2 = MyRunningWorklistTbl.MENU_VIEW_GROUP2().setOnclick(
 				"$Actions.reloc('g=taskname');");
+		final MenuItem g3 = MyRunningWorklistTbl.MENU_VIEW_GROUP3().setOnclick(
+				"$Actions.reloc('g=pgroup');");
 		final String g = pp.getParameter(G);
 		if ("none".equals(g)) {
 			g0.setIconClass(MenuItem.ICON_SELECTED);
@@ -181,8 +186,10 @@ public class MyRunningWorklistTPage extends AbstractItemsTPage {
 			g1.setIconClass(MenuItem.ICON_SELECTED);
 		} else if ("taskname".equals(g)) {
 			g2.setIconClass(MenuItem.ICON_SELECTED);
+		} else if ("pgroup".equals(g)) {
+			g3.setIconClass(MenuItem.ICON_SELECTED);
 		}
-		mb.addItem(g0).addItem(g1).addItem(g2);
+		mb.addItem(g0).addItem(g1).addItem(g2).addItem(g3);
 	}
 
 	protected TablePagerBean addTablePagerBean(final PageParameter pp) {

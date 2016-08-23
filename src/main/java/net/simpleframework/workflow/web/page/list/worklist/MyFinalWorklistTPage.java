@@ -19,6 +19,7 @@ import net.simpleframework.common.Convert;
 import net.simpleframework.common.ID;
 import net.simpleframework.common.StringUtils;
 import net.simpleframework.common.TimePeriod;
+import net.simpleframework.common.coll.ArrayUtils;
 import net.simpleframework.common.coll.KVMap;
 import net.simpleframework.ctx.trans.Transaction;
 import net.simpleframework.mvc.IForward;
@@ -84,7 +85,7 @@ public class MyFinalWorklistTPage extends MyRunningWorklistTPage {
 		if (g == null) {
 			g = pp.getCookie("group_worklist_final");
 		}
-		if ("modelname".equals(g) || "taskname".equals(g) || "none".equals(g)) {
+		if (ArrayUtils.contains(GROUP_NAMES, g, false)) {
 			pp.putParameter("g", g);
 			pp.addCookie("group_worklist_final", g, 365 * 60 * 60 * 24);
 		} else {

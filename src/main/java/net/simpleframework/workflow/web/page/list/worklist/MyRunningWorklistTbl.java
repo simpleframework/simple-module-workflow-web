@@ -107,17 +107,18 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 	@Override
 	public Object getGroupValue(final ComponentParameter cp, final Object bean,
 			final String groupColumn) {
-		final boolean bModelname = "modelname".equals(groupColumn);
-		if (bModelname || "taskname".equals(groupColumn)) {
-			final ActivityBean activity = wfwService.getActivity(getWorkitem(bean));
-			final ProcessModelBean processModel = wfpService.getProcessModel(wfaService
-					.getProcessBean(activity));
-			activity.setAttr("_PROCESSMODEL", processModel);
-			if (bModelname) {
-				return new ModelWrapper(processModel);
-			} else {
-				return new TaskWrapper(wfaService.getTaskNode(activity), processModel);
-			}
+		final ActivityBean activity = wfwService.getActivity(getWorkitem(bean));
+		ProcessModelBean processModel = (ProcessModelBean) activity.getAttr("_PROCESSMODEL");
+		if (processModel == null) {
+			activity.setAttr("_PROCESSMODEL",
+					processModel = wfpService.getProcessModel(wfaService.getProcessBean(activity)));
+		}
+		if ("modelname".equals(groupColumn)) {
+			return new ModelWrapper(processModel);
+		} else if ("pgroup".equals(groupColumn)) {
+			return new PGroupWrapper(processModel);
+		} else if ("taskname".equals(groupColumn)) {
+			return new TaskWrapper(wfaService.getTaskNode(activity), processModel);
 		}
 		return groupColumn;
 	}
@@ -127,6 +128,23 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 
 		ModelWrapper(final ProcessModelBean processModel) {
 			setName(processModel.getModelName());
+			this.processModel = processModel;
+		}
+
+		@Override
+		public String toString() {
+			return getName();
+		}
+	}
+
+	class PGroupWrapper extends NamedObject<PGroupWrapper> {
+		ProcessModelBean processModel;
+
+		PGroupWrapper(final ProcessModelBean processModel) {
+			final String[] arr = StringUtils.split(processModel.getModelText(), ".");
+			if (arr != null && arr.length > 0) {
+				setName(arr[0]);
+			}
 			this.processModel = processModel;
 		}
 
@@ -483,5 +501,9 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 
 	static MenuItem MENU_VIEW_GROUP2() {
 		return MenuItem.of($m("AbstractItemsTPage.8"));
+	}
+
+	static MenuItem MENU_VIEW_GROUP3() {
+		return MenuItem.of($m("AbstractItemsTPage.15"));
 	}
 }
