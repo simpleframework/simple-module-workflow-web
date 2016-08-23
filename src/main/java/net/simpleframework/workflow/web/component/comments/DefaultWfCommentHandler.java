@@ -345,7 +345,9 @@ public class DefaultWfCommentHandler extends ComponentHandlerEx implements IWfCo
 			sb.append(" item-first");
 		}
 		sb.append("'>");
-		sb.append("<img src='").append(cp.getPhotoUrl(comment.getUserId())).append("' />");
+		// cp.getPhotoUrl(comment.getUserId())
+		sb.append("<img src='").append(cp.getCssResourceHomePath(DefaultWfCommentHandler.class))
+				.append("/images/none_user.gif' />");
 		sb.append(" <div class='i1'>").append(HtmlUtils.convertHtmlLines(comment.getCcomment()))
 				.append("</div>");
 		sb.append(" <div class='i2 clearfix'>");
