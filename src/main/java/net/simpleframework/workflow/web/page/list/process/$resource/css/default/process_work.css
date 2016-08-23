@@ -79,7 +79,7 @@
 }
 
 .MyProcessWorksTPage .col1 .gitem.active {
-  background-color: #cde;
+  background-color: #fff;
 }
 
 .MyProcessWorksTPage .col1 .gitem.active .glbl, 
@@ -89,7 +89,7 @@
 
 .MyProcessWorksTPage .col1 .psub {
   position: absolute;
-  background-color: #cde;
+  background-color: #fff;
   color: #fff;
   font-size: 9.5pt;
   width: 740px;
@@ -128,7 +128,7 @@
 .MyProcessWorksTPage .col1 .pgroup {
   border-top: 1px dashed #d2d2d2;
   margin-bottom: 4px;
-  color: #662;
+  color: #d33;
   padding: 12px 0 4px 110px;
   min-height: 40px;
 }
