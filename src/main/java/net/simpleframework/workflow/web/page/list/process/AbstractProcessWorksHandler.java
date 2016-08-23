@@ -165,7 +165,7 @@ public abstract class AbstractProcessWorksHandler extends AbstractScanHandler im
 		return $m("AbstractProcessWorksHandler.0") + " - " + getClass().getName();
 	}
 
-	static IProcessWorksHandler getProcessWorksHandler(final PageParameter pp) {
+	public static IProcessWorksHandler getProcessWorksHandler(final PageParameter pp) {
 		final ProcessModelBean pm = WorkflowUtils.getProcessModel(pp);
 		IProcessWorksHandler hdl = null;
 		if (pm != null) {
