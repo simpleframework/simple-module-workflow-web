@@ -33,7 +33,8 @@ body {
 } */
 
 /*-------------------------WorkflowCompleteInfoPage--------------------*/
-.WorkflowCompleteInfoPage {
+.form_content .WorkflowCompleteInfoPage {
+  min-width: 50%;
   width: 50%;
   text-align: left;
   border: 1px solid #aaa;

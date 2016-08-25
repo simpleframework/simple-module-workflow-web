@@ -53,7 +53,7 @@ public class AbstractFormTemplatePage extends T1FormTemplatePage implements IWor
 		}
 
 		final String href = backBtn.getHref();
-		if (!StringUtils.hasText(href)) {
+		if (!StringUtils.hasText(href) || href.startsWith("javascript:")) {
 			referer = (String) SessionCache.lget("_Referer");
 			if (referer != null) {
 				backBtn.setHref(referer);
