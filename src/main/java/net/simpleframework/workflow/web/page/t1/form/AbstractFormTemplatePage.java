@@ -37,29 +37,30 @@ public class AbstractFormTemplatePage extends T1FormTemplatePage implements IWor
 		final LinkButton backBtn = LinkButton.backBtn();
 
 		String referer = pp.getRequestHeader("Referer");
+		String href = null;
 		if (StringUtils.hasText(referer)) {
 			final String path = HttpUtils.stripContextPath(pp.request,
 					HttpUtils.stripAbsoluteUrl(referer));
 			// 返回首页
 			if ("".equals(path) || "/".equals(path)) {
-				backBtn.setHref("/");
+				backBtn.setHref((href = "/"));
 			} else {
 				if (referer.contains("/workflow/")
 						&& !(referer.contains("/workflow/form") || referer.contains("/workflow/view"))) {
-					backBtn.setHref(referer);
-					SessionCache.lput("_Referer", referer);
+					backBtn.setHref((href = referer));
 				}
 			}
 		}
 
-		final String href = backBtn.getHref();
-		if (!StringUtils.hasText(href) || href.startsWith("javascript:")) {
+		if (href == null) {
 			referer = (String) SessionCache.lget("_Referer");
 			if (referer != null) {
 				backBtn.setHref(referer);
 			} else {
 				backBtn.setHref(getDefaultBackUrl(pp));
 			}
+		} else {
+			SessionCache.lput("_Referer", href);
 		}
 		return backBtn;
 	}
