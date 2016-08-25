@@ -1,6 +1,7 @@
 package net.simpleframework.workflow.web.page.t1.form;
 
 import net.simpleframework.common.StringUtils;
+import net.simpleframework.common.web.HttpUtils;
 import net.simpleframework.ctx.permission.PermissionConst;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.SessionCache;
@@ -34,13 +35,25 @@ public class AbstractFormTemplatePage extends T1FormTemplatePage implements IWor
 
 	public LinkButton getBackBtn(final PageParameter pp) {
 		final LinkButton backBtn = LinkButton.backBtn();
+
 		String referer = pp.getRequestHeader("Referer");
-		if (StringUtils.hasText(referer)
-				&& (referer.contains("/workflow/") && !(referer.contains("/workflow/form") || referer
-						.contains("/workflow/view")))) {
-			backBtn.setHref(referer);
-			SessionCache.lput("_Referer", referer);
-		} else {
+		if (StringUtils.hasText(referer)) {
+			final String path = HttpUtils.stripContextPath(pp.request,
+					HttpUtils.stripAbsoluteUrl(referer));
+			// 返回首页
+			if ("".equals(path) || "/".equals(path)) {
+				backBtn.setHref("/");
+			} else {
+				if (referer.contains("/workflow/")
+						&& !(referer.contains("/workflow/form") || referer.contains("/workflow/view"))) {
+					backBtn.setHref(referer);
+					SessionCache.lput("_Referer", referer);
+				}
+			}
+		}
+
+		final String href = backBtn.getHref();
+		if (!StringUtils.hasText(href)) {
 			referer = (String) SessionCache.lget("_Referer");
 			if (referer != null) {
 				backBtn.setHref(referer);
