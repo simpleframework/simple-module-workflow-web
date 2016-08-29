@@ -8,7 +8,7 @@
 	final String componentName = nCP.getComponentName();
 	final String params = ActivityAbortUtils.toParams(nCP);
 %>
-<div class="simple_window_tcb activity_abort_select">
+<div class="activity_abort_select simple_window_tcb">
   <%=ActivityAbortUtils.toListHTML(nCP)%>
   <div class="msg"></div>
   <div class="b">
