@@ -20,7 +20,6 @@ import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageMapping;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.ButtonElement;
-import net.simpleframework.mvc.common.element.ETextAlign;
 import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.LinkButton;
 import net.simpleframework.mvc.common.element.LinkElement;
@@ -89,8 +88,8 @@ public class ProcessModelMgrPage extends AbstractWorkflowMgrPage {
 								.setFilter(false))
 				.addColumn(
 						new TablePagerColumn("version", $m("MyInitiateItemsTPage.4"), 80)
-								.setFilter(false).setTextAlign(ETextAlign.center))
-				.addColumn(TC_CREATEDATE().setFilter(false)).addColumn(TablePagerColumn.OPE(90));
+								.setFilter(false).center()).addColumn(TC_CREATEDATE().setFilter(false))
+				.addColumn(TablePagerColumn.OPE(90));
 		return tablePager;
 	}
 

@@ -8,7 +8,6 @@ import java.util.Map;
 import net.simpleframework.mvc.PageMapping;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.Checkbox;
-import net.simpleframework.mvc.common.element.ETextAlign;
 import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.LinkButton;
 import net.simpleframework.mvc.common.element.LinkElement;
@@ -76,8 +75,7 @@ public class WorkflowMonitorPage extends AbstractWorkflowFormPage {
 				.addColumn(ActivityTbl.TC_RELATIVEDATE())
 				.addColumn(
 						new TablePagerColumn("status", $m("WorkflowMonitorPage.4")).setWidth(60)
-								.setSort(false).setTextAlign(ETextAlign.center))
-				.addColumn(ActivityTbl.TC_TIMEOUT());
+								.setSort(false).center()).addColumn(ActivityTbl.TC_TIMEOUT());
 		return tablePager;
 	}
 

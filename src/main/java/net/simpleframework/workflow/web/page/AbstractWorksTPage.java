@@ -2,7 +2,6 @@ package net.simpleframework.workflow.web.page;
 
 import static net.simpleframework.common.I18n.$m;
 import net.simpleframework.mvc.PageParameter;
-import net.simpleframework.mvc.common.element.ETextAlign;
 import net.simpleframework.mvc.component.ui.pager.ITablePagerHandler;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
 import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
@@ -44,8 +43,8 @@ public class AbstractWorksTPage extends Category_ListPage implements IWorkflowPa
 	}
 
 	public static TablePagerColumn TC_USER(final String columnName, final String columnText) {
-		return new TablePagerColumn(columnName, columnText, 55).setTextAlign(ETextAlign.center)
-				.setFilterSort(false).setNowrap(false);
+		return new TablePagerColumn(columnName, columnText, 55).center().setFilterSort(false)
+				.setNowrap(false);
 	}
 
 	public static <T extends Enum<T>> TablePagerColumn TC_STATUS(final Class<T> e) {

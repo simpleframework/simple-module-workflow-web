@@ -14,7 +14,6 @@ import net.simpleframework.mvc.IForward;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.ButtonElement;
-import net.simpleframework.mvc.common.element.ETextAlign;
 import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.ImageElement;
 import net.simpleframework.mvc.common.element.LinkElement;
@@ -101,8 +100,8 @@ public class MyDelegateListTPage extends AbstractItemsTPage {
 	}
 
 	protected TablePagerColumn TC_USERTEXT() {
-		return new TablePagerColumn("userText", $m("MyDelegateListTPage.0"), 120).setTextAlign(
-				ETextAlign.center).setFilterSort(false);
+		return new TablePagerColumn("userText", $m("MyDelegateListTPage.0"), 120).center()
+				.setFilterSort(false);
 	}
 
 	@Transaction(context = IWorkflowContext.class)

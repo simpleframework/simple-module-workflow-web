@@ -13,7 +13,6 @@ import net.simpleframework.common.ID;
 import net.simpleframework.ctx.permission.PermissionDept;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.ButtonElement;
-import net.simpleframework.mvc.common.element.ETextAlign;
 import net.simpleframework.mvc.common.element.JS;
 import net.simpleframework.mvc.common.element.LinkElement;
 import net.simpleframework.mvc.component.ComponentParameter;
@@ -47,11 +46,11 @@ public class ProcessModelMgrTPage extends AbstractWorkflowMgrTPage {
 						new TablePagerColumn("processCount", $m("ProcessModelMgrPage.1"), 60)
 								.setFilter(false))
 				.addColumn(
-						new TablePagerColumn("userText", $m("ProcessModelMgrPage.2"), 80).setTextAlign(
-								ETextAlign.center).setFilter(false))
+						new TablePagerColumn("userText", $m("ProcessModelMgrPage.2"), 80).center()
+								.setFilter(false))
 				.addColumn(
-						new TablePagerColumn("version", $m("MyInitiateItemsTPage.4"), 80).setTextAlign(
-								ETextAlign.center).setFilter(false))
+						new TablePagerColumn("version", $m("MyInitiateItemsTPage.4"), 80).center()
+								.setFilter(false))
 				.addColumn(AbstractWorkflowMgrPage.TC_CREATEDATE().setFilter(false))
 				.addColumn(TablePagerColumn.OPE(80));
 	}

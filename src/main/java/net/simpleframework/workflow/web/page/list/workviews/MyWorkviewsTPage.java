@@ -13,7 +13,6 @@ import net.simpleframework.ado.query.IDataQuery;
 import net.simpleframework.common.coll.KVMap;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.ButtonElement;
-import net.simpleframework.mvc.common.element.ETextAlign;
 import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.ImageElement;
 import net.simpleframework.mvc.common.element.JS;
@@ -55,8 +54,8 @@ public class MyWorkviewsTPage extends AbstractItemsTPage {
 				.addColumn(TC_ICON())
 				.addColumn(TC_TITLE())
 				.addColumn(
-						new TablePagerColumn("sent", $m("MyRunningWorklistTPage.0"), 120).setTextAlign(
-								ETextAlign.center).setFilterSort(false))
+						new TablePagerColumn("sent", $m("MyRunningWorklistTPage.0"), 120).center()
+								.setFilterSort(false))
 				.addColumn(TC_CREATEDATE().setColumnText($m("MyRunningWorklistTPage.1")))
 				.addColumn(TablePagerColumn.OPE(70));
 		return tablePager;

@@ -7,7 +7,6 @@ import java.util.Map;
 import net.simpleframework.ado.query.IDataQuery;
 import net.simpleframework.common.coll.KVMap;
 import net.simpleframework.mvc.PageParameter;
-import net.simpleframework.mvc.common.element.ETextAlign;
 import net.simpleframework.mvc.common.element.LinkButton;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.ui.pager.EPagerBarLayout;
@@ -56,8 +55,7 @@ public abstract class MyProcessWorksTPages implements IWorkflowPageAware {
 					.addColumn(new TablePagerColumn("modelText", $m("MyProcessWorksTPage.10")))
 					.addColumn(
 							new TablePagerColumn("modelVer", $m("MyProcessWorksTPage.11"), 80)
-									.setFilterSort(false).setTextAlign(ETextAlign.center))
-					.addColumn(TablePagerColumn.OPE(80));
+									.setFilterSort(false).center()).addColumn(TablePagerColumn.OPE(80));
 		}
 
 		public static class ProcessModelSelectTbl extends AbstractDbTablePagerHandler {

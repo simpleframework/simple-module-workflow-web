@@ -16,7 +16,6 @@ import net.simpleframework.common.coll.KVMap;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.AbstractElement;
 import net.simpleframework.mvc.common.element.ButtonElement;
-import net.simpleframework.mvc.common.element.ETextAlign;
 import net.simpleframework.mvc.common.element.LinkElement;
 import net.simpleframework.mvc.common.element.ProgressElement;
 import net.simpleframework.mvc.common.element.SpanElement;
@@ -226,18 +225,18 @@ public class ActivityTbl extends GroupDbTablePagerHandler implements IWorkflowCo
 	}
 
 	public static TablePagerColumn TC_PRE_PARTICIPANTS() {
-		return new TablePagerColumn("pre_participants", $m("ActivityTbl.2"), 100)
-				.setTextAlign(ETextAlign.center).setNowrap(false).setFilterSort(false);
+		return new TablePagerColumn("pre_participants", $m("ActivityTbl.2"), 100).center()
+				.setNowrap(false).setFilterSort(false);
 	}
 
 	public static TablePagerColumn TC_PARTICIPANTS() {
-		return new TablePagerColumn("participants", $m("ActivityTbl.3"), 150)
-				.setTextAlign(ETextAlign.center).setNowrap(false).setFilterSort(false);
+		return new TablePagerColumn("participants", $m("ActivityTbl.3"), 150).center()
+				.setNowrap(false).setFilterSort(false);
 	}
 
 	public static TablePagerColumn TC_PARTICIPANTS2() {
-		return new TablePagerColumn("participants2", $m("ActivityTbl.4"), 150)
-				.setTextAlign(ETextAlign.center).setNowrap(false).setFilterSort(false);
+		return new TablePagerColumn("participants2", $m("ActivityTbl.4"), 150).center()
+				.setNowrap(false).setFilterSort(false);
 	}
 
 	public static TablePagerColumn TC_TIMEOUT() {

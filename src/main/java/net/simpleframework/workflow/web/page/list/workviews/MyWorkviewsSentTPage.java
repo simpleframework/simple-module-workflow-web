@@ -11,7 +11,6 @@ import net.simpleframework.common.ID;
 import net.simpleframework.common.coll.KVMap;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.ButtonElement;
-import net.simpleframework.mvc.common.element.ETextAlign;
 import net.simpleframework.mvc.common.element.ImageElement;
 import net.simpleframework.mvc.common.element.JS;
 import net.simpleframework.mvc.common.element.LinkElement;
@@ -57,8 +56,8 @@ public class MyWorkviewsSentTPage extends MyWorkviewsTPage {
 				.addColumn(TC_ICON())
 				.addColumn(TC_TITLE())
 				.addColumn(
-						new TablePagerColumn("rev", $m("MyFinalWorklistTPage.0"), 200)
-								.setTextAlign(ETextAlign.center).setNowrap(false).setFilterSort(false))
+						new TablePagerColumn("rev", $m("MyFinalWorklistTPage.0"), 200).center()
+								.setNowrap(false).setFilterSort(false))
 				.addColumn(TC_CREATEDATE().setColumnText($m("MyWorkviewsSentTPage.0")))
 				.addColumn(TablePagerColumn.OPE(70));
 		return tablePager;

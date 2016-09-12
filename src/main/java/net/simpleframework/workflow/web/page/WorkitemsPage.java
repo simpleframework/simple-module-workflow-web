@@ -10,7 +10,6 @@ import net.simpleframework.common.coll.KVMap;
 import net.simpleframework.ctx.IModuleRef;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.ButtonElement;
-import net.simpleframework.mvc.common.element.ETextAlign;
 import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.LinkButton;
 import net.simpleframework.mvc.common.element.SpanElement;
@@ -45,14 +44,9 @@ public class WorkitemsPage extends OneTableTemplatePage implements IWorkflowCont
 		final TablePagerBean tablePager = addTablePagerBean(pp, "WorkitemsPage_tbl",
 				WorkitemsTbl.class).setShowCheckbox(false).setFilter(false).setResize(false)
 				.setShowLineNo(false);
-		tablePager
-				.addColumn(TablePagerColumn.ICON())
-				.addColumn(
-						new TablePagerColumn("userText", $m("WorkitemsPage.0"))
-								.setTextAlign(ETextAlign.center))
-				.addColumn(
-						new TablePagerColumn("userText2", $m("WorkitemsPage.1"))
-								.setTextAlign(ETextAlign.center))
+		tablePager.addColumn(TablePagerColumn.ICON())
+				.addColumn(new TablePagerColumn("userText", $m("WorkitemsPage.0")).center())
+				.addColumn(new TablePagerColumn("userText2", $m("WorkitemsPage.1")).center())
 				.addColumn(TablePagerColumn.DATE("createDate", $m("WorkitemsPage.2")).setWidth(150))
 				.addColumn(TablePagerColumn.DATE("completeDate", $m("WorkitemsPage.3")).setWidth(150));
 		if (pp.isLmember(getPageManagerRole(pp))) {
