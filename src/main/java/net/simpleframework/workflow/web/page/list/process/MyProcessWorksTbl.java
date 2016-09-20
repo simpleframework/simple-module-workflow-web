@@ -37,7 +37,7 @@ public class MyProcessWorksTbl extends AbstractDbTablePagerHandler implements IW
 		if (dq != null) {
 			return dq;
 		}
-		return wfpService.getProcessWlist(cp.getLoginId(), pm);
+		return wfpService.getProcessWlist(cp.getLoginId(), pm, "");
 	}
 
 	@Override
@@ -86,7 +86,7 @@ public class MyProcessWorksTbl extends AbstractDbTablePagerHandler implements IW
 				return dq;
 			}
 
-			return wfpService.getProcessWlistInDept(deptIds.toArray(new ID[deptIds.size()]), pm);
+			return wfpService.getProcessWlistInDept(deptIds.toArray(new ID[deptIds.size()]), pm, "");
 		}
 
 		@Override
@@ -111,7 +111,7 @@ public class MyProcessWorksTbl extends AbstractDbTablePagerHandler implements IW
 				return dq;
 			}
 
-			return wfpService.getProcessWlistInDomain(cp.getLDomainId(), pm);
+			return wfpService.getProcessWlistInDomain(cp.getLDomainId(), pm, "");
 		}
 
 		@Override
