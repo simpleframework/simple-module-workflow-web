@@ -82,8 +82,8 @@ public abstract class ActivityFallbackUtils implements IWorkflowContextAware {
 		sb.append(new Checkbox("idActivityFallback_opt1", $m("ActivityFallbackUtils.0")));
 		sb.append("</div>");
 		sb.append("<div class='right'>");
-		sb.append(ButtonElement.okBtn().setOnclick("_activity_fallback_select_click();")).append(
-				SpanElement.SPACE);
+		sb.append(ButtonElement.okBtn().setOnclick("_activity_fallback_select_click();"))
+				.append(SpanElement.SPACE);
 		sb.append(ButtonElement.closeBtn());
 		sb.append("</div>");
 		return sb.toString();

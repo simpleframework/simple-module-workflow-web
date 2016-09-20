@@ -46,13 +46,14 @@ public class TestForm extends AbstractWorkflowFormTPage {
 	protected TableRows getTableRows(final PageParameter pp) {
 		final ProcessBean process = getProcessBean(pp);
 		final InputElement wf_days = new InputElement("wf_days");
-		final TableRow r1 = new TableRow(new RowField($m("AbstractWorkflowFormPage.2"),
-				getInput_topic(pp).setText(process.getTitle())),
+		final TableRow r1 = new TableRow(
+				new RowField($m("AbstractWorkflowFormPage.2"),
+						getInput_topic(pp).setText(process.getTitle())),
 				new RowField("请假天数", wf_days).setElementsStyle("width: 200px;"));
-		final TableRow r2 = new TableRow(new RowField($m("AbstractWorkflowFormPage.3"),
-				getInput_description(pp)));
-		final TableRow r3 = new TableRow(new RowField("意见",
-				new BlockElement().setId("idTestForm_comments")));
+		final TableRow r2 = new TableRow(
+				new RowField($m("AbstractWorkflowFormPage.3"), getInput_description(pp)));
+		final TableRow r3 = new TableRow(
+				new RowField("意见", new BlockElement().setId("idTestForm_comments")));
 		return TableRows.of(r1, r3, r2);
 	}
 }

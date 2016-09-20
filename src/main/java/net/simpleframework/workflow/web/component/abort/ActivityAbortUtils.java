@@ -100,9 +100,8 @@ public abstract class ActivityAbortUtils implements IWorkflowContextAware {
 							sb2.append(", ");
 						}
 						sb2.append(p.getUser())
-								.append(
-										new SpanElement("(" + cp.getDept(p.getDeptId()) + ")")
-												.setClassName("dept"));
+								.append(new SpanElement("(" + cp.getDept(p.getDeptId()) + ")")
+										.setClassName("dept"));
 					}
 					sb.append(new Checkbox("aitem" + i++, sb2).setVal(activity.getId()));
 					sb.append("</div>");

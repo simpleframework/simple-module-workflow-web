@@ -53,8 +53,8 @@ public class WorkflowCompleteInfoPage extends AbstractWorkflowFormPage {
 		sb.append("<div class='WorkflowCompleteInfoPage'>");
 		sb.append(" <div class='l1'>");
 		sb.append($m("WorkflowCompleteInfoPage.0"));
-		sb.append(LinkButton.closeBtn().corner().setHref(getBackBtn(pp).getHref())
-				.setClassName("right"));
+		sb.append(
+				LinkButton.closeBtn().corner().setHref(getBackBtn(pp).getHref()).setClassName("right"));
 		sb.append(" </div>");
 		sb.append(" <div class='l2'>");
 		final List<ActivityBean> nextActivities = removeMergeNodes(wfaService
@@ -89,8 +89,8 @@ public class WorkflowCompleteInfoPage extends AbstractWorkflowFormPage {
 			}
 			sb.append("</table>");
 		} else {
-			sb.append(new BlockElement().setClassName("winfo").setText(
-					$m("WorkflowCompleteInfoPage.1")));
+			sb.append(
+					new BlockElement().setClassName("winfo").setText($m("WorkflowCompleteInfoPage.1")));
 		}
 		sb.append(" </div>");
 		sb.append("</div>");

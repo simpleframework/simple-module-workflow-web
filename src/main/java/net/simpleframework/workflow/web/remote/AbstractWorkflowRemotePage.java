@@ -18,8 +18,8 @@ import net.simpleframework.workflow.engine.IWorkflowContextAware;
  * @author 陈侃(cknet@126.com, 13910090885) https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
-public abstract class AbstractWorkflowRemotePage extends AbstractTemplatePage implements
-		IWorkflowContextAware {
+public abstract class AbstractWorkflowRemotePage extends AbstractTemplatePage
+		implements IWorkflowContextAware {
 
 	@Override
 	protected void onForward(final PageParameter pp) throws Exception {
@@ -31,7 +31,8 @@ public abstract class AbstractWorkflowRemotePage extends AbstractTemplatePage im
 		return PermissionConst.ROLE_ALL_ACCOUNT;
 	}
 
-	protected void copyTo(final PageParameter pp, final Properties properties, final String... keys) {
+	protected void copyTo(final PageParameter pp, final Properties properties,
+			final String... keys) {
 		if (keys == null) {
 			return;
 		}

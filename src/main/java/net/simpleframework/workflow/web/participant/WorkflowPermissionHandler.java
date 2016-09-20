@@ -31,8 +31,8 @@ import net.simpleframework.workflow.web.participant.PRelativeRoleHandler.Level;
  * @author 陈侃(cknet@126.com, 13910090885) https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
-public class WorkflowPermissionHandler extends OrganizationPermissionHandler implements
-		IWorkflowPermissionHandler {
+public class WorkflowPermissionHandler extends OrganizationPermissionHandler
+		implements IWorkflowPermissionHandler {
 
 	@Override
 	public Collection<Participant> getRelativeParticipants(final IDomainBeanAware domain,
@@ -45,8 +45,8 @@ public class WorkflowPermissionHandler extends OrganizationPermissionHandler imp
 			final String relative = rRole.getRelative();
 			final String[] arr = StringUtils.split(relative, ":");
 			if (arr.length == 2) {
-				rr = _roleService.getRoleByName(_rolecService.getRoleChartByName(
-						_deptService.getBean(domain.getDomainId()), arr[0]), arr[1]);
+				rr = _roleService.getRoleByName(_rolecService
+						.getRoleChartByName(_deptService.getBean(domain.getDomainId()), arr[0]), arr[1]);
 			} else {
 				rr = _roleService.getRoleByName(_roleService.getRoleChart(r), relative);
 			}
@@ -169,8 +169,9 @@ public class WorkflowPermissionHandler extends OrganizationPermissionHandler imp
 			final Map<String, Object> tmp = new HashMap<String, Object>();
 			while (users.hasNext()) {
 				user = users.next();
-				if (null != tmp.get(user.getId().toString()))
+				if (null != tmp.get(user.getId().toString())) {
 					continue;// 处理加过的用户就不在加了，因为会有一个用户在同一个部门会有不同角色
+				}
 				participants.add(new Participant(getUser(user)));
 				tmp.put(user.getId().toString(), "");
 			}

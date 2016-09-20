@@ -94,8 +94,8 @@ public abstract class AbstractWorkflowFormTPage extends AbstractFormTableRowTPag
 	protected WorkitemCompleteBean addWorkitemCompleteComponentBean(final PageParameter pp) {
 		// 完成
 		return (WorkitemCompleteBean) addComponentBean(pp, "AbstractWorkflowFormPage_completeAction",
-				WorkitemCompleteBean.class).setSelector(getFormSelector()).setParameters(
-				"_isSendAction=false");
+				WorkitemCompleteBean.class).setSelector(getFormSelector())
+						.setParameters("_isSendAction=false");
 	}
 
 	protected WfCommentBean addWfCommentBean(final PageParameter pp) {
@@ -105,8 +105,8 @@ public abstract class AbstractWorkflowFormTPage extends AbstractFormTableRowTPag
 
 	@Override
 	protected ValidationBean addFormValidationBean(final PageParameter pp) {
-		return super.addFormValidationBean(pp).addValidators(
-				new Validator(EValidatorMethod.required, "#" + getParamKey_title()));
+		return super.addFormValidationBean(pp)
+				.addValidators(new Validator(EValidatorMethod.required, "#" + getParamKey_title()));
 	}
 
 	@Transaction(context = IWorkflowContext.class)
@@ -116,8 +116,8 @@ public abstract class AbstractWorkflowFormTPage extends AbstractFormTableRowTPag
 		final WorkitemBean workitem = getWorkitemBean(pp);
 		onSaveForm(pp, workitem);
 		pp.removeSessionAttr("time_" + workitem.getId());
-		return new JavascriptForward(JS.loc(uFactory.getUrl(pp, WorkflowCompleteInfoPage.class,
-				workitem)));
+		return new JavascriptForward(
+				JS.loc(uFactory.getUrl(pp, WorkflowCompleteInfoPage.class, workitem)));
 	}
 
 	@Transaction(context = IWorkflowContext.class)
@@ -171,8 +171,8 @@ public abstract class AbstractWorkflowFormTPage extends AbstractFormTableRowTPag
 				sEle.setText($m("AbstractWorkflowFormTPage.0", Convert.toDateString(date, "HH:mm")));
 			}
 		} else {
-			el.add(SpanElement.strongText(WorkflowUtils.getProcessTitle(WorkflowUtils.getProcessBean(
-					pp, workitem))));
+			el.add(SpanElement.strongText(
+					WorkflowUtils.getProcessTitle(WorkflowUtils.getProcessBean(pp, workitem))));
 		}
 		return el;
 	}
@@ -222,8 +222,8 @@ public abstract class AbstractWorkflowFormTPage extends AbstractFormTableRowTPag
 		final ProcessBean process = getProcessBean(pp);
 		final TableRow r1 = new TableRow(new RowField($m("AbstractWorkflowFormPage.2"),
 				getInput_topic(pp).setText(process.getTitle())));
-		final TableRow r2 = new TableRow(new RowField($m("AbstractWorkflowFormPage.3"),
-				getInput_description(pp)));
+		final TableRow r2 = new TableRow(
+				new RowField($m("AbstractWorkflowFormPage.3"), getInput_description(pp)));
 		return TableRows.of(r1, r2);
 	}
 
@@ -303,9 +303,8 @@ public abstract class AbstractWorkflowFormTPage extends AbstractFormTableRowTPag
 	}
 
 	@Override
-	protected String toHtml(final PageParameter pp,
-			final Class<? extends AbstractMVCPage> pageClass, final Map<String, Object> variables,
-			final String currentVariable) throws IOException {
+	protected String toHtml(final PageParameter pp, final Class<? extends AbstractMVCPage> pageClass,
+			final Map<String, Object> variables, final String currentVariable) throws IOException {
 		String html = super.toHtml(pp, pageClass, variables, currentVariable);
 		if (FormTableRowTemplatePage.class.equals(pageClass)) {
 			final StringBuffer js = new StringBuffer();
@@ -314,7 +313,8 @@ public abstract class AbstractWorkflowFormTPage extends AbstractFormTableRowTPag
 			js.append("	var act = $Actions['AbstractWorkflowFormTPage_autosave'];");
 			js.append(" var _func = function() { act.CHANGE_MARK = true; };");
 			js.append(" var eles = _form.select('#ta_wfcomment');"); // _form.getElements()
-			js.append(" eles.invoke('observe', 'input', _func).invoke('observe', 'propertychange', _func);");
+			js.append(
+					" eles.invoke('observe', 'input', _func).invoke('observe', 'propertychange', _func);");
 			js.append("}");
 
 			// 添加确定退出

@@ -217,8 +217,8 @@ public abstract class WorkitemCompleteUtils implements IWorkflowContextAware {
 					sb.append("<div class='ritem'>");
 					final String val = participant.toString();
 					Object user = participant.getUser();
-					final DelegationBean delegation = wfdService.queryRunningDelegation(participant
-							.getUserId());
+					final DelegationBean delegation = wfdService
+							.queryRunningDelegation(participant.getUserId());
 					if (delegation != null) {
 						user = user + $m("WorkflowUtils.1", delegation.getUserText());
 					}
@@ -237,8 +237,8 @@ public abstract class WorkitemCompleteUtils implements IWorkflowContextAware {
 						if (multi) {
 							box = new Checkbox(id, user).setChecked(check);
 						} else {
-							box = new Radio(id, user).setChecked(i++ == 0 || check).setName(
-									transition.getId());
+							box = new Radio(id, user).setChecked(i++ == 0 || check)
+									.setName(transition.getId());
 						}
 					}
 					sb.append(box.setValue(val));

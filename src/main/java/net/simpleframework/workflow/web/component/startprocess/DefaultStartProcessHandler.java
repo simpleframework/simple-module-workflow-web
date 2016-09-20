@@ -12,8 +12,8 @@ import net.simpleframework.workflow.engine.bean.ProcessBean;
  * @author 陈侃(cknet@126.com, 13910090885) https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
-public class DefaultStartProcessHandler extends AbstractComponentHandler implements
-		IStartProcessHandler {
+public class DefaultStartProcessHandler extends AbstractComponentHandler
+		implements IStartProcessHandler {
 	@Override
 	public void onInit(final ComponentParameter cp, final InitiateItem initiateItem) {
 	}

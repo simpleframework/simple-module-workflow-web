@@ -74,8 +74,8 @@ public class ActivityTbl extends GroupDbTablePagerHandler implements IWorkflowCo
 			if (completeDate == null) {
 				completeDate = new Date();
 			}
-			final long l = wfaService.getWorkCalendarListener(activity).getRelativeMilliseconds(
-					activity, activity.getCreateDate(), completeDate);
+			final long l = wfaService.getWorkCalendarListener(activity)
+					.getRelativeMilliseconds(activity, activity.getCreateDate(), completeDate);
 			max = Math.max(max, l);
 			cp.setRequestAttr("l_" + activity.getId(), l);
 		}
@@ -94,8 +94,8 @@ public class ActivityTbl extends GroupDbTablePagerHandler implements IWorkflowCo
 		}
 
 		final KVMap row = new KVMap();
-		row.add(TablePagerColumn.ICON, WorkflowUtils.getStatusIcon(cp, activity.getStatus())).add(
-				"tasknode", toTasknodeElement(cp, activity));
+		row.add(TablePagerColumn.ICON, WorkflowUtils.getStatusIcon(cp, activity.getStatus()))
+				.add("tasknode", toTasknodeElement(cp, activity));
 
 		final ActivityBean pre = wfaService.getPreActivity(activity);
 		if (pre != null) {
@@ -110,8 +110,8 @@ public class ActivityTbl extends GroupDbTablePagerHandler implements IWorkflowCo
 			row.add("pre_participants", pre_participants);
 		}
 
-		row.add("participants", WorkflowUtils.getParticipants(cp, activity, false)).add(
-				"participants2", WorkflowUtils.getParticipants(cp, activity, true));
+		row.add("participants", WorkflowUtils.getParticipants(cp, activity, false))
+				.add("participants2", WorkflowUtils.getParticipants(cp, activity, true));
 
 		row.add("createDate", activity.getCreateDate())
 				.add("completeDate", activity.getCompleteDate())
@@ -156,11 +156,11 @@ public class ActivityTbl extends GroupDbTablePagerHandler implements IWorkflowCo
 		final Date timeoutDate = activity.getTimeoutDate();
 		if (timeoutDate != null) {
 			final Date completeDate = activity.getCompleteDate();
-			final int d = Double.valueOf(
-					(timeoutDate.getTime() - (completeDate != null ? completeDate.getTime() : System
-							.currentTimeMillis())) / (1000 * 60)).intValue();
-			return new SpanElement(NumberUtils.format(d / 60.0, "0.#")).setColor(
-					d > 0 ? "green" : "red").toString();
+			final int d = Double.valueOf((timeoutDate.getTime()
+					- (completeDate != null ? completeDate.getTime() : System.currentTimeMillis()))
+					/ (1000 * 60)).intValue();
+			return new SpanElement(NumberUtils.format(d / 60.0, "0.#"))
+					.setColor(d > 0 ? "green" : "red").toString();
 		}
 		return null;
 	}
@@ -173,15 +173,15 @@ public class ActivityTbl extends GroupDbTablePagerHandler implements IWorkflowCo
 	}
 
 	protected LinkElement createUsernodeElement(final ActivityBean activity) {
-		return new LinkElement(activity.getTasknodeText())
-				.setOnclick("$Actions['ActivityMgrPage_workitems']('activityId=" + activity.getId()
-						+ "');");
+		return new LinkElement(activity.getTasknodeText()).setOnclick(
+				"$Actions['ActivityMgrPage_workitems']('activityId=" + activity.getId() + "');");
 	}
 
-	protected ButtonElement createLogButton(final ComponentParameter cp, final ActivityBean activity) {
-		return WorkflowUtils.createLogButton().setOnclick(
-				"$Actions['AbstractWorkflowMgrPage_update_log']('activityId=" + activity.getId()
-						+ "');");
+	protected ButtonElement createLogButton(final ComponentParameter cp,
+			final ActivityBean activity) {
+		return WorkflowUtils.createLogButton()
+				.setOnclick("$Actions['AbstractWorkflowMgrPage_update_log']('activityId="
+						+ activity.getId() + "');");
 	}
 
 	@Override
@@ -192,13 +192,13 @@ public class ActivityTbl extends GroupDbTablePagerHandler implements IWorkflowCo
 	}
 
 	protected MenuItem MI_STATUS_RUNNING() {
-		return MenuItem.of($m("AbstractWorkflowMgrPage.1")).setOnclick_act(
-				"AbstractWorkflowMgrPage_status", "activityId", "op=running");
+		return MenuItem.of($m("AbstractWorkflowMgrPage.1"))
+				.setOnclick_act("AbstractWorkflowMgrPage_status", "activityId", "op=running");
 	}
 
 	protected MenuItem MI_STATUS_SUSPENDED() {
-		return MenuItem.of($m("AbstractWorkflowMgrPage.0")).setOnclick_act(
-				"AbstractWorkflowMgrPage_status", "activityId", "op=suspended");
+		return MenuItem.of($m("AbstractWorkflowMgrPage.0"))
+				.setOnclick_act("AbstractWorkflowMgrPage_status", "activityId", "op=suspended");
 	}
 
 	protected MenuItem MI_STATUS_DO_ABORT() {

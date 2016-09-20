@@ -54,9 +54,9 @@ public class MyInitiateItemsTPage extends AbstractItemsTPage {
 	}
 
 	protected StartProcessBean addStartProcess(final PageParameter pp) {
-		return (StartProcessBean) pp.addComponentBean("MyInitiateItemsTPage_startProcess",
-				StartProcessBean.class)
-		// .setConfirmMessage($m("MyInitiateItemsTPage.0"))
+		return (StartProcessBean) pp
+				.addComponentBean("MyInitiateItemsTPage_startProcess", StartProcessBean.class)
+				// .setConfirmMessage($m("MyInitiateItemsTPage.0"))
 				.setHandlerClass(_StartProcessHandler.class);
 	}
 
@@ -66,25 +66,25 @@ public class MyInitiateItemsTPage extends AbstractItemsTPage {
 	}
 
 	static SpanElement getTabs(final PageParameter pp) {
-		return createTabsElement(pp, TabButtons.of(new TabButton($m("MyInitiateItemsTPage.5"),
-				uFactory.getUrl(pp, MyInitiateItemsGroupTPage.class)), new TabButton(
-				$m("MyInitiateItemsTPage.6"), uFactory.getUrl(pp, MyInitiateItemsTPage.class))));
+		return createTabsElement(pp,
+				TabButtons.of(
+						new TabButton($m("MyInitiateItemsTPage.5"),
+								uFactory.getUrl(pp, MyInitiateItemsGroupTPage.class)),
+						new TabButton($m("MyInitiateItemsTPage.6"),
+								uFactory.getUrl(pp, MyInitiateItemsTPage.class))));
 	}
 
 	protected TablePagerBean addTablePagerBean(final PageParameter pp) {
 		final TablePagerBean tablePager = (TablePagerBean) addTablePagerBean(pp,
 				"MyInitiateItemsTPage_tbl", MyInitiateItemsTbl.class).setGroupColumn("gc")
-				.setPagerBarLayout(EPagerBarLayout.none);
-		tablePager
-				.addColumn(TC_ICON())
+						.setPagerBarLayout(EPagerBarLayout.none);
+		tablePager.addColumn(TC_ICON())
 				.addColumn(
 						new TablePagerColumn("modelText", $m("MyInitiateItemsTPage.1")).setSort(false))
-				.addColumn(
-						new TablePagerColumn("processCount", $m("MyInitiateItemsTPage.3"), 80).setFilter(
-								false).setPropertyClass(Integer.class))
-				.addColumn(
-						new TablePagerColumn("version", $m("MyInitiateItemsTPage.4"), 80).center()
-								.setFilter(false))
+				.addColumn(new TablePagerColumn("processCount", $m("MyInitiateItemsTPage.3"), 80)
+						.setFilter(false).setPropertyClass(Integer.class))
+				.addColumn(new TablePagerColumn("version", $m("MyInitiateItemsTPage.4"), 80).center()
+						.setFilter(false))
 				.addColumn(
 						TablePagerColumn.DATE("lastUpdate", $m("MyInitiateItemsTPage.7")).setWidth(130));
 		// .addColumn(TablePagerColumn.OPE(70))
@@ -133,14 +133,14 @@ public class MyInitiateItemsTPage extends AbstractItemsTPage {
 		}
 
 		@Override
-		protected Map<String, Object> getRowData(final ComponentParameter cp, final Object dataObject) {
+		protected Map<String, Object> getRowData(final ComponentParameter cp,
+				final Object dataObject) {
 			final InitiateItem initiateItem = (InitiateItem) dataObject;
 			final Object modelId = initiateItem.getModelId();
 			final ProcessModelBean processModel = wfpmService.getBean(modelId);
 			final KVMap row = new KVMap();
-			row.add("modelText", new LinkElement(WorkflowUtils.getShortMtext(processModel))
-					.setOnclick("$Actions['MyInitiateItemsTPage_startProcess']('modelId=" + modelId
-							+ "');"));
+			row.add("modelText", new LinkElement(WorkflowUtils.getShortMtext(processModel)).setOnclick(
+					"$Actions['MyInitiateItemsTPage_startProcess']('modelId=" + modelId + "');"));
 			row.add("version", processModel.getModelVer())
 					.add("processCount", processModel.getProcessCount())
 					.add("lastUpdate", processModel.getLastUpdate());
@@ -152,7 +152,8 @@ public class MyInitiateItemsTPage extends AbstractItemsTPage {
 	public static class _StartProcessHandler extends DefaultStartProcessHandler {
 
 		@Override
-		public JavascriptForward onStartProcess(final ComponentParameter cp, final ProcessBean process) {
+		public JavascriptForward onStartProcess(final ComponentParameter cp,
+				final ProcessBean process) {
 			final WorkitemBean workitem = wfpService.getFirstWorkitem(process);
 			if (workitem != null) {
 				final JavascriptForward js = new JavascriptForward();

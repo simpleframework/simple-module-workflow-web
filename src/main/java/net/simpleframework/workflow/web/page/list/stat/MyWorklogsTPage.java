@@ -98,15 +98,15 @@ public class MyWorklogsTPage extends AbstractItemsTPage implements ILogContextAw
 		final List<AbstractEntityTblLogBean> logs = new ArrayList<AbstractEntityTblLogBean>();
 		AbstractEntityTblLogBean log;
 		// 删除日志
-		final IDataQuery<EntityDeleteLog> dqd = _logDeleteService.queryLogs(loginId, new String[] {
-				TBL_PROCESS, TBL_DELEGATION }, period, ColumnData.EMPTY);
+		final IDataQuery<EntityDeleteLog> dqd = _logDeleteService.queryLogs(loginId,
+				new String[] { TBL_PROCESS, TBL_DELEGATION }, period, ColumnData.EMPTY);
 		while ((log = dqd.next()) != null) {
 			logs.add(log);
 		}
 
 		// 插入日志
-		final IDataQuery<EntityInsertLog> dqi = _logInsertService.queryLogs(loginId, new String[] {
-				TBL_PROCESS, TBL_DELEGATION }, period, ColumnData.EMPTY);
+		final IDataQuery<EntityInsertLog> dqi = _logInsertService.queryLogs(loginId,
+				new String[] { TBL_PROCESS, TBL_DELEGATION }, period, ColumnData.EMPTY);
 		while ((log = dqi.next()) != null) {
 			logs.add(log);
 		}
@@ -257,8 +257,8 @@ public class MyWorklogsTPage extends AbstractItemsTPage implements ILogContextAw
 				sb.append(tag($m("MyWorklogsTPage.5"), "#c00"));
 				if (workitem != null) {
 					sb.append(wfpService.getBean(workitem.getProcessId()));
-					sb.append(toNextActivitiesHTML(pp, wfaService.getBean(workitem.getActivityId()),
-							false));
+					sb.append(
+							toNextActivitiesHTML(pp, wfaService.getBean(workitem.getActivityId()), false));
 				}
 			}
 			if (workitem == null) {

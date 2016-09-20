@@ -43,7 +43,7 @@ public class WorkitemsPage extends OneTableTemplatePage implements IWorkflowCont
 		// workitems
 		final TablePagerBean tablePager = addTablePagerBean(pp, "WorkitemsPage_tbl",
 				WorkitemsTbl.class).setShowCheckbox(false).setFilter(false).setResize(false)
-				.setShowLineNo(false);
+						.setShowLineNo(false);
 		tablePager.addColumn(TablePagerColumn.ICON())
 				.addColumn(new TablePagerColumn("userText", $m("WorkitemsPage.0")).center())
 				.addColumn(new TablePagerColumn("userText2", $m("WorkitemsPage.1")).center())
@@ -71,14 +71,13 @@ public class WorkitemsPage extends OneTableTemplatePage implements IWorkflowCont
 	public ElementList getLeftElements(final PageParameter pp) {
 		final ElementList el = ElementList.of(LinkButton.closeBtn());
 		ActivityBean activity;
-		if (pp.isLmember(getPageManagerRole(pp))
-				&& (activity = WorkflowUtils.getActivityBean(pp)).getStatus() == EActivityStatus.running) {
+		if (pp.isLmember(getPageManagerRole(pp)) && (activity = WorkflowUtils.getActivityBean(pp))
+				.getStatus() == EActivityStatus.running) {
 			addComponentBean(pp, "WorkitemsMgrPage_fallback", ActivityFallbackBean.class);
 			el.append(SpanElement.SPACE);
 
-			el.append(new LinkButton($m("WorkitemsPage.4"))
-					.setOnclick("$Actions['WorkitemsMgrPage_fallback']('activityId=" + activity.getId()
-							+ "');"));
+			el.append(new LinkButton($m("WorkitemsPage.4")).setOnclick(
+					"$Actions['WorkitemsMgrPage_fallback']('activityId=" + activity.getId() + "');"));
 		}
 		return el;
 	}
@@ -94,17 +93,16 @@ public class WorkitemsPage extends OneTableTemplatePage implements IWorkflowCont
 
 		protected String toOpeHTML(final ComponentParameter cp, final WorkitemBean workitem) {
 			final StringBuilder sb = new StringBuilder();
-			sb.append(ButtonElement
-					.logBtn()
+			sb.append(ButtonElement.logBtn()
 					.setDisabled(((IWorkflowWebContext) workflowContext).getLogRef() == null)
-					.setOnclick(
-							"$Actions['WorkitemsMgrPage_update_log']('workitemId=" + workitem.getId()
-									+ "');"));
+					.setOnclick("$Actions['WorkitemsMgrPage_update_log']('workitemId=" + workitem.getId()
+							+ "');"));
 			return sb.toString();
 		}
 
 		@Override
-		protected Map<String, Object> getRowData(final ComponentParameter cp, final Object dataObject) {
+		protected Map<String, Object> getRowData(final ComponentParameter cp,
+				final Object dataObject) {
 			final WorkitemBean workitem = (WorkitemBean) dataObject;
 			final KVMap row = new KVMap();
 			row.add(TablePagerColumn.ICON, WorkflowUtils.getStatusIcon(cp, workitem.getStatus()))

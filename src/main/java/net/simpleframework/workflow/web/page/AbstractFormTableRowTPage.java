@@ -1,6 +1,7 @@
 package net.simpleframework.workflow.web.page;
 
 import static net.simpleframework.common.I18n.$m;
+
 import net.simpleframework.common.StringUtils;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.AbstractElement;
@@ -21,8 +22,8 @@ import net.simpleframework.workflow.web.component.workview.DoWorkviewBean;
  * @author 陈侃(cknet@126.com, 13910090885) https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
-public abstract class AbstractFormTableRowTPage<T extends AbstractWorkitemBean> extends
-		FormTableRow_TabsTemplatePage implements IWorkflowContextAware {
+public abstract class AbstractFormTableRowTPage<T extends AbstractWorkitemBean>
+		extends FormTableRow_TabsTemplatePage implements IWorkflowContextAware {
 
 	public String getForwardUrl(final PageParameter pp) {
 		return url(getClass());
@@ -34,8 +35,8 @@ public abstract class AbstractFormTableRowTPage<T extends AbstractWorkitemBean> 
 
 	protected AbstractElement<?> createDoWorkviewBtn(final PageParameter pp) {
 		final T item = getWorkitemBean(pp);
-		return LinkButton.of($m("AbstractWorkflowFormTPage.1")).setOnclick(
-				"$Actions['AbstractWorkflowFormPage_doWorkview']('workitemId="
+		return LinkButton.of($m("AbstractWorkflowFormTPage.1"))
+				.setOnclick("$Actions['AbstractWorkflowFormPage_doWorkview']('workitemId="
 						+ (null != item ? item.getId() : "") + "');");
 	}
 

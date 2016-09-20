@@ -136,9 +136,9 @@ public abstract class StartProcessUtils implements IWorkflowContextAware {
 				sb.append(SpanElement.color777("(" + role.getDept() + ")"));
 				sb.append(" </div>");
 				sb.append(" <div class='right'>");
-				sb.append(LinkButton.corner($m("StartProcessUtils.2")).setOnclick(
-						"$Actions['InitiatorSelect_ok']('" + toParams(cp, initiateItem) + "&roleId="
-								+ role.getId() + "&deptId=" + role.getDept().getId() + "');"));
+				sb.append(LinkButton.corner($m("StartProcessUtils.2"))
+						.setOnclick("$Actions['InitiatorSelect_ok']('" + toParams(cp, initiateItem)
+								+ "&roleId=" + role.getId() + "&deptId=" + role.getDept().getId() + "');"));
 				sb.append(" </div>");
 				sb.append("</div>");
 			}

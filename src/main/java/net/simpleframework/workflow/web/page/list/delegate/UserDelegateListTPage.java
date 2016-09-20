@@ -47,11 +47,10 @@ public class UserDelegateListTPage extends MyDelegateListTPage {
 	protected TablePagerBean addTablePagerBean(final PageParameter pp) {
 		final TablePagerBean tablePager = addTablePagerBean(pp, "MyWorklistTPage_tbl",
 				UserDelegateTbl.class);
-		tablePager
-				.addColumn(TablePagerColumn.ICON())
-				.addColumn(
-						new TablePagerColumn("description", $m("WorkitemDelegateSetPage.3"))
-								.setSort(false)).addColumn(TC_USERTEXT())
+		tablePager.addColumn(TablePagerColumn.ICON())
+				.addColumn(new TablePagerColumn("description", $m("WorkitemDelegateSetPage.3"))
+						.setSort(false))
+				.addColumn(TC_USERTEXT())
 				.addColumn(TC_CREATEDATE().setColumnText($m("MyDelegateListTPage.1")))
 				.addColumn(TC_DDATE()).addColumn(TablePagerColumn.OPE(70));
 		return tablePager;
@@ -59,8 +58,8 @@ public class UserDelegateListTPage extends MyDelegateListTPage {
 
 	@Override
 	public ElementList getLeftElements(final PageParameter pp) {
-		return ElementList.of(LinkButton.of($m("Add")).setOnclick(
-				"$Actions['UserDelegateListTPage_delegate']('delegationSource=user');"));
+		return ElementList.of(LinkButton.of($m("Add"))
+				.setOnclick("$Actions['UserDelegateListTPage_delegate']('delegationSource=user');"));
 	}
 
 	public static class UserDelegateTbl extends MyWorkDelegateTbl {
@@ -70,7 +69,8 @@ public class UserDelegateListTPage extends MyDelegateListTPage {
 		}
 
 		@Override
-		protected Map<String, Object> getRowData(final ComponentParameter cp, final Object dataObject) {
+		protected Map<String, Object> getRowData(final ComponentParameter cp,
+				final Object dataObject) {
 			final DelegationBean delegation = (DelegationBean) dataObject;
 			final KVMap row = new KVMap();
 			final AbstractElement<?> img = createImageMark(cp, delegation);

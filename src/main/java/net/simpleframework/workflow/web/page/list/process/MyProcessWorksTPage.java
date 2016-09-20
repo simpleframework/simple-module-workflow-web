@@ -121,11 +121,11 @@ public class MyProcessWorksTPage extends AbstractWorksTPage {
 		WorkitemBean workitem;
 		if (process != null && (workitem = getOpenWorkitem(cp, process)) != null) {
 			if (cp.getBoolParameter("monitor")) {
-				return new JavascriptForward(JS.loc(
-						uFactory.getUrl(cp, WorkflowMonitorPage.class, workitem), true));
+				return new JavascriptForward(
+						JS.loc(uFactory.getUrl(cp, WorkflowMonitorPage.class, workitem), true));
 			} else {
-				return new JavascriptForward(JS.loc(uFactory.getUrl(cp, WorkflowFormPage.class,
-						workitem)));
+				return new JavascriptForward(
+						JS.loc(uFactory.getUrl(cp, WorkflowFormPage.class, workitem)));
 			}
 		} else {
 			return JavascriptForward.alert($m("MyProcessWorksTPage.7"));
@@ -143,8 +143,8 @@ public class MyProcessWorksTPage extends AbstractWorksTPage {
 		if (pm != null) {
 			params = "modelId=" + pm.getId();
 		}
-		final TabButtons tabs = TabButtons.of(new TabButton($m("MyProcessWorksTPage.4"), uFactory
-				.getUrl(pp, MyProcessWorksTPage.class, params)));
+		final TabButtons tabs = TabButtons.of(new TabButton($m("MyProcessWorksTPage.4"),
+				uFactory.getUrl(pp, MyProcessWorksTPage.class, params)));
 		final IWorkflowWebContext ctx = (IWorkflowWebContext) workflowContext;
 		if (pp.isLmember(ctx.getProcessWorks_DeptRole(pp))) {
 			final String url = uFactory.getUrl(pp, MyProcessWorks_DeptTPage.class, params);
@@ -165,18 +165,18 @@ public class MyProcessWorksTPage extends AbstractWorksTPage {
 					if (_dept.equals(dept)) {
 						continue;
 					}
-					items.add(MenuItem.of(_dept.getText()).setOnclick(
-							"$Actions.loc('" + HttpUtils.addParameters(url, "deptId=" + _dept.getId())
-									+ "');"));
+					items.add(MenuItem.of(_dept.getText()).setOnclick("$Actions.loc('"
+							+ HttpUtils.addParameters(url, "deptId=" + _dept.getId()) + "');"));
 				}
-				txt.append(new ImageElement(pp.getCssResourceHomePath(MyProcessWorksTPage.class)
-						+ "/images/down.png").setClassName("depts-menu"));
+				txt.append(new ImageElement(
+						pp.getCssResourceHomePath(MyProcessWorksTPage.class) + "/images/down.png")
+								.setClassName("depts-menu"));
 			}
 			tabs.append(new TabButton(txt, url));
 		}
 		if (pp.isLmember(ctx.getProcessWorks_OrgRole(pp))) {
-			tabs.append(new TabButton($m("MyProcessWorksTPage.5"), uFactory.getUrl(pp,
-					MyProcessWorks_OrgTPage.class, params)));
+			tabs.append(new TabButton($m("MyProcessWorksTPage.5"),
+					uFactory.getUrl(pp, MyProcessWorks_OrgTPage.class, params)));
 		}
 		return ElementList.of(createTabsElement(pp, tabs));
 	}
@@ -184,8 +184,8 @@ public class MyProcessWorksTPage extends AbstractWorksTPage {
 	static final String CONST_OTHER = $m("MyInitiateItemsGroupTPage.0");
 
 	public static Map<String, List<ProcessModelBean>> getProcessModelMap(final PageParameter pp) {
-		final List<ProcessModelBean> models = DataQueryUtils.toList(wfpmService.getModelListByDomain(
-				pp.getLDomainId(), EProcessModelStatus.deploy));
+		final List<ProcessModelBean> models = DataQueryUtils.toList(
+				wfpmService.getModelListByDomain(pp.getLDomainId(), EProcessModelStatus.deploy));
 		wfpmService.sort(models);
 
 		final Map<String, List<ProcessModelBean>> gmap = new LinkedHashMap<String, List<ProcessModelBean>>();
@@ -255,21 +255,22 @@ public class MyProcessWorksTPage extends AbstractWorksTPage {
 			final CategoryItems items = CategoryItems.of();
 			if (l != null) {
 				for (final ProcessModelBean pm : l) {
-					items.add(new _CategoryItem(pm).setHref(
-							uFactory.getUrl(pp, MyProcessWorksTPage.class, "modelId=" + pm.getId()))
+					items.add(new _CategoryItem(pm)
+							.setHref(
+									uFactory.getUrl(pp, MyProcessWorksTPage.class, "modelId=" + pm.getId()))
 							.setSelected(cur.getId().equals(pm.getId())));
 				}
 			}
 
 			if (l == null || !l.contains(cur)) {
-				items.add(new _CategoryItem(cur).setHref(
-						uFactory.getUrl(pp, MyProcessWorksTPage.class, "modelId=" + cur.getId()))
+				items.add(new _CategoryItem(cur)
+						.setHref(uFactory.getUrl(pp, MyProcessWorksTPage.class, "modelId=" + cur.getId()))
 						.setSelected(true));
 			}
 
 			sb.append("<div class='gtitle'>");
-			sb.append(new LinkElement($m("MyProcessWorksTPage.9")).setHref(uFactory.getUrl(pp,
-					getOriginalClass())));
+			sb.append(new LinkElement($m("MyProcessWorksTPage.9"))
+					.setHref(uFactory.getUrl(pp, getOriginalClass())));
 			sb.append(SpanElement.NAV(3)).append(pgroup);
 			sb.append("</div>");
 			sb.append(items);
@@ -300,9 +301,10 @@ public class MyProcessWorksTPage extends AbstractWorksTPage {
 				sb.append(">").append(new SpanElement(e2.getKey()));
 				for (final ProcessModelBean pm : e2.getValue()) {
 					sb.append("<div class='pitem'>");
-					sb.append(new LinkElement(WorkflowUtils.getShortMtext(pm)).setOnclick("$Actions.loc('"
-							+ uFactory.getUrl(pp, MyProcessWorksTPage.class, "modelId=" + pm.getId())
-							+ "');"));
+					sb.append(
+							new LinkElement(WorkflowUtils.getShortMtext(pm)).setOnclick("$Actions.loc('"
+									+ uFactory.getUrl(pp, MyProcessWorksTPage.class, "modelId=" + pm.getId())
+									+ "');"));
 					sb.append("</div>");
 				}
 				sb.append("</div>");

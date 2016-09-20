@@ -62,28 +62,25 @@ public class WorkflowMonitorPage extends AbstractWorkflowFormPage {
 	protected TablePagerBean addTablePagerBean(final PageParameter pp) {
 		final TablePagerBean tablePager = (TablePagerBean) addTablePagerBean(pp,
 				"WorkflowMonitorPage_tbl", _ActivityTbl.class).setShowVerticalLine(true)
-				.setFilter(false).setShowCheckbox(false).setPagerBarLayout(EPagerBarLayout.none)
-				.setContainerId("idWorkflowMonitorPage_tbl");
+						.setFilter(false).setShowCheckbox(false).setPagerBarLayout(EPagerBarLayout.none)
+						.setContainerId("idWorkflowMonitorPage_tbl");
 		// .addColumn(TablePagerColumn.ICON())
-		tablePager
-				.addColumn(ActivityTbl.TC_TASKNODE())
-				.addColumn(ActivityTbl.TC_PRE_PARTICIPANTS())
-				.addColumn(ActivityTbl.TC_PARTICIPANTS())
-				.addColumn(ActivityTbl.TC_PARTICIPANTS2())
+		tablePager.addColumn(ActivityTbl.TC_TASKNODE()).addColumn(ActivityTbl.TC_PRE_PARTICIPANTS())
+				.addColumn(ActivityTbl.TC_PARTICIPANTS()).addColumn(ActivityTbl.TC_PARTICIPANTS2())
 				.addColumn(AbstractWorkflowMgrPage.TC_CREATEDATE())
 				.addColumn(AbstractWorkflowMgrPage.TC_COMPLETEDATE())
 				.addColumn(ActivityTbl.TC_RELATIVEDATE())
-				.addColumn(
-						new TablePagerColumn("status", $m("WorkflowMonitorPage.4")).setWidth(60)
-								.setSort(false).center()).addColumn(ActivityTbl.TC_TIMEOUT());
+				.addColumn(new TablePagerColumn("status", $m("WorkflowMonitorPage.4")).setWidth(60)
+						.setSort(false).center())
+				.addColumn(ActivityTbl.TC_TIMEOUT());
 		return tablePager;
 	}
 
 	@Override
 	public ElementList getLeftElements(final PageParameter pp) {
 		final ProcessBean process = WorkflowUtils.getProcessBean(pp);
-		return ElementList.of(SpanElement.strongText(WorkflowUtils.getProcessTitle(process) + " ["
-				+ process.getStatus() + "]"));
+		return ElementList.of(SpanElement
+				.strongText(WorkflowUtils.getProcessTitle(process) + " [" + process.getStatus() + "]"));
 	}
 
 	@Override
@@ -102,11 +99,12 @@ public class WorkflowMonitorPage extends AbstractWorkflowFormPage {
 
 	public TabButtons getLeftTabButtons(final PageParameter pp) {
 		final WorkitemBean workitem = WorkflowUtils.getWorkitemBean(pp);
-		final TabButtons tabs = TabButtons.of(
-				new TabButton($m("WorkflowMonitorPage.0")).setHref(uFactory.getUrl(pp,
-						WorkflowMonitorPage.class, workitem)),
-				new TabButton($m("WorkflowMonitorPage.1")).setHref(uFactory.getUrl(pp,
-						WorkflowGraphMonitorPage.class, workitem))).setVertical(true);
+		final TabButtons tabs = TabButtons
+				.of(new TabButton($m("WorkflowMonitorPage.0"))
+						.setHref(uFactory.getUrl(pp, WorkflowMonitorPage.class, workitem)),
+						new TabButton($m("WorkflowMonitorPage.1"))
+								.setHref(uFactory.getUrl(pp, WorkflowGraphMonitorPage.class, workitem)))
+				.setVertical(true);
 		return tabs;
 	}
 
@@ -115,8 +113,8 @@ public class WorkflowMonitorPage extends AbstractWorkflowFormPage {
 		sb.append("<div class='tb clearfix'>");
 		sb.append(" <div class='left'>");
 		sb.append(new Checkbox("idWorkflowMonitorPage_hideNulltask", $m("WorkflowMonitorPage.2"))
-				.setChecked(ActivityTbl.isNulltask_opt(pp)).setOnclick(
-						checkClick("nulltask", ActivityTbl.COOKIE_HIDE_NULLTASK)));
+				.setChecked(ActivityTbl.isNulltask_opt(pp))
+				.setOnclick(checkClick("nulltask", ActivityTbl.COOKIE_HIDE_NULLTASK)));
 		sb.append(" </div>");
 		sb.append(" <div class='right'>");
 		sb.append(LinkButton.closeBtn().corner().setOnclick("window.close();"));
@@ -150,13 +148,13 @@ public class WorkflowMonitorPage extends AbstractWorkflowFormPage {
 	public static class _ActivityTbl extends ActivityTbl {
 		@Override
 		protected LinkElement createUsernodeElement(final ActivityBean activity) {
-			return new LinkElement(activity.getTasknodeText())
-					.setOnclick("$Actions['WorkflowMonitorPage_workitems']('activityId="
-							+ activity.getId() + "');");
+			return new LinkElement(activity.getTasknodeText()).setOnclick(
+					"$Actions['WorkflowMonitorPage_workitems']('activityId=" + activity.getId() + "');");
 		}
 
 		@Override
-		protected Map<String, Object> getRowData(final ComponentParameter cp, final Object dataObject) {
+		protected Map<String, Object> getRowData(final ComponentParameter cp,
+				final Object dataObject) {
 			final Map<String, Object> row = super.getRowData(cp, dataObject);
 			if (row != null) {
 				final ActivityBean activity = (ActivityBean) dataObject;

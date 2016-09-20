@@ -18,8 +18,8 @@ import net.simpleframework.workflow.web.WorkflowUtils;
  * @author 陈侃(cknet@126.com, 13910090885) https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
-public class DefaultActivityFallbackHandler extends AbstractComponentHandler implements
-		IActivityFallbackHandler {
+public class DefaultActivityFallbackHandler extends AbstractComponentHandler
+		implements IActivityFallbackHandler {
 
 	@Override
 	public Collection<UserNode> getUserNodes(final ComponentParameter cp) {

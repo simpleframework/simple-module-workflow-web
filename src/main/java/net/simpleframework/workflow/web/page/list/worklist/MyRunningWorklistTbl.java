@@ -178,8 +178,8 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 				public String toString() {
 					final ProcessModelBean processModel = ((TaskWrapper) groupVal).processModel;
 
-					final Set<String> modelIds = ArrayUtils.asSet(StringUtils.split(
-							cp.getParameter("modelId"), ";"));
+					final Set<String> modelIds = ArrayUtils
+							.asSet(StringUtils.split(cp.getParameter("modelId"), ";"));
 					modelIds.add(processModel.getId().toString());
 
 					final StringBuilder sb = new StringBuilder();
@@ -195,8 +195,8 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 					} else {
 						le = new LinkElement(mtxt);
 					}
-					sb.append(le.setOnclick("$Actions.reloc('modelId=" + StringUtils.join(modelIds, ";")
-							+ "');"));
+					sb.append(le.setOnclick(
+							"$Actions.reloc('modelId=" + StringUtils.join(modelIds, ";") + "');"));
 					sb.append(")");
 					sb.append(toCountHTML());
 					return sb.toString();
@@ -209,8 +209,8 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 				public String toString() {
 					final StringBuilder sb = new StringBuilder();
 					final String mtxt = processModel.toString();
-					final Set<String> modelIds = ArrayUtils.asSet(StringUtils.split(
-							cp.getParameter("modelId"), ";"));
+					final Set<String> modelIds = ArrayUtils
+							.asSet(StringUtils.split(cp.getParameter("modelId"), ";"));
 					modelIds.add(processModel.getId().toString());
 					final int p = mtxt.indexOf('.');
 					LinkElement le;
@@ -221,8 +221,8 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 					} else {
 						le = new LinkElement(mtxt);
 					}
-					sb.append(le.setOnclick("$Actions.reloc('modelId=" + StringUtils.join(modelIds, ";")
-							+ "');"));
+					sb.append(le.setOnclick(
+							"$Actions.reloc('modelId=" + StringUtils.join(modelIds, ";") + "');"));
 					sb.append(toCountHTML());
 					return sb.toString();
 				}
@@ -232,16 +232,18 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 	}
 
 	protected static ImageElement MARK_RETAKE(final PageParameter pp) {
-		return AbstractItemsTPage._createImageMark(pp, "status_retake.png").setTitle(
-				$m("MyRunningWorklistTbl.13"));
+		return AbstractItemsTPage._createImageMark(pp, "status_retake.png")
+				.setTitle($m("MyRunningWorklistTbl.13"));
 	}
 
-	protected static ImageElement MARK_DELEGATE(final PageParameter pp, final WorkitemBean workitem) {
-		return PhotoImage.icon12(pp.getPhotoUrl(workitem.getUserId())).setTitle(
-				$m("MyRunningWorklistTbl.0", pp.getUser(workitem.getUserId())));
+	protected static ImageElement MARK_DELEGATE(final PageParameter pp,
+			final WorkitemBean workitem) {
+		return PhotoImage.icon12(pp.getPhotoUrl(workitem.getUserId()))
+				.setTitle($m("MyRunningWorklistTbl.0", pp.getUser(workitem.getUserId())));
 	}
 
-	public ImageElement createWorkitemImageMark(final PageParameter pp, final WorkitemBean workitem) {
+	public ImageElement createWorkitemImageMark(final PageParameter pp,
+			final WorkitemBean workitem) {
 		ImageElement img = null;
 		final EWorkitemStatus status = workitem.getStatus();
 		ActivityBean fallback;
@@ -261,7 +263,8 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 		return img;
 	}
 
-	protected ImageElement createImageMark(final ComponentParameter cp, final WorkitemBean workitem) {
+	protected ImageElement createImageMark(final ComponentParameter cp,
+			final WorkitemBean workitem) {
 		return createWorkitemImageMark(cp, workitem);
 	}
 
@@ -299,8 +302,8 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 			@Override
 			public Boolean get() {
 				final EWorkitemStatus status = workitem.getStatus();
-				final DelegationBean delegation = (status == EWorkitemStatus.delegate) ? wfdService
-						.queryRunningDelegation(workitem) : null;
+				final DelegationBean delegation = (status == EWorkitemStatus.delegate)
+						? wfdService.queryRunningDelegation(workitem) : null;
 				return delegation != null && delegation.getStatus() == EDelegationStatus.receiving;
 			}
 		});
@@ -314,8 +317,8 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 			if (pm == null) {
 				pm = wfpService.getProcessModel(wfaService.getProcessBean(activity));
 			}
-			sb.append(new SpanElement(activity.getTasknodeText()).setTitle(WorkflowUtils
-					.getShortMtext(pm)));
+			sb.append(new SpanElement(activity.getTasknodeText())
+					.setTitle(WorkflowUtils.getShortMtext(pm)));
 		}
 		return sb.toString();
 	}
@@ -332,15 +335,18 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 							(System.currentTimeMillis() - timeoutDate.getTime()) / (1000 * 60 * 60 * 24))
 							.intValue();
 				}
-				sb.append(new SpanElement(d > 0 ? $m("MyRunningWorklistTbl.20", d)
-						: $m("MyRunningWorklistTbl.21")).setClassName("worklist_timeout"));
+				sb.append(new SpanElement(
+						d > 0 ? $m("MyRunningWorklistTbl.20", d) : $m("MyRunningWorklistTbl.21"))
+								.setClassName("worklist_timeout"));
 			} else {
-				final int m = Double.valueOf(
-						(timeoutDate.getTime() - System.currentTimeMillis()) / (1000 * 60)).intValue();
+				final int m = Double
+						.valueOf((timeoutDate.getTime() - System.currentTimeMillis()) / (1000 * 60))
+						.intValue();
 				if (m < wfSettings.getHoursToTimeoutWarning() * 60) {
 					final int h = m / 60;
-					sb.append(new SpanElement(h > 0 ? $m("MyRunningWorklistTbl.19", m)
-							: $m("MyRunningWorklistTbl.18")).setClassName("worklist_timeout2"));
+					sb.append(new SpanElement(
+							h > 0 ? $m("MyRunningWorklistTbl.19", m) : $m("MyRunningWorklistTbl.18"))
+									.setClassName("worklist_timeout2"));
 				}
 			}
 		}
@@ -370,9 +376,9 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 				tEle = new SpanElement(txt);
 			}
 		} else {
-			tEle = new LinkElement(WorkflowUtils.getProcessTitle(process)).setStrong(
-					!workitem.isReadMark()).setOnclick(
-					JS.loc(uFactory.getUrl(pp, WorkflowFormPage.class, workitem)));
+			tEle = new LinkElement(WorkflowUtils.getProcessTitle(process))
+					.setStrong(!workitem.isReadMark())
+					.setOnclick(JS.loc(uFactory.getUrl(pp, WorkflowFormPage.class, workitem)));
 		}
 		sb.append(tEle.setColor_gray(!StringUtils.hasText(process.getTitle())));
 		return sb.toString();
@@ -398,12 +404,12 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 	protected String toOpeHTML(final ComponentParameter cp, final WorkitemBean workitem) {
 		final StringBuilder sb = new StringBuilder();
 		if (isRev(cp, workitem)) {
-			sb.append(new ButtonElement(EDelegationStatus.receiving).setHighlight(true).setOnclick(
-					"$Actions['MyWorklistTPage_delegate_receiving']('workitemId=" + workitem.getId()
-							+ "');"));
+			sb.append(new ButtonElement(EDelegationStatus.receiving).setHighlight(true)
+					.setOnclick("$Actions['MyWorklistTPage_delegate_receiving']('workitemId="
+							+ workitem.getId() + "');"));
 		} else {
-			sb.append(new ButtonElement($m("MyRunningWorklistTbl.3")).setOnclick(JS.loc(
-					uFactory.getUrl(cp, WorkflowMonitorPage.class, workitem), true)));
+			sb.append(new ButtonElement($m("MyRunningWorklistTbl.3"))
+					.setOnclick(JS.loc(uFactory.getUrl(cp, WorkflowMonitorPage.class, workitem), true)));
 		}
 		sb.append(AbstractTablePagerSchema.IMG_DOWNMENU);
 		return sb.toString();
@@ -415,8 +421,8 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 		row.add("userFrom", SpanElement.color060(WorkflowUtils.getUserFrom(activity, "<br>")));
 		final Date lastUpdate = workitem.getLastUpdate();
 		final Date d = DateUtils.getZeroPoint().getTime();
-		final String dtxt = lastUpdate.after(d) ? Convert.toDateString(lastUpdate, "HH:mm") : Convert
-				.toDateString(lastUpdate, "yy-MM-dd");
+		final String dtxt = lastUpdate.after(d) ? Convert.toDateString(lastUpdate, "HH:mm")
+				: Convert.toDateString(lastUpdate, "yy-MM-dd");
 		row.add("createDate", new SpanElement(dtxt).setTitle(Convert.toDateTimeString(lastUpdate)));
 	}
 
@@ -434,61 +440,49 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 		final MenuItem mItems = MenuItem.of($m("MyRunningWorklistTbl.6"));
 		mItems.addChild(
 				MENU_MARK_READ().setOnclick_act("MyWorklistTPage_readMark", "workitemId", "op=read"))
-				.addChild(
-						MENU_MARK_UNREAD().setOnclick_act("MyWorklistTPage_readMark", "workitemId",
-								"op=unread"));
+				.addChild(MENU_MARK_UNREAD().setOnclick_act("MyWorklistTPage_readMark", "workitemId",
+						"op=unread"));
 		mItems.addChild(MenuItem.sep());
 		mItems.addChild(
 				MENU_MARK_TOP().setOnclick_act("MyWorklistTPage_topMark", "workitemId", "op=top"))
-				.addChild(
-						MENU_MARK_UNTOP().setOnclick_act("MyWorklistTPage_topMark", "workitemId",
-								"op=untop"));
+				.addChild(MENU_MARK_UNTOP().setOnclick_act("MyWorklistTPage_topMark", "workitemId",
+						"op=untop"));
 		items.append(mItems);
 		items.append(MenuItem.sep());
-		items.append(MenuItem.of($m("MyRunningWorklistTbl.16")).setOnclick_act(
-				"MyWorklistTPage_delete", "workitemId"));
+		items.append(MenuItem.of($m("MyRunningWorklistTbl.16"))
+				.setOnclick_act("MyWorklistTPage_delete", "workitemId"));
 		return items;
 	}
 
 	static MenuItem MENU_MONITOR(final PageParameter pp) {
-		return MenuItem.of($m("MyRunningWorklistTbl.7")).setOnclick(
-				"$Actions.loc('" + uFactory.getUrl(pp, WorkflowMonitorPage.class)
+		return MenuItem.of($m("MyRunningWorklistTbl.7"))
+				.setOnclick("$Actions.loc('" + uFactory.getUrl(pp, WorkflowMonitorPage.class)
 						+ "?workitemId=' + $pager_action(item).rowId(), true);");
 	}
 
 	static MenuItem MENU_MARK_READ() {
-		return MenuItem
-				.of($m("MyRunningWorklistTbl.8"))
-				.setOnclick(
-						"$Actions['MyWorklistTPage_tbl'].doAct('MyWorklistTPage_readMark', 'workitemId', 'op=read');");
+		return MenuItem.of($m("MyRunningWorklistTbl.8")).setOnclick(
+				"$Actions['MyWorklistTPage_tbl'].doAct('MyWorklistTPage_readMark', 'workitemId', 'op=read');");
 	}
 
 	static MenuItem MENU_MARK_UNREAD() {
-		return MenuItem
-				.of($m("MyRunningWorklistTbl.9"))
-				.setIconClass("menu_unread")
-				.setOnclick(
-						"$Actions['MyWorklistTPage_tbl'].doAct('MyWorklistTPage_readMark', 'workitemId', 'op=unread');");
+		return MenuItem.of($m("MyRunningWorklistTbl.9")).setIconClass("menu_unread").setOnclick(
+				"$Actions['MyWorklistTPage_tbl'].doAct('MyWorklistTPage_readMark', 'workitemId', 'op=unread');");
 	}
 
 	static MenuItem MENU_MARK_ALLREAD() {
-		return MenuItem.of($m("MyRunningWorklistTbl.10")).setOnclick(
-				"$Actions['MyWorklistTPage_readMark']('op=allread');");
+		return MenuItem.of($m("MyRunningWorklistTbl.10"))
+				.setOnclick("$Actions['MyWorklistTPage_readMark']('op=allread');");
 	}
 
 	static MenuItem MENU_MARK_TOP() {
-		return MenuItem
-				.of($m("MyRunningWorklistTbl.11"))
-				.setIconClass("menu_top")
-				.setOnclick(
-						"$Actions['MyWorklistTPage_tbl'].doAct('MyWorklistTPage_topMark', 'workitemId', 'op=top');");
+		return MenuItem.of($m("MyRunningWorklistTbl.11")).setIconClass("menu_top").setOnclick(
+				"$Actions['MyWorklistTPage_tbl'].doAct('MyWorklistTPage_topMark', 'workitemId', 'op=top');");
 	}
 
 	static MenuItem MENU_MARK_UNTOP() {
-		return MenuItem
-				.of($m("MyRunningWorklistTbl.12"))
-				.setOnclick(
-						"$Actions['MyWorklistTPage_tbl'].doAct('MyWorklistTPage_topMark', 'workitemId', 'op=untop');");
+		return MenuItem.of($m("MyRunningWorklistTbl.12")).setOnclick(
+				"$Actions['MyWorklistTPage_tbl'].doAct('MyWorklistTPage_topMark', 'workitemId', 'op=untop');");
 	}
 
 	static MenuItem MENU_VIEW_GROUP0() {

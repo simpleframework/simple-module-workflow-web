@@ -50,12 +50,11 @@ public abstract class MyProcessWorksTPages implements IWorkflowPageAware {
 			super.onForward(pp);
 			final TablePagerBean tablePager = (TablePagerBean) addTablePagerBean(pp,
 					"ProcessModelSelectPage_tbl", ProcessModelSelectTbl.class).setShowCheckbox(false)
-					.setShowLineNo(false).setPagerBarLayout(EPagerBarLayout.none);
-			tablePager
-					.addColumn(new TablePagerColumn("modelText", $m("MyProcessWorksTPage.10")))
-					.addColumn(
-							new TablePagerColumn("modelVer", $m("MyProcessWorksTPage.11"), 80)
-									.setFilterSort(false).center()).addColumn(TablePagerColumn.OPE(80));
+							.setShowLineNo(false).setPagerBarLayout(EPagerBarLayout.none);
+			tablePager.addColumn(new TablePagerColumn("modelText", $m("MyProcessWorksTPage.10")))
+					.addColumn(new TablePagerColumn("modelVer", $m("MyProcessWorksTPage.11"), 80)
+							.setFilterSort(false).center())
+					.addColumn(TablePagerColumn.OPE(80));
 		}
 
 		public static class ProcessModelSelectTbl extends AbstractDbTablePagerHandler {
@@ -76,8 +75,8 @@ public abstract class MyProcessWorksTPages implements IWorkflowPageAware {
 
 			protected String toOpeHTML(final ComponentParameter cp, final ProcessModelBean pm) {
 				final StringBuilder ope = new StringBuilder();
-				ope.append(LinkButton.corner($m("MyProcessWorksTPage.12")).setOnclick(
-						"$Actions.reloc('modelId=" + pm.getId() + "');"));
+				ope.append(LinkButton.corner($m("MyProcessWorksTPage.12"))
+						.setOnclick("$Actions.reloc('modelId=" + pm.getId() + "');"));
 				return ope.toString();
 			}
 		}

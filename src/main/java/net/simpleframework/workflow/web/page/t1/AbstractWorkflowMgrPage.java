@@ -30,8 +30,8 @@ import net.simpleframework.workflow.web.page.IWorkflowPageAware;
  * @author 陈侃(cknet@126.com, 13910090885) https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
-public abstract class AbstractWorkflowMgrPage extends T1ResizedTemplatePage implements
-		IWorkflowPageAware {
+public abstract class AbstractWorkflowMgrPage extends T1ResizedTemplatePage
+		implements IWorkflowPageAware {
 
 	@Override
 	protected void onForward(final PageParameter pp) throws Exception {
@@ -130,9 +130,8 @@ public abstract class AbstractWorkflowMgrPage extends T1ResizedTemplatePage impl
 			}
 			sb.append(" </div>");
 			sb.append(" <div class='b'>");
-			sb.append(
-					ButtonElement.okBtn().setHighlight(true)
-							.setOnclick("$Actions['AbstractAbortPage_ok']();")).append(SpanElement.SPACE)
+			sb.append(ButtonElement.okBtn().setHighlight(true)
+					.setOnclick("$Actions['AbstractAbortPage_ok']();")).append(SpanElement.SPACE)
 					.append(ButtonElement.closeBtn());
 			sb.append(" </div>");
 			sb.append("</div>");

@@ -50,12 +50,9 @@ public class MyWorkviewsTPage extends AbstractItemsTPage {
 	protected TablePagerBean addTablePagerBean(final PageParameter pp) {
 		final TablePagerBean tablePager = addTablePagerBean(pp, "MyWorkviewsTPage_tbl",
 				MyWorkviewsTbl.class);
-		tablePager
-				.addColumn(TC_ICON())
-				.addColumn(TC_TITLE())
-				.addColumn(
-						new TablePagerColumn("sent", $m("MyRunningWorklistTPage.0"), 120).center()
-								.setFilterSort(false))
+		tablePager.addColumn(TC_ICON()).addColumn(TC_TITLE())
+				.addColumn(new TablePagerColumn("sent", $m("MyRunningWorklistTPage.0"), 120).center()
+						.setFilterSort(false))
 				.addColumn(TC_CREATEDATE().setColumnText($m("MyRunningWorklistTPage.1")))
 				.addColumn(TablePagerColumn.OPE(70));
 		return tablePager;
@@ -64,8 +61,9 @@ public class MyWorkviewsTPage extends AbstractItemsTPage {
 	static SpanElement getStatTabs(final PageParameter pp) {
 		return createTabsElement(pp, TabButtons.of(
 				new TabButton($m("AbstractItemsTPage.5"), uFactory.getUrl(pp, MyWorkviewsTPage.class)),
-				new TabButton($m("AbstractItemsTPage.14"), uFactory.getUrl(pp,
-						MyWorkviewsUnreadTPage.class)), new TabButton($m("AbstractItemsTPage.13"),
+				new TabButton($m("AbstractItemsTPage.14"),
+						uFactory.getUrl(pp, MyWorkviewsUnreadTPage.class)),
+				new TabButton($m("AbstractItemsTPage.13"),
 						uFactory.getUrl(pp, MyWorkviewsSentTPage.class))));
 	}
 
@@ -76,8 +74,8 @@ public class MyWorkviewsTPage extends AbstractItemsTPage {
 
 	protected static class AMyWorkviewsTbl extends AbstractDbTablePagerHandler {
 		protected ImageElement MARK_FORWARD(final PageParameter pp) {
-			return AbstractItemsTPage._createImageMark(pp, "wv_forward.png").setTitle(
-					$m("MyWorkviewsTPage.1"));
+			return AbstractItemsTPage._createImageMark(pp, "wv_forward.png")
+					.setTitle($m("MyWorkviewsTPage.1"));
 		}
 
 		@Override
@@ -126,7 +124,8 @@ public class MyWorkviewsTPage extends AbstractItemsTPage {
 		}
 
 		@Override
-		protected Map<String, Object> getRowData(final ComponentParameter cp, final Object dataObject) {
+		protected Map<String, Object> getRowData(final ComponentParameter cp,
+				final Object dataObject) {
 			final WorkviewBean workview = (WorkviewBean) dataObject;
 			final KVMap row = new KVMap();
 			final ImageElement img = createImageMark(cp, workview);
@@ -145,8 +144,8 @@ public class MyWorkviewsTPage extends AbstractItemsTPage {
 
 		protected String toOpeHTML(final PageParameter pp, final WorkviewBean workview) {
 			final StringBuilder ope = new StringBuilder();
-			ope.append(new ButtonElement($m("MyWorkviewsTPage.0")).setOnclick(JS.loc(getWorkviewUrl(
-					pp, workview))));
+			ope.append(new ButtonElement($m("MyWorkviewsTPage.0"))
+					.setOnclick(JS.loc(getWorkviewUrl(pp, workview))));
 			return ope.toString();
 		}
 
@@ -158,8 +157,8 @@ public class MyWorkviewsTPage extends AbstractItemsTPage {
 	public static class MyWorkviewsUnreadTPage extends MyWorkviewsTPage {
 		@Override
 		protected TablePagerBean addTablePagerBean(final PageParameter pp) {
-			return (TablePagerBean) super.addTablePagerBean(pp).setHandlerClass(
-					MyWorkviews_UnreadTbl.class);
+			return (TablePagerBean) super.addTablePagerBean(pp)
+					.setHandlerClass(MyWorkviews_UnreadTbl.class);
 		}
 	}
 

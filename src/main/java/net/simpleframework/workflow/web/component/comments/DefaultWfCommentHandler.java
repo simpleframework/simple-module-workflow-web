@@ -132,8 +132,8 @@ public class DefaultWfCommentHandler extends ComponentHandlerEx implements IWfCo
 		final Map<String, String[]> data = new LinkedHashMap<String, String[]>();
 		if (workitem instanceof WorkitemBean) {
 			final IActivityService aService = workflowContext.getActivityService();
-			final AbstractTaskNode tasknode = aService.getTaskNode(aService
-					.getBean(((WorkitemBean) workitem).getActivityId()));
+			final AbstractTaskNode tasknode = aService
+					.getTaskNode(aService.getBean(((WorkitemBean) workitem).getActivityId()));
 			for (final Node node : ((ProcessNode) tasknode.getParent()).nodes()) {
 				if (node instanceof UserNode) {
 					final String name = node.getName();
@@ -147,7 +147,8 @@ public class DefaultWfCommentHandler extends ComponentHandlerEx implements IWfCo
 	}
 
 	protected Map<Object, List<WfComment>> comments_map(final PageParameter pp,
-			final IDataQuery<WfComment> dq, final AbstractWorkitemBean workitem, final EGroupBy groupBy) {
+			final IDataQuery<WfComment> dq, final AbstractWorkitemBean workitem,
+			final EGroupBy groupBy) {
 		final Map<Object, List<WfComment>> data = new LinkedHashMap<Object, List<WfComment>>();
 		Map<String, String[]> tasknames = null;
 		if (groupBy == EGroupBy.taskname) {
@@ -391,11 +392,11 @@ public class DefaultWfCommentHandler extends ComponentHandlerEx implements IWfCo
 		if (cp.isLmember(cp.getBeanProperty("managerRole"))) {
 			sb.append(SpanElement.SPACE10).append("[");
 			final String componentName = cp.getComponentName();
-			sb.append(new LinkElement($m("Edit")).setOnclick("$Actions['" + componentName
-					+ "_edit']('commentId=" + comment.getId() + "');"));
+			sb.append(new LinkElement($m("Edit")).setOnclick(
+					"$Actions['" + componentName + "_edit']('commentId=" + comment.getId() + "');"));
 			sb.append(SpanElement.SPACE);
-			sb.append(new LinkElement($m("Delete")).setOnclick("$Actions['" + componentName
-					+ "_del']('commentId=" + comment.getId() + "');"));
+			sb.append(new LinkElement($m("Delete")).setOnclick(
+					"$Actions['" + componentName + "_del']('commentId=" + comment.getId() + "');"));
 			sb.append("]");
 		}
 		sb.append("</div>");

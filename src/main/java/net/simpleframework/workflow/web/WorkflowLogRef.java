@@ -1,6 +1,7 @@
 package net.simpleframework.workflow.web;
 
 import static net.simpleframework.common.I18n.$m;
+
 import net.simpleframework.ctx.service.ado.db.IDbBeanService;
 import net.simpleframework.module.log.LogRef;
 import net.simpleframework.module.log.web.page.EntityUpdateLogPage;

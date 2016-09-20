@@ -61,8 +61,8 @@ public class MyFinalWorklistTPage extends MyRunningWorklistTPage {
 	@Override
 	protected void addComponents(final PageParameter pp) {
 		// 取回
-		addAjaxRequest(pp, "MyWorklistTPage_retake").setHandlerMethod("doRetake").setConfirmMessage(
-				$m("MyFinalWorklistTPage.2"));
+		addAjaxRequest(pp, "MyWorklistTPage_retake").setHandlerMethod("doRetake")
+				.setConfirmMessage($m("MyFinalWorklistTPage.2"));
 
 		// 发送用户列表
 		final AjaxRequestBean ajaxRequest = addAjaxRequest(pp, "MyFinalWorklistTPage_userTo_page",
@@ -102,15 +102,11 @@ public class MyFinalWorklistTPage extends MyRunningWorklistTPage {
 		if (!"taskname".equals(g)) {
 			tablePager.addColumn(TC_TASK());
 		}
-		tablePager
-				.addColumn(TC_TITLE())
-				.addColumn(TC_PNO())
-				.addColumn(
-						TC_USER("userTo", $m("MyFinalWorklistTPage.0")).setTextAlign(ETextAlign.left)
-								.setWidth(130).setNowrap(true))
-				.addColumn(
-						TablePagerColumn.DATE("completeDate", $m("MyFinalWorklistTPage.1")).setWidth(75)
-								.setFilterSort(false));
+		tablePager.addColumn(TC_TITLE()).addColumn(TC_PNO())
+				.addColumn(TC_USER("userTo", $m("MyFinalWorklistTPage.0")).setTextAlign(ETextAlign.left)
+						.setWidth(130).setNowrap(true))
+				.addColumn(TablePagerColumn.DATE("completeDate", $m("MyFinalWorklistTPage.1"))
+						.setWidth(75).setFilterSort(false));
 		// tablePager.addColumn(TC_PSTAT());
 		tablePager.addColumn(TablePagerColumn.OPE(70));
 		return tablePager;
@@ -119,23 +115,23 @@ public class MyFinalWorklistTPage extends MyRunningWorklistTPage {
 	@Transaction(context = IWorkflowContext.class)
 	public IForward doRetake(final ComponentParameter cp) {
 		wfwService.doRetake(WorkflowUtils.getWorkitemBean(cp));
-		return new JavascriptForward("$Actions.loc('").append(
-				uFactory.getUrl(cp, MyRunningWorklistTPage.class)).append("');");
+		return new JavascriptForward("$Actions.loc('")
+				.append(uFactory.getUrl(cp, MyRunningWorklistTPage.class)).append("');");
 	}
 
 	@Override
 	public ElementList getLeftElements(final PageParameter pp) {
-		final ElementList el = ElementList.of(LinkButton.menu($m("MyRunningWorklistTbl.14")).setId(
-				"idMyWorklistTPage_groupMenu"));
+		final ElementList el = ElementList.of(
+				LinkButton.menu($m("MyRunningWorklistTbl.14")).setId("idMyWorklistTPage_groupMenu"));
 		el.add(SpanElement.SPACE);
-		el.add(LinkButton.of($m("MyRunningWorklistTPage.17")).setOnclick(
-				"$Actions['MyWorklistTPage_pmSelected']();"));
+		el.add(LinkButton.of($m("MyRunningWorklistTPage.17"))
+				.setOnclick("$Actions['MyWorklistTPage_pmSelected']();"));
 		el.add(SpanElement.SPACE);
-		el.add(LinkButton.of($m("MyRunningWorklistTbl.15")).setOnclick(
-				"$Actions.reloc('retake=true');"));
+		el.add(LinkButton.of($m("MyRunningWorklistTbl.15"))
+				.setOnclick("$Actions.reloc('retake=true');"));
 		el.add(SpanElement.SPACE);
-		el.add(LinkButton.of($m("MyRunningWorklistTbl.22")).setOnclick(
-				"$Actions.reloc('delegation=true');"));
+		el.add(LinkButton.of($m("MyRunningWorklistTbl.22"))
+				.setOnclick("$Actions.reloc('delegation=true');"));
 		return el;
 	}
 
@@ -178,8 +174,8 @@ public class MyFinalWorklistTPage extends MyRunningWorklistTPage {
 				final WorkitemBean workitem) {
 			ImageElement img = null;
 			if (workitem.getStatus() == EWorkitemStatus.abort) {
-				img = AbstractItemsTPage._createImageMark(cp, "status_abort.png").setTitle(
-						$m("MyRunningWorklistTbl.24"));
+				img = AbstractItemsTPage._createImageMark(cp, "status_abort.png")
+						.setTitle($m("MyRunningWorklistTbl.24"));
 			} else if (workitem.getRetakeId() != null) {
 				img = MARK_RETAKE(cp);
 			} else if (!workitem.getUserId().equals(workitem.getUserId2())) {
@@ -220,28 +216,21 @@ public class MyFinalWorklistTPage extends MyRunningWorklistTPage {
 									break lbl;
 								}
 								final StringBuilder sb = new StringBuilder();
-								final SpanElement ele = (wfaService.isFinalStatus(nextActivity) ? SpanElement
-										.color777(tasknode) : SpanElement.color333(tasknode)).setTitle(status
-										.toString());
+								final SpanElement ele = (wfaService.isFinalStatus(nextActivity)
+										? SpanElement.color777(tasknode) : SpanElement.color333(tasknode))
+												.setTitle(status.toString());
 								final String utxt = workitem.getUserText2();
-								sb.append("[")
-										.append(ele)
-										.append("] ")
-										.append(
-												SpanElement.color060(utxt).setTitle(
-														workitem.getUserId().equals(workitem.getUserId2()) ? utxt
-																: $m("WorkflowCompleteInfoPage.2",
-																		workitem.getUserText())));
+								sb.append("[").append(ele).append("] ").append(SpanElement.color060(utxt)
+										.setTitle(workitem.getUserId().equals(workitem.getUserId2()) ? utxt
+												: $m("WorkflowCompleteInfoPage.2", workitem.getUserText())));
 								list.add(sb.toString());
 							}
 						}
 					}
 					if (more) {
-						list.add(LinkElement
-								.style2("...")
-								.setOnclick(
-										"$Actions['MyFinalWorklistTPage_userTo']('activityId=" + activityId
-												+ "');").toString());
+						list.add(LinkElement.style2("...").setOnclick(
+								"$Actions['MyFinalWorklistTPage_userTo']('activityId=" + activityId + "');")
+								.toString());
 					}
 					return list.size() > 0 ? StringUtils.join(list, "<br>") : null;
 				}
@@ -260,9 +249,8 @@ public class MyFinalWorklistTPage extends MyRunningWorklistTPage {
 			final MenuItem mItems = MenuItem.of($m("MyRunningWorklistTbl.6"));
 			mItems.addChild(
 					MENU_MARK_TOP().setOnclick_act("MyWorklistTPage_topMark", "workitemId", "op=top"))
-					.addChild(
-							MENU_MARK_UNTOP().setOnclick_act("MyWorklistTPage_topMark", "workitemId",
-									"op=untop"));
+					.addChild(MENU_MARK_UNTOP().setOnclick_act("MyWorklistTPage_topMark", "workitemId",
+							"op=untop"));
 			items.append(mItems);
 			return items;
 		}

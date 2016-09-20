@@ -44,10 +44,10 @@ public class MyWorkstatTPage extends AbstractItemsTPage {
 	public static void addStatChart(final PageParameter pp) {
 		final HighchartBean hc1 = (HighchartBean) pp
 				.addComponentBean("MyWorkstatTPage_chart", HighchartBean.class)
-				.setChart(
-						new HcChart().setHeight(300).setBackgroundColor("#FFF").setMarginTop(20)
-								.setMarginRight(30)).setTitle("")
-				.setLegend(new HcLegend().setEnabled(false)).setContainerId("idMyWorkstatTPage_chart");
+				.setChart(new HcChart().setHeight(300).setBackgroundColor("#FFF").setMarginTop(20)
+						.setMarginRight(30))
+				.setTitle("").setLegend(new HcLegend().setEnabled(false))
+				.setContainerId("idMyWorkstatTPage_chart");
 		hc1.setxAxis(new HcXAxis());
 		hc1.setyAxis(new HcYAxis().setTitle($m("MyWorkstatTPage.0")).setMin(0).setMax(100));
 		final StringBuilder sb = new StringBuilder();
@@ -58,9 +58,8 @@ public class MyWorkstatTPage extends AbstractItemsTPage {
 				.setHeaderFormat($m("MyWorkstatTPage.1") + "{point.key}<br>")
 				.setPointFormat(sb.toString()));
 
-		hc1.getxAxis().setCategories(
-				new String[] { null, null, null, null, null, $m("MyWorkstatTPage.6"),
-						$m("MyWorkstatTPage.5") });
+		hc1.getxAxis().setCategories(new String[] { null, null, null, null, null,
+				$m("MyWorkstatTPage.6"), $m("MyWorkstatTPage.5") });
 
 		final Calendar cal = Calendar.getInstance();
 		final HcSeries h = new HcSeries();
@@ -69,8 +68,8 @@ public class MyWorkstatTPage extends AbstractItemsTPage {
 			final String lbl = Convert.toDateString(nDate, "MM-dd");
 			final int[] arr = wfusService.getComplete_AllWorkitems(pp.getLoginId(), nDate);
 			final float p = arr[1] == 0 ? 100 : ((float) arr[0] / arr[1]) * 100;
-			final DataObj data = new DataObj(lbl, NumberUtils.toFloat(p)).addAttribute("complete",
-					arr[0]).addAttribute("all", arr[1]);
+			final DataObj data = new DataObj(lbl, NumberUtils.toFloat(p))
+					.addAttribute("complete", arr[0]).addAttribute("all", arr[1]);
 			// if (arr[1] == 0) {
 			// data.setColor("#f00");
 			// }

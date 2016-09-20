@@ -63,7 +63,8 @@ public class MyInitiateItemsGroupTPage extends MyInitiateItemsTPage {
 			list.add(item);
 		}
 
-		final String[] COLORS = new String[] { "#166CA5", "#953735", "#01B0F1", "#767719", "#F99D52" };
+		final String[] COLORS = new String[] { "#166CA5", "#953735", "#01B0F1", "#767719",
+				"#F99D52" };
 		int i = 0;
 		sb.append("<div class='gpane clearfix'>");
 		for (final Map.Entry<String, List<InitiateItem>> e : gmap.entrySet()) {

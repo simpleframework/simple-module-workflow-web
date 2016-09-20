@@ -46,22 +46,22 @@ public abstract class WorkflowUtils implements IWorkflowContextAware {
 	}
 
 	public static ButtonElement createLogButton() {
-		return ButtonElement.logBtn().setDisabled(
-				((IWorkflowWebContext) workflowContext).getLogRef() == null);
+		return ButtonElement.logBtn()
+				.setDisabled(((IWorkflowWebContext) workflowContext).getLogRef() == null);
 	}
 
 	public static AbstractElement<?> getStatusIcon(final PageParameter pp, final Enum<?> status) {
 		return new ImageElement(pp.getCssResourceHomePath(AbstractItemsTPage.class)
-				+ "/images/status_" + status.name() + ".png").setClassName("icon16").setTitle(
-				status.toString());
+				+ "/images/status_" + status.name() + ".png").setClassName("icon16")
+						.setTitle(status.toString());
 	}
 
 	public static String getParticipants(final PageParameter pp, final ActivityBean activity,
 			final boolean r) {
 		final StringBuilder sb = new StringBuilder();
 		int i = 0;
-		for (final Participant p : (r ? wfaService.getParticipants2(activity) : wfaService
-				.getParticipants(activity, true))) {
+		for (final Participant p : (r ? wfaService.getParticipants2(activity)
+				: wfaService.getParticipants(activity, true))) {
 			if (i++ > 0) {
 				sb.append(", ");
 			}

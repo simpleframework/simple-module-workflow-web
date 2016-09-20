@@ -68,7 +68,7 @@ public class ActivityMgrPage extends AbstractWorkflowMgrPage {
 	protected TablePagerBean addTablePagerBean(final PageParameter pp) {
 		final TablePagerBean tablePager = (TablePagerBean) addTablePagerBean(pp,
 				"ActivityMgrPage_tbl", ActivityTbl.class).setPagerBarLayout(EPagerBarLayout.none)
-				.setContainerId("idActivityMgrPage_tbl");
+						.setContainerId("idActivityMgrPage_tbl");
 		tablePager.addColumn(TablePagerColumn.ICON()).addColumn(ActivityTbl.TC_TASKNODE())
 				.addColumn(ActivityTbl.TC_PARTICIPANTS()).addColumn(ActivityTbl.TC_PARTICIPANTS2())
 				.addColumn(TC_CREATEDATE()).addColumn(ActivityTbl.TC_TIMEOUT())
@@ -93,9 +93,12 @@ public class ActivityMgrPage extends AbstractWorkflowMgrPage {
 	public ElementList getRightElements(final PageParameter pp) {
 		final ProcessBean process = WorkflowUtils.getProcessBean(pp);
 		final Object id = process.getId();
-		return ElementList.of(createTabsElement(pp, TabButtons.of(new TabButton(
-				$m("ActivityMgrPage.1"), url(ActivityMgrPage.class, "processId=" + id)), new TabButton(
-				$m("ActivityMgrPage.2"), url(ActivityGraphMgrPage.class, "processId=" + id)))));
+		return ElementList.of(createTabsElement(pp,
+				TabButtons.of(
+						new TabButton($m("ActivityMgrPage.1"),
+								url(ActivityMgrPage.class, "processId=" + id)),
+						new TabButton($m("ActivityMgrPage.2"),
+								url(ActivityGraphMgrPage.class, "processId=" + id)))));
 	}
 
 	@Override

@@ -1,6 +1,7 @@
 package net.simpleframework.workflow.web;
 
 import static net.simpleframework.common.I18n.$m;
+
 import net.simpleframework.ctx.IModuleRef;
 import net.simpleframework.ctx.ModuleFunctions;
 import net.simpleframework.ctx.ModuleRefUtils;
@@ -54,9 +55,8 @@ public class WorkflowWebContext extends WorkflowContext implements IWorkflowWebC
 
 	@Override
 	protected ModuleFunctions getFunctions() {
-		return ModuleFunctions.of(
-				new WebModuleFunction(this, MyRunningWorklistPage.class).setName(
-						MODULE_NAME + "-MyRunningWorklistTPage").setText($m("WorkflowWebContext.0")),
+		return ModuleFunctions.of(new WebModuleFunction(this, MyRunningWorklistPage.class)
+				.setName(MODULE_NAME + "-MyRunningWorklistTPage").setText($m("WorkflowWebContext.0")),
 				new WebModuleFunction(this, ProcessModelMgrPage.class)
 						.setManagerRole(PermissionConst.ROLE_MANAGER)
 						.setName(MODULE_NAME + "-ProcessModelMgrPage")

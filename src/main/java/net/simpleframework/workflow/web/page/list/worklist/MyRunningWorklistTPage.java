@@ -114,8 +114,8 @@ public class MyRunningWorklistTPage extends AbstractItemsTPage {
 				.setConfirmMessage($m("MyRunningWorklistTPage.3"));
 
 		// 删除
-		addAjaxRequest(pp, "MyWorklistTPage_delete").setHandlerMethod("doDelete").setConfirmMessage(
-				$m("Confirm.Delete"));
+		addAjaxRequest(pp, "MyWorklistTPage_delete").setHandlerMethod("doDelete")
+				.setConfirmMessage($m("Confirm.Delete"));
 
 		// 委托设置
 		AjaxRequestBean ajaxRequest = addAjaxRequest(pp, "MyWorklistTPage_delegate_page",
@@ -146,23 +146,18 @@ public class MyRunningWorklistTPage extends AbstractItemsTPage {
 
 		// 委托菜单
 		mb = createDelegateMenuComponent(pp);
-		mb.addItem(
-				MenuItem
-						.of($m("MyRunningWorklistTPage.6"))
-						.setOnclick(
-								"$Actions['MyWorklistTPage_tbl'].doAct('MyWorklistTPage_delegate', 'workitemId');"))
-				.addItem(MenuItem.sep())
-				.addItem(
-						MenuItem.of($m("MyRunningWorklistTPage.7")).setOnclick(
-								"$Actions['MyWorklistTPage_delegate']('delegationSource=user');"));
+		mb.addItem(MenuItem.of($m("MyRunningWorklistTPage.6")).setOnclick(
+				"$Actions['MyWorklistTPage_tbl'].doAct('MyWorklistTPage_delegate', 'workitemId');"))
+				.addItem(MenuItem.sep()).addItem(MenuItem.of($m("MyRunningWorklistTPage.7"))
+						.setOnclick("$Actions['MyWorklistTPage_delegate']('delegationSource=user');"));
 
 		// 更多操作
 		mb = createOpeMenuComponent(pp);
 		mb.addItem(MenuItem.of($m("MyRunningWorklistTbl.16")).setOnclick(
 				"$Actions['MyWorklistTPage_tbl'].doAct('MyWorklistTPage_delete', 'workitemId');"));
 		mb.addItem(MenuItem.sep());
-		mb.addItem(MenuItem.of($m("MyRunningWorklistTPage.18")).setOnclick(
-				"$Actions['MyWorklistTPage_mysettings']();"));
+		mb.addItem(MenuItem.of($m("MyRunningWorklistTPage.18"))
+				.setOnclick("$Actions['MyWorklistTPage_mysettings']();"));
 
 		// 我的设置
 		ajaxRequest = addAjaxRequest(pp, "MyWorklistTPage_mysettings_page", MySettingsPage.class);
@@ -171,14 +166,14 @@ public class MyRunningWorklistTPage extends AbstractItemsTPage {
 	}
 
 	protected void addGroupMenuItems(final PageParameter pp, final MenuBean mb, final String url) {
-		final MenuItem g0 = MyRunningWorklistTbl.MENU_VIEW_GROUP0().setOnclick(
-				"$Actions.reloc('g=none');");
-		final MenuItem g1 = MyRunningWorklistTbl.MENU_VIEW_GROUP1().setOnclick(
-				"$Actions.reloc('g=modelname');");
-		final MenuItem g2 = MyRunningWorklistTbl.MENU_VIEW_GROUP2().setOnclick(
-				"$Actions.reloc('g=taskname');");
-		final MenuItem g3 = MyRunningWorklistTbl.MENU_VIEW_GROUP3().setOnclick(
-				"$Actions.reloc('g=pgroup');");
+		final MenuItem g0 = MyRunningWorklistTbl.MENU_VIEW_GROUP0()
+				.setOnclick("$Actions.reloc('g=none');");
+		final MenuItem g1 = MyRunningWorklistTbl.MENU_VIEW_GROUP1()
+				.setOnclick("$Actions.reloc('g=modelname');");
+		final MenuItem g2 = MyRunningWorklistTbl.MENU_VIEW_GROUP2()
+				.setOnclick("$Actions.reloc('g=taskname');");
+		final MenuItem g3 = MyRunningWorklistTbl.MENU_VIEW_GROUP3()
+				.setOnclick("$Actions.reloc('g=pgroup');");
 		final String g = pp.getParameter(G);
 		if ("none".equals(g)) {
 			g0.setIconClass(MenuItem.ICON_SELECTED);
@@ -214,8 +209,8 @@ public class MyRunningWorklistTPage extends AbstractItemsTPage {
 	}
 
 	protected TablePagerColumn TC_PSTAT() {
-		return new TablePagerColumn("pstat", $m("MyRunningWorklistTPage.13"), 56).setTextAlign(
-				ETextAlign.right).setFilterSort(false);
+		return new TablePagerColumn("pstat", $m("MyRunningWorklistTPage.13"), 56)
+				.setTextAlign(ETextAlign.right).setFilterSort(false);
 	}
 
 	protected MenuBean createMarkMenuComponent(final PageParameter pp) {
@@ -244,22 +239,23 @@ public class MyRunningWorklistTPage extends AbstractItemsTPage {
 		final StringBuilder sb = new StringBuilder();
 		final DelegationBean delegation = wfdService.queryRunningDelegation(pp.getLoginId());
 		if (delegation != null) {
-			addAjaxRequest(pp, "MyRunningWorklistTPage_user_undelegate").setConfirmMessage(
-					$m("MyRunningWorklistTPage.11")).setHandlerMethod("doUserUndelegate");
+			addAjaxRequest(pp, "MyRunningWorklistTPage_user_undelegate")
+					.setConfirmMessage($m("MyRunningWorklistTPage.11"))
+					.setHandlerMethod("doUserUndelegate");
 
 			final StringBuilder txt = new StringBuilder();
 			txt.append($m("MyRunningWorklistTPage.8",
 					new SpanElement(pp.getUser(delegation.getUserId())).setStrong(true)));
 			txt.append(SpanElement.SPACE15);
-			txt.append(new LinkElement($m("MyRunningWorklistTPage.10")).setHref(uFactory.getUrl(pp,
-					UserDelegateListTPage.class)));
+			txt.append(new LinkElement($m("MyRunningWorklistTPage.10"))
+					.setHref(uFactory.getUrl(pp, UserDelegateListTPage.class)));
 			txt.append(SpanElement.SPACE);
 			txt.append(new LinkElement($m("MyRunningWorklistTPage.9"))
 					.setOnclick("$Actions['MyRunningWorklistTPage_user_undelegate']();"));
 			sb.append(new BlockElement().setClassName("worklist_tip").setText(txt.toString()));
 		}
-		final Set<String> modelIds = ArrayUtils.asSet(StringUtils.split(pp.getParameter("modelId"),
-				";"));
+		final Set<String> modelIds = ArrayUtils
+				.asSet(StringUtils.split(pp.getParameter("modelId"), ";"));
 		FilterButtons btns = getFilterButtons(pp);
 		if (btns == null) {
 			btns = FilterButtons.of();
@@ -269,9 +265,9 @@ public class MyRunningWorklistTPage extends AbstractItemsTPage {
 			if (pm != null) {
 				final List<String> _modelIds = new ArrayList<String>(modelIds);
 				_modelIds.remove(modelId);
-				btns.add(new FilterButton(StringUtils.replace(pm.getModelText(), ".", " / ")).setLabel(
-						$m("MyRunningWorklistTPage.17")).setOndelete(
-						"$Actions.reloc('modelId="
+				btns.add(new FilterButton(StringUtils.replace(pm.getModelText(), ".", " / "))
+						.setLabel($m("MyRunningWorklistTPage.17"))
+						.setOndelete("$Actions.reloc('modelId="
 								+ (_modelIds.size() > 0 ? StringUtils.join(_modelIds, ";") : "__del")
 								+ "');"));
 			}
@@ -352,13 +348,14 @@ public class MyRunningWorklistTPage extends AbstractItemsTPage {
 	@Override
 	public ElementList getLeftElements(final PageParameter pp) {
 		return ElementList.of(
-				LinkButton.of($m("MyRunningWorklistTPage.12")).setHref(
-						uFactory.getUrl(pp, MyInitiateItemsGroupTPage.class)),
+				LinkButton.of($m("MyRunningWorklistTPage.12"))
+						.setHref(uFactory.getUrl(pp, MyInitiateItemsGroupTPage.class)),
 				SpanElement.SPACE,
 				LinkButton.menu($m("MyRunningWorklistTbl.14")).setId("idMyWorklistTPage_groupMenu"),
 				SpanElement.SPACE,
-				LinkButton.of($m("MyRunningWorklistTPage.17")).setOnclick(
-						"$Actions['MyWorklistTPage_pmSelected']();"), SpanElement.SPACE,
+				LinkButton.of($m("MyRunningWorklistTPage.17"))
+						.setOnclick("$Actions['MyWorklistTPage_pmSelected']();"),
+				SpanElement.SPACE,
 				LinkButton.of($m("MyRunningWorklistTbl.9")).setOnclick("$Actions.reloc('v=unread');"),
 				SpanElement.SPACE,
 				LinkButton.menu($m("MyRunningWorklistTbl.6")).setId("idMyWorklistTPage_markMenu"),
@@ -441,8 +438,8 @@ public class MyRunningWorklistTPage extends AbstractItemsTPage {
 					.setTriggerSelector(".MySettingsPage .button2")
 					.addValidators(new Validator(EValidatorMethod.digits, "#ms_interval"));
 			// 提交
-			addAjaxRequest(pp, "MySettingsPage_ok").setHandlerMethod("doOk").setSelector(
-					".MySettingsPage");
+			addAjaxRequest(pp, "MySettingsPage_ok").setHandlerMethod("doOk")
+					.setSelector(".MySettingsPage");
 		}
 
 		@Transaction(context = IWorkflowContext.class)
@@ -458,8 +455,8 @@ public class MyRunningWorklistTPage extends AbstractItemsTPage {
 				final String currentVariable) throws IOException {
 			final StringBuilder sb = new StringBuilder();
 			final UserStatBean stat = wfusService.getUserStat(pp.getLoginId());
-			final InputElement interval = new InputElement("ms_interval").setWidth("100px").setVal(
-					stat.getWorklist_refresh_interval());
+			final InputElement interval = new InputElement("ms_interval").setWidth("100px")
+					.setVal(stat.getWorklist_refresh_interval());
 			sb.append("<div class='simple_window_tcb MySettingsPage'>");
 			sb.append(" <div class='c'>");
 			sb.append("  <div class='lbl'>#(MySettingsPage.0)</div>");

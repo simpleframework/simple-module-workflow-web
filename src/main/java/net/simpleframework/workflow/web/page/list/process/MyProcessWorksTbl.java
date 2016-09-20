@@ -90,7 +90,8 @@ public class MyProcessWorksTbl extends AbstractDbTablePagerHandler implements IW
 		}
 
 		@Override
-		protected Map<String, Object> getRowData(final ComponentParameter cp, final Object dataObject) {
+		protected Map<String, Object> getRowData(final ComponentParameter cp,
+				final Object dataObject) {
 			return AbstractProcessWorksHandler.getProcessWorksHandler(cp).getRowData(cp, dataObject,
 					EProcessWorks.dept);
 		}
@@ -114,7 +115,8 @@ public class MyProcessWorksTbl extends AbstractDbTablePagerHandler implements IW
 		}
 
 		@Override
-		protected Map<String, Object> getRowData(final ComponentParameter cp, final Object dataObject) {
+		protected Map<String, Object> getRowData(final ComponentParameter cp,
+				final Object dataObject) {
 			return AbstractProcessWorksHandler.getProcessWorksHandler(cp).getRowData(cp, dataObject,
 					EProcessWorks.org);
 		}
@@ -137,7 +139,8 @@ public class MyProcessWorksTbl extends AbstractDbTablePagerHandler implements IW
 		}
 
 		@Override
-		protected Map<String, Object> getRowData(final ComponentParameter cp, final Object dataObject) {
+		protected Map<String, Object> getRowData(final ComponentParameter cp,
+				final Object dataObject) {
 			return AbstractProcessWorksHandler.getProcessWorksHandler(cp).getRowData(cp, dataObject,
 					EProcessWorks.role);
 		}

@@ -65,7 +65,7 @@ public class ActivityMgrTPage extends AbstractWorkflowMgrTPage {
 	protected TablePagerBean addTablePagerBean(final PageParameter pp) {
 		final TablePagerBean tablePager = (TablePagerBean) addTablePagerBean(pp,
 				"ActivityMgrTPage_tbl", _ActivityTbl.class).setShowCheckbox(false)
-				.setPagerBarLayout(EPagerBarLayout.none).setContainerId("idActivityMgrTPage_tbl");
+						.setPagerBarLayout(EPagerBarLayout.none).setContainerId("idActivityMgrTPage_tbl");
 		tablePager.addColumn(TablePagerColumn.ICON()).addColumn(ActivityTbl.TC_TASKNODE())
 				.addColumn(ActivityTbl.TC_PARTICIPANTS()).addColumn(ActivityTbl.TC_PARTICIPANTS2())
 				.addColumn(AbstractWorkflowMgrPage.TC_CREATEDATE()).addColumn(ActivityTbl.TC_TIMEOUT())
@@ -89,9 +89,9 @@ public class ActivityMgrTPage extends AbstractWorkflowMgrTPage {
 	public ElementList getLeftElements(final PageParameter pp) {
 		final ProcessBean process = WorkflowUtils.getProcessBean(pp);
 		final ElementList el = ElementList.of(
-				LinkButton.backBtn().setOnclick(
-						JS.loc(uFactory.getUrl(pp, ProcessMgrTPage.class, "modelId="
-								+ (process != null ? process.getModelId() : "")))),
+				LinkButton.backBtn()
+						.setOnclick(JS.loc(uFactory.getUrl(pp, ProcessMgrTPage.class,
+								"modelId=" + (process != null ? process.getModelId() : "")))),
 				// SpanElement.SPACE,
 				// LinkButton.of(EActivityStatus.abort).setOnclick(
 				// "$Actions['ActivityMgrTPage_abort2']('processId=" +
@@ -129,10 +129,10 @@ public class ActivityMgrTPage extends AbstractWorkflowMgrTPage {
 		final ProcessBean process = WorkflowUtils.getProcessBean(pp);
 		final String params = "processId=" + (process != null ? process.getId() : "");
 		return TabButtons.of(
-				new TabButton($m("ActivityMgrPage.1"), uFactory.getUrl(pp, ActivityMgrTPage.class,
-						params)),
-				new TabButton($m("ActivityMgrPage.2"), uFactory.getUrl(pp, ActivityGraphMgrTPage.class,
-						params)));
+				new TabButton($m("ActivityMgrPage.1"),
+						uFactory.getUrl(pp, ActivityMgrTPage.class, params)),
+				new TabButton($m("ActivityMgrPage.2"),
+						uFactory.getUrl(pp, ActivityGraphMgrTPage.class, params)));
 	}
 
 	public static class _ActivityAbortPage extends ActivityAbortPage {
@@ -151,16 +151,15 @@ public class ActivityMgrTPage extends AbstractWorkflowMgrTPage {
 		@Override
 		protected ButtonElement createLogButton(final ComponentParameter cp,
 				final ActivityBean activity) {
-			return super.createLogButton(cp, activity).setOnclick(
-					"$Actions['AbstractWorkflowMgrTPage_update_log']('activityId=" + activity.getId()
-							+ "');");
+			return super.createLogButton(cp, activity)
+					.setOnclick("$Actions['AbstractWorkflowMgrTPage_update_log']('activityId="
+							+ activity.getId() + "');");
 		}
 
 		@Override
 		protected LinkElement createUsernodeElement(final ActivityBean activity) {
-			return new LinkElement(activity.getTasknodeText())
-					.setOnclick("$Actions['ActivityMgrTPage_workitems']('activityId=" + activity.getId()
-							+ "');");
+			return new LinkElement(activity.getTasknodeText()).setOnclick(
+					"$Actions['ActivityMgrTPage_workitems']('activityId=" + activity.getId() + "');");
 		}
 
 		@Override

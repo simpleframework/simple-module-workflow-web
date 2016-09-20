@@ -60,8 +60,9 @@ public class WorkviewSelectLoaded extends DefaultPageHandler implements IWorkflo
 				.setHandlerClass(_UserSelectHandler.class)
 				.setAttr("_WorkviewSelect", nCP.componentBean);
 		// 预设列表字典
-		final ListboxBean listbox = (ListboxBean) pp.addComponentBean(componentName + "_roleList",
-				ListboxBean.class).setHandlerClass(SelectedRolesHandler.class);
+		final ListboxBean listbox = (ListboxBean) pp
+				.addComponentBean(componentName + "_roleList", ListboxBean.class)
+				.setHandlerClass(SelectedRolesHandler.class);
 		final StringBuilder js = new StringBuilder();
 		js.append("$Actions['").append(componentName).append("_roleDictSelect_OK']('")
 				.append(DoWorkviewUtils.toParams(nCP)).append("&roleId=' + selects[0].id);");
@@ -101,14 +102,14 @@ public class WorkviewSelectLoaded extends DefaultPageHandler implements IWorkflo
 		final String[] sentMenu = (String[]) nCP.getBeanProperty("sentMenu");
 		for (final String k : sentMenu) {
 			if ("user-select".equals(k)) {
-				mb.addItem(MenuItem.of($m("DoWorkviewUtils.0")).setOnclick(
-						DoWorkviewUtils.jsActions(nCP, "_userSelect")));
+				mb.addItem(MenuItem.of($m("DoWorkviewUtils.0"))
+						.setOnclick(DoWorkviewUtils.jsActions(nCP, "_userSelect")));
 			} else if ("role-select".equals(k)) {
-				mb.addItem(MenuItem.of($m("DoWorkviewUtils.1")).setOnclick(
-						DoWorkviewUtils.jsActions(nCP, "_roleDictSelect")));
+				mb.addItem(MenuItem.of($m("DoWorkviewUtils.1"))
+						.setOnclick(DoWorkviewUtils.jsActions(nCP, "_roleDictSelect")));
 			} else if ("last-select".equals(k)) {
-				mb.addItem(MenuItem.of($m("DoWorkviewUtils.6")).setOnclick(
-						DoWorkviewUtils.jsActions(nCP, "_lastUlist")));
+				mb.addItem(MenuItem.of($m("DoWorkviewUtils.6"))
+						.setOnclick(DoWorkviewUtils.jsActions(nCP, "_lastUlist")));
 			} else if ("-".equals(k)) {
 				mb.addItem(MenuItem.sep());
 			}

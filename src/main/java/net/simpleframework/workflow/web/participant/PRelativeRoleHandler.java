@@ -21,8 +21,8 @@ import net.simpleframework.workflow.schema.AbstractTaskNode;
 import net.simpleframework.workflow.schema.TransitionNode;
 import net.simpleframework.workflow.schema.UserNode;
 
-public class PRelativeRoleHandler extends AbstractParticipantHandler implements
-		IOrganizationContextAware {
+public class PRelativeRoleHandler extends AbstractParticipantHandler
+		implements IOrganizationContextAware {
 
 	// 指定前一任务节点node: (默认为前一节点)
 	private final String PARAMS_KEY_NODE = "node";
@@ -135,9 +135,8 @@ public class PRelativeRoleHandler extends AbstractParticipantHandler implements
 				Collection<Participant> _participants = wph.getRelativeParticipantsOfLevel(userId,
 						roleId, deptId, variables, r, level);
 
-				if ((_participants == null || _participants.size() == 0)
-						&& level.equals(Level.internal) && null != autoparent
-						&& autoparent.equals("true")) {
+				if ((_participants == null || _participants.size() == 0) && level.equals(Level.internal)
+						&& null != autoparent && autoparent.equals("true")) {
 					// 本部门,自动查找上一部门角色
 					final Department dept = _deptService.getBean(deptId);
 					_participants = wph.getRelativeParticipantsOfLevel(userId, roleId,

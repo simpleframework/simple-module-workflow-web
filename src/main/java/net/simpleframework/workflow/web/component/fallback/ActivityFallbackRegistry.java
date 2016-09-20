@@ -1,6 +1,7 @@
 package net.simpleframework.workflow.web.component.fallback;
 
 import static net.simpleframework.common.I18n.$m;
+
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.component.AbstractComponentBean;
 import net.simpleframework.mvc.component.AbstractComponentRegistry;
@@ -27,16 +28,17 @@ public class ActivityFallbackRegistry extends AbstractComponentRegistry {
 	public static final String ACTIVITY_FALLBACK = "wf_activity_fallback";
 
 	@Override
-	public AbstractComponentBean createComponentBean(final PageParameter pp, final Object attriData) {
+	public AbstractComponentBean createComponentBean(final PageParameter pp,
+			final Object attriData) {
 		final ActivityFallbackBean fallback = (ActivityFallbackBean) super.createComponentBean(pp,
 				attriData);
 
 		final ComponentParameter nCP = ComponentParameter.get(pp, fallback);
 		final String componentName = nCP.getComponentName();
 
-		final AjaxRequestBean ajaxRequest = pp.addComponentBean(componentName + "_win_page",
-				AjaxRequestBean.class).setUrlForward(
-				getComponentResourceProvider().getResourceHomePath()
+		final AjaxRequestBean ajaxRequest = pp
+				.addComponentBean(componentName + "_win_page", AjaxRequestBean.class)
+				.setUrlForward(getComponentResourceProvider().getResourceHomePath()
 						+ "/jsp/activity_fallback_select.jsp");
 		pp.addComponentBean(componentName + "_win", WindowBean.class)
 				.setContentRef(ajaxRequest.getName()).setWidth(300).setHeight(400)

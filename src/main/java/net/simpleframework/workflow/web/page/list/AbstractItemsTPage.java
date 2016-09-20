@@ -44,8 +44,8 @@ public abstract class AbstractItemsTPage extends AbstractWorksTPage {
 
 	public CategoryItem createCategoryItem(final PageParameter pp, final String text,
 			final Class<? extends AbstractItemsTPage> mClass) {
-		return new CategoryItem(text).setHref(uFactory.getUrl(pp, mClass)).setSelected(
-				mClass.isAssignableFrom(getOriginalClass()));
+		return new CategoryItem(text).setHref(uFactory.getUrl(pp, mClass))
+				.setSelected(mClass.isAssignableFrom(getOriginalClass()));
 	}
 
 	private String getIcon(final PageParameter pp, final String icon) {
@@ -154,8 +154,8 @@ public abstract class AbstractItemsTPage extends AbstractWorksTPage {
 	}
 
 	public static ImageElement _createImageMark(final PageParameter pp, final String img) {
-		return ImageElement.img16(
-				pp.getCssResourceHomePath(AbstractItemsTPage.class) + "/images/" + img)
+		return ImageElement
+				.img16(pp.getCssResourceHomePath(AbstractItemsTPage.class) + "/images/" + img)
 				.setVerticalAlign(EVerticalAlign.middle);
 	}
 

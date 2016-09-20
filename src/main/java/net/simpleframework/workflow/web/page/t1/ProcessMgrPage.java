@@ -55,7 +55,7 @@ public class ProcessMgrPage extends AbstractWorkflowMgrPage {
 
 		final TablePagerBean tablePager = (TablePagerBean) addComponentBean(pp, "ProcessMgrPage_tbl",
 				TablePagerBean.class).setPagerBarLayout(EPagerBarLayout.bottom)
-				.setContainerId("idProcessMgrPage_tbl").setHandlerClass(ProcessTbl.class);
+						.setContainerId("idProcessMgrPage_tbl").setHandlerClass(ProcessTbl.class);
 		tablePager.addColumn(TablePagerColumn.ICON()).addColumn(TC_TITLE())
 				.addColumn(new TablePagerColumn("userText", $m("ProcessMgrPage.0"), 100))
 				.addColumn(TC_CREATEDATE()).addColumn(TC_COMPLETEDATE())
@@ -90,8 +90,8 @@ public class ProcessMgrPage extends AbstractWorkflowMgrPage {
 
 	@Override
 	public ElementList getLeftElements(final PageParameter pp) {
-		return ElementList.of(createBackButton().setHref(
-				uFactory.getUrl(pp, ProcessModelMgrPage.class)));
+		return ElementList
+				.of(createBackButton().setHref(uFactory.getUrl(pp, ProcessModelMgrPage.class)));
 	}
 
 	@Override
@@ -117,13 +117,14 @@ public class ProcessMgrPage extends AbstractWorkflowMgrPage {
 		}
 
 		@Override
-		protected Map<String, Object> getRowData(final ComponentParameter cp, final Object dataObject) {
+		protected Map<String, Object> getRowData(final ComponentParameter cp,
+				final Object dataObject) {
 			final ProcessBean process = (ProcessBean) dataObject;
 			final EProcessStatus status = process.getStatus();
 			final KVMap row = new KVMap()
 					.add(TablePagerColumn.ICON, WorkflowUtils.getStatusIcon(cp, status))
-					.add("title", createTitleElement(cp, process))
-					.add("userText", process.getUserText()).add("createDate", process.getCreateDate())
+					.add("title", createTitleElement(cp, process)).add("userText", process.getUserText())
+					.add("createDate", process.getCreateDate())
 					.add("completeDate", process.getCompleteDate());
 			row.add(TablePagerColumn.OPE, toOpeHTML(cp, process));
 			return row;
@@ -131,15 +132,16 @@ public class ProcessMgrPage extends AbstractWorkflowMgrPage {
 
 		protected LinkElement createTitleElement(final ComponentParameter cp,
 				final ProcessBean process) {
-			return new LinkElement(WorkflowUtils.getProcessTitle(process)).setHref(
-					url(ActivityMgrPage.class, "processId=" + process.getId())).setColor_gray(
-					!StringUtils.hasText(process.getTitle()));
+			return new LinkElement(WorkflowUtils.getProcessTitle(process))
+					.setHref(url(ActivityMgrPage.class, "processId=" + process.getId()))
+					.setColor_gray(!StringUtils.hasText(process.getTitle()));
 		}
 
-		protected ButtonElement createLogButton(final ComponentParameter cp, final ProcessBean process) {
-			return WorkflowUtils.createLogButton().setOnclick(
-					"$Actions['AbstractWorkflowMgrPage_update_log']('processId=" + process.getId()
-							+ "');");
+		protected ButtonElement createLogButton(final ComponentParameter cp,
+				final ProcessBean process) {
+			return WorkflowUtils.createLogButton()
+					.setOnclick("$Actions['AbstractWorkflowMgrPage_update_log']('processId="
+							+ process.getId() + "');");
 		}
 
 		protected String toOpeHTML(final ComponentParameter cp, final ProcessBean process) {
@@ -159,9 +161,10 @@ public class ProcessMgrPage extends AbstractWorkflowMgrPage {
 						MenuItem.sep(),
 						MenuItem.of($m("AbstractWorkflowMgrPage.0")).setOnclick_act(
 								"AbstractWorkflowMgrPage_status", "processId", "op=suspended"),
-						MenuItem.of(EProcessStatus.abort.toString()).setOnclick_act(
-								"ProcessMgrPage_abort", "processId"), MenuItem.sep(), MenuItem.itemDelete()
-								.setOnclick_act("AbstractWorkflowMgrPage_del", "processId"));
+						MenuItem.of(EProcessStatus.abort.toString())
+								.setOnclick_act("ProcessMgrPage_abort", "processId"),
+						MenuItem.sep(),
+						MenuItem.itemDelete().setOnclick_act("AbstractWorkflowMgrPage_del", "processId"));
 			}
 			return null;
 		}

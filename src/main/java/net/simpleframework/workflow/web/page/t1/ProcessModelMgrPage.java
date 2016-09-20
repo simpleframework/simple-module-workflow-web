@@ -75,21 +75,18 @@ public class ProcessModelMgrPage extends AbstractWorkflowMgrPage {
 	protected TablePagerBean addTablePagerBean(final PageParameter pp) {
 		final TablePagerBean tablePager = (TablePagerBean) addComponentBean(pp,
 				"ProcessModelMgrPage_tbl", TablePagerBean.class).setGroupColumn("gc").setSort(false)
-				.setPagerBarLayout(EPagerBarLayout.none).setContainerId("idProcessModelMgrPage_tbl")
-				.setHandlerClass(ProcessModelTbl.class);
-		tablePager
-				.addColumn(TablePagerColumn.ICON())
+						.setPagerBarLayout(EPagerBarLayout.none)
+						.setContainerId("idProcessModelMgrPage_tbl")
+						.setHandlerClass(ProcessModelTbl.class);
+		tablePager.addColumn(TablePagerColumn.ICON())
 				.addColumn(new TablePagerColumn("modelText", $m("ProcessModelMgrPage.0")))
-				.addColumn(
-						new TablePagerColumn("processCount", $m("ProcessModelMgrPage.1"), 60)
-								.setFilter(false))
-				.addColumn(
-						new TablePagerColumn("userText", $m("ProcessModelMgrPage.2"), 80)
-								.setFilter(false))
-				.addColumn(
-						new TablePagerColumn("version", $m("MyInitiateItemsTPage.4"), 80)
-								.setFilter(false).center()).addColumn(TC_CREATEDATE().setFilter(false))
-				.addColumn(TablePagerColumn.OPE(90));
+				.addColumn(new TablePagerColumn("processCount", $m("ProcessModelMgrPage.1"), 60)
+						.setFilter(false))
+				.addColumn(new TablePagerColumn("userText", $m("ProcessModelMgrPage.2"), 80)
+						.setFilter(false))
+				.addColumn(new TablePagerColumn("version", $m("MyInitiateItemsTPage.4"), 80)
+						.setFilter(false).center())
+				.addColumn(TC_CREATEDATE().setFilter(false)).addColumn(TablePagerColumn.OPE(90));
 		return tablePager;
 	}
 
@@ -147,12 +144,13 @@ public class ProcessModelMgrPage extends AbstractWorkflowMgrPage {
 		};
 
 		@Override
-		protected Map<String, Object> getRowData(final ComponentParameter cp, final Object dataObject) {
+		protected Map<String, Object> getRowData(final ComponentParameter cp,
+				final Object dataObject) {
 			final ProcessModelBean processModel = (ProcessModelBean) dataObject;
 			final EProcessModelStatus status = processModel.getStatus();
 			final Object id = processModel.getId();
-			final LinkElement le = new LinkElement(processModel).setHref(url(ProcessMgrPage.class,
-					"modelId=" + id));
+			final LinkElement le = new LinkElement(processModel)
+					.setHref(url(ProcessMgrPage.class, "modelId=" + id));
 			if (status != EProcessModelStatus.deploy) {
 				le.setColor("#777");
 			}
@@ -199,8 +197,9 @@ public class ProcessModelMgrPage extends AbstractWorkflowMgrPage {
 			return MenuItems.of(
 					MenuItem.of($m("ProcessModelMgrPage.6")).setOnclick_act(
 							"AbstractWorkflowMgrPage_status", "modelId",
-							"op=" + EProcessModelStatus.edit.name()), MenuItem.sep(), MenuItem
-							.itemDelete().setOnclick_act("AbstractWorkflowMgrPage_del", "modelId"));
+							"op=" + EProcessModelStatus.edit.name()),
+					MenuItem.sep(),
+					MenuItem.itemDelete().setOnclick_act("AbstractWorkflowMgrPage_del", "modelId"));
 		}
 
 		@Override

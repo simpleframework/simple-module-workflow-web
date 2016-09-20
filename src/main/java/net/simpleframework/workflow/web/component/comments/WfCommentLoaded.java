@@ -1,6 +1,7 @@
 package net.simpleframework.workflow.web.component.comments;
 
 import static net.simpleframework.common.I18n.$m;
+
 import net.simpleframework.mvc.DefaultPageHandler;
 import net.simpleframework.mvc.IForward;
 import net.simpleframework.mvc.JavascriptForward;

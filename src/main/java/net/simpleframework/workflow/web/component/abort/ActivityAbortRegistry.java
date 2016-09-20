@@ -1,6 +1,7 @@
 package net.simpleframework.workflow.web.component.abort;
 
 import static net.simpleframework.common.I18n.$m;
+
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.component.AbstractComponentBean;
 import net.simpleframework.mvc.component.AbstractComponentRegistry;
@@ -27,18 +28,18 @@ public class ActivityAbortRegistry extends AbstractComponentRegistry {
 	public static final String ACTIVITY_ABORT = "wf_activity_abort";
 
 	@Override
-	public AbstractComponentBean createComponentBean(final PageParameter pp, final Object attriData) {
+	public AbstractComponentBean createComponentBean(final PageParameter pp,
+			final Object attriData) {
 		final ActivityAbortBean activityAbort = (ActivityAbortBean) super.createComponentBean(pp,
 				attriData);
 
 		final ComponentParameter nCP = ComponentParameter.get(pp, activityAbort);
 		final String componentName = nCP.getComponentName();
 
-		final AjaxRequestBean ajaxRequest = pp.addComponentBean(componentName + "_win_page",
-				AjaxRequestBean.class)
-				.setUrlForward(
-						getComponentResourceProvider().getResourceHomePath()
-								+ "/jsp/activity_abort_select.jsp");
+		final AjaxRequestBean ajaxRequest = pp
+				.addComponentBean(componentName + "_win_page", AjaxRequestBean.class)
+				.setUrlForward(getComponentResourceProvider().getResourceHomePath()
+						+ "/jsp/activity_abort_select.jsp");
 		pp.addComponentBean(componentName + "_win", WindowBean.class)
 				.setContentRef(ajaxRequest.getName()).setWidth(300).setHeight(400)
 				.setTitle($m("ActivityAbortRegistry.0"));

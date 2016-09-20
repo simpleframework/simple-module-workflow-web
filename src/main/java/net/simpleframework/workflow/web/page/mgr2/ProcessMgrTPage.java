@@ -54,8 +54,8 @@ public class ProcessMgrTPage extends AbstractWorkflowMgrTPage {
 		addTablePagerBean(pp);
 
 		// 删除
-		addAjaxRequest(pp, "ProcessMgrTPage_del").setHandlerMethod("doDelete").setConfirmMessage(
-				$m("Confirm.Delete"));
+		addAjaxRequest(pp, "ProcessMgrTPage_del").setHandlerMethod("doDelete")
+				.setConfirmMessage($m("Confirm.Delete"));
 
 		// 放弃
 		final AjaxRequestBean ajaxRequest = addAjaxRequest(pp, "ProcessMgrTPage_abortPage",
@@ -67,7 +67,7 @@ public class ProcessMgrTPage extends AbstractWorkflowMgrTPage {
 	protected TablePagerBean addTablePagerBean(final PageParameter pp) {
 		final TablePagerBean tablePager = (TablePagerBean) addTablePagerBean(pp,
 				"ProcessMgrTPage_tbl", _ProcessTbl.class).setPagerBarLayout(EPagerBarLayout.bottom)
-				.setContainerId("idProcessMgrTPage_tbl");
+						.setContainerId("idProcessMgrTPage_tbl");
 		tablePager.addColumn(TablePagerColumn.ICON()).addColumn(AbstractWorkflowMgrPage.TC_TITLE())
 				.addColumn(new TablePagerColumn("userText", $m("ProcessMgrPage.0"), 100))
 				.addColumn(AbstractWorkflowMgrPage.TC_CREATEDATE())
@@ -105,10 +105,8 @@ public class ProcessMgrTPage extends AbstractWorkflowMgrTPage {
 
 	@Override
 	public ElementList getLeftElements(final PageParameter pp) {
-		final ElementList el = ElementList.of(
-				LinkButton.backBtn()
-						.setOnclick(JS.loc(uFactory.getUrl(pp, ProcessModelMgrTPage.class))),
-				SpanElement.SPACE15);
+		final ElementList el = ElementList.of(LinkButton.backBtn().setOnclick(
+				JS.loc(uFactory.getUrl(pp, ProcessModelMgrTPage.class))), SpanElement.SPACE15);
 		return el.appendAll(super.getLeftElements(pp));
 	}
 
@@ -134,10 +132,11 @@ public class ProcessMgrTPage extends AbstractWorkflowMgrTPage {
 		}
 
 		@Override
-		protected ButtonElement createLogButton(final ComponentParameter cp, final ProcessBean process) {
-			return super.createLogButton(cp, process).setOnclick(
-					"$Actions['AbstractWorkflowMgrTPage_update_log']('processId=" + process.getId()
-							+ "');");
+		protected ButtonElement createLogButton(final ComponentParameter cp,
+				final ProcessBean process) {
+			return super.createLogButton(cp, process)
+					.setOnclick("$Actions['AbstractWorkflowMgrTPage_update_log']('processId="
+							+ process.getId() + "');");
 		}
 
 		@Override
@@ -157,9 +156,10 @@ public class ProcessMgrTPage extends AbstractWorkflowMgrTPage {
 						MenuItem.sep(),
 						MenuItem.of($m("AbstractWorkflowMgrPage.0")).setOnclick_act(
 								"AbstractWorkflowMgrTPage_status", "processId", "op=suspended"),
-						MenuItem.of(EProcessStatus.abort.toString()).setOnclick_act(
-								"ProcessMgrTPage_abort", "processId"), MenuItem.sep(), MenuItem
-								.itemDelete().setOnclick_act("ProcessMgrTPage_del", "processId"));
+						MenuItem.of(EProcessStatus.abort.toString())
+								.setOnclick_act("ProcessMgrTPage_abort", "processId"),
+						MenuItem.sep(),
+						MenuItem.itemDelete().setOnclick_act("ProcessMgrTPage_del", "processId"));
 			}
 			return null;
 		}

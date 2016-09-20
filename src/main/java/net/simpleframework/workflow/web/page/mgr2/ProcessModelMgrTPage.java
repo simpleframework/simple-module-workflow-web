@@ -37,20 +37,16 @@ public class ProcessModelMgrTPage extends AbstractWorkflowMgrTPage {
 
 		final TablePagerBean tablePager = (TablePagerBean) addTablePagerBean(pp,
 				"ProcessModelMgrTPage_tbl", ProcessModelTbl.class).setGroupColumn("gc").setSort(false)
-				.setShowCheckbox(false).setPagerBarLayout(EPagerBarLayout.none)
-				.setContainerId("idProcessModelMgrTPage_tbl");
-		tablePager
-				.addColumn(TablePagerColumn.ICON())
+						.setShowCheckbox(false).setPagerBarLayout(EPagerBarLayout.none)
+						.setContainerId("idProcessModelMgrTPage_tbl");
+		tablePager.addColumn(TablePagerColumn.ICON())
 				.addColumn(new TablePagerColumn("modelText", $m("ProcessModelMgrPage.0")))
-				.addColumn(
-						new TablePagerColumn("processCount", $m("ProcessModelMgrPage.1"), 60)
-								.setFilter(false))
-				.addColumn(
-						new TablePagerColumn("userText", $m("ProcessModelMgrPage.2"), 80).center()
-								.setFilter(false))
-				.addColumn(
-						new TablePagerColumn("version", $m("MyInitiateItemsTPage.4"), 80).center()
-								.setFilter(false))
+				.addColumn(new TablePagerColumn("processCount", $m("ProcessModelMgrPage.1"), 60)
+						.setFilter(false))
+				.addColumn(new TablePagerColumn("userText", $m("ProcessModelMgrPage.2"), 80).center()
+						.setFilter(false))
+				.addColumn(new TablePagerColumn("version", $m("MyInitiateItemsTPage.4"), 80).center()
+						.setFilter(false))
 				.addColumn(AbstractWorkflowMgrPage.TC_CREATEDATE().setFilter(false))
 				.addColumn(TablePagerColumn.OPE(80));
 	}
@@ -74,8 +70,8 @@ public class ProcessModelMgrTPage extends AbstractWorkflowMgrTPage {
 			if (org != null) {
 				final ID orgId = org.getId();
 				cp.addFormParameter("orgId", orgId);
-				final List<ProcessModelBean> list = DataQueryUtils.toList(wfpmService
-						.getModelListByDomain(orgId));
+				final List<ProcessModelBean> list = DataQueryUtils
+						.toList(wfpmService.getModelListByDomain(orgId));
 				wfpmService.sort(list);
 				return new ListDataQuery<ProcessModelBean>(list);
 			}
@@ -99,8 +95,8 @@ public class ProcessModelMgrTPage extends AbstractWorkflowMgrTPage {
 		@Override
 		protected String toOpeHTML(final ComponentParameter cp, final ProcessModelBean pm) {
 			final StringBuilder sb = new StringBuilder();
-			sb.append(new ButtonElement($m("ProcessModelMgrTPage.0")).setOnclick(JS.loc(uFactory
-					.getUrl(cp, ProcessMgrTPage.class, "modelId=" + pm.getId()))));
+			sb.append(new ButtonElement($m("ProcessModelMgrTPage.0")).setOnclick(
+					JS.loc(uFactory.getUrl(cp, ProcessMgrTPage.class, "modelId=" + pm.getId()))));
 			return sb.toString();
 		}
 	}

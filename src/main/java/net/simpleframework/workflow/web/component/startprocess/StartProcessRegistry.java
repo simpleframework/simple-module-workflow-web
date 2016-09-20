@@ -1,6 +1,7 @@
 package net.simpleframework.workflow.web.component.startprocess;
 
 import static net.simpleframework.common.I18n.$m;
+
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.component.AbstractComponentBean;
 import net.simpleframework.mvc.component.AbstractComponentRegistry;
@@ -27,7 +28,8 @@ public class StartProcessRegistry extends AbstractComponentRegistry {
 	public static final String STARTPROCESS = "wf_start_process";
 
 	@Override
-	public AbstractComponentBean createComponentBean(final PageParameter pp, final Object attriData) {
+	public AbstractComponentBean createComponentBean(final PageParameter pp,
+			final Object attriData) {
 		final StartProcessBean startProcess = (StartProcessBean) super.createComponentBean(pp,
 				attriData);
 
@@ -35,21 +37,23 @@ public class StartProcessRegistry extends AbstractComponentRegistry {
 		final String componentName = nCP.getComponentName();
 
 		// 启动流程
-		pp.addComponentBean(componentName + "_startProcess", AjaxRequestBean.class).setHandlerClass(
-				StartProcessAction.class);
+		pp.addComponentBean(componentName + "_startProcess", AjaxRequestBean.class)
+				.setHandlerClass(StartProcessAction.class);
 
 		// 路由选择
-		AjaxRequestBean ajaxRequest = pp.addComponentBean(componentName + "__TransitionSelect_page",
-				AjaxRequestBean.class).setUrlForward(
-				getComponentResourceProvider().getResourceHomePath() + "/jsp/transition_select.jsp");
+		AjaxRequestBean ajaxRequest = pp
+				.addComponentBean(componentName + "__TransitionSelect_page", AjaxRequestBean.class)
+				.setUrlForward(getComponentResourceProvider().getResourceHomePath()
+						+ "/jsp/transition_select.jsp");
 		pp.addComponentBean(componentName + "_TransitionSelect", WindowBean.class)
 				.setContentRef(ajaxRequest.getName()).setTitle($m("StartProcessRegistry.0"))
 				.setWidth(320).setHeight(400);
 
 		// 角色选择
-		ajaxRequest = pp.addComponentBean(componentName + "__initiatorSelect_page",
-				AjaxRequestBean.class).setUrlForward(
-				getComponentResourceProvider().getResourceHomePath() + "/jsp/initiator_select.jsp");
+		ajaxRequest = pp
+				.addComponentBean(componentName + "__initiatorSelect_page", AjaxRequestBean.class)
+				.setUrlForward(getComponentResourceProvider().getResourceHomePath()
+						+ "/jsp/initiator_select.jsp");
 		pp.addComponentBean(componentName + "_initiatorSelect", WindowBean.class)
 				.setContentRef(ajaxRequest.getName()).setTitle($m("StartProcessRegistry.1"))
 				.setWidth(320).setHeight(400);

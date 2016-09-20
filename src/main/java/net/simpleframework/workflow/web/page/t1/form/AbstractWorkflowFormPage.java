@@ -1,6 +1,7 @@
 package net.simpleframework.workflow.web.page.t1.form;
 
 import static net.simpleframework.common.I18n.$m;
+
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.TabButton;
 import net.simpleframework.workflow.engine.bean.WorkitemBean;
@@ -26,12 +27,12 @@ public abstract class AbstractWorkflowFormPage extends AbstractFormTemplatePage 
 	}
 
 	protected TabButton createFormTab(final PageParameter pp, final WorkitemBean workitem) {
-		return new TabButton($m("WorkflowFormPage.0")).setHref(uFactory.getUrl(pp,
-				WorkflowFormPage.class, workitem));
+		return new TabButton($m("WorkflowFormPage.0"))
+				.setHref(uFactory.getUrl(pp, WorkflowFormPage.class, workitem));
 	}
 
 	protected TabButton createMonitorTab(final PageParameter pp, final WorkitemBean workitem) {
-		return new TabButton($m("WorkflowFormPage.1")).blank().setHref(
-				uFactory.getUrl(pp, WorkflowMonitorPage.class, workitem));
+		return new TabButton($m("WorkflowFormPage.1")).blank()
+				.setHref(uFactory.getUrl(pp, WorkflowMonitorPage.class, workitem));
 	}
 }

@@ -25,7 +25,8 @@ public class WfCommentRegistry extends AbstractComponentRegistry {
 	public static final String WF_COMMENT = "wf_comment";
 
 	@Override
-	public AbstractComponentBean createComponentBean(final PageParameter pp, final Object attriData) {
+	public AbstractComponentBean createComponentBean(final PageParameter pp,
+			final Object attriData) {
 		final WfCommentBean commentBean = (WfCommentBean) super.createComponentBean(pp, attriData);
 		ComponentHtmlRenderEx.createAjaxRequest(ComponentParameter.get(pp, commentBean));
 		return commentBean;

@@ -34,8 +34,8 @@ public class SubProcessRemotePage extends AbstractWorkflowRemotePage {
 
 				// 子流程变量
 				final KVMap variables = new KVMap();
-				for (final String mapping : StringUtils.split(properties
-						.getProperty(IProcessRemoteHandler.VAR_MAPPINGS))) {
+				for (final String mapping : StringUtils
+						.split(properties.getProperty(IProcessRemoteHandler.VAR_MAPPINGS))) {
 					variables.add(mapping, pp.getLocaleParameter(mapping));
 				}
 
@@ -51,8 +51,8 @@ public class SubProcessRemotePage extends AbstractWorkflowRemotePage {
 		return doJsonForward(new IJsonForwardCallback() {
 			@Override
 			public void doAction(final JsonForward json) {
-				final ProcessBean sProcess = wfpService.getBean(pp
-						.getLocaleParameter(IProcessRemoteHandler.SUB_PROCESSID));
+				final ProcessBean sProcess = wfpService
+						.getBean(pp.getLocaleParameter(IProcessRemoteHandler.SUB_PROCESSID));
 				if (sProcess != null && wfpService.isFinalStatus(sProcess)) {
 					wfpService.doBackToRemote(sProcess);
 				}
@@ -65,8 +65,8 @@ public class SubProcessRemotePage extends AbstractWorkflowRemotePage {
 		return doJsonForward(new IJsonForwardCallback() {
 			@Override
 			public void doAction(final JsonForward json) {
-				final ActivityBean nActivity = wfaService.getBean(pp
-						.getLocaleParameter(IProcessRemoteHandler.SUB_ACTIVITYID));
+				final ActivityBean nActivity = wfaService
+						.getBean(pp.getLocaleParameter(IProcessRemoteHandler.SUB_ACTIVITYID));
 				wfaService.doSubComplete(nActivity, new IMappingVal() {
 					@Override
 					public Object val(final String mapping) {

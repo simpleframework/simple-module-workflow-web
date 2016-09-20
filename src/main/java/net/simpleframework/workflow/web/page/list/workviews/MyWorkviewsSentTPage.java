@@ -52,12 +52,9 @@ public class MyWorkviewsSentTPage extends MyWorkviewsTPage {
 	protected TablePagerBean addTablePagerBean(final PageParameter pp) {
 		final TablePagerBean tablePager = addTablePagerBean(pp, "MyWorkviewsTPage_tbl",
 				MyWorkviewsSentTbl.class);
-		tablePager
-				.addColumn(TC_ICON())
-				.addColumn(TC_TITLE())
-				.addColumn(
-						new TablePagerColumn("rev", $m("MyFinalWorklistTPage.0"), 200).center()
-								.setNowrap(false).setFilterSort(false))
+		tablePager.addColumn(TC_ICON()).addColumn(TC_TITLE())
+				.addColumn(new TablePagerColumn("rev", $m("MyFinalWorklistTPage.0"), 200).center()
+						.setNowrap(false).setFilterSort(false))
 				.addColumn(TC_CREATEDATE().setColumnText($m("MyWorkviewsSentTPage.0")))
 				.addColumn(TablePagerColumn.OPE(70));
 		return tablePager;
@@ -80,7 +77,8 @@ public class MyWorkviewsSentTPage extends MyWorkviewsTPage {
 		}
 
 		@Override
-		protected Map<String, Object> getRowData(final ComponentParameter cp, final Object dataObject) {
+		protected Map<String, Object> getRowData(final ComponentParameter cp,
+				final Object dataObject) {
 			final WorkviewSentBean sent = (WorkviewSentBean) dataObject;
 			final KVMap row = new KVMap();
 			final ImageElement img = createImageMark(cp, sent);
@@ -91,8 +89,8 @@ public class MyWorkviewsSentTPage extends MyWorkviewsTPage {
 					.add("rev", sent.getAttrCache("_rev", new CacheV<String>() {
 						@Override
 						public String get() {
-							final IDataQuery<WorkviewBean> dq = wfvService.getWorkviewsListBySent(sent
-									.getId());
+							final IDataQuery<WorkviewBean> dq = wfvService
+									.getWorkviewsListBySent(sent.getId());
 							if (dq.getCount() > 0) {
 								WorkviewBean workview;
 								int i = 0;
@@ -113,15 +111,15 @@ public class MyWorkviewsSentTPage extends MyWorkviewsTPage {
 
 		protected String toTopicHTML(final ComponentParameter cp, final WorkviewSentBean sent) {
 			final ProcessBean process = wfpService.getBean(sent.getProcessId());
-			return new LinkElement(WorkflowUtils.getProcessTitle(process)).setHref(
-					getWorkviewSentUrl(cp, sent)).toString();
+			return new LinkElement(WorkflowUtils.getProcessTitle(process))
+					.setHref(getWorkviewSentUrl(cp, sent)).toString();
 		}
 
 		protected String toOpeHTML(final ComponentParameter cp, final WorkviewSentBean sent) {
 			final StringBuilder ope = new StringBuilder();
 			if (sent.getWorkviewId() != null) {
-				ope.append(new ButtonElement($m("MyWorkviewsTPage.0")).setOnclick(JS
-						.loc(getWorkviewSentUrl(cp, sent))));
+				ope.append(new ButtonElement($m("MyWorkviewsTPage.0"))
+						.setOnclick(JS.loc(getWorkviewSentUrl(cp, sent))));
 			} else {
 				ope.append(new ButtonElement($m("MyWorkviewsTPage.2"))
 						.setOnclick("$Actions['MyWorkviewsSentTPage_tracing']('workitemId="

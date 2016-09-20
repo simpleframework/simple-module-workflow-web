@@ -40,8 +40,8 @@ import net.simpleframework.workflow.web.page.AbstractWorksTPage;
  *         https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
-public abstract class AbstractProcessWorksHandler extends AbstractScanHandler implements
-		IProcessWorksHandler {
+public abstract class AbstractProcessWorksHandler extends AbstractScanHandler
+		implements IProcessWorksHandler {
 
 	static Map<String, IProcessWorksHandler> regists = new HashMap<String, IProcessWorksHandler>();
 
@@ -79,9 +79,10 @@ public abstract class AbstractProcessWorksHandler extends AbstractScanHandler im
 				dept = pp.getLdept();
 			}
 			if (dept.getParentId() != null && dept.getDeptChildren().size() > 0) {
-				return ElementList.of(new Checkbox("idMyProcessWorks_DeptTPage_children",
-						$m("MyProcessWorksTPage.2"))
-						.setOnchange("$Actions['MyProcessWorksTPage_tbl']('child=' + this.checked);"));
+				return ElementList.of(
+						new Checkbox("idMyProcessWorks_DeptTPage_children", $m("MyProcessWorksTPage.2"))
+								.setOnchange(
+										"$Actions['MyProcessWorksTPage_tbl']('child=' + this.checked);"));
 			}
 		}
 		return null;
@@ -95,13 +96,10 @@ public abstract class AbstractProcessWorksHandler extends AbstractScanHandler im
 	@Override
 	public void doTablePagerInit(final PageParameter pp, final TablePagerBean tablePager,
 			final EProcessWorks qw) {
-		tablePager
-				.addColumn(TablePagerColumn.ICON())
-				.addColumn(AbstractWorksTPage.TC_TITLE())
+		tablePager.addColumn(TablePagerColumn.ICON()).addColumn(AbstractWorksTPage.TC_TITLE())
 				.addColumn(AbstractWorksTPage.TC_PNO())
-				.addColumn(
-						AbstractWorksTPage.TC_USER("userText", $m("ProcessMgrPage.0"))
-								.setTextAlign(ETextAlign.left).setWidth(100))
+				.addColumn(AbstractWorksTPage.TC_USER("userText", $m("ProcessMgrPage.0"))
+						.setTextAlign(ETextAlign.left).setWidth(100))
 				.addColumn(AbstractWorksTPage.TC_CREATEDATE().setWidth(100).setFormat("yy-MM-dd HH:mm"))
 				.addColumn(TablePagerColumn.OPE(105));
 	}
@@ -141,20 +139,21 @@ public abstract class AbstractProcessWorksHandler extends AbstractScanHandler im
 
 		// final String deptTxt =
 		// cp.getPermission().getDept(process.getDeptId()).toString();
-		// sb.append("[").append(SpanElement.color777(deptTxt).setTitle(deptTxt)).append("] ");
-		sb.append(new LinkElement(WorkflowUtils.getProcessTitle(process)).setOnclick(
-				"$Actions['MyProcessWorksTPage_workitem']('processId=" + process.getId() + "');")
+		// sb.append("[").append(SpanElement.color777(deptTxt).setTitle(deptTxt)).append("]
+		// ");
+		sb.append(new LinkElement(WorkflowUtils.getProcessTitle(process))
+				.setOnclick(
+						"$Actions['MyProcessWorksTPage_workitem']('processId=" + process.getId() + "');")
 				.setColor_gray(!StringUtils.hasText(process.getTitle())));
 		return sb.toString();
 	}
 
 	protected String toOpeHTML(final ComponentParameter cp, final ProcessBean process) {
 		final StringBuilder ope = new StringBuilder();
-		ope.append(new ButtonElement($m("MyProcessWorksTPage.1"))
-				.setOnclick("$Actions['MyProcessWorksTPage_detail']('processId=" + process.getId()
-						+ "');"));
-		ope.append(SpanElement.SPACE).append(
-				new ButtonElement($m("MyRunningWorklistTbl.3"))
+		ope.append(new ButtonElement($m("MyProcessWorksTPage.1")).setOnclick(
+				"$Actions['MyProcessWorksTPage_detail']('processId=" + process.getId() + "');"));
+		ope.append(SpanElement.SPACE)
+				.append(new ButtonElement($m("MyRunningWorklistTbl.3"))
 						.setOnclick("$Actions['MyProcessWorksTPage_workitem']('processId="
 								+ process.getId() + "&monitor=true');"));
 		return ope.toString();

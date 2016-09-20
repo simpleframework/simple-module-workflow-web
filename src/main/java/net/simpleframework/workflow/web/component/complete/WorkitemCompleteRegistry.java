@@ -1,6 +1,7 @@
 package net.simpleframework.workflow.web.component.complete;
 
 import static net.simpleframework.common.I18n.$m;
+
 import net.simpleframework.mvc.IForward;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.component.AbstractComponentBean;
@@ -31,25 +32,28 @@ public class WorkitemCompleteRegistry extends AbstractComponentRegistry {
 	public static final String WORKITEMCOMPLETE = "wf_workitem_complete";
 
 	@Override
-	public AbstractComponentBean createComponentBean(final PageParameter pp, final Object attriData) {
-		final WorkitemCompleteBean workitemComplete = (WorkitemCompleteBean) super
-				.createComponentBean(pp, attriData);
+	public AbstractComponentBean createComponentBean(final PageParameter pp,
+			final Object attriData) {
+		final WorkitemCompleteBean workitemComplete = (WorkitemCompleteBean) super.createComponentBean(
+				pp, attriData);
 
 		final ComponentParameter nCP = ComponentParameter.get(pp, workitemComplete);
 		final String componentName = nCP.getComponentName();
 
 		// 手动路由
-		AjaxRequestBean ajaxRequest = pp.addComponentBean(componentName + "_TransitionSelect_page",
-				AjaxRequestBean.class).setUrlForward(
-				getComponentResourceProvider().getResourceHomePath() + "/jsp/transition_select.jsp");
+		AjaxRequestBean ajaxRequest = pp
+				.addComponentBean(componentName + "_TransitionSelect_page", AjaxRequestBean.class)
+				.setUrlForward(getComponentResourceProvider().getResourceHomePath()
+						+ "/jsp/transition_select.jsp");
 		pp.addComponentBean(componentName + "_TransitionSelect", WindowBean.class)
 				.setContentRef(ajaxRequest.getName()).setTitle($m("WorkitemCompleteRegistry.0"))
 				.setHeight(450).setWidth(320);
 
 		// 手动参与者
-		ajaxRequest = pp.addComponentBean(componentName + "_ParticipantSelect_page",
-				AjaxRequestBean.class).setUrlForward(
-				getComponentResourceProvider().getResourceHomePath() + "/jsp/participant_select.jsp");
+		ajaxRequest = pp
+				.addComponentBean(componentName + "_ParticipantSelect_page", AjaxRequestBean.class)
+				.setUrlForward(getComponentResourceProvider().getResourceHomePath()
+						+ "/jsp/participant_select.jsp");
 		pp.addComponentBean(componentName + "_ParticipantSelect", WindowBean.class)
 				.setContentRef(ajaxRequest.getName()).setTitle($m("WorkitemCompleteRegistry.1"))
 				.setHeight(450).setWidth(320);

@@ -122,8 +122,8 @@ public abstract class DoWorkviewUtils implements IWorkflowContextAware {
 		sb.append(" <div class='right'>");
 
 		final StringBuilder js = new StringBuilder();
-		js.append("$Actions['").append(cp.getComponentName()).append("_save']('")
-				.append(toParams(cp)).append("&allowSent=' + $('idDoWorkviewUtils_opt1').checked);");
+		js.append("$Actions['").append(cp.getComponentName()).append("_save']('").append(toParams(cp))
+				.append("&allowSent=' + $('idDoWorkviewUtils_opt1').checked);");
 		sb.append(
 				new ButtonElement($m("DoWorkviewUtils.5")).setHighlight(true).setOnclick(js.toString()))
 				.append(SpanElement.SPACE);

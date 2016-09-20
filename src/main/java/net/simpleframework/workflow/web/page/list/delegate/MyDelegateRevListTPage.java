@@ -1,6 +1,7 @@
 package net.simpleframework.workflow.web.page.list.delegate;
 
 import static net.simpleframework.common.I18n.$m;
+
 import net.simpleframework.ado.query.IDataQuery;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.SpanElement;
@@ -21,8 +22,8 @@ public class MyDelegateRevListTPage extends MyDelegateListTPage {
 
 	@Override
 	protected TablePagerBean addTablePagerBean(final PageParameter pp) {
-		return (TablePagerBean) super.addTablePagerBean(pp).setHandlerClass(
-				MyWorkDelegateRevTbl.class);
+		return (TablePagerBean) super.addTablePagerBean(pp)
+				.setHandlerClass(MyWorkDelegateRevTbl.class);
 	}
 
 	@Override

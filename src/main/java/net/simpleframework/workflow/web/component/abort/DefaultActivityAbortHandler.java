@@ -15,8 +15,8 @@ import net.simpleframework.workflow.web.WorkflowUtils;
  * @author 陈侃(cknet@126.com, 13910090885) https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
-public class DefaultActivityAbortHandler extends AbstractComponentHandler implements
-		IActivityAbortHandler {
+public class DefaultActivityAbortHandler extends AbstractComponentHandler
+		implements IActivityAbortHandler {
 
 	@Override
 	public List<ActivityBean> getActivities(final ComponentParameter cp) {

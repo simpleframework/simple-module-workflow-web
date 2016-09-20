@@ -46,8 +46,8 @@ import net.simpleframework.workflow.web.page.t1.form.WorkflowFormPage;
  *         https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
-public abstract class AbstractDelegateFormPage extends FormTableRowTemplatePage implements
-		IWorkflowPageAware {
+public abstract class AbstractDelegateFormPage extends FormTableRowTemplatePage
+		implements IWorkflowPageAware {
 
 	@Override
 	public String getLabelWidth(final PageParameter pp) {
@@ -72,8 +72,8 @@ public abstract class AbstractDelegateFormPage extends FormTableRowTemplatePage 
 			addFormValidationBean(pp).addValidators(
 					new Validator(EValidatorMethod.required, "#wd_userTxt, #wd_description"));
 
-			addCalendarBean(pp, "WorkitemDelegatePage_cal").setShowTime(true).setDateFormat(
-					"yyyy-MM-dd HH:mm");
+			addCalendarBean(pp, "WorkitemDelegatePage_cal").setShowTime(true)
+					.setDateFormat("yyyy-MM-dd HH:mm");
 
 			// 用户选取
 			addComponentBean(pp, "WorkitemDelegatePage_userSelect", UserSelectBean.class)
@@ -126,10 +126,10 @@ public abstract class AbstractDelegateFormPage extends FormTableRowTemplatePage 
 
 		@Override
 		protected TableRows getTableRows(final PageParameter pp) {
-			final InputElement delegationSource = InputElement.hidden("delegationSource").setText(
-					pp.getParameter("delegationSource"));
-			final InputElement workitemId = InputElement.hidden("workitemId").setText(
-					pp.getParameter("workitemId"));
+			final InputElement delegationSource = InputElement.hidden("delegationSource")
+					.setText(pp.getParameter("delegationSource"));
+			final InputElement workitemId = InputElement.hidden("workitemId")
+					.setText(pp.getParameter("workitemId"));
 
 			final TextButton wd_userTxt = new TextButton("wd_userTxt").setEditable(true)
 					.setHiddenField("wd_userId")
@@ -142,10 +142,12 @@ public abstract class AbstractDelegateFormPage extends FormTableRowTemplatePage 
 
 			final TableRow r1 = new TableRow(new RowField($m("WorkitemDelegateSetPage.0"),
 					delegationSource, workitemId, wd_userTxt).setStarMark(true));
-			final TableRow r2 = new TableRow(new RowField($m("WorkitemDelegateSetPage.1"),
-					wd_startDate), new RowField($m("WorkitemDelegateSetPage.2"), wd_endDate));
-			final TableRow r3 = new TableRow(new RowField($m("WorkitemDelegateSetPage.3"),
-					createDescElement()).setStarMark(true));
+			final TableRow r2 = new TableRow(
+					new RowField($m("WorkitemDelegateSetPage.1"), wd_startDate),
+					new RowField($m("WorkitemDelegateSetPage.2"), wd_endDate));
+			final TableRow r3 = new TableRow(
+					new RowField($m("WorkitemDelegateSetPage.3"), createDescElement())
+							.setStarMark(true));
 			return TableRows.of(r1, r2, r3);
 		}
 	}
@@ -158,8 +160,8 @@ public abstract class AbstractDelegateFormPage extends FormTableRowTemplatePage 
 
 		protected RowField createUser(final PageParameter pp) {
 			final DelegationBean delegation = _getDelegation(pp);
-			return new RowField($m("WorkitemDelegateSetPage.0"), new InputElement().setText(delegation
-					.getUserText()));
+			return new RowField($m("WorkitemDelegateSetPage.0"),
+					new InputElement().setText(delegation.getUserText()));
 		}
 
 		@Override
@@ -184,14 +186,15 @@ public abstract class AbstractDelegateFormPage extends FormTableRowTemplatePage 
 		protected TableRows getTableRows(final PageParameter pp) {
 			final DelegationBean delegation = _getDelegation(pp);
 
-			final TableRow r1 = new TableRow(createUser(pp), new RowField(
-					$m("WorkitemDelegateReceivingPage.0"), new InputElement().setText(delegation
-							.getCreateDate()))).setReadonly(true);
+			final TableRow r1 = new TableRow(createUser(pp),
+					new RowField($m("WorkitemDelegateReceivingPage.0"),
+							new InputElement().setText(delegation.getCreateDate()))).setReadonly(true);
 
-			final TableRow r2 = new TableRow(new RowField($m("WorkitemDelegateSetPage.1"),
-					new InputElement().setText(delegation.getDstartDate())), new RowField(
-					$m("WorkitemDelegateSetPage.2"), new InputElement().setText(delegation
-							.getDcompleteDate()))).setReadonly(true);
+			final TableRow r2 = new TableRow(
+					new RowField($m("WorkitemDelegateSetPage.1"),
+							new InputElement().setText(delegation.getDstartDate())),
+					new RowField($m("WorkitemDelegateSetPage.2"),
+							new InputElement().setText(delegation.getDcompleteDate()))).setReadonly(true);
 
 			final TableRow r3 = new TableRow(new RowField($m("WorkitemDelegateSetPage.3"),
 					InputElement.textarea().setText(delegation.getDescription()))).setReadonly(true);
@@ -204,8 +207,8 @@ public abstract class AbstractDelegateFormPage extends FormTableRowTemplatePage 
 		}
 
 		protected TableRow createRow4(final DelegationBean delegation) {
-			return new TableRow(new RowField($m("WorkitemDelegateSetPage.4"), InputElement.textarea()
-					.setText(delegation.getDescription2()).setReadonly(true)));
+			return new TableRow(new RowField($m("WorkitemDelegateSetPage.4"),
+					InputElement.textarea().setText(delegation.getDescription2()).setReadonly(true)));
 		}
 	}
 
@@ -214,8 +217,8 @@ public abstract class AbstractDelegateFormPage extends FormTableRowTemplatePage 
 		protected void onForward(final PageParameter pp) throws Exception {
 			super.onForward(pp);
 
-			addFormValidationBean(pp).addValidators(
-					new Validator(EValidatorMethod.required, "#wd_description"));
+			addFormValidationBean(pp)
+					.addValidators(new Validator(EValidatorMethod.required, "#wd_description"));
 
 			addAjaxRequest(pp, "WorkitemDelegateReceivingPage_refuse")
 					.setConfirmMessage($m("WorkitemDelegateReceivingPage.4"))
@@ -227,12 +230,8 @@ public abstract class AbstractDelegateFormPage extends FormTableRowTemplatePage 
 		public JavascriptForward onSave(final ComponentParameter cp) throws Exception {
 			final DelegationBean delegation = _getDelegation(cp);
 			wfdService.doAccept(delegation, cp.getParameter("wd_description"));
-			return super
-					.onSave(cp)
-					.append("$Actions.loc('")
-					.append(
-							uFactory.getUrl(cp, WorkflowFormPage.class,
-									wfwService.getBean(delegation.getSourceId()))).append("');");
+			return super.onSave(cp).append("$Actions.loc('").append(uFactory.getUrl(cp,
+					WorkflowFormPage.class, wfwService.getBean(delegation.getSourceId()))).append("');");
 		}
 
 		@Transaction(context = IWorkflowContext.class)
@@ -245,11 +244,10 @@ public abstract class AbstractDelegateFormPage extends FormTableRowTemplatePage 
 		@Override
 		public ElementList getRightElements(final PageParameter pp) {
 			return ElementList.of(
-					SAVE_BTN().setText($m("WorkitemDelegateReceivingPage.1")).removeClassName(
-							"validation"),
-					SpanElement.SPACE,
-					VALIDATION_BTN($m("WorkitemDelegateReceivingPage.2")).setOnclick(
-							"$Actions['WorkitemDelegateReceivingPage_refuse']();"));
+					SAVE_BTN().setText($m("WorkitemDelegateReceivingPage.1"))
+							.removeClassName("validation"),
+					SpanElement.SPACE, VALIDATION_BTN($m("WorkitemDelegateReceivingPage.2"))
+							.setOnclick("$Actions['WorkitemDelegateReceivingPage_refuse']();"));
 		}
 
 		@Override
@@ -260,14 +258,15 @@ public abstract class AbstractDelegateFormPage extends FormTableRowTemplatePage 
 		@Override
 		protected RowField createUser(final PageParameter pp) {
 			final WorkitemBean workitem = WorkflowUtils.getWorkitemBean(pp);
-			return new RowField($m("WorkitemDelegateSetPage.0"), InputElement.hidden("workitemId")
-					.setText(workitem.getId()), new InputElement().setText(workitem.getUserText()));
+			return new RowField($m("WorkitemDelegateSetPage.0"),
+					InputElement.hidden("workitemId").setText(workitem.getId()),
+					new InputElement().setText(workitem.getUserText()));
 		}
 
 		@Override
 		protected TableRow createRow4(final DelegationBean delegation) {
-			return new TableRow(new RowField($m("WorkitemDelegateReceivingPage.3"),
-					createDescElement()));
+			return new TableRow(
+					new RowField($m("WorkitemDelegateReceivingPage.3"), createDescElement()));
 		}
 	}
 

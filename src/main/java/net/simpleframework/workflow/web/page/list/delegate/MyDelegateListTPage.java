@@ -70,8 +70,8 @@ public class MyDelegateListTPage extends AbstractItemsTPage {
 	}
 
 	protected void addAbortComponent(final PageParameter pp) {
-		addAjaxRequest(pp, "DelegateListTPage_abort").setHandlerMethod("doAbort").setConfirmMessage(
-				$m("MyDelegateListTPage.2"));
+		addAjaxRequest(pp, "DelegateListTPage_abort").setHandlerMethod("doAbort")
+				.setConfirmMessage($m("MyDelegateListTPage.2"));
 	}
 
 	protected WindowBean addDelegateView(final PageParameter pp) {
@@ -123,13 +123,14 @@ public class MyDelegateListTPage extends AbstractItemsTPage {
 	}
 
 	protected SpanElement getDelegateTabs(final PageParameter pp) {
-		return createTabsElement(pp, TabButtons.of(
-				new TabButton($m("MyDelegateListTPage.4"), uFactory.getUrl(pp,
-						MyDelegateListTPage.class)),
-				new TabButton($m("MyDelegateListTPage.8"), uFactory.getUrl(pp,
-						MyDelegateRevListTPage.class)),
-				new TabButton($m("MyDelegateListTPage.5"), uFactory.getUrl(pp,
-						UserDelegateListTPage.class))));
+		return createTabsElement(pp,
+				TabButtons.of(
+						new TabButton($m("MyDelegateListTPage.4"),
+								uFactory.getUrl(pp, MyDelegateListTPage.class)),
+						new TabButton($m("MyDelegateListTPage.8"),
+								uFactory.getUrl(pp, MyDelegateRevListTPage.class)),
+						new TabButton($m("MyDelegateListTPage.5"),
+								uFactory.getUrl(pp, UserDelegateListTPage.class))));
 	}
 
 	@Override
@@ -150,20 +151,19 @@ public class MyDelegateListTPage extends AbstractItemsTPage {
 		}
 
 		protected Object toTitle(final DelegationBean delegation, final Object title) {
-			return new LinkElement(title)
-					.setOnclick("$Actions['DelegateListTPage_view']('delegationId=" + delegation.getId()
-							+ "');");
+			return new LinkElement(title).setOnclick(
+					"$Actions['DelegateListTPage_view']('delegationId=" + delegation.getId() + "');");
 		}
 
 		protected String toOpeHTML(final ComponentParameter cp, final DelegationBean delegation) {
 			final StringBuilder sb = new StringBuilder();
 			final Object id = delegation.getId();
 			if (wfdService.isFinalStatus(delegation)) {
-				sb.append(ButtonElement.viewBtn().setOnclick(
-						"$Actions['DelegateListTPage_view']('delegationId=" + id + "');"));
+				sb.append(ButtonElement.viewBtn()
+						.setOnclick("$Actions['DelegateListTPage_view']('delegationId=" + id + "');"));
 			} else {
-				sb.append(ButtonElement.cancelBtn().setOnclick(
-						"$Actions['DelegateListTPage_abort']('delegationId=" + id + "');"));
+				sb.append(ButtonElement.cancelBtn()
+						.setOnclick("$Actions['DelegateListTPage_abort']('delegationId=" + id + "');"));
 			}
 
 			if (isShowDownmenu(cp)) {
@@ -180,8 +180,8 @@ public class MyDelegateListTPage extends AbstractItemsTPage {
 				final DelegationBean delegation) {
 			ImageElement img = null;
 			if (delegation.isTimeoutMark()) {
-				img = AbstractItemsTPage._createImageMark(cp, "status_timeout.png").setTitle(
-						$m("MyDelegateListTPage.6"));
+				img = AbstractItemsTPage._createImageMark(cp, "status_timeout.png")
+						.setTitle($m("MyDelegateListTPage.6"));
 			} else {
 				final EDelegationStatus status = delegation.getStatus();
 				img = AbstractItemsTPage._createImageMark(cp, "status_" + status.name() + ".png")
@@ -191,7 +191,8 @@ public class MyDelegateListTPage extends AbstractItemsTPage {
 		}
 
 		@Override
-		protected Map<String, Object> getRowData(final ComponentParameter cp, final Object dataObject) {
+		protected Map<String, Object> getRowData(final ComponentParameter cp,
+				final Object dataObject) {
 			final DelegationBean delegation = (DelegationBean) dataObject;
 			final WorkitemBean workitem = getWorkitem(delegation);
 			final KVMap row = new KVMap();
@@ -242,7 +243,8 @@ public class MyDelegateListTPage extends AbstractItemsTPage {
 		public MenuItems getContextMenu(final ComponentParameter cp, final MenuBean menuBean,
 				final MenuItem menuItem) {
 			final MenuItems items = MenuItems.of();
-			items.add(MenuItem.itemDelete().setOnclick_act("DelegateListTPage_delete", "delegationId"));
+			items.add(
+					MenuItem.itemDelete().setOnclick_act("DelegateListTPage_delete", "delegationId"));
 			return items;
 		}
 	}

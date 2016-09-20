@@ -46,8 +46,8 @@ public class AbstractWorkflowMgrTPage extends AbstractMgrTPage implements IWorkf
 		if (ref != null && (lPage = getUpdateLogPage()) != null) {
 			final AjaxRequestBean ajaxRequest = addAjaxRequest(pp,
 					"AbstractWorkflowMgrTPage_update_logPage", lPage);
-			return addWindowBean(pp, "AbstractWorkflowMgrTPage_update_log", ajaxRequest)
-					.setHeight(540).setWidth(864);
+			return addWindowBean(pp, "AbstractWorkflowMgrTPage_update_log", ajaxRequest).setHeight(540)
+					.setWidth(864);
 		}
 		return null;
 	}

@@ -1,6 +1,7 @@
 package net.simpleframework.workflow.web.component.workview;
 
 import static net.simpleframework.common.I18n.$m;
+
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.component.AbstractComponentRegistry;
 import net.simpleframework.mvc.component.ComponentBean;
@@ -32,9 +33,10 @@ public class DoWorkviewRegistry extends AbstractComponentRegistry {
 		final ComponentParameter nCP = ComponentParameter.get(pp, doWorkview);
 		final String componentName = nCP.getComponentName();
 
-		final AjaxRequestBean ajaxRequest = pp.addComponentBean(componentName + "_win_page",
-				AjaxRequestBean.class).setUrlForward(
-				getComponentResourceProvider().getResourceHomePath() + "/jsp/workview_select.jsp");
+		final AjaxRequestBean ajaxRequest = pp
+				.addComponentBean(componentName + "_win_page", AjaxRequestBean.class)
+				.setUrlForward(getComponentResourceProvider().getResourceHomePath()
+						+ "/jsp/workview_select.jsp");
 		pp.addComponentBean(componentName + "_win", WindowBean.class)
 				.setContentRef(ajaxRequest.getName()).setWidth(340).setHeight(460)
 				.setTitle($m("DoWorkviewRegistry.0"));

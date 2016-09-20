@@ -1,6 +1,7 @@
 package net.simpleframework.workflow.web.component.comments;
 
 import static net.simpleframework.common.I18n.$m;
+
 import net.simpleframework.mvc.component.AbstractContainerBean;
 import net.simpleframework.workflow.engine.IWorkflowContextAware;
 

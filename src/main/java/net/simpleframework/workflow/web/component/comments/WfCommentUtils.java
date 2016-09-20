@@ -53,8 +53,8 @@ public abstract class WfCommentUtils implements IWorkflowContextAware {
 		final IWfCommentHandler cHdl = (IWfCommentHandler) cp.getComponentHandler();
 		sb.append("<div class='cl_btns clearfix'>");
 		sb.append(" <div class='left'>");
-		sb.append(LinkElement.style2($m("WfCommentUtils.2")).blank()
-				.setHref(cHdl.getMycommentsUrl(cp)));
+		sb.append(
+				LinkElement.style2($m("WfCommentUtils.2")).blank().setHref(cHdl.getMycommentsUrl(cp)));
 		sb.append(" </div>");
 		sb.append(" <div class='right'>");
 		sb.append(ButtonElement.okBtn().setOnclick("wf_comment_okclick();"));
@@ -75,7 +75,8 @@ public abstract class WfCommentUtils implements IWorkflowContextAware {
 		final IDataQuery<WfCommentLog> dq = lService.queryLogs(cp.getLoginId(), logType);
 		WfCommentLog log;
 		while ((log = dq.next()) != null) {
-			sb.append("<div class='litem' onclick='wf_comment_itemclick(this);' ondblclick='wf_comment_itemdblclick(this);'>");
+			sb.append(
+					"<div class='litem' onclick='wf_comment_itemclick(this);' ondblclick='wf_comment_itemdblclick(this);'>");
 			final String ccomment = log.getCcomment();
 			sb.append(" <div class='l1'>").append(HtmlUtils.convertHtmlLines(ccomment));
 			sb.append(InputElement.textarea().setStyle("display:none;").setValue(ccomment));
@@ -92,8 +93,8 @@ public abstract class WfCommentUtils implements IWorkflowContextAware {
 						.setOnclick("wf_comment_itemcopy(this, 'logid=" + log.getId() + "');")
 						.setTitle($m("WfCommentUtils.1")));
 			}
-			sb.append(new SpanElement().setClassName("del").setOnclick(
-					"wf_comment_itemdel(this, 'logid=" + log.getId() + "');"));
+			sb.append(new SpanElement().setClassName("del")
+					.setOnclick("wf_comment_itemdel(this, 'logid=" + log.getId() + "');"));
 			sb.append(" </span>");
 			sb.append("</div>");
 		}

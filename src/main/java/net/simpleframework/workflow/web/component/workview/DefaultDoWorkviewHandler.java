@@ -22,8 +22,8 @@ import net.simpleframework.workflow.web.WorkflowUtils;
  * @author 陈侃(cknet@126.com, 13910090885) https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
-public class DefaultDoWorkviewHandler extends AbstractComponentHandler implements
-		IDoWorkviewHandler {
+public class DefaultDoWorkviewHandler extends AbstractComponentHandler
+		implements IDoWorkviewHandler {
 
 	@Override
 	public JavascriptForward doSent(final ComponentParameter cp, final boolean allowSent,
@@ -46,10 +46,9 @@ public class DefaultDoWorkviewHandler extends AbstractComponentHandler implement
 	protected JavascriptForward createJavascriptForward(final ComponentParameter cp,
 			final List<WorkviewBean> list) {
 		final JavascriptForward js = new JavascriptForward();
-		js.append("alert('")
-				.append(
-						$m("DefaultDoWorkviewHandler.0", new SpanElement(list != null ? list.size() : 0)
-								.setClassName("workview_select_num"))).append("');");
+		js.append("alert('").append($m("DefaultDoWorkviewHandler.0",
+				new SpanElement(list != null ? list.size() : 0).setClassName("workview_select_num")))
+				.append("');");
 		return js;
 	}
 

@@ -10,7 +10,8 @@ import net.simpleframework.mvc.component.IComponentResourceProvider.AbstractComp
  *         https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
-public abstract class AbstractWfComponentResourceProvider extends AbstractComponentResourceProvider {
+public abstract class AbstractWfComponentResourceProvider
+		extends AbstractComponentResourceProvider {
 
 	@Override
 	public String[] getCssPath(final PageParameter pp) {

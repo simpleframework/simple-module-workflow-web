@@ -6,6 +6,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+
+import com.mxgraph.canvas.mxICanvas;
+import com.mxgraph.canvas.mxSvgCanvas;
+import com.mxgraph.canvas.mxVmlCanvas;
+import com.mxgraph.util.mxCellRenderer;
+import com.mxgraph.util.mxCellRenderer.CanvasFactory;
+import com.mxgraph.util.mxConstants;
+import com.mxgraph.util.mxDomUtils;
+import com.mxgraph.util.mxUtils;
+import com.mxgraph.view.mxGraph;
+
 import net.simpleframework.common.StringUtils;
 import net.simpleframework.common.coll.KVMap;
 import net.simpleframework.ctx.common.xml.XmlDocument;
@@ -19,19 +32,6 @@ import net.simpleframework.workflow.engine.bean.ProcessBean;
 import net.simpleframework.workflow.engine.bean.ProcessModelBean;
 import net.simpleframework.workflow.graph.GraphUtils;
 import net.simpleframework.workflow.web.WorkflowUtils;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-
-import com.mxgraph.canvas.mxICanvas;
-import com.mxgraph.canvas.mxSvgCanvas;
-import com.mxgraph.canvas.mxVmlCanvas;
-import com.mxgraph.util.mxCellRenderer;
-import com.mxgraph.util.mxCellRenderer.CanvasFactory;
-import com.mxgraph.util.mxConstants;
-import com.mxgraph.util.mxDomUtils;
-import com.mxgraph.util.mxUtils;
-import com.mxgraph.view.mxGraph;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -83,8 +83,8 @@ public abstract class WorkflowGraphUtils implements IWorkflowContextAware {
 						public mxICanvas createCanvas(final int width, final int height) {
 							final Document document = mxDomUtils.createDocument();
 							final Element root = document.createElement("div");
-							root.setAttribute("style", "position: relative; width:" + width + "px;height:"
-									+ height + "px");
+							root.setAttribute("style",
+									"position: relative; width:" + width + "px;height:" + height + "px");
 							document.appendChild(root);
 							return new mxVmlCanvas(document) {
 								@Override
@@ -93,8 +93,8 @@ public abstract class WorkflowGraphUtils implements IWorkflowContextAware {
 								}
 
 								@Override
-								public Element drawShape(final int x, final int y, final int w,
-										final int h, final Map<String, Object> style) {
+								public Element drawShape(final int x, final int y, final int w, final int h,
+										final Map<String, Object> style) {
 									final Element ele = super.drawShape(x, y, w, h, style);
 									_setShape(ele, style);
 									return ele;
@@ -124,8 +124,8 @@ public abstract class WorkflowGraphUtils implements IWorkflowContextAware {
 						public mxICanvas createCanvas(final int width, final int height) {
 							return new mxSvgCanvas(mxDomUtils.createSvgDocument(width, height)) {
 								@Override
-								public Element drawShape(final int x, final int y, final int w,
-										final int h, final Map<String, Object> style) {
+								public Element drawShape(final int x, final int y, final int w, final int h,
+										final Map<String, Object> style) {
 									final Element ele = super.drawShape(x, y, w, h, style);
 									_setShape(ele, style);
 									return ele;
@@ -166,7 +166,8 @@ public abstract class WorkflowGraphUtils implements IWorkflowContextAware {
 		return ie != null && ie;
 	}
 
-	private static String _getImageForStyle(final PageParameter pp, final Map<String, Object> style) {
+	private static String _getImageForStyle(final PageParameter pp,
+			final Map<String, Object> style) {
 		final String filename = mxUtils.getString(style, mxConstants.STYLE_IMAGE);
 		final StringBuilder sb = new StringBuilder();
 		sb.append(pp.getResourceHomePath(GraphUtils.class)).append("/images");

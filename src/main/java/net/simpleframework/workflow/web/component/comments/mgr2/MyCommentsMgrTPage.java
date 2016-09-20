@@ -55,7 +55,8 @@ public class MyCommentsMgrTPage extends AbstractMgrTPage implements IWorkflowCon
 
 		final TablePagerBean tablePager = (TablePagerBean) addTablePagerBean(pp,
 				"MyCommentsMgrTPage_tbl", MyCommentsTbl.class).setFilter(false).setSort(false)
-				.setPagerBarLayout(EPagerBarLayout.none).setContainerId("idMyCommentsMgrTPage_tbl");
+						.setPagerBarLayout(EPagerBarLayout.none)
+						.setContainerId("idMyCommentsMgrTPage_tbl");
 		tablePager.addColumn(new TablePagerColumn("comment", $m("MyCommentsMgrTPage.1")))
 				.addColumn(TablePagerColumn.DATE("createDate", $m("MyCommentsMgrTPage.2")))
 				.addColumn(TablePagerColumn.OPE(105));
@@ -66,8 +67,8 @@ public class MyCommentsMgrTPage extends AbstractMgrTPage implements IWorkflowCon
 		// 编辑
 		final AjaxRequestBean ajaxRequest = addAjaxRequest(pp, "MyCommentsMgrTPage_editPage",
 				CommentEditPage.class);
-		addWindowBean(pp, "MyCommentsMgrTPage_edit", ajaxRequest)
-				.setTitle($m("MyCommentsMgrTPage.3")).setHeight(280).setWidth(480);
+		addWindowBean(pp, "MyCommentsMgrTPage_edit", ajaxRequest).setTitle($m("MyCommentsMgrTPage.3"))
+				.setHeight(280).setWidth(480);
 
 	}
 
@@ -80,8 +81,8 @@ public class MyCommentsMgrTPage extends AbstractMgrTPage implements IWorkflowCon
 
 	@Override
 	public ElementList getLeftElements(final PageParameter pp) {
-		return ElementList.of(LinkButton.addBtn()
-				.setOnclick("$Actions['MyCommentsMgrTPage_edit']();"));
+		return ElementList
+				.of(LinkButton.addBtn().setOnclick("$Actions['MyCommentsMgrTPage_edit']();"));
 	}
 
 	@Override
@@ -106,7 +107,8 @@ public class MyCommentsMgrTPage extends AbstractMgrTPage implements IWorkflowCon
 		}
 
 		@Override
-		protected Map<String, Object> getRowData(final ComponentParameter cp, final Object dataObject) {
+		protected Map<String, Object> getRowData(final ComponentParameter cp,
+				final Object dataObject) {
 			final WfCommentLog log = (WfCommentLog) dataObject;
 			final KVMap kv = new KVMap();
 			kv.add("comment",
@@ -119,11 +121,11 @@ public class MyCommentsMgrTPage extends AbstractMgrTPage implements IWorkflowCon
 		protected String toOpeHTML(final ComponentParameter cp, final WfCommentLog log) {
 			final StringBuilder sb = new StringBuilder();
 			final Object id = log.getId();
-			sb.append(ButtonElement.editBtn().setOnclick(
-					"$Actions['MyCommentsMgrTPage_edit']('logId=" + id + "');"));
+			sb.append(ButtonElement.editBtn()
+					.setOnclick("$Actions['MyCommentsMgrTPage_edit']('logId=" + id + "');"));
 			sb.append(SpanElement.SPACE);
-			sb.append(ButtonElement.deleteBtn().setOnclick(
-					"$Actions['MyCommentsMgrTPage_delete']('id=" + id + "');"));
+			sb.append(ButtonElement.deleteBtn()
+					.setOnclick("$Actions['MyCommentsMgrTPage_delete']('id=" + id + "');"));
 			return sb.toString();
 		}
 	}
