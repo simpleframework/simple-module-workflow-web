@@ -11,6 +11,8 @@ import net.simpleframework.workflow.web.component.AbstractWfActionBean;
  *         http://www.simpleframework.net
  */
 public class ActivityAbortBean extends AbstractWfActionBean {
+	private static final long serialVersionUID = 3601555925624541852L;
+
 	@Override
 	public boolean isRunImmediately() {
 		return false;

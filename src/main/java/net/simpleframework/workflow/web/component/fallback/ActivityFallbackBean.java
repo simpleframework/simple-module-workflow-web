@@ -10,6 +10,7 @@ import net.simpleframework.workflow.web.component.AbstractWfActionBean;
  *         http://www.simpleframework.net
  */
 public class ActivityFallbackBean extends AbstractWfActionBean {
+	private static final long serialVersionUID = -7087039001663391442L;
 
 	@Override
 	public boolean isRunImmediately() {

@@ -67,4 +67,6 @@ public class WorkitemCompleteBean extends AbstractWfActionBean {
 		final String sClass = super.getHandlerClass();
 		return StringUtils.hasText(sClass) ? sClass : DefaultWorkitemCompleteHandler.class.getName();
 	}
+
+	private static final long serialVersionUID = -166932913518682826L;
 }
