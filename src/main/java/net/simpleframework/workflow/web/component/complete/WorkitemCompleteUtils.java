@@ -17,6 +17,7 @@ import net.simpleframework.common.logger.LogFactory;
 import net.simpleframework.common.object.ObjectUtils;
 import net.simpleframework.common.web.JavascriptUtils;
 import net.simpleframework.ctx.permission.PermissionDept;
+import net.simpleframework.ctx.permission.PermissionUser;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.MVCUtils;
 import net.simpleframework.mvc.PageRequestResponse;
@@ -217,6 +218,10 @@ public abstract class WorkitemCompleteUtils implements IWorkflowContextAware {
 					sb.append("<div class='ritem'>");
 					final String val = participant.toString();
 					Object user = participant.getUser();
+					if (!((PermissionUser) user).isNormal()) {
+						continue;
+					}
+
 					final DelegationBean delegation = wfdService
 							.queryRunningDelegation(participant.getUserId());
 					if (delegation != null) {
