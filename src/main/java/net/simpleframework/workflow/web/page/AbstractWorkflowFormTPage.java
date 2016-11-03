@@ -307,7 +307,7 @@ public abstract class AbstractWorkflowFormTPage extends AbstractFormTableRowTPag
 			final Map<String, Object> variables, final String currentVariable) throws IOException {
 		String html = super.toHtml(pp, pageClass, variables, currentVariable);
 		if (FormTableRowTemplatePage.class.equals(pageClass)) {
-			final StringBuffer js = new StringBuffer();
+			final StringBuilder js = new StringBuilder();
 			js.append("var _form = $('#").append(getBlockId()).append(" form');");
 			js.append("if (_form) {");
 			js.append("	var act = $Actions['AbstractWorkflowFormTPage_autosave'];");
