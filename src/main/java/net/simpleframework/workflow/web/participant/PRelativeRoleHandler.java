@@ -21,8 +21,8 @@ import net.simpleframework.workflow.schema.AbstractTaskNode;
 import net.simpleframework.workflow.schema.TransitionNode;
 import net.simpleframework.workflow.schema.UserNode;
 
-public class PRelativeRoleHandler extends AbstractParticipantHandler
-		implements IOrganizationContextAware {
+public class PRelativeRoleHandler extends AbstractParticipantHandler implements
+		IOrganizationContextAware {
 
 	// 指定前一任务节点node: (默认为前一节点)
 	private final String PARAMS_KEY_NODE = "node";
@@ -37,6 +37,7 @@ public class PRelativeRoleHandler extends AbstractParticipantHandler
 	private final String PARAMS_KEY_dept = "dept";
 	// send=1时，过虑已经过送过的并还在处理中的用户,并且包括后续有处理
 	// send=2时，过虑已经过送过的并还在处理中的用户,不包括后续
+	// send=3时，过虑前一任务实际执行人员
 	private final String PARAMS_KEY_send = "send";
 
 	public enum Level {
@@ -135,8 +136,9 @@ public class PRelativeRoleHandler extends AbstractParticipantHandler
 				Collection<Participant> _participants = wph.getRelativeParticipantsOfLevel(userId,
 						roleId, deptId, variables, r, level);
 
-				if ((_participants == null || _participants.size() == 0) && level.equals(Level.internal)
-						&& null != autoparent && autoparent.equals("true")) {
+				if ((_participants == null || _participants.size() == 0)
+						&& level.equals(Level.internal) && null != autoparent
+						&& autoparent.equals("true")) {
 					// 本部门,自动查找上一部门角色
 					final Department dept = _deptService.getBean(deptId);
 					_participants = wph.getRelativeParticipantsOfLevel(userId, roleId,
@@ -183,6 +185,15 @@ public class PRelativeRoleHandler extends AbstractParticipantHandler
 								}
 							}
 						}
+					}
+				}
+			} else if (StringUtils.hasText(send) && ("3".equals(send))) {
+				// 过虑前一任务实际执行人员
+				for (final Participant p : participants) {
+					if (p.getUserId().equals(workitem.getUserId())
+							&& p.getDeptId().equals(workitem.getDeptId())) {
+						participants.remove(p);
+						break;
 					}
 				}
 			}
