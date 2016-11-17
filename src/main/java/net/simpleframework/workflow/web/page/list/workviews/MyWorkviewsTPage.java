@@ -11,11 +11,15 @@ import net.simpleframework.ado.db.common.ExpressionValue;
 import net.simpleframework.ado.db.common.SQLValue;
 import net.simpleframework.ado.query.IDataQuery;
 import net.simpleframework.common.coll.KVMap;
+import net.simpleframework.ctx.trans.Transaction;
+import net.simpleframework.mvc.IForward;
+import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.ButtonElement;
 import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.ImageElement;
 import net.simpleframework.mvc.common.element.JS;
+import net.simpleframework.mvc.common.element.LinkButton;
 import net.simpleframework.mvc.common.element.LinkElement;
 import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.common.element.TabButton;
@@ -24,6 +28,7 @@ import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
 import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
 import net.simpleframework.mvc.component.ui.pager.db.AbstractDbTablePagerHandler;
+import net.simpleframework.workflow.engine.IWorkflowContext;
 import net.simpleframework.workflow.engine.bean.ProcessBean;
 import net.simpleframework.workflow.engine.bean.WorkviewBean;
 import net.simpleframework.workflow.engine.bean.WorkviewSentBean;
@@ -65,6 +70,26 @@ public class MyWorkviewsTPage extends AbstractItemsTPage {
 						uFactory.getUrl(pp, MyWorkviewsUnreadTPage.class)),
 				new TabButton($m("AbstractItemsTPage.13"),
 						uFactory.getUrl(pp, MyWorkviewsSentTPage.class))));
+	}
+
+	@Transaction(context = IWorkflowContext.class)
+	public IForward doAllread(final ComponentParameter cp) throws Exception {
+		final IDataQuery<WorkviewBean> dq = wfvService.getUnreadWorkviewsList(cp.getLoginId());
+		WorkviewBean workview;
+		while ((workview = dq.next()) != null) {
+			wfvService.doReadMark(workview);
+		}
+		return JavascriptForward.RELOC;
+	}
+
+	@Override
+	public ElementList getLeftElements(final PageParameter pp) {
+		if (MyWorkviewsUnreadTPage.class.isAssignableFrom(getClass())) {
+			addAjaxRequest(pp, "MyWorkviewsTPage_allread").setHandlerMethod("doAllread");
+			return ElementList.of(LinkButton.corner($m("MyWorkviewsTPage.3"))
+					.setOnclick("$Actions['MyWorkviewsTPage_allread']();"));
+		}
+		return super.getLeftElements(pp);
 	}
 
 	@Override
