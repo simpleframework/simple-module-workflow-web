@@ -42,7 +42,7 @@ public class AbstractFormTemplatePage extends T1FormTemplatePage implements IWor
 			final String path = HttpUtils.stripContextPath(pp.request,
 					HttpUtils.stripAbsoluteUrl(referer));
 			// 返回首页
-			if ("".equals(path) || "/".equals(path)) {
+			if ("".equals(path) || "/".equals(path) || "/home".equals(path)) {
 				backBtn.setHref((href = "/"));
 			} else {
 				if (referer.contains("/workflow/")
