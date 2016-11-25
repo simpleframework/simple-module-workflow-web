@@ -226,6 +226,14 @@ public class DefaultWfCommentHandler extends ComponentHandlerEx implements IWfCo
 
 	protected final static String COOKIE_GROUPBY = "wfcomment_groupby";
 
+	protected EGroupBy[] allGroups() {
+		return EGroupBy.values();
+	}
+
+	protected String getGroupText(final EGroupBy g) {
+		return g.toString();
+	}
+
 	@Override
 	public String toHTML(final ComponentParameter cp) {
 		EGroupBy groupBy = cp.getEnumParameter(EGroupBy.class, "groupBy");
@@ -261,12 +269,12 @@ public class DefaultWfCommentHandler extends ComponentHandlerEx implements IWfCo
 		}
 		sb.append(" <div class='right'>");
 		int i = 0;
-		for (final EGroupBy g : EGroupBy.values()) {
+		for (final EGroupBy g : allGroups()) {
 			final String rn = "comments_groupby";
 			if (workitem instanceof WorkviewBean && g == EGroupBy.taskname) {
 				continue;
 			}
-			sb.append(new Radio(rn + i++, g).setName(rn).setChecked(groupBy == g)
+			sb.append(new Radio(rn + i++, getGroupText(g)).setName(rn).setChecked(groupBy == g)
 					.setOnclick("_wf_comment_radio_click('" + g.name() + "');"));
 			sb.append(SpanElement.SPACE);
 		}

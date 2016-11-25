@@ -6,7 +6,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import net.simpleframework.ado.query.IDataQuery;
-import net.simpleframework.common.DateUtils;
 import net.simpleframework.common.web.JavascriptUtils;
 import net.simpleframework.common.web.html.HtmlUtils;
 import net.simpleframework.mvc.PageRequestResponse;
@@ -17,7 +16,6 @@ import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.workflow.engine.IWorkflowContextAware;
 import net.simpleframework.workflow.engine.comment.IWfCommentLogService;
-import net.simpleframework.workflow.engine.comment.IWfCommentService;
 import net.simpleframework.workflow.engine.comment.WfComment;
 import net.simpleframework.workflow.engine.comment.WfCommentLog;
 import net.simpleframework.workflow.engine.comment.WfCommentLog.ELogType;
@@ -25,7 +23,8 @@ import net.simpleframework.workflow.engine.comment.WfCommentLog.ELogType;
 /**
  * Licensed under the Apache License, Version 2.0
  * 
- * @author 陈侃(cknet@126.com, 13910090885) https://github.com/simpleframework
+ * @author 陈侃(cknet@126.com, 13910090885)
+ *         https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
 public abstract class WfCommentUtils implements IWorkflowContextAware {
@@ -70,7 +69,7 @@ public abstract class WfCommentUtils implements IWorkflowContextAware {
 			logType = ELogType.collection;
 		}
 		final StringBuilder sb = new StringBuilder();
-		final IWfCommentService cService = workflowContext.getCommentService();
+		// final IWfCommentService cService = workflowContext.getCommentService();
 		final IWfCommentLogService lService = workflowContext.getCommentLogService();
 		final IDataQuery<WfCommentLog> dq = lService.queryLogs(cp.getLoginId(), logType);
 		WfCommentLog log;
@@ -81,12 +80,12 @@ public abstract class WfCommentUtils implements IWorkflowContextAware {
 			sb.append(" <div class='l1'>").append(HtmlUtils.convertHtmlLines(ccomment));
 			sb.append(InputElement.textarea().setStyle("display:none;").setValue(ccomment));
 			sb.append(" </div>");
-			sb.append(" <div class='l2'>");
-			final WfComment comment = cService.getBean(log.getCommentId());
-			if (comment != null) {
-				sb.append(comment.getTaskname()).append($m("WfCommentUtils.0"));
-			}
-			sb.append(DateUtils.getRelativeDate(log.getCreateDate())).append("</div>");
+			// sb.append(" <div class='l2'>");
+			// final WfComment comment = cService.getBean(log.getCommentId());
+			// if (comment != null) {
+			// sb.append(comment.getTaskname()).append($m("WfCommentUtils.0"));
+			// }
+			// sb.append(DateUtils.getRelativeDate(log.getCreateDate())).append("</div>");
 			sb.append(" <span class='act' style='display:none;'>");
 			if (logType == ELogType.history) {
 				sb.append(new SpanElement().setClassName("copy")
