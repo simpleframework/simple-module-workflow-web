@@ -28,9 +28,14 @@ import net.simpleframework.mvc.common.element.TableRow;
 import net.simpleframework.mvc.common.element.TableRows;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.base.ajaxrequest.AjaxRequestBean;
+import net.simpleframework.mvc.component.ui.menu.MenuBean;
+import net.simpleframework.mvc.component.ui.menu.MenuItem;
+import net.simpleframework.mvc.component.ui.menu.MenuItems;
+import net.simpleframework.mvc.component.ui.pager.AbstractTablePagerSchema;
 import net.simpleframework.mvc.component.ui.pager.EPagerBarLayout;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
 import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
+import net.simpleframework.mvc.component.ui.pager.TablePagerUtils;
 import net.simpleframework.mvc.component.ui.pager.db.AbstractDbTablePagerHandler;
 import net.simpleframework.mvc.template.AbstractTemplatePage;
 import net.simpleframework.workflow.engine.IWorkflowContext;
@@ -59,7 +64,7 @@ public class MyCommentsMgrTPage extends AbstractMgrTPage implements IWorkflowCon
 						.setContainerId("idMyCommentsMgrTPage_tbl");
 		tablePager.addColumn(new TablePagerColumn("comment", $m("MyCommentsMgrTPage.1")))
 				.addColumn(TablePagerColumn.DATE("createDate", $m("MyCommentsMgrTPage.2")))
-				.addColumn(TablePagerColumn.OPE(105));
+				.addColumn(TablePagerColumn.OPE(135));
 
 		// 删除
 		addDeleteAjaxRequest(pp, "MyCommentsMgrTPage_delete");
@@ -70,12 +75,20 @@ public class MyCommentsMgrTPage extends AbstractMgrTPage implements IWorkflowCon
 		addWindowBean(pp, "MyCommentsMgrTPage_edit", ajaxRequest).setTitle($m("MyCommentsMgrTPage.3"))
 				.setHeight(280).setWidth(480);
 
+		// 移动
+		addAjaxRequest(pp, "MyCommentsMgrTPage_move").setHandlerMethod("doMove");
 	}
 
 	@Transaction(context = IWorkflowContext.class)
 	public IForward doDelete(final ComponentParameter cp) {
 		final Object[] ids = StringUtils.split(cp.getParameter("id"));
 		wfclService.delete(ids);
+		return _jsTableRefresh();
+	}
+
+	@Transaction(context = IWorkflowContext.class)
+	public IForward doMove(final ComponentParameter cp) {
+		wfclService.exchange(TablePagerUtils.getExchangeBeans(cp, wfclService));
 		return _jsTableRefresh();
 	}
 
@@ -126,7 +139,23 @@ public class MyCommentsMgrTPage extends AbstractMgrTPage implements IWorkflowCon
 			sb.append(SpanElement.SPACE);
 			sb.append(ButtonElement.deleteBtn()
 					.setOnclick("$Actions['MyCommentsMgrTPage_delete']('id=" + id + "');"));
+			sb.append(AbstractTablePagerSchema.IMG_DOWNMENU);
 			return sb.toString();
+		}
+
+		@Override
+		public MenuItems getContextMenu(final ComponentParameter cp, final MenuBean menuBean,
+				final MenuItem menuItem) {
+			if (menuItem != null) {
+				return null;
+			}
+			final MenuItems items = MenuItems.of();
+			// 移动菜单
+			items.append(MenuItem.TBL_MOVE_UP("MyCommentsMgrTPage_move"));
+			items.append(MenuItem.TBL_MOVE_UP2("MyCommentsMgrTPage_move"));
+			items.append(MenuItem.TBL_MOVE_DOWN("MyCommentsMgrTPage_move"));
+			items.append(MenuItem.TBL_MOVE_DOWN2("MyCommentsMgrTPage_move"));
+			return items;
 		}
 	}
 

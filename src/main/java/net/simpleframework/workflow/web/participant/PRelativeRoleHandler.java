@@ -21,8 +21,8 @@ import net.simpleframework.workflow.schema.AbstractTaskNode;
 import net.simpleframework.workflow.schema.TransitionNode;
 import net.simpleframework.workflow.schema.UserNode;
 
-public class PRelativeRoleHandler extends AbstractParticipantHandler implements
-		IOrganizationContextAware {
+public class PRelativeRoleHandler extends AbstractParticipantHandler
+		implements IOrganizationContextAware {
 
 	// 指定前一任务节点node: (默认为前一节点)
 	private final String PARAMS_KEY_NODE = "node";
@@ -132,14 +132,13 @@ public class PRelativeRoleHandler extends AbstractParticipantHandler implements
 		final WorkflowPermissionHandler wph = (WorkflowPermissionHandler) permission;
 		if (StringUtils.hasText(role)) {
 			final String[] _r = role.split(",");// 多个角色采用豆号分隔
-			Map<String, String> tempmap = new HashMap<String, String>();
+			final Map<String, String> tempmap = new HashMap<String, String>();
 			for (final String r : _r) {
 				Collection<Participant> _participants = wph.getRelativeParticipantsOfLevel(userId,
 						roleId, deptId, variables, r, level);
 
-				if ((_participants == null || _participants.size() == 0)
-						&& level.equals(Level.internal) && null != autoparent
-						&& autoparent.equals("true")) {
+				if ((_participants == null || _participants.size() == 0) && level.equals(Level.internal)
+						&& null != autoparent && autoparent.equals("true")) {
 					// 本部门,自动查找上一部门角色
 					final Department dept = _deptService.getBean(deptId);
 					_participants = wph.getRelativeParticipantsOfLevel(userId, roleId,
@@ -147,8 +146,8 @@ public class PRelativeRoleHandler extends AbstractParticipantHandler implements
 				}
 				if (_participants != null && _participants.size() > 0) {
 					// participants.addAll(_participants);
-					for (Participant ppr : _participants) {
-						String key = "" + ppr.getDeptId() + ppr.getUserId();
+					for (final Participant ppr : _participants) {
+						final String key = "" + ppr.getDeptId() + ppr.getUserId();
 						if (null == tempmap.get(key)) {
 							participants.add(ppr);
 							tempmap.put(key, "1");
