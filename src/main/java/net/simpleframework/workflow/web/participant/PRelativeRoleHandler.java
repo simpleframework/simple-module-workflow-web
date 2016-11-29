@@ -14,15 +14,18 @@ import net.simpleframework.organization.bean.Department;
 import net.simpleframework.workflow.engine.ActivityComplete;
 import net.simpleframework.workflow.engine.EWorkitemStatus;
 import net.simpleframework.workflow.engine.bean.ActivityBean;
+import net.simpleframework.workflow.engine.bean.ProcessBean;
 import net.simpleframework.workflow.engine.bean.WorkitemBean;
 import net.simpleframework.workflow.engine.participant.IParticipantHandler.AbstractParticipantHandler;
 import net.simpleframework.workflow.engine.participant.Participant;
 import net.simpleframework.workflow.schema.AbstractTaskNode;
+import net.simpleframework.workflow.schema.ProcessDocument;
+import net.simpleframework.workflow.schema.ProcessNode;
 import net.simpleframework.workflow.schema.TransitionNode;
 import net.simpleframework.workflow.schema.UserNode;
 
-public class PRelativeRoleHandler extends AbstractParticipantHandler
-		implements IOrganizationContextAware {
+public class PRelativeRoleHandler extends AbstractParticipantHandler implements
+		IOrganizationContextAware {
 
 	// 指定前一任务节点node: (默认为前一节点)
 	private final String PARAMS_KEY_NODE = "node";
@@ -137,8 +140,9 @@ public class PRelativeRoleHandler extends AbstractParticipantHandler
 				Collection<Participant> _participants = wph.getRelativeParticipantsOfLevel(userId,
 						roleId, deptId, variables, r, level);
 
-				if ((_participants == null || _participants.size() == 0) && level.equals(Level.internal)
-						&& null != autoparent && autoparent.equals("true")) {
+				if ((_participants == null || _participants.size() == 0)
+						&& level.equals(Level.internal) && null != autoparent
+						&& autoparent.equals("true")) {
 					// 本部门,自动查找上一部门角色
 					final Department dept = _deptService.getBean(deptId);
 					_participants = wph.getRelativeParticipantsOfLevel(userId, roleId,
@@ -172,8 +176,14 @@ public class PRelativeRoleHandler extends AbstractParticipantHandler
 				final List<ActivityBean> sends = wfaService.getActivities(wfpService.getBean(pid),
 						unode.getId());
 				if (null != sends) {
+					final ProcessBean pb = workflowContext.getProcessService().getBean(
+							preActivity.getProcessId());
+					String yznodes = getProcessNodeProperty(pb, "process.yzyz.nodes");
+					if (StringUtils.isBlank(yznodes))
+						yznodes = "主任阅知";
+
 					for (final ActivityBean act : sends) {
-						if (isFinalRunning(act, "1".equals(send))) {
+						if (isFinalRunning(act, "1".equals(send), yznodes)) {
 							List<WorkitemBean> items = null;
 							if ("2".equals(send)) {
 								items = wfwService.getWorkitems(act, EWorkitemStatus.running);
@@ -208,14 +218,28 @@ public class PRelativeRoleHandler extends AbstractParticipantHandler
 		return participants;
 	}
 
+	protected String getProcessNodeProperty(final ProcessBean pb, final String key) {
+		final ProcessDocument doc = wfpService.getProcessDocument(pb);
+		final ProcessNode node = doc == null ? null : doc.getProcessNode();
+		return node == null ? null : node.getProperty(key);
+	}
+
 	// n是否包括后续
-	private boolean isFinalRunning(final ActivityBean act, final boolean n) {
+	private boolean isFinalRunning(final ActivityBean act, final boolean n, String yznodes) {
 		if (wfaService.isFinalStatus(act)) {
 			if (n) {
 				final List<ActivityBean> nexts = wfaService.getNextActivities(act);
 				if (null != nexts) {
 					for (final ActivityBean next : nexts) {
-						if (isFinalRunning(next, n)) {
+						// 不包括阅知的节点
+						boolean isyznode = false;
+						if (StringUtils.hasText(yznodes)) {
+							AbstractTaskNode nextnode = wfaService.getTaskNode(next);
+							if (null != nextnode
+									&& ("," + yznodes + ",").indexOf("," + nextnode.getName() + ",") > -1)
+								isyznode = true;
+						}
+						if ((!isyznode) && isFinalRunning(next, n, yznodes)) {
 							return true;
 						}
 					}
