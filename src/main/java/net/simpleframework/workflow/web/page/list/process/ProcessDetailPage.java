@@ -36,7 +36,7 @@ public class ProcessDetailPage extends AbstractTemplatePage implements IWorkflow
 		sb.append("<div class='ProcessDetailPage'>");
 		sb.append("<div class='ptitle'>").append(process).append("</div>");
 		sb.append("<table class='form_tbl' cellspacing='1'>");
-		sb.append("  <tr>");
+		sb.append("  <tr style='display: none;'>");
 		sb.append("    <td class='l'>#(MyProcessWorksTPage.13)</td>");
 		sb.append("    <td class='v'>");
 		final LinkedHashSet<String> dtags = new LinkedHashSet<String>();
@@ -72,7 +72,7 @@ public class ProcessDetailPage extends AbstractTemplatePage implements IWorkflow
 		}
 		sb.append("    </td>");
 		sb.append("  </tr>");
-		sb.append("  <tr>");
+		sb.append("  <tr style='display: none;'>");
 		sb.append("    <td class='l'>#(MyProcessWorksTPage.14)</td>");
 		sb.append("    <td class='v'>");
 		final LinkedHashMap<AbstractTaskNode, Integer> wtags = new LinkedHashMap<AbstractTaskNode, Integer>();
@@ -98,6 +98,7 @@ public class ProcessDetailPage extends AbstractTemplatePage implements IWorkflow
 		}
 		sb.append("    </td>");
 		sb.append("  </tr>");
+
 		sb.append("  <tr>");
 		sb.append("    <td class='l'>#(MyProcessWorksTPage.17)</td>");
 		sb.append("    <td class='v'>");
@@ -116,7 +117,8 @@ public class ProcessDetailPage extends AbstractTemplatePage implements IWorkflow
 		}
 		sb.append("    </td>");
 		sb.append("  </tr>");
-		sb.append("  <tr>");
+
+		sb.append("  <tr style='display: none;'>");
 		sb.append("    <td class='l'>#(MyProcessWorksTPage.15)</td>");
 		sb.append("    <td class='v'>");
 		for (final Map.Entry<ID, Integer> e : utags.entrySet()) {
