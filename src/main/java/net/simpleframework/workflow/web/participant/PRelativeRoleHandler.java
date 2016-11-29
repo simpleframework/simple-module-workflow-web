@@ -24,8 +24,8 @@ import net.simpleframework.workflow.schema.ProcessNode;
 import net.simpleframework.workflow.schema.TransitionNode;
 import net.simpleframework.workflow.schema.UserNode;
 
-public class PRelativeRoleHandler extends AbstractParticipantHandler implements
-		IOrganizationContextAware {
+public class PRelativeRoleHandler extends AbstractParticipantHandler
+		implements IOrganizationContextAware {
 
 	// 指定前一任务节点node: (默认为前一节点)
 	private final String PARAMS_KEY_NODE = "node";
@@ -140,9 +140,8 @@ public class PRelativeRoleHandler extends AbstractParticipantHandler implements
 				Collection<Participant> _participants = wph.getRelativeParticipantsOfLevel(userId,
 						roleId, deptId, variables, r, level);
 
-				if ((_participants == null || _participants.size() == 0)
-						&& level.equals(Level.internal) && null != autoparent
-						&& autoparent.equals("true")) {
+				if ((_participants == null || _participants.size() == 0) && level.equals(Level.internal)
+						&& null != autoparent && autoparent.equals("true")) {
 					// 本部门,自动查找上一部门角色
 					final Department dept = _deptService.getBean(deptId);
 					_participants = wph.getRelativeParticipantsOfLevel(userId, roleId,
@@ -176,11 +175,12 @@ public class PRelativeRoleHandler extends AbstractParticipantHandler implements
 				final List<ActivityBean> sends = wfaService.getActivities(wfpService.getBean(pid),
 						unode.getId());
 				if (null != sends) {
-					final ProcessBean pb = workflowContext.getProcessService().getBean(
-							preActivity.getProcessId());
+					final ProcessBean pb = workflowContext.getProcessService()
+							.getBean(preActivity.getProcessId());
 					String yznodes = getProcessNodeProperty(pb, "process.yzyz.nodes");
-					if (StringUtils.isBlank(yznodes))
+					if (StringUtils.isBlank(yznodes)) {
 						yznodes = "主任阅知";
+					}
 
 					for (final ActivityBean act : sends) {
 						if (isFinalRunning(act, "1".equals(send), yznodes)) {
@@ -225,7 +225,7 @@ public class PRelativeRoleHandler extends AbstractParticipantHandler implements
 	}
 
 	// n是否包括后续
-	private boolean isFinalRunning(final ActivityBean act, final boolean n, String yznodes) {
+	private boolean isFinalRunning(final ActivityBean act, final boolean n, final String yznodes) {
 		if (wfaService.isFinalStatus(act)) {
 			if (n) {
 				final List<ActivityBean> nexts = wfaService.getNextActivities(act);
@@ -234,10 +234,11 @@ public class PRelativeRoleHandler extends AbstractParticipantHandler implements
 						// 不包括阅知的节点
 						boolean isyznode = false;
 						if (StringUtils.hasText(yznodes)) {
-							AbstractTaskNode nextnode = wfaService.getTaskNode(next);
+							final AbstractTaskNode nextnode = wfaService.getTaskNode(next);
 							if (null != nextnode
-									&& ("," + yznodes + ",").indexOf("," + nextnode.getName() + ",") > -1)
+									&& ("," + yznodes + ",").indexOf("," + nextnode.getName() + ",") > -1) {
 								isyznode = true;
+							}
 						}
 						if ((!isyznode) && isFinalRunning(next, n, yznodes)) {
 							return true;
