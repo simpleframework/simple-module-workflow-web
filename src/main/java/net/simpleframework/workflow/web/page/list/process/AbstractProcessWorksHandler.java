@@ -99,7 +99,7 @@ public abstract class AbstractProcessWorksHandler extends AbstractScanHandler
 		tablePager.addColumn(TablePagerColumn.ICON()).addColumn(AbstractWorksTPage.TC_TITLE())
 				.addColumn(AbstractWorksTPage.TC_PNO())
 				.addColumn(AbstractWorksTPage.TC_USER("userText", $m("ProcessMgrPage.0"))
-						.setTextAlign(ETextAlign.left).setWidth(100))
+						.setFilter(true).setTextAlign(ETextAlign.left).setWidth(100))
 				.addColumn(AbstractWorksTPage.TC_CREATEDATE().setWidth(100).setFormat("yy-MM-dd HH:mm"))
 				.addColumn(TablePagerColumn.OPE(105));
 	}
