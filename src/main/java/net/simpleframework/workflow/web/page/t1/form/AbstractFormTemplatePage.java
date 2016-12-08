@@ -1,5 +1,8 @@
 package net.simpleframework.workflow.web.page.t1.form;
 
+import java.util.Map;
+
+import net.simpleframework.common.Convert;
 import net.simpleframework.common.StringUtils;
 import net.simpleframework.common.web.HttpUtils;
 import net.simpleframework.ctx.permission.PermissionConst;
@@ -47,6 +50,15 @@ public class AbstractFormTemplatePage extends T1FormTemplatePage implements IWor
 			} else {
 				if (referer.contains("/workflow/")
 						&& !(referer.contains("/workflow/form") || referer.contains("/workflow/view"))) {
+					@SuppressWarnings("unchecked")
+					final Map<String, Object> attri = (Map<String, Object>) pp
+							.getSessionAttr("attributes_MyWorklistTPage_tbl");
+					if (attri != null) {
+						final int pageNumber = Convert.toInt(attri.get("pageNumber"));
+						if (pageNumber > 1) {
+							referer = HttpUtils.addParameters(referer, "pageNumber=" + pageNumber);
+						}
+					}
 					backBtn.setHref((href = referer));
 				}
 			}
