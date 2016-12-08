@@ -21,7 +21,6 @@ import net.simpleframework.mvc.common.element.ETextAlign;
 import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.LinkElement;
 import net.simpleframework.mvc.common.element.SpanElement;
-import net.simpleframework.mvc.common.element.TagElement;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.ui.pager.AbstractTablePagerSchema;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
@@ -96,11 +95,12 @@ public abstract class AbstractProcessWorksHandler extends AbstractScanHandler
 	@Override
 	public void doTablePagerInit(final PageParameter pp, final TablePagerBean tablePager,
 			final EProcessWorks qw) {
-		tablePager.addColumn(TablePagerColumn.ICON()).addColumn(AbstractWorksTPage.TC_TITLE())
-				.addColumn(AbstractWorksTPage.TC_PNO())
+		tablePager.addColumn(TablePagerColumn.ICON())
+				.addColumn(AbstractWorksTPage.TC_PNO().setWidth(150))
+				.addColumn(AbstractWorksTPage.TC_TITLE())
 				.addColumn(AbstractWorksTPage.TC_USER("userText", $m("ProcessMgrPage.0"))
-						.setFilter(true).setTextAlign(ETextAlign.left).setWidth(100))
-				.addColumn(AbstractWorksTPage.TC_CREATEDATE().setWidth(100).setFormat("yy-MM-dd HH:mm"))
+						.setFilter(true).setTextAlign(ETextAlign.left).setWidth(80))
+				.addColumn(AbstractWorksTPage.TC_CREATEDATE().setWidth(80).setFormat("yy-MM-dd"))
 				.addColumn(TablePagerColumn.OPE(105));
 	}
 
@@ -125,8 +125,8 @@ public abstract class AbstractProcessWorksHandler extends AbstractScanHandler
 	protected String toUserHTML(final ComponentParameter cp, final ProcessBean process) {
 		final StringBuilder sb = new StringBuilder();
 		sb.append(SpanElement.color555(process.getUserText()));
-		sb.append(TagElement.br());
-		sb.append(SpanElement.color999(cp.getPermission().getDept(process.getDeptId())));
+		// sb.append(TagElement.br());
+		// sb.append(SpanElement.color999(cp.getPermission().getDept(process.getDeptId())));
 		return sb.toString();
 	}
 
