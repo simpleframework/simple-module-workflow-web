@@ -21,6 +21,7 @@ import net.simpleframework.common.StringUtils;
 import net.simpleframework.common.coll.ArrayUtils;
 import net.simpleframework.common.coll.KVMap;
 import net.simpleframework.common.object.NamedObject;
+import net.simpleframework.common.web.html.HtmlEncoder;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.AbstractElement;
 import net.simpleframework.mvc.common.element.ButtonElement;
@@ -367,17 +368,16 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 
 		AbstractElement<?> tEle;
 		final ProcessBean process = WorkflowUtils.getProcessBean(pp, workitem);
+		final String title = HtmlEncoder.text(WorkflowUtils.getProcessTitle(process));
 		if (isRev(pp, workitem)) {
-			final String txt = WorkflowUtils.getProcessTitle(process) + " ("
-					+ $m("MyRunningWorklistTbl.25") + ")";
+			final String txt = title + " (" + $m("MyRunningWorklistTbl.25") + ")";
 			if (linklist) {
 				tEle = new LinkElement(txt).setHref(uFactory.getUrl(pp, MyRunningWorklistTPage.class));
 			} else {
 				tEle = new SpanElement(txt);
 			}
 		} else {
-			tEle = new LinkElement(WorkflowUtils.getProcessTitle(process))
-					.setStrong(!workitem.isReadMark())
+			tEle = new LinkElement(title).setStrong(!workitem.isReadMark())
 					.setOnclick(JS.loc(uFactory.getUrl(pp, WorkflowFormPage.class, workitem)));
 		}
 		sb.append(tEle.setColor_gray(!StringUtils.hasText(process.getTitle())));
