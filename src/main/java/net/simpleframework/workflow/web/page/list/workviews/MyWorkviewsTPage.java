@@ -58,16 +58,16 @@ public class MyWorkviewsTPage extends AbstractItemsTPage {
 		tablePager.addColumn(TC_ICON()).addColumn(TC_TITLE())
 				.addColumn(new TablePagerColumn("sent", $m("MyRunningWorklistTPage.0"), 120).center()
 						.setFilterSort(false))
-				.addColumn(TC_CREATEDATE().setColumnText($m("MyRunningWorklistTPage.1")))
+				.addColumn(TC_CREATEDATE().setColumnText($m("MyRunningWorklistTPage.1")).setWidth(120))
 				.addColumn(TablePagerColumn.OPE(70));
 		return tablePager;
 	}
 
 	static SpanElement getStatTabs(final PageParameter pp) {
 		return createTabsElement(pp, TabButtons.of(
-				new TabButton($m("AbstractItemsTPage.5"), uFactory.getUrl(pp, MyWorkviewsTPage.class)),
 				new TabButton($m("AbstractItemsTPage.14"),
 						uFactory.getUrl(pp, MyWorkviewsUnreadTPage.class)),
+				new TabButton($m("AbstractItemsTPage.5"), uFactory.getUrl(pp, MyWorkviewsTPage.class)),
 				new TabButton($m("AbstractItemsTPage.13"),
 						uFactory.getUrl(pp, MyWorkviewsSentTPage.class))));
 	}
