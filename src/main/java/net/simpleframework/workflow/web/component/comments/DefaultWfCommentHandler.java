@@ -18,7 +18,6 @@ import net.simpleframework.common.StringUtils;
 import net.simpleframework.common.coll.ArrayUtils;
 import net.simpleframework.common.web.html.HtmlConst;
 import net.simpleframework.common.web.html.HtmlUtils;
-import net.simpleframework.ctx.permission.IPermissionHandler;
 import net.simpleframework.ctx.permission.PermissionDept;
 import net.simpleframework.ctx.permission.PermissionUser;
 import net.simpleframework.mvc.PageParameter;
@@ -159,12 +158,11 @@ public class DefaultWfCommentHandler extends ComponentHandlerEx implements IWfCo
 			}
 		}
 
-		final IPermissionHandler phdl = pp.getPermission();
 		WfComment comment;
 		while ((comment = dq.next()) != null) {
 			Object key = null;
 			if (groupBy == EGroupBy.dept) {
-				final PermissionDept dept = phdl.getDept(comment.getDeptId());
+				final PermissionDept dept = getDept(pp, comment);
 				if (dept == null) {
 					continue;
 				}
@@ -222,6 +220,10 @@ public class DefaultWfCommentHandler extends ComponentHandlerEx implements IWfCo
 			return _data;
 		}
 		return data;
+	}
+
+	protected PermissionDept getDept(final PageParameter pp, final WfComment comment) {
+		return pp.getDept(comment.getDeptId());
 	}
 
 	protected final static String COOKIE_GROUPBY = "wfcomment_groupby";
