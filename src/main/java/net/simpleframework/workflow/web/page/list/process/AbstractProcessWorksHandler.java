@@ -44,6 +44,11 @@ public abstract class AbstractProcessWorksHandler extends AbstractScanHandler
 		implements IProcessWorksHandler {
 
 	static Map<String, IProcessWorksHandler> regists = new HashMap<String, IProcessWorksHandler>();
+	static IProcessWorksHandler _instance;
+
+	public static void setDefaultProcessWorksHandler(final IProcessWorksHandler instance) {
+		_instance = instance;
+	}
 
 	@Override
 	public void onScan(final IApplicationContext application) throws Exception {
@@ -181,7 +186,10 @@ public abstract class AbstractProcessWorksHandler extends AbstractScanHandler
 			hdl = AbstractProcessWorksHandler.regists.get(pm.getModelName());
 		}
 		if (hdl == null) {
-			hdl = DefaultProcessWorksHandler.instance;
+			if (_instance == null) {
+				_instance = new DefaultProcessWorksHandler();
+			}
+			hdl = _instance;
 		}
 		return hdl;
 	}

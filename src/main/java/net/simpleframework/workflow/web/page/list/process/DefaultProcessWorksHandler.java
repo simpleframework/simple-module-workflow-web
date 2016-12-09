@@ -9,8 +9,6 @@ package net.simpleframework.workflow.web.page.list.process;
  */
 public class DefaultProcessWorksHandler extends AbstractProcessWorksHandler {
 
-	static IProcessWorksHandler instance = new DefaultProcessWorksHandler();
-
 	@Override
 	public String[] getModelNames() {
 		return null;
