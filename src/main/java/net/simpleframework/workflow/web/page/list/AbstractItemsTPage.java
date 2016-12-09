@@ -31,7 +31,8 @@ import net.simpleframework.workflow.web.page.list.workviews.MyWorkviewsTPage;
 /**
  * Licensed under the Apache License, Version 2.0
  * 
- * @author 陈侃(cknet@126.com, 13910090885) https://github.com/simpleframework
+ * @author 陈侃(cknet@126.com, 13910090885)
+ *         https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
 public abstract class AbstractItemsTPage extends AbstractWorksTPage {
@@ -44,7 +45,12 @@ public abstract class AbstractItemsTPage extends AbstractWorksTPage {
 
 	public CategoryItem createCategoryItem(final PageParameter pp, final String text,
 			final Class<? extends AbstractItemsTPage> mClass) {
-		return new CategoryItem(text).setHref(uFactory.getUrl(pp, mClass))
+		return createCategoryItem(pp, text, mClass, null);
+	}
+
+	public CategoryItem createCategoryItem(final PageParameter pp, final String text,
+			final Class<? extends AbstractItemsTPage> mClass, final String params) {
+		return new CategoryItem(text).setHref(uFactory.getUrl(pp, mClass, params))
 				.setSelected(mClass.isAssignableFrom(getOriginalClass()));
 	}
 
@@ -79,8 +85,9 @@ public abstract class AbstractItemsTPage extends AbstractWorksTPage {
 	}
 
 	public CategoryItem createCategoryItem_mywork_complete(final PageParameter pp) {
-		return createCategoryItem(pp, $m("AbstractItemsTPage.1"), MyFinalWorklistTPage.class)
-				.setIconClass(getIcon(pp, "my_work_complete.png"));
+		// $m("AbstractItemsTPage.1")
+		return createCategoryItem(pp, $m("MyRunningWorklistTbl.15"), MyFinalWorklistTPage.class,
+				"retake=true").setIconClass(getIcon(pp, "my_work_complete.png"));
 	}
 
 	public CategoryItem createCategoryItem_delegate(final PageParameter pp) {

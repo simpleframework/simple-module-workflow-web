@@ -123,15 +123,15 @@ public class MyFinalWorklistTPage extends MyRunningWorklistTPage {
 	public ElementList getLeftElements(final PageParameter pp) {
 		final ElementList el = ElementList.of(
 				LinkButton.menu($m("MyRunningWorklistTbl.14")).setId("idMyWorklistTPage_groupMenu"));
-		el.add(SpanElement.SPACE);
-		el.add(LinkButton.of($m("MyRunningWorklistTPage.17"))
-				.setOnclick("$Actions['MyWorklistTPage_pmSelected']();"));
-		el.add(SpanElement.SPACE);
-		el.add(LinkButton.of($m("MyRunningWorklistTbl.15"))
-				.setOnclick("$Actions.reloc('retake=true');"));
-		el.add(SpanElement.SPACE);
-		el.add(LinkButton.of($m("MyRunningWorklistTbl.22"))
-				.setOnclick("$Actions.reloc('delegation=true');"));
+		// el.add(SpanElement.SPACE);
+		// el.add(LinkButton.of($m("MyRunningWorklistTPage.17"))
+		// .setOnclick("$Actions['MyWorklistTPage_pmSelected']();"));
+		// el.add(SpanElement.SPACE);
+		// el.add(LinkButton.of($m("MyRunningWorklistTbl.15"))
+		// .setOnclick("$Actions.reloc('retake=true');"));
+		// el.add(SpanElement.SPACE);
+		// el.add(LinkButton.of($m("MyRunningWorklistTbl.22"))
+		// .setOnclick("$Actions.reloc('delegation=true');"));
 		return el;
 	}
 
