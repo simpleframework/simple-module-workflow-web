@@ -15,6 +15,7 @@ import net.simpleframework.ctx.IApplicationContext;
 import net.simpleframework.ctx.hdl.AbstractScanHandler;
 import net.simpleframework.ctx.permission.PermissionDept;
 import net.simpleframework.mvc.PageParameter;
+import net.simpleframework.mvc.common.element.AbstractElement;
 import net.simpleframework.mvc.common.element.ButtonElement;
 import net.simpleframework.mvc.common.element.Checkbox;
 import net.simpleframework.mvc.common.element.ETextAlign;
@@ -101,7 +102,7 @@ public abstract class AbstractProcessWorksHandler extends AbstractScanHandler
 				.addColumn(AbstractWorksTPage.TC_USER("userText", $m("ProcessMgrPage.0"))
 						.setFilter(true).setTextAlign(ETextAlign.left).setWidth(80))
 				.addColumn(AbstractWorksTPage.TC_CREATEDATE().setWidth(80).setFormat("yy-MM-dd"))
-				.addColumn(TablePagerColumn.OPE(105));
+				.addColumn(TablePagerColumn.OPE(115));
 	}
 
 	@Override
@@ -148,14 +149,23 @@ public abstract class AbstractProcessWorksHandler extends AbstractScanHandler
 		return sb.toString();
 	}
 
+	protected AbstractElement<?> createDetailBtn(final PageParameter pp, final ProcessBean process) {
+		return new ButtonElement($m("MyProcessWorksTPage.1")).setOnclick(
+				"$Actions['MyProcessWorksTPage_detail']('processId=" + process.getId() + "');");
+	}
+
+	protected AbstractElement<?> createMonitorBtn(final PageParameter pp,
+			final ProcessBean process) {
+		return new ButtonElement($m("MyRunningWorklistTbl.3"))
+				.setOnclick("$Actions['MyProcessWorksTPage_workitem']('processId=" + process.getId()
+						+ "&monitor=true');");
+	}
+
 	protected String toOpeHTML(final ComponentParameter cp, final ProcessBean process) {
 		final StringBuilder ope = new StringBuilder();
-		ope.append(new ButtonElement($m("MyProcessWorksTPage.1")).setOnclick(
-				"$Actions['MyProcessWorksTPage_detail']('processId=" + process.getId() + "');"));
-		ope.append(SpanElement.SPACE)
-				.append(new ButtonElement($m("MyRunningWorklistTbl.3"))
-						.setOnclick("$Actions['MyProcessWorksTPage_workitem']('processId="
-								+ process.getId() + "&monitor=true');"));
+		ope.append(createDetailBtn(cp, process));
+		ope.append(SpanElement.SPACE);
+		ope.append(createMonitorBtn(cp, process));
 		return ope.toString();
 	}
 
