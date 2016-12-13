@@ -139,6 +139,10 @@
   max-width: 90px;
 }
 
+.MyProcessWorksTPage .col1 .pgroup span:HOVER {
+  color: #666;
+}
+
 .MyProcessWorksTPage .col1 .pitem a {
   color: #444;
 }

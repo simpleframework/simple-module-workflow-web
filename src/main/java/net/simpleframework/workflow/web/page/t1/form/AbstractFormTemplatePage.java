@@ -36,6 +36,7 @@ public class AbstractFormTemplatePage extends T1FormTemplatePage implements IWor
 		return el;
 	}
 
+	@SuppressWarnings("unchecked")
 	public LinkButton getBackBtn(final PageParameter pp) {
 		final LinkButton backBtn = LinkButton.backBtn();
 
@@ -50,9 +51,13 @@ public class AbstractFormTemplatePage extends T1FormTemplatePage implements IWor
 			} else {
 				if (referer.contains("/workflow/")
 						&& !(referer.contains("/workflow/form") || referer.contains("/workflow/view"))) {
-					@SuppressWarnings("unchecked")
-					final Map<String, Object> attri = (Map<String, Object>) pp
+					referer = HttpUtils.addParameters(referer, "pageNumber=__del");
+					Map<String, Object> attri = (Map<String, Object>) pp
 							.getSessionAttr("attributes_MyWorklistTPage_tbl");
+					if (attri == null) {
+						attri = (Map<String, Object>) pp
+								.getSessionAttr("attributes_MyProcessWorksTPage_tbl");
+					}
 					if (attri != null) {
 						final int pageNumber = Convert.toInt(attri.get("pageNumber"));
 						if (pageNumber > 1) {

@@ -298,13 +298,11 @@ public class MyProcessWorksTPage extends AbstractWorksTPage {
 				if (i++ == 0) {
 					sb.append(" style='border-top: 0'");
 				}
-				sb.append(">").append(new SpanElement(e2.getKey()));
+				sb.append(">").append(new SpanElement(e2.getKey()).setOnclick(""));
 				for (final ProcessModelBean pm : e2.getValue()) {
 					sb.append("<div class='pitem'>");
-					sb.append(
-							new LinkElement(WorkflowUtils.getShortMtext(pm)).setOnclick("$Actions.loc('"
-									+ uFactory.getUrl(pp, MyProcessWorksTPage.class, "modelId=" + pm.getId())
-									+ "');"));
+					sb.append(new LinkElement(WorkflowUtils.getShortMtext(pm)).setOnclick(JS.loc(
+							uFactory.getUrl(pp, MyProcessWorksTPage.class, "modelId=" + pm.getId()))));
 					sb.append("</div>");
 				}
 				sb.append("</div>");
