@@ -1,5 +1,7 @@
 package net.simpleframework.workflow.web.component.comments;
 
+import java.util.Date;
+
 import net.simpleframework.mvc.DefaultPageHandler;
 import net.simpleframework.mvc.IForward;
 import net.simpleframework.mvc.JavascriptForward;
@@ -36,7 +38,11 @@ public class WfCommentEditLoaded extends DefaultPageHandler implements IWorkflow
 		public IForward doSave(final ComponentParameter cp) throws Exception {
 			final WfComment comment = wfcService.getBean(cp.getParameter("commentId"));
 			comment.setCcomment(cp.getParameter("ce_ccomment"));
-			wfcService.update(new String[] { "ccomment" }, comment);
+			final Date date = cp.getDateParameter("ce_cdate");
+			if (date != null) {
+				comment.setCreateDate(date);
+			}
+			wfcService.update(new String[] { "createdate", "ccomment" }, comment);
 			return JavascriptForward.RELOC;
 		}
 	}

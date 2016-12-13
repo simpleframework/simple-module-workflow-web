@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import net.simpleframework.ado.query.IDataQuery;
+import net.simpleframework.common.Convert;
 import net.simpleframework.common.web.JavascriptUtils;
 import net.simpleframework.common.web.html.HtmlUtils;
 import net.simpleframework.mvc.PageRequestResponse;
@@ -107,7 +108,10 @@ public abstract class WfCommentUtils implements IWorkflowContextAware {
 		sb.append(InputElement.hidden("commentId").setVal(comment.getId()));
 		sb.append("<div class='c'>");
 		sb.append(" <div class='ta'>")
-				.append(InputElement.textarea("ce_ccomment").setRows(10).setText(comment.getCcomment()))
+				.append(InputElement.textarea("ce_ccomment").setRows(7).setText(comment.getCcomment()))
+				.append("</div>");
+		sb.append(" <br><div class='txt-wrap'>").append(
+				new InputElement("ce_cdate").setText(Convert.toDateTimeString(comment.getCreateDate())))
 				.append("</div>");
 		sb.append("</div>");
 		sb.append("<div class='b'>");
