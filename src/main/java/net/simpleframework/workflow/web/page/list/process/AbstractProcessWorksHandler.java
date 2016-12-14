@@ -103,7 +103,7 @@ public abstract class AbstractProcessWorksHandler extends AbstractScanHandler
 			final EProcessWorks qw) {
 		tablePager.addColumn(TablePagerColumn.ICON())
 				.addColumn(AbstractWorksTPage.TC_PNO().setWidth(150))
-				.addColumn(AbstractWorksTPage.TC_TITLE().setLblStyle("font-size: 9pt;"))
+				.addColumn(AbstractWorksTPage.TC_TITLE())
 				.addColumn(AbstractWorksTPage.TC_USER("userText", $m("ProcessMgrPage.0"))
 						.setFilter(true).setTextAlign(ETextAlign.left).setWidth(80))
 				.addColumn(AbstractWorksTPage.TC_CREATEDATE().setWidth(80).setFormat("yy-MM-dd"))
