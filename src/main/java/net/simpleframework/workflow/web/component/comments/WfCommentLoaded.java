@@ -31,7 +31,7 @@ public class WfCommentLoaded extends DefaultPageHandler implements IWorkflowCont
 		pp.addComponentBean(commentName + "_logPage", AjaxRequestBean.class).setUrlForward(
 				rpath + "/jsp/wf_comment_log.jsp?" + WfCommentUtils.BEAN_ID + "=" + nCP.hashId());
 		pp.addComponentBean(commentName + "_log_popup", WindowBean.class)
-				.setContentRef(commentName + "_logPage").setPopup(true)
+				.setContentRef(commentName + "_logPage").setPopup(true).setDestroyOnClose(false)
 				.setTitle($m("WfCommentLoaded.0")).setHeight(450).setWidth(340);
 
 		if (pp.isLmember(nCP.getBeanProperty("managerRole"))) {
