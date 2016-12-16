@@ -39,16 +39,21 @@
     if (!o) {
       alert('#(wf_comment_log.4)');
     } else {
-      wf_comment_itemdblclick(o);
+      wf_comment_itemdblclick(o, true);
     }
   }
   
-  function wf_comment_itemdblclick(o) {
+  function wf_comment_itemdblclick(o, close) {
     var act = $Actions['<%=commentName%>_log_popup'];
     var ta = $(act.trigger).up(".wf_comment").down("textarea");
-    $Actions.setValue(ta, ta.value + $(o).down(".l1 textarea").value);
+    var val = $(o).down(".l1 textarea").value;
+    if (!ta.value.endsWith(val)) {
+      $Actions.setValue(ta, ta.value + val);
+    }
     wf_comment_ta_valchange(ta);
-    act.close();
+    if (close) {
+   		act.close();
+    }
   }
   
   function wf_comment_itemdel(o, params) {
