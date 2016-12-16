@@ -15,6 +15,8 @@ import net.simpleframework.workflow.web.page.IWorkflowPageAware;
  */
 public interface IWfCommentHandler extends IComponentHandler, IWorkflowPageAware {
 
+	void onComponentsCreated(ComponentParameter cp);
+
 	/**
 	 * 查询意见列表
 	 * 

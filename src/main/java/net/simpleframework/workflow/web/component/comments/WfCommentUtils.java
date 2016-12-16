@@ -75,8 +75,8 @@ public abstract class WfCommentUtils implements IWorkflowContextAware {
 		final IDataQuery<WfCommentLog> dq = lService.queryLogs(cp.getLoginId(), logType);
 		WfCommentLog log;
 		while ((log = dq.next()) != null) {
-			sb.append(
-					"<div class='litem' onclick='wf_comment_itemclick(this);' ondblclick='wf_comment_itemdblclick(this);'>");
+			// ondblclick='wf_comment_itemdblclick(this);'
+			sb.append("<div class='litem' onclick='wf_comment_itemclick(this);'>");
 			final String ccomment = log.getCcomment();
 			sb.append(" <div class='l1'>").append(HtmlUtils.convertHtmlLines(ccomment));
 			sb.append(InputElement.textarea().setStyle("display:none;").setValue(ccomment));
