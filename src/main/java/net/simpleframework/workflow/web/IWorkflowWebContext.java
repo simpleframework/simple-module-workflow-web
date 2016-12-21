@@ -2,6 +2,7 @@ package net.simpleframework.workflow.web;
 
 import net.simpleframework.ctx.IModuleRef;
 import net.simpleframework.mvc.PageParameter;
+import net.simpleframework.mvc.component.ext.userselect.DefaultUserSelectHandler;
 import net.simpleframework.workflow.engine.IWorkflowContext;
 
 /**
@@ -38,4 +39,6 @@ public interface IWorkflowWebContext extends IWorkflowContext {
 	 * @return
 	 */
 	String getProcessWorks_OrgRole(PageParameter pp);
+
+	Class<? extends DefaultUserSelectHandler> getDelegate_UserSelectHandler(PageParameter pp);
 }

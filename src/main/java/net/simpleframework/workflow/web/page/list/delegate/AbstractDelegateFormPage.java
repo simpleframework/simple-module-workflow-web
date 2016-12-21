@@ -35,6 +35,7 @@ import net.simpleframework.workflow.engine.EDelegationSource;
 import net.simpleframework.workflow.engine.IWorkflowContext;
 import net.simpleframework.workflow.engine.bean.DelegationBean;
 import net.simpleframework.workflow.engine.bean.WorkitemBean;
+import net.simpleframework.workflow.web.IWorkflowWebContext;
 import net.simpleframework.workflow.web.WorkflowUtils;
 import net.simpleframework.workflow.web.page.IWorkflowPageAware;
 import net.simpleframework.workflow.web.page.t1.form.WorkflowFormPage;
@@ -78,7 +79,8 @@ public abstract class AbstractDelegateFormPage extends FormTableRowTemplatePage
 			// 用户选取
 			addComponentBean(pp, "WorkitemDelegatePage_userSelect", UserSelectBean.class)
 					.setShowGroupOpt(false).setShowTreeOpt(false).setBindingId("wd_userId")
-					.setBindingText("wd_userTxt").setHandlerClass(Delegate_UserSelectHandler.class);
+					.setBindingText("wd_userTxt").setHandlerClass(
+							((IWorkflowWebContext) workflowContext).getDelegate_UserSelectHandler(pp));
 			// 自动完成
 			addUserAutocompleteBean(pp, "WorkitemDelegatePage_autocomplete").setSepChar(null)
 					.setInputField("wd_userTxt").setHandlerClass(Delegate_AutocompleteHandler.class);

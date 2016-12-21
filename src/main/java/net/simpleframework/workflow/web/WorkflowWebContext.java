@@ -7,9 +7,11 @@ import net.simpleframework.ctx.ModuleFunctions;
 import net.simpleframework.ctx.ModuleRefUtils;
 import net.simpleframework.ctx.permission.PermissionConst;
 import net.simpleframework.mvc.PageParameter;
+import net.simpleframework.mvc.component.ext.userselect.DefaultUserSelectHandler;
 import net.simpleframework.mvc.ctx.WebModuleFunction;
 import net.simpleframework.workflow.engine.impl.WorkflowContext;
 import net.simpleframework.workflow.engine.participant.IWorkflowPermissionHandler;
+import net.simpleframework.workflow.web.page.list.delegate.AbstractDelegateFormPage.Delegate_UserSelectHandler;
 import net.simpleframework.workflow.web.page.t1.ProcessModelMgrPage;
 import net.simpleframework.workflow.web.page.t2.AbstractWorkPage.MyRunningWorklistPage;
 import net.simpleframework.workflow.web.participant.WorkflowPermissionHandler;
@@ -17,7 +19,8 @@ import net.simpleframework.workflow.web.participant.WorkflowPermissionHandler;
 /**
  * Licensed under the Apache License, Version 2.0
  * 
- * @author 陈侃(cknet@126.com, 13910090885) https://github.com/simpleframework
+ * @author 陈侃(cknet@126.com, 13910090885)
+ *         https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
 public class WorkflowWebContext extends WorkflowContext implements IWorkflowWebContext {
@@ -40,6 +43,12 @@ public class WorkflowWebContext extends WorkflowContext implements IWorkflowWebC
 	@Override
 	public IWorkflowPermissionHandler getPermissionHandler() {
 		return singleton(WorkflowPermissionHandler.class);
+	}
+
+	@Override
+	public Class<? extends DefaultUserSelectHandler> getDelegate_UserSelectHandler(
+			final PageParameter pp) {
+		return Delegate_UserSelectHandler.class;
 	}
 
 	@Override
