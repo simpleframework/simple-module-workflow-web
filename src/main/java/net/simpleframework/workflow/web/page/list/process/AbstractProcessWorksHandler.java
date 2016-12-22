@@ -63,14 +63,14 @@ public abstract class AbstractProcessWorksHandler extends AbstractScanHandler
 				oprintln(new StringBuilder("[IProcessWorksHandler] ")
 						.append($m("AbstractProcessWorksHandler.1")).append(" - ")
 						.append(getClass().getName()));
-				return;
+				continue;
 			}
 
 			if (regists.containsKey(modelname)) {
 				oprintln(new StringBuilder("[IProcessWorksHandler, name: ").append(modelname)
 						.append("] ").append($m("AbstractProcessWorksHandler.2")).append(" - ")
 						.append(getClass().getName()));
-				return;
+				continue;
 			}
 			regists.put(modelname, this);
 		}
