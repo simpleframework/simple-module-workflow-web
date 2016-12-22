@@ -5,6 +5,7 @@ import static net.simpleframework.common.I18n.$m;
 import java.io.IOException;
 import java.util.Map;
 
+import net.simpleframework.ctx.trans.Transaction;
 import net.simpleframework.mvc.AbstractMVCPage;
 import net.simpleframework.mvc.IForward;
 import net.simpleframework.mvc.JavascriptForward;
@@ -24,6 +25,8 @@ import net.simpleframework.mvc.component.ui.pager.EPagerBarLayout;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
 import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
 import net.simpleframework.workflow.engine.EActivityStatus;
+import net.simpleframework.workflow.engine.EProcessStatus;
+import net.simpleframework.workflow.engine.IWorkflowContext;
 import net.simpleframework.workflow.engine.bean.ActivityBean;
 import net.simpleframework.workflow.engine.bean.ProcessBean;
 import net.simpleframework.workflow.web.WorkflowLogRef.ActivityUpdateLogPage;
@@ -88,16 +91,31 @@ public class ActivityMgrTPage extends AbstractWorkflowMgrTPage {
 	@Override
 	public ElementList getLeftElements(final PageParameter pp) {
 		final ProcessBean process = WorkflowUtils.getProcessBean(pp);
-		final ElementList el = ElementList.of(
-				LinkButton.backBtn()
-						.setOnclick(JS.loc(uFactory.getUrl(pp, ProcessMgrTPage.class,
-								"modelId=" + (process != null ? process.getModelId() : "")))),
-				// SpanElement.SPACE,
-				// LinkButton.of(EActivityStatus.abort).setOnclick(
-				// "$Actions['ActivityMgrTPage_abort2']('processId=" +
-				// process.getId() + "');"),
-				SpanElement.SPACE15);
+		final ElementList el = ElementList
+				.of(LinkButton.backBtn().setOnclick(JS.loc(uFactory.getUrl(pp, ProcessMgrTPage.class,
+						"modelId=" + (process != null ? process.getModelId() : "")))));
+		// SpanElement.SPACE,
+		// LinkButton.of(EActivityStatus.abort).setOnclick(
+		// "$Actions['ActivityMgrTPage_abort2']('processId=" +
+		// process.getId() + "');"),
+		if (process.getStatus() == EProcessStatus.complete) {
+			el.append(SpanElement.SPACE);
+
+			addAjaxRequest(pp, "ActivityMgrTPage_run").setHandlerMethod("doRun")
+					.setConfirmMessage($m("ActivityMgrPage.4"));
+			el.append(LinkButton.corner($m("ActivityMgrPage.3")).setOnclick(
+					"$Actions['ActivityMgrTPage_run']('processId=" + process.getId() + "');"));
+		}
+
+		el.append(SpanElement.SPACE15);
 		return el.appendAll(super.getLeftElements(pp));
+	}
+
+	@Transaction(context = IWorkflowContext.class)
+	public IForward doRun(final ComponentParameter cp) {
+		final ProcessBean process = WorkflowUtils.getProcessBean(cp);
+		wfpService.doRunning(process);
+		return JavascriptForward.RELOC;
 	}
 
 	@Override

@@ -180,7 +180,10 @@ public class ProcessMgrPage extends AbstractWorkflowMgrPage {
 				sb.append(";0");
 			}
 			if (s != EProcessStatus.running) {
-				sb.append(";1;2");
+				sb.append(";1");
+			}
+			if (s != EProcessStatus.running && s != EProcessStatus.timeout) {
+				sb.append(";2");
 			}
 			if (sb.length() > 0) {
 				kv.put(AbstractTablePagerSchema.MENU_DISABLED, sb.substring(1));
