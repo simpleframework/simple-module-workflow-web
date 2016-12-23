@@ -355,13 +355,15 @@ public class MyRunningWorklistTPage extends AbstractItemsTPage {
 				SpanElement.SPACE,
 				LinkButton.of($m("MyRunningWorklistTPage.17"))
 						.setOnclick("$Actions['MyWorklistTPage_pmSelected']();"),
-				SpanElement.SPACE,
-				LinkButton.of($m("MyRunningWorklistTbl.9")).setOnclick("$Actions.reloc('v=unread');"),
-				SpanElement.SPACE,
+				SpanElement.SPACE, createUnread_tbtn(pp), SpanElement.SPACE,
 				LinkButton.menu($m("MyRunningWorklistTbl.6")).setId("idMyWorklistTPage_markMenu"),
 				SpanElement.SPACE,
 				LinkButton.menu($m("MyRunningWorklistTbl.5")).setId("idMyWorklistTPage_delegateMenu"),
 				LinkButton.menu($m("MyRunningWorklistTbl.17")).setId("idMyWorklistTPage_opeMenu"));
+	}
+
+	protected LinkButton createUnread_tbtn(final PageParameter pp) {
+		return LinkButton.of($m("MyRunningWorklistTbl.9")).setOnclick("$Actions.reloc('v=unread');");
 	}
 
 	protected BlockElement createStatElement(final PageParameter pp) {

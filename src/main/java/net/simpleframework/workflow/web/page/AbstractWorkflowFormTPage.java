@@ -73,9 +73,9 @@ public abstract class AbstractWorkflowFormTPage extends AbstractFormTableRowTPag
 
 			// 重置新到意见
 			wfcuService.resetCommentUser(workitem.getUserId(), processId);
-			if (!workitem.isReadMark()) {
-				wfwService.doReadMark(workitem);
-			}
+			// if (!workitem.isReadMark()) {
+			// wfwService.doReadMark(workitem);
+			// }
 
 			// 更新
 			final String k = "views_" + processId;
@@ -127,6 +127,10 @@ public abstract class AbstractWorkflowFormTPage extends AbstractFormTableRowTPag
 		doUpdateProcessKV(cp);
 
 		final WorkitemBean workitem = getWorkitemBean(cp);
+		if (!workitem.isReadMark()) {
+			wfwService.doReadMark(workitem);
+		}
+
 		onSaveForm(cp, workitem);
 		cp.setSessionAttr("time_" + workitem.getId(), new Date());
 		return new JavascriptForward(JS.loc(uFactory.getUrl(cp, WorkflowFormPage.class, workitem)));
