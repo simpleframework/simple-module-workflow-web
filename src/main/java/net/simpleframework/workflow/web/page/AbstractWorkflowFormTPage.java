@@ -127,9 +127,6 @@ public abstract class AbstractWorkflowFormTPage extends AbstractFormTableRowTPag
 		doUpdateProcessKV(cp);
 
 		final WorkitemBean workitem = getWorkitemBean(cp);
-		if (!workitem.isReadMark()) {
-			wfwService.doReadMark(workitem);
-		}
 
 		onSaveForm(cp, workitem);
 		cp.setSessionAttr("time_" + workitem.getId(), new Date());
@@ -151,6 +148,9 @@ public abstract class AbstractWorkflowFormTPage extends AbstractFormTableRowTPag
 	}
 
 	public void onSaveForm(final PageParameter pp, final WorkitemBean workitem) {
+		if (!workitem.isReadMark()) {
+			wfwService.doReadMark(workitem);
+		}
 		// 添加评论
 		doCommentSave(pp);
 	}
