@@ -25,6 +25,7 @@ import net.simpleframework.workflow.web.page.list.process.IProcessWorksHandler.E
  *         http://www.simpleframework.net
  */
 public class MyProcessWorksTbl extends AbstractDbTablePagerHandler implements IWorkflowPageAware {
+
 	@Override
 	public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
 		final ProcessModelBean pm = WorkflowUtils.getProcessModel(cp);
@@ -32,12 +33,8 @@ public class MyProcessWorksTbl extends AbstractDbTablePagerHandler implements IW
 			cp.addFormParameter("modelId", pm.getId());
 		}
 
-		final IDataQuery<?> dq = AbstractProcessWorksHandler.getProcessWorksHandler(cp)
-				.createDataObjectQuery(cp, EProcessWorks.my);
-		if (dq != null) {
-			return dq;
-		}
-		return wfpService.getProcessWlist(cp.getLoginId(), pm, "");
+		return AbstractProcessWorksHandler.getProcessWorksHandler(cp).createDataObjectQuery(cp,
+				getProcessWorks());
 	}
 
 	@Override
@@ -51,17 +48,17 @@ public class MyProcessWorksTbl extends AbstractDbTablePagerHandler implements IW
 	@Override
 	protected Map<String, Object> getRowData(final ComponentParameter cp, final Object dataObject) {
 		return AbstractProcessWorksHandler.getProcessWorksHandler(cp).getRowData(cp, dataObject,
-				EProcessWorks.my);
+				getProcessWorks());
+	}
+
+	protected EProcessWorks getProcessWorks() {
+		return EProcessWorks.my;
 	}
 
 	public static class MyProcessWorks_DeptTbl extends MyProcessWorksTbl {
+
 		@Override
 		public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
-			final ProcessModelBean pm = WorkflowUtils.getProcessModel(cp);
-			if (pm != null) {
-				cp.addFormParameter("modelId", pm.getId());
-			}
-
 			PermissionDept dept = cp.getDept(ID.of(cp.getParameter("deptId")));
 			if (!dept.exists()) {
 				dept = cp.getLdept();
@@ -80,69 +77,28 @@ public class MyProcessWorksTbl extends AbstractDbTablePagerHandler implements IW
 			}
 			cp.setAttr("deptIds", deptIds);
 
-			final IDataQuery<?> dq = AbstractProcessWorksHandler.getProcessWorksHandler(cp)
-					.createDataObjectQuery(cp, EProcessWorks.dept);
-			if (dq != null) {
-				return dq;
-			}
-
-			return wfpService.getProcessWlistInDept(deptIds.toArray(new ID[deptIds.size()]), pm, "");
+			return super.createDataObjectQuery(cp);
 		}
 
 		@Override
-		protected Map<String, Object> getRowData(final ComponentParameter cp,
-				final Object dataObject) {
-			return AbstractProcessWorksHandler.getProcessWorksHandler(cp).getRowData(cp, dataObject,
-					EProcessWorks.dept);
+		protected EProcessWorks getProcessWorks() {
+			return EProcessWorks.dept;
 		}
 	}
 
 	public static class MyProcessWorks_OrgTbl extends MyProcessWorksTbl {
-		@Override
-		public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
-			final ProcessModelBean pm = WorkflowUtils.getProcessModel(cp);
-			if (pm != null) {
-				cp.addFormParameter("modelId", pm.getId());
-			}
-
-			final IDataQuery<?> dq = AbstractProcessWorksHandler.getProcessWorksHandler(cp)
-					.createDataObjectQuery(cp, EProcessWorks.org);
-			if (dq != null) {
-				return dq;
-			}
-
-			return wfpService.getProcessWlistInDomain(cp.getLDomainId(), pm, "");
-		}
 
 		@Override
-		protected Map<String, Object> getRowData(final ComponentParameter cp,
-				final Object dataObject) {
-			return AbstractProcessWorksHandler.getProcessWorksHandler(cp).getRowData(cp, dataObject,
-					EProcessWorks.org);
+		protected EProcessWorks getProcessWorks() {
+			return EProcessWorks.org;
 		}
 	}
 
 	public static class MyProcessWorks_RoleTbl extends MyProcessWorksTbl {
-		@Override
-		public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
-			final IDataQuery<?> dq = AbstractProcessWorksHandler.getProcessWorksHandler(cp)
-					.createDataObjectQuery(cp, EProcessWorks.role);
-			if (dq != null) {
-				return dq;
-			}
-
-			final ProcessModelBean pm = WorkflowUtils.getProcessModel(cp);
-			if (pm != null) {
-				cp.addFormParameter("modelId", pm.getId());
-			}
-			return null;
-		}
 
 		@Override
-		protected Map<String, Object> getRowData(final ComponentParameter cp,
-				final Object dataObject) {
-			return AbstractProcessWorksHandler.getProcessWorksHandler(cp).getRowData(cp, dataObject,
-					EProcessWorks.role);
+		protected EProcessWorks getProcessWorks() {
+			return EProcessWorks.role;
 		}
 	}
 }

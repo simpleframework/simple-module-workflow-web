@@ -4,6 +4,7 @@ import static net.simpleframework.common.I18n.$m;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import net.simpleframework.ado.query.IDataQuery;
@@ -110,8 +111,21 @@ public abstract class AbstractProcessWorksHandler extends AbstractScanHandler
 				.addColumn(TablePagerColumn.OPE(115));
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp, final EProcessWorks qw) {
+		if (qw == EProcessWorks.my) {
+			final ProcessModelBean pm = WorkflowUtils.getProcessModel(cp);
+			return wfpService.getProcessWlist(cp.getLoginId(), pm, "");
+		} else if (qw == EProcessWorks.dept) {
+			final List<Object> deptIds = (List<Object>) cp.getAttr("deptIds");
+			final ProcessModelBean pm = WorkflowUtils.getProcessModel(cp);
+			return wfpService.getProcessWlistInDept(deptIds.toArray(new ID[deptIds.size()]), pm, "");
+		} else if (qw == EProcessWorks.org) {
+			final ProcessModelBean pm = WorkflowUtils.getProcessModel(cp);
+			return wfpService.getProcessWlistInDomain(cp.getLDomainId(), pm, "");
+		} else if (qw == EProcessWorks.role) {
+		}
 		return null;
 	}
 
