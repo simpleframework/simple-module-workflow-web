@@ -116,14 +116,16 @@ public abstract class AbstractProcessWorksHandler extends AbstractScanHandler
 	public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp, final EProcessWorks qw) {
 		if (qw == EProcessWorks.my) {
 			final ProcessModelBean pm = WorkflowUtils.getProcessModel(cp);
-			return wfpService.getProcessWlist(cp.getLoginId(), pm, "");
+			return wfpService.getProcessWlist(cp.getLoginId(), new ProcessModelBean[] { pm }, "");
 		} else if (qw == EProcessWorks.dept) {
 			final List<Object> deptIds = (List<Object>) cp.getAttr("deptIds");
 			final ProcessModelBean pm = WorkflowUtils.getProcessModel(cp);
-			return wfpService.getProcessWlistInDept(deptIds.toArray(new ID[deptIds.size()]), pm, "");
+			return wfpService.getProcessWlistInDept(deptIds.toArray(new ID[deptIds.size()]),
+					new ProcessModelBean[] { pm }, "");
 		} else if (qw == EProcessWorks.org) {
 			final ProcessModelBean pm = WorkflowUtils.getProcessModel(cp);
-			return wfpService.getProcessWlistInDomain(cp.getLDomainId(), pm, "");
+			return wfpService.getProcessWlistInDomain(cp.getLDomainId(), new ProcessModelBean[] { pm },
+					"");
 		} else if (qw == EProcessWorks.role) {
 		}
 		return null;
