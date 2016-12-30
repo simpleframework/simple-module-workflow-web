@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import net.simpleframework.ado.query.DataQueryUtils;
+import net.simpleframework.common.Base64;
 import net.simpleframework.common.ID;
 import net.simpleframework.common.StringUtils;
 import net.simpleframework.common.web.HttpUtils;
@@ -232,37 +233,55 @@ public class MyProcessWorksTPage extends AbstractWorksTPage {
 		return gmap2;
 	}
 
+	public static String[] getPgroups(final PageParameter pp) {
+		final String _gstr = pp.getParameter("pgroup");
+		if (StringUtils.hasText(_gstr)) {
+			return StringUtils.split(Base64.decodeToString(pp.getParameter("pgroup")));
+		}
+		return null;
+	}
+
 	@Override
 	protected String toCategoryHTML(final PageParameter pp) {
 		final StringBuilder sb = new StringBuilder();
 		final Map<String, Map<String, List<ProcessModelBean>>> gmap2 = getProcessModelMap2(pp);
 		final ProcessModelBean cur = WorkflowUtils.getProcessModel(pp);
-		if (cur != null) {
+		final String[] pgroups = getPgroups(pp);
+		if (cur != null || (pgroups != null && pgroups.length == 2)) {
 			List<ProcessModelBean> l = null;
+			String key = null;
 			String pgroup = null;
-
-			final String[] arr = StringUtils.split(cur.getModelText(), ".");
-			final String key = arr.length > 1 ? arr[0] : CONST_OTHER;
-			final Map<String, List<ProcessModelBean>> m2 = gmap2.get(key);
-			if (m2 != null) {
+			Map<String, List<ProcessModelBean>> m2 = null;
+			if (cur != null) {
+				final String[] arr = StringUtils.split(cur.getModelText(), ".");
+				key = arr.length > 1 ? arr[0] : CONST_OTHER;
+				m2 = gmap2.get(key);
 				pgroup = wfpmService.getProcessDocument(cur).getProcessNode().getPgroup();
 				if (!StringUtils.hasText(pgroup)) {
 					pgroup = CONST_OTHER;
 				}
+			} else {
+				key = pgroups[0];
+				m2 = gmap2.get(key);
+				pgroup = pgroups[1];
+			}
+			if (m2 != null) {
 				l = m2.get(pgroup);
 			}
 
 			final CategoryItems items = CategoryItems.of();
 			if (l != null) {
 				for (final ProcessModelBean pm : l) {
-					items.add(new _CategoryItem(pm)
-							.setHref(
-									uFactory.getUrl(pp, MyProcessWorksTPage.class, "modelId=" + pm.getId()))
-							.setSelected(cur.getId().equals(pm.getId())));
+					final _CategoryItem item = (_CategoryItem) new _CategoryItem(pm).setHref(
+							uFactory.getUrl(pp, MyProcessWorksTPage.class, "modelId=" + pm.getId()));
+					if (cur != null) {
+						item.setSelected(cur.getId().equals(pm.getId()));
+					}
+					items.add(item);
 				}
 			}
 
-			if (l == null || !l.contains(cur)) {
+			if (cur != null && (l == null || !l.contains(cur))) {
 				items.add(new _CategoryItem(cur)
 						.setHref(uFactory.getUrl(pp, MyProcessWorksTPage.class, "modelId=" + cur.getId()))
 						.setSelected(true));
@@ -271,7 +290,15 @@ public class MyProcessWorksTPage extends AbstractWorksTPage {
 			sb.append("<div class='gtitle'>");
 			sb.append(new LinkElement($m("MyProcessWorksTPage.9"))
 					.setHref(uFactory.getUrl(pp, getOriginalClass())));
-			sb.append(SpanElement.NAV(3)).append(pgroup);
+
+			AbstractElement<?> ele;
+			if (cur != null) {
+				ele = new LinkElement(pgroup).setHref(uFactory.getUrl(pp, MyProcessWorksTPage.class,
+						"pgroup=" + HttpUtils.encodeUrl(Base64.encodeToString(key + ";" + pgroup))));
+			} else {
+				ele = new SpanElement(pgroup);
+			}
+			sb.append(SpanElement.NAV(3)).append(ele);
 			sb.append("</div>");
 			sb.append(items);
 			return sb.toString();
@@ -298,7 +325,10 @@ public class MyProcessWorksTPage extends AbstractWorksTPage {
 				if (i++ == 0) {
 					sb.append(" style='border-top: 0'");
 				}
-				sb.append(">").append(new SpanElement(e2.getKey()).setOnclick(""));
+
+				sb.append(">").append(new SpanElement(e2.getKey())
+						.setOnclick(JS.loc(uFactory.getUrl(pp, MyProcessWorksTPage.class, "pgroup="
+								+ HttpUtils.encodeUrl(Base64.encodeToString(key + ";" + e2.getKey()))))));
 				for (final ProcessModelBean pm : e2.getValue()) {
 					sb.append("<div class='pitem'>");
 					sb.append(new LinkElement(WorkflowUtils.getShortMtext(pm)).setOnclick(JS.loc(
@@ -317,6 +347,10 @@ public class MyProcessWorksTPage extends AbstractWorksTPage {
 	class _CategoryItem extends CategoryItem {
 		_CategoryItem(final ProcessModelBean pm) {
 			super(WorkflowUtils.getShortMtext(pm));
+		}
+
+		_CategoryItem(final String title) {
+			super(title);
 		}
 
 		@Override

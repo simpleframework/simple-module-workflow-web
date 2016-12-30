@@ -137,6 +137,7 @@
   float: left;
   margin-left: -110px;
   max-width: 90px;
+  cursor: pointer;
 }
 
 .MyProcessWorksTPage .col1 .pgroup span:HOVER {

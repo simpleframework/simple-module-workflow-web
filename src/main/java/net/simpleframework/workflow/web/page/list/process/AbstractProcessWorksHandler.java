@@ -111,21 +111,37 @@ public abstract class AbstractProcessWorksHandler extends AbstractScanHandler
 				.addColumn(TablePagerColumn.OPE(115));
 	}
 
+	protected ProcessModelBean[] getModels(final PageParameter pp) {
+		final ProcessModelBean pm = WorkflowUtils.getProcessModel(pp);
+		if (pm != null) {
+			return new ProcessModelBean[] { pm };
+		}
+		final String[] pgroups = MyProcessWorksTPage.getPgroups(pp);
+		if (pgroups != null && pgroups.length == 2) {
+			final Map<String, Map<String, List<ProcessModelBean>>> gmap2 = MyProcessWorksTPage
+					.getProcessModelMap2(pp);
+			final Map<String, List<ProcessModelBean>> l = gmap2.get(pgroups[0]);
+			if (l != null) {
+				final List<ProcessModelBean> coll = l.get(pgroups[1]);
+				if (coll != null) {
+					return coll.toArray(new ProcessModelBean[coll.size()]);
+				}
+			}
+		}
+		return null;
+	}
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp, final EProcessWorks qw) {
 		if (qw == EProcessWorks.my) {
-			final ProcessModelBean pm = WorkflowUtils.getProcessModel(cp);
-			return wfpService.getProcessWlist(cp.getLoginId(), new ProcessModelBean[] { pm }, "");
+			return wfpService.getProcessWlist(cp.getLoginId(), getModels(cp), "");
 		} else if (qw == EProcessWorks.dept) {
 			final List<Object> deptIds = (List<Object>) cp.getAttr("deptIds");
-			final ProcessModelBean pm = WorkflowUtils.getProcessModel(cp);
 			return wfpService.getProcessWlistInDept(deptIds.toArray(new ID[deptIds.size()]),
-					new ProcessModelBean[] { pm }, "");
+					getModels(cp), "");
 		} else if (qw == EProcessWorks.org) {
-			final ProcessModelBean pm = WorkflowUtils.getProcessModel(cp);
-			return wfpService.getProcessWlistInDomain(cp.getLDomainId(), new ProcessModelBean[] { pm },
-					"");
+			return wfpService.getProcessWlistInDomain(cp.getLDomainId(), getModels(cp), "");
 		} else if (qw == EProcessWorks.role) {
 		}
 		return null;
