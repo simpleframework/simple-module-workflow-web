@@ -143,7 +143,13 @@ public class MyProcessWorksTPage extends AbstractWorksTPage {
 		String params = null;
 		if (pm != null) {
 			params = "modelId=" + pm.getId();
+		} else {
+			final String _gstr = pp.getParameter("pgroup");
+			if (StringUtils.hasText(_gstr)) {
+				params = "pgroup=" + _gstr;
+			}
 		}
+
 		final TabButtons tabs = TabButtons.of(new TabButton($m("MyProcessWorksTPage.4"),
 				uFactory.getUrl(pp, MyProcessWorksTPage.class, params)));
 		final IWorkflowWebContext ctx = (IWorkflowWebContext) workflowContext;
