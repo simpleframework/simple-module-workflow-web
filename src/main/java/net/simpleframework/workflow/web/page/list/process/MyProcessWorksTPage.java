@@ -146,7 +146,7 @@ public class MyProcessWorksTPage extends AbstractWorksTPage {
 		} else {
 			final String _gstr = pp.getParameter("pgroup");
 			if (StringUtils.hasText(_gstr)) {
-				params = "pgroup=" + _gstr;
+				params = "pgroup=" + HttpUtils.encodeUrl(_gstr);
 			}
 		}
 
