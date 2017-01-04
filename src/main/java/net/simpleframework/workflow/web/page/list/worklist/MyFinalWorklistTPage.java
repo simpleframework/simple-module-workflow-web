@@ -150,7 +150,7 @@ public class MyFinalWorklistTPage extends MyRunningWorklistTPage {
 				cp.addFormParameter("retake", true);
 
 				final IDataQuery<?> dq = wfwService.getWorklist(cp.getLoginId(), getModels(cp),
-						FilterItems.of().addEqual("createdate", TimePeriod.week),
+						FilterItems.of().addEqual("completeDate", TimePeriod.week),
 						EWorkitemStatus.complete);
 				final List<WorkitemBean> list = new ArrayList<WorkitemBean>();
 				WorkitemBean workitem;
