@@ -53,5 +53,10 @@ public class ActivityGraphMgrTPage extends ActivityMgrTPage {
 		public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
 			return createDataObjectQuery_bytask(cp);
 		}
+
+		@Override
+		protected boolean isNulltask(final PageParameter pp) {
+			return false;
+		}
 	}
 }

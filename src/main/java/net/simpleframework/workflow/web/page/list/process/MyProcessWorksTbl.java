@@ -6,6 +6,7 @@ import java.util.Map;
 
 import net.simpleframework.ado.query.IDataQuery;
 import net.simpleframework.common.ID;
+import net.simpleframework.common.StringUtils;
 import net.simpleframework.common.coll.ArrayUtils;
 import net.simpleframework.ctx.permission.PermissionDept;
 import net.simpleframework.mvc.component.ComponentParameter;
@@ -31,6 +32,11 @@ public class MyProcessWorksTbl extends AbstractDbTablePagerHandler implements IW
 		final ProcessModelBean pm = WorkflowUtils.getProcessModel(cp);
 		if (pm != null) {
 			cp.addFormParameter("modelId", pm.getId());
+		} else {
+			final String _gstr = cp.getParameter("pgroup");
+			if (StringUtils.hasText(_gstr)) {
+				cp.addFormParameter("pgroup", _gstr);
+			}
 		}
 
 		return AbstractProcessWorksHandler.getProcessWorksHandler(cp).createDataObjectQuery(cp,

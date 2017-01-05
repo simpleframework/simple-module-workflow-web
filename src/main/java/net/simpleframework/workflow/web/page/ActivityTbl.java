@@ -31,6 +31,7 @@ import net.simpleframework.workflow.engine.IWorkflowContextAware;
 import net.simpleframework.workflow.engine.bean.ActivityBean;
 import net.simpleframework.workflow.engine.bean.ProcessBean;
 import net.simpleframework.workflow.schema.AbstractTaskNode;
+import net.simpleframework.workflow.schema.MergeNode;
 import net.simpleframework.workflow.schema.UserNode;
 import net.simpleframework.workflow.web.WorkflowUtils;
 
@@ -83,10 +84,14 @@ public class ActivityTbl extends GroupDbTablePagerHandler implements IWorkflowCo
 		return list;
 	}
 
+	protected boolean isNulltask(final PageParameter pp) {
+		return isNulltask_opt(pp);
+	}
+
 	@Override
 	protected Map<String, Object> getRowData(final ComponentParameter cp, final Object dataObject) {
 		final ActivityBean activity = (ActivityBean) dataObject;
-		if (isNulltask_opt(cp)) {
+		if (isNulltask(cp)) {
 			final AbstractTaskNode tasknode = wfaService.getTaskNode(activity);
 			if (!(tasknode instanceof UserNode) || ((UserNode) tasknode).isEmpty()) {
 				return null;
@@ -131,6 +136,8 @@ public class ActivityTbl extends GroupDbTablePagerHandler implements IWorkflowCo
 			} else {
 				return createUsernodeElement(activity);
 			}
+		} else if (tasknode instanceof MergeNode) {
+			return createUsernodeElement(activity);
 		}
 		return new SpanElement(activity.getTasknodeText()).setStyle("color: #808;");
 	}
