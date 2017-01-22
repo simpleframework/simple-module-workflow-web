@@ -7,6 +7,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import net.simpleframework.ado.EFilterRelation;
+import net.simpleframework.ado.FilterItem;
+import net.simpleframework.ado.FilterItems;
 import net.simpleframework.ado.query.IDataQuery;
 import net.simpleframework.common.ID;
 import net.simpleframework.common.StringUtils;
@@ -29,6 +32,7 @@ import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
 import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
 import net.simpleframework.mvc.component.ui.pager.TablePagerColumns;
 import net.simpleframework.mvc.template.struct.FilterButtons;
+import net.simpleframework.workflow.engine.EProcessStatus;
 import net.simpleframework.workflow.engine.bean.ProcessBean;
 import net.simpleframework.workflow.engine.bean.ProcessModelBean;
 import net.simpleframework.workflow.web.WorkflowUtils;
@@ -134,14 +138,17 @@ public abstract class AbstractProcessWorksHandler extends AbstractScanHandler
 	@SuppressWarnings("unchecked")
 	@Override
 	public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp, final EProcessWorks qw) {
+		final FilterItems items = FilterItems
+				.of(new FilterItem("status", EFilterRelation.not_equal, EProcessStatus.abort));
 		if (qw == EProcessWorks.my) {
-			return wfpService.getProcessWlist(cp.getLoginId(), getModels(cp), "");
+			return wfpService.getProcessWlist(cp.getLoginId(), getModels(cp), "", null, items);
 		} else if (qw == EProcessWorks.dept) {
 			final List<Object> deptIds = (List<Object>) cp.getAttr("deptIds");
 			return wfpService.getProcessWlistInDept(deptIds.toArray(new ID[deptIds.size()]),
-					getModels(cp), "");
+					getModels(cp), "", null, items);
 		} else if (qw == EProcessWorks.org) {
-			return wfpService.getProcessWlistInDomain(cp.getLDomainId(), getModels(cp), "");
+			return wfpService.getProcessWlistInDomain(cp.getLDomainId(), getModels(cp), "", null,
+					items);
 		} else if (qw == EProcessWorks.role) {
 		}
 		return null;

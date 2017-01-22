@@ -113,7 +113,8 @@ public class ProcessMgrPage extends AbstractWorkflowMgrPage {
 				return DataQueryUtils.nullQuery();
 			}
 			cp.addFormParameter("modelId", processModel.getId());
-			return wfpService.getProcessList(null, new ProcessModelBean[] { processModel }, "");
+			return wfpService.getProcessList(null, new ProcessModelBean[] { processModel }, "", null,
+					null);
 		}
 
 		@Override
