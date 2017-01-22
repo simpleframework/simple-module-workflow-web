@@ -21,6 +21,7 @@ import net.simpleframework.mvc.PageMapping;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.ButtonElement;
 import net.simpleframework.mvc.common.element.ElementList;
+import net.simpleframework.mvc.common.element.InputElement;
 import net.simpleframework.mvc.common.element.LinkButton;
 import net.simpleframework.mvc.common.element.LinkElement;
 import net.simpleframework.mvc.common.element.SpanElement;
@@ -49,7 +50,8 @@ import net.simpleframework.workflow.web.WorkflowUtils;
 /**
  * Licensed under the Apache License, Version 2.0
  * 
- * @author 陈侃(cknet@126.com, 13910090885) https://github.com/simpleframework
+ * @author 陈侃(cknet@126.com, 13910090885)
+ *         https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
 @PageMapping(url = "/workflow/mgr/model")
@@ -281,6 +283,21 @@ public class ProcessModelMgrPage extends AbstractWorkflowMgrPage {
 				}
 			}
 			return super.onSave(cp).append("$Actions['ProcessModelMgrPage_tbl']();");
+		}
+
+		@Override
+		public String toTableRowsString(final PageParameter pp) {
+			final StringBuilder sb = new StringBuilder();
+			final EProcessModelStatus op = pp.getEnumParameter(EProcessModelStatus.class, "op");
+			if (op != null) {
+				sb.append(InputElement.hidden("op").setVal(op.name()));
+			}
+			final String modelId = pp.getParameter("modelId");
+			if (StringUtils.hasText(modelId)) {
+				sb.append(InputElement.hidden("modelId").setVal(modelId));
+			}
+			sb.append(super.toTableRowsString(pp));
+			return sb.toString();
 		}
 
 		@Override
