@@ -4,6 +4,7 @@ import net.simpleframework.ctx.trans.Transaction;
 import net.simpleframework.mvc.DefaultPageHandler;
 import net.simpleframework.mvc.IForward;
 import net.simpleframework.mvc.PageParameter;
+import net.simpleframework.mvc.component.AbstractComponentBean;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.base.ajaxrequest.AjaxRequestBean;
 import net.simpleframework.mvc.component.base.ajaxrequest.DefaultAjaxRequestHandler;
@@ -26,7 +27,8 @@ public class ActivityFallbackSelectLoaded extends DefaultPageHandler
 
 		final ComponentParameter nCP = ActivityFallbackUtils.get(pp);
 		pp.addComponentBean(nCP.getComponentName() + "_Usernode_Select_OK", AjaxRequestBean.class)
-				.setHandlerClass(UsernodeSelectAction.class);
+				.setHandlerClass(UsernodeSelectAction.class)
+				.setAttr("_ActivityFallback", nCP.componentBean);
 	}
 
 	public static class UsernodeSelectAction extends DefaultAjaxRequestHandler {
@@ -34,7 +36,8 @@ public class ActivityFallbackSelectLoaded extends DefaultPageHandler
 		@Transaction(context = IWorkflowContext.class)
 		@Override
 		public IForward ajaxProcess(final ComponentParameter cp) throws Exception {
-			final ComponentParameter nCP = ActivityFallbackUtils.get(cp);
+			final ComponentParameter nCP = ComponentParameter.get(cp,
+					(AbstractComponentBean) cp.componentBean.getAttr("_Usernode_Select_OK"));
 			return ((IActivityFallbackHandler) nCP.getComponentHandler()).doFallback(nCP,
 					cp.getParameter("usernodeId"), cp.getBoolParameter("opt1"));
 		}
