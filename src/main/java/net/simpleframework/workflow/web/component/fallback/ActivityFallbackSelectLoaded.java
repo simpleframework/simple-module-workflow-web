@@ -37,7 +37,7 @@ public class ActivityFallbackSelectLoaded extends DefaultPageHandler
 		@Override
 		public IForward ajaxProcess(final ComponentParameter cp) throws Exception {
 			final ComponentParameter nCP = ComponentParameter.get(cp,
-					(AbstractComponentBean) cp.componentBean.getAttr("_Usernode_Select_OK"));
+					(AbstractComponentBean) cp.componentBean.getAttr("_ActivityFallback"));
 			return ((IActivityFallbackHandler) nCP.getComponentHandler()).doFallback(nCP,
 					cp.getParameter("usernodeId"), cp.getBoolParameter("opt1"));
 		}
