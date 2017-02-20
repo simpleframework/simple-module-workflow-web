@@ -14,7 +14,8 @@ import net.simpleframework.workflow.web.page.ActivityTbl;
 /**
  * Licensed under the Apache License, Version 2.0
  * 
- * @author 陈侃(cknet@126.com, 13910090885) https://github.com/simpleframework
+ * @author 陈侃(cknet@126.com, 13910090885)
+ *         https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
 @PageMapping(url = "/workflow/mgr/activity/graph")
@@ -48,6 +49,10 @@ public class ActivityGraphMgrPage extends ActivityMgrPage {
 	}
 
 	public static class _ActivityGraphTbl extends ActivityTbl {
+		@Override
+		protected boolean isNulltask(final PageParameter pp) {
+			return false;
+		}
 
 		@Override
 		public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
