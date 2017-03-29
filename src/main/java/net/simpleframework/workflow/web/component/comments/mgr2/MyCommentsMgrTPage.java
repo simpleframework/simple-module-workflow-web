@@ -47,7 +47,8 @@ import net.simpleframework.workflow.web.component.comments.IWfCommentHandler;
 /**
  * Licensed under the Apache License, Version 2.0
  * 
- * @author 陈侃(cknet@126.com, 13910090885) https://github.com/simpleframework
+ * @author 陈侃(cknet@126.com, 13910090885)
+ *         https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
 public class MyCommentsMgrTPage extends AbstractMgrTPage implements IWorkflowContextAware {
@@ -193,10 +194,12 @@ public class MyCommentsMgrTPage extends AbstractMgrTPage implements IWorkflowCon
 		protected TableRows getTableRows(final PageParameter pp) {
 			final InputElement ta = createTextarea(pp);
 			final WfCommentLog log = getCommentLog(pp);
+			InputElement log2 = null;
 			if (log != null) {
 				ta.setValue(log.getCcomment());
+				log2 = InputElement.hidden("logId").setVal(log.getId());
 			}
-			return TableRows.of(new TableRow(new RowField($m("MyCommentsMgrTPage.1"), ta)));
+			return TableRows.of(new TableRow(new RowField($m("MyCommentsMgrTPage.1"), log2, ta)));
 		}
 	}
 }
