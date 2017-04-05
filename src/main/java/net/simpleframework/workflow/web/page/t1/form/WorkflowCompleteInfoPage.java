@@ -7,15 +7,22 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import net.simpleframework.common.StringUtils;
+import net.simpleframework.common.object.ObjectEx.CacheV;
+import net.simpleframework.common.web.JavascriptUtils;
 import net.simpleframework.ctx.permission.PermissionUser;
 import net.simpleframework.mvc.PageMapping;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.BlockElement;
+import net.simpleframework.mvc.common.element.JS;
 import net.simpleframework.mvc.common.element.LinkButton;
+import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.workflow.engine.EWorkitemStatus;
 import net.simpleframework.workflow.engine.bean.ActivityBean;
 import net.simpleframework.workflow.engine.bean.WorkitemBean;
 import net.simpleframework.workflow.schema.AbstractTaskNode;
+import net.simpleframework.workflow.schema.ProcessDocument;
+import net.simpleframework.workflow.schema.ProcessNode;
 import net.simpleframework.workflow.web.WorkflowUtils;
 
 /**
@@ -53,8 +60,10 @@ public class WorkflowCompleteInfoPage extends AbstractWorkflowFormPage {
 		sb.append("<div class='WorkflowCompleteInfoPage'>");
 		sb.append(" <div class='l1'>");
 		sb.append($m("WorkflowCompleteInfoPage.0"));
+		sb.append(SpanElement.colorf00("").setStyle("color:#f00;padding-left:50px;").setId("backtimetxt"));
+		String backhref = getBackBtn(pp).getHref();
 		sb.append(
-				LinkButton.closeBtn().corner().setHref(getBackBtn(pp).getHref()).setClassName("right"));
+				LinkButton.closeBtn().corner().setHref(backhref).setClassName("right"));
 		sb.append(" </div>");
 		sb.append(" <div class='l2'>");
 		final List<ActivityBean> nextActivities = removeMergeNodes(wfaService
@@ -94,6 +103,42 @@ public class WorkflowCompleteInfoPage extends AbstractWorkflowFormPage {
 		}
 		sb.append(" </div>");
 		sb.append("</div>");
+		
+		String backtime = getTaskNodeProperty(pp, "node.complete.backtime");
+		if(StringUtils.isBlank(backtime)){
+			String backnodes = getProcessNodeProperty(pp, "process.complete.backnodes");
+			AbstractTaskNode node = getTaskNode(pp);
+			if(StringUtils.hasText(backnodes)&&(","+backnodes+",").indexOf(","+node.getName()+",")>-1){
+				backtime="0";//直接返回
+			}
+		}
+		if(StringUtils.hasText(backtime)){
+			sb.append(JavascriptUtils.wrapScriptTag("var backtxtele=document.getElementById('backtimetxt');var countback="+Integer.parseInt(backtime)+";function settime_back(){backtxtele.innerHTML=countback;if(countback==0){"+JS.loc(backhref)+"}else{countback--;setTimeout(settime_back,1000);}} settime_back();"));
+		}
 		return sb.toString();
+	}
+	
+	protected AbstractTaskNode getTaskNode(final PageParameter pp) {
+		return WorkflowUtils.getTaskNode(pp);
+	}
+
+	protected String getTaskNodeProperty(final PageParameter pp, final String key) {
+		final AbstractTaskNode node = getTaskNode(pp);
+		return node == null ? null : node.getProperty(key);
+	}
+	
+	protected ProcessNode getProcessNode(final PageParameter pp) {
+		return pp.getRequestCache("$ProcessNode", new CacheV<ProcessNode>() {
+			@Override
+			public ProcessNode get() {
+				final ProcessDocument doc = wfpService.getProcessDocument(WorkflowUtils.getProcessBean(pp));
+				return doc == null ? null : doc.getProcessNode();
+			}
+		});
+	}
+	
+	protected String getProcessNodeProperty(final PageParameter pp, final String key) {
+		final ProcessNode node = getProcessNode(pp);
+		return node == null ? null : node.getProperty(key);
 	}
 }
