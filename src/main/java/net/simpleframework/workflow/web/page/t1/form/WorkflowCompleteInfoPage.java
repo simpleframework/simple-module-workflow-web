@@ -56,11 +56,25 @@ public class WorkflowCompleteInfoPage extends AbstractWorkflowFormPage {
 	@Override
 	protected String toHtml(final PageParameter pp, final Map<String, Object> variables,
 			final String currentVariable) throws IOException {
+		String backtime = getTaskNodeProperty(pp, "node.complete.backtime");
+		if(StringUtils.isBlank(backtime)){
+			String backnodes = getProcessNodeProperty(pp, "process.complete.backnodes");
+			AbstractTaskNode node = getTaskNode(pp);
+			if(StringUtils.hasText(backnodes)&&(","+backnodes+",").indexOf(","+node.getName()+",")>-1){
+				backtime="0";//直接返回
+			}
+		}
+		boolean bt = false;
+		if(StringUtils.hasText(backtime)){
+			bt=true;
+		}
 		final StringBuilder sb = new StringBuilder();
 		sb.append("<div class='WorkflowCompleteInfoPage'>");
 		sb.append(" <div class='l1'>");
 		sb.append($m("WorkflowCompleteInfoPage.0"));
-		sb.append(SpanElement.colorf00("").setStyle("color:#f00;padding-left:50px;").setId("backtimetxt"));
+		if(bt){
+			sb.append(SpanElement.colorf00("").setStyle("color:#f00;padding-left:50px;").setId("backtimetxt"));
+		}
 		String backhref = getBackBtn(pp).getHref();
 		sb.append(
 				LinkButton.closeBtn().corner().setHref(backhref).setClassName("right"));
@@ -104,15 +118,7 @@ public class WorkflowCompleteInfoPage extends AbstractWorkflowFormPage {
 		sb.append(" </div>");
 		sb.append("</div>");
 		
-		String backtime = getTaskNodeProperty(pp, "node.complete.backtime");
-		if(StringUtils.isBlank(backtime)){
-			String backnodes = getProcessNodeProperty(pp, "process.complete.backnodes");
-			AbstractTaskNode node = getTaskNode(pp);
-			if(StringUtils.hasText(backnodes)&&(","+backnodes+",").indexOf(","+node.getName()+",")>-1){
-				backtime="0";//直接返回
-			}
-		}
-		if(StringUtils.hasText(backtime)){
+		if(bt){
 			sb.append(JavascriptUtils.wrapScriptTag("var backtxtele=document.getElementById('backtimetxt');var countback="+Integer.parseInt(backtime)+";function settime_back(){backtxtele.innerHTML=countback;if(countback==0){"+JS.loc(backhref)+"}else{countback--;setTimeout(settime_back,1000);}} settime_back();"));
 		}
 		return sb.toString();
