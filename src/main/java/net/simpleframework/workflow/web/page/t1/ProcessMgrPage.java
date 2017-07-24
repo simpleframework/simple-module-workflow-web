@@ -21,6 +21,7 @@ import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.InputElement;
 import net.simpleframework.mvc.common.element.LinkElement;
 import net.simpleframework.mvc.common.element.SpanElement;
+import net.simpleframework.mvc.common.element.TableRows;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.base.ajaxrequest.AjaxRequestBean;
 import net.simpleframework.mvc.component.ui.menu.MenuBean;
@@ -199,7 +200,10 @@ public class ProcessMgrPage extends AbstractWorkflowMgrPage {
 	}
 
 	public static class ProcessStatusDescPage extends AbstractStatusDescPage {
-
+		@Override
+		public String getIDParameterKey() {
+			return "processId";
+		}
 		@Transaction(context = IWorkflowContext.class)
 		@Override
 		public JavascriptForward onSave(final ComponentParameter cp) throws Exception {

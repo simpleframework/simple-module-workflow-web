@@ -5,6 +5,7 @@ import static net.simpleframework.common.I18n.$m;
 import java.io.IOException;
 import java.util.Map;
 
+import net.simpleframework.common.StringUtils;
 import net.simpleframework.ctx.IModuleRef;
 import net.simpleframework.ctx.permission.PermissionConst;
 import net.simpleframework.module.common.web.page.AbstractDescPage;
@@ -15,12 +16,16 @@ import net.simpleframework.mvc.common.element.Icon;
 import net.simpleframework.mvc.common.element.InputElement;
 import net.simpleframework.mvc.common.element.LinkButton;
 import net.simpleframework.mvc.common.element.Radio;
+import net.simpleframework.mvc.common.element.RowField;
 import net.simpleframework.mvc.common.element.SpanElement;
+import net.simpleframework.mvc.common.element.TableRow;
+import net.simpleframework.mvc.common.element.TableRows;
 import net.simpleframework.mvc.component.base.ajaxrequest.AjaxRequestBean;
 import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
 import net.simpleframework.mvc.component.ui.window.WindowBean;
 import net.simpleframework.mvc.template.AbstractTemplatePage;
 import net.simpleframework.mvc.template.t1.T1ResizedTemplatePage;
+import net.simpleframework.workflow.engine.comment.WfCommentLog;
 import net.simpleframework.workflow.web.IWorkflowWebContext;
 import net.simpleframework.workflow.web.page.IWorkflowPageAware;
 
@@ -97,6 +102,28 @@ public abstract class AbstractWorkflowMgrPage extends T1ResizedTemplatePage
 				return $m("AbstractWorkflowMgrPage.1");
 			}
 			return null;
+		}
+		
+		protected InputElement getOpEle(final PageParameter pp){
+			String op = pp.getParameter("op");
+			return InputElement.hidden("op").setVal(null==op?"":op);
+		}
+		
+		protected InputElement getIDEle(final PageParameter pp){
+			String idkey = getIDParameterKey();
+			if(StringUtils.isBlank(idkey)) idkey="_@idtmp";
+			String id = pp.getParameter(idkey);
+			return InputElement.hidden(idkey).setVal(null==id?"":id);
+		}
+		
+		public String getIDParameterKey(){
+			return null;
+		}
+		
+		@Override
+		protected TableRows getTableRows(final PageParameter pp) {
+			final InputElement ta = createTextarea(pp);
+			return TableRows.of(new TableRow(new RowField($m("MyCommentsMgrTPage.1"), getIDEle(pp), getOpEle(pp), ta)));
 		}
 	}
 
