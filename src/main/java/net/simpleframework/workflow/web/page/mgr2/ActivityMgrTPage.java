@@ -98,7 +98,7 @@ public class ActivityMgrTPage extends AbstractWorkflowMgrTPage {
 		// LinkButton.of(EActivityStatus.abort).setOnclick(
 		// "$Actions['ActivityMgrTPage_abort2']('processId=" +
 		// process.getId() + "');"),
-		if (process.getStatus() == EProcessStatus.complete) {
+		if (process.getStatus() == EProcessStatus.complete || process.getStatus() == EProcessStatus.abort) {
 			el.append(SpanElement.SPACE);
 
 			addAjaxRequest(pp, "ActivityMgrTPage_run").setHandlerMethod("doRun")
