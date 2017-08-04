@@ -134,7 +134,41 @@ public class MyProcessWorksTPage extends AbstractWorksTPage {
 	}
 
 	protected WorkitemBean getOpenWorkitem(final PageParameter pp, final ProcessBean process) {
-		return wfwService.getWorkitems(process, pp.getLoginId()).iterator().next();
+		List<WorkitemBean> items= wfwService.getWorkitems(process, pp.getLoginId());
+		return null!=items&&items.size()>0?items.iterator().next():wfwService.getWorkitems(process, null).iterator().next();
+	}
+	
+	protected TabButton getMyProcessTabButton(final PageParameter pp,final String params){
+		return new TabButton($m("MyProcessWorksTPage.4"),
+				uFactory.getUrl(pp, MyProcessWorksTPage.class, params));
+	}
+	protected TabButton getDeptProcessTabButton(final PageParameter pp,final String params){
+		final String url = uFactory.getUrl(pp, MyProcessWorks_DeptTPage.class, params);
+		final StringBuilder txt = new StringBuilder();
+		PermissionDept dept = pp.getDept(ID.of(pp.getParameter("deptId")));
+		if (!dept.exists()) {
+			dept = pp.getLdept();
+		}
+		txt.append(dept);
+		final List<PermissionDept> depts = pp.getLogin().depts();
+		if (depts.size() > 1) {
+			final MenuBean menu = (MenuBean) pp
+					.addComponentBean("MyProcessWorksTPage_depts_menu", MenuBean.class)
+					.setMenuEvent(EMenuEvent.mouseenter)
+					.setSelector(".MyProcessWorksTPage .tool_bar img.depts-menu");
+			final MenuItems items = menu.getMenuItems();
+			for (final PermissionDept _dept : depts) {
+				if (_dept.equals(dept)) {
+					continue;
+				}
+				items.add(MenuItem.of(_dept.getText()).setOnclick("$Actions.loc('"
+						+ HttpUtils.addParameters(url, "deptId=" + _dept.getId()) + "');"));
+			}
+			txt.append(new ImageElement(
+					pp.getCssResourceHomePath(MyProcessWorksTPage.class) + "/images/down.png")
+							.setClassName("depts-menu"));
+		}
+		return new TabButton(txt, url);
 	}
 
 	@Override
@@ -150,36 +184,10 @@ public class MyProcessWorksTPage extends AbstractWorksTPage {
 			}
 		}
 
-		final TabButtons tabs = TabButtons.of(new TabButton($m("MyProcessWorksTPage.4"),
-				uFactory.getUrl(pp, MyProcessWorksTPage.class, params)));
+		final TabButtons tabs = TabButtons.of(getMyProcessTabButton(pp, params));
 		final IWorkflowWebContext ctx = (IWorkflowWebContext) workflowContext;
 		if (pp.isLmember(ctx.getProcessWorks_DeptRole(pp))) {
-			final String url = uFactory.getUrl(pp, MyProcessWorks_DeptTPage.class, params);
-			final StringBuilder txt = new StringBuilder();
-			PermissionDept dept = pp.getDept(ID.of(pp.getParameter("deptId")));
-			if (!dept.exists()) {
-				dept = pp.getLdept();
-			}
-			txt.append(dept);
-			final List<PermissionDept> depts = pp.getLogin().depts();
-			if (depts.size() > 1) {
-				final MenuBean menu = (MenuBean) pp
-						.addComponentBean("MyProcessWorksTPage_depts_menu", MenuBean.class)
-						.setMenuEvent(EMenuEvent.mouseenter)
-						.setSelector(".MyProcessWorksTPage .tool_bar img.depts-menu");
-				final MenuItems items = menu.getMenuItems();
-				for (final PermissionDept _dept : depts) {
-					if (_dept.equals(dept)) {
-						continue;
-					}
-					items.add(MenuItem.of(_dept.getText()).setOnclick("$Actions.loc('"
-							+ HttpUtils.addParameters(url, "deptId=" + _dept.getId()) + "');"));
-				}
-				txt.append(new ImageElement(
-						pp.getCssResourceHomePath(MyProcessWorksTPage.class) + "/images/down.png")
-								.setClassName("depts-menu"));
-			}
-			tabs.append(new TabButton(txt, url));
+			tabs.append(getDeptProcessTabButton(pp, params));
 		}
 		if (pp.isLmember(ctx.getProcessWorks_OrgRole(pp))) {
 			tabs.append(new TabButton($m("MyProcessWorksTPage.5"),
