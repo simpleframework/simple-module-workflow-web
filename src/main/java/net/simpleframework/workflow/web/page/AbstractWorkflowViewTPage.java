@@ -18,6 +18,11 @@ public abstract class AbstractWorkflowViewTPage extends AbstractFormTableRowTPag
 	protected void onForward(final PageParameter pp) throws Exception {
 		super.onForward(pp);
 
+		OpenDoReadMark(pp);
+	}
+	
+	protected void OpenDoReadMark(final PageParameter pp){
+		//子类覆盖，有些地方不需要打开就标记已读
 		final WorkviewBean workview = getWorkitemBean(pp);
 		if (workview != null) {
 			// 标记已读
