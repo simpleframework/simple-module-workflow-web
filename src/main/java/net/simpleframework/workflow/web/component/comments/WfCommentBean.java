@@ -21,12 +21,59 @@ public class WfCommentBean extends AbstractContainerBean implements IWorkflowCon
 	private int maxlength = 200;
 	/* 分组 */
 	private EGroupBy groupBy;
+	
+	/* 是否显示分组切换 */
+	private boolean disGroup = true;
+	/* 是否显示签名 */
+	private boolean disSign = true;
+	
+	/* 只显示指定节点的意见,多个节点豆号分隔 */
+	private String disTaskName;
+	
+	/* 不显示指定节点的意见,多个节点豆号分隔 */
+	private String notDisTaskName;
 
 	/* 管理员角色 */
 	private String managerRole = workflowContext.getModule().getManagerRole(null);
 
 	public WfCommentBean() {
 		setHandlerClass(DefaultWfCommentHandler.class);
+	}
+
+	public String getDisTaskName() {
+		return disTaskName;
+	}
+
+	public WfCommentBean setDisTaskName(String disTaskName) {
+		this.disTaskName = disTaskName;
+		return this;
+	}
+
+	public String getNotDisTaskName() {
+		return notDisTaskName;
+	}
+
+	public WfCommentBean setNotDisTaskName(String notDisTaskName) {
+		this.notDisTaskName = notDisTaskName;
+		return this;
+	}
+
+	public boolean isDisSign() {
+		return disSign;
+	}
+
+	public WfCommentBean setDisSign(boolean disSign) {
+		this.disSign = disSign;
+		return this;
+	}
+
+	public boolean isDisGroup() {
+		return disGroup;
+	}
+
+	public WfCommentBean setDisGroup(boolean disGroup) {
+		this.disGroup = disGroup;
+		return this;
 	}
 
 	public boolean isEditable() {
