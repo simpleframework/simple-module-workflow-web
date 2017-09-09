@@ -4,6 +4,7 @@ import static net.simpleframework.common.I18n.$m;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -250,13 +251,14 @@ public class ProcessModelMgrPage extends AbstractWorkflowMgrPage {
 		@Override
 		public JavascriptForward doSave(final ComponentParameter cp,
 				final IAttachmentSaveCallback callback) throws IOException {
-			final Map<String, AttachmentFile> attachments = getUploadCache(cp);
+			final Map<String, AttachmentFile> attachments = new LinkedHashMap<String, AttachmentFile>(
+					getUploadCache(cp));
 			for (final AttachmentFile aFile : attachments.values()) {
 				wfpmService.doAddModel(cp.getLoginId(),
 						new ProcessDocument(new FileInputStream(aFile.getAttachment())).clone());
 			}
 			// 清除
-			clearCache(cp);
+			clearCache(cp, attachments.keySet(), null);
 			return new JavascriptForward("$Actions['ProcessModelMgrPage_tbl']();")
 					.append("$Actions['ProcessModelMgrPage_upload'].close();");
 		}
