@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import net.simpleframework.common.BeanUtils;
 import net.simpleframework.common.ID;
 import net.simpleframework.common.StringUtils;
 import net.simpleframework.ctx.script.IScriptEval;
@@ -137,15 +138,17 @@ public class PRelativeRoleHandler extends AbstractParticipantHandler
 			final String[] _r = role.split(",");// 多个角色采用豆号分隔
 			final Map<String, String> tempmap = new HashMap<String, String>();
 			for (final String r : _r) {
+				Map<String, Object> _variables=new HashMap<String, Object>();
+				_variables.putAll(variables);//建一个新的实列，因为users.net()时会改变variables的值，下一次就会得到不正确的用户
 				Collection<Participant> _participants = wph.getRelativeParticipantsOfLevel(userId,
-						roleId, deptId, variables, r, level);
+						roleId, deptId, _variables, r, level);
 
 				if ((_participants == null || _participants.size() == 0) && level.equals(Level.internal)
 						&& null != autoparent && autoparent.equals("true")) {
 					// 本部门,自动查找上一部门角色
 					final Department dept = _deptService.getBean(deptId);
 					_participants = wph.getRelativeParticipantsOfLevel(userId, roleId,
-							dept.getParentId(), variables, r, level);
+							dept.getParentId(), _variables, r, level);
 				}
 				if (_participants != null && _participants.size() > 0) {
 					// participants.addAll(_participants);
