@@ -90,7 +90,8 @@ public class WorkflowPermissionHandler extends OrganizationPermissionHandler
 					} else if (level.equals(Level.all)) {// 指定角色
 						final Iterator<PermissionUser> users = users(roleId, null, variables);
 						while (users.hasNext()) {
-							participants.add(new Participant(users.next(), roleId, null));
+							PermissionUser u=users.next();
+							participants.add(new Participant(u, roleId, u.getDept().getId()));
 						}
 					} else {
 						Department dept = _deptService.getBean(deptId);
