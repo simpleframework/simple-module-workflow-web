@@ -32,12 +32,24 @@ public class WfCommentBean extends AbstractContainerBean implements IWorkflowCon
 	
 	/* 不显示指定节点的意见,多个节点豆号分隔 */
 	private String notDisTaskName;
+	
+	/* 列表是否显示当前意见 */
+	private boolean disCurComment=true;
 
 	/* 管理员角色 */
 	private String managerRole = workflowContext.getModule().getManagerRole(null);
 
 	public WfCommentBean() {
 		setHandlerClass(DefaultWfCommentHandler.class);
+	}
+
+	public boolean isDisCurComment() {
+		return disCurComment;
+	}
+
+	public WfCommentBean setDisCurComment(boolean disCurComment) {
+		this.disCurComment = disCurComment;
+		return this;
 	}
 
 	public String getDisTaskName() {
