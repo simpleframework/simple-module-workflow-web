@@ -188,10 +188,20 @@ public class PRelativeRoleHandler extends AbstractParticipantHandler
 					for (final ActivityBean act : sends) {
 						if (isFinalRunning(act, "1".equals(send), yznodes)) {
 							List<WorkitemBean> items = null;
+							final AbstractTaskNode tasknode = wfaService.getTaskNode(act);
+							ActivityBean _act = act;
+							if (tasknode instanceof UserNode
+									&& ((UserNode) tasknode).isEmpty()) {
+								final List<ActivityBean> nexts = wfaService
+										.getNextActivities(act);
+								if (null != nexts && nexts.size() > 0) {
+									_act = nexts.get(0);
+								}
+							}
 							if ("2".equals(send)) {
-								items = wfwService.getWorkitems(act, EWorkitemStatus.running);
+								items = wfwService.getWorkitems(_act, EWorkitemStatus.running);
 							} else {
-								items = wfwService.getWorkitems(act);
+								items = wfwService.getWorkitems(_act);
 							}
 							if (null != items) {
 								for (final WorkitemBean item : items) {
