@@ -162,7 +162,7 @@ public class MyFinalWorklistTPage extends MyRunningWorklistTPage {
 							continue l;
 						}
 					}
-					if(null==workitem.getRetakeId()){//取回过的不让取回了
+					if(null==workitem.getRetakeId()){//取回过的不让再取回了
 						list.add(workitem);
 					}
 				}
