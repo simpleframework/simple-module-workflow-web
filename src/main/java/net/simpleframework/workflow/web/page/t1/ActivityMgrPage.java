@@ -131,6 +131,7 @@ public class ActivityMgrPage extends AbstractWorkflowMgrPage {
 		public String getIDParameterKey() {
 			return "activityId";
 		}
+
 		@Transaction(context = IWorkflowContext.class)
 		@Override
 		public JavascriptForward onSave(final ComponentParameter cp) throws Exception {

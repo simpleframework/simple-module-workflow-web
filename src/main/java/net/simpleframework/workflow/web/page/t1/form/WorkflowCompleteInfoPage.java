@@ -56,13 +56,15 @@ public class WorkflowCompleteInfoPage extends AbstractWorkflowFormPage {
 	protected String toHtml(final PageParameter pp, final Map<String, Object> variables,
 			final String currentVariable) throws IOException {
 		String backtime = getTaskNodeProperty(pp, "node.complete.backtime");
-		if (StringUtils.isBlank(backtime)) 
+		if (StringUtils.isBlank(backtime)) {
 			backtime = getProcessNodeProperty(pp, "node.complete.backtime");
+		}
 		if (StringUtils.isBlank(backtime)) {
 			final String backnodes = getProcessNodeProperty(pp, "process.complete.backnodes");
 			final AbstractTaskNode node = getTaskNode(pp);
 			if (StringUtils.hasText(backnodes)
-					&& (("," + backnodes + ",").indexOf("," + node.getName() + ",") > -1||"all".equals(backnodes))) {
+					&& (("," + backnodes + ",").indexOf("," + node.getName() + ",") > -1
+							|| "all".equals(backnodes))) {
 				backtime = "0";// 直接返回
 			}
 		}

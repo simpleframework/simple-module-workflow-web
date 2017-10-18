@@ -21,20 +21,20 @@ public class WfCommentBean extends AbstractContainerBean implements IWorkflowCon
 	private int maxlength = 200;
 	/* 分组 */
 	private EGroupBy groupBy;
-	
+
 	/* 是否显示分组切换 */
 	private boolean disGroup = true;
 	/* 是否显示签名 */
 	private boolean disSign = true;
-	
+
 	/* 只显示指定节点的意见,多个节点豆号分隔 */
 	private String disTaskName;
-	
+
 	/* 不显示指定节点的意见,多个节点豆号分隔 */
 	private String notDisTaskName;
-	
+
 	/* 列表是否显示当前意见 */
-	private boolean disCurComment=true;
+	private boolean disCurComment = true;
 
 	/* 管理员角色 */
 	private String managerRole = workflowContext.getModule().getManagerRole(null);
@@ -47,7 +47,7 @@ public class WfCommentBean extends AbstractContainerBean implements IWorkflowCon
 		return disCurComment;
 	}
 
-	public WfCommentBean setDisCurComment(boolean disCurComment) {
+	public WfCommentBean setDisCurComment(final boolean disCurComment) {
 		this.disCurComment = disCurComment;
 		return this;
 	}
@@ -56,7 +56,7 @@ public class WfCommentBean extends AbstractContainerBean implements IWorkflowCon
 		return disTaskName;
 	}
 
-	public WfCommentBean setDisTaskName(String disTaskName) {
+	public WfCommentBean setDisTaskName(final String disTaskName) {
 		this.disTaskName = disTaskName;
 		return this;
 	}
@@ -65,7 +65,7 @@ public class WfCommentBean extends AbstractContainerBean implements IWorkflowCon
 		return notDisTaskName;
 	}
 
-	public WfCommentBean setNotDisTaskName(String notDisTaskName) {
+	public WfCommentBean setNotDisTaskName(final String notDisTaskName) {
 		this.notDisTaskName = notDisTaskName;
 		return this;
 	}
@@ -74,7 +74,7 @@ public class WfCommentBean extends AbstractContainerBean implements IWorkflowCon
 		return disSign;
 	}
 
-	public WfCommentBean setDisSign(boolean disSign) {
+	public WfCommentBean setDisSign(final boolean disSign) {
 		this.disSign = disSign;
 		return this;
 	}
@@ -83,7 +83,7 @@ public class WfCommentBean extends AbstractContainerBean implements IWorkflowCon
 		return disGroup;
 	}
 
-	public WfCommentBean setDisGroup(boolean disGroup) {
+	public WfCommentBean setDisGroup(final boolean disGroup) {
 		this.disGroup = disGroup;
 		return this;
 	}

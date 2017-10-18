@@ -93,8 +93,8 @@ public abstract class WorkflowUtils implements IWorkflowContextAware {
 
 				final Set<String> list = new LinkedHashSet<String>();
 				for (final WorkitemBean workitem : wfwService.getWorkitems(preActivity,
-						EWorkitemStatus.complete,EWorkitemStatus.running)) {
-					//需要加上运行中的，因为发送时不会完成
+						EWorkitemStatus.complete, EWorkitemStatus.running)) {
+					// 需要加上运行中的，因为发送时不会完成
 					list.add(workitem.getUserText());
 				}
 				return list.size() > 0 ? StringUtils.join(list, StringUtils.text(sep, ", ")) : null;

@@ -25,7 +25,6 @@ import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
 import net.simpleframework.mvc.component.ui.window.WindowBean;
 import net.simpleframework.mvc.template.AbstractTemplatePage;
 import net.simpleframework.mvc.template.t1.T1ResizedTemplatePage;
-import net.simpleframework.workflow.engine.comment.WfCommentLog;
 import net.simpleframework.workflow.web.IWorkflowWebContext;
 import net.simpleframework.workflow.web.page.IWorkflowPageAware;
 
@@ -103,27 +102,30 @@ public abstract class AbstractWorkflowMgrPage extends T1ResizedTemplatePage
 			}
 			return null;
 		}
-		
-		protected InputElement getOpEle(final PageParameter pp){
-			String op = pp.getParameter("op");
-			return InputElement.hidden("op").setVal(null==op?"":op);
+
+		protected InputElement getOpEle(final PageParameter pp) {
+			final String op = pp.getParameter("op");
+			return InputElement.hidden("op").setVal(null == op ? "" : op);
 		}
-		
-		protected InputElement getIDEle(final PageParameter pp){
+
+		protected InputElement getIDEle(final PageParameter pp) {
 			String idkey = getIDParameterKey();
-			if(StringUtils.isBlank(idkey)) idkey="_@idtmp";
-			String id = pp.getParameter(idkey);
-			return InputElement.hidden(idkey).setVal(null==id?"":id);
+			if (StringUtils.isBlank(idkey)) {
+				idkey = "_@idtmp";
+			}
+			final String id = pp.getParameter(idkey);
+			return InputElement.hidden(idkey).setVal(null == id ? "" : id);
 		}
-		
-		public String getIDParameterKey(){
+
+		public String getIDParameterKey() {
 			return null;
 		}
-		
+
 		@Override
 		protected TableRows getTableRows(final PageParameter pp) {
 			final InputElement ta = createTextarea(pp);
-			return TableRows.of(new TableRow(new RowField($m("MyCommentsMgrTPage.1"), getIDEle(pp), getOpEle(pp), ta)));
+			return TableRows.of(new TableRow(
+					new RowField($m("MyCommentsMgrTPage.1"), getIDEle(pp), getOpEle(pp), ta)));
 		}
 	}
 

@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import net.simpleframework.common.BeanUtils;
 import net.simpleframework.common.ID;
 import net.simpleframework.common.StringUtils;
 import net.simpleframework.ctx.script.IScriptEval;
@@ -138,8 +137,8 @@ public class PRelativeRoleHandler extends AbstractParticipantHandler
 			final String[] _r = role.split(",");// 多个角色采用豆号分隔
 			final Map<String, String> tempmap = new HashMap<String, String>();
 			for (final String r : _r) {
-				Map<String, Object> _variables=new HashMap<String, Object>();
-				_variables.putAll(variables);//建一个新的实列，因为users.net()时会改变variables的值，下一次就会得到不正确的用户
+				final Map<String, Object> _variables = new HashMap<String, Object>();
+				_variables.putAll(variables);// 建一个新的实列，因为users.net()时会改变variables的值，下一次就会得到不正确的用户
 				Collection<Participant> _participants = wph.getRelativeParticipantsOfLevel(userId,
 						roleId, deptId, _variables, r, level);
 
@@ -190,10 +189,8 @@ public class PRelativeRoleHandler extends AbstractParticipantHandler
 							List<WorkitemBean> items = null;
 							final AbstractTaskNode tasknode = wfaService.getTaskNode(act);
 							ActivityBean _act = act;
-							if (tasknode instanceof UserNode
-									&& ((UserNode) tasknode).isEmpty()) {
-								final List<ActivityBean> nexts = wfaService
-										.getNextActivities(act);
+							if (tasknode instanceof UserNode && ((UserNode) tasknode).isEmpty()) {
+								final List<ActivityBean> nexts = wfaService.getNextActivities(act);
 								if (null != nexts && nexts.size() > 0) {
 									_act = nexts.get(0);
 								}

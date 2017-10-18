@@ -20,9 +20,9 @@ public abstract class AbstractWorkflowViewTPage extends AbstractFormTableRowTPag
 
 		OpenDoReadMark(pp);
 	}
-	
-	protected void OpenDoReadMark(final PageParameter pp){
-		//子类覆盖，有些地方不需要打开就标记已读
+
+	protected void OpenDoReadMark(final PageParameter pp) {
+		// 子类覆盖，有些地方不需要打开就标记已读
 		final WorkviewBean workview = getWorkitemBean(pp);
 		if (workview != null) {
 			// 标记已读

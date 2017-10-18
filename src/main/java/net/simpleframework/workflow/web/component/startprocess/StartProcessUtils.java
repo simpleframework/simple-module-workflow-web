@@ -57,7 +57,7 @@ public abstract class StartProcessUtils implements IWorkflowContextAware {
 		if (processModel == null) {
 			processModel = wfpmService.getProcessModelByName(cp.getParameter("modelName"));
 		}
-		return wfpmService.getInitiateItems(processModel,cp.getLoginId()).get(processModel);
+		return wfpmService.getInitiateItems(processModel, cp.getLoginId()).get(processModel);
 	}
 
 	public static String toParams(final ComponentParameter cp, final InitiateItem initiateItem) {

@@ -134,15 +134,17 @@ public class MyProcessWorksTPage extends AbstractWorksTPage {
 	}
 
 	protected WorkitemBean getOpenWorkitem(final PageParameter pp, final ProcessBean process) {
-		List<WorkitemBean> items= wfwService.getWorkitems(process, pp.getLoginId());
-		return null!=items&&items.size()>0?items.iterator().next():wfwService.getWorkitems(process, null).iterator().next();
+		final List<WorkitemBean> items = wfwService.getWorkitems(process, pp.getLoginId());
+		return null != items && items.size() > 0 ? items.iterator().next()
+				: wfwService.getWorkitems(process, null).iterator().next();
 	}
-	
-	protected TabButton getMyProcessTabButton(final PageParameter pp,final String params){
+
+	protected TabButton getMyProcessTabButton(final PageParameter pp, final String params) {
 		return new TabButton($m("MyProcessWorksTPage.4"),
 				uFactory.getUrl(pp, MyProcessWorksTPage.class, params));
 	}
-	protected TabButton getDeptProcessTabButton(final PageParameter pp,final String params){
+
+	protected TabButton getDeptProcessTabButton(final PageParameter pp, final String params) {
 		final String url = uFactory.getUrl(pp, MyProcessWorks_DeptTPage.class, params);
 		final StringBuilder txt = new StringBuilder();
 		PermissionDept dept = pp.getDept(ID.of(pp.getParameter("deptId")));
