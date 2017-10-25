@@ -10,6 +10,7 @@ import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.LinkButton;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.ui.pager.EPagerBarLayout;
+import net.simpleframework.mvc.component.ui.pager.ITablePagerHandler;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
 import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
 import net.simpleframework.mvc.component.ui.pager.db.AbstractDbTablePagerHandler;
@@ -19,6 +20,10 @@ import net.simpleframework.workflow.engine.bean.ProcessBean;
 import net.simpleframework.workflow.engine.bean.ProcessModelBean;
 import net.simpleframework.workflow.engine.bean.WorkitemBean;
 import net.simpleframework.workflow.web.page.IWorkflowPageAware;
+import net.simpleframework.workflow.web.page.list.process.IProcessWorksHandler.EProcessWorks;
+import net.simpleframework.workflow.web.page.list.process.MyProcessWorksTbl.MyProcessWorks_DeptTbl;
+import net.simpleframework.workflow.web.page.list.process.MyProcessWorksTbl.MyProcessWorks_OrgTbl;
+import net.simpleframework.workflow.web.page.list.process.MyProcessWorksTbl.MyProcessWorks_RoleTbl;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -35,12 +40,36 @@ public abstract class MyProcessWorksTPages implements IWorkflowPageAware {
 		protected WorkitemBean getOpenWorkitem(final PageParameter pp, final ProcessBean process) {
 			return wfwService.getWorkitems(process, null).iterator().next();
 		}
+		@Override
+		protected Class<? extends ITablePagerHandler> getTableHandler(){
+			return MyProcessWorks_OrgTbl.class;
+		}
+		@Override
+		protected EProcessWorks getEProcessWorks(){
+			return EProcessWorks.org;
+		}
 	}
 
 	public static class MyProcessWorks_DeptTPage extends MyProcessWorks_OrgTPage {
+		@Override
+		protected Class<? extends ITablePagerHandler> getTableHandler(){
+			return MyProcessWorks_DeptTbl.class;
+		}
+		@Override
+		protected EProcessWorks getEProcessWorks(){
+			return EProcessWorks.dept;
+		}
 	}
 
 	public static class MyProcessWorks_RoleTPage extends MyProcessWorksTPage {
+		@Override
+		protected Class<? extends ITablePagerHandler> getTableHandler(){
+			return MyProcessWorks_RoleTbl.class;
+		}
+		@Override
+		protected EProcessWorks getEProcessWorks(){
+			return EProcessWorks.role;
+		}
 	}
 
 	public static class ProcessModelSelectPage extends OneTableTemplatePage {

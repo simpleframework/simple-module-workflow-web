@@ -30,8 +30,8 @@ import net.simpleframework.mvc.component.ui.menu.EMenuEvent;
 import net.simpleframework.mvc.component.ui.menu.MenuBean;
 import net.simpleframework.mvc.component.ui.menu.MenuItem;
 import net.simpleframework.mvc.component.ui.menu.MenuItems;
+import net.simpleframework.mvc.component.ui.pager.ITablePagerHandler;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
-import net.simpleframework.mvc.component.ui.pager.db.AbstractDbTablePagerHandler;
 import net.simpleframework.mvc.template.struct.CategoryItem;
 import net.simpleframework.mvc.template.struct.CategoryItems;
 import net.simpleframework.mvc.template.struct.FilterButtons;
@@ -45,10 +45,6 @@ import net.simpleframework.workflow.web.page.AbstractWorksTPage;
 import net.simpleframework.workflow.web.page.list.process.IProcessWorksHandler.EProcessWorks;
 import net.simpleframework.workflow.web.page.list.process.MyProcessWorksTPages.MyProcessWorks_DeptTPage;
 import net.simpleframework.workflow.web.page.list.process.MyProcessWorksTPages.MyProcessWorks_OrgTPage;
-import net.simpleframework.workflow.web.page.list.process.MyProcessWorksTPages.MyProcessWorks_RoleTPage;
-import net.simpleframework.workflow.web.page.list.process.MyProcessWorksTbl.MyProcessWorks_DeptTbl;
-import net.simpleframework.workflow.web.page.list.process.MyProcessWorksTbl.MyProcessWorks_OrgTbl;
-import net.simpleframework.workflow.web.page.list.process.MyProcessWorksTbl.MyProcessWorks_RoleTbl;
 import net.simpleframework.workflow.web.page.t1.form.WorkflowFormPage;
 import net.simpleframework.workflow.web.page.t1.form.WorkflowMonitorPage;
 
@@ -83,38 +79,46 @@ public class MyProcessWorksTPage extends AbstractWorksTPage {
 		return "MyProcessWorksTPage";
 	}
 
-	protected EProcessWorks qw;
-	protected Class<? extends AbstractDbTablePagerHandler> tblClass;
-	{
-		if (MyProcessWorks_DeptTPage.class.isAssignableFrom(getClass())) {
-			qw = EProcessWorks.dept;
-			tblClass = MyProcessWorks_DeptTbl.class;
-		} else if (MyProcessWorks_OrgTPage.class.isAssignableFrom(getClass())) {
-			qw = EProcessWorks.org;
-			tblClass = MyProcessWorks_OrgTbl.class;
-		} else if (MyProcessWorks_RoleTPage.class.isAssignableFrom(getClass())) {
-			qw = EProcessWorks.role;
-			tblClass = MyProcessWorks_RoleTbl.class;
-		} else {
-			qw = EProcessWorks.my;
-			tblClass = MyProcessWorksTbl.class;
-		}
+//	protected EProcessWorks qw;
+//	protected Class<? extends AbstractDbTablePagerHandler> tblClass;
+//	{
+//		if (MyProcessWorks_DeptTPage.class.isAssignableFrom(getClass())) {
+//			qw = EProcessWorks.dept;
+//			tblClass = MyProcessWorks_DeptTbl.class;
+//		} else if (MyProcessWorks_OrgTPage.class.isAssignableFrom(getClass())) {
+//			qw = EProcessWorks.org;
+//			tblClass = MyProcessWorks_OrgTbl.class;
+//		} else if (MyProcessWorks_RoleTPage.class.isAssignableFrom(getClass())) {
+//			qw = EProcessWorks.role;
+//			tblClass = MyProcessWorks_RoleTbl.class;
+//		} else {
+//			qw = EProcessWorks.my;
+//			tblClass = MyProcessWorksTbl.class;
+//		}
+//	}
+	
+	protected Class<? extends ITablePagerHandler> getTableHandler(){
+		return MyProcessWorksTbl.class;
+	}
+	
+	protected EProcessWorks getEProcessWorks(){
+		return EProcessWorks.my;
 	}
 
 	protected TablePagerBean addTablePagerBean(final PageParameter pp) {
-		final TablePagerBean tablePager = addTablePagerBean(pp, "MyProcessWorksTPage_tbl", tblClass);
-		AbstractProcessWorksHandler.getProcessWorksHandler(pp).doTablePagerInit(pp, tablePager, qw);
+		final TablePagerBean tablePager = addTablePagerBean(pp, "MyProcessWorksTPage_tbl", getTableHandler());
+		AbstractProcessWorksHandler.getProcessWorksHandler(pp).doTablePagerInit(pp, tablePager, getEProcessWorks());
 		return tablePager;
 	}
 
 	@Override
 	public FilterButtons getFilterButtons(final PageParameter pp) {
-		return AbstractProcessWorksHandler.getProcessWorksHandler(pp).getFilterButtons(pp, qw);
+		return AbstractProcessWorksHandler.getProcessWorksHandler(pp).getFilterButtons(pp, getEProcessWorks());
 	}
 
 	@Override
 	public ElementList getLeftElements(final PageParameter pp) {
-		return AbstractProcessWorksHandler.getProcessWorksHandler(pp).getLeftElements(pp, qw);
+		return AbstractProcessWorksHandler.getProcessWorksHandler(pp).getLeftElements(pp, getEProcessWorks());
 	}
 
 	public IForward doWorkitem(final ComponentParameter cp) {
