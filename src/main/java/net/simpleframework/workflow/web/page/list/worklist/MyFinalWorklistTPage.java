@@ -13,6 +13,7 @@ import java.util.Set;
 import net.simpleframework.ado.EFilterRelation;
 import net.simpleframework.ado.FilterItem;
 import net.simpleframework.ado.FilterItems;
+import net.simpleframework.ado.db.DbDataQuery;
 import net.simpleframework.ado.query.IDataQuery;
 import net.simpleframework.ado.query.ListDataQuery;
 import net.simpleframework.common.Convert;
@@ -37,6 +38,7 @@ import net.simpleframework.mvc.component.base.ajaxrequest.AjaxRequestBean;
 import net.simpleframework.mvc.component.ui.menu.MenuBean;
 import net.simpleframework.mvc.component.ui.menu.MenuItem;
 import net.simpleframework.mvc.component.ui.menu.MenuItems;
+import net.simpleframework.mvc.component.ui.pager.AbstractTablePagerSchema;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
 import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
 import net.simpleframework.mvc.template.AbstractTemplatePage;
@@ -44,6 +46,7 @@ import net.simpleframework.workflow.engine.EActivityStatus;
 import net.simpleframework.workflow.engine.EWorkitemStatus;
 import net.simpleframework.workflow.engine.IWorkflowContext;
 import net.simpleframework.workflow.engine.bean.ActivityBean;
+import net.simpleframework.workflow.engine.bean.ProcessBean;
 import net.simpleframework.workflow.engine.bean.WorkitemBean;
 import net.simpleframework.workflow.schema.AbstractTaskNode;
 import net.simpleframework.workflow.web.WorkflowUtils;
@@ -137,6 +140,26 @@ public class MyFinalWorklistTPage extends MyRunningWorklistTPage {
 	}
 
 	public static class MyCompleteWorklistTbl extends MyRunningWorklistTbl {
+		
+		@Override
+		public AbstractTablePagerSchema createTablePagerSchema() {
+			return new DefaultDbTablePagerSchema() {
+				@Override
+				public Object getVal(final Object dataObject, final String key) {
+					final WorkitemBean pi = (WorkitemBean) dataObject;
+					if ("title".equals(key)||"pno".equals(key)) {
+						ProcessBean process = wfpService.getBean(pi.getProcessId());
+						if("title".equals(key)){
+							return null==process?null:process.getTitle();
+						}else{
+							return null==process?null:process.getPno();
+						}
+					}
+					return super.getVal(dataObject, key);
+				}
+			};
+		}
+		
 		@Override
 		public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
 			if (cp.getBoolParameter("delegation")) {
@@ -153,6 +176,7 @@ public class MyFinalWorklistTPage extends MyRunningWorklistTPage {
 				final IDataQuery<?> dq = wfwService.getWorklist(cp.getLoginId(), getModels(cp),
 						FilterItems.of().addEqual("completeDate", TimePeriod.week),
 						EWorkitemStatus.complete);
+				doFilterSQL(cp, (DbDataQuery<?>) dq);
 				final List<WorkitemBean> list = new ArrayList<WorkitemBean>();
 				WorkitemBean workitem;
 				l: while ((workitem = (WorkitemBean) dq.next()) != null) {
