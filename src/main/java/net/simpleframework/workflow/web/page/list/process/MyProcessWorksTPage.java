@@ -97,11 +97,11 @@ public class MyProcessWorksTPage extends AbstractWorksTPage {
 //		}
 //	}
 	
-	protected Class<? extends ITablePagerHandler> getTableHandler(){
+	public Class<? extends ITablePagerHandler> getTableHandler(){
 		return MyProcessWorksTbl.class;
 	}
 	
-	protected EProcessWorks getEProcessWorks(){
+	public EProcessWorks getEProcessWorks(){
 		return EProcessWorks.my;
 	}
 	
