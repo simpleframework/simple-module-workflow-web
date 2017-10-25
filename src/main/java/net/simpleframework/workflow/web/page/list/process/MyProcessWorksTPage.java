@@ -104,9 +104,12 @@ public class MyProcessWorksTPage extends AbstractWorksTPage {
 	protected EProcessWorks getEProcessWorks(){
 		return EProcessWorks.my;
 	}
-
+	
 	protected TablePagerBean addTablePagerBean(final PageParameter pp) {
-		final TablePagerBean tablePager = addTablePagerBean(pp, "MyProcessWorksTPage_tbl", getTableHandler());
+		return addTablePagerBean(pp, "MyProcessWorksTPage_tbl");
+	}
+	protected TablePagerBean addTablePagerBean(final PageParameter pp,final String name) {
+		final TablePagerBean tablePager = addTablePagerBean(pp,name , getTableHandler());
 		AbstractProcessWorksHandler.getProcessWorksHandler(pp).doTablePagerInit(pp, tablePager, getEProcessWorks());
 		return tablePager;
 	}
