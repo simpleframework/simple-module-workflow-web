@@ -179,19 +179,24 @@ public class MyProcessWorksTPage extends AbstractWorksTPage {
 		}
 		return new TabButton(txt, url);
 	}
-
-	@Override
-	public ElementList getRightElements(final PageParameter pp) {
+	
+	public String getTabParams(final PageParameter pp){
 		final ProcessModelBean pm = WorkflowUtils.getProcessModel(pp);
-		String params = null;
+		StringBuilder params = new StringBuilder();
 		if (pm != null) {
-			params = "modelId=" + pm.getId();
+			params.append("modelId=").append(pm.getId());
 		} else {
 			final String _gstr = pp.getParameter("pgroup");
 			if (StringUtils.hasText(_gstr)) {
-				params = "pgroup=" + HttpUtils.encodeUrl(_gstr);
+				params.append("pgroup=").append(HttpUtils.encodeUrl(_gstr));
 			}
 		}
+		return params.toString();
+	}
+
+	@Override
+	public ElementList getRightElements(final PageParameter pp) {
+		String params = getTabParams(pp);
 
 		final TabButtons tabs = TabButtons.of(getMyProcessTabButton(pp, params));
 		final IWorkflowWebContext ctx = (IWorkflowWebContext) workflowContext;
