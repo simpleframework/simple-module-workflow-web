@@ -81,7 +81,7 @@ public class WorkflowCompleteInfoPage extends AbstractWorkflowFormPage {
 					.setId("backtimetxt"));
 		}
 		final String backhref = getBackBtn(pp).getHref();
-		sb.append(LinkButton.closeBtn().corner().setHref(backhref).setClassName("right"));
+		sb.append(LinkButton.closeBtn().corner().setOnclick("").setHref(backhref).setClassName("right"));
 		sb.append(" </div>");
 		sb.append(" <div class='l2'>");
 		final List<ActivityBean> nextActivities = removeMergeNodes(wfaService
