@@ -5,6 +5,7 @@ import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.UrlsCache;
 import net.simpleframework.workflow.engine.bean.WorkitemBean;
 import net.simpleframework.workflow.web.component.comments.mgr2.MyCommentsMgrTPage;
+import net.simpleframework.workflow.web.page.list.AbstractItemsTPage;
 import net.simpleframework.workflow.web.page.list.delegate.MyDelegateListTPage;
 import net.simpleframework.workflow.web.page.list.delegate.MyDelegateRevListTPage;
 import net.simpleframework.workflow.web.page.list.delegate.UserDelegateListTPage;
@@ -98,5 +99,9 @@ public class WorkflowUrlsFactory extends UrlsCache {
 	public String getUrl(final PageParameter pp, final Class<? extends AbstractMVCPage> mClass,
 			final WorkitemBean workitem) {
 		return getUrl(pp, mClass, workitem != null ? ("workitemId=" + workitem.getId()) : null);
+	}
+	
+	public String getIcon(final PageParameter pp, final String icon) {
+		return pp.getCssResourceHomePath(AbstractItemsTPage.class) + "/images/" + icon;
 	}
 }
