@@ -56,7 +56,8 @@ public abstract class AbstractItemsTPage extends AbstractWorksTPage {
 
 	private String getIcon(final PageParameter pp, final String icon) {
 		return uFactory.getIcon(pp, icon);
-		//return pp.getCssResourceHomePath(AbstractItemsTPage.class) + "/images/" + icon;
+		// return pp.getCssResourceHomePath(AbstractItemsTPage.class) + "/images/"
+		// + icon;
 	}
 
 	public CategoryItem createCategoryItem_myWorkviews(final PageParameter pp) {

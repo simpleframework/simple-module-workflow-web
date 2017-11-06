@@ -100,7 +100,7 @@ public class WorkflowUrlsFactory extends UrlsCache {
 			final WorkitemBean workitem) {
 		return getUrl(pp, mClass, workitem != null ? ("workitemId=" + workitem.getId()) : null);
 	}
-	
+
 	public String getIcon(final PageParameter pp, final String icon) {
 		return pp.getCssResourceHomePath(AbstractItemsTPage.class) + "/images/" + icon;
 	}

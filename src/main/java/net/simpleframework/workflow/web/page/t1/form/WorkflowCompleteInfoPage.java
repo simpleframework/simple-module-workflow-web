@@ -34,7 +34,7 @@ import net.simpleframework.workflow.web.WorkflowUtils;
 public class WorkflowCompleteInfoPage extends AbstractWorkflowFormPage {
 
 	private List<ActivityBean> removeMergeNodes(final List<ActivityBean> nextActivities) {
-		final List<ActivityBean> l = new ArrayList<ActivityBean>();
+		final List<ActivityBean> l = new ArrayList<>();
 		if (nextActivities != null) {
 			for (final ActivityBean next : nextActivities) {
 				if (next.getTasknodeType() == AbstractTaskNode.TT_MERGE) {
@@ -81,7 +81,8 @@ public class WorkflowCompleteInfoPage extends AbstractWorkflowFormPage {
 					.setId("backtimetxt"));
 		}
 		final String backhref = getBackBtn(pp).getHref();
-		sb.append(LinkButton.closeBtn().corner().setOnclick("").setHref(backhref).setClassName("right"));
+		sb.append(
+				LinkButton.closeBtn().corner().setOnclick("").setHref(backhref).setClassName("right"));
 		sb.append(" </div>");
 		sb.append(" <div class='l2'>");
 		final List<ActivityBean> nextActivities = removeMergeNodes(wfaService

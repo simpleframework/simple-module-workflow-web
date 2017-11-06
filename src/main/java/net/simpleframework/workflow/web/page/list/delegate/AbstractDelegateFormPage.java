@@ -284,7 +284,7 @@ public abstract class AbstractDelegateFormPage extends FormTableRowTemplatePage
 	public static class Delegate_UserSelectHandler extends DefaultUserSelectHandler {
 		@Override
 		public IDataQuery<PermissionUser> getUsers(final ComponentParameter cp) {
-			return new IteratorDataQuery<PermissionUser>(cp.getLdept().users());
+			return new IteratorDataQuery<>(cp.getLdept().users());
 		}
 	}
 }

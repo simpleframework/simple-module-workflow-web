@@ -75,7 +75,7 @@ public class MyRunningWorklistTbl extends GroupDbTablePagerHandler implements IW
 	}
 
 	protected List<ProcessModelBean> getModels(final PageParameter pp) {
-		final List<ProcessModelBean> list = new ArrayList<ProcessModelBean>();
+		final List<ProcessModelBean> list = new ArrayList<>();
 		for (final String mId : StringUtils.split(pp.getParameter("modelId"), ";")) {
 			final ProcessModelBean pm = wfpmService.getBean(mId);
 			if (pm != null) {

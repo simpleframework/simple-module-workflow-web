@@ -47,7 +47,7 @@ public class ParticipantSelectLoaded extends DefaultPageHandler {
 		public IForward ajaxProcess(final ComponentParameter cp) throws Exception {
 			final ComponentParameter nCP = WorkitemCompleteUtils.get(cp);
 
-			final Map<String, String[]> participantIds = new HashMap<String, String[]>();
+			final Map<String, String[]> participantIds = new HashMap<>();
 			for (final Object o : JsonUtils.toList(nCP.getParameter("json"))) {
 				final Map<?, ?> map = (Map<?, ?>) o;
 				participantIds.put((String) map.get("transition"),

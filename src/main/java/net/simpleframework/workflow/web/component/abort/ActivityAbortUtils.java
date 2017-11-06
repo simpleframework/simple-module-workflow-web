@@ -71,14 +71,14 @@ public abstract class ActivityAbortUtils implements IWorkflowContextAware {
 				.getActivities(cp);
 		if (list != null) {
 			final IActivityService aService = workflowContext.getActivityService();
-			final Map<UserNode, List<ActivityBean>> cache = new LinkedHashMap<UserNode, List<ActivityBean>>();
+			final Map<UserNode, List<ActivityBean>> cache = new LinkedHashMap<>();
 			AbstractTaskNode tasknode;
 			for (final ActivityBean activity : list) {
 				if (!aService.isFinalStatus(activity)
 						&& (tasknode = aService.getTaskNode(activity)) instanceof UserNode) {
 					List<ActivityBean> l = cache.get(tasknode);
 					if (l == null) {
-						cache.put((UserNode) tasknode, l = new ArrayList<ActivityBean>());
+						cache.put((UserNode) tasknode, l = new ArrayList<>());
 					}
 					l.add(activity);
 				}

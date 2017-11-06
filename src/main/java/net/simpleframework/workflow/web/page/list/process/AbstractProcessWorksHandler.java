@@ -48,7 +48,7 @@ import net.simpleframework.workflow.web.page.AbstractWorksTPage;
 public abstract class AbstractProcessWorksHandler extends AbstractScanHandler
 		implements IProcessWorksHandler {
 
-	static Map<String, IProcessWorksHandler> regists = new HashMap<String, IProcessWorksHandler>();
+	static Map<String, IProcessWorksHandler> regists = new HashMap<>();
 	static IProcessWorksHandler _instance;
 
 	public static void setDefaultProcessWorksHandler(final IProcessWorksHandler instance) {
@@ -63,14 +63,15 @@ public abstract class AbstractProcessWorksHandler extends AbstractScanHandler
 		}
 
 		for (final String modelname : modelnames) {
-			//允许注册分类，所以不需要查是否有流程模型
-//			final ProcessModelBean pm = wfpmService.getProcessModelByName(modelname);
-//			if (pm == null) {
-//				oprintln(new StringBuilder("[IProcessWorksHandler] ")
-//						.append($m("AbstractProcessWorksHandler.1")).append(" - ")
-//						.append(getClass().getName()));
-//				continue;
-//			}
+			// 允许注册分类，所以不需要查是否有流程模型
+			// final ProcessModelBean pm =
+			// wfpmService.getProcessModelByName(modelname);
+			// if (pm == null) {
+			// oprintln(new StringBuilder("[IProcessWorksHandler] ")
+			// .append($m("AbstractProcessWorksHandler.1")).append(" - ")
+			// .append(getClass().getName()));
+			// continue;
+			// }
 
 			if (regists.containsKey(modelname)) {
 				oprintln(new StringBuilder("[IProcessWorksHandler, name: ").append(modelname)
@@ -119,6 +120,7 @@ public abstract class AbstractProcessWorksHandler extends AbstractScanHandler
 	protected ProcessModelBean[] getModels(final PageParameter pp) {
 		return _getModels(pp);
 	}
+
 	protected static ProcessModelBean[] _getModels(final PageParameter pp) {
 		final ProcessModelBean pm = WorkflowUtils.getProcessModel(pp);
 		if (pm != null) {
@@ -231,10 +233,11 @@ public abstract class AbstractProcessWorksHandler extends AbstractScanHandler
 		if (hdl == null) {
 			final String[] pgroups = MyProcessWorksTPage.getPgroups(pp);
 			if (pgroups != null && pgroups.length == 2) {
-				//如果是分类，则取分类的注册handler
+				// 如果是分类，则取分类的注册handler
 				hdl = AbstractProcessWorksHandler.regists.get(StringUtils.join(pgroups, "."));
-				if(null!=hdl)
+				if (null != hdl) {
 					return hdl;
+				}
 			}
 			if (_instance == null) {
 				_instance = new DefaultProcessWorksHandler();

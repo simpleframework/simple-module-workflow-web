@@ -155,7 +155,7 @@ public class WorkviewSelectLoaded extends DefaultPageHandler implements IWorkflo
 			if (ulist == null || ulist.size() == 0) {
 				js.append("alert('").append($m("WorkviewSelectLoaded.0")).append("');");
 			} else {
-				final List<ID> list = new ArrayList<ID>();
+				final List<ID> list = new ArrayList<>();
 				final IPagePermissionHandler permission = cp.getPermission();
 				for (final String id : ulist) {
 					final ID oid = permission.getUser(id).getId();

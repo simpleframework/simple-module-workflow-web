@@ -68,7 +68,7 @@ public class PRelativeRoleHandler extends AbstractParticipantHandler
 	@Override
 	public Collection<Participant> getParticipants(final IScriptEval script,
 			final ActivityComplete activityComplete, final Map<String, Object> variables) {
-		final ArrayList<Participant> participants = new ArrayList<Participant>();
+		final ArrayList<Participant> participants = new ArrayList<>();
 		// UserNode node = ((UserNode) ((TransitionNode)
 		// variables.get("transition")).to());
 		ActivityBean preActivity = activityComplete.getActivity();// 前一任务步骤实例
@@ -135,9 +135,9 @@ public class PRelativeRoleHandler extends AbstractParticipantHandler
 		final WorkflowPermissionHandler wph = (WorkflowPermissionHandler) permission;
 		if (StringUtils.hasText(role)) {
 			final String[] _r = role.split(",");// 多个角色采用豆号分隔
-			final Map<String, String> tempmap = new HashMap<String, String>();
+			final Map<String, String> tempmap = new HashMap<>();
 			for (final String r : _r) {
-				final Map<String, Object> _variables = new HashMap<String, Object>();
+				final Map<String, Object> _variables = new HashMap<>();
 				_variables.putAll(variables);// 建一个新的实列，因为users.net()时会改变variables的值，下一次就会得到不正确的用户
 				Collection<Participant> _participants = wph.getRelativeParticipantsOfLevel(userId,
 						roleId, deptId, _variables, r, level);
@@ -282,7 +282,7 @@ public class PRelativeRoleHandler extends AbstractParticipantHandler
 	// }
 
 	private Map<String, String> getParams(final String pas) {
-		final Map<String, String> params = new HashMap<String, String>();
+		final Map<String, String> params = new HashMap<>();
 		if (StringUtils.hasText(pas)) {
 			final String[] ps = pas.split(";");
 			if (null != ps) {

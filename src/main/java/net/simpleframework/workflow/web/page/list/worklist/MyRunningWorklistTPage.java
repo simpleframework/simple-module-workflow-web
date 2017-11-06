@@ -263,7 +263,7 @@ public class MyRunningWorklistTPage extends AbstractItemsTPage {
 		for (final String modelId : modelIds) {
 			final ProcessModelBean pm = wfpmService.getBean(modelId);
 			if (pm != null) {
-				final List<String> _modelIds = new ArrayList<String>(modelIds);
+				final List<String> _modelIds = new ArrayList<>(modelIds);
 				_modelIds.remove(modelId);
 				btns.add(new FilterButton(StringUtils.replace(pm.getModelText(), ".", " / "))
 						.setLabel($m("MyRunningWorklistTPage.17"))

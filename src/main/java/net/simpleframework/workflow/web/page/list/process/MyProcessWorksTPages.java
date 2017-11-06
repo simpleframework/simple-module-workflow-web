@@ -40,34 +40,38 @@ public abstract class MyProcessWorksTPages implements IWorkflowPageAware {
 		protected WorkitemBean getOpenWorkitem(final PageParameter pp, final ProcessBean process) {
 			return wfwService.getWorkitems(process, null).iterator().next();
 		}
+
 		@Override
-		public Class<? extends ITablePagerHandler> getTableHandler(){
+		public Class<? extends ITablePagerHandler> getTableHandler() {
 			return MyProcessWorks_OrgTbl.class;
 		}
+
 		@Override
-		public EProcessWorks getEProcessWorks(){
+		public EProcessWorks getEProcessWorks() {
 			return EProcessWorks.org;
 		}
 	}
 
 	public static class MyProcessWorks_DeptTPage extends MyProcessWorks_OrgTPage {
 		@Override
-		public Class<? extends ITablePagerHandler> getTableHandler(){
+		public Class<? extends ITablePagerHandler> getTableHandler() {
 			return MyProcessWorks_DeptTbl.class;
 		}
+
 		@Override
-		public EProcessWorks getEProcessWorks(){
+		public EProcessWorks getEProcessWorks() {
 			return EProcessWorks.dept;
 		}
 	}
 
 	public static class MyProcessWorks_RoleTPage extends MyProcessWorksTPage {
 		@Override
-		public Class<? extends ITablePagerHandler> getTableHandler(){
+		public Class<? extends ITablePagerHandler> getTableHandler() {
 			return MyProcessWorks_RoleTbl.class;
 		}
+
 		@Override
-		public EProcessWorks getEProcessWorks(){
+		public EProcessWorks getEProcessWorks() {
 			return EProcessWorks.role;
 		}
 	}

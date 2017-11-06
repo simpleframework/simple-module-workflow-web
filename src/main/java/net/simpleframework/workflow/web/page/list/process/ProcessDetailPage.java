@@ -39,9 +39,9 @@ public class ProcessDetailPage extends AbstractTemplatePage implements IWorkflow
 		sb.append("  <tr style='display: none;'>");
 		sb.append("    <td class='l'>#(MyProcessWorksTPage.13)</td>");
 		sb.append("    <td class='v'>");
-		final LinkedHashSet<String> dtags = new LinkedHashSet<String>();
-		final LinkedHashMap<ID, Integer> utags2 = new LinkedHashMap<ID, Integer>();
-		final LinkedHashMap<ID, Integer> utags = new LinkedHashMap<ID, Integer>();
+		final LinkedHashSet<String> dtags = new LinkedHashSet<>();
+		final LinkedHashMap<ID, Integer> utags2 = new LinkedHashMap<>();
+		final LinkedHashMap<ID, Integer> utags = new LinkedHashMap<>();
 		List<WorkitemBean> list = wfwService.getWorkitems(process, null);
 		final IPagePermissionHandler hdl = pp.getPermission();
 		for (int i = list.size() - 1; i >= 0; i--) {
@@ -75,7 +75,7 @@ public class ProcessDetailPage extends AbstractTemplatePage implements IWorkflow
 		sb.append("  <tr style='display: none;'>");
 		sb.append("    <td class='l'>#(MyProcessWorksTPage.14)</td>");
 		sb.append("    <td class='v'>");
-		final LinkedHashMap<AbstractTaskNode, Integer> wtags = new LinkedHashMap<AbstractTaskNode, Integer>();
+		final LinkedHashMap<AbstractTaskNode, Integer> wtags = new LinkedHashMap<>();
 		list = wfwService.getWorkitems(process, loginId);
 		for (int i = list.size() - 1; i >= 0; i--) {
 			final ActivityBean activity = wfwService.getActivity(list.get(i));

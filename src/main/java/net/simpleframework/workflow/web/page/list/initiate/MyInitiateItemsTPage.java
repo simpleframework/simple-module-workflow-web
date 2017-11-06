@@ -97,7 +97,7 @@ public class MyInitiateItemsTPage extends AbstractItemsTPage {
 		public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
 			final ID loginId = cp.getLoginId();
 			final InitiateItems items = wfpmService.getInitiateItems(loginId).sort();
-			return new ListDataQuery<InitiateItem>(items);
+			return new ListDataQuery<>(items);
 		}
 
 		@Override

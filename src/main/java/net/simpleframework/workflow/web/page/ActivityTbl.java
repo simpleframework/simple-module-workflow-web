@@ -49,7 +49,7 @@ public class ActivityTbl extends GroupDbTablePagerHandler implements IWorkflowCo
 		if (process != null) {
 			cp.addFormParameter("processId", process.getId());
 			final List<ActivityBean> list = wfaService.getActivities(process);
-			return new ListDataQuery<ActivityBean>(setRelativeDate(cp, list));
+			return new ListDataQuery<>(setRelativeDate(cp, list));
 		}
 		return null;
 	}
@@ -63,7 +63,7 @@ public class ActivityTbl extends GroupDbTablePagerHandler implements IWorkflowCo
 		if (StringUtils.hasText(taskid)) {
 			cp.addFormParameter("taskid", taskid);
 			final List<ActivityBean> list = wfaService.getActivities(process, taskid);
-			return new ListDataQuery<ActivityBean>(setRelativeDate(cp, list));
+			return new ListDataQuery<>(setRelativeDate(cp, list));
 		}
 		return null;
 	}

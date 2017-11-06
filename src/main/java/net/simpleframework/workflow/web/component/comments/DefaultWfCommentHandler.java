@@ -131,7 +131,7 @@ public class DefaultWfCommentHandler extends ComponentHandlerEx implements IWfCo
 
 	protected Map<String, String[]> getTasknames(final PageParameter pp,
 			final AbstractWorkitemBean workitem) {
-		final Map<String, String[]> data = new LinkedHashMap<String, String[]>();
+		final Map<String, String[]> data = new LinkedHashMap<>();
 		if (workitem instanceof WorkitemBean) {
 			final IActivityService aService = workflowContext.getActivityService();
 			final AbstractTaskNode tasknode = aService
@@ -151,7 +151,7 @@ public class DefaultWfCommentHandler extends ComponentHandlerEx implements IWfCo
 	protected Map<Object, List<WfComment>> comments_map(final PageParameter pp,
 			final IDataQuery<WfComment> dq, final AbstractWorkitemBean workitem,
 			final EGroupBy groupBy) {
-		final Map<Object, List<WfComment>> data = new LinkedHashMap<Object, List<WfComment>>();
+		final Map<Object, List<WfComment>> data = new LinkedHashMap<>();
 		Map<String, String[]> tasknames = null;
 		if (groupBy == EGroupBy.taskname) {
 			// 数据按tasknames的顺序
@@ -187,7 +187,7 @@ public class DefaultWfCommentHandler extends ComponentHandlerEx implements IWfCo
 			if (key != null) {
 				List<WfComment> list = data.get(key);
 				if (list == null) {
-					data.put(key, list = new ArrayList<WfComment>());
+					data.put(key, list = new ArrayList<>());
 				}
 				list.add(comment);
 			}
@@ -195,7 +195,7 @@ public class DefaultWfCommentHandler extends ComponentHandlerEx implements IWfCo
 
 		// 默认排序
 		if (groupBy == EGroupBy.dept) {
-			final List<Object> keys = new ArrayList<Object>(data.keySet());
+			final List<Object> keys = new ArrayList<>(data.keySet());
 			Collections.sort(keys, new Comparator<Object>() {
 				@Override
 				public int compare(final Object o1, final Object o2) {
@@ -216,7 +216,7 @@ public class DefaultWfCommentHandler extends ComponentHandlerEx implements IWfCo
 					}
 				}
 			});
-			final Map<Object, List<WfComment>> _data = new LinkedHashMap<Object, List<WfComment>>();
+			final Map<Object, List<WfComment>> _data = new LinkedHashMap<>();
 			for (final Object key : keys) {
 				_data.put(key, data.get(key));
 			}
@@ -322,7 +322,7 @@ public class DefaultWfCommentHandler extends ComponentHandlerEx implements IWfCo
 		} else {
 			for (final Map.Entry<Object, List<WfComment>> e : comments_map(cp, dq, workitem, groupBy)
 					.entrySet()) {
-				final List<WfComment> list = new ArrayList<WfComment>();
+				final List<WfComment> list = new ArrayList<>();
 				for (final WfComment comment : e.getValue()) {
 					if (editable && comment2 != null && comment2.equals(comment)) {
 						continue;

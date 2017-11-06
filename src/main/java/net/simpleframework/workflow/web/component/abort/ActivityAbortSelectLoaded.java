@@ -38,7 +38,7 @@ public class ActivityAbortSelectLoaded extends DefaultPageHandler implements IWo
 		@Override
 		public IForward ajaxProcess(final ComponentParameter cp) throws Exception {
 			final ComponentParameter nCP = ActivityAbortUtils.get(cp);
-			final List<ActivityBean> list = new ArrayList<ActivityBean>();
+			final List<ActivityBean> list = new ArrayList<>();
 			final String[] activityIds = StringUtils.split(cp.getParameter("activityIds"), ";");
 			if (activityIds != null) {
 				for (final String id : activityIds) {

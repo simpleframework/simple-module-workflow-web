@@ -79,49 +79,53 @@ public class MyProcessWorksTPage extends AbstractWorksTPage {
 		return "MyProcessWorksTPage";
 	}
 
-//	protected EProcessWorks qw;
-//	protected Class<? extends AbstractDbTablePagerHandler> tblClass;
-//	{
-//		if (MyProcessWorks_DeptTPage.class.isAssignableFrom(getClass())) {
-//			qw = EProcessWorks.dept;
-//			tblClass = MyProcessWorks_DeptTbl.class;
-//		} else if (MyProcessWorks_OrgTPage.class.isAssignableFrom(getClass())) {
-//			qw = EProcessWorks.org;
-//			tblClass = MyProcessWorks_OrgTbl.class;
-//		} else if (MyProcessWorks_RoleTPage.class.isAssignableFrom(getClass())) {
-//			qw = EProcessWorks.role;
-//			tblClass = MyProcessWorks_RoleTbl.class;
-//		} else {
-//			qw = EProcessWorks.my;
-//			tblClass = MyProcessWorksTbl.class;
-//		}
-//	}
-	
-	public Class<? extends ITablePagerHandler> getTableHandler(){
+	// protected EProcessWorks qw;
+	// protected Class<? extends AbstractDbTablePagerHandler> tblClass;
+	// {
+	// if (MyProcessWorks_DeptTPage.class.isAssignableFrom(getClass())) {
+	// qw = EProcessWorks.dept;
+	// tblClass = MyProcessWorks_DeptTbl.class;
+	// } else if (MyProcessWorks_OrgTPage.class.isAssignableFrom(getClass())) {
+	// qw = EProcessWorks.org;
+	// tblClass = MyProcessWorks_OrgTbl.class;
+	// } else if (MyProcessWorks_RoleTPage.class.isAssignableFrom(getClass())) {
+	// qw = EProcessWorks.role;
+	// tblClass = MyProcessWorks_RoleTbl.class;
+	// } else {
+	// qw = EProcessWorks.my;
+	// tblClass = MyProcessWorksTbl.class;
+	// }
+	// }
+
+	public Class<? extends ITablePagerHandler> getTableHandler() {
 		return MyProcessWorksTbl.class;
 	}
-	
-	public EProcessWorks getEProcessWorks(){
+
+	public EProcessWorks getEProcessWorks() {
 		return EProcessWorks.my;
 	}
-	
+
 	protected TablePagerBean addTablePagerBean(final PageParameter pp) {
 		return addTablePagerBean(pp, "MyProcessWorksTPage_tbl");
 	}
-	public TablePagerBean addTablePagerBean(final PageParameter pp,final String name) {
-		final TablePagerBean tablePager = addTablePagerBean(pp,name , getTableHandler());
-		AbstractProcessWorksHandler.getProcessWorksHandler(pp).doTablePagerInit(pp, tablePager, getEProcessWorks());
+
+	public TablePagerBean addTablePagerBean(final PageParameter pp, final String name) {
+		final TablePagerBean tablePager = addTablePagerBean(pp, name, getTableHandler());
+		AbstractProcessWorksHandler.getProcessWorksHandler(pp).doTablePagerInit(pp, tablePager,
+				getEProcessWorks());
 		return tablePager;
 	}
 
 	@Override
 	public FilterButtons getFilterButtons(final PageParameter pp) {
-		return AbstractProcessWorksHandler.getProcessWorksHandler(pp).getFilterButtons(pp, getEProcessWorks());
+		return AbstractProcessWorksHandler.getProcessWorksHandler(pp).getFilterButtons(pp,
+				getEProcessWorks());
 	}
 
 	@Override
 	public ElementList getLeftElements(final PageParameter pp) {
-		return AbstractProcessWorksHandler.getProcessWorksHandler(pp).getLeftElements(pp, getEProcessWorks());
+		return AbstractProcessWorksHandler.getProcessWorksHandler(pp).getLeftElements(pp,
+				getEProcessWorks());
 	}
 
 	public IForward doWorkitem(final ComponentParameter cp) {
@@ -179,10 +183,10 @@ public class MyProcessWorksTPage extends AbstractWorksTPage {
 		}
 		return new TabButton(txt, url);
 	}
-	
-	public String getTabParams(final PageParameter pp){
+
+	public String getTabParams(final PageParameter pp) {
 		final ProcessModelBean pm = WorkflowUtils.getProcessModel(pp);
-		StringBuilder params = new StringBuilder();
+		final StringBuilder params = new StringBuilder();
 		if (pm != null) {
 			params.append("modelId=").append(pm.getId());
 		} else {
@@ -196,7 +200,7 @@ public class MyProcessWorksTPage extends AbstractWorksTPage {
 
 	@Override
 	public ElementList getRightElements(final PageParameter pp) {
-		String params = getTabParams(pp);
+		final String params = getTabParams(pp);
 
 		final TabButtons tabs = TabButtons.of(getMyProcessTabButton(pp, params));
 		final IWorkflowWebContext ctx = (IWorkflowWebContext) workflowContext;
@@ -217,13 +221,13 @@ public class MyProcessWorksTPage extends AbstractWorksTPage {
 				wfpmService.getModelListByDomain(pp.getLDomainId(), EProcessModelStatus.deploy));
 		wfpmService.sort(models);
 
-		final Map<String, List<ProcessModelBean>> gmap = new LinkedHashMap<String, List<ProcessModelBean>>();
+		final Map<String, List<ProcessModelBean>> gmap = new LinkedHashMap<>();
 		for (final ProcessModelBean pm : models) {
 			final String[] arr = StringUtils.split(pm.getModelText(), ".");
 			final String key = arr.length > 1 ? arr[0] : CONST_OTHER;
 			List<ProcessModelBean> list = gmap.get(key);
 			if (list == null) {
-				gmap.put(key, list = new ArrayList<ProcessModelBean>());
+				gmap.put(key, list = new ArrayList<>());
 			}
 			list.add(pm);
 		}
@@ -233,22 +237,22 @@ public class MyProcessWorksTPage extends AbstractWorksTPage {
 	public static Map<String, Map<String, List<ProcessModelBean>>> getProcessModelMap2(
 			final PageParameter pp) {
 		final Map<String, List<ProcessModelBean>> gmap = getProcessModelMap(pp);
-		final Map<String, Map<String, List<ProcessModelBean>>> gmap2 = new LinkedHashMap<String, Map<String, List<ProcessModelBean>>>();
+		final Map<String, Map<String, List<ProcessModelBean>>> gmap2 = new LinkedHashMap<>();
 		for (final Map.Entry<String, List<ProcessModelBean>> e : gmap.entrySet()) {
 			final String key = e.getKey();
-			final Map<String, List<ProcessModelBean>> m = new LinkedHashMap<String, List<ProcessModelBean>>();
+			final Map<String, List<ProcessModelBean>> m = new LinkedHashMap<>();
 			List<ProcessModelBean> glist = null;
 			for (final ProcessModelBean pm : e.getValue()) {
 				final String pgroup = wfpmService.getProcessDocument(pm).getProcessNode().getPgroup();
 				if (StringUtils.hasText(pgroup)) {
 					List<ProcessModelBean> list = m.get(pgroup);
 					if (list == null) {
-						m.put(pgroup, list = new ArrayList<ProcessModelBean>());
+						m.put(pgroup, list = new ArrayList<>());
 					}
 					list.add(pm);
 				} else {
 					if (glist == null) {
-						glist = new ArrayList<ProcessModelBean>();
+						glist = new ArrayList<>();
 					}
 					glist.add(pm);
 				}

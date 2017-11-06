@@ -25,7 +25,7 @@ public class DefaultActivityFallbackHandler extends AbstractComponentHandler
 	@Override
 	public Collection<UserNode> getUserNodes(final ComponentParameter cp) {
 		final ActivityBean activity = WorkflowUtils.getActivityBean(cp);
-		final Map<String, UserNode> cache = new LinkedHashMap<String, UserNode>();
+		final Map<String, UserNode> cache = new LinkedHashMap<>();
 		ActivityBean pre = activity;
 		while ((pre = wfaService.getPreActivity(pre)) != null) {
 			final AbstractTaskNode tasknode = wfaService.getTaskNode(pre);

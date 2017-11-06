@@ -188,11 +188,10 @@ public abstract class AbstractWorkflowFormTPage extends AbstractFormTableRowTPag
 
 	protected AbstractElement<?> createCompleteBtn(final PageParameter pp) {
 		return VALIDATION_BTN2($m("AbstractWorkflowFormPage.1")).setIconClass(Icon.check)
-				.setHighlight(true)
-				.setOnclick(getCompleteAction(pp));
+				.setHighlight(true).setOnclick(getCompleteAction(pp));
 	}
-	
-	protected String getCompleteAction(final PageParameter pp){
+
+	protected String getCompleteAction(final PageParameter pp) {
 		return "$Actions['AbstractWorkflowFormPage_completeAction']();";
 	}
 

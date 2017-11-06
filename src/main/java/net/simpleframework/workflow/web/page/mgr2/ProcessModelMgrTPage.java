@@ -73,7 +73,7 @@ public class ProcessModelMgrTPage extends AbstractWorkflowMgrTPage {
 				final List<ProcessModelBean> list = DataQueryUtils
 						.toList(wfpmService.getModelListByDomain(orgId));
 				wfpmService.sort(list);
-				return new ListDataQuery<ProcessModelBean>(list);
+				return new ListDataQuery<>(list);
 			}
 			return null;
 		}

@@ -64,7 +64,7 @@ public class ModelerRemotePage extends AbstractWorkflowRemotePage {
 		return doJsonForward(new IJsonForwardCallback() {
 			@Override
 			public void doAction(final JsonForward json) {
-				final ArrayList<Map<?, ?>> models = new ArrayList<Map<?, ?>>();
+				final ArrayList<Map<?, ?>> models = new ArrayList<>();
 				ProcessModelBean pm;
 				final IDataQuery<ProcessModelBean> query = wfpmService.getModelList();
 				while ((pm = query.next()) != null) {

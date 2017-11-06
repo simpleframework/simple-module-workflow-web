@@ -92,7 +92,7 @@ public abstract class DoWorkviewUtils implements IWorkflowContextAware {
 	static Set<String> getSessionUlist(final PageParameter pp) {
 		Set<String> ulist = (Set<String>) pp.getSessionAttr(SESSION_ULIST);
 		if (ulist == null) {
-			pp.setSessionAttr(SESSION_ULIST, ulist = new LinkedHashSet<String>());
+			pp.setSessionAttr(SESSION_ULIST, ulist = new LinkedHashSet<>());
 		}
 		return ulist;
 	}
@@ -149,7 +149,7 @@ public abstract class DoWorkviewUtils implements IWorkflowContextAware {
 			}
 			final IPagePermissionHandler permission = cp.getPermission();
 			final ID processId = workitem.getProcessId();
-			final List<PermissionUser> slist = new ArrayList<PermissionUser>();
+			final List<PermissionUser> slist = new ArrayList<>();
 			for (final String id : ulist) {
 				final PermissionUser user = permission.getUser(id);
 				if (wfvService.getWorkviewBean(processId, id) != null) {

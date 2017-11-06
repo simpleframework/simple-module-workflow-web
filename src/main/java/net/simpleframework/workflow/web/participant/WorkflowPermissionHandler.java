@@ -37,7 +37,7 @@ public class WorkflowPermissionHandler extends OrganizationPermissionHandler
 	@Override
 	public Collection<Participant> getRelativeParticipants(final IDomainBeanAware domain,
 			final UserNode.RelativeRole rRole, final Map<String, Object> variables) {
-		final ArrayList<Participant> participants = new ArrayList<Participant>();
+		final ArrayList<Participant> participants = new ArrayList<>();
 		final Role r = getRoleObject(BeanUtils.getProperty(domain, "roleId"), variables);
 		if (r != null) {
 			// 获取相对角色，部门
@@ -65,7 +65,7 @@ public class WorkflowPermissionHandler extends OrganizationPermissionHandler
 	public Collection<Participant> getRelativeParticipantsOfLevel(final Object user,
 			final Object role, final ID deptId, final Map<String, Object> variables,
 			String relativeRole, final Level level) {
-		final ArrayList<Participant> participants = new ArrayList<Participant>();
+		final ArrayList<Participant> participants = new ArrayList<>();
 		Role oRole = getRoleObject(role, variables);
 		if (oRole != null) {
 			if (StringUtils.hasText(relativeRole)) {
@@ -159,7 +159,7 @@ public class WorkflowPermissionHandler extends OrganizationPermissionHandler
 	}
 
 	private ArrayList<Participant> queryDept(final Department dept) {
-		final ArrayList<Participant> participants = new ArrayList<Participant>();
+		final ArrayList<Participant> participants = new ArrayList<>();
 		if (dept == null) {
 			return participants;
 		}
@@ -167,7 +167,7 @@ public class WorkflowPermissionHandler extends OrganizationPermissionHandler
 		// final IDataQuery<User> users = _userService.queryUsers(dept);
 		User user = null;
 		if (null != users) {
-			final Map<String, Object> tmp = new HashMap<String, Object>();
+			final Map<String, Object> tmp = new HashMap<>();
 			while (users.hasNext()) {
 				user = users.next();
 				if (null != tmp.get(user.getId().toString())) {

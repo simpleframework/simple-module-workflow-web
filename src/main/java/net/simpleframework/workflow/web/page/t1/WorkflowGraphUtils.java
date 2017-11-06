@@ -64,7 +64,7 @@ public abstract class WorkflowGraphUtils implements IWorkflowContextAware {
 
 		final mxGraph graph = GraphUtils.createGraph(wfpService.getProcessDocument(process));
 		final List<ActivityBean> list = wfaService.getActivities(process);
-		final Map<String, Boolean> state = new HashMap<String, Boolean>();
+		final Map<String, Boolean> state = new HashMap<>();
 		for (final ActivityBean activity : list) {
 			final String tasknodeId = activity.getTasknodeId();
 			if (state.get(tasknodeId) == null) {

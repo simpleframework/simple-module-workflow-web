@@ -140,26 +140,26 @@ public class MyFinalWorklistTPage extends MyRunningWorklistTPage {
 	}
 
 	public static class MyCompleteWorklistTbl extends MyRunningWorklistTbl {
-		
+
 		@Override
 		public AbstractTablePagerSchema createTablePagerSchema() {
 			return new DefaultDbTablePagerSchema() {
 				@Override
 				public Object getVal(final Object dataObject, final String key) {
 					final WorkitemBean pi = (WorkitemBean) dataObject;
-					if ("title".equals(key)||"pno".equals(key)) {
-						ProcessBean process = wfpService.getBean(pi.getProcessId());
-						if("title".equals(key)){
-							return null==process?null:process.getTitle();
-						}else{
-							return null==process?null:process.getPno();
+					if ("title".equals(key) || "pno".equals(key)) {
+						final ProcessBean process = wfpService.getBean(pi.getProcessId());
+						if ("title".equals(key)) {
+							return null == process ? null : process.getTitle();
+						} else {
+							return null == process ? null : process.getPno();
 						}
 					}
 					return super.getVal(dataObject, key);
 				}
 			};
 		}
-		
+
 		@Override
 		public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
 			if (cp.getBoolParameter("delegation")) {
@@ -177,7 +177,7 @@ public class MyFinalWorklistTPage extends MyRunningWorklistTPage {
 						FilterItems.of().addEqual("completeDate", TimePeriod.week),
 						EWorkitemStatus.complete);
 				doFilterSQL(cp, (DbDataQuery<?>) dq);
-				final List<WorkitemBean> list = new ArrayList<WorkitemBean>();
+				final List<WorkitemBean> list = new ArrayList<>();
 				WorkitemBean workitem;
 				l: while ((workitem = (WorkitemBean) dq.next()) != null) {
 					final ActivityBean activity = wfaService.getBean(workitem.getActivityId());
@@ -190,7 +190,7 @@ public class MyFinalWorklistTPage extends MyRunningWorklistTPage {
 						list.add(workitem);
 					}
 				}
-				return new ListDataQuery<WorkitemBean>(list);
+				return new ListDataQuery<>(list);
 			}
 			return wfwService.getWorklist(cp.getLoginId(), getModels(cp), EWorkitemStatus.complete,
 					EWorkitemStatus.abort);
@@ -232,7 +232,7 @@ public class MyFinalWorklistTPage extends MyRunningWorklistTPage {
 				@Override
 				public String get() {
 					boolean more = false;
-					final Set<String> list = new LinkedHashSet<String>();
+					final Set<String> list = new LinkedHashSet<>();
 					lbl: {
 						for (final ActivityBean nextActivity : wfaService.getNextActivities(activity)) {
 							final AbstractTaskNode tasknode = wfaService.getTaskNode(nextActivity);

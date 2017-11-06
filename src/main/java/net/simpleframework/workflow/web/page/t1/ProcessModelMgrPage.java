@@ -191,7 +191,7 @@ public class ProcessModelMgrPage extends AbstractWorkflowMgrPage {
 		public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
 			final List<ProcessModelBean> list = DataQueryUtils.toList(wfpmService.getModelList());
 			wfpmService.sort(list);
-			return new ListDataQuery<ProcessModelBean>(list);
+			return new ListDataQuery<>(list);
 		}
 
 		@Override
@@ -251,7 +251,7 @@ public class ProcessModelMgrPage extends AbstractWorkflowMgrPage {
 		@Override
 		public JavascriptForward doSave(final ComponentParameter cp,
 				final IAttachmentSaveCallback callback) throws IOException {
-			final Map<String, AttachmentFile> attachments = new LinkedHashMap<String, AttachmentFile>(
+			final Map<String, AttachmentFile> attachments = new LinkedHashMap<>(
 					getUploadCache(cp));
 			for (final AttachmentFile aFile : attachments.values()) {
 				wfpmService.doAddModel(cp.getLoginId(),

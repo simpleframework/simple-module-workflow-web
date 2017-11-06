@@ -138,7 +138,7 @@ public abstract class WorkitemCompleteUtils implements IWorkflowContextAware {
 	}
 
 	private static Collection<TransitionNode> getTransitions(final ComponentParameter cp) {
-		final ArrayList<TransitionNode> al = new ArrayList<TransitionNode>();
+		final ArrayList<TransitionNode> al = new ArrayList<>();
 		final String[] transitions = StringUtils.split(cp.getParameter("transitions"));
 		final ActivityComplete activityComplete = getActivityComplete(cp);
 		// 通过手动方式选取的路由

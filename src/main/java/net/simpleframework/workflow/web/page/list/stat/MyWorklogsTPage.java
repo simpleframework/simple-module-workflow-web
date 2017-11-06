@@ -55,7 +55,7 @@ public class MyWorklogsTPage extends AbstractItemsTPage implements ILogContextAw
 		sb.append(" <div class='topbar clearfix'>");
 		final Calendar cal = Calendar.getInstance();
 		long t = pp.getLongParameter("t");
-		final ArrayList<LinkElement> al = new ArrayList<LinkElement>();
+		final ArrayList<LinkElement> al = new ArrayList<>();
 		LinkElement sEle = null;
 		for (int i = 0; i < 7; i++) {
 			final Date nDate = cal.getTime();
@@ -95,7 +95,7 @@ public class MyWorklogsTPage extends AbstractItemsTPage implements ILogContextAw
 		final StringBuilder sb = new StringBuilder();
 		final ID loginId = pp.getLoginId();
 
-		final List<AbstractEntityTblLogBean> logs = new ArrayList<AbstractEntityTblLogBean>();
+		final List<AbstractEntityTblLogBean> logs = new ArrayList<>();
 		AbstractEntityTblLogBean log;
 		// 删除日志
 		final IDataQuery<EntityDeleteLog> dqd = _logDeleteService.queryLogs(loginId,

@@ -46,7 +46,7 @@ public class MyInitiateItemsGroupTPage extends MyInitiateItemsTPage {
 	protected String toListHTML(final PageParameter pp) {
 		final StringBuilder sb = new StringBuilder();
 		final InitiateItems items = wfpmService.getInitiateItems(pp.getLoginId()).sort();
-		final Map<String, List<InitiateItem>> gmap = new LinkedHashMap<String, List<InitiateItem>>();
+		final Map<String, List<InitiateItem>> gmap = new LinkedHashMap<>();
 		for (final InitiateItem item : items) {
 			final ProcessModelBean pm = wfpmService.getBean(item.getModelId());
 			final String[] arr = StringUtils.split(pm.getModelText(), ".");
@@ -58,7 +58,7 @@ public class MyInitiateItemsGroupTPage extends MyInitiateItemsTPage {
 			}
 			List<InitiateItem> list = gmap.get(key);
 			if (list == null) {
-				gmap.put(key, list = new ArrayList<InitiateItem>());
+				gmap.put(key, list = new ArrayList<>());
 			}
 			list.add(item);
 		}
