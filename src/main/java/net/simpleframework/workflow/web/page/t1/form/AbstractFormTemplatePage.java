@@ -43,11 +43,12 @@ public class AbstractFormTemplatePage extends T1FormTemplatePage implements IWor
 		String referer = pp.getRequestHeader("Referer");
 		String href = null;
 		if (StringUtils.hasText(referer)) {
-			final String path = HttpUtils.stripContextPath(pp.request,
+			String path = HttpUtils.stripContextPath(pp.request,
 					HttpUtils.stripAbsoluteUrl(referer));
 			// 返回首页
 			if ("".equals(path) || "/".equals(path) || "/home".equals(path)) {
-				backBtn.setHref((href = "/"));
+				if("".equals(path)) path="/";
+				backBtn.setHref((href = path));//不能全设为/，因为/可能为共公首页，/home才是个人首页
 			} else {
 				if (referer.contains("/workflow/")
 						&& !(referer.contains("/workflow/form") || referer.contains("/workflow/view"))) {
