@@ -135,7 +135,6 @@ public class ModelerRemotePage extends AbstractWorkflowRemotePage {
 	 */
 	public IForward participants(final PageParameter pp) {
 		return doJsonForward(new IJsonForwardCallback() {
-			@SuppressWarnings("unchecked")
 			@Override
 			public void doAction(final JsonForward json) {
 				final File settingsFile = new File(MVCUtils.getRealPath("/WEB-INF/participants.json"));
@@ -151,7 +150,7 @@ public class ModelerRemotePage extends AbstractWorkflowRemotePage {
 						final String jsons = IoUtils
 								.getStringFromInputStream(iStream = new FileInputStream(settingsFile));
 						if (StringUtils.hasText(jsons)) {
-							json.put((Map<String, Object>) JsonUtils.toMap(jsons));
+							json.put(JsonUtils.toMap(jsons));
 						}
 					} catch (final IOException e) {
 						e.printStackTrace();

@@ -51,12 +51,5 @@
       <groupId>org.tinyjee.jgraphx</groupId>
       <artifactId>jgraphx</artifactId>
     </dependency>
-
-    <!-- web容器包 -->
-    <dependency>
-      <groupId>javax.servlet</groupId>
-      <artifactId>javax.servlet-api</artifactId>
-      <scope>provided</scope>
-    </dependency>
   </dependencies>
 </project>
