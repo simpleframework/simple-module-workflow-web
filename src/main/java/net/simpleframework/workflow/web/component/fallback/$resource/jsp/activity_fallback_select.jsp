@@ -4,11 +4,13 @@
 <%@ page import="net.simpleframework.mvc.common.element.ButtonElement"%>
 <%@ page import="net.simpleframework.workflow.web.WorkflowUtils"%>
 <%@ page import="net.simpleframework.workflow.engine.bean.ActivityBean"%>
+<%@page import="net.simpleframework.workflow.engine.bean.WorkitemBean"%>
 <%
 	final ComponentParameter nCP = ActivityFallbackUtils.get(request,
 			response);
 	final String componentName = nCP.getComponentName();
 	final ActivityBean activity = WorkflowUtils.getActivityBean(nCP);
+	final WorkitemBean workitem = WorkflowUtils.getWorkitemBean(nCP);
 %>
 <div class="simple_window_tcb activity_fallback_select">
   <%=ActivityFallbackUtils.toListHTML(nCP)%>
@@ -29,7 +31,7 @@
 	    return;
 	  }
 	  $Actions['<%=componentName%>_Usernode_Select_OK'](
-	      'activityId=<%=activity.getId()%>&usernodeId=' + obj.getAttribute('_usernode') + 
+	      'workitemId=<%=(null!=workitem?workitem.getId():"")%>&activityId=<%=activity.getId()%>&usernodeId=' + obj.getAttribute('_usernode') + 
 	      '&opt1=' + ($('idActivityFallback_opt1').checked ? 'true' : 'false'));
 	}
 	
