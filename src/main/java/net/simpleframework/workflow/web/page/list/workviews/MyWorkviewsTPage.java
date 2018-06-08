@@ -79,7 +79,7 @@ public class MyWorkviewsTPage extends AbstractItemsTPage {
 		while ((workview = dq.next()) != null) {
 			wfvService.doReadMark(workview);
 		}
-		return JavascriptForward.RELOC;
+		return JavascriptForward.reloc();
 	}
 
 	@Override

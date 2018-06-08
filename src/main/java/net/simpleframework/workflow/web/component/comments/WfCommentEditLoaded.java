@@ -43,7 +43,7 @@ public class WfCommentEditLoaded extends DefaultPageHandler implements IWorkflow
 				comment.setCreateDate(date);
 			}
 			wfcService.update(new String[] { "createdate", "ccomment" }, comment);
-			return JavascriptForward.RELOC;
+			return JavascriptForward.reloc();
 		}
 	}
 }

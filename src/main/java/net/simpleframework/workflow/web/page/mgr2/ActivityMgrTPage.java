@@ -116,7 +116,7 @@ public class ActivityMgrTPage extends AbstractWorkflowMgrTPage {
 	public IForward doRun(final ComponentParameter cp) {
 		final ProcessBean process = WorkflowUtils.getProcessBean(cp);
 		wfpService.doRunning(process);
-		return JavascriptForward.RELOC;
+		return JavascriptForward.reloc();
 	}
 
 	@Override

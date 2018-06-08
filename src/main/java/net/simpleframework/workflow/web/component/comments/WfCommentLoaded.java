@@ -28,7 +28,7 @@ public class WfCommentLoaded extends DefaultPageHandler implements IWorkflowCont
 
 		public IForward doDel(final ComponentParameter cp) throws Exception {
 			wfcService.delete(cp.getParameter("commentId"));
-			return JavascriptForward.RELOC;
+			return JavascriptForward.reloc();
 		}
 	}
 }

@@ -376,7 +376,7 @@ public class MyRunningWorklistTPage extends AbstractItemsTPage {
 		if (delegation != null) {
 			wfdService.doAbort(delegation);
 		}
-		return JavascriptForward.RELOC;
+		return JavascriptForward.reloc();
 	}
 
 	@Transaction(context = IWorkflowContext.class)
@@ -449,7 +449,7 @@ public class MyRunningWorklistTPage extends AbstractItemsTPage {
 			final UserStatBean stat = wfusService.getUserStat(cp.getLoginId());
 			stat.setWorklist_refresh_interval(cp.getIntParameter("ms_interval"));
 			wfusService.update(new String[] { "worklist_refresh_interval" }, stat);
-			return JavascriptForward.RELOC;
+			return JavascriptForward.reloc();
 		}
 
 		@Override

@@ -116,7 +116,7 @@ public abstract class AbstractDelegateFormPage extends FormTableRowTemplatePage
 			if ("user".equals(cp.getParameter("delegationSource"))) {
 				wfdService.doUserDelegation(cp.getLoginId(), user.getId(), wd_startDate, wd_endDate,
 						wd_description);
-				return JavascriptForward.RELOC;
+				return JavascriptForward.reloc();
 			} else {
 				for (final String workitemId : StringUtils.split(cp.getParameter("workitemId"))) {
 					wfwService.doWorkitemDelegation(wfwService.getBean(workitemId), cp.getLoginId(),
